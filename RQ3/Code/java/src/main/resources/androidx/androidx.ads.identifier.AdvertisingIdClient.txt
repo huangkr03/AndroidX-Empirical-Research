@@ -1,0 +1,382 @@
+androidx.ads.identifier.AdvertisingIdClient
+<androidx.ads.identifier.AdvertisingIdClient: long TIMEOUT_SECONDS>
+<androidx.ads.identifier.AdvertisingIdClient: long AUTO_DISCONNECT_SECONDS>
+<androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.ExecutorService QUERY_EXECUTOR_SERVICE>
+<androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE>
+<androidx.ads.identifier.AdvertisingIdClient: java.lang.Object sLock>
+<androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.atomic.AtomicReference sConnectionClient>
+    private void <init>()
+    {
+        androidx.ads.identifier.AdvertisingIdClient r0;
+
+        r0 := @this: androidx.ads.identifier.AdvertisingIdClient;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static androidx.ads.identifier.AdvertisingIdClient$ConnectionPair getConnection(android.content.Context) throws java.io.IOException, androidx.ads.identifier.AdvertisingIdNotAvailableException, java.util.concurrent.TimeoutException, java.lang.InterruptedException
+    {
+        android.content.Context r0;
+        java.lang.Object r1, $r4;
+        androidx.ads.identifier.internal.HoldingConnectionClient r2, $r5;
+        java.lang.Throwable r3, $r7;
+        java.util.concurrent.atomic.AtomicReference $r6;
+        androidx.ads.identifier.AdvertisingIdClient$ConnectionPair r8;
+
+        r0 := @parameter0: android.content.Context;
+
+        r8 = staticinvoke <androidx.ads.identifier.AdvertisingIdClient: androidx.ads.identifier.AdvertisingIdClient$ConnectionPair tryConnect()>();
+
+        if r8 != null goto label6;
+
+        $r4 = <androidx.ads.identifier.AdvertisingIdClient: java.lang.Object sLock>;
+
+        r1 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        r8 = staticinvoke <androidx.ads.identifier.AdvertisingIdClient: androidx.ads.identifier.AdvertisingIdClient$ConnectionPair tryConnect()>();
+
+        if r8 != null goto label2;
+
+        $r5 = new androidx.ads.identifier.internal.HoldingConnectionClient;
+
+        specialinvoke $r5.<androidx.ads.identifier.internal.HoldingConnectionClient: void <init>(android.content.Context)>(r0);
+
+        r2 = $r5;
+
+        $r6 = <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.atomic.AtomicReference sConnectionClient>;
+
+        virtualinvoke $r6.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>(r2);
+
+        r8 = staticinvoke <androidx.ads.identifier.AdvertisingIdClient$ConnectionPair: androidx.ads.identifier.AdvertisingIdClient$ConnectionPair of(androidx.ads.identifier.internal.HoldingConnectionClient,long)>(r2, 0L);
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r1;
+
+     label5:
+        throw r3;
+
+     label6:
+        return r8;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    private static androidx.ads.identifier.AdvertisingIdClient$ConnectionPair tryConnect()
+    {
+        androidx.ads.identifier.internal.HoldingConnectionClient r0;
+        long l0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        java.lang.Object $r2;
+        byte $b1;
+        androidx.ads.identifier.AdvertisingIdClient$ConnectionPair $r3;
+
+        $r1 = <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.atomic.AtomicReference sConnectionClient>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        r0 = (androidx.ads.identifier.internal.HoldingConnectionClient) $r2;
+
+        if r0 == null goto label1;
+
+        l0 = virtualinvoke r0.<androidx.ads.identifier.internal.HoldingConnectionClient: long askConnectionId()>();
+
+        $b1 = l0 cmp 0L;
+
+        if $b1 < 0 goto label1;
+
+        $r3 = staticinvoke <androidx.ads.identifier.AdvertisingIdClient$ConnectionPair: androidx.ads.identifier.AdvertisingIdClient$ConnectionPair of(androidx.ads.identifier.internal.HoldingConnectionClient,long)>(r0, l0);
+
+        return $r3;
+
+     label1:
+        return null;
+    }
+
+    static androidx.ads.identifier.AdvertisingIdInfo getIdInfo(androidx.ads.identifier.internal.HoldingConnectionClient) throws java.io.IOException, androidx.ads.identifier.AdvertisingIdNotAvailableException
+    {
+        androidx.ads.identifier.internal.HoldingConnectionClient r0;
+        androidx.ads.identifier.provider.IAdvertisingIdService r1;
+        java.lang.String $r3, $r6, r14;
+        boolean $z0, $z1;
+        androidx.ads.identifier.AdvertisingIdInfo$Builder $r4, $r5, $r7, $r8;
+        androidx.ads.identifier.AdvertisingIdInfo $r9;
+        java.lang.Throwable $r10, $r12, r15, r16, r20, r21;
+        androidx.ads.identifier.AdvertisingIdNotAvailableException r17, r19;
+        java.io.IOException r18;
+
+        r0 := @parameter0: androidx.ads.identifier.internal.HoldingConnectionClient;
+
+        r1 = virtualinvoke r0.<androidx.ads.identifier.internal.HoldingConnectionClient: androidx.ads.identifier.provider.IAdvertisingIdService getIdService()>();
+
+     label1:
+        r14 = interfaceinvoke r1.<androidx.ads.identifier.provider.IAdvertisingIdService: java.lang.String getId()>();
+
+        if r14 == null goto label2;
+
+        $r3 = virtualinvoke r14.<java.lang.String: java.lang.String trim()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 == 0 goto label3;
+
+     label2:
+        r17 = new androidx.ads.identifier.AdvertisingIdNotAvailableException;
+
+        specialinvoke r17.<androidx.ads.identifier.AdvertisingIdNotAvailableException: void <init>(java.lang.String)>("Advertising ID Provider does not returns an Advertising ID.");
+
+        r20 = (java.lang.Throwable) r17;
+
+        throw r20;
+
+     label3:
+        $r4 = staticinvoke <androidx.ads.identifier.AdvertisingIdInfo: androidx.ads.identifier.AdvertisingIdInfo$Builder builder()>();
+
+        $r5 = virtualinvoke $r4.<androidx.ads.identifier.AdvertisingIdInfo$Builder: androidx.ads.identifier.AdvertisingIdInfo$Builder setId(java.lang.String)>(r14);
+
+        $r6 = virtualinvoke r0.<androidx.ads.identifier.internal.HoldingConnectionClient: java.lang.String getPackageName()>();
+
+        $r7 = virtualinvoke $r5.<androidx.ads.identifier.AdvertisingIdInfo$Builder: androidx.ads.identifier.AdvertisingIdInfo$Builder setProviderPackageName(java.lang.String)>($r6);
+
+        $z1 = interfaceinvoke r1.<androidx.ads.identifier.provider.IAdvertisingIdService: boolean isLimitAdTrackingEnabled()>();
+
+        $r8 = virtualinvoke $r7.<androidx.ads.identifier.AdvertisingIdInfo$Builder: androidx.ads.identifier.AdvertisingIdInfo$Builder setLimitAdTrackingEnabled(boolean)>($z1);
+
+        $r9 = virtualinvoke $r8.<androidx.ads.identifier.AdvertisingIdInfo$Builder: androidx.ads.identifier.AdvertisingIdInfo build()>();
+
+     label4:
+        return $r9;
+
+     label5:
+        $r12 := @caughtexception;
+
+        r15 = $r12;
+
+        r18 = new java.io.IOException;
+
+        specialinvoke r18.<java.io.IOException: void <init>(java.lang.String,java.lang.Throwable)>("Remote exception", r15);
+
+        throw r18;
+
+     label6:
+        $r10 := @caughtexception;
+
+        r16 = $r10;
+
+        r19 = new androidx.ads.identifier.AdvertisingIdNotAvailableException;
+
+        specialinvoke r19.<androidx.ads.identifier.AdvertisingIdNotAvailableException: void <init>(java.lang.String,java.lang.Throwable)>("Advertising ID Provider throws a exception.", r16);
+
+        r21 = (java.lang.Throwable) r19;
+
+        throw r21;
+
+        catch android.os.RemoteException from label1 to label4 with label5;
+        catch java.lang.RuntimeException from label1 to label4 with label6;
+    }
+
+    static void clearConnectionClient()
+    {
+        java.util.concurrent.atomic.AtomicReference $r0;
+
+        $r0 = <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.atomic.AtomicReference sConnectionClient>;
+
+        virtualinvoke $r0.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>(null);
+
+        return;
+    }
+
+    static boolean isConnected()
+    {
+        androidx.ads.identifier.internal.HoldingConnectionClient r0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        java.lang.Object $r2;
+        boolean $z0, $z1;
+
+        $r1 = <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.atomic.AtomicReference sConnectionClient>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        r0 = (androidx.ads.identifier.internal.HoldingConnectionClient) $r2;
+
+        if r0 == null goto label1;
+
+        $z0 = virtualinvoke r0.<androidx.ads.identifier.internal.HoldingConnectionClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    public static boolean isAdvertisingIdProviderAvailable(android.content.Context)
+    {
+        android.content.Context r0;
+        android.content.pm.PackageManager $r1;
+        java.util.List $r2;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r2 = staticinvoke <androidx.ads.identifier.AdvertisingIdUtils: java.util.List getAdvertisingIdProviderServices(android.content.pm.PackageManager)>($r1);
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    public static com.google.common.util.concurrent.ListenableFuture getAdvertisingIdInfo(android.content.Context)
+    {
+        android.content.Context r0, r1;
+        androidx.ads.identifier.AdvertisingIdClient$1 $r2;
+        com.google.common.util.concurrent.ListenableFuture $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 = virtualinvoke r0.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r2 = new androidx.ads.identifier.AdvertisingIdClient$1;
+
+        specialinvoke $r2.<androidx.ads.identifier.AdvertisingIdClient$1: void <init>(android.content.Context)>(r1);
+
+        $r3 = staticinvoke <androidx.concurrent.futures.CallbackToFutureAdapter: com.google.common.util.concurrent.ListenableFuture getFuture(androidx.concurrent.futures.CallbackToFutureAdapter$Resolver)>($r2);
+
+        return $r3;
+    }
+
+    static void submitAdvertisingIdInfoTask(android.content.Context, androidx.concurrent.futures.CallbackToFutureAdapter$Completer)
+    {
+        android.content.Context r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r1;
+        java.util.concurrent.Future r2;
+        androidx.ads.identifier.AdvertisingIdClient$2 $r3;
+        java.util.concurrent.ExecutorService $r4;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        $r4 = <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.ExecutorService QUERY_EXECUTOR_SERVICE>;
+
+        $r3 = new androidx.ads.identifier.AdvertisingIdClient$2;
+
+        specialinvoke $r3.<androidx.ads.identifier.AdvertisingIdClient$2: void <init>(android.content.Context,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>(r0, r1);
+
+        r2 = interfaceinvoke $r4.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable)>($r3);
+
+        staticinvoke <androidx.ads.identifier.AdvertisingIdClient: void scheduleTimeoutCheck(java.util.concurrent.Future,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>(r2, r1);
+
+        return;
+    }
+
+    private static void scheduleTimeoutCheck(java.util.concurrent.Future, androidx.concurrent.futures.CallbackToFutureAdapter$Completer)
+    {
+        java.util.concurrent.Future r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r1;
+        androidx.ads.identifier.AdvertisingIdClient$3 $r2;
+        java.util.concurrent.ScheduledExecutorService $r3;
+        java.util.concurrent.TimeUnit $r4;
+
+        r0 := @parameter0: java.util.concurrent.Future;
+
+        r1 := @parameter1: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        $r3 = <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE>;
+
+        $r2 = new androidx.ads.identifier.AdvertisingIdClient$3;
+
+        specialinvoke $r2.<androidx.ads.identifier.AdvertisingIdClient$3: void <init>(java.util.concurrent.Future,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>(r0, r1);
+
+        $r4 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        interfaceinvoke $r3.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r2, 20L, $r4);
+
+        return;
+    }
+
+    static void scheduleAutoDisconnect(androidx.ads.identifier.AdvertisingIdClient$ConnectionPair)
+    {
+        androidx.ads.identifier.AdvertisingIdClient$ConnectionPair r0;
+        androidx.ads.identifier.AdvertisingIdClient$4 $r1;
+        java.util.concurrent.ScheduledExecutorService $r2;
+        java.util.concurrent.TimeUnit $r3;
+
+        r0 := @parameter0: androidx.ads.identifier.AdvertisingIdClient$ConnectionPair;
+
+        $r2 = <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE>;
+
+        $r1 = new androidx.ads.identifier.AdvertisingIdClient$4;
+
+        specialinvoke $r1.<androidx.ads.identifier.AdvertisingIdClient$4: void <init>(androidx.ads.identifier.AdvertisingIdClient$ConnectionPair)>(r0);
+
+        $r3 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        interfaceinvoke $r2.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r1, 30L, $r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.util.concurrent.ExecutorService $r0;
+        java.util.concurrent.ScheduledExecutorService $r1;
+        java.lang.Object $r2;
+        java.util.concurrent.atomic.AtomicReference $r3;
+
+        $r0 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ExecutorService newCachedThreadPool()>();
+
+        <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.ExecutorService QUERY_EXECUTOR_SERVICE> = $r0;
+
+        $r1 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ScheduledExecutorService newSingleThreadScheduledExecutor()>();
+
+        <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE> = $r1;
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        <androidx.ads.identifier.AdvertisingIdClient: java.lang.Object sLock> = $r2;
+
+        $r3 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r3.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>(null);
+
+        <androidx.ads.identifier.AdvertisingIdClient: java.util.concurrent.atomic.AtomicReference sConnectionClient> = $r3;
+
+        return;
+    }
+

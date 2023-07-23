@@ -1,0 +1,318 @@
+com.google.common.flogger.backend.android.LogUtils
+    public static com.google.common.flogger.backend.android.LogUtils$AndroidLevel getAndroidLevel(java.util.logging.Level)
+    {
+        java.util.logging.Level $r0;
+        int $i0, $i1;
+        com.google.common.flogger.backend.android.LogUtils$AndroidLevel r1;
+
+        $r0 := @parameter0: java.util.logging.Level;
+
+        $i0 = virtualinvoke $r0.<java.util.logging.Level: int intValue()>();
+
+        $r0 = <java.util.logging.Level: java.util.logging.Level SEVERE>;
+
+        $i1 = virtualinvoke $r0.<java.util.logging.Level: int intValue()>();
+
+        if $i0 < $i1 goto label1;
+
+        r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel ERROR>;
+
+        return r1;
+
+     label1:
+        $r0 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        $i1 = virtualinvoke $r0.<java.util.logging.Level: int intValue()>();
+
+        if $i0 < $i1 goto label2;
+
+        r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel WARN>;
+
+        return r1;
+
+     label2:
+        $r0 = <java.util.logging.Level: java.util.logging.Level INFO>;
+
+        $i1 = virtualinvoke $r0.<java.util.logging.Level: int intValue()>();
+
+        if $i0 < $i1 goto label3;
+
+        r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel INFO>;
+
+        return r1;
+
+     label3:
+        $r0 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        $i1 = virtualinvoke $r0.<java.util.logging.Level: int intValue()>();
+
+        if $i0 < $i1 goto label4;
+
+        r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel DEBUG>;
+
+        return r1;
+
+     label4:
+        r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel VERBOSE>;
+
+        return r1;
+    }
+
+    private static int getLastSeparatorIndex(java.lang.String)
+    {
+        java.lang.String $r0;
+        int $i0;
+        char $c1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 + -1;
+
+     label1:
+        if $i0 < 0 goto label4;
+
+        $c1 = virtualinvoke $r0.<java.lang.String: char charAt(int)>($i0);
+
+        if $c1 == 46 goto label3;
+
+        if $c1 != 36 goto label2;
+
+        return $i0;
+
+     label2:
+        $i0 = $i0 + -1;
+
+        goto label1;
+
+     label3:
+        return $i0;
+
+     label4:
+        return -1;
+    }
+
+    public static java.lang.String getValidTag(java.lang.String, java.lang.String, boolean)
+    {
+        java.lang.String $r0, $r1;
+        boolean $z0;
+        int $i0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 := @parameter2: boolean;
+
+        $r0 = staticinvoke <com.google.common.flogger.backend.android.LogUtils: java.lang.String truncateToSimpleClassNameIfTooLong(java.lang.String,java.lang.String)>($r0, $r1);
+
+        if $z0 != 0 goto label2;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 26 goto label1;
+
+        goto label2;
+
+     label1:
+        return $r0;
+
+     label2:
+        $r0 = staticinvoke <com.google.common.flogger.backend.android.LogUtils: java.lang.String truncateTag(java.lang.String)>($r0);
+
+        return $r0;
+    }
+
+    public static java.lang.String truncateTag(java.lang.String)
+    {
+        java.lang.String $r0;
+        int $i0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = staticinvoke <java.lang.Math: int min(int,int)>($i0, 23);
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>(0, $i0);
+
+        return $r0;
+    }
+
+    public static java.lang.String truncateToSimpleClassNameIfTooLong(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        int $i0, $i1;
+        java.lang.StringBuilder $r2;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i1 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        $i0 = $i0 + $i1;
+
+        if $i0 <= 23 goto label1;
+
+        $i0 = staticinvoke <com.google.common.flogger.backend.android.LogUtils: int getLastSeparatorIndex(java.lang.String)>($r1);
+
+        $i0 = $i0 + 1;
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int)>($i0);
+
+     label1:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r0 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r0;
+    }
+
+com.google.common.flogger.backend.android.LogUtils$AndroidLevel
+<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel[] $VALUES>
+<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel ASSERT>
+<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel DEBUG>
+<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel ERROR>
+<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel INFO>
+<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel VERBOSE>
+<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel WARN>
+<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: int value>
+    private static com.google.common.flogger.backend.android.LogUtils$AndroidLevel[] $values()
+    {
+        com.google.common.flogger.backend.android.LogUtils$AndroidLevel[] $r0;
+        com.google.common.flogger.backend.android.LogUtils$AndroidLevel $r1;
+
+        $r0 = newarray (com.google.common.flogger.backend.android.LogUtils$AndroidLevel)[6];
+
+        $r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel ASSERT>;
+
+        $r0[0] = $r1;
+
+        $r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel ERROR>;
+
+        $r0[1] = $r1;
+
+        $r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel WARN>;
+
+        $r0[2] = $r1;
+
+        $r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel INFO>;
+
+        $r0[3] = $r1;
+
+        $r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel DEBUG>;
+
+        $r0[4] = $r1;
+
+        $r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel VERBOSE>;
+
+        $r0[5] = $r1;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        com.google.common.flogger.backend.android.LogUtils$AndroidLevel[] $r0;
+        com.google.common.flogger.backend.android.LogUtils$AndroidLevel $r1;
+
+        $r1 = new com.google.common.flogger.backend.android.LogUtils$AndroidLevel;
+
+        specialinvoke $r1.<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: void <init>(java.lang.String,int,int)>("ASSERT", 0, 7);
+
+        <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel ASSERT> = $r1;
+
+        $r1 = new com.google.common.flogger.backend.android.LogUtils$AndroidLevel;
+
+        specialinvoke $r1.<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: void <init>(java.lang.String,int,int)>("ERROR", 1, 6);
+
+        <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel ERROR> = $r1;
+
+        $r1 = new com.google.common.flogger.backend.android.LogUtils$AndroidLevel;
+
+        specialinvoke $r1.<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: void <init>(java.lang.String,int,int)>("WARN", 2, 5);
+
+        <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel WARN> = $r1;
+
+        $r1 = new com.google.common.flogger.backend.android.LogUtils$AndroidLevel;
+
+        specialinvoke $r1.<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: void <init>(java.lang.String,int,int)>("INFO", 3, 4);
+
+        <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel INFO> = $r1;
+
+        $r1 = new com.google.common.flogger.backend.android.LogUtils$AndroidLevel;
+
+        specialinvoke $r1.<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: void <init>(java.lang.String,int,int)>("DEBUG", 4, 3);
+
+        <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel DEBUG> = $r1;
+
+        $r1 = new com.google.common.flogger.backend.android.LogUtils$AndroidLevel;
+
+        specialinvoke $r1.<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: void <init>(java.lang.String,int,int)>("VERBOSE", 5, 2);
+
+        <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel VERBOSE> = $r1;
+
+        $r0 = staticinvoke <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel[] $values()>();
+
+        <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel[] $VALUES> = $r0;
+
+        return;
+    }
+
+    private void <init>(java.lang.String, int, int)
+    {
+        com.google.common.flogger.backend.android.LogUtils$AndroidLevel $r0;
+        java.lang.String $r1;
+        int $i0, $i1;
+
+        $r0 := @this: com.google.common.flogger.backend.android.LogUtils$AndroidLevel;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        specialinvoke $r0.<java.lang.Enum: void <init>(java.lang.String,int)>($r1, $i0);
+
+        $r0.<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: int value> = $i1;
+
+        return;
+    }
+
+    public static com.google.common.flogger.backend.android.LogUtils$AndroidLevel[] values()
+    {
+        java.lang.Object $r0;
+        com.google.common.flogger.backend.android.LogUtils$AndroidLevel[] $r1;
+
+        $r1 = <com.google.common.flogger.backend.android.LogUtils$AndroidLevel: com.google.common.flogger.backend.android.LogUtils$AndroidLevel[] $VALUES>;
+
+        $r0 = virtualinvoke $r1.<java.lang.Object: java.lang.Object clone()>();
+
+        $r1 = (com.google.common.flogger.backend.android.LogUtils$AndroidLevel[]) $r0;
+
+        return $r1;
+    }
+
+    public int getValue()
+    {
+        com.google.common.flogger.backend.android.LogUtils$AndroidLevel $r0;
+        int i0;
+
+        $r0 := @this: com.google.common.flogger.backend.android.LogUtils$AndroidLevel;
+
+        i0 = $r0.<com.google.common.flogger.backend.android.LogUtils$AndroidLevel: int value>;
+
+        return i0;
+    }
+

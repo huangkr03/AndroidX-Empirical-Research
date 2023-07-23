@@ -1,0 +1,113 @@
+kotlinx.coroutines.TimeoutKt
+    public static final kotlinx.coroutines.TimeoutCancellationException TimeoutCancellationException(long, kotlinx.coroutines.Job)
+    {
+        kotlinx.coroutines.Job $r0;
+        long $l0;
+        kotlinx.coroutines.TimeoutCancellationException $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+
+        $l0 := @parameter0: long;
+
+        $r0 := @parameter1: kotlinx.coroutines.Job;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r0, "coroutine");
+
+        $r1 = new kotlinx.coroutines.TimeoutCancellationException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Timed out waiting for ");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ms");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<kotlinx.coroutines.TimeoutCancellationException: void <init>(java.lang.String,kotlinx.coroutines.Job)>($r3, $r0);
+
+        return $r1;
+    }
+
+    private static final java.lang.Object setupTimeout(kotlinx.coroutines.TimeoutCoroutine, kotlin.jvm.functions.Function2)
+    {
+        kotlin.jvm.functions.Function2 $r0;
+        long $l0;
+        kotlinx.coroutines.TimeoutCoroutine $r1;
+        kotlin.coroutines.Continuation $r2;
+        kotlin.coroutines.CoroutineContext $r3;
+        kotlinx.coroutines.Delay $r4;
+        kotlinx.coroutines.DisposableHandle $r5;
+        java.lang.Object $r6;
+
+        $r1 := @parameter0: kotlinx.coroutines.TimeoutCoroutine;
+
+        $r0 := @parameter1: kotlin.jvm.functions.Function2;
+
+        $r2 = $r1.<kotlinx.coroutines.TimeoutCoroutine: kotlin.coroutines.Continuation uCont>;
+
+        $r3 = interfaceinvoke $r2.<kotlin.coroutines.Continuation: kotlin.coroutines.CoroutineContext getContext()>();
+
+        $r4 = staticinvoke <kotlinx.coroutines.DelayKt: kotlinx.coroutines.Delay getDelay(kotlin.coroutines.CoroutineContext)>($r3);
+
+        $l0 = $r1.<kotlinx.coroutines.TimeoutCoroutine: long time>;
+
+        $r3 = virtualinvoke $r1.<kotlinx.coroutines.TimeoutCoroutine: kotlin.coroutines.CoroutineContext getContext()>();
+
+        $r5 = interfaceinvoke $r4.<kotlinx.coroutines.Delay: kotlinx.coroutines.DisposableHandle invokeOnTimeout(long,java.lang.Runnable,kotlin.coroutines.CoroutineContext)>($l0, $r1, $r3);
+
+        staticinvoke <kotlinx.coroutines.JobKt: kotlinx.coroutines.DisposableHandle disposeOnCompletion(kotlinx.coroutines.Job,kotlinx.coroutines.DisposableHandle)>($r1, $r5);
+
+        $r6 = staticinvoke <kotlinx.coroutines.intrinsics.UndispatchedKt: java.lang.Object startUndispatchedOrReturnIgnoreTimeout(kotlinx.coroutines.internal.ScopeCoroutine,java.lang.Object,kotlin.jvm.functions.Function2)>($r1, $r1, $r0);
+
+        return $r6;
+    }
+
+    public static final java.lang.Object withTimeout(long, kotlin.jvm.functions.Function2, kotlin.coroutines.Continuation)
+    {
+        kotlin.jvm.functions.Function2 $r0;
+        kotlin.coroutines.Continuation $r1;
+        byte $b0;
+        long $l1;
+        kotlinx.coroutines.TimeoutCoroutine $r2;
+        java.lang.Object $r3, $r4;
+        kotlinx.coroutines.TimeoutCancellationException $r5;
+
+        $l1 := @parameter0: long;
+
+        $r0 := @parameter1: kotlin.jvm.functions.Function2;
+
+        $r1 := @parameter2: kotlin.coroutines.Continuation;
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 <= 0 goto label1;
+
+        $r2 = new kotlinx.coroutines.TimeoutCoroutine;
+
+        specialinvoke $r2.<kotlinx.coroutines.TimeoutCoroutine: void <init>(long,kotlin.coroutines.Continuation)>($l1, $r1);
+
+        $r3 = staticinvoke <kotlinx.coroutines.TimeoutKt: java.lang.Object setupTimeout(kotlinx.coroutines.TimeoutCoroutine,kotlin.jvm.functions.Function2)>($r2, $r0);
+
+        $r4 = staticinvoke <kotlin.coroutines.intrinsics.IntrinsicsKt: java.lang.Object getCOROUTINE_SUSPENDED()>();
+
+        if $r3 != $r4 goto label2;
+
+        staticinvoke <kotlin.coroutines.jvm.internal.DebugProbesKt: void probeCoroutineSuspended(kotlin.coroutines.Continuation)>($r1);
+
+        return $r3;
+
+     label1:
+        $r5 = new kotlinx.coroutines.TimeoutCancellationException;
+
+        specialinvoke $r5.<kotlinx.coroutines.TimeoutCancellationException: void <init>(java.lang.String)>("Timed out immediately");
+
+        throw $r5;
+
+     label2:
+        return $r3;
+    }
+

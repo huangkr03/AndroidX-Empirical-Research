@@ -1,0 +1,615 @@
+androidx.test.internal.events.client.TestEventClient
+<androidx.test.internal.events.client.TestEventClient: java.lang.String TAG>
+<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventClient NO_OP_CLIENT>
+<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventServiceConnection defaultConn>
+<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestDiscoveryListener testDiscoveryListener>
+<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener>
+<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestPlatformListener testPlatformListener>
+<androidx.test.internal.events.client.TestEventClient: java.util.concurrent.atomic.AtomicBoolean isConnectedToOrchestrator>
+    public static androidx.test.internal.events.client.TestEventClient connect(android.content.Context, androidx.test.internal.events.client.TestEventClientConnectListener, androidx.test.internal.events.client.TestEventClientArgs)
+    {
+        android.content.Context r0;
+        androidx.test.internal.events.client.TestEventClientConnectListener r1;
+        androidx.test.internal.events.client.TestEventClientArgs r2;
+        androidx.test.internal.events.client.TestEventServiceConnection r3, $r7, $r17;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        androidx.test.internal.events.client.OrchestratedInstrumentationListener $r8, r23;
+        androidx.test.internal.events.client.TestEventClient $r9, $r12, $r14, $r15, $r16, r18;
+        androidx.test.internal.events.client.TestPlatformListener $r10, r21;
+        androidx.test.internal.events.client.TestPlatformEventService $r11;
+        androidx.test.internal.events.client.TestDiscoveryListener $r13, r20;
+        androidx.test.internal.events.client.TestDiscoveryEventService r19;
+        androidx.test.internal.events.client.TestRunEventService r22;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.test.internal.events.client.TestEventClientConnectListener;
+
+        r2 := @parameter2: androidx.test.internal.events.client.TestEventClientArgs;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r0, "context parameter cannot be null!");
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "listener parameter cannot be null!");
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r2, "args parameter cannot be null!");
+
+        $z0 = r2.<androidx.test.internal.events.client.TestEventClientArgs: boolean isOrchestrated>;
+
+        if $z0 != 0 goto label1;
+
+        $r16 = <androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventClient NO_OP_CLIENT>;
+
+        return $r16;
+
+     label1:
+        $z1 = r2.<androidx.test.internal.events.client.TestEventClientArgs: boolean isPrimaryInstrProcess>;
+
+        if $z1 != 0 goto label2;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("TestEventClient", "Orchestration requested, but this isn\'t the primary instrumentation");
+
+        $r15 = <androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventClient NO_OP_CLIENT>;
+
+        return $r15;
+
+     label2:
+        $r7 = <androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventServiceConnection defaultConn>;
+
+        if $r7 == null goto label3;
+
+        $r17 = <androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventServiceConnection defaultConn>;
+
+        goto label4;
+
+     label3:
+        $r17 = staticinvoke <androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventServiceConnection getConnection(androidx.test.internal.events.client.TestEventClientConnectListener,androidx.test.internal.events.client.TestEventClientArgs)>(r1, r2);
+
+     label4:
+        r3 = $r17;
+
+        r18 = <androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventClient NO_OP_CLIENT>;
+
+        $z2 = r2.<androidx.test.internal.events.client.TestEventClientArgs: boolean isTestDiscoveryRequested>;
+
+        if $z2 == 0 goto label5;
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>("TestEventClient", "Test discovery events requested");
+
+        r19 = (androidx.test.internal.events.client.TestDiscoveryEventService) r3;
+
+        $r13 = new androidx.test.internal.events.client.TestDiscoveryListener;
+
+        specialinvoke $r13.<androidx.test.internal.events.client.TestDiscoveryListener: void <init>(androidx.test.internal.events.client.TestDiscoveryEventService)>(r19);
+
+        r20 = $r13;
+
+        $r14 = new androidx.test.internal.events.client.TestEventClient;
+
+        specialinvoke $r14.<androidx.test.internal.events.client.TestEventClient: void <init>(androidx.test.internal.events.client.TestDiscoveryListener)>(r20);
+
+        r18 = $r14;
+
+        goto label7;
+
+     label5:
+        $z3 = r2.<androidx.test.internal.events.client.TestEventClientArgs: boolean isTestRunEventsRequested>;
+
+        if $z3 == 0 goto label7;
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>("TestEventClient", "Test run events requested");
+
+        $z4 = r2.<androidx.test.internal.events.client.TestEventClientArgs: boolean testPlatformMigration>;
+
+        if $z4 == 0 goto label6;
+
+        $r10 = new androidx.test.internal.events.client.TestPlatformListener;
+
+        $r11 = (androidx.test.internal.events.client.TestPlatformEventService) r3;
+
+        specialinvoke $r10.<androidx.test.internal.events.client.TestPlatformListener: void <init>(androidx.test.internal.events.client.TestPlatformEventService)>($r11);
+
+        r21 = $r10;
+
+        $r12 = new androidx.test.internal.events.client.TestEventClient;
+
+        specialinvoke $r12.<androidx.test.internal.events.client.TestEventClient: void <init>(androidx.test.internal.events.client.TestPlatformListener)>(r21);
+
+        r18 = $r12;
+
+        goto label7;
+
+     label6:
+        r22 = (androidx.test.internal.events.client.TestRunEventService) r3;
+
+        $r8 = new androidx.test.internal.events.client.OrchestratedInstrumentationListener;
+
+        specialinvoke $r8.<androidx.test.internal.events.client.OrchestratedInstrumentationListener: void <init>(androidx.test.internal.events.client.TestRunEventService)>(r22);
+
+        r23 = $r8;
+
+        $r9 = new androidx.test.internal.events.client.TestEventClient;
+
+        specialinvoke $r9.<androidx.test.internal.events.client.TestEventClient: void <init>(androidx.test.internal.events.client.OrchestratedInstrumentationListener)>(r23);
+
+        r18 = $r9;
+
+     label7:
+        interfaceinvoke r3.<androidx.test.internal.events.client.TestEventServiceConnection: void connect(android.content.Context)>(r0);
+
+        return r18;
+    }
+
+    private static androidx.test.internal.events.client.TestEventServiceConnection getConnection(androidx.test.internal.events.client.TestEventClientConnectListener, androidx.test.internal.events.client.TestEventClientArgs)
+    {
+        androidx.test.internal.events.client.TestEventClientConnectListener r0;
+        androidx.test.internal.events.client.TestEventClientArgs r1;
+        int $i0, $i1;
+        java.lang.IllegalArgumentException $r2, $r16;
+        boolean $z0, $z1, $z2;
+        androidx.test.internal.events.client.TestRunEventServiceConnection $r3;
+        java.lang.String $r4, $r6, $r8, $r10, $r12, $r14;
+        java.lang.Object $r5, $r9, $r13;
+        androidx.test.internal.events.client.TestPlatformEventServiceConnection $r7;
+        androidx.test.internal.events.client.TestDiscoveryEventServiceConnection $r11;
+        androidx.test.internal.events.client.TestEventClientArgs$ConnectionFactory $r15, $r17;
+        androidx.test.internal.events.client.TestEventServiceConnection $r18;
+
+        r0 := @parameter0: androidx.test.internal.events.client.TestEventClientConnectListener;
+
+        r1 := @parameter1: androidx.test.internal.events.client.TestEventClientArgs;
+
+        $i0 = r1.<androidx.test.internal.events.client.TestEventClientArgs: int orchestratorVersion>;
+
+        if $i0 != 1 goto label2;
+
+        $r15 = r1.<androidx.test.internal.events.client.TestEventClientArgs: androidx.test.internal.events.client.TestEventClientArgs$ConnectionFactory connectionFactory>;
+
+        if $r15 == null goto label1;
+
+        $r17 = r1.<androidx.test.internal.events.client.TestEventClientArgs: androidx.test.internal.events.client.TestEventClientArgs$ConnectionFactory connectionFactory>;
+
+        $r18 = interfaceinvoke $r17.<androidx.test.internal.events.client.TestEventClientArgs$ConnectionFactory: androidx.test.internal.events.client.TestEventServiceConnection create(androidx.test.internal.events.client.TestEventClientConnectListener)>(r0);
+
+        return $r18;
+
+     label1:
+        $r16 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r16.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Orchestrator v1 connectionFactory must be provided by TestEventClientArgs.Builder#setConnectionFactory()");
+
+        throw $r16;
+
+     label2:
+        $i1 = r1.<androidx.test.internal.events.client.TestEventClientArgs: int orchestratorVersion>;
+
+        if $i1 != 2 goto label5;
+
+        $z0 = r1.<androidx.test.internal.events.client.TestEventClientArgs: boolean isTestDiscoveryRequested>;
+
+        if $z0 == 0 goto label3;
+
+        $r11 = new androidx.test.internal.events.client.TestDiscoveryEventServiceConnection;
+
+        $r12 = r1.<androidx.test.internal.events.client.TestEventClientArgs: java.lang.String testDiscoveryService>;
+
+        $r13 = staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>($r12);
+
+        $r14 = (java.lang.String) $r13;
+
+        specialinvoke $r11.<androidx.test.internal.events.client.TestDiscoveryEventServiceConnection: void <init>(java.lang.String,androidx.test.internal.events.client.TestEventClientConnectListener)>($r14, r0);
+
+        return $r11;
+
+     label3:
+        $z1 = r1.<androidx.test.internal.events.client.TestEventClientArgs: boolean isTestRunEventsRequested>;
+
+        if $z1 == 0 goto label5;
+
+        $z2 = r1.<androidx.test.internal.events.client.TestEventClientArgs: boolean testPlatformMigration>;
+
+        if $z2 == 0 goto label4;
+
+        $r7 = new androidx.test.internal.events.client.TestPlatformEventServiceConnection;
+
+        $r8 = r1.<androidx.test.internal.events.client.TestEventClientArgs: java.lang.String testRunEventService>;
+
+        $r9 = staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>($r8);
+
+        $r10 = (java.lang.String) $r9;
+
+        specialinvoke $r7.<androidx.test.internal.events.client.TestPlatformEventServiceConnection: void <init>(java.lang.String,androidx.test.internal.events.client.TestEventClientConnectListener)>($r10, r0);
+
+        return $r7;
+
+     label4:
+        $r3 = new androidx.test.internal.events.client.TestRunEventServiceConnection;
+
+        $r4 = r1.<androidx.test.internal.events.client.TestEventClientArgs: java.lang.String testRunEventService>;
+
+        $r5 = staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        $r6 = (java.lang.String) $r5;
+
+        specialinvoke $r3.<androidx.test.internal.events.client.TestRunEventServiceConnection: void <init>(java.lang.String,androidx.test.internal.events.client.TestEventClientConnectListener)>($r6, r0);
+
+        return $r3;
+
+     label5:
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("TestEventClientArgs misconfiguration - can\'t determine which service connection to use.");
+
+        throw $r2;
+    }
+
+    public org.junit.runner.notification.RunListener getRunListener()
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        boolean $z0, $z1;
+        androidx.test.internal.events.client.OrchestratedInstrumentationListener $r1, $r3;
+        androidx.test.internal.events.client.TestPlatformListener $r2;
+        androidx.test.internal.events.client.TestDiscoveryListener $r4;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        $z0 = specialinvoke r0.<androidx.test.internal.events.client.TestEventClient: boolean isTestDiscoveryEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestDiscoveryListener testDiscoveryListener>;
+
+        return $r4;
+
+     label1:
+        $z1 = specialinvoke r0.<androidx.test.internal.events.client.TestEventClient: boolean isTestRunEventsEnabled()>();
+
+        if $z1 == 0 goto label3;
+
+        $r1 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener>;
+
+        if $r1 == null goto label2;
+
+        $r3 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener>;
+
+        return $r3;
+
+     label2:
+        $r2 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestPlatformListener testPlatformListener>;
+
+        return $r2;
+
+     label3:
+        return null;
+    }
+
+    static void <clinit>()
+    {
+        androidx.test.internal.events.client.TestEventClient $r0;
+
+        $r0 = new androidx.test.internal.events.client.TestEventClient;
+
+        specialinvoke $r0.<androidx.test.internal.events.client.TestEventClient: void <init>()>();
+
+        <androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventClient NO_OP_CLIENT> = $r0;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<androidx.test.internal.events.client.TestEventClient: java.util.concurrent.atomic.AtomicBoolean isConnectedToOrchestrator> = $r1;
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestDiscoveryListener testDiscoveryListener> = null;
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener> = null;
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestPlatformListener testPlatformListener> = null;
+
+        return;
+    }
+
+    private void <init>(androidx.test.internal.events.client.OrchestratedInstrumentationListener)
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        androidx.test.internal.events.client.OrchestratedInstrumentationListener r1;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        r1 := @parameter0: androidx.test.internal.events.client.OrchestratedInstrumentationListener;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<androidx.test.internal.events.client.TestEventClient: java.util.concurrent.atomic.AtomicBoolean isConnectedToOrchestrator> = $r2;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "runListener cannot be null");
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestDiscoveryListener testDiscoveryListener> = null;
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener> = r1;
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestPlatformListener testPlatformListener> = null;
+
+        return;
+    }
+
+    private void <init>(androidx.test.internal.events.client.TestDiscoveryListener)
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        androidx.test.internal.events.client.TestDiscoveryListener r1;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        r1 := @parameter0: androidx.test.internal.events.client.TestDiscoveryListener;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<androidx.test.internal.events.client.TestEventClient: java.util.concurrent.atomic.AtomicBoolean isConnectedToOrchestrator> = $r2;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "testDiscovery cannot be null");
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestDiscoveryListener testDiscoveryListener> = r1;
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener> = null;
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestPlatformListener testPlatformListener> = null;
+
+        return;
+    }
+
+    private void <init>(androidx.test.internal.events.client.TestPlatformListener)
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        androidx.test.internal.events.client.TestPlatformListener r1;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        r1 := @parameter0: androidx.test.internal.events.client.TestPlatformListener;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<androidx.test.internal.events.client.TestEventClient: java.util.concurrent.atomic.AtomicBoolean isConnectedToOrchestrator> = $r2;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "runListener cannot be null");
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestDiscoveryListener testDiscoveryListener> = null;
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener> = null;
+
+        r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestPlatformListener testPlatformListener> = r1;
+
+        return;
+    }
+
+    public void setConnectedToOrchestrator(boolean)
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        boolean z0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = r0.<androidx.test.internal.events.client.TestEventClient: java.util.concurrent.atomic.AtomicBoolean isConnectedToOrchestrator>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(z0);
+
+        return;
+    }
+
+    public static void setOrchestratorConnection(androidx.test.internal.events.client.TestEventServiceConnection)
+    {
+        androidx.test.internal.events.client.TestEventServiceConnection r0, $r2;
+        java.lang.Object $r1;
+
+        r0 := @parameter0: androidx.test.internal.events.client.TestEventServiceConnection;
+
+        $r1 = staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>(r0);
+
+        $r2 = (androidx.test.internal.events.client.TestEventServiceConnection) $r1;
+
+        <androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestEventServiceConnection defaultConn> = $r2;
+
+        return;
+    }
+
+    public boolean isOrchestrationServiceEnabled()
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        $z0 = specialinvoke r0.<androidx.test.internal.events.client.TestEventClient: boolean isTestDiscoveryEnabled()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = specialinvoke r0.<androidx.test.internal.events.client.TestEventClient: boolean isTestRunEventsEnabled()>();
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        return $z2;
+    }
+
+    private boolean isTestDiscoveryEnabled()
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        androidx.test.internal.events.client.TestDiscoveryListener $r1;
+        boolean $z0;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        $r1 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestDiscoveryListener testDiscoveryListener>;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private boolean isTestRunEventsEnabled()
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        androidx.test.internal.events.client.OrchestratedInstrumentationListener $r1;
+        androidx.test.internal.events.client.TestPlatformListener $r2;
+        boolean $z0;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        $r1 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener>;
+
+        if $r1 != null goto label1;
+
+        $r2 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestPlatformListener testPlatformListener>;
+
+        if $r2 == null goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    public boolean reportProcessCrash(java.lang.Throwable)
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        java.lang.Throwable r1;
+        java.util.concurrent.TimeUnit $r2;
+        long $l0;
+        boolean $z0;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.TimeUnit: long toMillis(long)>(20L);
+
+        $z0 = virtualinvoke r0.<androidx.test.internal.events.client.TestEventClient: boolean reportProcessCrash(java.lang.Throwable,long)>(r1, $l0);
+
+        return $z0;
+    }
+
+    public boolean reportProcessCrash(java.lang.Throwable, long)
+    {
+        androidx.test.internal.events.client.TestEventClient r0;
+        java.lang.Throwable r1;
+        long l0;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        androidx.test.internal.events.client.TestDiscoveryListener $r3;
+        androidx.test.internal.events.client.OrchestratedInstrumentationListener $r4, $r7;
+        androidx.test.internal.events.client.TestPlatformListener $r5, $r6;
+
+        r0 := @this: androidx.test.internal.events.client.TestEventClient;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        l0 := @parameter1: long;
+
+        $r2 = r0.<androidx.test.internal.events.client.TestEventClient: java.util.concurrent.atomic.AtomicBoolean isConnectedToOrchestrator>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("TestEventClient", "Process crashed before connection to orchestrator");
+
+        return 0;
+
+     label1:
+        $z1 = specialinvoke r0.<androidx.test.internal.events.client.TestEventClient: boolean isTestRunEventsEnabled()>();
+
+        if $z1 == 0 goto label3;
+
+        $r4 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener>;
+
+        if $r4 == null goto label2;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TestEventClient", "Reporting process crashed to orchestration test run event service.");
+
+        $r7 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.OrchestratedInstrumentationListener notificationRunListener>;
+
+        $z5 = virtualinvoke $r7.<androidx.test.internal.events.client.OrchestratedInstrumentationListener: boolean reportProcessCrash(java.lang.Throwable,long)>(r1, l0);
+
+        return $z5;
+
+     label2:
+        $r5 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestPlatformListener testPlatformListener>;
+
+        if $r5 == null goto label4;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TestEventClient", "Reporting process crash to platform test event service.");
+
+        $r6 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestPlatformListener testPlatformListener>;
+
+        $z4 = virtualinvoke $r6.<androidx.test.internal.events.client.TestPlatformListener: boolean reportProcessCrash(java.lang.Throwable)>(r1);
+
+        return $z4;
+
+     label3:
+        $z2 = specialinvoke r0.<androidx.test.internal.events.client.TestEventClient: boolean isTestDiscoveryEnabled()>();
+
+        if $z2 == 0 goto label4;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TestEventClient", "Reporting process crash to platform test discovery service.");
+
+        $r3 = r0.<androidx.test.internal.events.client.TestEventClient: androidx.test.internal.events.client.TestDiscoveryListener testDiscoveryListener>;
+
+        $z3 = virtualinvoke $r3.<androidx.test.internal.events.client.TestDiscoveryListener: boolean reportProcessCrash(java.lang.Throwable)>(r1);
+
+        return $z3;
+
+     label4:
+        return 0;
+    }
+

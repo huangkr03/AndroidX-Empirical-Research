@@ -1,0 +1,230 @@
+androidx.benchmark.gradle.LockClocksTask
+<androidx.benchmark.gradle.LockClocksTask: org.gradle.api.provider.Property adbPath>
+    public void <init>()
+    {
+        androidx.benchmark.gradle.LockClocksTask r0;
+        org.gradle.api.Project $r1;
+        org.gradle.api.provider.Property $r2;
+        org.gradle.api.model.ObjectFactory $r3;
+
+        r0 := @this: androidx.benchmark.gradle.LockClocksTask;
+
+        specialinvoke r0.<org.gradle.api.DefaultTask: void <init>()>();
+
+        virtualinvoke r0.<androidx.benchmark.gradle.LockClocksTask: void setGroup(java.lang.String)>("Android");
+
+        virtualinvoke r0.<androidx.benchmark.gradle.LockClocksTask: void setDescription(java.lang.String)>("locks clocks of connected, supported, rooted device");
+
+        $r1 = virtualinvoke r0.<androidx.benchmark.gradle.LockClocksTask: org.gradle.api.Project getProject()>();
+
+        $r3 = interfaceinvoke $r1.<org.gradle.api.Project: org.gradle.api.model.ObjectFactory getObjects()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r3, "project.objects");
+
+        $r2 = interfaceinvoke $r3.<org.gradle.api.model.ObjectFactory: org.gradle.api.provider.Property property(java.lang.Class)>(class "Ljava/lang/String;");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r2, "property(T::class.java)");
+
+        r0.<androidx.benchmark.gradle.LockClocksTask: org.gradle.api.provider.Property adbPath> = $r2;
+
+        return;
+    }
+
+    public final org.gradle.api.provider.Property getAdbPath()
+    {
+        androidx.benchmark.gradle.LockClocksTask r0;
+        org.gradle.api.provider.Property $r1;
+
+        r0 := @this: androidx.benchmark.gradle.LockClocksTask;
+
+        $r1 = r0.<androidx.benchmark.gradle.LockClocksTask: org.gradle.api.provider.Property adbPath>;
+
+        return $r1;
+    }
+
+    public final void exec()
+    {
+        androidx.benchmark.gradle.LockClocksTask r0;
+        androidx.benchmark.gradle.Adb r1, $r5;
+        boolean z0, $z1, z2, $z3;
+        java.lang.String r2, r4, $r7, $r23, $r25, $r33, $r42, $r52;
+        java.net.URL r3;
+        org.gradle.api.provider.Property $r6;
+        java.lang.Class $r9;
+        java.lang.ClassLoader $r10;
+        java.nio.file.attribute.FileAttribute[] $r11;
+        java.nio.file.Path $r12, $r15;
+        java.io.InputStream $r13;
+        java.lang.String[] $r14;
+        java.nio.file.StandardCopyOption $r16;
+        java.nio.file.CopyOption $r17;
+        java.lang.StringBuilder $r18, $r19, $r20, $r21, $r22, $r28, $r29, $r30, $r31, $r32, $r37, $r38, $r39, $r40, $r41;
+        org.gradle.api.Project $r27;
+        org.gradle.api.GradleException $r45;
+        java.lang.Object r46, r49, $r50, $r51;
+        org.gradle.api.logging.Logger r47;
+        java.nio.file.CopyOption[] r48;
+
+        r0 := @this: androidx.benchmark.gradle.LockClocksTask;
+
+        $r5 = new androidx.benchmark.gradle.Adb;
+
+        $r6 = r0.<androidx.benchmark.gradle.LockClocksTask: org.gradle.api.provider.Property adbPath>;
+
+        r46 = interfaceinvoke $r6.<org.gradle.api.provider.Property: java.lang.Object get()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r46, "adbPath.get()");
+
+        $r7 = (java.lang.String) r46;
+
+        r47 = virtualinvoke r0.<androidx.benchmark.gradle.LockClocksTask: org.gradle.api.logging.Logger getLogger()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r47, "logger");
+
+        specialinvoke $r5.<androidx.benchmark.gradle.Adb: void <init>(java.lang.String,org.gradle.api.logging.Logger)>($r7, r47);
+
+        r1 = $r5;
+
+        staticinvoke <androidx.benchmark.gradle.Adb: androidx.benchmark.gradle.Adb$ProcessResult execSync$default(androidx.benchmark.gradle.Adb,java.lang.String,java.lang.String,boolean,boolean,int,java.lang.Object)>(r1, "root", null, 0, 1, 2, null);
+
+        z2 = virtualinvoke r1.<androidx.benchmark.gradle.Adb: boolean isAdbdRoot()>();
+
+        if z2 != 0 goto label1;
+
+        $z1 = virtualinvoke r1.<androidx.benchmark.gradle.Adb: boolean isSuInstalled()>();
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        $z3 = 1;
+
+        goto label3;
+
+     label2:
+        $z3 = 0;
+
+     label3:
+        z0 = $z3;
+
+        if z0 != 0 goto label4;
+
+        $r45 = new org.gradle.api.GradleException;
+
+        specialinvoke $r45.<org.gradle.api.GradleException: void <init>(java.lang.String)>("Your device must be rooted to lock clocks.");
+
+        throw $r45;
+
+     label4:
+        r2 = "/data/local/tmp/lockClocks.sh";
+
+        $r9 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        r3 = virtualinvoke $r10.<java.lang.ClassLoader: java.net.URL getResource(java.lang.String)>("scripts/lockClocks.sh");
+
+        $r11 = newarray (java.nio.file.attribute.FileAttribute)[0];
+
+        $r12 = staticinvoke <java.nio.file.Files: java.nio.file.Path createTempFile(java.lang.String,java.lang.String,java.nio.file.attribute.FileAttribute[])>("lockClocks.sh", null, $r11);
+
+        r4 = virtualinvoke $r12.<java.lang.Object: java.lang.String toString()>();
+
+        $r13 = virtualinvoke r3.<java.net.URL: java.io.InputStream openStream()>();
+
+        $r14 = newarray (java.lang.String)[0];
+
+        $r15 = staticinvoke <java.nio.file.Paths: java.nio.file.Path get(java.lang.String,java.lang.String[])>(r4, $r14);
+
+        r48 = newarray (java.nio.file.CopyOption)[1];
+
+        $r16 = <java.nio.file.StandardCopyOption: java.nio.file.StandardCopyOption REPLACE_EXISTING>;
+
+        $r17 = (java.nio.file.CopyOption) $r16;
+
+        r48[0] = $r17;
+
+        staticinvoke <java.nio.file.Files: long copy(java.io.InputStream,java.nio.file.Path,java.nio.file.CopyOption[])>($r13, $r15, r48);
+
+        $r18 = new java.lang.StringBuilder;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>()>();
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("push ");
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(32);
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.benchmark.gradle.Adb: androidx.benchmark.gradle.Adb$ProcessResult execSync$default(androidx.benchmark.gradle.Adb,java.lang.String,java.lang.String,boolean,boolean,int,java.lang.Object)>(r1, $r23, null, 0, 0, 14, null);
+
+        $r25 = staticinvoke <kotlin.jvm.internal.Intrinsics: java.lang.String stringPlus(java.lang.String,java.lang.Object)>("shell chmod 700 ", r2);
+
+        staticinvoke <androidx.benchmark.gradle.Adb: androidx.benchmark.gradle.Adb$ProcessResult execSync$default(androidx.benchmark.gradle.Adb,java.lang.String,java.lang.String,boolean,boolean,int,java.lang.Object)>(r1, $r25, null, 0, 0, 14, null);
+
+        $r27 = virtualinvoke r0.<androidx.benchmark.gradle.LockClocksTask: org.gradle.api.Project getProject()>();
+
+        r49 = interfaceinvoke $r27.<org.gradle.api.Project: java.lang.Object findProperty(java.lang.String)>("androidx.benchmark.lockClocks.cores");
+
+        if z2 != 0 goto label6;
+
+        $r37 = new java.lang.StringBuilder;
+
+        specialinvoke $r37.<java.lang.StringBuilder: void <init>()>();
+
+        $r38 = virtualinvoke $r37.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("shell su 0 ");
+
+        $r39 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r40 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(32);
+
+        $r50 = r49;
+
+        if r49 != null goto label5;
+
+        $r50 = "";
+
+     label5:
+        $r41 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r50);
+
+        $r42 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.benchmark.gradle.Adb: androidx.benchmark.gradle.Adb$ProcessResult execSync$default(androidx.benchmark.gradle.Adb,java.lang.String,java.lang.String,boolean,boolean,int,java.lang.Object)>(r1, $r42, null, 0, 0, 14, null);
+
+        goto label8;
+
+     label6:
+        $r28 = new java.lang.StringBuilder;
+
+        specialinvoke $r28.<java.lang.StringBuilder: void <init>()>();
+
+        $r29 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("shell ");
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r31 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(32);
+
+        $r51 = r49;
+
+        if r49 != null goto label7;
+
+        $r51 = "";
+
+     label7:
+        $r32 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r51);
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.benchmark.gradle.Adb: androidx.benchmark.gradle.Adb$ProcessResult execSync$default(androidx.benchmark.gradle.Adb,java.lang.String,java.lang.String,boolean,boolean,int,java.lang.Object)>(r1, $r33, null, 0, 0, 14, null);
+
+     label8:
+        $r52 = staticinvoke <kotlin.jvm.internal.Intrinsics: java.lang.String stringPlus(java.lang.String,java.lang.Object)>("shell rm ", r2);
+
+        staticinvoke <androidx.benchmark.gradle.Adb: androidx.benchmark.gradle.Adb$ProcessResult execSync$default(androidx.benchmark.gradle.Adb,java.lang.String,java.lang.String,boolean,boolean,int,java.lang.Object)>(r1, $r52, null, 0, 0, 14, null);
+
+        return;
+    }
+

@@ -1,0 +1,1477 @@
+kotlinx.coroutines.channels.AbstractSendChannel
+<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.atomicfu.AtomicRef onCloseHandler>
+<kotlinx.coroutines.channels.AbstractSendChannel: kotlin.jvm.functions.Function1 onUndeliveredElement>
+<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>
+    public void <init>(kotlin.jvm.functions.Function1)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.atomicfu.AtomicRef $r1;
+        kotlin.jvm.functions.Function1 $r2;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r2 := @parameter0: kotlin.jvm.functions.Function1;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlin.jvm.functions.Function1 onUndeliveredElement> = $r2;
+
+        $r3 = new kotlinx.coroutines.internal.LockFreeLinkedListHead;
+
+        specialinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListHead: void <init>()>();
+
+        $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue> = $r3;
+
+        $r1 = staticinvoke <kotlinx.atomicfu.AtomicFU: kotlinx.atomicfu.AtomicRef atomic(java.lang.Object)>(null);
+
+        $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.atomicfu.AtomicRef onCloseHandler> = $r1;
+
+        return;
+    }
+
+    public static final void access$helpCloseAndResumeWithSendException(kotlinx.coroutines.channels.AbstractSendChannel, kotlin.coroutines.Continuation, java.lang.Object, kotlinx.coroutines.channels.Closed)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlin.coroutines.Continuation $r1;
+        java.lang.Object $r2;
+        kotlinx.coroutines.channels.Closed $r3;
+
+        $r0 := @parameter0: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter1: kotlin.coroutines.Continuation;
+
+        $r2 := @parameter2: java.lang.Object;
+
+        $r3 := @parameter3: kotlinx.coroutines.channels.Closed;
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: void helpCloseAndResumeWithSendException(kotlin.coroutines.Continuation,java.lang.Object,kotlinx.coroutines.channels.Closed)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    public static final boolean access$isFullImpl(kotlinx.coroutines.channels.AbstractSendChannel)
+    {
+        boolean $z0;
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+
+        $r0 := @parameter0: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: boolean isFullImpl()>();
+
+        return $z0;
+    }
+
+    private final int countQueueSize()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r1;
+        java.lang.Object $r2;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r3;
+        int $i0;
+        boolean $z0;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        $r2 = virtualinvoke $r1.<kotlinx.coroutines.internal.LockFreeLinkedListHead: java.lang.Object getNext()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r2, "null cannot be cast to non-null type kotlinx.coroutines.internal.LockFreeLinkedListNode{ kotlinx.coroutines.internal.LockFreeLinkedListKt.Node }");
+
+        $r3 = (kotlinx.coroutines.internal.LockFreeLinkedListNode) $r2;
+
+        $i0 = 0;
+
+     label1:
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r3, $r1);
+
+        if $z0 != 0 goto label3;
+
+        $z0 = $r3 instanceof kotlinx.coroutines.internal.LockFreeLinkedListNode;
+
+        if $z0 == 0 goto label2;
+
+        $i0 = $i0 + 1;
+
+     label2:
+        $r3 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListNode: kotlinx.coroutines.internal.LockFreeLinkedListNode getNextNode()>();
+
+        goto label1;
+
+     label3:
+        return $i0;
+    }
+
+    private final java.lang.String getQueueDebugStateString()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r1;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r2, $r5;
+        boolean $z0;
+        java.lang.String $r3;
+        java.lang.StringBuilder $r4;
+        int $i0;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        $r2 = virtualinvoke $r1.<kotlinx.coroutines.internal.LockFreeLinkedListHead: kotlinx.coroutines.internal.LockFreeLinkedListNode getNextNode()>();
+
+        $r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        if $r2 != $r1 goto label1;
+
+        return "EmptyQueue";
+
+     label1:
+        $z0 = $r2 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeLinkedListNode: java.lang.String toString()>();
+
+        goto label5;
+
+     label2:
+        $z0 = $r2 instanceof kotlinx.coroutines.channels.Receive;
+
+        if $z0 == 0 goto label3;
+
+        $r3 = "ReceiveQueued";
+
+        goto label5;
+
+     label3:
+        $z0 = $r2 instanceof kotlinx.coroutines.channels.Send;
+
+        if $z0 == 0 goto label4;
+
+        $r3 = "SendQueued";
+
+        goto label5;
+
+     label4:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("UNEXPECTED:");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label5:
+        $r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        $r5 = virtualinvoke $r1.<kotlinx.coroutines.internal.LockFreeLinkedListHead: kotlinx.coroutines.internal.LockFreeLinkedListNode getPrevNode()>();
+
+        if $r5 == $r2 goto label6;
+
+        $i0 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: int countQueueSize()>();
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",queueSize=");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z0 = $r5 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label6;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",closedForSend=");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r5);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label6:
+        return $r3;
+    }
+
+    private final void helpClose(kotlinx.coroutines.channels.Closed)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.channels.Closed $r1;
+        java.lang.Object $r2;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r3;
+        boolean $z0;
+        kotlinx.coroutines.channels.Receive $r4;
+        java.util.ArrayList $r5;
+        int $i0;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter0: kotlinx.coroutines.channels.Closed;
+
+        $r2 = staticinvoke <kotlinx.coroutines.internal.InlineList: java.lang.Object constructor-impl$default(java.lang.Object,int,kotlin.jvm.internal.DefaultConstructorMarker)>(null, 1, null);
+
+     label1:
+        $r3 = virtualinvoke $r1.<kotlinx.coroutines.channels.Closed: kotlinx.coroutines.internal.LockFreeLinkedListNode getPrevNode()>();
+
+        $z0 = $r3 instanceof kotlinx.coroutines.channels.Receive;
+
+        if $z0 == 0 goto label2;
+
+        $r4 = (kotlinx.coroutines.channels.Receive) $r3;
+
+        goto label3;
+
+     label2:
+        $r4 = null;
+
+     label3:
+        if $r4 != null goto label7;
+
+        if $r2 == null goto label6;
+
+        $z0 = $r2 instanceof java.util.ArrayList;
+
+        if $z0 != 0 goto label4;
+
+        $r4 = (kotlinx.coroutines.channels.Receive) $r2;
+
+        virtualinvoke $r4.<kotlinx.coroutines.channels.Receive: void resumeReceiveClosed(kotlinx.coroutines.channels.Closed)>($r1);
+
+        goto label6;
+
+     label4:
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r2, "null cannot be cast to non-null type java.util.ArrayList<E of kotlinx.coroutines.internal.InlineList>{ kotlin.collections.TypeAliasesKt.ArrayList<E of kotlinx.coroutines.internal.InlineList> }");
+
+        $r5 = (java.util.ArrayList) $r2;
+
+        $i0 = virtualinvoke $r5.<java.util.ArrayList: int size()>();
+
+        $i0 = $i0 + -1;
+
+     label5:
+        if $i0 < 0 goto label6;
+
+        $r2 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r4 = (kotlinx.coroutines.channels.Receive) $r2;
+
+        virtualinvoke $r4.<kotlinx.coroutines.channels.Receive: void resumeReceiveClosed(kotlinx.coroutines.channels.Closed)>($r1);
+
+        $i0 = $i0 + -1;
+
+        goto label5;
+
+     label6:
+        virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: void onClosedIdempotent(kotlinx.coroutines.internal.LockFreeLinkedListNode)>($r1);
+
+        return;
+
+     label7:
+        $z0 = virtualinvoke $r4.<kotlinx.coroutines.channels.Receive: boolean remove()>();
+
+        if $z0 != 0 goto label8;
+
+        virtualinvoke $r4.<kotlinx.coroutines.channels.Receive: void helpRemove()>();
+
+        goto label1;
+
+     label8:
+        $r2 = staticinvoke <kotlinx.coroutines.internal.InlineList: java.lang.Object plus-FjFbRPM(java.lang.Object,java.lang.Object)>($r2, $r4);
+
+        goto label1;
+    }
+
+    private final java.lang.Throwable helpCloseAndGetSendException(kotlinx.coroutines.channels.Closed)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        java.lang.Throwable $r1;
+        kotlinx.coroutines.channels.Closed $r2;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r2 := @parameter0: kotlinx.coroutines.channels.Closed;
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: void helpClose(kotlinx.coroutines.channels.Closed)>($r2);
+
+        $r1 = virtualinvoke $r2.<kotlinx.coroutines.channels.Closed: java.lang.Throwable getSendException()>();
+
+        return $r1;
+    }
+
+    private final void helpCloseAndResumeWithSendException(kotlin.coroutines.Continuation, java.lang.Object, kotlinx.coroutines.channels.Closed)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlin.coroutines.Continuation $r1;
+        kotlin.jvm.functions.Function1 $r2;
+        java.lang.Object $r3;
+        kotlinx.coroutines.channels.Closed $r4;
+        java.lang.Throwable $r5;
+        kotlinx.coroutines.internal.UndeliveredElementException $r6;
+        kotlin.Result$Companion $r7;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter0: kotlin.coroutines.Continuation;
+
+        $r3 := @parameter1: java.lang.Object;
+
+        $r4 := @parameter2: kotlinx.coroutines.channels.Closed;
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: void helpClose(kotlinx.coroutines.channels.Closed)>($r4);
+
+        $r5 = virtualinvoke $r4.<kotlinx.coroutines.channels.Closed: java.lang.Throwable getSendException()>();
+
+        $r2 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlin.jvm.functions.Function1 onUndeliveredElement>;
+
+        if $r2 == null goto label1;
+
+        $r6 = staticinvoke <kotlinx.coroutines.internal.OnUndeliveredElementKt: kotlinx.coroutines.internal.UndeliveredElementException callUndeliveredElementCatchingException$default(kotlin.jvm.functions.Function1,java.lang.Object,kotlinx.coroutines.internal.UndeliveredElementException,int,java.lang.Object)>($r2, $r3, null, 2, null);
+
+        if $r6 == null goto label1;
+
+        staticinvoke <kotlin.ExceptionsKt: void addSuppressed(java.lang.Throwable,java.lang.Throwable)>($r6, $r5);
+
+        $r7 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        $r3 = staticinvoke <kotlin.ResultKt: java.lang.Object createFailure(java.lang.Throwable)>($r6);
+
+        $r3 = staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r3);
+
+        interfaceinvoke $r1.<kotlin.coroutines.Continuation: void resumeWith(java.lang.Object)>($r3);
+
+        return;
+
+     label1:
+        $r7 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        $r3 = staticinvoke <kotlin.ResultKt: java.lang.Object createFailure(java.lang.Throwable)>($r5);
+
+        $r3 = staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r3);
+
+        interfaceinvoke $r1.<kotlin.coroutines.Continuation: void resumeWith(java.lang.Object)>($r3);
+
+        return;
+    }
+
+    private final void invokeOnCloseHandler(java.lang.Throwable)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        java.lang.Throwable $r1;
+        kotlinx.coroutines.internal.Symbol $r2;
+        kotlinx.atomicfu.AtomicRef $r3;
+        java.lang.Object $r4;
+        boolean $z0;
+        kotlin.jvm.functions.Function1 $r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r3 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.atomicfu.AtomicRef onCloseHandler>;
+
+        $r4 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        if $r4 == null goto label1;
+
+        $r2 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol HANDLER_INVOKED>;
+
+        if $r4 == $r2 goto label1;
+
+        $r3 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.atomicfu.AtomicRef onCloseHandler>;
+
+        $r2 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol HANDLER_INVOKED>;
+
+        $z0 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r4, $r2);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = staticinvoke <kotlin.jvm.internal.TypeIntrinsics: java.lang.Object beforeCheckcastToFunctionOfArity(java.lang.Object,int)>($r4, 1);
+
+        $r5 = (kotlin.jvm.functions.Function1) $r4;
+
+        interfaceinvoke $r5.<kotlin.jvm.functions.Function1: java.lang.Object invoke(java.lang.Object)>($r1);
+
+     label1:
+        return;
+    }
+
+    private final boolean isFullImpl()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r1;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r2;
+        boolean $z0;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        $r2 = virtualinvoke $r1.<kotlinx.coroutines.internal.LockFreeLinkedListHead: kotlinx.coroutines.internal.LockFreeLinkedListNode getNextNode()>();
+
+        $z0 = $r2 instanceof kotlinx.coroutines.channels.ReceiveOrClosed;
+
+        if $z0 != 0 goto label1;
+
+        $z0 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: boolean isBufferFull()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private final java.lang.Object sendSuspend(java.lang.Object, kotlin.coroutines.Continuation)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        java.lang.Object $r1, $r7;
+        kotlin.coroutines.Continuation $r2, $r3;
+        kotlinx.coroutines.CancellableContinuationImpl $r4;
+        boolean $z0;
+        kotlin.jvm.functions.Function1 $r5;
+        kotlinx.coroutines.channels.SendElement $r6, r14;
+        kotlinx.coroutines.channels.Closed $r8;
+        kotlinx.coroutines.internal.Symbol $r9;
+        java.lang.StringBuilder $r10, r16;
+        java.lang.String $r11;
+        kotlin.Result$Companion $r12;
+        kotlin.Unit $r13;
+        kotlinx.coroutines.channels.SendElementWithUndeliveredHandler r15;
+        java.lang.IllegalStateException r17;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 := @parameter1: kotlin.coroutines.Continuation;
+
+        $r3 = staticinvoke <kotlin.coroutines.intrinsics.IntrinsicsKt: kotlin.coroutines.Continuation intercepted(kotlin.coroutines.Continuation)>($r2);
+
+        $r4 = staticinvoke <kotlinx.coroutines.CancellableContinuationKt: kotlinx.coroutines.CancellableContinuationImpl getOrCreateCancellableContinuation(kotlin.coroutines.Continuation)>($r3);
+
+     label01:
+        $z0 = staticinvoke <kotlinx.coroutines.channels.AbstractSendChannel: boolean access$isFullImpl(kotlinx.coroutines.channels.AbstractSendChannel)>($r0);
+
+        if $z0 == 0 goto label07;
+
+        $r5 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlin.jvm.functions.Function1 onUndeliveredElement>;
+
+        if $r5 != null goto label02;
+
+        r14 = new kotlinx.coroutines.channels.SendElement;
+
+        $r6 = r14;
+
+        specialinvoke r14.<kotlinx.coroutines.channels.SendElement: void <init>(java.lang.Object,kotlinx.coroutines.CancellableContinuation)>($r1, $r4);
+
+        goto label03;
+
+     label02:
+        r15 = new kotlinx.coroutines.channels.SendElementWithUndeliveredHandler;
+
+        $r6 = r15;
+
+        $r5 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlin.jvm.functions.Function1 onUndeliveredElement>;
+
+        specialinvoke r15.<kotlinx.coroutines.channels.SendElementWithUndeliveredHandler: void <init>(java.lang.Object,kotlinx.coroutines.CancellableContinuation,kotlin.jvm.functions.Function1)>($r1, $r4, $r5);
+
+     label03:
+        $r7 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: java.lang.Object enqueueSend(kotlinx.coroutines.channels.Send)>($r6);
+
+        if $r7 != null goto label04;
+
+        staticinvoke <kotlinx.coroutines.CancellableContinuationKt: void removeOnCancellation(kotlinx.coroutines.CancellableContinuation,kotlinx.coroutines.internal.LockFreeLinkedListNode)>($r4, $r6);
+
+        goto label09;
+
+     label04:
+        $z0 = $r7 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label05;
+
+        $r8 = (kotlinx.coroutines.channels.Closed) $r7;
+
+        staticinvoke <kotlinx.coroutines.channels.AbstractSendChannel: void access$helpCloseAndResumeWithSendException(kotlinx.coroutines.channels.AbstractSendChannel,kotlin.coroutines.Continuation,java.lang.Object,kotlinx.coroutines.channels.Closed)>($r0, $r4, $r1, $r8);
+
+        goto label09;
+
+     label05:
+        $r9 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol ENQUEUE_FAILED>;
+
+        if $r7 == $r9 goto label07;
+
+        $z0 = $r7 instanceof kotlinx.coroutines.channels.Receive;
+
+        if $z0 == 0 goto label06;
+
+        goto label07;
+
+     label06:
+        r17 = new java.lang.IllegalStateException;
+
+        r16 = new java.lang.StringBuilder;
+
+        specialinvoke r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("enqueueSend returned ");
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r7);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r11 = virtualinvoke $r11.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke r17.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r11);
+
+        throw r17;
+
+     label07:
+        $r7 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: java.lang.Object offerInternal(java.lang.Object)>($r1);
+
+        $r9 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_SUCCESS>;
+
+        if $r7 != $r9 goto label08;
+
+        $r12 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        $r13 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        $r1 = staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r13);
+
+        interfaceinvoke $r4.<kotlin.coroutines.Continuation: void resumeWith(java.lang.Object)>($r1);
+
+        goto label09;
+
+     label08:
+        $r9 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_FAILED>;
+
+        if $r7 == $r9 goto label01;
+
+        $z0 = $r7 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label12;
+
+        $r8 = (kotlinx.coroutines.channels.Closed) $r7;
+
+        staticinvoke <kotlinx.coroutines.channels.AbstractSendChannel: void access$helpCloseAndResumeWithSendException(kotlinx.coroutines.channels.AbstractSendChannel,kotlin.coroutines.Continuation,java.lang.Object,kotlinx.coroutines.channels.Closed)>($r0, $r4, $r1, $r8);
+
+     label09:
+        $r1 = virtualinvoke $r4.<kotlinx.coroutines.CancellableContinuationImpl: java.lang.Object getResult()>();
+
+        $r7 = staticinvoke <kotlin.coroutines.intrinsics.IntrinsicsKt: java.lang.Object getCOROUTINE_SUSPENDED()>();
+
+        if $r1 != $r7 goto label10;
+
+        staticinvoke <kotlin.coroutines.jvm.internal.DebugProbesKt: void probeCoroutineSuspended(kotlin.coroutines.Continuation)>($r2);
+
+     label10:
+        $r7 = staticinvoke <kotlin.coroutines.intrinsics.IntrinsicsKt: java.lang.Object getCOROUTINE_SUSPENDED()>();
+
+        if $r1 != $r7 goto label11;
+
+        return $r1;
+
+     label11:
+        $r13 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        return $r13;
+
+     label12:
+        r17 = new java.lang.IllegalStateException;
+
+        r16 = new java.lang.StringBuilder;
+
+        specialinvoke r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("offerInternal returned ");
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r7);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r11 = virtualinvoke $r11.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke r17.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r11);
+
+        goto label13;
+
+     label13:
+        throw r17;
+    }
+
+    public boolean close(java.lang.Throwable)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        java.lang.Throwable $r1;
+        kotlinx.coroutines.channels.Closed $r2;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r3;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r4;
+        boolean $z0, $z1;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = new kotlinx.coroutines.channels.Closed;
+
+        specialinvoke $r2.<kotlinx.coroutines.channels.Closed: void <init>(java.lang.Throwable)>($r1);
+
+        $r3 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+     label1:
+        $r4 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListNode: kotlinx.coroutines.internal.LockFreeLinkedListNode getPrevNode()>();
+
+        $z0 = $r4 instanceof kotlinx.coroutines.channels.Closed;
+
+        $z1 = 1;
+
+        if $z0 != 0 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        if $z0 != 0 goto label4;
+
+        $z1 = 0;
+
+        goto label5;
+
+     label4:
+        $z0 = virtualinvoke $r4.<kotlinx.coroutines.internal.LockFreeLinkedListNode: boolean addNext(kotlinx.coroutines.internal.LockFreeLinkedListNode,kotlinx.coroutines.internal.LockFreeLinkedListNode)>($r2, $r3);
+
+        if $z0 == 0 goto label1;
+
+     label5:
+        if $z1 != 0 goto label6;
+
+        $r3 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        $r4 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListHead: kotlinx.coroutines.internal.LockFreeLinkedListNode getPrevNode()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r4, "null cannot be cast to non-null type kotlinx.coroutines.channels.Closed<*>");
+
+        $r2 = (kotlinx.coroutines.channels.Closed) $r4;
+
+     label6:
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: void helpClose(kotlinx.coroutines.channels.Closed)>($r2);
+
+        if $z1 == 0 goto label7;
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: void invokeOnCloseHandler(java.lang.Throwable)>($r1);
+
+     label7:
+        return $z1;
+    }
+
+    protected java.lang.Object enqueueSend(kotlinx.coroutines.channels.Send)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        boolean $z0;
+        kotlinx.coroutines.channels.Send $r1;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r2;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r3;
+        kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1 $r4;
+        int $i0;
+        kotlinx.coroutines.internal.Symbol r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter0: kotlinx.coroutines.channels.Send;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "send");
+
+        $z0 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: boolean isBufferAlwaysFull()>();
+
+        if $z0 == 0 goto label03;
+
+        $r2 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+     label01:
+        $r3 = virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeLinkedListNode: kotlinx.coroutines.internal.LockFreeLinkedListNode getPrevNode()>();
+
+        $z0 = $r3 instanceof kotlinx.coroutines.channels.ReceiveOrClosed;
+
+        if $z0 == 0 goto label02;
+
+        return $r3;
+
+     label02:
+        $z0 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListNode: boolean addNext(kotlinx.coroutines.internal.LockFreeLinkedListNode,kotlinx.coroutines.internal.LockFreeLinkedListNode)>($r1, $r2);
+
+        if $z0 == 0 goto label01;
+
+        goto label10;
+
+     label03:
+        $r2 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        $r4 = new kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1;
+
+        specialinvoke $r4.<kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1: void <init>(kotlinx.coroutines.internal.LockFreeLinkedListNode,kotlinx.coroutines.channels.AbstractSendChannel)>($r1, $r0);
+
+     label04:
+        $r3 = virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeLinkedListNode: kotlinx.coroutines.internal.LockFreeLinkedListNode getPrevNode()>();
+
+        $z0 = $r3 instanceof kotlinx.coroutines.channels.ReceiveOrClosed;
+
+        if $z0 == 0 goto label05;
+
+        return $r3;
+
+     label05:
+        $i0 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListNode: int tryCondAddNext(kotlinx.coroutines.internal.LockFreeLinkedListNode,kotlinx.coroutines.internal.LockFreeLinkedListNode,kotlinx.coroutines.internal.LockFreeLinkedListNode$CondAddOp)>($r1, $r2, $r4);
+
+        lookupswitch($i0)
+        {
+            case 1: goto label08;
+            case 2: goto label07;
+            default: goto label06;
+        };
+
+     label06:
+        goto label04;
+
+     label07:
+        $z0 = 0;
+
+        goto label09;
+
+     label08:
+        $z0 = 1;
+
+     label09:
+        if $z0 != 0 goto label10;
+
+        r5 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol ENQUEUE_FAILED>;
+
+        return r5;
+
+     label10:
+        return null;
+    }
+
+    protected java.lang.String getBufferDebugString()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        return "";
+    }
+
+    protected final kotlinx.coroutines.channels.Closed getClosedForReceive()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        boolean $z0;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r1;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r2;
+        kotlinx.coroutines.channels.Closed $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r2 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        $r1 = virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeLinkedListHead: kotlinx.coroutines.internal.LockFreeLinkedListNode getNextNode()>();
+
+        $z0 = $r1 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = (kotlinx.coroutines.channels.Closed) $r1;
+
+        goto label2;
+
+     label1:
+        $r3 = null;
+
+     label2:
+        if $r3 == null goto label3;
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: void helpClose(kotlinx.coroutines.channels.Closed)>($r3);
+
+        return $r3;
+
+     label3:
+        return null;
+    }
+
+    protected final kotlinx.coroutines.channels.Closed getClosedForSend()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        boolean $z0;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r1;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r2;
+        kotlinx.coroutines.channels.Closed $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r2 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        $r1 = virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeLinkedListHead: kotlinx.coroutines.internal.LockFreeLinkedListNode getPrevNode()>();
+
+        $z0 = $r1 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = (kotlinx.coroutines.channels.Closed) $r1;
+
+        goto label2;
+
+     label1:
+        $r3 = null;
+
+     label2:
+        if $r3 == null goto label3;
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: void helpClose(kotlinx.coroutines.channels.Closed)>($r3);
+
+        return $r3;
+
+     label3:
+        return null;
+    }
+
+    protected final kotlinx.coroutines.internal.LockFreeLinkedListHead getQueue()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead r1;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        return r1;
+    }
+
+<kotlinx.coroutines.channels.AbstractSendChannel: boolean isBufferAlwaysFull()>
+<kotlinx.coroutines.channels.AbstractSendChannel: boolean isBufferFull()>
+    public final boolean isClosedForSend()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.channels.Closed $r1;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.channels.Closed getClosedForSend()>();
+
+        if $r1 == null goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    protected java.lang.Object offerInternal(java.lang.Object)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        java.lang.Object $r1;
+        kotlinx.coroutines.channels.ReceiveOrClosed $r2;
+        kotlinx.coroutines.internal.Symbol $r3, $r4;
+        boolean $z0;
+        java.lang.AssertionError $r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter0: java.lang.Object;
+
+     label1:
+        $r2 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.channels.ReceiveOrClosed takeFirstReceiveOrPeekClosed()>();
+
+        if $r2 != null goto label2;
+
+        $r3 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_FAILED>;
+
+        return $r3;
+
+     label2:
+        $r3 = interfaceinvoke $r2.<kotlinx.coroutines.channels.ReceiveOrClosed: kotlinx.coroutines.internal.Symbol tryResumeReceive(java.lang.Object,kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp)>($r1, null);
+
+        if $r3 == null goto label1;
+
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label6;
+
+        $r4 = <kotlinx.coroutines.CancellableContinuationImplKt: kotlinx.coroutines.internal.Symbol RESUME_TOKEN>;
+
+        if $r3 != $r4 goto label3;
+
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        if $z0 == 0 goto label5;
+
+        goto label6;
+
+     label5:
+        $r5 = new java.lang.AssertionError;
+
+        specialinvoke $r5.<java.lang.AssertionError: void <init>()>();
+
+        throw $r5;
+
+     label6:
+        interfaceinvoke $r2.<kotlinx.coroutines.channels.ReceiveOrClosed: void completeResumeReceive(java.lang.Object)>($r1);
+
+        $r1 = interfaceinvoke $r2.<kotlinx.coroutines.channels.ReceiveOrClosed: java.lang.Object getOfferResult()>();
+
+        return $r1;
+    }
+
+    protected void onClosedIdempotent(kotlinx.coroutines.internal.LockFreeLinkedListNode)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r1;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter0: kotlinx.coroutines.internal.LockFreeLinkedListNode;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "closed");
+
+        return;
+    }
+
+    public final java.lang.Object send(java.lang.Object, kotlin.coroutines.Continuation)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.internal.Symbol $r1;
+        java.lang.Object $r2, $r4;
+        kotlin.coroutines.Continuation $r3;
+        kotlin.Unit r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r2 := @parameter0: java.lang.Object;
+
+        $r3 := @parameter1: kotlin.coroutines.Continuation;
+
+        $r4 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: java.lang.Object offerInternal(java.lang.Object)>($r2);
+
+        $r1 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_SUCCESS>;
+
+        if $r4 != $r1 goto label1;
+
+        r5 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        return r5;
+
+     label1:
+        $r2 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: java.lang.Object sendSuspend(java.lang.Object,kotlin.coroutines.Continuation)>($r2, $r3);
+
+        $r4 = staticinvoke <kotlin.coroutines.intrinsics.IntrinsicsKt: java.lang.Object getCOROUTINE_SUSPENDED()>();
+
+        if $r2 != $r4 goto label2;
+
+        return $r2;
+
+     label2:
+        r5 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        return r5;
+    }
+
+    protected final kotlinx.coroutines.channels.ReceiveOrClosed sendBuffered(java.lang.Object)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r1;
+        kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered $r2;
+        boolean $z0;
+        java.lang.Object $r3;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r4;
+        kotlinx.coroutines.channels.ReceiveOrClosed $r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r3 := @parameter0: java.lang.Object;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+        $r2 = new kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered;
+
+        specialinvoke $r2.<kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered: void <init>(java.lang.Object)>($r3);
+
+     label1:
+        $r4 = virtualinvoke $r1.<kotlinx.coroutines.internal.LockFreeLinkedListNode: kotlinx.coroutines.internal.LockFreeLinkedListNode getPrevNode()>();
+
+        $z0 = $r4 instanceof kotlinx.coroutines.channels.ReceiveOrClosed;
+
+        if $z0 == 0 goto label2;
+
+        $r5 = (kotlinx.coroutines.channels.ReceiveOrClosed) $r4;
+
+        return $r5;
+
+     label2:
+        $z0 = virtualinvoke $r4.<kotlinx.coroutines.internal.LockFreeLinkedListNode: boolean addNext(kotlinx.coroutines.internal.LockFreeLinkedListNode,kotlinx.coroutines.internal.LockFreeLinkedListNode)>($r2, $r1);
+
+        if $z0 == 0 goto label1;
+
+        return null;
+    }
+
+    protected kotlinx.coroutines.channels.ReceiveOrClosed takeFirstReceiveOrPeekClosed()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r1;
+        boolean $z0;
+        java.lang.Object $r2;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r3, $r5;
+        kotlinx.coroutines.channels.ReceiveOrClosed $r4;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+     label1:
+        $r2 = virtualinvoke $r1.<kotlinx.coroutines.internal.LockFreeLinkedListNode: java.lang.Object getNext()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r2, "null cannot be cast to non-null type kotlinx.coroutines.internal.LockFreeLinkedListNode{ kotlinx.coroutines.internal.LockFreeLinkedListKt.Node }");
+
+        $r3 = (kotlinx.coroutines.internal.LockFreeLinkedListNode) $r2;
+
+        if $r3 != $r1 goto label2;
+
+        $r3 = null;
+
+        goto label5;
+
+     label2:
+        $z0 = $r3 instanceof kotlinx.coroutines.channels.ReceiveOrClosed;
+
+        if $z0 != 0 goto label3;
+
+        $r3 = null;
+
+        goto label5;
+
+     label3:
+        $r4 = (kotlinx.coroutines.channels.ReceiveOrClosed) $r3;
+
+        $z0 = $r4 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label4;
+
+        $z0 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListNode: boolean isRemoved()>();
+
+        if $z0 != 0 goto label4;
+
+        goto label5;
+
+     label4:
+        $r5 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListNode: kotlinx.coroutines.internal.LockFreeLinkedListNode removeOrNext()>();
+
+        if $r5 != null goto label6;
+
+     label5:
+        $r4 = (kotlinx.coroutines.channels.ReceiveOrClosed) $r3;
+
+        return $r4;
+
+     label6:
+        virtualinvoke $r5.<kotlinx.coroutines.internal.LockFreeLinkedListNode: void helpRemovePrev()>();
+
+        goto label1;
+    }
+
+    protected final kotlinx.coroutines.channels.Send takeFirstSendOrPeekClosed()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListHead $r1;
+        boolean $z0;
+        java.lang.Object $r2;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r3, $r5;
+        kotlinx.coroutines.channels.Send $r4;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.internal.LockFreeLinkedListHead queue>;
+
+     label1:
+        $r2 = virtualinvoke $r1.<kotlinx.coroutines.internal.LockFreeLinkedListNode: java.lang.Object getNext()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r2, "null cannot be cast to non-null type kotlinx.coroutines.internal.LockFreeLinkedListNode{ kotlinx.coroutines.internal.LockFreeLinkedListKt.Node }");
+
+        $r3 = (kotlinx.coroutines.internal.LockFreeLinkedListNode) $r2;
+
+        if $r3 != $r1 goto label2;
+
+        $r3 = null;
+
+        goto label5;
+
+     label2:
+        $z0 = $r3 instanceof kotlinx.coroutines.channels.Send;
+
+        if $z0 != 0 goto label3;
+
+        $r3 = null;
+
+        goto label5;
+
+     label3:
+        $r4 = (kotlinx.coroutines.channels.Send) $r3;
+
+        $z0 = $r4 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label4;
+
+        $z0 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListNode: boolean isRemoved()>();
+
+        if $z0 != 0 goto label4;
+
+        goto label5;
+
+     label4:
+        $r5 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeLinkedListNode: kotlinx.coroutines.internal.LockFreeLinkedListNode removeOrNext()>();
+
+        if $r5 != null goto label6;
+
+     label5:
+        $r4 = (kotlinx.coroutines.channels.Send) $r3;
+
+        return $r4;
+
+     label6:
+        virtualinvoke $r5.<kotlinx.coroutines.internal.LockFreeLinkedListNode: void helpRemovePrev()>();
+
+        goto label1;
+    }
+
+    public java.lang.String toString()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        java.lang.String $r1, $r2, $r3, $r4;
+        java.lang.StringBuilder $r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 = staticinvoke <kotlinx.coroutines.DebugStringsKt: java.lang.String getClassSimpleName(java.lang.Object)>($r0);
+
+        $r2 = staticinvoke <kotlinx.coroutines.DebugStringsKt: java.lang.String getHexAddress(java.lang.Object)>($r0);
+
+        $r3 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: java.lang.String getQueueDebugStateString()>();
+
+        $r4 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: java.lang.String getBufferDebugString()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("@");
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("{");
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("}");
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public final java.lang.Object trySend-JP2dKIU(java.lang.Object)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel $r0;
+        java.lang.Object $r1;
+        kotlinx.coroutines.internal.Symbol $r2;
+        kotlinx.coroutines.channels.ChannelResult$Companion $r3;
+        kotlin.Unit $r4;
+        kotlinx.coroutines.channels.Closed $r5;
+        java.lang.Throwable $r6;
+        boolean $z0;
+        java.lang.IllegalStateException $r7;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r9;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r1 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: java.lang.Object offerInternal(java.lang.Object)>($r1);
+
+        $r2 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_SUCCESS>;
+
+        if $r1 != $r2 goto label1;
+
+        $r3 = <kotlinx.coroutines.channels.ChannelResult: kotlinx.coroutines.channels.ChannelResult$Companion Companion>;
+
+        $r4 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        $r1 = virtualinvoke $r3.<kotlinx.coroutines.channels.ChannelResult$Companion: java.lang.Object success-JP2dKIU(java.lang.Object)>($r4);
+
+        return $r1;
+
+     label1:
+        $r2 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_FAILED>;
+
+        if $r1 != $r2 goto label3;
+
+        $r5 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: kotlinx.coroutines.channels.Closed getClosedForSend()>();
+
+        if $r5 != null goto label2;
+
+        $r3 = <kotlinx.coroutines.channels.ChannelResult: kotlinx.coroutines.channels.ChannelResult$Companion Companion>;
+
+        $r1 = virtualinvoke $r3.<kotlinx.coroutines.channels.ChannelResult$Companion: java.lang.Object failure-PtdJZtk()>();
+
+        return $r1;
+
+     label2:
+        $r3 = <kotlinx.coroutines.channels.ChannelResult: kotlinx.coroutines.channels.ChannelResult$Companion Companion>;
+
+        $r6 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: java.lang.Throwable helpCloseAndGetSendException(kotlinx.coroutines.channels.Closed)>($r5);
+
+        $r1 = virtualinvoke $r3.<kotlinx.coroutines.channels.ChannelResult$Companion: java.lang.Object closed-JP2dKIU(java.lang.Throwable)>($r6);
+
+        return $r1;
+
+     label3:
+        $z0 = $r1 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label4;
+
+        $r3 = <kotlinx.coroutines.channels.ChannelResult: kotlinx.coroutines.channels.ChannelResult$Companion Companion>;
+
+        $r5 = (kotlinx.coroutines.channels.Closed) $r1;
+
+        $r6 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel: java.lang.Throwable helpCloseAndGetSendException(kotlinx.coroutines.channels.Closed)>($r5);
+
+        $r1 = virtualinvoke $r3.<kotlinx.coroutines.channels.ChannelResult$Companion: java.lang.Object closed-JP2dKIU(java.lang.Throwable)>($r6);
+
+        return $r1;
+
+     label4:
+        $r7 = new java.lang.IllegalStateException;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("trySend returned ");
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = virtualinvoke $r9.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r9);
+
+        throw $r7;
+    }
+
+kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1
+<kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1: kotlinx.coroutines.channels.AbstractSendChannel this$0>
+    public void <init>(kotlinx.coroutines.internal.LockFreeLinkedListNode, kotlinx.coroutines.channels.AbstractSendChannel)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1 $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r1;
+        kotlinx.coroutines.channels.AbstractSendChannel $r2;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1;
+
+        $r1 := @parameter0: kotlinx.coroutines.internal.LockFreeLinkedListNode;
+
+        $r2 := @parameter1: kotlinx.coroutines.channels.AbstractSendChannel;
+
+        $r0.<kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1: kotlinx.coroutines.channels.AbstractSendChannel this$0> = $r2;
+
+        specialinvoke $r0.<kotlinx.coroutines.internal.LockFreeLinkedListNode$CondAddOp: void <init>(kotlinx.coroutines.internal.LockFreeLinkedListNode)>($r1);
+
+        return;
+    }
+
+    public volatile java.lang.Object prepare(java.lang.Object)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1 $r0;
+        java.lang.Object $r1;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r2;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = (kotlinx.coroutines.internal.LockFreeLinkedListNode) $r1;
+
+        $r1 = virtualinvoke $r0.<kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1: java.lang.Object prepare(kotlinx.coroutines.internal.LockFreeLinkedListNode)>($r2);
+
+        return $r1;
+    }
+
+    public java.lang.Object prepare(kotlinx.coroutines.internal.LockFreeLinkedListNode)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1 $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode $r1;
+        kotlinx.coroutines.channels.AbstractSendChannel $r2;
+        boolean $z0;
+        java.lang.Object $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1;
+
+        $r1 := @parameter0: kotlinx.coroutines.internal.LockFreeLinkedListNode;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "affected");
+
+        $r2 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel$enqueueSend$$inlined$addLastIfPrevAndIf$1: kotlinx.coroutines.channels.AbstractSendChannel this$0>;
+
+        $z0 = virtualinvoke $r2.<kotlinx.coroutines.channels.AbstractSendChannel: boolean isBufferFull()>();
+
+        if $z0 == 0 goto label1;
+
+        return null;
+
+     label1:
+        $r3 = staticinvoke <kotlinx.coroutines.internal.LockFreeLinkedListKt: java.lang.Object getCONDITION_FALSE()>();
+
+        return $r3;
+    }
+
+kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered
+<kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered: java.lang.Object element>
+    public void <init>(java.lang.Object)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered $r0;
+        java.lang.Object $r1;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.Send: void <init>()>();
+
+        $r0.<kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered: java.lang.Object element> = $r1;
+
+        return;
+    }
+
+    public void completeResumeSend()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered $r0;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered;
+
+        return;
+    }
+
+    public java.lang.Object getPollResult()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered $r0;
+        java.lang.Object r1;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered;
+
+        r1 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered: java.lang.Object element>;
+
+        return r1;
+    }
+
+    public void resumeSendClosed(kotlinx.coroutines.channels.Closed)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered $r0;
+        boolean $z0;
+        kotlinx.coroutines.channels.Closed $r1;
+        java.lang.AssertionError $r2;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered;
+
+        $r1 := @parameter0: kotlinx.coroutines.channels.Closed;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "closed");
+
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = new java.lang.AssertionError;
+
+        specialinvoke $r2.<java.lang.AssertionError: void <init>()>();
+
+        throw $r2;
+    }
+
+    public java.lang.String toString()
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered $r0;
+        java.lang.String $r1;
+        java.lang.Object $r2;
+        java.lang.StringBuilder $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered;
+
+        $r1 = staticinvoke <kotlinx.coroutines.DebugStringsKt: java.lang.String getHexAddress(java.lang.Object)>($r0);
+
+        $r2 = $r0.<kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered: java.lang.Object element>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("SendBuffered@");
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("(");
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public kotlinx.coroutines.internal.Symbol tryResumeSend(kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp)
+    {
+        kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered $r0;
+        kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp $r1;
+        kotlinx.coroutines.internal.Symbol $r2;
+
+        $r0 := @this: kotlinx.coroutines.channels.AbstractSendChannel$SendBuffered;
+
+        $r1 := @parameter0: kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp;
+
+        $r2 = <kotlinx.coroutines.CancellableContinuationImplKt: kotlinx.coroutines.internal.Symbol RESUME_TOKEN>;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r1.<kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp: void finishPrepare()>();
+
+     label1:
+        return $r2;
+    }
+

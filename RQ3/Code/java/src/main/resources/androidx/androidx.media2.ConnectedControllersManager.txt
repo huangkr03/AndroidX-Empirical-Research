@@ -1,0 +1,872 @@
+androidx.media2.ConnectedControllersManager
+<androidx.media2.ConnectedControllersManager: java.lang.String TAG>
+<androidx.media2.ConnectedControllersManager: boolean DEBUG>
+<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>
+<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerInfoMap>
+<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>
+<androidx.media2.ConnectedControllersManager: androidx.media2.MediaSession$MediaSessionImpl mSessionImpl>
+    void <init>(androidx.media2.MediaSession$MediaSessionImpl)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        androidx.media2.MediaSession$MediaSessionImpl r1;
+        java.lang.Object $r2;
+        androidx.collection.ArrayMap $r3, $r4;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: androidx.media2.MediaSession$MediaSessionImpl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock> = $r2;
+
+        $r3 = new androidx.collection.ArrayMap;
+
+        specialinvoke $r3.<androidx.collection.ArrayMap: void <init>()>();
+
+        r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerInfoMap> = $r3;
+
+        $r4 = new androidx.collection.ArrayMap;
+
+        specialinvoke $r4.<androidx.collection.ArrayMap: void <init>()>();
+
+        r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords> = $r4;
+
+        r0.<androidx.media2.ConnectedControllersManager: androidx.media2.MediaSession$MediaSessionImpl mSessionImpl> = r1;
+
+        return;
+    }
+
+    public void addController(java.lang.Object, androidx.media2.MediaSession$ControllerInfo, androidx.media2.SessionCommandGroup)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        java.lang.Object r1, r4, $r9, $r11;
+        androidx.media2.MediaSession$ControllerInfo r2, r5;
+        androidx.media2.SessionCommandGroup r3;
+        androidx.media2.ConnectedControllersManager$ConnectedControllerRecord r6, $r14;
+        java.lang.Throwable r7, $r18;
+        boolean $z0;
+        java.lang.IllegalArgumentException $r8;
+        androidx.collection.ArrayMap $r10, $r12, $r16;
+        androidx.media2.SequencedFutureManager $r15;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: androidx.media2.MediaSession$ControllerInfo;
+
+        r3 := @parameter2: androidx.media2.SessionCommandGroup;
+
+        if r1 == null goto label01;
+
+        if r2 != null goto label03;
+
+     label01:
+        $z0 = <androidx.media2.ConnectedControllersManager: boolean DEBUG>;
+
+        if $z0 == 0 goto label02;
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("controllerKey and controllerInfo shouldn\'t be null");
+
+        throw $r8;
+
+     label02:
+        return;
+
+     label03:
+        $r9 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r4 = $r9;
+
+        entermonitor $r9;
+
+     label04:
+        r5 = virtualinvoke r0.<androidx.media2.ConnectedControllersManager: androidx.media2.MediaSession$ControllerInfo getController(java.lang.Object)>(r1);
+
+        if r5 != null goto label05;
+
+        $r12 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerInfoMap>;
+
+        virtualinvoke $r12.<androidx.collection.ArrayMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        $r16 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>;
+
+        $r14 = new androidx.media2.ConnectedControllersManager$ConnectedControllerRecord;
+
+        $r15 = new androidx.media2.SequencedFutureManager;
+
+        specialinvoke $r15.<androidx.media2.SequencedFutureManager: void <init>()>();
+
+        specialinvoke $r14.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: void <init>(androidx.media2.ConnectedControllersManager,java.lang.Object,androidx.media2.SequencedFutureManager,androidx.media2.SessionCommandGroup)>(r0, r1, $r15, r3);
+
+        virtualinvoke $r16.<androidx.collection.ArrayMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, $r14);
+
+        goto label06;
+
+     label05:
+        $r10 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>;
+
+        $r11 = virtualinvoke $r10.<androidx.collection.ArrayMap: java.lang.Object get(java.lang.Object)>(r5);
+
+        r6 = (androidx.media2.ConnectedControllersManager$ConnectedControllerRecord) $r11;
+
+        r6.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SessionCommandGroup allowedCommands> = r3;
+
+     label06:
+        exitmonitor r4;
+
+     label07:
+        goto label10;
+
+     label08:
+        $r18 := @caughtexception;
+
+        r7 = $r18;
+
+        exitmonitor r4;
+
+     label09:
+        throw r7;
+
+     label10:
+        return;
+
+        catch java.lang.Throwable from label04 to label07 with label08;
+        catch java.lang.Throwable from label08 to label09 with label08;
+    }
+
+    public void updateAllowedCommands(androidx.media2.MediaSession$ControllerInfo, androidx.media2.SessionCommandGroup)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        androidx.media2.MediaSession$ControllerInfo r1;
+        androidx.media2.SessionCommandGroup r2;
+        java.lang.Object r3, $r6, $r8;
+        androidx.media2.ConnectedControllersManager$ConnectedControllerRecord r4;
+        java.lang.Throwable r5, $r9;
+        androidx.collection.ArrayMap $r7;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: androidx.media2.MediaSession$ControllerInfo;
+
+        r2 := @parameter1: androidx.media2.SessionCommandGroup;
+
+        if r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r6 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r3 = $r6;
+
+        entermonitor $r6;
+
+     label2:
+        $r7 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>;
+
+        $r8 = virtualinvoke $r7.<androidx.collection.ArrayMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        r4 = (androidx.media2.ConnectedControllersManager$ConnectedControllerRecord) $r8;
+
+        if r4 == null goto label4;
+
+        r4.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SessionCommandGroup allowedCommands> = r2;
+
+        exitmonitor r3;
+
+     label3:
+        return;
+
+     label4:
+        exitmonitor r3;
+
+     label5:
+        goto label8;
+
+     label6:
+        $r9 := @caughtexception;
+
+        r5 = $r9;
+
+        exitmonitor r3;
+
+     label7:
+        throw r5;
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label2 to label3 with label6;
+        catch java.lang.Throwable from label4 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+
+    public void removeController(java.lang.Object)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        java.lang.Object r1;
+        androidx.media2.MediaSession$ControllerInfo $r2;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r2 = virtualinvoke r0.<androidx.media2.ConnectedControllersManager: androidx.media2.MediaSession$ControllerInfo getController(java.lang.Object)>(r1);
+
+        virtualinvoke r0.<androidx.media2.ConnectedControllersManager: void removeController(androidx.media2.MediaSession$ControllerInfo)>($r2);
+
+        return;
+    }
+
+    public void removeController(androidx.media2.MediaSession$ControllerInfo)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        androidx.media2.MediaSession$ControllerInfo r1;
+        androidx.media2.ConnectedControllersManager$ConnectedControllerRecord r2;
+        java.lang.Object r3, $r5, $r7, $r8;
+        java.lang.Throwable r4, $r20;
+        androidx.collection.ArrayMap $r6, $r9;
+        boolean $z0;
+        androidx.media2.SequencedFutureManager $r11;
+        androidx.media2.MediaSession$MediaSessionImpl $r12;
+        java.util.concurrent.Executor $r13;
+        androidx.media2.ConnectedControllersManager$1 $r14;
+        java.lang.StringBuilder $r15, $r16, $r17, $r18;
+        java.lang.String $r19;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: androidx.media2.MediaSession$ControllerInfo;
+
+        if r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r5 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r3 = $r5;
+
+        entermonitor $r5;
+
+     label2:
+        $r6 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>;
+
+        $r7 = virtualinvoke $r6.<androidx.collection.ArrayMap: java.lang.Object remove(java.lang.Object)>(r1);
+
+        r2 = (androidx.media2.ConnectedControllersManager$ConnectedControllerRecord) $r7;
+
+        if r2 != null goto label4;
+
+        exitmonitor r3;
+
+     label3:
+        return;
+
+     label4:
+        $r9 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerInfoMap>;
+
+        $r8 = r2.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: java.lang.Object controllerKey>;
+
+        virtualinvoke $r9.<androidx.collection.ArrayMap: java.lang.Object remove(java.lang.Object)>($r8);
+
+        exitmonitor r3;
+
+     label5:
+        goto label8;
+
+     label6:
+        $r20 := @caughtexception;
+
+        r4 = $r20;
+
+        exitmonitor r3;
+
+     label7:
+        throw r4;
+
+     label8:
+        $z0 = <androidx.media2.ConnectedControllersManager: boolean DEBUG>;
+
+        if $z0 == 0 goto label9;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Controller ");
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is disconnected");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MS2ControllerMgr", $r19);
+
+     label9:
+        $r11 = r2.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SequencedFutureManager sequencedFutureManager>;
+
+        virtualinvoke $r11.<androidx.media2.SequencedFutureManager: void close()>();
+
+        $r12 = r0.<androidx.media2.ConnectedControllersManager: androidx.media2.MediaSession$MediaSessionImpl mSessionImpl>;
+
+        $r13 = interfaceinvoke $r12.<androidx.media2.MediaSession$MediaSessionImpl: java.util.concurrent.Executor getCallbackExecutor()>();
+
+        $r14 = new androidx.media2.ConnectedControllersManager$1;
+
+        specialinvoke $r14.<androidx.media2.ConnectedControllersManager$1: void <init>(androidx.media2.ConnectedControllersManager,androidx.media2.MediaSession$ControllerInfo)>(r0, r1);
+
+        interfaceinvoke $r13.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r14);
+
+        return;
+
+        catch java.lang.Throwable from label2 to label3 with label6;
+        catch java.lang.Throwable from label4 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+
+    public final java.util.List getConnectedControllers()
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        java.util.ArrayList r1, $r4;
+        java.lang.Object r2, $r5;
+        java.lang.Throwable r3, $r8;
+        androidx.collection.ArrayMap $r6;
+        java.util.Collection $r7;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r1 = $r4;
+
+        $r5 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r2 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerInfoMap>;
+
+        $r7 = virtualinvoke $r6.<androidx.collection.ArrayMap: java.util.Collection values()>();
+
+        virtualinvoke r1.<java.util.ArrayList: boolean addAll(java.util.Collection)>($r7);
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public final boolean isConnected(androidx.media2.MediaSession$ControllerInfo)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        androidx.media2.MediaSession$ControllerInfo r1;
+        java.lang.Object r2, $r4, $r6;
+        java.lang.Throwable r3, $r7;
+        androidx.collection.ArrayMap $r5;
+        boolean $z0;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: androidx.media2.MediaSession$ControllerInfo;
+
+        $r4 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>;
+
+        $r6 = virtualinvoke $r5.<androidx.collection.ArrayMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        if $r6 == null goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        exitmonitor r2;
+
+     label4:
+        return $z0;
+
+     label5:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r2;
+
+     label6:
+        throw r3;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public final androidx.media2.SequencedFutureManager getSequencedFutureManager(androidx.media2.MediaSession$ControllerInfo)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        androidx.media2.MediaSession$ControllerInfo r1;
+        androidx.media2.ConnectedControllersManager$ConnectedControllerRecord r2;
+        java.lang.Object r3, $r5, $r7;
+        java.lang.Throwable r4, $r8;
+        androidx.collection.ArrayMap $r6;
+        androidx.media2.SequencedFutureManager $r9;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: androidx.media2.MediaSession$ControllerInfo;
+
+        $r5 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r3 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>;
+
+        $r7 = virtualinvoke $r6.<androidx.collection.ArrayMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        r2 = (androidx.media2.ConnectedControllersManager$ConnectedControllerRecord) $r7;
+
+        exitmonitor r3;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r4 = $r8;
+
+        exitmonitor r3;
+
+     label4:
+        throw r4;
+
+     label5:
+        if r2 == null goto label6;
+
+        $r9 = r2.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SequencedFutureManager sequencedFutureManager>;
+
+        goto label7;
+
+     label6:
+        $r9 = null;
+
+     label7:
+        return $r9;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public androidx.media2.SequencedFutureManager getSequencedFutureManager(java.lang.Object)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        java.lang.Object r1, r3, $r5, $r8;
+        androidx.media2.ConnectedControllersManager$ConnectedControllerRecord r2;
+        java.lang.Throwable r4, $r9;
+        androidx.collection.ArrayMap $r6;
+        androidx.media2.MediaSession$ControllerInfo $r7;
+        androidx.media2.SequencedFutureManager $r10;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r5 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r3 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>;
+
+        $r7 = virtualinvoke r0.<androidx.media2.ConnectedControllersManager: androidx.media2.MediaSession$ControllerInfo getController(java.lang.Object)>(r1);
+
+        $r8 = virtualinvoke $r6.<androidx.collection.ArrayMap: java.lang.Object get(java.lang.Object)>($r7);
+
+        r2 = (androidx.media2.ConnectedControllersManager$ConnectedControllerRecord) $r8;
+
+        exitmonitor r3;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r9 := @caughtexception;
+
+        r4 = $r9;
+
+        exitmonitor r3;
+
+     label4:
+        throw r4;
+
+     label5:
+        if r2 == null goto label6;
+
+        $r10 = r2.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SequencedFutureManager sequencedFutureManager>;
+
+        goto label7;
+
+     label6:
+        $r10 = null;
+
+     label7:
+        return $r10;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public boolean isAllowedCommand(androidx.media2.MediaSession$ControllerInfo, androidx.media2.SessionCommand)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        androidx.media2.MediaSession$ControllerInfo r1;
+        androidx.media2.SessionCommand r2;
+        androidx.media2.ConnectedControllersManager$ConnectedControllerRecord r3;
+        java.lang.Object r4, $r6, $r8;
+        java.lang.Throwable r5, $r10;
+        androidx.collection.ArrayMap $r7;
+        androidx.media2.SessionCommandGroup $r9;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: androidx.media2.MediaSession$ControllerInfo;
+
+        r2 := @parameter1: androidx.media2.SessionCommand;
+
+        $r6 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r4 = $r6;
+
+        entermonitor $r6;
+
+     label1:
+        $r7 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>;
+
+        $r8 = virtualinvoke $r7.<androidx.collection.ArrayMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        r3 = (androidx.media2.ConnectedControllersManager$ConnectedControllerRecord) $r8;
+
+        exitmonitor r4;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r10 := @caughtexception;
+
+        r5 = $r10;
+
+        exitmonitor r4;
+
+     label4:
+        throw r5;
+
+     label5:
+        if r3 == null goto label6;
+
+        $r9 = r3.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SessionCommandGroup allowedCommands>;
+
+        $z0 = virtualinvoke $r9.<androidx.media2.SessionCommandGroup: boolean hasCommand(androidx.media2.SessionCommand)>(r2);
+
+        if $z0 == 0 goto label6;
+
+        $z1 = 1;
+
+        goto label7;
+
+     label6:
+        $z1 = 0;
+
+     label7:
+        return $z1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public boolean isAllowedCommand(androidx.media2.MediaSession$ControllerInfo, int)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        androidx.media2.MediaSession$ControllerInfo r1;
+        int i0;
+        androidx.media2.ConnectedControllersManager$ConnectedControllerRecord r2;
+        java.lang.Object r3, $r5, $r7;
+        java.lang.Throwable r4, $r9;
+        androidx.collection.ArrayMap $r6;
+        androidx.media2.SessionCommandGroup $r8;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: androidx.media2.MediaSession$ControllerInfo;
+
+        i0 := @parameter1: int;
+
+        $r5 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r3 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerRecords>;
+
+        $r7 = virtualinvoke $r6.<androidx.collection.ArrayMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        r2 = (androidx.media2.ConnectedControllersManager$ConnectedControllerRecord) $r7;
+
+        exitmonitor r3;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r9 := @caughtexception;
+
+        r4 = $r9;
+
+        exitmonitor r3;
+
+     label4:
+        throw r4;
+
+     label5:
+        if r2 == null goto label6;
+
+        $r8 = r2.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SessionCommandGroup allowedCommands>;
+
+        $z0 = virtualinvoke $r8.<androidx.media2.SessionCommandGroup: boolean hasCommand(int)>(i0);
+
+        if $z0 == 0 goto label6;
+
+        $z1 = 1;
+
+        goto label7;
+
+     label6:
+        $z1 = 0;
+
+     label7:
+        return $z1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public androidx.media2.MediaSession$ControllerInfo getController(java.lang.Object)
+    {
+        androidx.media2.ConnectedControllersManager r0;
+        java.lang.Object r1, r2, $r4, $r6;
+        java.lang.Throwable r3, $r8;
+        androidx.collection.ArrayMap $r5;
+        androidx.media2.MediaSession$ControllerInfo $r7;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r4 = r0.<androidx.media2.ConnectedControllersManager: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.media2.ConnectedControllersManager: androidx.collection.ArrayMap mControllerInfoMap>;
+
+        $r6 = virtualinvoke $r5.<androidx.collection.ArrayMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r7 = (androidx.media2.MediaSession$ControllerInfo) $r6;
+
+        exitmonitor r2;
+
+     label2:
+        return $r7;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    static void <clinit>()
+    {
+        boolean $z0;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("MS2ControllerMgr", 3);
+
+        <androidx.media2.ConnectedControllersManager: boolean DEBUG> = $z0;
+
+        return;
+    }
+
+androidx.media2.ConnectedControllersManager$1
+<androidx.media2.ConnectedControllersManager$1: androidx.media2.MediaSession$ControllerInfo val$controllerInfo>
+<androidx.media2.ConnectedControllersManager$1: androidx.media2.ConnectedControllersManager this$0>
+    void <init>(androidx.media2.ConnectedControllersManager, androidx.media2.MediaSession$ControllerInfo)
+    {
+        androidx.media2.ConnectedControllersManager$1 r0;
+        androidx.media2.ConnectedControllersManager r1;
+        androidx.media2.MediaSession$ControllerInfo r2;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager$1;
+
+        r1 := @parameter0: androidx.media2.ConnectedControllersManager;
+
+        r2 := @parameter1: androidx.media2.MediaSession$ControllerInfo;
+
+        r0.<androidx.media2.ConnectedControllersManager$1: androidx.media2.ConnectedControllersManager this$0> = r1;
+
+        r0.<androidx.media2.ConnectedControllersManager$1: androidx.media2.MediaSession$ControllerInfo val$controllerInfo> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.media2.ConnectedControllersManager$1 r0;
+        androidx.media2.ConnectedControllersManager $r1, $r3, $r6;
+        androidx.media2.MediaSession$MediaSessionImpl $r2, $r4, $r7;
+        boolean $z0;
+        androidx.media2.MediaSession$SessionCallback $r5;
+        androidx.media2.MediaSession $r8;
+        androidx.media2.MediaSession$ControllerInfo $r9;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager$1;
+
+        $r1 = r0.<androidx.media2.ConnectedControllersManager$1: androidx.media2.ConnectedControllersManager this$0>;
+
+        $r2 = $r1.<androidx.media2.ConnectedControllersManager: androidx.media2.MediaSession$MediaSessionImpl mSessionImpl>;
+
+        $z0 = interfaceinvoke $r2.<androidx.media2.MediaSession$MediaSessionImpl: boolean isClosed()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.media2.ConnectedControllersManager$1: androidx.media2.ConnectedControllersManager this$0>;
+
+        $r4 = $r3.<androidx.media2.ConnectedControllersManager: androidx.media2.MediaSession$MediaSessionImpl mSessionImpl>;
+
+        $r5 = interfaceinvoke $r4.<androidx.media2.MediaSession$MediaSessionImpl: androidx.media2.MediaSession$SessionCallback getCallback()>();
+
+        $r6 = r0.<androidx.media2.ConnectedControllersManager$1: androidx.media2.ConnectedControllersManager this$0>;
+
+        $r7 = $r6.<androidx.media2.ConnectedControllersManager: androidx.media2.MediaSession$MediaSessionImpl mSessionImpl>;
+
+        $r8 = interfaceinvoke $r7.<androidx.media2.MediaSession$MediaSessionImpl: androidx.media2.MediaSession getInstance()>();
+
+        $r9 = r0.<androidx.media2.ConnectedControllersManager$1: androidx.media2.MediaSession$ControllerInfo val$controllerInfo>;
+
+        virtualinvoke $r5.<androidx.media2.MediaSession$SessionCallback: void onDisconnected(androidx.media2.MediaSession,androidx.media2.MediaSession$ControllerInfo)>($r8, $r9);
+
+        return;
+    }
+
+androidx.media2.ConnectedControllersManager$ConnectedControllerRecord
+<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: java.lang.Object controllerKey>
+<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SequencedFutureManager sequencedFutureManager>
+<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SessionCommandGroup allowedCommands>
+<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.ConnectedControllersManager this$0>
+    void <init>(androidx.media2.ConnectedControllersManager, java.lang.Object, androidx.media2.SequencedFutureManager, androidx.media2.SessionCommandGroup)
+    {
+        androidx.media2.ConnectedControllersManager$ConnectedControllerRecord r0;
+        androidx.media2.ConnectedControllersManager r1;
+        java.lang.Object r2;
+        androidx.media2.SequencedFutureManager r3;
+        androidx.media2.SessionCommandGroup r4, $r5, $r6;
+
+        r0 := @this: androidx.media2.ConnectedControllersManager$ConnectedControllerRecord;
+
+        r1 := @parameter0: androidx.media2.ConnectedControllersManager;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: androidx.media2.SequencedFutureManager;
+
+        r4 := @parameter3: androidx.media2.SessionCommandGroup;
+
+        r0.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.ConnectedControllersManager this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: java.lang.Object controllerKey> = r2;
+
+        r0.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SequencedFutureManager sequencedFutureManager> = r3;
+
+        r0.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SessionCommandGroup allowedCommands> = r4;
+
+        $r5 = r0.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SessionCommandGroup allowedCommands>;
+
+        if $r5 != null goto label1;
+
+        $r6 = new androidx.media2.SessionCommandGroup;
+
+        specialinvoke $r6.<androidx.media2.SessionCommandGroup: void <init>()>();
+
+        r0.<androidx.media2.ConnectedControllersManager$ConnectedControllerRecord: androidx.media2.SessionCommandGroup allowedCommands> = $r6;
+
+     label1:
+        return;
+    }
+

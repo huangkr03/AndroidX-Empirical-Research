@@ -1,0 +1,230 @@
+io.grpc.SynchronizationContext
+<io.grpc.SynchronizationContext: java.util.concurrent.atomic.AtomicReference drainingThread>
+<io.grpc.SynchronizationContext: java.util.Queue queue>
+<io.grpc.SynchronizationContext: java.lang.Thread$UncaughtExceptionHandler uncaughtExceptionHandler>
+    public void <init>(java.lang.Thread$UncaughtExceptionHandler)
+    {
+        io.grpc.SynchronizationContext $r0;
+        java.lang.Object $r1;
+        java.lang.Thread$UncaughtExceptionHandler $r2;
+        java.util.concurrent.ConcurrentLinkedQueue $r3;
+        java.util.concurrent.atomic.AtomicReference $r4;
+
+        $r0 := @this: io.grpc.SynchronizationContext;
+
+        $r2 := @parameter0: java.lang.Thread$UncaughtExceptionHandler;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new java.util.concurrent.ConcurrentLinkedQueue;
+
+        specialinvoke $r3.<java.util.concurrent.ConcurrentLinkedQueue: void <init>()>();
+
+        $r0.<io.grpc.SynchronizationContext: java.util.Queue queue> = $r3;
+
+        $r4 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r4.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        $r0.<io.grpc.SynchronizationContext: java.util.concurrent.atomic.AtomicReference drainingThread> = $r4;
+
+        $r1 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "uncaughtExceptionHandler");
+
+        $r2 = (java.lang.Thread$UncaughtExceptionHandler) $r1;
+
+        $r0.<io.grpc.SynchronizationContext: java.lang.Thread$UncaughtExceptionHandler uncaughtExceptionHandler> = $r2;
+
+        return;
+    }
+
+    public final void drain()
+    {
+        io.grpc.SynchronizationContext $r0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        java.lang.Thread $r2;
+        boolean $z0;
+        java.util.Queue $r3;
+        java.lang.Object $r4;
+        java.lang.Runnable $r5;
+        java.lang.Throwable $r6, $r8;
+        java.lang.Thread$UncaughtExceptionHandler $r7;
+
+        $r0 := @this: io.grpc.SynchronizationContext;
+
+     label01:
+        $r1 = $r0.<io.grpc.SynchronizationContext: java.util.concurrent.atomic.AtomicReference drainingThread>;
+
+        $r2 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        $z0 = staticinvoke <io.grpc.SynchronizationContext$$ExternalSyntheticBackportWithForwarding0: boolean m(java.util.concurrent.atomic.AtomicReference,java.lang.Object,java.lang.Object)>($r1, null, $r2);
+
+        if $z0 == 0 goto label12;
+
+     label02:
+        $r3 = $r0.<io.grpc.SynchronizationContext: java.util.Queue queue>;
+
+     label03:
+        $r4 = interfaceinvoke $r3.<java.util.Queue: java.lang.Object poll()>();
+
+     label04:
+        $r5 = (java.lang.Runnable) $r4;
+
+        if $r5 == null goto label10;
+
+     label05:
+        interfaceinvoke $r5.<java.lang.Runnable: void run()>();
+
+     label06:
+        goto label02;
+
+     label07:
+        $r6 := @caughtexception;
+
+        $r7 = $r0.<io.grpc.SynchronizationContext: java.lang.Thread$UncaughtExceptionHandler uncaughtExceptionHandler>;
+
+        $r2 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+     label08:
+        interfaceinvoke $r7.<java.lang.Thread$UncaughtExceptionHandler: void uncaughtException(java.lang.Thread,java.lang.Throwable)>($r2, $r6);
+
+     label09:
+        goto label02;
+
+     label10:
+        $r1 = $r0.<io.grpc.SynchronizationContext: java.util.concurrent.atomic.AtomicReference drainingThread>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>(null);
+
+        $r3 = $r0.<io.grpc.SynchronizationContext: java.util.Queue queue>;
+
+        $z0 = interfaceinvoke $r3.<java.util.Queue: boolean isEmpty()>();
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label11:
+        $r8 := @caughtexception;
+
+        $r1 = $r0.<io.grpc.SynchronizationContext: java.util.concurrent.atomic.AtomicReference drainingThread>;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>(null);
+
+        throw $r8;
+
+     label12:
+        return;
+
+        catch java.lang.Throwable from label03 to label04 with label11;
+        catch java.lang.Throwable from label05 to label06 with label07;
+        catch java.lang.Throwable from label08 to label09 with label11;
+    }
+
+    public final void execute(java.lang.Runnable)
+    {
+        io.grpc.SynchronizationContext $r0;
+        java.lang.Runnable $r1;
+
+        $r0 := @this: io.grpc.SynchronizationContext;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        virtualinvoke $r0.<io.grpc.SynchronizationContext: void executeLater(java.lang.Runnable)>($r1);
+
+        virtualinvoke $r0.<io.grpc.SynchronizationContext: void drain()>();
+
+        return;
+    }
+
+    public final void executeLater(java.lang.Runnable)
+    {
+        io.grpc.SynchronizationContext $r0;
+        java.util.Queue $r1;
+        java.lang.Object $r2;
+        java.lang.Runnable $r3;
+
+        $r0 := @this: io.grpc.SynchronizationContext;
+
+        $r3 := @parameter0: java.lang.Runnable;
+
+        $r1 = $r0.<io.grpc.SynchronizationContext: java.util.Queue queue>;
+
+        $r2 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "runnable is null");
+
+        $r3 = (java.lang.Runnable) $r2;
+
+        interfaceinvoke $r1.<java.util.Queue: boolean add(java.lang.Object)>($r3);
+
+        return;
+    }
+
+    public final io.grpc.SynchronizationContext$ScheduledHandle schedule(java.lang.Runnable, long, java.util.concurrent.TimeUnit, java.util.concurrent.ScheduledExecutorService)
+    {
+        io.grpc.SynchronizationContext $r0;
+        java.util.concurrent.TimeUnit $r1;
+        java.util.concurrent.ScheduledExecutorService $r2;
+        io.grpc.SynchronizationContext$ManagedRunnable $r3;
+        io.grpc.SynchronizationContext$1 $r4;
+        java.util.concurrent.ScheduledFuture $r5;
+        java.lang.Runnable $r6;
+        long $l0;
+        io.grpc.SynchronizationContext$ScheduledHandle $r7;
+
+        $r0 := @this: io.grpc.SynchronizationContext;
+
+        $r6 := @parameter0: java.lang.Runnable;
+
+        $l0 := @parameter1: long;
+
+        $r1 := @parameter2: java.util.concurrent.TimeUnit;
+
+        $r2 := @parameter3: java.util.concurrent.ScheduledExecutorService;
+
+        $r3 = new io.grpc.SynchronizationContext$ManagedRunnable;
+
+        specialinvoke $r3.<io.grpc.SynchronizationContext$ManagedRunnable: void <init>(java.lang.Runnable)>($r6);
+
+        $r4 = new io.grpc.SynchronizationContext$1;
+
+        specialinvoke $r4.<io.grpc.SynchronizationContext$1: void <init>(io.grpc.SynchronizationContext,io.grpc.SynchronizationContext$ManagedRunnable,java.lang.Runnable)>($r0, $r3, $r6);
+
+        $r5 = interfaceinvoke $r2.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r4, $l0, $r1);
+
+        $r7 = new io.grpc.SynchronizationContext$ScheduledHandle;
+
+        specialinvoke $r7.<io.grpc.SynchronizationContext$ScheduledHandle: void <init>(io.grpc.SynchronizationContext$ManagedRunnable,java.util.concurrent.ScheduledFuture,io.grpc.SynchronizationContext$1)>($r3, $r5, null);
+
+        return $r7;
+    }
+
+    public void throwIfNotInThisSynchronizationContext()
+    {
+        io.grpc.SynchronizationContext $r0;
+        java.lang.Thread $r1;
+        java.util.concurrent.atomic.AtomicReference $r2;
+        java.lang.Object $r3;
+        boolean $z0;
+
+        $r0 := @this: io.grpc.SynchronizationContext;
+
+        $r1 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        $r2 = $r0.<io.grpc.SynchronizationContext: java.util.concurrent.atomic.AtomicReference drainingThread>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        if $r1 != $r3 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Not called from the SynchronizationContext");
+
+        return;
+    }
+

@@ -1,0 +1,1894 @@
+io.grpc.okhttp.internal.Platform
+<io.grpc.okhttp.internal.Platform: java.lang.String[] ANDROID_SECURITY_PROVIDERS>
+<io.grpc.okhttp.internal.Platform: io.grpc.okhttp.internal.Platform PLATFORM>
+<io.grpc.okhttp.internal.Platform: java.util.logging.Logger logger>
+<io.grpc.okhttp.internal.Platform: java.security.Provider sslProvider>
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+        java.lang.String[] $r3;
+        io.grpc.okhttp.internal.Platform $r4;
+
+        $r0 = class "Lio/grpc/okhttp/internal/Platform;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.okhttp.internal.Platform: java.util.logging.Logger logger> = $r2;
+
+        $r3 = newarray (java.lang.String)[5];
+
+        $r3[0] = "com.google.android.gms.org.conscrypt.OpenSSLProvider";
+
+        $r3[1] = "org.conscrypt.OpenSSLProvider";
+
+        $r3[2] = "com.android.org.conscrypt.OpenSSLProvider";
+
+        $r3[3] = "org.apache.harmony.xnet.provider.jsse.OpenSSLProvider";
+
+        $r3[4] = "com.google.android.libraries.stitch.sslguard.SslGuardProvider";
+
+        <io.grpc.okhttp.internal.Platform: java.lang.String[] ANDROID_SECURITY_PROVIDERS> = $r3;
+
+        $r4 = staticinvoke <io.grpc.okhttp.internal.Platform: io.grpc.okhttp.internal.Platform findPlatform()>();
+
+        <io.grpc.okhttp.internal.Platform: io.grpc.okhttp.internal.Platform PLATFORM> = $r4;
+
+        return;
+    }
+
+    public void <init>(java.security.Provider)
+    {
+        io.grpc.okhttp.internal.Platform $r0;
+        java.security.Provider $r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform;
+
+        $r1 := @parameter0: java.security.Provider;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<io.grpc.okhttp.internal.Platform: java.security.Provider sslProvider> = $r1;
+
+        return;
+    }
+
+    public static byte[] concatLengthPrefixed(java.util.List)
+    {
+        okio.Buffer $r0;
+        java.util.List $r1;
+        int $i0, $i1, $i2;
+        java.lang.Object $r2;
+        io.grpc.okhttp.internal.Protocol $r3, $r4;
+        java.lang.String $r5;
+        byte[] $r6;
+
+        $r1 := @parameter0: java.util.List;
+
+        $r0 = new okio.Buffer;
+
+        specialinvoke $r0.<okio.Buffer: void <init>()>();
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $r3 = (io.grpc.okhttp.internal.Protocol) $r2;
+
+        $r4 = <io.grpc.okhttp.internal.Protocol: io.grpc.okhttp.internal.Protocol HTTP_1_0>;
+
+        if $r3 == $r4 goto label2;
+
+        $r5 = virtualinvoke $r3.<io.grpc.okhttp.internal.Protocol: java.lang.String toString()>();
+
+        $i2 = virtualinvoke $r5.<java.lang.String: int length()>();
+
+        virtualinvoke $r0.<okio.Buffer: okio.Buffer writeByte(int)>($i2);
+
+        $r5 = virtualinvoke $r3.<io.grpc.okhttp.internal.Protocol: java.lang.String toString()>();
+
+        virtualinvoke $r0.<okio.Buffer: okio.Buffer writeUtf8(java.lang.String)>($r5);
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $r6 = virtualinvoke $r0.<okio.Buffer: byte[] readByteArray()>();
+
+        return $r6;
+    }
+
+    private static io.grpc.okhttp.internal.Platform findPlatform()
+    {
+        java.security.Provider $r0;
+        io.grpc.okhttp.internal.OptionalMethod $r1, $r4, $r5, $r6, r32;
+        java.lang.Class[] $r2;
+        java.lang.Class $r3, $r25, $r26, $r27;
+        java.lang.reflect.Method $r7, $r8, $r28;
+        java.lang.Throwable $r9, $r10, $r11, $r12, $r19, $r20, $r21, $r22, $r23, $r29, $r30, $r31;
+        java.lang.String $r13;
+        boolean $z0;
+        io.grpc.okhttp.internal.Platform$TlsExtensionType $r14;
+        javax.net.ssl.SSLContext $r15;
+        javax.net.ssl.SSLEngine $r16;
+        java.lang.Object $r17;
+        java.lang.Object[] $r18;
+        java.lang.StringBuilder $r24, r38;
+        io.grpc.okhttp.internal.Platform$Android r33;
+        io.grpc.okhttp.internal.Platform$1 r34;
+        io.grpc.okhttp.internal.Platform$2 r35;
+        io.grpc.okhttp.internal.Platform$3 r36;
+        io.grpc.okhttp.internal.Platform$JdkAlpnPlatform r37;
+        io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform r39;
+        io.grpc.okhttp.internal.Platform r40;
+        java.lang.RuntimeException r41;
+
+        $r0 = staticinvoke <io.grpc.okhttp.internal.Platform: java.security.Provider getAndroidSecurityProvider()>();
+
+        if $r0 == null goto label17;
+
+        $r4 = new io.grpc.okhttp.internal.OptionalMethod;
+
+        $r1 = $r4;
+
+        $r2 = newarray (java.lang.Class)[1];
+
+        $r3 = <java.lang.Boolean: java.lang.Class TYPE>;
+
+        $r2[0] = $r3;
+
+        specialinvoke $r4.<io.grpc.okhttp.internal.OptionalMethod: void <init>(java.lang.Class,java.lang.String,java.lang.Class[])>(null, "setUseSessionTickets", $r2);
+
+        $r5 = new io.grpc.okhttp.internal.OptionalMethod;
+
+        $r4 = $r5;
+
+        $r2 = newarray (java.lang.Class)[1];
+
+        $r2[0] = class "Ljava/lang/String;";
+
+        specialinvoke $r5.<io.grpc.okhttp.internal.OptionalMethod: void <init>(java.lang.Class,java.lang.String,java.lang.Class[])>(null, "setHostname", $r2);
+
+        $r6 = new io.grpc.okhttp.internal.OptionalMethod;
+
+        $r5 = $r6;
+
+        $r2 = newarray (java.lang.Class)[0];
+
+        specialinvoke $r6.<io.grpc.okhttp.internal.OptionalMethod: void <init>(java.lang.Class,java.lang.String,java.lang.Class[])>(class "[B", "getAlpnSelectedProtocol", $r2);
+
+        r32 = new io.grpc.okhttp.internal.OptionalMethod;
+
+        $r6 = r32;
+
+        $r2 = newarray (java.lang.Class)[1];
+
+        $r2[0] = class "[B";
+
+        specialinvoke r32.<io.grpc.okhttp.internal.OptionalMethod: void <init>(java.lang.Class,java.lang.String,java.lang.Class[])>(null, "setAlpnProtocols", $r2);
+
+        $r3 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("android.net.TrafficStats");
+
+        $r2 = newarray (java.lang.Class)[1];
+
+        $r2[0] = class "Ljava/net/Socket;";
+
+     label01:
+        $r7 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("tagSocket", $r2);
+
+     label02:
+        $r2 = newarray (java.lang.Class)[1];
+
+        $r2[0] = class "Ljava/net/Socket;";
+
+     label03:
+        $r8 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("untagSocket", $r2);
+
+     label04:
+        goto label11;
+
+     label05:
+        $r9 := @caughtexception;
+
+        goto label08;
+
+     label06:
+        $r10 := @caughtexception;
+
+        goto label10;
+
+     label07:
+        $r11 := @caughtexception;
+
+        $r7 = null;
+
+     label08:
+        $r8 = null;
+
+        goto label11;
+
+     label09:
+        $r12 := @caughtexception;
+
+        $r7 = null;
+
+     label10:
+        $r8 = null;
+
+     label11:
+        $r13 = virtualinvoke $r0.<java.security.Provider: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r13.<java.lang.String: boolean equals(java.lang.Object)>("GmsCore_OpenSSL");
+
+        if $z0 != 0 goto label15;
+
+        $r13 = virtualinvoke $r0.<java.security.Provider: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r13.<java.lang.String: boolean equals(java.lang.Object)>("Conscrypt");
+
+        if $z0 != 0 goto label15;
+
+        $r13 = virtualinvoke $r0.<java.security.Provider: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r13.<java.lang.String: boolean equals(java.lang.Object)>("Ssl_Guard");
+
+        if $z0 == 0 goto label12;
+
+        goto label15;
+
+     label12:
+        $z0 = staticinvoke <io.grpc.okhttp.internal.Platform: boolean isAtLeastAndroid5()>();
+
+        if $z0 == 0 goto label13;
+
+        $r14 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType ALPN_AND_NPN>;
+
+        goto label16;
+
+     label13:
+        $z0 = staticinvoke <io.grpc.okhttp.internal.Platform: boolean isAtLeastAndroid41()>();
+
+        if $z0 == 0 goto label14;
+
+        $r14 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType NPN>;
+
+        goto label16;
+
+     label14:
+        $r14 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType NONE>;
+
+        goto label16;
+
+     label15:
+        $r14 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType ALPN_AND_NPN>;
+
+     label16:
+        r33 = new io.grpc.okhttp.internal.Platform$Android;
+
+        specialinvoke r33.<io.grpc.okhttp.internal.Platform$Android: void <init>(io.grpc.okhttp.internal.OptionalMethod,io.grpc.okhttp.internal.OptionalMethod,java.lang.reflect.Method,java.lang.reflect.Method,io.grpc.okhttp.internal.OptionalMethod,io.grpc.okhttp.internal.OptionalMethod,java.security.Provider,io.grpc.okhttp.internal.Platform$TlsExtensionType)>($r1, $r4, $r7, $r8, $r5, $r6, $r0, $r14);
+
+        return r33;
+
+     label17:
+        $r15 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getDefault()>();
+
+     label18:
+        $r0 = virtualinvoke $r15.<javax.net.ssl.SSLContext: java.security.Provider getProvider()>();
+
+     label19:
+        $r15 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String,java.security.Provider)>("TLS", $r0);
+
+     label20:
+        virtualinvoke $r15.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(null, null, null);
+
+        $r16 = virtualinvoke $r15.<javax.net.ssl.SSLContext: javax.net.ssl.SSLEngine createSSLEngine()>();
+
+     label21:
+        r34 = new io.grpc.okhttp.internal.Platform$1;
+
+     label22:
+        specialinvoke r34.<io.grpc.okhttp.internal.Platform$1: void <init>()>();
+
+     label23:
+        $r17 = staticinvoke <java.security.AccessController: java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction)>(r34);
+
+        $r7 = (java.lang.reflect.Method) $r17;
+
+        $r18 = newarray (java.lang.Object)[0];
+
+     label24:
+        virtualinvoke $r7.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r16, $r18);
+
+     label25:
+        r35 = new io.grpc.okhttp.internal.Platform$2;
+
+     label26:
+        specialinvoke r35.<io.grpc.okhttp.internal.Platform$2: void <init>()>();
+
+     label27:
+        $r17 = staticinvoke <java.security.AccessController: java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction)>(r35);
+
+        $r7 = (java.lang.reflect.Method) $r17;
+
+        r36 = new io.grpc.okhttp.internal.Platform$3;
+
+     label28:
+        specialinvoke r36.<io.grpc.okhttp.internal.Platform$3: void <init>()>();
+
+     label29:
+        $r17 = staticinvoke <java.security.AccessController: java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction)>(r36);
+
+        $r8 = (java.lang.reflect.Method) $r17;
+
+        r37 = new io.grpc.okhttp.internal.Platform$JdkAlpnPlatform;
+
+     label30:
+        specialinvoke r37.<io.grpc.okhttp.internal.Platform$JdkAlpnPlatform: void <init>(java.security.Provider,java.lang.reflect.Method,java.lang.reflect.Method,io.grpc.okhttp.internal.Platform$JdkAlpnPlatform-IA)>($r0, $r7, $r8, null);
+
+     label31:
+        return r37;
+
+     label32:
+        $r19 := @caughtexception;
+
+        goto label37;
+
+     label33:
+        $r20 := @caughtexception;
+
+        goto label37;
+
+     label34:
+        $r21 := @caughtexception;
+
+        goto label37;
+
+     label35:
+        $r22 := @caughtexception;
+
+        goto label37;
+
+     label36:
+        $r23 := @caughtexception;
+
+     label37:
+        $r3 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("org.eclipse.jetty.alpn.ALPN");
+
+        r38 = new java.lang.StringBuilder;
+
+        $r24 = r38;
+
+     label38:
+        specialinvoke r38.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("org.eclipse.jetty.alpn.ALPN");
+
+        $r24 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("$Provider");
+
+        $r13 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label39:
+        $r25 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>($r13);
+
+        r38 = new java.lang.StringBuilder;
+
+        $r24 = r38;
+
+     label40:
+        specialinvoke r38.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("org.eclipse.jetty.alpn.ALPN");
+
+        $r24 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("$ClientProvider");
+
+        $r13 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label41:
+        $r26 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>($r13);
+
+        r38 = new java.lang.StringBuilder;
+
+        $r24 = r38;
+
+     label42:
+        specialinvoke r38.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("org.eclipse.jetty.alpn.ALPN");
+
+        $r24 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("$ServerProvider");
+
+        $r13 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label43:
+        $r27 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>($r13);
+
+        $r2 = newarray (java.lang.Class)[2];
+
+        $r2[0] = class "Ljavax/net/ssl/SSLSocket;";
+
+        $r2[1] = $r25;
+
+     label44:
+        $r7 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("put", $r2);
+
+     label45:
+        $r2 = newarray (java.lang.Class)[1];
+
+        $r2[0] = class "Ljavax/net/ssl/SSLSocket;";
+
+     label46:
+        $r8 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("get", $r2);
+
+     label47:
+        $r2 = newarray (java.lang.Class)[1];
+
+        $r2[0] = class "Ljavax/net/ssl/SSLSocket;";
+
+     label48:
+        $r28 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("remove", $r2);
+
+     label49:
+        r39 = new io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform;
+
+     label50:
+        specialinvoke r39.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: void <init>(java.lang.reflect.Method,java.lang.reflect.Method,java.lang.reflect.Method,java.lang.Class,java.lang.Class,java.security.Provider)>($r7, $r8, $r28, $r26, $r27, $r0);
+
+     label51:
+        return r39;
+
+     label52:
+        $r29 := @caughtexception;
+
+        goto label54;
+
+     label53:
+        $r30 := @caughtexception;
+
+     label54:
+        r40 = new io.grpc.okhttp.internal.Platform;
+
+        specialinvoke r40.<io.grpc.okhttp.internal.Platform: void <init>(java.security.Provider)>($r0);
+
+        return r40;
+
+     label55:
+        $r31 := @caughtexception;
+
+        r41 = new java.lang.RuntimeException;
+
+        specialinvoke r41.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r31);
+
+        $r9 = (java.lang.Throwable) r41;
+
+        throw $r9;
+
+        catch java.lang.ClassNotFoundException from label01 to label02 with label09;
+        catch java.lang.NoSuchMethodException from label01 to label02 with label07;
+        catch java.lang.ClassNotFoundException from label03 to label04 with label06;
+        catch java.lang.NoSuchMethodException from label03 to label04 with label05;
+        catch java.security.NoSuchAlgorithmException from label18 to label19 with label55;
+        catch java.security.NoSuchAlgorithmException from label20 to label21 with label36;
+        catch java.security.NoSuchAlgorithmException from label22 to label23 with label36;
+        catch java.security.NoSuchAlgorithmException from label24 to label25 with label36;
+        catch java.security.NoSuchAlgorithmException from label26 to label27 with label36;
+        catch java.security.NoSuchAlgorithmException from label28 to label29 with label36;
+        catch java.security.NoSuchAlgorithmException from label30 to label31 with label36;
+        catch java.security.KeyManagementException from label20 to label21 with label35;
+        catch java.security.KeyManagementException from label22 to label23 with label35;
+        catch java.security.KeyManagementException from label24 to label25 with label35;
+        catch java.security.KeyManagementException from label26 to label27 with label35;
+        catch java.security.KeyManagementException from label28 to label29 with label35;
+        catch java.security.KeyManagementException from label30 to label31 with label35;
+        catch java.security.PrivilegedActionException from label20 to label21 with label34;
+        catch java.security.PrivilegedActionException from label22 to label23 with label34;
+        catch java.security.PrivilegedActionException from label24 to label25 with label34;
+        catch java.security.PrivilegedActionException from label26 to label27 with label34;
+        catch java.security.PrivilegedActionException from label28 to label29 with label34;
+        catch java.security.PrivilegedActionException from label30 to label31 with label34;
+        catch java.lang.IllegalAccessException from label20 to label21 with label33;
+        catch java.lang.IllegalAccessException from label22 to label23 with label33;
+        catch java.lang.IllegalAccessException from label24 to label25 with label33;
+        catch java.lang.IllegalAccessException from label26 to label27 with label33;
+        catch java.lang.IllegalAccessException from label28 to label29 with label33;
+        catch java.lang.IllegalAccessException from label30 to label31 with label33;
+        catch java.lang.reflect.InvocationTargetException from label20 to label21 with label32;
+        catch java.lang.reflect.InvocationTargetException from label22 to label23 with label32;
+        catch java.lang.reflect.InvocationTargetException from label24 to label25 with label32;
+        catch java.lang.reflect.InvocationTargetException from label26 to label27 with label32;
+        catch java.lang.reflect.InvocationTargetException from label28 to label29 with label32;
+        catch java.lang.reflect.InvocationTargetException from label30 to label31 with label32;
+        catch java.lang.ClassNotFoundException from label38 to label39 with label53;
+        catch java.lang.ClassNotFoundException from label40 to label41 with label53;
+        catch java.lang.ClassNotFoundException from label42 to label43 with label53;
+        catch java.lang.ClassNotFoundException from label44 to label45 with label53;
+        catch java.lang.ClassNotFoundException from label46 to label47 with label53;
+        catch java.lang.ClassNotFoundException from label48 to label49 with label53;
+        catch java.lang.ClassNotFoundException from label50 to label51 with label53;
+        catch java.lang.NoSuchMethodException from label38 to label39 with label52;
+        catch java.lang.NoSuchMethodException from label40 to label41 with label52;
+        catch java.lang.NoSuchMethodException from label42 to label43 with label52;
+        catch java.lang.NoSuchMethodException from label44 to label45 with label52;
+        catch java.lang.NoSuchMethodException from label46 to label47 with label52;
+        catch java.lang.NoSuchMethodException from label48 to label49 with label52;
+        catch java.lang.NoSuchMethodException from label50 to label51 with label52;
+    }
+
+    public static io.grpc.okhttp.internal.Platform get()
+    {
+        io.grpc.okhttp.internal.Platform r0;
+
+        r0 = <io.grpc.okhttp.internal.Platform: io.grpc.okhttp.internal.Platform PLATFORM>;
+
+        return r0;
+    }
+
+    private static java.security.Provider getAndroidSecurityProvider()
+    {
+        java.lang.String[] $r0;
+        int $i0, $i1, $i2, $i3;
+        java.util.logging.Level $r1;
+        java.lang.String $r2, $r6;
+        java.security.Provider[] $r3;
+        java.security.Provider $r4;
+        java.lang.Class $r5;
+        boolean $z0;
+        java.util.logging.Logger $r7;
+
+        $r3 = staticinvoke <java.security.Security: java.security.Provider[] getProviders()>();
+
+        $i1 = lengthof $r3;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label5;
+
+        $r4 = $r3[$i2];
+
+        $r0 = <io.grpc.okhttp.internal.Platform: java.lang.String[] ANDROID_SECURITY_PROVIDERS>;
+
+        $i0 = lengthof $r0;
+
+        $i3 = 0;
+
+     label2:
+        if $i3 >= $i0 goto label4;
+
+        $r2 = $r0[$i3];
+
+        $r5 = virtualinvoke $r4.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label3;
+
+        $r7 = <io.grpc.okhttp.internal.Platform: java.util.logging.Logger logger>;
+
+        $r1 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        virtualinvoke $r7.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Object)>($r1, "io.grpc.okhttp.internal.Platform", "getAndroidSecurityProvider", "Found registered provider {0}", $r2);
+
+        return $r4;
+
+     label3:
+        $i3 = $i3 + 1;
+
+        goto label2;
+
+     label4:
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label5:
+        $r7 = <io.grpc.okhttp.internal.Platform: java.util.logging.Logger logger>;
+
+        $r1 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        virtualinvoke $r7.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String)>($r1, "io.grpc.okhttp.internal.Platform", "getAndroidSecurityProvider", "Unable to find Conscrypt");
+
+        return null;
+    }
+
+    private static boolean isAtLeastAndroid41()
+    {
+        java.util.logging.Level $r0;
+        java.lang.ClassLoader $r1;
+        java.lang.Class $r2;
+        java.lang.Throwable $r3;
+        java.util.logging.Logger $r4;
+
+        $r2 = class "Lio/grpc/okhttp/internal/Platform;";
+
+     label1:
+        $r1 = virtualinvoke $r2.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        virtualinvoke $r1.<java.lang.ClassLoader: java.lang.Class loadClass(java.lang.String)>("android.app.ActivityOptions");
+
+     label2:
+        return 1;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r4 = <io.grpc.okhttp.internal.Platform: java.util.logging.Logger logger>;
+
+        $r0 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        virtualinvoke $r4.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r0, "io.grpc.okhttp.internal.Platform", "isAtLeastAndroid41", "Can\'t find class", $r3);
+
+        return 0;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label3;
+    }
+
+    private static boolean isAtLeastAndroid5()
+    {
+        java.util.logging.Level $r0;
+        java.lang.ClassLoader $r1;
+        java.lang.Class $r2;
+        java.lang.Throwable $r3;
+        java.util.logging.Logger $r4;
+
+        $r2 = class "Lio/grpc/okhttp/internal/Platform;";
+
+     label1:
+        $r1 = virtualinvoke $r2.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        virtualinvoke $r1.<java.lang.ClassLoader: java.lang.Class loadClass(java.lang.String)>("android.net.Network");
+
+     label2:
+        return 1;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r4 = <io.grpc.okhttp.internal.Platform: java.util.logging.Logger logger>;
+
+        $r0 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        virtualinvoke $r4.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r0, "io.grpc.okhttp.internal.Platform", "isAtLeastAndroid5", "Can\'t find class", $r3);
+
+        return 0;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label3;
+    }
+
+    public void afterHandshake(javax.net.ssl.SSLSocket)
+    {
+        io.grpc.okhttp.internal.Platform $r0;
+        javax.net.ssl.SSLSocket $r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        return;
+    }
+
+    public void configureTlsExtensions(javax.net.ssl.SSLSocket, java.lang.String, java.util.List)
+    {
+        io.grpc.okhttp.internal.Platform $r0;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.String $r2;
+        java.util.List $r3;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.util.List;
+
+        return;
+    }
+
+    public java.security.Provider getProvider()
+    {
+        io.grpc.okhttp.internal.Platform $r0;
+        java.security.Provider r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform;
+
+        r1 = $r0.<io.grpc.okhttp.internal.Platform: java.security.Provider sslProvider>;
+
+        return r1;
+    }
+
+    public java.lang.String getSelectedProtocol(javax.net.ssl.SSLSocket)
+    {
+        io.grpc.okhttp.internal.Platform $r0;
+        javax.net.ssl.SSLSocket $r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        return null;
+    }
+
+    public io.grpc.okhttp.internal.Platform$TlsExtensionType getTlsExtensionType()
+    {
+        io.grpc.okhttp.internal.Platform $r0;
+        io.grpc.okhttp.internal.Platform$TlsExtensionType r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform;
+
+        r1 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType NONE>;
+
+        return r1;
+    }
+
+io.grpc.okhttp.internal.Platform$1
+    void <init>()
+    {
+        io.grpc.okhttp.internal.Platform$1 $r0;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$1;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public volatile java.lang.Object run() throws java.lang.Exception
+    {
+        io.grpc.okhttp.internal.Platform$1 $r0;
+        java.lang.reflect.Method $r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$1;
+
+        $r1 = virtualinvoke $r0.<io.grpc.okhttp.internal.Platform$1: java.lang.reflect.Method run()>();
+
+        return $r1;
+    }
+
+    public java.lang.reflect.Method run() throws java.lang.Exception
+    {
+        io.grpc.okhttp.internal.Platform$1 $r0;
+        java.lang.reflect.Method $r1;
+        java.lang.Class $r2;
+        java.lang.Class[] $r3;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$1;
+
+        $r2 = class "Ljavax/net/ssl/SSLEngine;";
+
+        $r3 = newarray (java.lang.Class)[0];
+
+        $r1 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("getApplicationProtocol", $r3);
+
+        return $r1;
+    }
+
+io.grpc.okhttp.internal.Platform$2
+    void <init>()
+    {
+        io.grpc.okhttp.internal.Platform$2 $r0;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$2;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public volatile java.lang.Object run() throws java.lang.Exception
+    {
+        io.grpc.okhttp.internal.Platform$2 $r0;
+        java.lang.reflect.Method $r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$2;
+
+        $r1 = virtualinvoke $r0.<io.grpc.okhttp.internal.Platform$2: java.lang.reflect.Method run()>();
+
+        return $r1;
+    }
+
+    public java.lang.reflect.Method run() throws java.lang.Exception
+    {
+        io.grpc.okhttp.internal.Platform$2 $r0;
+        java.lang.reflect.Method $r1;
+        java.lang.Class $r2;
+        java.lang.Class[] $r3;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$2;
+
+        $r2 = class "Ljavax/net/ssl/SSLParameters;";
+
+        $r3 = newarray (java.lang.Class)[1];
+
+        $r3[0] = class "[Ljava/lang/String;";
+
+        $r1 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("setApplicationProtocols", $r3);
+
+        return $r1;
+    }
+
+io.grpc.okhttp.internal.Platform$3
+    void <init>()
+    {
+        io.grpc.okhttp.internal.Platform$3 $r0;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$3;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public volatile java.lang.Object run() throws java.lang.Exception
+    {
+        io.grpc.okhttp.internal.Platform$3 $r0;
+        java.lang.reflect.Method $r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$3;
+
+        $r1 = virtualinvoke $r0.<io.grpc.okhttp.internal.Platform$3: java.lang.reflect.Method run()>();
+
+        return $r1;
+    }
+
+    public java.lang.reflect.Method run() throws java.lang.Exception
+    {
+        io.grpc.okhttp.internal.Platform$3 $r0;
+        java.lang.reflect.Method $r1;
+        java.lang.Class $r2;
+        java.lang.Class[] $r3;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$3;
+
+        $r2 = class "Ljavax/net/ssl/SSLSocket;";
+
+        $r3 = newarray (java.lang.Class)[0];
+
+        $r1 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("getApplicationProtocol", $r3);
+
+        return $r1;
+    }
+
+io.grpc.okhttp.internal.Platform$Android
+<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod getAlpnSelectedProtocol>
+<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setAlpnProtocols>
+<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setHostname>
+<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setUseSessionTickets>
+<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.Platform$TlsExtensionType tlsExtensionType>
+<io.grpc.okhttp.internal.Platform$Android: java.lang.reflect.Method trafficStatsTagSocket>
+<io.grpc.okhttp.internal.Platform$Android: java.lang.reflect.Method trafficStatsUntagSocket>
+    public void <init>(io.grpc.okhttp.internal.OptionalMethod, io.grpc.okhttp.internal.OptionalMethod, java.lang.reflect.Method, java.lang.reflect.Method, io.grpc.okhttp.internal.OptionalMethod, io.grpc.okhttp.internal.OptionalMethod, java.security.Provider, io.grpc.okhttp.internal.Platform$TlsExtensionType)
+    {
+        io.grpc.okhttp.internal.Platform$Android $r0;
+        io.grpc.okhttp.internal.OptionalMethod $r1, $r2, $r5, $r6;
+        java.lang.reflect.Method $r3, $r4;
+        java.security.Provider $r7;
+        io.grpc.okhttp.internal.Platform$TlsExtensionType $r8;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$Android;
+
+        $r1 := @parameter0: io.grpc.okhttp.internal.OptionalMethod;
+
+        $r2 := @parameter1: io.grpc.okhttp.internal.OptionalMethod;
+
+        $r3 := @parameter2: java.lang.reflect.Method;
+
+        $r4 := @parameter3: java.lang.reflect.Method;
+
+        $r5 := @parameter4: io.grpc.okhttp.internal.OptionalMethod;
+
+        $r6 := @parameter5: io.grpc.okhttp.internal.OptionalMethod;
+
+        $r7 := @parameter6: java.security.Provider;
+
+        $r8 := @parameter7: io.grpc.okhttp.internal.Platform$TlsExtensionType;
+
+        specialinvoke $r0.<io.grpc.okhttp.internal.Platform: void <init>(java.security.Provider)>($r7);
+
+        $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setUseSessionTickets> = $r1;
+
+        $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setHostname> = $r2;
+
+        $r0.<io.grpc.okhttp.internal.Platform$Android: java.lang.reflect.Method trafficStatsTagSocket> = $r3;
+
+        $r0.<io.grpc.okhttp.internal.Platform$Android: java.lang.reflect.Method trafficStatsUntagSocket> = $r4;
+
+        $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod getAlpnSelectedProtocol> = $r5;
+
+        $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setAlpnProtocols> = $r6;
+
+        $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.Platform$TlsExtensionType tlsExtensionType> = $r8;
+
+        return;
+    }
+
+    public void configureTlsExtensions(javax.net.ssl.SSLSocket, java.lang.String, java.util.List)
+    {
+        io.grpc.okhttp.internal.Platform$Android $r0;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.String $r2;
+        java.util.List $r3;
+        io.grpc.okhttp.internal.OptionalMethod $r4;
+        java.lang.Object[] $r5;
+        java.lang.Boolean $r6;
+        boolean $z0;
+        byte[] $r7;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$Android;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.util.List;
+
+        if $r2 == null goto label1;
+
+        $r4 = $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setUseSessionTickets>;
+
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r6 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        $r5[0] = $r6;
+
+        virtualinvoke $r4.<io.grpc.okhttp.internal.OptionalMethod: java.lang.Object invokeOptionalWithoutCheckedException(java.lang.Object,java.lang.Object[])>($r1, $r5);
+
+        $r4 = $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setHostname>;
+
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r5[0] = $r2;
+
+        virtualinvoke $r4.<io.grpc.okhttp.internal.OptionalMethod: java.lang.Object invokeOptionalWithoutCheckedException(java.lang.Object,java.lang.Object[])>($r1, $r5);
+
+     label1:
+        $r4 = $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setAlpnProtocols>;
+
+        $z0 = virtualinvoke $r4.<io.grpc.okhttp.internal.OptionalMethod: boolean isSupported(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label2;
+
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r7 = staticinvoke <io.grpc.okhttp.internal.Platform$Android: byte[] concatLengthPrefixed(java.util.List)>($r3);
+
+        $r5[0] = $r7;
+
+        $r4 = $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod setAlpnProtocols>;
+
+        virtualinvoke $r4.<io.grpc.okhttp.internal.OptionalMethod: java.lang.Object invokeWithoutCheckedException(java.lang.Object,java.lang.Object[])>($r1, $r5);
+
+     label2:
+        return;
+    }
+
+    public java.lang.String getSelectedProtocol(javax.net.ssl.SSLSocket)
+    {
+        io.grpc.okhttp.internal.Platform$Android $r0;
+        javax.net.ssl.SSLSocket $r1;
+        io.grpc.okhttp.internal.OptionalMethod $r2;
+        boolean $z0;
+        java.lang.Object[] $r3;
+        java.lang.Object $r4;
+        byte[] $r5;
+        java.lang.String $r6;
+        java.nio.charset.Charset $r7;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$Android;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 = $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod getAlpnSelectedProtocol>;
+
+        $z0 = virtualinvoke $r2.<io.grpc.okhttp.internal.OptionalMethod: boolean isSupported(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        $r2 = $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.OptionalMethod getAlpnSelectedProtocol>;
+
+        $r3 = newarray (java.lang.Object)[0];
+
+        $r4 = virtualinvoke $r2.<io.grpc.okhttp.internal.OptionalMethod: java.lang.Object invokeWithoutCheckedException(java.lang.Object,java.lang.Object[])>($r1, $r3);
+
+        $r5 = (byte[]) $r4;
+
+        if $r5 == null goto label2;
+
+        $r6 = new java.lang.String;
+
+        $r7 = <io.grpc.okhttp.internal.Util: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r6.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>($r5, $r7);
+
+        return $r6;
+
+     label2:
+        return null;
+    }
+
+    public io.grpc.okhttp.internal.Platform$TlsExtensionType getTlsExtensionType()
+    {
+        io.grpc.okhttp.internal.Platform$Android $r0;
+        io.grpc.okhttp.internal.Platform$TlsExtensionType r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$Android;
+
+        r1 = $r0.<io.grpc.okhttp.internal.Platform$Android: io.grpc.okhttp.internal.Platform$TlsExtensionType tlsExtensionType>;
+
+        return r1;
+    }
+
+io.grpc.okhttp.internal.Platform$JdkAlpnPlatform-IA
+io.grpc.okhttp.internal.Platform$JdkAlpnPlatform
+<io.grpc.okhttp.internal.Platform$JdkAlpnPlatform: java.lang.reflect.Method getApplicationProtocol>
+<io.grpc.okhttp.internal.Platform$JdkAlpnPlatform: java.lang.reflect.Method setApplicationProtocols>
+    private void <init>(java.security.Provider, java.lang.reflect.Method, java.lang.reflect.Method)
+    {
+        io.grpc.okhttp.internal.Platform$JdkAlpnPlatform $r0;
+        java.security.Provider $r1;
+        java.lang.reflect.Method $r2, $r3;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkAlpnPlatform;
+
+        $r1 := @parameter0: java.security.Provider;
+
+        $r2 := @parameter1: java.lang.reflect.Method;
+
+        $r3 := @parameter2: java.lang.reflect.Method;
+
+        specialinvoke $r0.<io.grpc.okhttp.internal.Platform: void <init>(java.security.Provider)>($r1);
+
+        $r0.<io.grpc.okhttp.internal.Platform$JdkAlpnPlatform: java.lang.reflect.Method setApplicationProtocols> = $r2;
+
+        $r0.<io.grpc.okhttp.internal.Platform$JdkAlpnPlatform: java.lang.reflect.Method getApplicationProtocol> = $r3;
+
+        return;
+    }
+
+    void <init>(java.security.Provider, java.lang.reflect.Method, java.lang.reflect.Method, io.grpc.okhttp.internal.Platform$JdkAlpnPlatform-IA)
+    {
+        io.grpc.okhttp.internal.Platform$JdkAlpnPlatform $r0;
+        java.security.Provider $r1;
+        java.lang.reflect.Method $r2, $r3;
+        io.grpc.okhttp.internal.Platform$JdkAlpnPlatform-IA $r4;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkAlpnPlatform;
+
+        $r1 := @parameter0: java.security.Provider;
+
+        $r2 := @parameter1: java.lang.reflect.Method;
+
+        $r3 := @parameter2: java.lang.reflect.Method;
+
+        $r4 := @parameter3: io.grpc.okhttp.internal.Platform$JdkAlpnPlatform-IA;
+
+        specialinvoke $r0.<io.grpc.okhttp.internal.Platform$JdkAlpnPlatform: void <init>(java.security.Provider,java.lang.reflect.Method,java.lang.reflect.Method)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    public void configureTlsExtensions(javax.net.ssl.SSLSocket, java.lang.String, java.util.List)
+    {
+        io.grpc.okhttp.internal.Platform$JdkAlpnPlatform $r0;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.String $r2;
+        java.util.List $r3;
+        javax.net.ssl.SSLParameters $r4;
+        java.util.ArrayList $r5, r16;
+        int $i0;
+        java.util.Iterator $r6;
+        boolean $z0;
+        java.lang.Object $r7;
+        io.grpc.okhttp.internal.Protocol $r8, $r9;
+        java.lang.reflect.Method $r10;
+        java.lang.Object[] $r11, $r13;
+        java.lang.String[] $r12;
+        java.lang.Throwable $r14, $r15;
+        java.lang.RuntimeException r17;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkAlpnPlatform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.util.List;
+
+        $r4 = virtualinvoke $r1.<javax.net.ssl.SSLSocket: javax.net.ssl.SSLParameters getSSLParameters()>();
+
+        r16 = new java.util.ArrayList;
+
+        $r5 = r16;
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        specialinvoke r16.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r6 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label01:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label02;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (io.grpc.okhttp.internal.Protocol) $r7;
+
+        $r9 = <io.grpc.okhttp.internal.Protocol: io.grpc.okhttp.internal.Protocol HTTP_1_0>;
+
+        if $r8 == $r9 goto label01;
+
+        $r2 = virtualinvoke $r8.<io.grpc.okhttp.internal.Protocol: java.lang.String toString()>();
+
+        $r3 = (java.util.List) $r5;
+
+        interfaceinvoke $r3.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        goto label01;
+
+     label02:
+        $r10 = $r0.<io.grpc.okhttp.internal.Platform$JdkAlpnPlatform: java.lang.reflect.Method setApplicationProtocols>;
+
+        $r11 = newarray (java.lang.Object)[1];
+
+        $r3 = (java.util.List) $r5;
+
+     label03:
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+     label04:
+        $r12 = newarray (java.lang.String)[$i0];
+
+        $r3 = (java.util.List) $r5;
+
+     label05:
+        $r13 = interfaceinvoke $r3.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r12);
+
+     label06:
+        $r11[0] = $r13;
+
+     label07:
+        virtualinvoke $r10.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r4, $r11);
+
+     label08:
+        virtualinvoke $r1.<javax.net.ssl.SSLSocket: void setSSLParameters(javax.net.ssl.SSLParameters)>($r4);
+
+        return;
+
+     label09:
+        $r14 := @caughtexception;
+
+        r17 = new java.lang.RuntimeException;
+
+        specialinvoke r17.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r14);
+
+        $r14 = (java.lang.Throwable) r17;
+
+        throw $r14;
+
+     label10:
+        $r15 := @caughtexception;
+
+        r17 = new java.lang.RuntimeException;
+
+        specialinvoke r17.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r15);
+
+        goto label11;
+
+     label11:
+        $r14 = (java.lang.Throwable) r17;
+
+        throw $r14;
+
+        catch java.lang.IllegalAccessException from label03 to label04 with label10;
+        catch java.lang.IllegalAccessException from label05 to label06 with label10;
+        catch java.lang.IllegalAccessException from label07 to label08 with label10;
+        catch java.lang.reflect.InvocationTargetException from label03 to label04 with label09;
+        catch java.lang.reflect.InvocationTargetException from label05 to label06 with label09;
+        catch java.lang.reflect.InvocationTargetException from label07 to label08 with label09;
+    }
+
+    public java.lang.String getSelectedProtocol(javax.net.ssl.SSLSocket)
+    {
+        io.grpc.okhttp.internal.Platform$JdkAlpnPlatform $r0;
+        java.lang.Object $r1;
+        javax.net.ssl.SSLSocket $r2;
+        java.lang.reflect.Method $r3;
+        java.lang.Object[] $r4;
+        java.lang.String $r5;
+        java.lang.Throwable $r6, $r7;
+        java.lang.RuntimeException r8;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkAlpnPlatform;
+
+        $r2 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r3 = $r0.<io.grpc.okhttp.internal.Platform$JdkAlpnPlatform: java.lang.reflect.Method getApplicationProtocol>;
+
+        $r4 = newarray (java.lang.Object)[0];
+
+     label1:
+        $r1 = virtualinvoke $r3.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r2, $r4);
+
+     label2:
+        $r5 = (java.lang.String) $r1;
+
+        return $r5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r8 = new java.lang.RuntimeException;
+
+        specialinvoke r8.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r6);
+
+        $r6 = (java.lang.Throwable) r8;
+
+        throw $r6;
+
+     label4:
+        $r7 := @caughtexception;
+
+        r8 = new java.lang.RuntimeException;
+
+        specialinvoke r8.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r7);
+
+        $r6 = (java.lang.Throwable) r8;
+
+        throw $r6;
+
+        catch java.lang.IllegalAccessException from label1 to label2 with label4;
+        catch java.lang.reflect.InvocationTargetException from label1 to label2 with label3;
+    }
+
+    public io.grpc.okhttp.internal.Platform$TlsExtensionType getTlsExtensionType()
+    {
+        io.grpc.okhttp.internal.Platform$JdkAlpnPlatform $r0;
+        io.grpc.okhttp.internal.Platform$TlsExtensionType r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkAlpnPlatform;
+
+        r1 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType ALPN_AND_NPN>;
+
+        return r1;
+    }
+
+io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform
+<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.Class clientProviderClass>
+<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.reflect.Method getMethod>
+<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.reflect.Method putMethod>
+<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.reflect.Method removeMethod>
+<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.Class serverProviderClass>
+    public void <init>(java.lang.reflect.Method, java.lang.reflect.Method, java.lang.reflect.Method, java.lang.Class, java.lang.Class, java.security.Provider)
+    {
+        io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform $r0;
+        java.lang.reflect.Method $r1, $r2, $r3;
+        java.lang.Class $r4, $r5;
+        java.security.Provider $r6;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform;
+
+        $r1 := @parameter0: java.lang.reflect.Method;
+
+        $r2 := @parameter1: java.lang.reflect.Method;
+
+        $r3 := @parameter2: java.lang.reflect.Method;
+
+        $r4 := @parameter3: java.lang.Class;
+
+        $r5 := @parameter4: java.lang.Class;
+
+        $r6 := @parameter5: java.security.Provider;
+
+        specialinvoke $r0.<io.grpc.okhttp.internal.Platform: void <init>(java.security.Provider)>($r6);
+
+        $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.reflect.Method putMethod> = $r1;
+
+        $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.reflect.Method getMethod> = $r2;
+
+        $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.reflect.Method removeMethod> = $r3;
+
+        $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.Class clientProviderClass> = $r4;
+
+        $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.Class serverProviderClass> = $r5;
+
+        return;
+    }
+
+    public void afterHandshake(javax.net.ssl.SSLSocket)
+    {
+        io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform $r0;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.reflect.Method $r2;
+        java.lang.Object[] $r3;
+        java.lang.Throwable $r4, $r7;
+        java.util.logging.Logger $r5;
+        java.util.logging.Level $r6;
+        java.lang.AssertionError $r8;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 = $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.reflect.Method removeMethod>;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r3[0] = $r1;
+
+     label1:
+        virtualinvoke $r2.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>(null, $r3);
+
+     label2:
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r5 = <io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.util.logging.Logger logger>;
+
+        $r6 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        virtualinvoke $r5.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r6, "io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform", "afterHandshake", "Failed to remove SSLSocket from Jetty ALPN", $r4);
+
+        return;
+
+     label4:
+        $r7 := @caughtexception;
+
+        $r8 = new java.lang.AssertionError;
+
+        specialinvoke $r8.<java.lang.AssertionError: void <init>()>();
+
+        throw $r8;
+
+        catch java.lang.IllegalAccessException from label1 to label2 with label4;
+        catch java.lang.reflect.InvocationTargetException from label1 to label2 with label3;
+    }
+
+    public void configureTlsExtensions(javax.net.ssl.SSLSocket, java.lang.String, java.util.List)
+    {
+        io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform $r0;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.String $r2;
+        java.util.List $r3, r18;
+        java.util.ArrayList $r4, r15;
+        int $i0, $i1;
+        java.lang.Object $r5;
+        io.grpc.okhttp.internal.Protocol $r6, $r7;
+        java.lang.Class $r8;
+        java.lang.ClassLoader $r9;
+        java.lang.Class[] $r10;
+        java.lang.reflect.Method $r11;
+        java.lang.Object[] $r12;
+        java.lang.Throwable $r13, $r14;
+        io.grpc.okhttp.internal.Platform$JettyNegoProvider r16;
+        java.lang.AssertionError r17;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.util.List;
+
+        r15 = new java.util.ArrayList;
+
+        $r4 = r15;
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        specialinvoke r15.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        $i1 = 0;
+
+     label01:
+        if $i1 >= $i0 goto label03;
+
+        $r5 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $r6 = (io.grpc.okhttp.internal.Protocol) $r5;
+
+        $r7 = <io.grpc.okhttp.internal.Protocol: io.grpc.okhttp.internal.Protocol HTTP_1_0>;
+
+        if $r6 == $r7 goto label02;
+
+        $r2 = virtualinvoke $r6.<io.grpc.okhttp.internal.Protocol: java.lang.String toString()>();
+
+        r18 = (java.util.List) $r4;
+
+        interfaceinvoke r18.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+     label02:
+        $i1 = $i1 + 1;
+
+        goto label01;
+
+     label03:
+        $r8 = class "Lio/grpc/okhttp/internal/Platform;";
+
+     label04:
+        $r9 = virtualinvoke $r8.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+     label05:
+        $r10 = newarray (java.lang.Class)[2];
+
+        $r8 = $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.Class clientProviderClass>;
+
+        $r10[0] = $r8;
+
+        $r8 = $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.Class serverProviderClass>;
+
+        $r10[1] = $r8;
+
+        r16 = new io.grpc.okhttp.internal.Platform$JettyNegoProvider;
+
+        $r3 = (java.util.List) $r4;
+
+     label06:
+        specialinvoke r16.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: void <init>(java.util.List)>($r3);
+
+     label07:
+        $r5 = staticinvoke <java.lang.reflect.Proxy: java.lang.Object newProxyInstance(java.lang.ClassLoader,java.lang.Class[],java.lang.reflect.InvocationHandler)>($r9, $r10, r16);
+
+        $r11 = $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.reflect.Method putMethod>;
+
+        $r12 = newarray (java.lang.Object)[2];
+
+        $r12[0] = $r1;
+
+        $r12[1] = $r5;
+
+     label08:
+        virtualinvoke $r11.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>(null, $r12);
+
+     label09:
+        return;
+
+     label10:
+        $r13 := @caughtexception;
+
+        r17 = new java.lang.AssertionError;
+
+        specialinvoke r17.<java.lang.AssertionError: void <init>(java.lang.Object)>($r13);
+
+        throw r17;
+
+     label11:
+        $r14 := @caughtexception;
+
+        r17 = new java.lang.AssertionError;
+
+        specialinvoke r17.<java.lang.AssertionError: void <init>(java.lang.Object)>($r14);
+
+        goto label12;
+
+     label12:
+        throw r17;
+
+        catch java.lang.reflect.InvocationTargetException from label04 to label05 with label11;
+        catch java.lang.reflect.InvocationTargetException from label06 to label07 with label11;
+        catch java.lang.reflect.InvocationTargetException from label08 to label09 with label11;
+        catch java.lang.IllegalAccessException from label04 to label05 with label10;
+        catch java.lang.IllegalAccessException from label06 to label07 with label10;
+        catch java.lang.IllegalAccessException from label08 to label09 with label10;
+    }
+
+    public java.lang.String getSelectedProtocol(javax.net.ssl.SSLSocket)
+    {
+        io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform $r0;
+        javax.net.ssl.SSLSocket $r1;
+        java.lang.reflect.Method $r2;
+        java.lang.Object[] $r3;
+        java.lang.String $r4, $r8;
+        java.lang.Object $r5;
+        java.lang.reflect.InvocationHandler $r6;
+        io.grpc.okhttp.internal.Platform$JettyNegoProvider $r7;
+        boolean $z0;
+        java.util.logging.Logger $r9;
+        java.util.logging.Level $r10;
+        java.lang.Throwable $r11, $r13;
+        java.lang.AssertionError $r12;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocket;
+
+        $r2 = $r0.<io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.lang.reflect.Method getMethod>;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r3[0] = $r1;
+
+        $r4 = null;
+
+     label01:
+        $r5 = virtualinvoke $r2.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>(null, $r3);
+
+     label02:
+        $r6 = staticinvoke <java.lang.reflect.Proxy: java.lang.reflect.InvocationHandler getInvocationHandler(java.lang.Object)>($r5);
+
+        $r7 = (io.grpc.okhttp.internal.Platform$JettyNegoProvider) $r6;
+
+        $z0 = staticinvoke <io.grpc.okhttp.internal.Platform$JettyNegoProvider: boolean '-$$Nest$fgetunsupported'(io.grpc.okhttp.internal.Platform$JettyNegoProvider)>($r7);
+
+        if $z0 != 0 goto label05;
+
+        $r8 = staticinvoke <io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.lang.String '-$$Nest$fgetselected'(io.grpc.okhttp.internal.Platform$JettyNegoProvider)>($r7);
+
+        if $r8 != null goto label05;
+
+        $r9 = <io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform: java.util.logging.Logger logger>;
+
+        $r10 = <java.util.logging.Level: java.util.logging.Level INFO>;
+
+     label03:
+        virtualinvoke $r9.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String)>($r10, "io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform", "getSelectedProtocol", "ALPN callback dropped: SPDY and HTTP/2 are disabled. Is alpn-boot on the boot class path?");
+
+     label04:
+        return null;
+
+     label05:
+        $z0 = staticinvoke <io.grpc.okhttp.internal.Platform$JettyNegoProvider: boolean '-$$Nest$fgetunsupported'(io.grpc.okhttp.internal.Platform$JettyNegoProvider)>($r7);
+
+        if $z0 == 0 goto label07;
+
+     label06:
+        return $r4;
+
+     label07:
+        $r4 = staticinvoke <io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.lang.String '-$$Nest$fgetselected'(io.grpc.okhttp.internal.Platform$JettyNegoProvider)>($r7);
+
+        goto label06;
+
+     label08:
+        $r11 := @caughtexception;
+
+        $r12 = new java.lang.AssertionError;
+
+        specialinvoke $r12.<java.lang.AssertionError: void <init>()>();
+
+        throw $r12;
+
+     label09:
+        $r13 := @caughtexception;
+
+        $r12 = new java.lang.AssertionError;
+
+        specialinvoke $r12.<java.lang.AssertionError: void <init>()>();
+
+        goto label10;
+
+     label10:
+        throw $r12;
+
+        catch java.lang.reflect.InvocationTargetException from label01 to label02 with label09;
+        catch java.lang.reflect.InvocationTargetException from label03 to label04 with label09;
+        catch java.lang.IllegalAccessException from label01 to label02 with label08;
+        catch java.lang.IllegalAccessException from label03 to label04 with label08;
+    }
+
+    public io.grpc.okhttp.internal.Platform$TlsExtensionType getTlsExtensionType()
+    {
+        io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform $r0;
+        io.grpc.okhttp.internal.Platform$TlsExtensionType r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JdkWithJettyBootPlatform;
+
+        r1 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType ALPN_AND_NPN>;
+
+        return r1;
+    }
+
+io.grpc.okhttp.internal.Platform$JettyNegoProvider
+<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.util.List protocols>
+<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.lang.String selected>
+<io.grpc.okhttp.internal.Platform$JettyNegoProvider: boolean unsupported>
+    static volatile java.lang.String '-$$Nest$fgetselected'(io.grpc.okhttp.internal.Platform$JettyNegoProvider)
+    {
+        io.grpc.okhttp.internal.Platform$JettyNegoProvider $r0;
+        java.lang.String r1;
+
+        $r0 := @parameter0: io.grpc.okhttp.internal.Platform$JettyNegoProvider;
+
+        r1 = $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.lang.String selected>;
+
+        return r1;
+    }
+
+    static volatile boolean '-$$Nest$fgetunsupported'(io.grpc.okhttp.internal.Platform$JettyNegoProvider)
+    {
+        io.grpc.okhttp.internal.Platform$JettyNegoProvider $r0;
+        boolean z0;
+
+        $r0 := @parameter0: io.grpc.okhttp.internal.Platform$JettyNegoProvider;
+
+        z0 = $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: boolean unsupported>;
+
+        return z0;
+    }
+
+    public void <init>(java.util.List)
+    {
+        io.grpc.okhttp.internal.Platform$JettyNegoProvider $r0;
+        java.util.List $r1;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JettyNegoProvider;
+
+        $r1 := @parameter0: java.util.List;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.util.List protocols> = $r1;
+
+        return;
+    }
+
+    public java.lang.Object invoke(java.lang.Object, java.lang.reflect.Method, java.lang.Object[]) throws java.lang.Throwable
+    {
+        io.grpc.okhttp.internal.Platform$JettyNegoProvider $r0;
+        java.lang.Object $r1;
+        java.lang.reflect.Method $r2;
+        java.lang.Object[] $r3;
+        java.lang.String $r4;
+        java.lang.Class $r5, $r6;
+        boolean $z0;
+        java.lang.Boolean $r7;
+        int $i0, $i1;
+        java.util.List $r8, $r9;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$JettyNegoProvider;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 := @parameter1: java.lang.reflect.Method;
+
+        $r3 := @parameter2: java.lang.Object[];
+
+        $r4 = virtualinvoke $r2.<java.lang.reflect.Method: java.lang.String getName()>();
+
+        $r5 = virtualinvoke $r2.<java.lang.reflect.Method: java.lang.Class getReturnType()>();
+
+        if $r3 != null goto label01;
+
+        $r3 = <io.grpc.okhttp.internal.Util: java.lang.String[] EMPTY_STRING_ARRAY>;
+
+        goto label01;
+
+     label01:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("supports");
+
+        if $z0 == 0 goto label02;
+
+        $r6 = <java.lang.Boolean: java.lang.Class TYPE>;
+
+        if $r6 != $r5 goto label02;
+
+        $r7 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        return $r7;
+
+     label02:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("unsupported");
+
+        if $z0 == 0 goto label03;
+
+        $r6 = <java.lang.Void: java.lang.Class TYPE>;
+
+        if $r6 != $r5 goto label03;
+
+        $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: boolean unsupported> = 1;
+
+        return null;
+
+     label03:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("protocols");
+
+        if $z0 == 0 goto label04;
+
+        $i0 = lengthof $r3;
+
+        if $i0 != 0 goto label04;
+
+        $r8 = $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.util.List protocols>;
+
+        return $r8;
+
+     label04:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("selectProtocol");
+
+        if $z0 != 0 goto label05;
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("select");
+
+        if $z0 == 0 goto label09;
+
+     label05:
+        if $r5 != class "Ljava/lang/String;" goto label09;
+
+        $i0 = lengthof $r3;
+
+        if $i0 != 1 goto label09;
+
+        $r1 = $r3[0];
+
+        $z0 = $r1 instanceof java.util.List;
+
+        if $z0 == 0 goto label09;
+
+        $r8 = (java.util.List) $r1;
+
+        $i0 = interfaceinvoke $r8.<java.util.List: int size()>();
+
+        $i1 = 0;
+
+     label06:
+        if $i1 >= $i0 goto label08;
+
+        $r9 = $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.util.List protocols>;
+
+        $r1 = interfaceinvoke $r8.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $z0 = interfaceinvoke $r9.<java.util.List: boolean contains(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label07;
+
+        $r1 = interfaceinvoke $r8.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $r4 = (java.lang.String) $r1;
+
+        $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.lang.String selected> = $r4;
+
+        return $r4;
+
+     label07:
+        $i1 = $i1 + 1;
+
+        goto label06;
+
+     label08:
+        $r8 = $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.util.List protocols>;
+
+        $r1 = interfaceinvoke $r8.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r4 = (java.lang.String) $r1;
+
+        $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.lang.String selected> = $r4;
+
+        return $r4;
+
+     label09:
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("protocolSelected");
+
+        if $z0 != 0 goto label10;
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("selected");
+
+        if $z0 == 0 goto label11;
+
+     label10:
+        $i0 = lengthof $r3;
+
+        if $i0 != 1 goto label11;
+
+        $r1 = $r3[0];
+
+        $r4 = (java.lang.String) $r1;
+
+        $r0.<io.grpc.okhttp.internal.Platform$JettyNegoProvider: java.lang.String selected> = $r4;
+
+        return null;
+
+     label11:
+        $r1 = virtualinvoke $r2.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r0, $r3);
+
+        return $r1;
+    }
+
+io.grpc.okhttp.internal.Platform$TlsExtensionType
+<io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType[] $VALUES>
+<io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType ALPN_AND_NPN>
+<io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType NONE>
+<io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType NPN>
+    private static io.grpc.okhttp.internal.Platform$TlsExtensionType[] $values()
+    {
+        io.grpc.okhttp.internal.Platform$TlsExtensionType[] $r0;
+        io.grpc.okhttp.internal.Platform$TlsExtensionType $r1;
+
+        $r0 = newarray (io.grpc.okhttp.internal.Platform$TlsExtensionType)[3];
+
+        $r1 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType ALPN_AND_NPN>;
+
+        $r0[0] = $r1;
+
+        $r1 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType NPN>;
+
+        $r0[1] = $r1;
+
+        $r1 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType NONE>;
+
+        $r0[2] = $r1;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        io.grpc.okhttp.internal.Platform$TlsExtensionType[] $r0;
+        io.grpc.okhttp.internal.Platform$TlsExtensionType $r1;
+
+        $r1 = new io.grpc.okhttp.internal.Platform$TlsExtensionType;
+
+        specialinvoke $r1.<io.grpc.okhttp.internal.Platform$TlsExtensionType: void <init>(java.lang.String,int)>("ALPN_AND_NPN", 0);
+
+        <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType ALPN_AND_NPN> = $r1;
+
+        $r1 = new io.grpc.okhttp.internal.Platform$TlsExtensionType;
+
+        specialinvoke $r1.<io.grpc.okhttp.internal.Platform$TlsExtensionType: void <init>(java.lang.String,int)>("NPN", 1);
+
+        <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType NPN> = $r1;
+
+        $r1 = new io.grpc.okhttp.internal.Platform$TlsExtensionType;
+
+        specialinvoke $r1.<io.grpc.okhttp.internal.Platform$TlsExtensionType: void <init>(java.lang.String,int)>("NONE", 2);
+
+        <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType NONE> = $r1;
+
+        $r0 = staticinvoke <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType[] $values()>();
+
+        <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType[] $VALUES> = $r0;
+
+        return;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        io.grpc.okhttp.internal.Platform$TlsExtensionType $r0;
+        java.lang.String $r1;
+        int $i0;
+
+        $r0 := @this: io.grpc.okhttp.internal.Platform$TlsExtensionType;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke $r0.<java.lang.Enum: void <init>(java.lang.String,int)>($r1, $i0);
+
+        return;
+    }
+
+    public static io.grpc.okhttp.internal.Platform$TlsExtensionType[] values()
+    {
+        java.lang.Object $r0;
+        io.grpc.okhttp.internal.Platform$TlsExtensionType[] $r1;
+
+        $r1 = <io.grpc.okhttp.internal.Platform$TlsExtensionType: io.grpc.okhttp.internal.Platform$TlsExtensionType[] $VALUES>;
+
+        $r0 = virtualinvoke $r1.<java.lang.Object: java.lang.Object clone()>();
+
+        $r1 = (io.grpc.okhttp.internal.Platform$TlsExtensionType[]) $r0;
+
+        return $r1;
+    }
+

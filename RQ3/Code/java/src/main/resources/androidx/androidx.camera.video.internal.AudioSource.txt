@@ -1,0 +1,2083 @@
+androidx.camera.video.internal.AudioSource
+<androidx.camera.video.internal.AudioSource: java.lang.String TAG>
+<androidx.camera.video.internal.AudioSource: java.util.List COMMON_SAMPLE_RATES>
+<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor>
+<androidx.camera.video.internal.AudioSource: android.media.AudioManager$AudioRecordingCallback mAudioRecordingCallback>
+<androidx.camera.video.internal.AudioSource: java.util.concurrent.atomic.AtomicBoolean mSourceSilence>
+<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>
+<androidx.camera.video.internal.AudioSource: int mBufferSize>
+<androidx.camera.video.internal.AudioSource: int mSampleRate>
+<androidx.camera.video.internal.AudioSource: int mBytesPerFrame>
+<androidx.camera.video.internal.AudioSource: long mTotalFramesRead>
+<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState>
+<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider$State mBufferProviderState>
+<androidx.camera.video.internal.AudioSource: boolean mIsSendingAudio>
+<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mCallbackExecutor>
+<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$AudioSourceCallback mAudioSourceCallback>
+<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>
+<androidx.camera.video.internal.AudioSource: androidx.camera.core.impl.utils.futures.FutureCallback mAcquireBufferCallback>
+<androidx.camera.video.internal.AudioSource: androidx.camera.core.impl.Observable$Observer mStateObserver>
+    public void <init>(androidx.camera.video.internal.AudioSource$Settings, java.util.concurrent.Executor, android.content.Context) throws androidx.camera.video.internal.AudioSourceAccessException
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.camera.video.internal.AudioSource$Settings r1;
+        java.util.concurrent.Executor r2, $r8, $r13;
+        android.content.Context r3;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19, $i20, $i21, $i22, $i23, $i24, $i25, $i26, $i27, $i28, $i29, $i30;
+        android.media.AudioRecord$Builder r4;
+        androidx.camera.video.internal.AudioSource$InternalState $r6;
+        androidx.camera.video.internal.BufferProvider$State $r7;
+        boolean $z0, $z1;
+        android.media.AudioRecord $r10, $r14, $r15, $r30, r35;
+        android.media.AudioManager$AudioRecordingCallback $r12;
+        android.media.AudioFormat$Builder $r18, $r19, $r20, r34;
+        java.lang.Object[] $r22;
+        java.lang.Integer $r23, $r24, $r25;
+        java.lang.String $r26;
+        java.lang.Throwable $r27, r31, r39, r40;
+        android.media.AudioFormat r29;
+        java.util.concurrent.atomic.AtomicBoolean r32;
+        java.lang.UnsupportedOperationException r33;
+        androidx.camera.video.internal.AudioSourceAccessException r36, r37;
+        androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback r38;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: androidx.camera.video.internal.AudioSource$Settings;
+
+        r2 := @parameter1: java.util.concurrent.Executor;
+
+        r3 := @parameter2: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r32 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke r32.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.atomic.AtomicBoolean mSourceSilence> = r32;
+
+        r0.<androidx.camera.video.internal.AudioSource: long mTotalFramesRead> = 0L;
+
+        $r6 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState CONFIGURED>;
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState> = $r6;
+
+        $r7 = <androidx.camera.video.internal.BufferProvider$State: androidx.camera.video.internal.BufferProvider$State INACTIVE>;
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider$State mBufferProviderState> = $r7;
+
+        $i1 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getSampleRate()>();
+
+        $i2 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getChannelCount()>();
+
+        $i3 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioFormat()>();
+
+        $z0 = staticinvoke <androidx.camera.video.internal.AudioSource: boolean isSettingsSupported(int,int,int)>($i1, $i2, $i3);
+
+        if $z0 != 0 goto label01;
+
+        r33 = new java.lang.UnsupportedOperationException;
+
+        $r22 = newarray (java.lang.Object)[3];
+
+        $i26 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getSampleRate()>();
+
+        $r23 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i26);
+
+        $r22[0] = $r23;
+
+        $i27 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getChannelCount()>();
+
+        $r24 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i27);
+
+        $r22[1] = $r24;
+
+        $i28 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioFormat()>();
+
+        $r25 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i28);
+
+        $r22[2] = $r25;
+
+        $r26 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("The combination of sample rate %d, channel count %d and audio format %d is not supported.", $r22);
+
+        specialinvoke r33.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>($r26);
+
+        throw r33;
+
+     label01:
+        $i4 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getSampleRate()>();
+
+        $i5 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getChannelCount()>();
+
+        $i6 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioFormat()>();
+
+        i0 = staticinvoke <androidx.camera.video.internal.AudioSource: int getMinBufferSize(int,int,int)>($i4, $i5, $i6);
+
+        if i0 <= 0 goto label02;
+
+        $z1 = 1;
+
+        goto label03;
+
+     label02:
+        $z1 = 0;
+
+     label03:
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean)>($z1);
+
+        $r8 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.Executor newSequentialExecutor(java.util.concurrent.Executor)>(r2);
+
+        r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor> = $r8;
+
+        $i7 = i0 * 2;
+
+        r0.<androidx.camera.video.internal.AudioSource: int mBufferSize> = $i7;
+
+        $i8 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getSampleRate()>();
+
+        r0.<androidx.camera.video.internal.AudioSource: int mSampleRate> = $i8;
+
+     label04:
+        $i9 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioFormat()>();
+
+        $i10 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getChannelCount()>();
+
+        $i11 = staticinvoke <androidx.camera.video.internal.AudioSource: int getBytesPerFrame(int,int)>($i9, $i10);
+
+        r0.<androidx.camera.video.internal.AudioSource: int mBytesPerFrame> = $i11;
+
+        $i12 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i12 < 23 goto label06;
+
+        r34 = new android.media.AudioFormat$Builder;
+
+        specialinvoke r34.<android.media.AudioFormat$Builder: void <init>()>();
+
+        $i21 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getSampleRate()>();
+
+        $r18 = virtualinvoke r34.<android.media.AudioFormat$Builder: android.media.AudioFormat$Builder setSampleRate(int)>($i21);
+
+        $i22 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getChannelCount()>();
+
+        $i23 = staticinvoke <androidx.camera.video.internal.AudioSource: int channelCountToChannelMask(int)>($i22);
+
+        $r19 = virtualinvoke $r18.<android.media.AudioFormat$Builder: android.media.AudioFormat$Builder setChannelMask(int)>($i23);
+
+        $i24 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioFormat()>();
+
+        $r20 = virtualinvoke $r19.<android.media.AudioFormat$Builder: android.media.AudioFormat$Builder setEncoding(int)>($i24);
+
+        r29 = virtualinvoke $r20.<android.media.AudioFormat$Builder: android.media.AudioFormat build()>();
+
+        r4 = staticinvoke <androidx.camera.video.internal.compat.Api23Impl: android.media.AudioRecord$Builder createAudioRecordBuilder()>();
+
+        $i25 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i25 < 31 goto label05;
+
+        if r3 == null goto label05;
+
+        staticinvoke <androidx.camera.video.internal.compat.Api31Impl: void setContext(android.media.AudioRecord$Builder,android.content.Context)>(r4, r3);
+
+     label05:
+        $i29 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioSource()>();
+
+        staticinvoke <androidx.camera.video.internal.compat.Api23Impl: void setAudioSource(android.media.AudioRecord$Builder,int)>(r4, $i29);
+
+        staticinvoke <androidx.camera.video.internal.compat.Api23Impl: void setAudioFormat(android.media.AudioRecord$Builder,android.media.AudioFormat)>(r4, r29);
+
+        $i30 = r0.<androidx.camera.video.internal.AudioSource: int mBufferSize>;
+
+        staticinvoke <androidx.camera.video.internal.compat.Api23Impl: void setBufferSizeInBytes(android.media.AudioRecord$Builder,int)>(r4, $i30);
+
+        $r30 = staticinvoke <androidx.camera.video.internal.compat.Api23Impl: android.media.AudioRecord build(android.media.AudioRecord$Builder)>(r4);
+
+        r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord> = $r30;
+
+        goto label07;
+
+     label06:
+        r35 = new android.media.AudioRecord;
+
+        $i13 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioSource()>();
+
+        $i14 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getSampleRate()>();
+
+        $i15 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getChannelCount()>();
+
+        $i16 = staticinvoke <androidx.camera.video.internal.AudioSource: int channelCountToChannelConfig(int)>($i15);
+
+        $i17 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioFormat()>();
+
+        $i18 = r0.<androidx.camera.video.internal.AudioSource: int mBufferSize>;
+
+        specialinvoke r35.<android.media.AudioRecord: void <init>(int,int,int,int,int)>($i13, $i14, $i16, $i17, $i18);
+
+        r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord> = r35;
+
+     label07:
+        goto label09;
+
+     label08:
+        $r27 := @caughtexception;
+
+        r31 = $r27;
+
+        r36 = new androidx.camera.video.internal.AudioSourceAccessException;
+
+        specialinvoke r36.<androidx.camera.video.internal.AudioSourceAccessException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to create AudioRecord", r31);
+
+        r39 = (java.lang.Throwable) r36;
+
+        throw r39;
+
+     label09:
+        $r10 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $i19 = virtualinvoke $r10.<android.media.AudioRecord: int getState()>();
+
+        if $i19 == 1 goto label10;
+
+        $r15 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        virtualinvoke $r15.<android.media.AudioRecord: void release()>();
+
+        r37 = new androidx.camera.video.internal.AudioSourceAccessException;
+
+        specialinvoke r37.<androidx.camera.video.internal.AudioSourceAccessException: void <init>(java.lang.String)>("Unable to initialize AudioRecord");
+
+        r40 = (java.lang.Throwable) r37;
+
+        throw r40;
+
+     label10:
+        $i20 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i20 < 29 goto label11;
+
+        r38 = new androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback;
+
+        specialinvoke r38.<androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: void <init>(androidx.camera.video.internal.AudioSource)>(r0);
+
+        r0.<androidx.camera.video.internal.AudioSource: android.media.AudioManager$AudioRecordingCallback mAudioRecordingCallback> = r38;
+
+        $r14 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $r13 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor>;
+
+        $r12 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioManager$AudioRecordingCallback mAudioRecordingCallback>;
+
+        staticinvoke <androidx.camera.video.internal.compat.Api29Impl: void registerAudioRecordingCallback(android.media.AudioRecord,java.util.concurrent.Executor,android.media.AudioManager$AudioRecordingCallback)>($r14, $r13, $r12);
+
+     label11:
+        return;
+
+        catch java.lang.IllegalArgumentException from label04 to label07 with label08;
+    }
+
+    public void setBufferProvider(androidx.camera.video.internal.BufferProvider)
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.camera.video.internal.BufferProvider r1;
+        java.util.concurrent.Executor $r2;
+        java.lang.Runnable $r3;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: androidx.camera.video.internal.BufferProvider;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor>;
+
+        $r3 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.video.internal.AudioSource,androidx.camera.video.internal.BufferProvider)>(r0, r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.internal.AudioSource: void lambda$setBufferProvider$0(androidx.camera.video.internal.BufferProvider)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r2.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r3);
+
+        return;
+    }
+
+    public void start()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        java.util.concurrent.Executor $r1;
+        java.lang.Runnable $r2;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        $r1 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor>;
+
+        $r2 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.video.internal.AudioSource)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.internal.AudioSource: void lambda$start$1()>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r1.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    public void stop()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        java.util.concurrent.Executor $r1;
+        java.lang.Runnable $r2;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        $r1 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor>;
+
+        $r2 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.video.internal.AudioSource)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.internal.AudioSource: void lambda$stop$2()>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r1.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    public com.google.common.util.concurrent.ListenableFuture release()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Resolver $r1;
+        com.google.common.util.concurrent.ListenableFuture $r2;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        $r1 = dynamicinvoke "attachCompleter" <androidx.concurrent.futures.CallbackToFutureAdapter$Resolver (androidx.camera.video.internal.AudioSource)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.internal.AudioSource: java.lang.Object lambda$release$4(androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer));
+
+        $r2 = staticinvoke <androidx.concurrent.futures.CallbackToFutureAdapter: com.google.common.util.concurrent.ListenableFuture getFuture(androidx.concurrent.futures.CallbackToFutureAdapter$Resolver)>($r1);
+
+        return $r2;
+    }
+
+    public void setAudioSourceCallback(java.util.concurrent.Executor, androidx.camera.video.internal.AudioSource$AudioSourceCallback)
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        java.util.concurrent.Executor r1, $r3;
+        androidx.camera.video.internal.AudioSource$AudioSourceCallback r2;
+        java.lang.Runnable $r4;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        r2 := @parameter1: androidx.camera.video.internal.AudioSource$AudioSourceCallback;
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor>;
+
+        $r4 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.video.internal.AudioSource,java.util.concurrent.Executor,androidx.camera.video.internal.AudioSource$AudioSourceCallback)>(r0, r1, r2) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.internal.AudioSource: void lambda$setAudioSourceCallback$5(java.util.concurrent.Executor,androidx.camera.video.internal.AudioSource$AudioSourceCallback)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r3.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r4);
+
+        return;
+    }
+
+    private void resetBufferProvider(androidx.camera.video.internal.BufferProvider)
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.camera.video.internal.BufferProvider r1, $r2, $r8, $r10;
+        androidx.camera.video.internal.BufferProvider$State $r3;
+        androidx.camera.video.internal.AudioSource$1 $r4;
+        androidx.camera.video.internal.AudioSource$2 $r5;
+        androidx.camera.core.impl.Observable$Observer $r6, $r9;
+        java.util.concurrent.Executor $r7;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: androidx.camera.video.internal.BufferProvider;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>;
+
+        if $r2 == null goto label1;
+
+        $r10 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>;
+
+        $r9 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.core.impl.Observable$Observer mStateObserver>;
+
+        interfaceinvoke $r10.<androidx.camera.video.internal.BufferProvider: void removeObserver(androidx.camera.core.impl.Observable$Observer)>($r9);
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider> = null;
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.core.impl.Observable$Observer mStateObserver> = null;
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.core.impl.utils.futures.FutureCallback mAcquireBufferCallback> = null;
+
+     label1:
+        $r3 = <androidx.camera.video.internal.BufferProvider$State: androidx.camera.video.internal.BufferProvider$State INACTIVE>;
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider$State mBufferProviderState> = $r3;
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void updateSendingAudio()>();
+
+        if r1 == null goto label2;
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider> = r1;
+
+        $r4 = new androidx.camera.video.internal.AudioSource$1;
+
+        specialinvoke $r4.<androidx.camera.video.internal.AudioSource$1: void <init>(androidx.camera.video.internal.AudioSource,androidx.camera.video.internal.BufferProvider)>(r0, r1);
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.core.impl.Observable$Observer mStateObserver> = $r4;
+
+        $r5 = new androidx.camera.video.internal.AudioSource$2;
+
+        specialinvoke $r5.<androidx.camera.video.internal.AudioSource$2: void <init>(androidx.camera.video.internal.AudioSource,androidx.camera.video.internal.BufferProvider)>(r0, r1);
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.core.impl.utils.futures.FutureCallback mAcquireBufferCallback> = $r5;
+
+        $r8 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>;
+
+        $r7 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor>;
+
+        $r6 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.core.impl.Observable$Observer mStateObserver>;
+
+        interfaceinvoke $r8.<androidx.camera.video.internal.BufferProvider: void addObserver(java.util.concurrent.Executor,androidx.camera.core.impl.Observable$Observer)>($r7, $r6);
+
+     label2:
+        return;
+    }
+
+    void notifyError(java.lang.Throwable)
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        java.lang.Throwable r1;
+        java.util.concurrent.Executor $r2, $r4;
+        androidx.camera.video.internal.AudioSource$AudioSourceCallback $r3;
+        java.lang.Runnable $r5;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mCallbackExecutor>;
+
+        if $r2 == null goto label1;
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$AudioSourceCallback mAudioSourceCallback>;
+
+        if $r3 == null goto label1;
+
+        $r4 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mCallbackExecutor>;
+
+        $r5 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.video.internal.AudioSource,java.lang.Throwable)>(r0, r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.internal.AudioSource: void lambda$notifyError$6(java.lang.Throwable)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r4.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r5);
+
+     label1:
+        return;
+    }
+
+    void updateSendingAudio()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.camera.video.internal.AudioSource$InternalState $r1, $r2;
+        androidx.camera.video.internal.BufferProvider$State $r3, $r4;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState>;
+
+        $r1 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState STARTED>;
+
+        if $r2 != $r1 goto label1;
+
+        $r4 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider$State mBufferProviderState>;
+
+        $r3 = <androidx.camera.video.internal.BufferProvider$State: androidx.camera.video.internal.BufferProvider$State ACTIVE>;
+
+        if $r4 != $r3 goto label1;
+
+        specialinvoke r0.<androidx.camera.video.internal.AudioSource: void startSendingAudio()>();
+
+        goto label2;
+
+     label1:
+        specialinvoke r0.<androidx.camera.video.internal.AudioSource: void stopSendingAudio()>();
+
+     label2:
+        return;
+    }
+
+    private void startSendingAudio()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        java.lang.Throwable r1, $r10, r16;
+        boolean $z0;
+        android.media.AudioRecord $r2, $r3, $r7;
+        int $i0, $i1;
+        java.lang.StringBuilder $r6, $r8, r13;
+        java.lang.String $r9;
+        androidx.camera.video.internal.AudioSource$InternalState $r11;
+        java.lang.IllegalStateException r14;
+        androidx.camera.video.internal.AudioSourceAccessException r15;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        $z0 = r0.<androidx.camera.video.internal.AudioSource: boolean mIsSendingAudio>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("AudioSource", "startSendingAudio");
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        virtualinvoke $r2.<android.media.AudioRecord: void startRecording()>();
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $i0 = virtualinvoke $r3.<android.media.AudioRecord: int getRecordingState()>();
+
+        if $i0 == 3 goto label2;
+
+        r14 = new java.lang.IllegalStateException;
+
+        r13 = new java.lang.StringBuilder;
+
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to start AudioRecord with state: ");
+
+        $r7 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $i1 = virtualinvoke $r7.<android.media.AudioRecord: int getRecordingState()>();
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r14.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r9);
+
+        throw r14;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r10 := @caughtexception;
+
+        r1 = $r10;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String,java.lang.Throwable)>("AudioSource", "Failed to start AudioRecord", r1);
+
+        $r11 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState CONFIGURED>;
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void setState(androidx.camera.video.internal.AudioSource$InternalState)>($r11);
+
+        r15 = new androidx.camera.video.internal.AudioSourceAccessException;
+
+        specialinvoke r15.<androidx.camera.video.internal.AudioSourceAccessException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to start the audio record.", r1);
+
+        r16 = (java.lang.Throwable) r15;
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void notifyError(java.lang.Throwable)>(r16);
+
+        return;
+
+     label4:
+        r0.<androidx.camera.video.internal.AudioSource: long mTotalFramesRead> = 0L;
+
+        r0.<androidx.camera.video.internal.AudioSource: boolean mIsSendingAudio> = 1;
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void sendNextAudio()>();
+
+        return;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+    }
+
+    private void stopSendingAudio()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        java.lang.Throwable r1, $r10;
+        boolean $z0;
+        android.media.AudioRecord $r2, $r3, $r7;
+        int $i0, $i1;
+        java.lang.IllegalStateException $r4;
+        java.lang.StringBuilder $r5, $r6, $r8;
+        java.lang.String $r9;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        $z0 = r0.<androidx.camera.video.internal.AudioSource: boolean mIsSendingAudio>;
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<androidx.camera.video.internal.AudioSource: boolean mIsSendingAudio> = 0;
+
+     label2:
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("AudioSource", "stopSendingAudio");
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        virtualinvoke $r2.<android.media.AudioRecord: void stop()>();
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $i0 = virtualinvoke $r3.<android.media.AudioRecord: int getRecordingState()>();
+
+        if $i0 == 1 goto label3;
+
+        $r4 = new java.lang.IllegalStateException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to stop AudioRecord with state: ");
+
+        $r7 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $i1 = virtualinvoke $r7.<android.media.AudioRecord: int getRecordingState()>();
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r9);
+
+        throw $r4;
+
+     label3:
+        goto label5;
+
+     label4:
+        $r10 := @caughtexception;
+
+        r1 = $r10;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String,java.lang.Throwable)>("AudioSource", "Failed to stop AudioRecord", r1);
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void notifyError(java.lang.Throwable)>(r1);
+
+     label5:
+        return;
+
+        catch java.lang.IllegalStateException from label2 to label3 with label4;
+    }
+
+    void sendNextAudio()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.camera.video.internal.BufferProvider $r1;
+        com.google.common.util.concurrent.ListenableFuture $r2;
+        java.util.concurrent.Executor $r3;
+        androidx.camera.core.impl.utils.futures.FutureCallback $r4;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        $r1 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>;
+
+        $r2 = interfaceinvoke $r1.<androidx.camera.video.internal.BufferProvider: com.google.common.util.concurrent.ListenableFuture acquireBuffer()>();
+
+        $r4 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.core.impl.utils.futures.FutureCallback mAcquireBufferCallback>;
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor>;
+
+        staticinvoke <androidx.camera.core.impl.utils.futures.Futures: void addCallback(com.google.common.util.concurrent.ListenableFuture,androidx.camera.core.impl.utils.futures.FutureCallback,java.util.concurrent.Executor)>($r2, $r4, $r3);
+
+        return;
+    }
+
+    void setState(androidx.camera.video.internal.AudioSource$InternalState)
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.camera.video.internal.AudioSource$InternalState r1, $r4;
+        java.lang.StringBuilder $r2, $r3, $r5, $r6, $r7;
+        java.lang.String $r8;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: androidx.camera.video.internal.AudioSource$InternalState;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Transitioning internal state: ");
+
+        $r4 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState>;
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" --> ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("AudioSource", $r8);
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState> = r1;
+
+        return;
+    }
+
+    long generatePresentationTimeUs()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        android.media.AudioTimestamp r1, $r3;
+        int $i0, $i2, $i4;
+        java.util.concurrent.TimeUnit $r2;
+        long $l1, $l3, l5;
+        boolean $z0;
+        android.media.AudioRecord $r4;
+        byte $b6;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        l5 = -1L;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 24 goto label2;
+
+        $z0 = staticinvoke <androidx.camera.video.internal.AudioSource: boolean hasAudioTimestampQuirk()>();
+
+        if $z0 != 0 goto label2;
+
+        $r3 = new android.media.AudioTimestamp;
+
+        specialinvoke $r3.<android.media.AudioTimestamp: void <init>()>();
+
+        r1 = $r3;
+
+        $r4 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $i2 = staticinvoke <androidx.camera.video.internal.compat.Api24Impl: int getTimestamp(android.media.AudioRecord,android.media.AudioTimestamp,int)>($r4, r1, 0);
+
+        if $i2 != 0 goto label1;
+
+        $i4 = r0.<androidx.camera.video.internal.AudioSource: int mSampleRate>;
+
+        $l3 = r0.<androidx.camera.video.internal.AudioSource: long mTotalFramesRead>;
+
+        l5 = staticinvoke <androidx.camera.video.internal.AudioSource: long computeInterpolatedTimeUs(int,long,android.media.AudioTimestamp)>($i4, $l3, r1);
+
+        goto label2;
+
+     label1:
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("AudioSource", "Unable to get audio timestamp");
+
+     label2:
+        $b6 = l5 cmp -1L;
+
+        if $b6 != 0 goto label3;
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l1 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        l5 = virtualinvoke $r2.<java.util.concurrent.TimeUnit: long toMicros(long)>($l1);
+
+     label3:
+        return l5;
+    }
+
+    private static boolean hasAudioTimestampQuirk()
+    {
+        androidx.camera.core.impl.Quirk $r0;
+        boolean $z0;
+
+        $r0 = staticinvoke <androidx.camera.video.internal.compat.quirk.DeviceQuirks: androidx.camera.core.impl.Quirk get(java.lang.Class)>(class "Landroidx/camera/video/internal/compat/quirk/AudioTimestampFramePositionIncorrectQuirk;");
+
+        if $r0 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private static long computeInterpolatedTimeUs(int, long, android.media.AudioTimestamp)
+    {
+        int i0;
+        long l1, l2, l3, l4, $l5, $l6, $l7, $l8, $l9, $l11;
+        android.media.AudioTimestamp r0;
+        java.util.concurrent.TimeUnit $r1, $r2;
+        byte $b10;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        r0 := @parameter2: android.media.AudioTimestamp;
+
+        $l5 = r0.<android.media.AudioTimestamp: long framePosition>;
+
+        l2 = l1 - $l5;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $l6 = virtualinvoke $r1.<java.util.concurrent.TimeUnit: long toNanos(long)>(1L);
+
+        $l8 = $l6 * l2;
+
+        $l7 = (long) i0;
+
+        l3 = $l8 / $l7;
+
+        $l9 = r0.<android.media.AudioTimestamp: long nanoTime>;
+
+        l4 = $l9 + l3;
+
+        $b10 = l4 cmp 0L;
+
+        if $b10 >= 0 goto label1;
+
+        $l11 = 0L;
+
+        goto label2;
+
+     label1:
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l11 = virtualinvoke $r2.<java.util.concurrent.TimeUnit: long toMicros(long)>(l4);
+
+     label2:
+        return $l11;
+    }
+
+    public static boolean isSettingsSupported(int, int, int)
+    {
+        int i0, i1, i2, $i3;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        if i0 <= 0 goto label1;
+
+        if i1 > 0 goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        $i3 = staticinvoke <androidx.camera.video.internal.AudioSource: int getMinBufferSize(int,int,int)>(i0, i1, i2);
+
+        if $i3 <= 0 goto label3;
+
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        return $z0;
+    }
+
+    private static int channelCountToChannelConfig(int)
+    {
+        int i0;
+        byte $b1;
+
+        i0 := @parameter0: int;
+
+        if i0 != 1 goto label1;
+
+        $b1 = 16;
+
+        goto label2;
+
+     label1:
+        $b1 = 12;
+
+     label2:
+        return $b1;
+    }
+
+    private static int channelCountToChannelMask(int)
+    {
+        int i0;
+        byte $b1;
+
+        i0 := @parameter0: int;
+
+        if i0 != 1 goto label1;
+
+        $b1 = 16;
+
+        goto label2;
+
+     label1:
+        $b1 = 12;
+
+     label2:
+        return $b1;
+    }
+
+    private static int getMinBufferSize(int, int, int)
+    {
+        int i0, i1, i2, $i3, $i4;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        $i3 = staticinvoke <androidx.camera.video.internal.AudioSource: int channelCountToChannelConfig(int)>(i1);
+
+        $i4 = staticinvoke <android.media.AudioRecord: int getMinBufferSize(int,int,int)>(i0, $i3, i2);
+
+        return $i4;
+    }
+
+    private static int getBytesPerFrame(int, int)
+    {
+        int i0, i1, $i2, $i3, $i4;
+        java.lang.IllegalArgumentException $r0;
+        java.lang.StringBuilder $r1, $r2, $r3;
+        java.lang.String $r4;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        if i1 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean)>($z0);
+
+        lookupswitch(i0)
+        {
+            case 2: goto label4;
+            case 3: goto label3;
+            case 4: goto label6;
+            case 21: goto label5;
+            case 22: goto label6;
+            default: goto label7;
+        };
+
+     label3:
+        return i1;
+
+     label4:
+        $i4 = i1 * 2;
+
+        return $i4;
+
+     label5:
+        $i2 = i1 * 3;
+
+        return $i2;
+
+     label6:
+        $i3 = i1 * 4;
+
+        return $i3;
+
+     label7:
+        $r0 = new java.lang.IllegalArgumentException;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid audio format: ");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r0.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r4);
+
+        throw $r0;
+    }
+
+    private void lambda$notifyError$6(java.lang.Throwable)
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        java.lang.Throwable r1;
+        androidx.camera.video.internal.AudioSource$AudioSourceCallback $r2;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$AudioSourceCallback mAudioSourceCallback>;
+
+        interfaceinvoke $r2.<androidx.camera.video.internal.AudioSource$AudioSourceCallback: void onError(java.lang.Throwable)>(r1);
+
+        return;
+    }
+
+    private void lambda$setAudioSourceCallback$5(java.util.concurrent.Executor, androidx.camera.video.internal.AudioSource$AudioSourceCallback)
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        java.util.concurrent.Executor r1;
+        androidx.camera.video.internal.AudioSource$AudioSourceCallback r2;
+        androidx.camera.video.internal.AudioSource$InternalState $r3;
+        int[] $r4;
+        int $i0, $i1;
+        java.lang.AssertionError $r5;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        r2 := @parameter1: androidx.camera.video.internal.AudioSource$AudioSourceCallback;
+
+        $r4 = <androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState>;
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState>;
+
+        $i0 = virtualinvoke $r3.<androidx.camera.video.internal.AudioSource$InternalState: int ordinal()>();
+
+        $i1 = $r4[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label2;
+            default: goto label3;
+        };
+
+     label1:
+        r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mCallbackExecutor> = r1;
+
+        r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$AudioSourceCallback mAudioSourceCallback> = r2;
+
+        goto label3;
+
+     label2:
+        $r5 = new java.lang.AssertionError;
+
+        specialinvoke $r5.<java.lang.AssertionError: void <init>(java.lang.Object)>("The audio recording callback must be registered before the audio source is started.");
+
+        throw $r5;
+
+     label3:
+        return;
+    }
+
+    private java.lang.Object lambda$release$4(androidx.concurrent.futures.CallbackToFutureAdapter$Completer) throws java.lang.Exception
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r1;
+        java.util.concurrent.Executor $r2;
+        java.lang.Runnable $r3;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mExecutor>;
+
+        $r3 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.video.internal.AudioSource,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>(r0, r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.internal.AudioSource: void lambda$release$3(androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r2.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r3);
+
+        return "AudioSource-release";
+    }
+
+    private void lambda$release$3(androidx.concurrent.futures.CallbackToFutureAdapter$Completer)
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r1;
+        java.lang.Throwable r2, $r9;
+        androidx.camera.video.internal.AudioSource$InternalState $r3, $r6;
+        int[] $r4;
+        int $i0, $i1, $i2;
+        android.media.AudioRecord $r5, $r8;
+        android.media.AudioManager$AudioRecordingCallback $r7;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+     label1:
+        $r4 = <androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState>;
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState>;
+
+        $i0 = virtualinvoke $r3.<androidx.camera.video.internal.AudioSource$InternalState: int ordinal()>();
+
+        $i1 = $r4[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label2;
+            case 2: goto label2;
+            case 3: goto label4;
+            default: goto label4;
+        };
+
+     label2:
+        specialinvoke r0.<androidx.camera.video.internal.AudioSource: void resetBufferProvider(androidx.camera.video.internal.BufferProvider)>(null);
+
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 < 29 goto label3;
+
+        $r8 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $r7 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioManager$AudioRecordingCallback mAudioRecordingCallback>;
+
+        staticinvoke <androidx.camera.video.internal.compat.Api29Impl: void unregisterAudioRecordingCallback(android.media.AudioRecord,android.media.AudioManager$AudioRecordingCallback)>($r8, $r7);
+
+     label3:
+        $r5 = r0.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        virtualinvoke $r5.<android.media.AudioRecord: void release()>();
+
+        specialinvoke r0.<androidx.camera.video.internal.AudioSource: void stopSendingAudio()>();
+
+        $r6 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState RELEASED>;
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void setState(androidx.camera.video.internal.AudioSource$InternalState)>($r6);
+
+        goto label4;
+
+     label4:
+        virtualinvoke r1.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+     label5:
+        goto label7;
+
+     label6:
+        $r9 := @caughtexception;
+
+        r2 = $r9;
+
+        virtualinvoke r1.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean setException(java.lang.Throwable)>(r2);
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label5 with label6;
+    }
+
+    private void lambda$stop$2()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.camera.video.internal.AudioSource$InternalState $r1, $r3;
+        int[] $r2;
+        int $i0, $i1;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        $r2 = <androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState>;
+
+        $r1 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState>;
+
+        $i0 = virtualinvoke $r1.<androidx.camera.video.internal.AudioSource$InternalState: int ordinal()>();
+
+        $i1 = $r2[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label2;
+            case 2: goto label1;
+            case 3: goto label3;
+            default: goto label4;
+        };
+
+     label1:
+        $r3 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState CONFIGURED>;
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void setState(androidx.camera.video.internal.AudioSource$InternalState)>($r3);
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void updateSendingAudio()>();
+
+        goto label4;
+
+     label2:
+        goto label4;
+
+     label3:
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("AudioSource", "AudioRecorder is released. Calling stop() is a no-op.");
+
+     label4:
+        return;
+    }
+
+    private void lambda$start$1()
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.camera.video.internal.AudioSource$InternalState $r1, $r4;
+        int[] $r2;
+        int $i0, $i1;
+        java.lang.AssertionError $r3;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        $r2 = <androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState>;
+
+        $r1 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState>;
+
+        $i0 = virtualinvoke $r1.<androidx.camera.video.internal.AudioSource$InternalState: int ordinal()>();
+
+        $i1 = $r2[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label3;
+            default: goto label4;
+        };
+
+     label1:
+        $r4 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState STARTED>;
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void setState(androidx.camera.video.internal.AudioSource$InternalState)>($r4);
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource: void updateSendingAudio()>();
+
+        goto label4;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 = new java.lang.AssertionError;
+
+        specialinvoke $r3.<java.lang.AssertionError: void <init>(java.lang.Object)>("AudioRecorder is released");
+
+        throw $r3;
+
+     label4:
+        return;
+    }
+
+    private void lambda$setBufferProvider$0(androidx.camera.video.internal.BufferProvider)
+    {
+        androidx.camera.video.internal.AudioSource r0;
+        androidx.camera.video.internal.BufferProvider r1, $r5;
+        androidx.camera.video.internal.AudioSource$InternalState $r2;
+        int[] $r3;
+        int $i0, $i1;
+        java.lang.AssertionError $r4;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource;
+
+        r1 := @parameter0: androidx.camera.video.internal.BufferProvider;
+
+        $r3 = <androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState>;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$InternalState mState>;
+
+        $i0 = virtualinvoke $r2.<androidx.camera.video.internal.AudioSource$InternalState: int ordinal()>();
+
+        $i1 = $r3[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label1;
+            case 2: goto label1;
+            case 3: goto label2;
+            default: goto label3;
+        };
+
+     label1:
+        $r5 = r0.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>;
+
+        if $r5 == r1 goto label3;
+
+        specialinvoke r0.<androidx.camera.video.internal.AudioSource: void resetBufferProvider(androidx.camera.video.internal.BufferProvider)>(r1);
+
+        goto label3;
+
+     label2:
+        $r4 = new java.lang.AssertionError;
+
+        specialinvoke $r4.<java.lang.AssertionError: void <init>(java.lang.Object)>("AudioRecorder is released");
+
+        throw $r4;
+
+     label3:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Integer[] $r0;
+        java.lang.Integer $r1, $r2, $r3, $r4, $r5, $r6;
+        java.util.List $r7, $r8;
+
+        $r0 = newarray (java.lang.Integer)[6];
+
+        $r1 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(48000);
+
+        $r0[0] = $r1;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(44100);
+
+        $r0[1] = $r2;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(22050);
+
+        $r0[2] = $r3;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(11025);
+
+        $r0[3] = $r4;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(8000);
+
+        $r0[4] = $r5;
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(4800);
+
+        $r0[5] = $r6;
+
+        $r7 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r0);
+
+        $r8 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r7);
+
+        <androidx.camera.video.internal.AudioSource: java.util.List COMMON_SAMPLE_RATES> = $r8;
+
+        return;
+    }
+
+androidx.camera.video.internal.AudioSource$1
+<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.BufferProvider val$bufferProvider>
+<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.AudioSource this$0>
+    void <init>(androidx.camera.video.internal.AudioSource, androidx.camera.video.internal.BufferProvider)
+    {
+        androidx.camera.video.internal.AudioSource$1 r0;
+        androidx.camera.video.internal.AudioSource r1;
+        androidx.camera.video.internal.BufferProvider r2;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$1;
+
+        r1 := @parameter0: androidx.camera.video.internal.AudioSource;
+
+        r2 := @parameter1: androidx.camera.video.internal.BufferProvider;
+
+        r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.AudioSource this$0> = r1;
+
+        r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.BufferProvider val$bufferProvider> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onNewData(androidx.camera.video.internal.BufferProvider$State)
+    {
+        androidx.camera.video.internal.AudioSource$1 r0;
+        androidx.camera.video.internal.BufferProvider$State r1, $r8;
+        androidx.camera.video.internal.AudioSource $r2, $r7, $r13, $r14;
+        androidx.camera.video.internal.BufferProvider $r3, $r4;
+        java.lang.StringBuilder $r5, $r6, $r9, $r10, $r11;
+        java.lang.String $r12;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$1;
+
+        r1 := @parameter0: androidx.camera.video.internal.BufferProvider$State;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r4 = $r2.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>;
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.BufferProvider val$bufferProvider>;
+
+        if $r4 != $r3 goto label1;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Receive BufferProvider state change: ");
+
+        $r7 = r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r8 = $r7.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider$State mBufferProviderState>;
+
+        $r9 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r8);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" to ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("AudioSource", $r12);
+
+        $r13 = r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r13.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider$State mBufferProviderState> = r1;
+
+        $r14 = r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.AudioSource this$0>;
+
+        virtualinvoke $r14.<androidx.camera.video.internal.AudioSource: void updateSendingAudio()>();
+
+     label1:
+        return;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        androidx.camera.video.internal.AudioSource$1 r0;
+        java.lang.Throwable r1;
+        androidx.camera.video.internal.AudioSource $r2, $r5;
+        androidx.camera.video.internal.BufferProvider $r3, $r4;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$1;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r4 = $r2.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>;
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.BufferProvider val$bufferProvider>;
+
+        if $r4 != $r3 goto label1;
+
+        $r5 = r0.<androidx.camera.video.internal.AudioSource$1: androidx.camera.video.internal.AudioSource this$0>;
+
+        virtualinvoke $r5.<androidx.camera.video.internal.AudioSource: void notifyError(java.lang.Throwable)>(r1);
+
+     label1:
+        return;
+    }
+
+    public volatile void onNewData(java.lang.Object)
+    {
+        androidx.camera.video.internal.AudioSource$1 r0;
+        java.lang.Object r1;
+        androidx.camera.video.internal.BufferProvider$State $r2;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (androidx.camera.video.internal.BufferProvider$State) r1;
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource$1: void onNewData(androidx.camera.video.internal.BufferProvider$State)>($r2);
+
+        return;
+    }
+
+androidx.camera.video.internal.AudioSource$2
+<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.BufferProvider val$bufferProvider>
+<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>
+    void <init>(androidx.camera.video.internal.AudioSource, androidx.camera.video.internal.BufferProvider)
+    {
+        androidx.camera.video.internal.AudioSource$2 r0;
+        androidx.camera.video.internal.AudioSource r1;
+        androidx.camera.video.internal.BufferProvider r2;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$2;
+
+        r1 := @parameter0: androidx.camera.video.internal.AudioSource;
+
+        r2 := @parameter1: androidx.camera.video.internal.BufferProvider;
+
+        r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0> = r1;
+
+        r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.BufferProvider val$bufferProvider> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onSuccess(androidx.camera.video.internal.encoder.InputBuffer)
+    {
+        androidx.camera.video.internal.AudioSource$2 r0;
+        androidx.camera.video.internal.encoder.InputBuffer r1;
+        java.nio.ByteBuffer r2;
+        int i0, $i1, $i3, $i4;
+        androidx.camera.video.internal.AudioSource $r3, $r4, $r7, $r8, $r10, $r12, $r13, $r14;
+        boolean $z0;
+        androidx.camera.video.internal.BufferProvider $r5, $r6;
+        android.media.AudioRecord $r9;
+        long $l2, $l5, $l6, $l7;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$2;
+
+        r1 := @parameter0: androidx.camera.video.internal.encoder.InputBuffer;
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        $z0 = $r3.<androidx.camera.video.internal.AudioSource: boolean mIsSendingAudio>;
+
+        if $z0 == 0 goto label1;
+
+        $r4 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r6 = $r4.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>;
+
+        $r5 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.BufferProvider val$bufferProvider>;
+
+        if $r6 == $r5 goto label2;
+
+     label1:
+        interfaceinvoke r1.<androidx.camera.video.internal.encoder.InputBuffer: boolean cancel()>();
+
+        return;
+
+     label2:
+        r2 = interfaceinvoke r1.<androidx.camera.video.internal.encoder.InputBuffer: java.nio.ByteBuffer getByteBuffer()>();
+
+        $r7 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r9 = $r7.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $r8 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        $i1 = $r8.<androidx.camera.video.internal.AudioSource: int mBufferSize>;
+
+        i0 = virtualinvoke $r9.<android.media.AudioRecord: int read(java.nio.ByteBuffer,int)>(r2, $i1);
+
+        if i0 <= 0 goto label3;
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.Buffer limit(int)>(i0);
+
+        $r12 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        $l2 = virtualinvoke $r12.<androidx.camera.video.internal.AudioSource: long generatePresentationTimeUs()>();
+
+        interfaceinvoke r1.<androidx.camera.video.internal.encoder.InputBuffer: void setPresentationTimeUs(long)>($l2);
+
+        interfaceinvoke r1.<androidx.camera.video.internal.encoder.InputBuffer: boolean submit()>();
+
+        $r13 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        $l6 = $r13.<androidx.camera.video.internal.AudioSource: long mTotalFramesRead>;
+
+        $r14 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        $i3 = $r14.<androidx.camera.video.internal.AudioSource: int mBytesPerFrame>;
+
+        $i4 = i0 / $i3;
+
+        $l5 = (long) $i4;
+
+        $l7 = $l6 + $l5;
+
+        $r13.<androidx.camera.video.internal.AudioSource: long mTotalFramesRead> = $l7;
+
+        goto label4;
+
+     label3:
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("AudioSource", "Unable to read data from AudioRecord.");
+
+        interfaceinvoke r1.<androidx.camera.video.internal.encoder.InputBuffer: boolean cancel()>();
+
+     label4:
+        $r10 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        virtualinvoke $r10.<androidx.camera.video.internal.AudioSource: void sendNextAudio()>();
+
+        return;
+    }
+
+    public void onFailure(java.lang.Throwable)
+    {
+        androidx.camera.video.internal.AudioSource$2 r0;
+        java.lang.Throwable r1;
+        androidx.camera.video.internal.AudioSource $r2, $r5;
+        androidx.camera.video.internal.BufferProvider $r3, $r4;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$2;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r4 = $r2.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.BufferProvider mBufferProvider>;
+
+        $r3 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.BufferProvider val$bufferProvider>;
+
+        if $r4 == $r3 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("AudioSource", "Unable to get input buffer, the BufferProvider could be transitioning to INACTIVE state.");
+
+        $r5 = r0.<androidx.camera.video.internal.AudioSource$2: androidx.camera.video.internal.AudioSource this$0>;
+
+        virtualinvoke $r5.<androidx.camera.video.internal.AudioSource: void notifyError(java.lang.Throwable)>(r1);
+
+     label1:
+        return;
+    }
+
+    public volatile void onSuccess(java.lang.Object)
+    {
+        androidx.camera.video.internal.AudioSource$2 r0;
+        java.lang.Object r1;
+        androidx.camera.video.internal.encoder.InputBuffer $r2;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$2;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (androidx.camera.video.internal.encoder.InputBuffer) r1;
+
+        virtualinvoke r0.<androidx.camera.video.internal.AudioSource$2: void onSuccess(androidx.camera.video.internal.encoder.InputBuffer)>($r2);
+
+        return;
+    }
+
+androidx.camera.video.internal.AudioSource$3
+<androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState>
+    static void <clinit>()
+    {
+        androidx.camera.video.internal.AudioSource$InternalState[] $r0;
+        int $i0, $i1, $i2, $i3;
+        int[] $r1, $r3, $r5, $r7;
+        androidx.camera.video.internal.AudioSource$InternalState $r2, $r4, $r6;
+        java.lang.Throwable $r8, $r9, $r10, r11, r12, r13;
+
+        $r0 = staticinvoke <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState[] values()>();
+
+        $i0 = lengthof $r0;
+
+        $r1 = newarray (int)[$i0];
+
+        <androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState> = $r1;
+
+     label01:
+        $r3 = <androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState>;
+
+        $r2 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState CONFIGURED>;
+
+        $i1 = virtualinvoke $r2.<androidx.camera.video.internal.AudioSource$InternalState: int ordinal()>();
+
+        $r3[$i1] = 1;
+
+     label02:
+        goto label04;
+
+     label03:
+        $r9 := @caughtexception;
+
+        r11 = $r9;
+
+     label04:
+        $r5 = <androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState>;
+
+        $r4 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState STARTED>;
+
+        $i2 = virtualinvoke $r4.<androidx.camera.video.internal.AudioSource$InternalState: int ordinal()>();
+
+        $r5[$i2] = 2;
+
+     label05:
+        goto label07;
+
+     label06:
+        $r8 := @caughtexception;
+
+        r12 = $r8;
+
+     label07:
+        $r7 = <androidx.camera.video.internal.AudioSource$3: int[] $SwitchMap$androidx$camera$video$internal$AudioSource$InternalState>;
+
+        $r6 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState RELEASED>;
+
+        $i3 = virtualinvoke $r6.<androidx.camera.video.internal.AudioSource$InternalState: int ordinal()>();
+
+        $r7[$i3] = 3;
+
+     label08:
+        goto label10;
+
+     label09:
+        $r10 := @caughtexception;
+
+        r13 = $r10;
+
+     label10:
+        return;
+
+        catch java.lang.NoSuchFieldError from label01 to label02 with label03;
+        catch java.lang.NoSuchFieldError from label04 to label05 with label06;
+        catch java.lang.NoSuchFieldError from label07 to label08 with label09;
+    }
+
+androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback
+<androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: androidx.camera.video.internal.AudioSource this$0>
+    void <init>(androidx.camera.video.internal.AudioSource)
+    {
+        androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback r0;
+        androidx.camera.video.internal.AudioSource r1;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback;
+
+        r1 := @parameter0: androidx.camera.video.internal.AudioSource;
+
+        r0.<androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: androidx.camera.video.internal.AudioSource this$0> = r1;
+
+        specialinvoke r0.<android.media.AudioManager$AudioRecordingCallback: void <init>()>();
+
+        return;
+    }
+
+    public void onRecordingConfigChanged(java.util.List)
+    {
+        androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback r0;
+        java.util.List r1;
+        java.util.Iterator r2;
+        android.media.AudioRecordingConfiguration r3;
+        boolean z0, $z1, $z2;
+        androidx.camera.video.internal.AudioSource $r4, $r6, $r9, $r11, $r13;
+        java.util.concurrent.Executor $r5, $r14;
+        androidx.camera.video.internal.AudioSource$AudioSourceCallback $r7;
+        java.lang.Object $r8;
+        int $i0, $i1;
+        android.media.AudioRecord $r10;
+        java.util.concurrent.atomic.AtomicBoolean $r12;
+        java.lang.Runnable $r15;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback;
+
+        r1 := @parameter0: java.util.List;
+
+        specialinvoke r0.<android.media.AudioManager$AudioRecordingCallback: void onRecordingConfigChanged(java.util.List)>(r1);
+
+        $r4 = r0.<androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r5 = $r4.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mCallbackExecutor>;
+
+        if $r5 == null goto label3;
+
+        $r6 = r0.<androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r7 = $r6.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$AudioSourceCallback mAudioSourceCallback>;
+
+        if $r7 == null goto label3;
+
+        r2 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r8 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (android.media.AudioRecordingConfiguration) $r8;
+
+        $i0 = staticinvoke <androidx.camera.video.internal.compat.Api24Impl: int getClientAudioSessionId(android.media.AudioRecordingConfiguration)>(r3);
+
+        $r9 = r0.<androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r10 = $r9.<androidx.camera.video.internal.AudioSource: android.media.AudioRecord mAudioRecord>;
+
+        $i1 = virtualinvoke $r10.<android.media.AudioRecord: int getAudioSessionId()>();
+
+        if $i0 != $i1 goto label2;
+
+        z0 = staticinvoke <androidx.camera.video.internal.compat.Api29Impl: boolean isClientSilenced(android.media.AudioRecordingConfiguration)>(r3);
+
+        $r11 = r0.<androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r12 = $r11.<androidx.camera.video.internal.AudioSource: java.util.concurrent.atomic.AtomicBoolean mSourceSilence>;
+
+        $z2 = virtualinvoke $r12.<java.util.concurrent.atomic.AtomicBoolean: boolean getAndSet(boolean)>(z0);
+
+        if $z2 == z0 goto label3;
+
+        $r13 = r0.<androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r14 = $r13.<androidx.camera.video.internal.AudioSource: java.util.concurrent.Executor mCallbackExecutor>;
+
+        $r15 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback,boolean)>(r0, z0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: void lambda$onRecordingConfigChanged$0(boolean)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r14.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r15);
+
+        goto label3;
+
+     label2:
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    private void lambda$onRecordingConfigChanged$0(boolean)
+    {
+        androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback r0;
+        boolean z0;
+        androidx.camera.video.internal.AudioSource $r1;
+        androidx.camera.video.internal.AudioSource$AudioSourceCallback $r2;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = r0.<androidx.camera.video.internal.AudioSource$AudioRecordingApi29Callback: androidx.camera.video.internal.AudioSource this$0>;
+
+        $r2 = $r1.<androidx.camera.video.internal.AudioSource: androidx.camera.video.internal.AudioSource$AudioSourceCallback mAudioSourceCallback>;
+
+        interfaceinvoke $r2.<androidx.camera.video.internal.AudioSource$AudioSourceCallback: void onSilenced(boolean)>(z0);
+
+        return;
+    }
+
+androidx.camera.video.internal.AudioSource$AudioSourceCallback
+<androidx.camera.video.internal.AudioSource$AudioSourceCallback: void onSilenced(boolean)>
+<androidx.camera.video.internal.AudioSource$AudioSourceCallback: void onError(java.lang.Throwable)>
+androidx.camera.video.internal.AudioSource$InternalState
+<androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState CONFIGURED>
+<androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState STARTED>
+<androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState RELEASED>
+<androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState[] $VALUES>
+    public static androidx.camera.video.internal.AudioSource$InternalState[] values()
+    {
+        androidx.camera.video.internal.AudioSource$InternalState[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (androidx.camera.video.internal.AudioSource$InternalState[]) $r1;
+
+        return $r2;
+    }
+
+    public static androidx.camera.video.internal.AudioSource$InternalState valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        androidx.camera.video.internal.AudioSource$InternalState $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "Landroidx/camera/video/internal/AudioSource$InternalState;", r0);
+
+        $r2 = (androidx.camera.video.internal.AudioSource$InternalState) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.camera.video.internal.AudioSource$InternalState r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$InternalState;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.video.internal.AudioSource$InternalState $r0, $r1, $r2, $r4, $r5, $r6;
+        androidx.camera.video.internal.AudioSource$InternalState[] $r3;
+
+        $r0 = new androidx.camera.video.internal.AudioSource$InternalState;
+
+        specialinvoke $r0.<androidx.camera.video.internal.AudioSource$InternalState: void <init>(java.lang.String,int)>("CONFIGURED", 0);
+
+        <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState CONFIGURED> = $r0;
+
+        $r1 = new androidx.camera.video.internal.AudioSource$InternalState;
+
+        specialinvoke $r1.<androidx.camera.video.internal.AudioSource$InternalState: void <init>(java.lang.String,int)>("STARTED", 1);
+
+        <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState STARTED> = $r1;
+
+        $r2 = new androidx.camera.video.internal.AudioSource$InternalState;
+
+        specialinvoke $r2.<androidx.camera.video.internal.AudioSource$InternalState: void <init>(java.lang.String,int)>("RELEASED", 2);
+
+        <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState RELEASED> = $r2;
+
+        $r3 = newarray (androidx.camera.video.internal.AudioSource$InternalState)[3];
+
+        $r4 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState CONFIGURED>;
+
+        $r3[0] = $r4;
+
+        $r5 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState STARTED>;
+
+        $r3[1] = $r5;
+
+        $r6 = <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState RELEASED>;
+
+        $r3[2] = $r6;
+
+        <androidx.camera.video.internal.AudioSource$InternalState: androidx.camera.video.internal.AudioSource$InternalState[] $VALUES> = $r3;
+
+        return;
+    }
+
+androidx.camera.video.internal.AudioSource$Settings$Builder
+<androidx.camera.video.internal.AudioSource$Settings$Builder: androidx.camera.video.internal.AudioSource$Settings$Builder setAudioSource(int)>
+<androidx.camera.video.internal.AudioSource$Settings$Builder: androidx.camera.video.internal.AudioSource$Settings$Builder setSampleRate(int)>
+<androidx.camera.video.internal.AudioSource$Settings$Builder: androidx.camera.video.internal.AudioSource$Settings$Builder setChannelCount(int)>
+<androidx.camera.video.internal.AudioSource$Settings$Builder: androidx.camera.video.internal.AudioSource$Settings$Builder setAudioFormat(int)>
+<androidx.camera.video.internal.AudioSource$Settings$Builder: androidx.camera.video.internal.AudioSource$Settings autoBuild()>
+    public final androidx.camera.video.internal.AudioSource$Settings build()
+    {
+        androidx.camera.video.internal.AudioSource$Settings$Builder r0;
+        androidx.camera.video.internal.AudioSource$Settings r1;
+        int $i0, $i1, $i2, $i3;
+        boolean $z0;
+        java.lang.IllegalArgumentException $r2;
+        java.lang.StringBuilder $r3, $r4, $r5, $r7, $r8, $r9, $r10, $r11, $r12, $r13, $r14, $r15, $r16, $r17, $r18;
+        java.lang.String $r6, r19;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$Settings$Builder;
+
+        r1 = virtualinvoke r0.<androidx.camera.video.internal.AudioSource$Settings$Builder: androidx.camera.video.internal.AudioSource$Settings autoBuild()>();
+
+        r19 = "";
+
+        $i0 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioSource()>();
+
+        if $i0 != -1 goto label1;
+
+        $r16 = new java.lang.StringBuilder;
+
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r19);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" audioSource");
+
+        r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label1:
+        $i1 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getSampleRate()>();
+
+        if $i1 > 0 goto label2;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r19);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" sampleRate");
+
+        r19 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label2:
+        $i2 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getChannelCount()>();
+
+        if $i2 > 0 goto label3;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r19);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" channelCount");
+
+        r19 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label3:
+        $i3 = virtualinvoke r1.<androidx.camera.video.internal.AudioSource$Settings: int getAudioFormat()>();
+
+        if $i3 != -1 goto label4;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r19);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" audioFormat");
+
+        r19 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label4:
+        $z0 = virtualinvoke r19.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 != 0 goto label5;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Required settings missing or non-positive:");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r19);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r6);
+
+        throw $r2;
+
+     label5:
+        return r1;
+    }
+
+    void <init>()
+    {
+        androidx.camera.video.internal.AudioSource$Settings$Builder r0;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$Settings$Builder;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+androidx.camera.video.internal.AudioSource$Settings
+    public static androidx.camera.video.internal.AudioSource$Settings$Builder builder()
+    {
+        androidx.camera.video.internal.AutoValue_AudioSource_Settings$Builder $r0;
+        androidx.camera.video.internal.AudioSource$Settings$Builder $r1, $r2, $r3, $r4;
+
+        $r0 = new androidx.camera.video.internal.AutoValue_AudioSource_Settings$Builder;
+
+        specialinvoke $r0.<androidx.camera.video.internal.AutoValue_AudioSource_Settings$Builder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<androidx.camera.video.internal.AutoValue_AudioSource_Settings$Builder: androidx.camera.video.internal.AudioSource$Settings$Builder setAudioSource(int)>(-1);
+
+        $r2 = virtualinvoke $r1.<androidx.camera.video.internal.AudioSource$Settings$Builder: androidx.camera.video.internal.AudioSource$Settings$Builder setSampleRate(int)>(-1);
+
+        $r3 = virtualinvoke $r2.<androidx.camera.video.internal.AudioSource$Settings$Builder: androidx.camera.video.internal.AudioSource$Settings$Builder setChannelCount(int)>(-1);
+
+        $r4 = virtualinvoke $r3.<androidx.camera.video.internal.AudioSource$Settings$Builder: androidx.camera.video.internal.AudioSource$Settings$Builder setAudioFormat(int)>(-1);
+
+        return $r4;
+    }
+
+<androidx.camera.video.internal.AudioSource$Settings: androidx.camera.video.internal.AudioSource$Settings$Builder toBuilder()>
+<androidx.camera.video.internal.AudioSource$Settings: int getAudioSource()>
+<androidx.camera.video.internal.AudioSource$Settings: int getSampleRate()>
+<androidx.camera.video.internal.AudioSource$Settings: int getChannelCount()>
+<androidx.camera.video.internal.AudioSource$Settings: int getAudioFormat()>
+    void <init>()
+    {
+        androidx.camera.video.internal.AudioSource$Settings r0;
+
+        r0 := @this: androidx.camera.video.internal.AudioSource$Settings;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

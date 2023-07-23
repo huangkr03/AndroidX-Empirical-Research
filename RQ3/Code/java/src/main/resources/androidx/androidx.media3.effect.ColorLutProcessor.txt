@@ -1,0 +1,217 @@
+androidx.media3.effect.ColorLutProcessor
+<androidx.media3.effect.ColorLutProcessor: java.lang.String VERTEX_SHADER_PATH>
+<androidx.media3.effect.ColorLutProcessor: java.lang.String FRAGMENT_SHADER_PATH>
+<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>
+<androidx.media3.effect.ColorLutProcessor: androidx.media3.effect.ColorLut colorLut>
+    public void <init>(android.content.Context, androidx.media3.effect.ColorLut, boolean) throws androidx.media3.common.FrameProcessingException
+    {
+        androidx.media3.effect.ColorLutProcessor r0;
+        android.content.Context r1;
+        androidx.media3.effect.ColorLut r2;
+        boolean z0, $z1;
+        androidx.media3.common.util.GlProgram $r3, $r4, $r6, $r7;
+        float[] $r5, r11;
+        java.lang.Throwable $r8, r10;
+        androidx.media3.common.FrameProcessingException $r9;
+
+        r0 := @this: androidx.media3.effect.ColorLutProcessor;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.media3.effect.ColorLut;
+
+        z0 := @parameter2: boolean;
+
+        specialinvoke r0.<androidx.media3.effect.SingleFrameGlTextureProcessor: void <init>(boolean)>(z0);
+
+        if z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "LutProcessor does not support HDR colors.");
+
+        r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.effect.ColorLut colorLut> = r2;
+
+     label3:
+        $r3 = new androidx.media3.common.util.GlProgram;
+
+        specialinvoke $r3.<androidx.media3.common.util.GlProgram: void <init>(android.content.Context,java.lang.String,java.lang.String)>(r1, "shaders/vertex_shader_transformation_es2.glsl", "shaders/fragment_shader_lut_es2.glsl");
+
+        r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram> = $r3;
+
+     label4:
+        goto label6;
+
+     label5:
+        $r8 := @caughtexception;
+
+        r10 = $r8;
+
+        $r9 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r9.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.Throwable)>(r10);
+
+        throw $r9;
+
+     label6:
+        $r4 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $r5 = staticinvoke <androidx.media3.common.util.GlUtil: float[] getNormalizedCoordinateBounds()>();
+
+        virtualinvoke $r4.<androidx.media3.common.util.GlProgram: void setBufferAttribute(java.lang.String,float[],int)>("aFramePosition", $r5, 4);
+
+        r11 = staticinvoke <androidx.media3.common.util.GlUtil: float[] create4x4IdentityMatrix()>();
+
+        $r6 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r6.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uTransformationMatrix", r11);
+
+        $r7 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r7.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uTexTransformationMatrix", r11);
+
+        return;
+
+        catch java.io.IOException from label3 to label4 with label5;
+        catch androidx.media3.common.util.GlUtil$GlException from label3 to label4 with label5;
+    }
+
+    public android.util.Pair configure(int, int)
+    {
+        androidx.media3.effect.ColorLutProcessor r0;
+        int i0, i1;
+        java.lang.Integer $r1, $r2;
+        android.util.Pair $r3;
+
+        r0 := @this: androidx.media3.effect.ColorLutProcessor;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r3 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r1, $r2);
+
+        return $r3;
+    }
+
+    public void drawFrame(int, long) throws androidx.media3.common.FrameProcessingException
+    {
+        androidx.media3.effect.ColorLutProcessor r0;
+        int i0, $i2, $i3;
+        long l1;
+        java.lang.Throwable r1, $r9;
+        androidx.media3.common.util.GlProgram $r2, $r3, $r5, $r7, $r8;
+        androidx.media3.effect.ColorLut $r4, $r6;
+        float $f0;
+        androidx.media3.common.FrameProcessingException $r10;
+
+        r0 := @this: androidx.media3.effect.ColorLutProcessor;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+     label1:
+        $r2 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.GlProgram: void use()>();
+
+        $r3 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r3.<androidx.media3.common.util.GlProgram: void setSamplerTexIdUniform(java.lang.String,int,int)>("uTexSampler", i0, 0);
+
+        $r5 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $r4 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.effect.ColorLut colorLut>;
+
+        $i2 = interfaceinvoke $r4.<androidx.media3.effect.ColorLut: int getLutTextureId(long)>(l1);
+
+        virtualinvoke $r5.<androidx.media3.common.util.GlProgram: void setSamplerTexIdUniform(java.lang.String,int,int)>("uColorLut", $i2, 1);
+
+        $r7 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $r6 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.effect.ColorLut colorLut>;
+
+        $i3 = interfaceinvoke $r6.<androidx.media3.effect.ColorLut: int getLength(long)>(l1);
+
+        $f0 = (float) $i3;
+
+        virtualinvoke $r7.<androidx.media3.common.util.GlProgram: void setFloatUniform(java.lang.String,float)>("uColorLutLength", $f0);
+
+        $r8 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r8.<androidx.media3.common.util.GlProgram: void bindAttributesAndUniforms()>();
+
+        staticinvoke <android.opengl.GLES20: void glDrawArrays(int,int,int)>(5, 0, 4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r9 := @caughtexception;
+
+        r1 = $r9;
+
+        $r10 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r10.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.Throwable)>(r1);
+
+        throw $r10;
+
+     label4:
+        return;
+
+        catch androidx.media3.common.util.GlUtil$GlException from label1 to label2 with label3;
+    }
+
+    public void release() throws androidx.media3.common.FrameProcessingException
+    {
+        androidx.media3.effect.ColorLutProcessor r0;
+        java.lang.Throwable r1, $r4;
+        androidx.media3.effect.ColorLut $r2;
+        androidx.media3.common.util.GlProgram $r3;
+        androidx.media3.common.FrameProcessingException $r5;
+
+        r0 := @this: androidx.media3.effect.ColorLutProcessor;
+
+        specialinvoke r0.<androidx.media3.effect.SingleFrameGlTextureProcessor: void release()>();
+
+     label1:
+        $r2 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.effect.ColorLut colorLut>;
+
+        interfaceinvoke $r2.<androidx.media3.effect.ColorLut: void release()>();
+
+        $r3 = r0.<androidx.media3.effect.ColorLutProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r3.<androidx.media3.common.util.GlProgram: void delete()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+        $r5 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r5.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.Throwable)>(r1);
+
+        throw $r5;
+
+     label4:
+        return;
+
+        catch androidx.media3.common.util.GlUtil$GlException from label1 to label2 with label3;
+    }
+

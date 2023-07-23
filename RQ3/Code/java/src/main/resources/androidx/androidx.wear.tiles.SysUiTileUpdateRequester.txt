@@ -1,0 +1,407 @@
+androidx.wear.tiles.SysUiTileUpdateRequester
+<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.String TAG>
+<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.String DEFAULT_TARGET_SYSUI>
+<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.String SYSUI_SETTINGS_KEY>
+<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.String ACTION_BIND_UPDATE_REQUESTER>
+<androidx.wear.tiles.SysUiTileUpdateRequester: android.content.Context mAppContext>
+<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.Object mLock>
+<androidx.wear.tiles.SysUiTileUpdateRequester: boolean mBindInProgress>
+<androidx.wear.tiles.SysUiTileUpdateRequester: java.util.Set mPendingServices>
+    public void <init>(android.content.Context)
+    {
+        androidx.wear.tiles.SysUiTileUpdateRequester r0;
+        android.content.Context r1;
+        java.lang.Object $r2;
+        java.util.HashSet $r3;
+
+        r0 := @this: androidx.wear.tiles.SysUiTileUpdateRequester;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.Object mLock> = $r2;
+
+        r0.<androidx.wear.tiles.SysUiTileUpdateRequester: boolean mBindInProgress> = 0;
+
+        $r3 = new java.util.HashSet;
+
+        specialinvoke $r3.<java.util.HashSet: void <init>()>();
+
+        r0.<androidx.wear.tiles.SysUiTileUpdateRequester: java.util.Set mPendingServices> = $r3;
+
+        r0.<androidx.wear.tiles.SysUiTileUpdateRequester: android.content.Context mAppContext> = r1;
+
+        return;
+    }
+
+    public void requestUpdate(java.lang.Class)
+    {
+        androidx.wear.tiles.SysUiTileUpdateRequester r0;
+        java.lang.Class r1;
+        java.lang.Object $r2, $r4, r6, r9;
+        java.util.Set $r3;
+        boolean $z1;
+        java.lang.Throwable $r5, r7;
+        android.content.Intent r8;
+
+        r0 := @this: androidx.wear.tiles.SysUiTileUpdateRequester;
+
+        r1 := @parameter0: java.lang.Class;
+
+        $r2 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.Object mLock>;
+
+        r6 = $r2;
+
+        entermonitor $r2;
+
+     label1:
+        $r3 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester: java.util.Set mPendingServices>;
+
+        interfaceinvoke $r3.<java.util.Set: boolean add(java.lang.Object)>(r1);
+
+        $z1 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester: boolean mBindInProgress>;
+
+        if $z1 == 0 goto label3;
+
+        exitmonitor r6;
+
+     label2:
+        return;
+
+     label3:
+        r0.<androidx.wear.tiles.SysUiTileUpdateRequester: boolean mBindInProgress> = 1;
+
+        exitmonitor r6;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r5 := @caughtexception;
+
+        r7 = $r5;
+
+        exitmonitor r6;
+
+     label6:
+        throw r7;
+
+     label7:
+        r8 = specialinvoke r0.<androidx.wear.tiles.SysUiTileUpdateRequester: android.content.Intent buildUpdateBindIntent()>();
+
+        if r8 != null goto label9;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("HTUpdateRequester", "Could not build bind intent");
+
+        $r4 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.Object mLock>;
+
+        r9 = $r4;
+
+        entermonitor $r4;
+
+        r0.<androidx.wear.tiles.SysUiTileUpdateRequester: boolean mBindInProgress> = 0;
+
+        exitmonitor r9;
+
+        goto label8;
+
+     label8:
+        return;
+
+     label9:
+        specialinvoke r0.<androidx.wear.tiles.SysUiTileUpdateRequester: void bindAndUpdate(android.content.Intent)>(r8);
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    private java.lang.String getSysUiPackageName()
+    {
+        androidx.wear.tiles.SysUiTileUpdateRequester r0;
+        java.lang.String r1;
+        android.content.Context $r2;
+        android.content.ContentResolver $r3;
+        boolean $z0;
+
+        r0 := @this: androidx.wear.tiles.SysUiTileUpdateRequester;
+
+        $r2 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester: android.content.Context mAppContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        r1 = staticinvoke <android.provider.Settings$Global: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r3, "clockwork_sysui_package");
+
+        if r1 == null goto label1;
+
+        $z0 = virtualinvoke r1.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        return "com.google.android.wearable.app";
+
+     label2:
+        return r1;
+    }
+
+    private android.content.Intent buildUpdateBindIntent()
+    {
+        androidx.wear.tiles.SysUiTileUpdateRequester r0;
+        android.content.Intent r1, $r5;
+        android.content.pm.PackageManager r2;
+        java.util.List r3;
+        android.content.pm.ServiceInfo r4;
+        java.lang.String $r6, $r11, $r12;
+        android.content.Context $r8;
+        boolean $z0;
+        java.lang.Object $r9;
+        android.content.pm.ResolveInfo $r10;
+
+        r0 := @this: androidx.wear.tiles.SysUiTileUpdateRequester;
+
+        $r5 = new android.content.Intent;
+
+        specialinvoke $r5.<android.content.Intent: void <init>(java.lang.String)>("androidx.wear.tiles.action.BIND_UPDATE_REQUESTER");
+
+        r1 = $r5;
+
+        $r6 = specialinvoke r0.<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.String getSysUiPackageName()>();
+
+        virtualinvoke r1.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>($r6);
+
+        $r8 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester: android.content.Context mAppContext>;
+
+        r2 = virtualinvoke $r8.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        r3 = virtualinvoke r2.<android.content.pm.PackageManager: java.util.List queryIntentServices(android.content.Intent,int)>(r1, 192);
+
+        $z0 = interfaceinvoke r3.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("HTUpdateRequester", "Couldn\'t find any services filtering on androidx.wear.tiles.action.BIND_UPDATE_REQUESTER");
+
+        return null;
+
+     label1:
+        $r9 = interfaceinvoke r3.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r10 = (android.content.pm.ResolveInfo) $r9;
+
+        r4 = $r10.<android.content.pm.ResolveInfo: android.content.pm.ServiceInfo serviceInfo>;
+
+        $r12 = r4.<android.content.pm.ServiceInfo: java.lang.String packageName>;
+
+        $r11 = r4.<android.content.pm.ServiceInfo: java.lang.String name>;
+
+        virtualinvoke r1.<android.content.Intent: android.content.Intent setClassName(java.lang.String,java.lang.String)>($r12, $r11);
+
+        return r1;
+    }
+
+    private void bindAndUpdate(android.content.Intent)
+    {
+        androidx.wear.tiles.SysUiTileUpdateRequester r0;
+        android.content.Intent r1;
+        androidx.wear.tiles.SysUiTileUpdateRequester$1 $r2;
+        android.content.Context $r3;
+
+        r0 := @this: androidx.wear.tiles.SysUiTileUpdateRequester;
+
+        r1 := @parameter0: android.content.Intent;
+
+        $r3 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester: android.content.Context mAppContext>;
+
+        $r2 = new androidx.wear.tiles.SysUiTileUpdateRequester$1;
+
+        specialinvoke $r2.<androidx.wear.tiles.SysUiTileUpdateRequester$1: void <init>(androidx.wear.tiles.SysUiTileUpdateRequester)>(r0);
+
+        virtualinvoke $r3.<android.content.Context: boolean bindService(android.content.Intent,android.content.ServiceConnection,int)>(r1, $r2, 1);
+
+        return;
+    }
+
+    void sendTileUpdateRequest(java.lang.Class, androidx.wear.tiles.TileUpdateRequesterService)
+    {
+        androidx.wear.tiles.SysUiTileUpdateRequester r0;
+        java.lang.Class r1;
+        androidx.wear.tiles.TileUpdateRequesterService r2;
+        android.content.ComponentName $r3, r7;
+        android.content.Context $r4;
+        androidx.wear.tiles.TileUpdateRequestData $r5;
+        java.lang.Throwable $r6, r8;
+
+        r0 := @this: androidx.wear.tiles.SysUiTileUpdateRequester;
+
+        r1 := @parameter0: java.lang.Class;
+
+        r2 := @parameter1: androidx.wear.tiles.TileUpdateRequesterService;
+
+     label1:
+        $r3 = new android.content.ComponentName;
+
+        $r4 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester: android.content.Context mAppContext>;
+
+        specialinvoke $r3.<android.content.ComponentName: void <init>(android.content.Context,java.lang.Class)>($r4, r1);
+
+        r7 = $r3;
+
+        $r5 = new androidx.wear.tiles.TileUpdateRequestData;
+
+        specialinvoke $r5.<androidx.wear.tiles.TileUpdateRequestData: void <init>()>();
+
+        interfaceinvoke r2.<androidx.wear.tiles.TileUpdateRequesterService: void requestUpdate(android.content.ComponentName,androidx.wear.tiles.TileUpdateRequestData)>(r7, $r5);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r8 = $r6;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("HTUpdateRequester", "RemoteException while requesting tile update");
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+androidx.wear.tiles.SysUiTileUpdateRequester$1
+<androidx.wear.tiles.SysUiTileUpdateRequester$1: androidx.wear.tiles.SysUiTileUpdateRequester this$0>
+    void <init>(androidx.wear.tiles.SysUiTileUpdateRequester)
+    {
+        androidx.wear.tiles.SysUiTileUpdateRequester$1 r0;
+        androidx.wear.tiles.SysUiTileUpdateRequester r1;
+
+        r0 := @this: androidx.wear.tiles.SysUiTileUpdateRequester$1;
+
+        r1 := @parameter0: androidx.wear.tiles.SysUiTileUpdateRequester;
+
+        r0.<androidx.wear.tiles.SysUiTileUpdateRequester$1: androidx.wear.tiles.SysUiTileUpdateRequester this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onServiceConnected(android.content.ComponentName, android.os.IBinder)
+    {
+        androidx.wear.tiles.SysUiTileUpdateRequester$1 r0;
+        android.content.ComponentName r1;
+        android.os.IBinder r2;
+        java.util.ArrayList r3, $r7;
+        java.lang.Class r4;
+        androidx.wear.tiles.SysUiTileUpdateRequester $r5, $r8, $r10, $r12, $r13, $r16;
+        java.lang.Object $r6, $r15, r18;
+        java.util.Set $r9, $r11;
+        boolean $z0;
+        android.content.Context $r14;
+        java.lang.Throwable $r17, r19;
+        androidx.wear.tiles.TileUpdateRequesterService r20;
+        java.util.Iterator r21;
+
+        r0 := @this: androidx.wear.tiles.SysUiTileUpdateRequester$1;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        r2 := @parameter1: android.os.IBinder;
+
+        $r5 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester$1: androidx.wear.tiles.SysUiTileUpdateRequester this$0>;
+
+        $r6 = $r5.<androidx.wear.tiles.SysUiTileUpdateRequester: java.lang.Object mLock>;
+
+        r18 = $r6;
+
+        entermonitor $r6;
+
+     label1:
+        $r7 = new java.util.ArrayList;
+
+        $r8 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester$1: androidx.wear.tiles.SysUiTileUpdateRequester this$0>;
+
+        $r9 = $r8.<androidx.wear.tiles.SysUiTileUpdateRequester: java.util.Set mPendingServices>;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>(java.util.Collection)>($r9);
+
+        r3 = $r7;
+
+        $r10 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester$1: androidx.wear.tiles.SysUiTileUpdateRequester this$0>;
+
+        $r11 = $r10.<androidx.wear.tiles.SysUiTileUpdateRequester: java.util.Set mPendingServices>;
+
+        interfaceinvoke $r11.<java.util.Set: void clear()>();
+
+        $r12 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester$1: androidx.wear.tiles.SysUiTileUpdateRequester this$0>;
+
+        $r12.<androidx.wear.tiles.SysUiTileUpdateRequester: boolean mBindInProgress> = 0;
+
+        exitmonitor r18;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r17 := @caughtexception;
+
+        r19 = $r17;
+
+        exitmonitor r18;
+
+     label4:
+        throw r19;
+
+     label5:
+        r20 = staticinvoke <androidx.wear.tiles.TileUpdateRequesterService$Stub: androidx.wear.tiles.TileUpdateRequesterService asInterface(android.os.IBinder)>(r2);
+
+        r21 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label6:
+        $z0 = interfaceinvoke r21.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label7;
+
+        $r15 = interfaceinvoke r21.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (java.lang.Class) $r15;
+
+        $r16 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester$1: androidx.wear.tiles.SysUiTileUpdateRequester this$0>;
+
+        virtualinvoke $r16.<androidx.wear.tiles.SysUiTileUpdateRequester: void sendTileUpdateRequest(java.lang.Class,androidx.wear.tiles.TileUpdateRequesterService)>(r4, r20);
+
+        goto label6;
+
+     label7:
+        $r13 = r0.<androidx.wear.tiles.SysUiTileUpdateRequester$1: androidx.wear.tiles.SysUiTileUpdateRequester this$0>;
+
+        $r14 = $r13.<androidx.wear.tiles.SysUiTileUpdateRequester: android.content.Context mAppContext>;
+
+        virtualinvoke $r14.<android.content.Context: void unbindService(android.content.ServiceConnection)>(r0);
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void onServiceDisconnected(android.content.ComponentName)
+    {
+        androidx.wear.tiles.SysUiTileUpdateRequester$1 r0;
+        android.content.ComponentName r1;
+
+        r0 := @this: androidx.wear.tiles.SysUiTileUpdateRequester$1;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        return;
+    }
+

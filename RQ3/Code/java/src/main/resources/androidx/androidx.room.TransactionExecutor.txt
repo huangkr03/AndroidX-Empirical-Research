@@ -1,0 +1,187 @@
+androidx.room.TransactionExecutor
+<androidx.room.TransactionExecutor: java.util.concurrent.Executor executor>
+<androidx.room.TransactionExecutor: java.util.ArrayDeque tasks>
+<androidx.room.TransactionExecutor: java.lang.Runnable active>
+<androidx.room.TransactionExecutor: java.lang.Object syncLock>
+    public void <init>(java.util.concurrent.Executor)
+    {
+        androidx.room.TransactionExecutor r0;
+        java.util.concurrent.Executor r1;
+        java.util.ArrayDeque $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: androidx.room.TransactionExecutor;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "executor");
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.room.TransactionExecutor: java.util.concurrent.Executor executor> = r1;
+
+        $r2 = new java.util.ArrayDeque;
+
+        specialinvoke $r2.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<androidx.room.TransactionExecutor: java.util.ArrayDeque tasks> = $r2;
+
+        $r3 = new java.lang.Object;
+
+        specialinvoke $r3.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.room.TransactionExecutor: java.lang.Object syncLock> = $r3;
+
+        return;
+    }
+
+    public void execute(java.lang.Runnable)
+    {
+        androidx.room.TransactionExecutor r0;
+        java.lang.Runnable r1, $r4, $r5;
+        java.lang.Object r2;
+        java.util.ArrayDeque $r3;
+        java.lang.Throwable $r6;
+        kotlin.Unit $r7;
+
+        r0 := @this: androidx.room.TransactionExecutor;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "command");
+
+        r2 = r0.<androidx.room.TransactionExecutor: java.lang.Object syncLock>;
+
+        entermonitor r2;
+
+     label1:
+        $r3 = r0.<androidx.room.TransactionExecutor: java.util.ArrayDeque tasks>;
+
+        $r4 = dynamicinvoke "run" <java.lang.Runnable (java.lang.Runnable,androidx.room.TransactionExecutor)>(r1, r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.room.TransactionExecutor: void execute$lambda$1$lambda$0(java.lang.Runnable,androidx.room.TransactionExecutor)>, methodtype: void __METHODTYPE__());
+
+        virtualinvoke $r3.<java.util.ArrayDeque: boolean offer(java.lang.Object)>($r4);
+
+        $r5 = r0.<androidx.room.TransactionExecutor: java.lang.Runnable active>;
+
+        if $r5 != null goto label2;
+
+        virtualinvoke r0.<androidx.room.TransactionExecutor: void scheduleNext()>();
+
+     label2:
+        $r7 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label3:
+        exitmonitor r2;
+
+        goto label6;
+
+     label4:
+        $r6 := @caughtexception;
+
+     label5:
+        exitmonitor r2;
+
+        throw $r6;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public final void scheduleNext()
+    {
+        androidx.room.TransactionExecutor r0;
+        java.lang.Object r1, r2;
+        java.lang.Runnable r3, $r5;
+        java.util.ArrayDeque $r4;
+        java.util.concurrent.Executor $r6;
+        java.lang.Throwable $r7;
+        kotlin.Unit $r8;
+
+        r0 := @this: androidx.room.TransactionExecutor;
+
+        r1 = r0.<androidx.room.TransactionExecutor: java.lang.Object syncLock>;
+
+        entermonitor r1;
+
+     label1:
+        $r4 = r0.<androidx.room.TransactionExecutor: java.util.ArrayDeque tasks>;
+
+        r2 = virtualinvoke $r4.<java.util.ArrayDeque: java.lang.Object poll()>();
+
+        r3 = (java.lang.Runnable) r2;
+
+        r0.<androidx.room.TransactionExecutor: java.lang.Runnable active> = r3;
+
+        if r2 == null goto label2;
+
+        $r6 = r0.<androidx.room.TransactionExecutor: java.util.concurrent.Executor executor>;
+
+        $r5 = r0.<androidx.room.TransactionExecutor: java.lang.Runnable active>;
+
+        interfaceinvoke $r6.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r5);
+
+     label2:
+        $r8 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label3:
+        exitmonitor r1;
+
+        goto label6;
+
+     label4:
+        $r7 := @caughtexception;
+
+     label5:
+        exitmonitor r1;
+
+        throw $r7;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    private static final void execute$lambda$1$lambda$0(java.lang.Runnable, androidx.room.TransactionExecutor)
+    {
+        java.lang.Runnable $r0;
+        androidx.room.TransactionExecutor r1;
+        java.lang.Throwable r2, $r3;
+
+        $r0 := @parameter0: java.lang.Runnable;
+
+        r1 := @parameter1: androidx.room.TransactionExecutor;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r0, "$command");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "this$0");
+
+     label1:
+        interfaceinvoke $r0.<java.lang.Runnable: void run()>();
+
+     label2:
+        virtualinvoke r1.<androidx.room.TransactionExecutor: void scheduleNext()>();
+
+        goto label5;
+
+     label3:
+        $r3 := @caughtexception;
+
+        r2 = $r3;
+
+     label4:
+        virtualinvoke r1.<androidx.room.TransactionExecutor: void scheduleNext()>();
+
+        throw r2;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+

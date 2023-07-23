@@ -1,0 +1,439 @@
+androidx.car.app.notification.CarPendingIntent
+<androidx.car.app.notification.CarPendingIntent: java.lang.String CAR_APP_ACTIVITY_CLASSNAME>
+<androidx.car.app.notification.CarPendingIntent: java.lang.String COMPONENT_EXTRA_KEY>
+<androidx.car.app.notification.CarPendingIntent: java.lang.String NAVIGATION_URI_PREFIX>
+<androidx.car.app.notification.CarPendingIntent: java.lang.String PHONE_URI_PREFIX>
+<androidx.car.app.notification.CarPendingIntent: java.lang.String SEARCH_QUERY_PARAMETER>
+<androidx.car.app.notification.CarPendingIntent: java.lang.String SEARCH_QUERY_PARAMETER_SPLITTER>
+<androidx.car.app.notification.CarPendingIntent: int FLAG_MUTABLE>
+    public static android.app.PendingIntent getCarApp(android.content.Context, int, android.content.Intent, int)
+    {
+        android.content.Context r0;
+        int i0, i1, i2, i3;
+        android.content.Intent r1;
+        boolean $z0;
+        android.app.PendingIntent $r4, $r5;
+
+        r0 := @parameter0: android.content.Context;
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: android.content.Intent;
+
+        i1 := @parameter3: int;
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>(r0);
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>(r1);
+
+        staticinvoke <androidx.car.app.notification.CarPendingIntent: void validateIntent(android.content.Context,android.content.Intent)>(r0, r1);
+
+        i2 = i1 & -67108865;
+
+        i3 = i2 | 33554432;
+
+        $z0 = staticinvoke <androidx.car.app.utils.CommonUtils: boolean isAutomotiveOS(android.content.Context)>(r0);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = staticinvoke <androidx.car.app.notification.CarPendingIntent: android.app.PendingIntent createForAutomotive(android.content.Context,int,android.content.Intent,int)>(r0, i0, r1, i3);
+
+        return $r5;
+
+     label1:
+        $r4 = staticinvoke <androidx.car.app.notification.CarPendingIntent: android.app.PendingIntent createForProjected(android.content.Context,int,android.content.Intent,int)>(r0, i0, r1, i3);
+
+        return $r4;
+    }
+
+    static void validateIntent(android.content.Context, android.content.Intent)
+    {
+        android.content.Context r0;
+        android.content.Intent r1;
+        java.lang.String r2, r3, $r6, $r7, $r10, $r18;
+        android.content.ComponentName r4;
+        java.lang.Throwable r5, $r13;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.SecurityException $r8;
+        java.security.InvalidParameterException $r9, $r14;
+        android.content.pm.PackageManager $r11;
+        java.lang.StringBuilder $r15, $r16, $r17;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.Intent;
+
+        r2 = virtualinvoke r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        r3 = virtualinvoke r1.<android.content.Intent: java.lang.String getAction()>();
+
+        r4 = virtualinvoke r1.<android.content.Intent: android.content.ComponentName getComponent()>();
+
+        if r4 == null goto label4;
+
+        $r10 = virtualinvoke r4.<android.content.ComponentName: java.lang.String getPackageName()>();
+
+        $z3 = staticinvoke <java.util.Objects: boolean equals(java.lang.Object,java.lang.Object)>($r10, r2);
+
+        if $z3 == 0 goto label4;
+
+     label1:
+        $r11 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        virtualinvoke $r11.<android.content.pm.PackageManager: android.content.pm.ServiceInfo getServiceInfo(android.content.ComponentName,int)>(r4, 128);
+
+     label2:
+        goto label9;
+
+     label3:
+        $r13 := @caughtexception;
+
+        r5 = $r13;
+
+        $r14 = new java.security.InvalidParameterException;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Intent does not have the CarAppService\'s ComponentName as its target");
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r14.<java.security.InvalidParameterException: void <init>(java.lang.String)>($r18);
+
+        throw $r14;
+
+     label4:
+        $z0 = staticinvoke <java.util.Objects: boolean equals(java.lang.Object,java.lang.Object)>(r3, "androidx.car.app.action.NAVIGATE");
+
+        if $z0 == 0 goto label5;
+
+        staticinvoke <androidx.car.app.notification.CarPendingIntent: void validateNavigationIntentIsValid(android.content.Intent)>(r1);
+
+        goto label9;
+
+     label5:
+        $r6 = "android.intent.action.DIAL";
+
+        $z1 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z1 != 0 goto label6;
+
+        $r7 = "android.intent.action.CALL";
+
+        $z2 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z2 == 0 goto label7;
+
+     label6:
+        staticinvoke <androidx.car.app.notification.CarPendingIntent: void validatePhoneIntentIsValid(android.content.Intent)>(r1);
+
+        goto label9;
+
+     label7:
+        if r4 != null goto label8;
+
+        $r9 = new java.security.InvalidParameterException;
+
+        specialinvoke $r9.<java.security.InvalidParameterException: void <init>(java.lang.String)>("The intent is not for a supported action");
+
+        throw $r9;
+
+     label8:
+        $r8 = new java.lang.SecurityException;
+
+        specialinvoke $r8.<java.lang.SecurityException: void <init>(java.lang.String)>("Explicitly starting a separate app is not supported");
+
+        throw $r8;
+
+     label9:
+        return;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    private static android.app.PendingIntent createForProjected(android.content.Context, int, android.content.Intent, int)
+    {
+        android.content.Context r0;
+        int i0, i1;
+        android.content.Intent r1;
+        android.content.ComponentName $r2;
+        android.app.PendingIntent $r5;
+        android.os.Parcelable r6;
+
+        r0 := @parameter0: android.content.Context;
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: android.content.Intent;
+
+        i1 := @parameter3: int;
+
+        $r2 = virtualinvoke r1.<android.content.Intent: android.content.ComponentName getComponent()>();
+
+        r6 = (android.os.Parcelable) $r2;
+
+        virtualinvoke r1.<android.content.Intent: android.content.Intent putExtra(java.lang.String,android.os.Parcelable)>("androidx.car.app.notification.COMPONENT_EXTRA_KEY", r6);
+
+        virtualinvoke r1.<android.content.Intent: android.content.Intent setClass(android.content.Context,java.lang.Class)>(r0, class "Landroidx/car/app/notification/CarAppNotificationBroadcastReceiver;");
+
+        $r5 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getBroadcast(android.content.Context,int,android.content.Intent,int)>(r0, i0, r1, i1);
+
+        return $r5;
+    }
+
+    private static android.app.PendingIntent createForAutomotive(android.content.Context, int, android.content.Intent, int)
+    {
+        android.content.Context r0;
+        int i0, i1;
+        android.content.Intent r1;
+        java.lang.String r2, $r4;
+        android.content.ComponentName r3;
+        boolean $z0;
+        android.app.PendingIntent $r6;
+
+        r0 := @parameter0: android.content.Context;
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: android.content.Intent;
+
+        i1 := @parameter3: int;
+
+        r2 = virtualinvoke r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        r3 = virtualinvoke r1.<android.content.Intent: android.content.ComponentName getComponent()>();
+
+        if r3 == null goto label1;
+
+        $r4 = virtualinvoke r3.<android.content.ComponentName: java.lang.String getPackageName()>();
+
+        $z0 = staticinvoke <java.util.Objects: boolean equals(java.lang.Object,java.lang.Object)>($r4, r2);
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r1.<android.content.Intent: android.content.Intent setClassName(java.lang.String,java.lang.String)>(r2, "androidx.car.app.activity.CarAppActivity");
+
+     label1:
+        $r6 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getActivity(android.content.Context,int,android.content.Intent,int)>(r0, i0, r1, i1);
+
+        return $r6;
+    }
+
+    private static void validatePhoneIntentIsValid(android.content.Intent)
+    {
+        android.content.Intent r0;
+        java.lang.String r1, $r2, $r6;
+        boolean $z0;
+        android.content.ComponentName $r3;
+        java.lang.SecurityException $r4;
+        java.security.InvalidParameterException $r5;
+
+        r0 := @parameter0: android.content.Intent;
+
+        $r2 = virtualinvoke r0.<android.content.Intent: java.lang.String getDataString()>();
+
+        if $r2 != null goto label1;
+
+        $r6 = "";
+
+        goto label2;
+
+     label1:
+        $r6 = virtualinvoke r0.<android.content.Intent: java.lang.String getDataString()>();
+
+     label2:
+        r1 = $r6;
+
+        $z0 = virtualinvoke r1.<java.lang.String: boolean startsWith(java.lang.String)>("tel:");
+
+        if $z0 != 0 goto label3;
+
+        $r5 = new java.security.InvalidParameterException;
+
+        specialinvoke $r5.<java.security.InvalidParameterException: void <init>(java.lang.String)>("Phone intent data is not properly formatted");
+
+        throw $r5;
+
+     label3:
+        $r3 = virtualinvoke r0.<android.content.Intent: android.content.ComponentName getComponent()>();
+
+        if $r3 == null goto label4;
+
+        $r4 = new java.lang.SecurityException;
+
+        specialinvoke $r4.<java.lang.SecurityException: void <init>(java.lang.String)>("Phone intent cannot have a component");
+
+        throw $r4;
+
+     label4:
+        return;
+    }
+
+    private static void validateNavigationIntentIsValid(android.content.Intent)
+    {
+        android.content.Intent r0;
+        java.lang.String r1, $r3, $r4, $r5, $r8;
+        android.net.Uri r2;
+        boolean $z0, $z1;
+        java.security.InvalidParameterException $r6, $r7;
+
+        r0 := @parameter0: android.content.Intent;
+
+        $r3 = virtualinvoke r0.<android.content.Intent: java.lang.String getDataString()>();
+
+        if $r3 != null goto label1;
+
+        $r8 = "";
+
+        goto label2;
+
+     label1:
+        $r8 = virtualinvoke r0.<android.content.Intent: java.lang.String getDataString()>();
+
+     label2:
+        r1 = $r8;
+
+        $z0 = virtualinvoke r1.<java.lang.String: boolean startsWith(java.lang.String)>("geo:");
+
+        if $z0 != 0 goto label3;
+
+        $r7 = new java.security.InvalidParameterException;
+
+        specialinvoke $r7.<java.security.InvalidParameterException: void <init>(java.lang.String)>("Navigation intent has a malformed uri");
+
+        throw $r7;
+
+     label3:
+        r2 = virtualinvoke r0.<android.content.Intent: android.net.Uri getData()>();
+
+        $r4 = staticinvoke <androidx.car.app.notification.CarPendingIntent: java.lang.String getQueryString(android.net.Uri)>(r2);
+
+        if $r4 != null goto label4;
+
+        $r5 = virtualinvoke r2.<android.net.Uri: java.lang.String getEncodedSchemeSpecificPart()>();
+
+        $z1 = staticinvoke <androidx.car.app.notification.CarPendingIntent: boolean isLatitudeLongitude(java.lang.String)>($r5);
+
+        if $z1 != 0 goto label4;
+
+        $r6 = new java.security.InvalidParameterException;
+
+        specialinvoke $r6.<java.security.InvalidParameterException: void <init>(java.lang.String)>("Navigation intent has neither a location nor a query string");
+
+        throw $r6;
+
+     label4:
+        return;
+    }
+
+    private static boolean isLatitudeLongitude(java.lang.String)
+    {
+        java.lang.String r0, $r3, $r4;
+        java.lang.String[] r1;
+        java.lang.Throwable r2, $r5;
+        int $i0;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 = virtualinvoke r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(",");
+
+        $i0 = lengthof r1;
+
+        if $i0 != 2 goto label4;
+
+     label1:
+        $r3 = r1[0];
+
+        staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r3);
+
+        $r4 = r1[1];
+
+        staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r4);
+
+     label2:
+        return 1;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+     label4:
+        return 0;
+
+        catch java.lang.NumberFormatException from label1 to label2 with label3;
+    }
+
+    private static java.lang.String getQueryString(android.net.Uri)
+    {
+        android.net.Uri r0;
+        java.lang.String[] r1, $r3;
+        boolean $z0, $z1;
+        int $i0;
+        java.lang.String $r2, $r6, r7, $r8;
+        java.lang.Object $r4;
+        java.util.List r5;
+
+        r0 := @parameter0: android.net.Uri;
+
+        $z0 = virtualinvoke r0.<android.net.Uri: boolean isHierarchical()>();
+
+        if $z0 == 0 goto label3;
+
+        r5 = virtualinvoke r0.<android.net.Uri: java.util.List getQueryParameters(java.lang.String)>("q");
+
+        $z1 = interfaceinvoke r5.<java.util.List: boolean isEmpty()>();
+
+        if $z1 == 0 goto label1;
+
+        $r6 = null;
+
+        goto label2;
+
+     label1:
+        $r4 = interfaceinvoke r5.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r6 = (java.lang.String) $r4;
+
+     label2:
+        return $r6;
+
+     label3:
+        r7 = virtualinvoke r0.<android.net.Uri: java.lang.String getEncodedSchemeSpecificPart()>();
+
+        r1 = virtualinvoke r7.<java.lang.String: java.lang.String[] split(java.lang.String)>("q=");
+
+        $i0 = lengthof r1;
+
+        if $i0 >= 2 goto label4;
+
+        $r8 = null;
+
+        goto label5;
+
+     label4:
+        $r2 = r1[1];
+
+        $r3 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String)>("&");
+
+        $r8 = $r3[0];
+
+     label5:
+        return $r8;
+    }
+
+    private void <init>()
+    {
+        androidx.car.app.notification.CarPendingIntent r0;
+
+        r0 := @this: androidx.car.app.notification.CarPendingIntent;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

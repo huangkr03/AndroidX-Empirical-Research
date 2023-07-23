@@ -1,0 +1,441 @@
+androidx.camera.extensions.ExtensionsInfo
+<androidx.camera.extensions.ExtensionsInfo: java.lang.String EXTENDED_CAMERA_CONFIG_PROVIDER_ID_PREFIX>
+<androidx.camera.extensions.ExtensionsInfo: androidx.camera.core.CameraProvider mCameraProvider>
+    void <init>(androidx.camera.core.CameraProvider)
+    {
+        androidx.camera.extensions.ExtensionsInfo r0;
+        androidx.camera.core.CameraProvider r1;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsInfo;
+
+        r1 := @parameter0: androidx.camera.core.CameraProvider;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.extensions.ExtensionsInfo: androidx.camera.core.CameraProvider mCameraProvider> = r1;
+
+        return;
+    }
+
+    androidx.camera.core.CameraSelector getExtensionCameraSelectorAndInjectCameraConfig(androidx.camera.core.CameraSelector, int)
+    {
+        androidx.camera.extensions.ExtensionsInfo r0;
+        androidx.camera.core.CameraSelector r1, $r6;
+        int i0;
+        androidx.camera.core.CameraFilter r2, $r4;
+        boolean $z0, $z1, $z2;
+        java.util.LinkedHashSet $r3;
+        java.lang.Object $r7;
+        java.lang.IllegalArgumentException $r8, $r9;
+        java.util.Iterator r10;
+        androidx.camera.core.CameraSelector$Builder r11;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsInfo;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        i0 := @parameter1: int;
+
+        $z0 = virtualinvoke r0.<androidx.camera.extensions.ExtensionsInfo: boolean isExtensionAvailable(androidx.camera.core.CameraSelector,int)>(r1, i0);
+
+        if $z0 != 0 goto label1;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("No camera can be found to support the specified extensions mode! isExtensionAvailable should be checked first before calling getExtensionEnabledCameraSelector.");
+
+        throw $r9;
+
+     label1:
+        $r3 = virtualinvoke r1.<androidx.camera.core.CameraSelector: java.util.LinkedHashSet getCameraFilterSet()>();
+
+        r10 = virtualinvoke $r3.<java.util.LinkedHashSet: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r10.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        $r7 = interfaceinvoke r10.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (androidx.camera.core.CameraFilter) $r7;
+
+        $z2 = r2 instanceof androidx.camera.extensions.ExtensionCameraFilter;
+
+        if $z2 == 0 goto label3;
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("An extension is already applied to the base CameraSelector.");
+
+        throw $r8;
+
+     label3:
+        goto label2;
+
+     label4:
+        staticinvoke <androidx.camera.extensions.ExtensionsInfo: void injectExtensionCameraConfig(int)>(i0);
+
+        r11 = staticinvoke <androidx.camera.core.CameraSelector$Builder: androidx.camera.core.CameraSelector$Builder fromSelector(androidx.camera.core.CameraSelector)>(r1);
+
+        $r4 = staticinvoke <androidx.camera.extensions.ExtensionsInfo: androidx.camera.core.CameraFilter getFilter(int)>(i0);
+
+        virtualinvoke r11.<androidx.camera.core.CameraSelector$Builder: androidx.camera.core.CameraSelector$Builder addCameraFilter(androidx.camera.core.CameraFilter)>($r4);
+
+        $r6 = virtualinvoke r11.<androidx.camera.core.CameraSelector$Builder: androidx.camera.core.CameraSelector build()>();
+
+        return $r6;
+    }
+
+    boolean isExtensionAvailable(androidx.camera.core.CameraSelector, int)
+    {
+        androidx.camera.extensions.ExtensionsInfo r0;
+        androidx.camera.core.CameraSelector r1, $r6;
+        int i0;
+        androidx.camera.core.CameraSelector$Builder r2;
+        java.util.List r3, $r8;
+        androidx.camera.core.CameraFilter $r4;
+        androidx.camera.core.CameraProvider $r7;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsInfo;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        i0 := @parameter1: int;
+
+        r2 = staticinvoke <androidx.camera.core.CameraSelector$Builder: androidx.camera.core.CameraSelector$Builder fromSelector(androidx.camera.core.CameraSelector)>(r1);
+
+        $r4 = staticinvoke <androidx.camera.extensions.ExtensionsInfo: androidx.camera.core.CameraFilter getFilter(int)>(i0);
+
+        virtualinvoke r2.<androidx.camera.core.CameraSelector$Builder: androidx.camera.core.CameraSelector$Builder addCameraFilter(androidx.camera.core.CameraFilter)>($r4);
+
+        $r6 = virtualinvoke r2.<androidx.camera.core.CameraSelector$Builder: androidx.camera.core.CameraSelector build()>();
+
+        $r7 = r0.<androidx.camera.extensions.ExtensionsInfo: androidx.camera.core.CameraProvider mCameraProvider>;
+
+        $r8 = interfaceinvoke $r7.<androidx.camera.core.CameraProvider: java.util.List getAvailableCameraInfos()>();
+
+        r3 = virtualinvoke $r6.<androidx.camera.core.CameraSelector: java.util.List filter(java.util.List)>($r8);
+
+        $z0 = interfaceinvoke r3.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    android.util.Range getEstimatedCaptureLatencyRange(androidx.camera.core.CameraSelector, int, android.util.Size)
+    {
+        androidx.camera.extensions.ExtensionsInfo r0;
+        androidx.camera.core.CameraSelector r1, r3;
+        int i0, $i1;
+        android.util.Size r2;
+        androidx.camera.core.CameraInfo r4;
+        java.util.List r5, $r10;
+        androidx.camera.core.CameraSelector$Builder $r6, $r8;
+        androidx.camera.core.CameraFilter $r7;
+        androidx.camera.core.CameraProvider $r9;
+        boolean $z0;
+        java.lang.Object $r11;
+        androidx.camera.extensions.internal.Version $r12, $r13;
+        android.util.Range $r14;
+        java.lang.IllegalArgumentException $r15;
+        java.lang.Throwable $r16, r18;
+        androidx.camera.extensions.internal.VendorExtender r17;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsInfo;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: android.util.Size;
+
+        $r6 = staticinvoke <androidx.camera.core.CameraSelector$Builder: androidx.camera.core.CameraSelector$Builder fromSelector(androidx.camera.core.CameraSelector)>(r1);
+
+        $r7 = staticinvoke <androidx.camera.extensions.ExtensionsInfo: androidx.camera.core.CameraFilter getFilter(int)>(i0);
+
+        $r8 = virtualinvoke $r6.<androidx.camera.core.CameraSelector$Builder: androidx.camera.core.CameraSelector$Builder addCameraFilter(androidx.camera.core.CameraFilter)>($r7);
+
+        r3 = virtualinvoke $r8.<androidx.camera.core.CameraSelector$Builder: androidx.camera.core.CameraSelector build()>();
+
+        $r9 = r0.<androidx.camera.extensions.ExtensionsInfo: androidx.camera.core.CameraProvider mCameraProvider>;
+
+        $r10 = interfaceinvoke $r9.<androidx.camera.core.CameraProvider: java.util.List getAvailableCameraInfos()>();
+
+        r5 = virtualinvoke r3.<androidx.camera.core.CameraSelector: java.util.List filter(java.util.List)>($r10);
+
+        $z0 = interfaceinvoke r5.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r15 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r15.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("No cameras found for given CameraSelector");
+
+        throw $r15;
+
+     label1:
+        $r11 = interfaceinvoke r5.<java.util.List: java.lang.Object get(int)>(0);
+
+        r4 = (androidx.camera.core.CameraInfo) $r11;
+
+        $r12 = staticinvoke <androidx.camera.extensions.internal.ExtensionVersion: androidx.camera.extensions.internal.Version getRuntimeVersion()>();
+
+        $r13 = <androidx.camera.extensions.internal.Version: androidx.camera.extensions.internal.Version VERSION_1_2>;
+
+        $i1 = virtualinvoke $r12.<androidx.camera.extensions.internal.Version: int compareTo(androidx.camera.extensions.internal.Version)>($r13);
+
+        if $i1 >= 0 goto label2;
+
+        return null;
+
+     label2:
+        r17 = staticinvoke <androidx.camera.extensions.ExtensionsInfo: androidx.camera.extensions.internal.VendorExtender getVendorExtender(int)>(i0);
+
+        interfaceinvoke r17.<androidx.camera.extensions.internal.VendorExtender: void init(androidx.camera.core.CameraInfo)>(r4);
+
+        $r14 = interfaceinvoke r17.<androidx.camera.extensions.internal.VendorExtender: android.util.Range getEstimatedCaptureLatencyRange(android.util.Size)>(r2);
+
+     label3:
+        return $r14;
+
+     label4:
+        $r16 := @caughtexception;
+
+        r18 = $r16;
+
+        return null;
+
+        catch java.lang.NoSuchMethodError from label2 to label3 with label4;
+    }
+
+    private static androidx.camera.core.CameraFilter getFilter(int)
+    {
+        int i0;
+        androidx.camera.extensions.ExtensionCameraFilter r0, $r3;
+        java.lang.String r1;
+        androidx.camera.extensions.internal.VendorExtender r2;
+
+        i0 := @parameter0: int;
+
+        r1 = staticinvoke <androidx.camera.extensions.ExtensionsInfo: java.lang.String getExtendedCameraConfigProviderId(int)>(i0);
+
+        r2 = staticinvoke <androidx.camera.extensions.ExtensionsInfo: androidx.camera.extensions.internal.VendorExtender getVendorExtender(int)>(i0);
+
+        $r3 = new androidx.camera.extensions.ExtensionCameraFilter;
+
+        specialinvoke $r3.<androidx.camera.extensions.ExtensionCameraFilter: void <init>(java.lang.String,androidx.camera.extensions.internal.VendorExtender)>(r1, r2);
+
+        r0 = $r3;
+
+        return r0;
+    }
+
+    private static void injectExtensionCameraConfig(int)
+    {
+        int i0;
+        androidx.camera.core.impl.Identifier r0;
+        java.lang.String $r1;
+        androidx.camera.core.impl.CameraConfigProvider $r2, $r3, $r4;
+
+        i0 := @parameter0: int;
+
+        $r1 = staticinvoke <androidx.camera.extensions.ExtensionsInfo: java.lang.String getExtendedCameraConfigProviderId(int)>(i0);
+
+        r0 = staticinvoke <androidx.camera.core.impl.Identifier: androidx.camera.core.impl.Identifier create(java.lang.Object)>($r1);
+
+        $r2 = staticinvoke <androidx.camera.core.impl.ExtendedCameraConfigProviderStore: androidx.camera.core.impl.CameraConfigProvider getConfigProvider(java.lang.Object)>(r0);
+
+        $r3 = <androidx.camera.core.impl.CameraConfigProvider: androidx.camera.core.impl.CameraConfigProvider EMPTY>;
+
+        if $r2 != $r3 goto label1;
+
+        $r4 = dynamicinvoke "getConfig" <androidx.camera.core.impl.CameraConfigProvider (int,androidx.camera.core.impl.Identifier)>(i0, r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: androidx.camera.core.impl.CameraConfig __METHODTYPE__(androidx.camera.core.CameraInfo,android.content.Context), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.extensions.ExtensionsInfo: androidx.camera.core.impl.CameraConfig lambda$injectExtensionCameraConfig$0(int,androidx.camera.core.impl.Identifier,androidx.camera.core.CameraInfo,android.content.Context)>, methodtype: androidx.camera.core.impl.CameraConfig __METHODTYPE__(androidx.camera.core.CameraInfo,android.content.Context));
+
+        staticinvoke <androidx.camera.core.impl.ExtendedCameraConfigProviderStore: void addConfig(java.lang.Object,androidx.camera.core.impl.CameraConfigProvider)>(r0, $r4);
+
+     label1:
+        return;
+    }
+
+    private static androidx.camera.extensions.internal.VendorExtender getVendorExtender(int)
+    {
+        int i0;
+        boolean z0;
+        androidx.camera.extensions.internal.BasicVendorExtender $r0;
+        androidx.camera.extensions.internal.AdvancedVendorExtender $r1;
+        androidx.camera.extensions.internal.VendorExtender r2;
+
+        i0 := @parameter0: int;
+
+        z0 = staticinvoke <androidx.camera.extensions.ExtensionsInfo: boolean isAdvancedExtenderSupported()>();
+
+        if z0 == 0 goto label1;
+
+        $r1 = new androidx.camera.extensions.internal.AdvancedVendorExtender;
+
+        specialinvoke $r1.<androidx.camera.extensions.internal.AdvancedVendorExtender: void <init>(int)>(i0);
+
+        r2 = $r1;
+
+        goto label2;
+
+     label1:
+        $r0 = new androidx.camera.extensions.internal.BasicVendorExtender;
+
+        specialinvoke $r0.<androidx.camera.extensions.internal.BasicVendorExtender: void <init>(int)>(i0);
+
+        r2 = $r0;
+
+     label2:
+        return r2;
+    }
+
+    private static boolean isAdvancedExtenderSupported()
+    {
+        androidx.camera.extensions.internal.Version $r0, $r1;
+        int $i0;
+        boolean $z0;
+
+        $r0 = staticinvoke <androidx.camera.extensions.internal.ExtensionVersion: androidx.camera.extensions.internal.Version getRuntimeVersion()>();
+
+        $r1 = <androidx.camera.extensions.internal.Version: androidx.camera.extensions.internal.Version VERSION_1_2>;
+
+        $i0 = virtualinvoke $r0.<androidx.camera.extensions.internal.Version: int compareTo(androidx.camera.extensions.internal.Version)>($r1);
+
+        if $i0 >= 0 goto label1;
+
+        return 0;
+
+     label1:
+        $z0 = staticinvoke <androidx.camera.extensions.internal.ExtensionVersion: boolean isAdvancedExtenderSupported()>();
+
+        return $z0;
+    }
+
+    private static java.lang.String getExtendedCameraConfigProviderId(int)
+    {
+        int i0;
+        java.lang.IllegalArgumentException $r0;
+        java.lang.String r1;
+
+        i0 := @parameter0: int;
+
+        tableswitch(i0)
+        {
+            case 0: goto label6;
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label3;
+            case 4: goto label4;
+            case 5: goto label5;
+            default: goto label7;
+        };
+
+     label1:
+        r1 = ":camera:camera-extensions-EXTENSION_MODE_BOKEH";
+
+        goto label8;
+
+     label2:
+        r1 = ":camera:camera-extensions-EXTENSION_MODE_HDR";
+
+        goto label8;
+
+     label3:
+        r1 = ":camera:camera-extensions-EXTENSION_MODE_NIGHT";
+
+        goto label8;
+
+     label4:
+        r1 = ":camera:camera-extensions-EXTENSION_MODE_FACE_RETOUCH";
+
+        goto label8;
+
+     label5:
+        r1 = ":camera:camera-extensions-EXTENSION_MODE_AUTO";
+
+        goto label8;
+
+     label6:
+        r1 = ":camera:camera-extensions-EXTENSION_MODE_NONE";
+
+        goto label8;
+
+     label7:
+        $r0 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r0.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Invalid extension mode!");
+
+        throw $r0;
+
+     label8:
+        return r1;
+    }
+
+    private static androidx.camera.core.impl.CameraConfig lambda$injectExtensionCameraConfig$0(int, androidx.camera.core.impl.Identifier, androidx.camera.core.CameraInfo, android.content.Context)
+    {
+        int i0;
+        androidx.camera.core.impl.Identifier r0;
+        androidx.camera.core.CameraInfo r1;
+        android.content.Context r2;
+        androidx.camera.extensions.internal.VendorExtender r3;
+        androidx.camera.extensions.internal.ExtensionsUseCaseConfigFactory r4, $r7;
+        androidx.camera.extensions.ExtensionsConfig$Builder r5, $r8, $r9, $r10, $r11, $r12;
+        androidx.camera.core.impl.SessionProcessor r6;
+        androidx.camera.extensions.ExtensionsConfig $r13;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: androidx.camera.core.impl.Identifier;
+
+        r1 := @parameter2: androidx.camera.core.CameraInfo;
+
+        r2 := @parameter3: android.content.Context;
+
+        r3 = staticinvoke <androidx.camera.extensions.ExtensionsInfo: androidx.camera.extensions.internal.VendorExtender getVendorExtender(int)>(i0);
+
+        interfaceinvoke r3.<androidx.camera.extensions.internal.VendorExtender: void init(androidx.camera.core.CameraInfo)>(r1);
+
+        $r7 = new androidx.camera.extensions.internal.ExtensionsUseCaseConfigFactory;
+
+        specialinvoke $r7.<androidx.camera.extensions.internal.ExtensionsUseCaseConfigFactory: void <init>(int,androidx.camera.extensions.internal.VendorExtender,android.content.Context)>(i0, r3, r2);
+
+        r4 = $r7;
+
+        $r8 = new androidx.camera.extensions.ExtensionsConfig$Builder;
+
+        specialinvoke $r8.<androidx.camera.extensions.ExtensionsConfig$Builder: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<androidx.camera.extensions.ExtensionsConfig$Builder: androidx.camera.extensions.ExtensionsConfig$Builder setExtensionMode(int)>(i0);
+
+        $r10 = virtualinvoke $r9.<androidx.camera.extensions.ExtensionsConfig$Builder: androidx.camera.extensions.ExtensionsConfig$Builder setUseCaseConfigFactory(androidx.camera.core.impl.UseCaseConfigFactory)>(r4);
+
+        $r11 = virtualinvoke $r10.<androidx.camera.extensions.ExtensionsConfig$Builder: androidx.camera.extensions.ExtensionsConfig$Builder setCompatibilityId(androidx.camera.core.impl.Identifier)>(r0);
+
+        $r12 = virtualinvoke $r11.<androidx.camera.extensions.ExtensionsConfig$Builder: androidx.camera.extensions.ExtensionsConfig$Builder setZslDisabled(boolean)>(1);
+
+        r5 = virtualinvoke $r12.<androidx.camera.extensions.ExtensionsConfig$Builder: androidx.camera.extensions.ExtensionsConfig$Builder setUseCaseCombinationRequiredRule(int)>(1);
+
+        r6 = interfaceinvoke r3.<androidx.camera.extensions.internal.VendorExtender: androidx.camera.core.impl.SessionProcessor createSessionProcessor(android.content.Context)>(r2);
+
+        if r6 == null goto label1;
+
+        virtualinvoke r5.<androidx.camera.extensions.ExtensionsConfig$Builder: androidx.camera.extensions.ExtensionsConfig$Builder setSessionProcessor(androidx.camera.core.impl.SessionProcessor)>(r6);
+
+     label1:
+        $r13 = virtualinvoke r5.<androidx.camera.extensions.ExtensionsConfig$Builder: androidx.camera.extensions.ExtensionsConfig build()>();
+
+        return $r13;
+    }
+

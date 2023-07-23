@@ -1,0 +1,121 @@
+androidx.media3.extractor.Id3Peeker
+<androidx.media3.extractor.Id3Peeker: androidx.media3.common.util.ParsableByteArray scratch>
+    public void <init>()
+    {
+        androidx.media3.extractor.Id3Peeker r0;
+        androidx.media3.common.util.ParsableByteArray $r1;
+
+        r0 := @this: androidx.media3.extractor.Id3Peeker;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r1.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(10);
+
+        r0.<androidx.media3.extractor.Id3Peeker: androidx.media3.common.util.ParsableByteArray scratch> = $r1;
+
+        return;
+    }
+
+    public androidx.media3.common.Metadata peekId3Data(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.metadata.id3.Id3Decoder$FramePredicate) throws java.io.IOException
+    {
+        androidx.media3.extractor.Id3Peeker r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.metadata.id3.Id3Decoder$FramePredicate r2;
+        int i0, $i1, i2, i3;
+        byte[] r3, $r5, $r11;
+        androidx.media3.common.util.ParsableByteArray $r4, $r6, $r7, $r8, $r9, $r10;
+        androidx.media3.extractor.metadata.id3.Id3Decoder $r12;
+        java.lang.Throwable $r13, r15;
+        androidx.media3.common.Metadata r14;
+
+        r0 := @this: androidx.media3.extractor.Id3Peeker;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: androidx.media3.extractor.metadata.id3.Id3Decoder$FramePredicate;
+
+        i2 = 0;
+
+        r14 = null;
+
+     label1:
+        $r4 = r0.<androidx.media3.extractor.Id3Peeker: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $r5 = virtualinvoke $r4.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r5, 0, 10);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r13 := @caughtexception;
+
+        r15 = $r13;
+
+        goto label8;
+
+     label4:
+        $r6 = r0.<androidx.media3.extractor.Id3Peeker: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r6.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r7 = r0.<androidx.media3.extractor.Id3Peeker: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $i1 = virtualinvoke $r7.<androidx.media3.common.util.ParsableByteArray: int readUnsignedInt24()>();
+
+        if $i1 == 4801587 goto label5;
+
+        goto label8;
+
+     label5:
+        $r8 = r0.<androidx.media3.extractor.Id3Peeker: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r8.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(3);
+
+        $r9 = r0.<androidx.media3.extractor.Id3Peeker: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        i3 = virtualinvoke $r9.<androidx.media3.common.util.ParsableByteArray: int readSynchSafeInt()>();
+
+        i0 = 10 + i3;
+
+        if r14 != null goto label6;
+
+        r3 = newarray (byte)[i0];
+
+        $r10 = r0.<androidx.media3.extractor.Id3Peeker: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $r11 = virtualinvoke $r10.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r11, 0, r3, 0, 10);
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>(r3, 10, i3);
+
+        $r12 = new androidx.media3.extractor.metadata.id3.Id3Decoder;
+
+        specialinvoke $r12.<androidx.media3.extractor.metadata.id3.Id3Decoder: void <init>(androidx.media3.extractor.metadata.id3.Id3Decoder$FramePredicate)>(r2);
+
+        r14 = virtualinvoke $r12.<androidx.media3.extractor.metadata.id3.Id3Decoder: androidx.media3.common.Metadata decode(byte[],int)>(r3, i0);
+
+        goto label7;
+
+     label6:
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(i3);
+
+     label7:
+        i2 = i2 + i0;
+
+        goto label1;
+
+     label8:
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(i2);
+
+        return r14;
+
+        catch java.io.EOFException from label1 to label2 with label3;
+    }
+

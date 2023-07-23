@@ -1,0 +1,887 @@
+androidx.core.provider.FontRequestWorker
+<androidx.core.provider.FontRequestWorker: androidx.collection.LruCache sTypefaceCache>
+<androidx.core.provider.FontRequestWorker: java.util.concurrent.ExecutorService DEFAULT_EXECUTOR_SERVICE>
+<androidx.core.provider.FontRequestWorker: java.lang.Object LOCK>
+<androidx.core.provider.FontRequestWorker: androidx.collection.SimpleArrayMap PENDING_REPLIES>
+    private void <init>()
+    {
+        androidx.core.provider.FontRequestWorker r0;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void resetTypefaceCache()
+    {
+        androidx.collection.LruCache $r0;
+
+        $r0 = <androidx.core.provider.FontRequestWorker: androidx.collection.LruCache sTypefaceCache>;
+
+        virtualinvoke $r0.<androidx.collection.LruCache: void evictAll()>();
+
+        return;
+    }
+
+    static android.graphics.Typeface requestFontSync(android.content.Context, androidx.core.provider.FontRequest, androidx.core.provider.CallbackWithHandler, int, int)
+    {
+        android.content.Context r0;
+        androidx.core.provider.FontRequest r1;
+        androidx.core.provider.CallbackWithHandler r2;
+        int i0, i1;
+        java.lang.String r3;
+        android.graphics.Typeface r4, $r10, $r11;
+        androidx.collection.LruCache $r5;
+        java.lang.Object $r6, $r9;
+        androidx.core.provider.FontRequestWorker$1 $r7, r16;
+        java.util.concurrent.ExecutorService $r8;
+        androidx.core.provider.FontRequestWorker$TypefaceResult $r12, $r14, r15, r17;
+        java.lang.Throwable $r13, r18;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.core.provider.FontRequest;
+
+        r2 := @parameter2: androidx.core.provider.CallbackWithHandler;
+
+        i0 := @parameter3: int;
+
+        i1 := @parameter4: int;
+
+        r3 = staticinvoke <androidx.core.provider.FontRequestWorker: java.lang.String createCacheId(androidx.core.provider.FontRequest,int)>(r1, i0);
+
+        $r5 = <androidx.core.provider.FontRequestWorker: androidx.collection.LruCache sTypefaceCache>;
+
+        $r6 = virtualinvoke $r5.<androidx.collection.LruCache: java.lang.Object get(java.lang.Object)>(r3);
+
+        r4 = (android.graphics.Typeface) $r6;
+
+        if r4 == null goto label1;
+
+        $r12 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke $r12.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(android.graphics.Typeface)>(r4);
+
+        virtualinvoke r2.<androidx.core.provider.CallbackWithHandler: void onTypefaceResult(androidx.core.provider.FontRequestWorker$TypefaceResult)>($r12);
+
+        return r4;
+
+     label1:
+        if i1 != -1 goto label2;
+
+        r15 = staticinvoke <androidx.core.provider.FontRequestWorker: androidx.core.provider.FontRequestWorker$TypefaceResult getFontSync(java.lang.String,android.content.Context,androidx.core.provider.FontRequest,int)>(r3, r0, r1, i0);
+
+        virtualinvoke r2.<androidx.core.provider.CallbackWithHandler: void onTypefaceResult(androidx.core.provider.FontRequestWorker$TypefaceResult)>(r15);
+
+        $r11 = r15.<androidx.core.provider.FontRequestWorker$TypefaceResult: android.graphics.Typeface mTypeface>;
+
+        return $r11;
+
+     label2:
+        $r7 = new androidx.core.provider.FontRequestWorker$1;
+
+        specialinvoke $r7.<androidx.core.provider.FontRequestWorker$1: void <init>(java.lang.String,android.content.Context,androidx.core.provider.FontRequest,int)>(r3, r0, r1, i0);
+
+        r16 = $r7;
+
+     label3:
+        $r8 = <androidx.core.provider.FontRequestWorker: java.util.concurrent.ExecutorService DEFAULT_EXECUTOR_SERVICE>;
+
+        $r9 = staticinvoke <androidx.core.provider.RequestExecutor: java.lang.Object submit(java.util.concurrent.ExecutorService,java.util.concurrent.Callable,int)>($r8, r16, i1);
+
+        r17 = (androidx.core.provider.FontRequestWorker$TypefaceResult) $r9;
+
+        virtualinvoke r2.<androidx.core.provider.CallbackWithHandler: void onTypefaceResult(androidx.core.provider.FontRequestWorker$TypefaceResult)>(r17);
+
+        $r10 = r17.<androidx.core.provider.FontRequestWorker$TypefaceResult: android.graphics.Typeface mTypeface>;
+
+     label4:
+        return $r10;
+
+     label5:
+        $r13 := @caughtexception;
+
+        r18 = $r13;
+
+        $r14 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke $r14.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(int)>(-3);
+
+        virtualinvoke r2.<androidx.core.provider.CallbackWithHandler: void onTypefaceResult(androidx.core.provider.FontRequestWorker$TypefaceResult)>($r14);
+
+        return null;
+
+        catch java.lang.InterruptedException from label3 to label4 with label5;
+    }
+
+    static android.graphics.Typeface requestFontAsync(android.content.Context, androidx.core.provider.FontRequest, int, java.util.concurrent.Executor, androidx.core.provider.CallbackWithHandler)
+    {
+        android.content.Context r0;
+        androidx.core.provider.FontRequest r1;
+        int i0;
+        java.util.concurrent.Executor r2, r32;
+        androidx.core.provider.CallbackWithHandler r3;
+        java.lang.String r4;
+        android.graphics.Typeface r5;
+        androidx.core.provider.FontRequestWorker$2 r6, r28;
+        java.lang.Throwable r7, $r20;
+        androidx.collection.LruCache $r8;
+        java.lang.Object $r9, $r11, $r13, r21, $r25, r26;
+        androidx.collection.SimpleArrayMap $r12, $r15;
+        java.util.ArrayList r22, r23, r29;
+        androidx.core.provider.FontRequestWorker$3 r24, r30;
+        androidx.core.provider.FontRequestWorker$TypefaceResult r27;
+        androidx.core.provider.FontRequestWorker$4 r31;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.core.provider.FontRequest;
+
+        i0 := @parameter2: int;
+
+        r2 := @parameter3: java.util.concurrent.Executor;
+
+        r3 := @parameter4: androidx.core.provider.CallbackWithHandler;
+
+        r4 = staticinvoke <androidx.core.provider.FontRequestWorker: java.lang.String createCacheId(androidx.core.provider.FontRequest,int)>(r1, i0);
+
+        $r8 = <androidx.core.provider.FontRequestWorker: androidx.collection.LruCache sTypefaceCache>;
+
+        $r9 = virtualinvoke $r8.<androidx.collection.LruCache: java.lang.Object get(java.lang.Object)>(r4);
+
+        r5 = (android.graphics.Typeface) $r9;
+
+        if r5 == null goto label01;
+
+        r27 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke r27.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(android.graphics.Typeface)>(r5);
+
+        virtualinvoke r3.<androidx.core.provider.CallbackWithHandler: void onTypefaceResult(androidx.core.provider.FontRequestWorker$TypefaceResult)>(r27);
+
+        return r5;
+
+     label01:
+        r28 = new androidx.core.provider.FontRequestWorker$2;
+
+        specialinvoke r28.<androidx.core.provider.FontRequestWorker$2: void <init>(androidx.core.provider.CallbackWithHandler)>(r3);
+
+        r6 = r28;
+
+        $r11 = <androidx.core.provider.FontRequestWorker: java.lang.Object LOCK>;
+
+        r21 = $r11;
+
+        entermonitor $r11;
+
+     label02:
+        $r12 = <androidx.core.provider.FontRequestWorker: androidx.collection.SimpleArrayMap PENDING_REPLIES>;
+
+        $r13 = virtualinvoke $r12.<androidx.collection.SimpleArrayMap: java.lang.Object get(java.lang.Object)>(r4);
+
+        r22 = (java.util.ArrayList) $r13;
+
+        if r22 == null goto label04;
+
+        virtualinvoke r22.<java.util.ArrayList: boolean add(java.lang.Object)>(r6);
+
+        exitmonitor r21;
+
+     label03:
+        return null;
+
+     label04:
+        r29 = new java.util.ArrayList;
+
+        specialinvoke r29.<java.util.ArrayList: void <init>()>();
+
+        r23 = r29;
+
+        virtualinvoke r23.<java.util.ArrayList: boolean add(java.lang.Object)>(r6);
+
+        $r15 = <androidx.core.provider.FontRequestWorker: androidx.collection.SimpleArrayMap PENDING_REPLIES>;
+
+        virtualinvoke $r15.<androidx.collection.SimpleArrayMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(r4, r23);
+
+        exitmonitor r21;
+
+     label05:
+        goto label08;
+
+     label06:
+        $r20 := @caughtexception;
+
+        r7 = $r20;
+
+        exitmonitor r21;
+
+     label07:
+        throw r7;
+
+     label08:
+        r30 = new androidx.core.provider.FontRequestWorker$3;
+
+        specialinvoke r30.<androidx.core.provider.FontRequestWorker$3: void <init>(java.lang.String,android.content.Context,androidx.core.provider.FontRequest,int)>(r4, r0, r1, i0);
+
+        r24 = r30;
+
+        if r2 != null goto label09;
+
+        $r25 = <androidx.core.provider.FontRequestWorker: java.util.concurrent.ExecutorService DEFAULT_EXECUTOR_SERVICE>;
+
+        goto label10;
+
+     label09:
+        $r25 = r2;
+
+     label10:
+        r26 = $r25;
+
+        r31 = new androidx.core.provider.FontRequestWorker$4;
+
+        specialinvoke r31.<androidx.core.provider.FontRequestWorker$4: void <init>(java.lang.String)>(r4);
+
+        r32 = (java.util.concurrent.Executor) r26;
+
+        staticinvoke <androidx.core.provider.RequestExecutor: void execute(java.util.concurrent.Executor,java.util.concurrent.Callable,androidx.core.util.Consumer)>(r32, r24, r31);
+
+        return null;
+
+        catch java.lang.Throwable from label02 to label03 with label06;
+        catch java.lang.Throwable from label04 to label05 with label06;
+        catch java.lang.Throwable from label06 to label07 with label06;
+    }
+
+    private static java.lang.String createCacheId(androidx.core.provider.FontRequest, int)
+    {
+        androidx.core.provider.FontRequest r0;
+        int i0;
+        java.lang.StringBuilder $r1, $r3, $r4, $r5;
+        java.lang.String $r2, $r6;
+
+        r0 := @parameter0: androidx.core.provider.FontRequest;
+
+        i0 := @parameter1: int;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke r0.<androidx.core.provider.FontRequest: java.lang.String getId()>();
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+
+    static androidx.core.provider.FontRequestWorker$TypefaceResult getFontSync(java.lang.String, android.content.Context, androidx.core.provider.FontRequest, int)
+    {
+        java.lang.String r0;
+        android.content.Context r1;
+        androidx.core.provider.FontRequest r2;
+        int i0, i1;
+        android.graphics.Typeface r3, r5;
+        androidx.core.provider.FontsContractCompat$FontFamilyResult r4;
+        androidx.collection.LruCache $r6, $r10;
+        java.lang.Object $r7;
+        androidx.core.provider.FontsContractCompat$FontInfo[] $r8;
+        androidx.core.provider.FontRequestWorker$TypefaceResult $r9, $r12, $r13, $r14, $r16;
+        java.lang.Throwable $r15, r17;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: android.content.Context;
+
+        r2 := @parameter2: androidx.core.provider.FontRequest;
+
+        i0 := @parameter3: int;
+
+        $r6 = <androidx.core.provider.FontRequestWorker: androidx.collection.LruCache sTypefaceCache>;
+
+        $r7 = virtualinvoke $r6.<androidx.collection.LruCache: java.lang.Object get(java.lang.Object)>(r0);
+
+        r3 = (android.graphics.Typeface) $r7;
+
+        if r3 == null goto label1;
+
+        $r14 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke $r14.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(android.graphics.Typeface)>(r3);
+
+        return $r14;
+
+     label1:
+        r4 = staticinvoke <androidx.core.provider.FontProvider: androidx.core.provider.FontsContractCompat$FontFamilyResult getFontFamilyResult(android.content.Context,androidx.core.provider.FontRequest,android.os.CancellationSignal)>(r1, r2, null);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r15 := @caughtexception;
+
+        r17 = $r15;
+
+        $r16 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke $r16.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(int)>(-1);
+
+        return $r16;
+
+     label4:
+        i1 = staticinvoke <androidx.core.provider.FontRequestWorker: int getFontFamilyResultStatus(androidx.core.provider.FontsContractCompat$FontFamilyResult)>(r4);
+
+        if i1 == 0 goto label5;
+
+        $r13 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke $r13.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(int)>(i1);
+
+        return $r13;
+
+     label5:
+        $r8 = virtualinvoke r4.<androidx.core.provider.FontsContractCompat$FontFamilyResult: androidx.core.provider.FontsContractCompat$FontInfo[] getFonts()>();
+
+        r5 = staticinvoke <androidx.core.graphics.TypefaceCompat: android.graphics.Typeface createFromFontInfo(android.content.Context,android.os.CancellationSignal,androidx.core.provider.FontsContractCompat$FontInfo[],int)>(r1, null, $r8, i0);
+
+        if r5 == null goto label6;
+
+        $r10 = <androidx.core.provider.FontRequestWorker: androidx.collection.LruCache sTypefaceCache>;
+
+        virtualinvoke $r10.<androidx.collection.LruCache: java.lang.Object put(java.lang.Object,java.lang.Object)>(r0, r5);
+
+        $r12 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke $r12.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(android.graphics.Typeface)>(r5);
+
+        return $r12;
+
+     label6:
+        $r9 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke $r9.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(int)>(-3);
+
+        return $r9;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    private static int getFontFamilyResultStatus(androidx.core.provider.FontsContractCompat$FontFamilyResult)
+    {
+        androidx.core.provider.FontsContractCompat$FontFamilyResult r0;
+        androidx.core.provider.FontsContractCompat$FontInfo[] r1, r2;
+        int i0, i1, $i2, $i3, $i4, i5, $i6;
+        androidx.core.provider.FontsContractCompat$FontInfo r3;
+
+        r0 := @parameter0: androidx.core.provider.FontsContractCompat$FontFamilyResult;
+
+        $i2 = virtualinvoke r0.<androidx.core.provider.FontsContractCompat$FontFamilyResult: int getStatusCode()>();
+
+        if $i2 == 0 goto label03;
+
+        $i4 = virtualinvoke r0.<androidx.core.provider.FontsContractCompat$FontFamilyResult: int getStatusCode()>();
+
+        lookupswitch($i4)
+        {
+            case 1: goto label01;
+            default: goto label02;
+        };
+
+     label01:
+        return -2;
+
+     label02:
+        return -3;
+
+     label03:
+        r1 = virtualinvoke r0.<androidx.core.provider.FontsContractCompat$FontFamilyResult: androidx.core.provider.FontsContractCompat$FontInfo[] getFonts()>();
+
+        if r1 == null goto label04;
+
+        $i3 = lengthof r1;
+
+        if $i3 != 0 goto label05;
+
+     label04:
+        return 1;
+
+     label05:
+        r2 = r1;
+
+        i0 = lengthof r2;
+
+        i5 = 0;
+
+     label06:
+        if i5 >= i0 goto label10;
+
+        r3 = r2[i5];
+
+        i1 = virtualinvoke r3.<androidx.core.provider.FontsContractCompat$FontInfo: int getResultCode()>();
+
+        if i1 == 0 goto label09;
+
+        if i1 >= 0 goto label07;
+
+        $i6 = -3;
+
+        goto label08;
+
+     label07:
+        $i6 = i1;
+
+     label08:
+        return $i6;
+
+     label09:
+        i5 = i5 + 1;
+
+        goto label06;
+
+     label10:
+        return 0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.collection.LruCache $r0;
+        java.util.concurrent.ThreadPoolExecutor $r1;
+        java.lang.Object $r2;
+        androidx.collection.SimpleArrayMap $r3;
+
+        $r0 = new androidx.collection.LruCache;
+
+        specialinvoke $r0.<androidx.collection.LruCache: void <init>(int)>(16);
+
+        <androidx.core.provider.FontRequestWorker: androidx.collection.LruCache sTypefaceCache> = $r0;
+
+        $r1 = staticinvoke <androidx.core.provider.RequestExecutor: java.util.concurrent.ThreadPoolExecutor createDefaultExecutor(java.lang.String,int,int)>("fonts-androidx", 10, 10000);
+
+        <androidx.core.provider.FontRequestWorker: java.util.concurrent.ExecutorService DEFAULT_EXECUTOR_SERVICE> = $r1;
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        <androidx.core.provider.FontRequestWorker: java.lang.Object LOCK> = $r2;
+
+        $r3 = new androidx.collection.SimpleArrayMap;
+
+        specialinvoke $r3.<androidx.collection.SimpleArrayMap: void <init>()>();
+
+        <androidx.core.provider.FontRequestWorker: androidx.collection.SimpleArrayMap PENDING_REPLIES> = $r3;
+
+        return;
+    }
+
+androidx.core.provider.FontRequestWorker$1
+<androidx.core.provider.FontRequestWorker$1: java.lang.String val$id>
+<androidx.core.provider.FontRequestWorker$1: android.content.Context val$context>
+<androidx.core.provider.FontRequestWorker$1: androidx.core.provider.FontRequest val$request>
+<androidx.core.provider.FontRequestWorker$1: int val$style>
+    void <init>(java.lang.String, android.content.Context, androidx.core.provider.FontRequest, int)
+    {
+        androidx.core.provider.FontRequestWorker$1 r0;
+        java.lang.String r1;
+        android.content.Context r2;
+        androidx.core.provider.FontRequest r3;
+        int i0;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$1;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: android.content.Context;
+
+        r3 := @parameter2: androidx.core.provider.FontRequest;
+
+        i0 := @parameter3: int;
+
+        r0.<androidx.core.provider.FontRequestWorker$1: java.lang.String val$id> = r1;
+
+        r0.<androidx.core.provider.FontRequestWorker$1: android.content.Context val$context> = r2;
+
+        r0.<androidx.core.provider.FontRequestWorker$1: androidx.core.provider.FontRequest val$request> = r3;
+
+        r0.<androidx.core.provider.FontRequestWorker$1: int val$style> = i0;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public androidx.core.provider.FontRequestWorker$TypefaceResult call()
+    {
+        androidx.core.provider.FontRequestWorker$1 r0;
+        int $i0;
+        androidx.core.provider.FontRequest $r1;
+        android.content.Context $r2;
+        java.lang.String $r3;
+        androidx.core.provider.FontRequestWorker$TypefaceResult $r4;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$1;
+
+        $r3 = r0.<androidx.core.provider.FontRequestWorker$1: java.lang.String val$id>;
+
+        $r2 = r0.<androidx.core.provider.FontRequestWorker$1: android.content.Context val$context>;
+
+        $r1 = r0.<androidx.core.provider.FontRequestWorker$1: androidx.core.provider.FontRequest val$request>;
+
+        $i0 = r0.<androidx.core.provider.FontRequestWorker$1: int val$style>;
+
+        $r4 = staticinvoke <androidx.core.provider.FontRequestWorker: androidx.core.provider.FontRequestWorker$TypefaceResult getFontSync(java.lang.String,android.content.Context,androidx.core.provider.FontRequest,int)>($r3, $r2, $r1, $i0);
+
+        return $r4;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        androidx.core.provider.FontRequestWorker$1 r0;
+        androidx.core.provider.FontRequestWorker$TypefaceResult $r1;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$1;
+
+        $r1 = virtualinvoke r0.<androidx.core.provider.FontRequestWorker$1: androidx.core.provider.FontRequestWorker$TypefaceResult call()>();
+
+        return $r1;
+    }
+
+androidx.core.provider.FontRequestWorker$2
+<androidx.core.provider.FontRequestWorker$2: androidx.core.provider.CallbackWithHandler val$callback>
+    void <init>(androidx.core.provider.CallbackWithHandler)
+    {
+        androidx.core.provider.FontRequestWorker$2 r0;
+        androidx.core.provider.CallbackWithHandler r1;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$2;
+
+        r1 := @parameter0: androidx.core.provider.CallbackWithHandler;
+
+        r0.<androidx.core.provider.FontRequestWorker$2: androidx.core.provider.CallbackWithHandler val$callback> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void accept(androidx.core.provider.FontRequestWorker$TypefaceResult)
+    {
+        androidx.core.provider.FontRequestWorker$2 r0;
+        androidx.core.provider.CallbackWithHandler $r1;
+        androidx.core.provider.FontRequestWorker$TypefaceResult $r2, r3;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$2;
+
+        r3 := @parameter0: androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        if r3 != null goto label1;
+
+        $r2 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke $r2.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(int)>(-3);
+
+        r3 = $r2;
+
+     label1:
+        $r1 = r0.<androidx.core.provider.FontRequestWorker$2: androidx.core.provider.CallbackWithHandler val$callback>;
+
+        virtualinvoke $r1.<androidx.core.provider.CallbackWithHandler: void onTypefaceResult(androidx.core.provider.FontRequestWorker$TypefaceResult)>(r3);
+
+        return;
+    }
+
+    public volatile void accept(java.lang.Object)
+    {
+        androidx.core.provider.FontRequestWorker$2 r0;
+        java.lang.Object r1;
+        androidx.core.provider.FontRequestWorker$TypefaceResult $r2;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$2;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (androidx.core.provider.FontRequestWorker$TypefaceResult) r1;
+
+        virtualinvoke r0.<androidx.core.provider.FontRequestWorker$2: void accept(androidx.core.provider.FontRequestWorker$TypefaceResult)>($r2);
+
+        return;
+    }
+
+androidx.core.provider.FontRequestWorker$3
+<androidx.core.provider.FontRequestWorker$3: java.lang.String val$id>
+<androidx.core.provider.FontRequestWorker$3: android.content.Context val$context>
+<androidx.core.provider.FontRequestWorker$3: androidx.core.provider.FontRequest val$request>
+<androidx.core.provider.FontRequestWorker$3: int val$style>
+    void <init>(java.lang.String, android.content.Context, androidx.core.provider.FontRequest, int)
+    {
+        androidx.core.provider.FontRequestWorker$3 r0;
+        java.lang.String r1;
+        android.content.Context r2;
+        androidx.core.provider.FontRequest r3;
+        int i0;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$3;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: android.content.Context;
+
+        r3 := @parameter2: androidx.core.provider.FontRequest;
+
+        i0 := @parameter3: int;
+
+        r0.<androidx.core.provider.FontRequestWorker$3: java.lang.String val$id> = r1;
+
+        r0.<androidx.core.provider.FontRequestWorker$3: android.content.Context val$context> = r2;
+
+        r0.<androidx.core.provider.FontRequestWorker$3: androidx.core.provider.FontRequest val$request> = r3;
+
+        r0.<androidx.core.provider.FontRequestWorker$3: int val$style> = i0;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public androidx.core.provider.FontRequestWorker$TypefaceResult call()
+    {
+        androidx.core.provider.FontRequestWorker$3 r0;
+        java.lang.Throwable r1, $r6;
+        int $i0;
+        androidx.core.provider.FontRequest $r2;
+        android.content.Context $r3;
+        java.lang.String $r4;
+        androidx.core.provider.FontRequestWorker$TypefaceResult $r5, $r7;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$3;
+
+     label1:
+        $r4 = r0.<androidx.core.provider.FontRequestWorker$3: java.lang.String val$id>;
+
+        $r3 = r0.<androidx.core.provider.FontRequestWorker$3: android.content.Context val$context>;
+
+        $r2 = r0.<androidx.core.provider.FontRequestWorker$3: androidx.core.provider.FontRequest val$request>;
+
+        $i0 = r0.<androidx.core.provider.FontRequestWorker$3: int val$style>;
+
+        $r5 = staticinvoke <androidx.core.provider.FontRequestWorker: androidx.core.provider.FontRequestWorker$TypefaceResult getFontSync(java.lang.String,android.content.Context,androidx.core.provider.FontRequest,int)>($r4, $r3, $r2, $i0);
+
+     label2:
+        return $r5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r1 = $r6;
+
+        $r7 = new androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        specialinvoke $r7.<androidx.core.provider.FontRequestWorker$TypefaceResult: void <init>(int)>(-3);
+
+        return $r7;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        androidx.core.provider.FontRequestWorker$3 r0;
+        androidx.core.provider.FontRequestWorker$TypefaceResult $r1;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$3;
+
+        $r1 = virtualinvoke r0.<androidx.core.provider.FontRequestWorker$3: androidx.core.provider.FontRequestWorker$TypefaceResult call()>();
+
+        return $r1;
+    }
+
+androidx.core.provider.FontRequestWorker$4
+<androidx.core.provider.FontRequestWorker$4: java.lang.String val$id>
+    void <init>(java.lang.String)
+    {
+        androidx.core.provider.FontRequestWorker$4 r0;
+        java.lang.String r1;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$4;
+
+        r1 := @parameter0: java.lang.String;
+
+        r0.<androidx.core.provider.FontRequestWorker$4: java.lang.String val$id> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void accept(androidx.core.provider.FontRequestWorker$TypefaceResult)
+    {
+        androidx.core.provider.FontRequestWorker$4 r0;
+        androidx.core.provider.FontRequestWorker$TypefaceResult r1;
+        java.util.ArrayList r2;
+        java.lang.Throwable r3, $r13;
+        java.lang.Object $r4, $r7, $r11, r14;
+        java.lang.String $r5, $r8;
+        androidx.collection.SimpleArrayMap $r6, $r9;
+        int $i0, i1;
+        androidx.core.util.Consumer $r12;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$4;
+
+        r1 := @parameter0: androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        $r4 = <androidx.core.provider.FontRequestWorker: java.lang.Object LOCK>;
+
+        r14 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r6 = <androidx.core.provider.FontRequestWorker: androidx.collection.SimpleArrayMap PENDING_REPLIES>;
+
+        $r5 = r0.<androidx.core.provider.FontRequestWorker$4: java.lang.String val$id>;
+
+        $r7 = virtualinvoke $r6.<androidx.collection.SimpleArrayMap: java.lang.Object get(java.lang.Object)>($r5);
+
+        r2 = (java.util.ArrayList) $r7;
+
+        if r2 != null goto label3;
+
+        exitmonitor r14;
+
+     label2:
+        return;
+
+     label3:
+        $r9 = <androidx.core.provider.FontRequestWorker: androidx.collection.SimpleArrayMap PENDING_REPLIES>;
+
+        $r8 = r0.<androidx.core.provider.FontRequestWorker$4: java.lang.String val$id>;
+
+        virtualinvoke $r9.<androidx.collection.SimpleArrayMap: java.lang.Object remove(java.lang.Object)>($r8);
+
+        exitmonitor r14;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r13 := @caughtexception;
+
+        r3 = $r13;
+
+        exitmonitor r14;
+
+     label6:
+        throw r3;
+
+     label7:
+        i1 = 0;
+
+     label8:
+        $i0 = virtualinvoke r2.<java.util.ArrayList: int size()>();
+
+        if i1 >= $i0 goto label9;
+
+        $r11 = virtualinvoke r2.<java.util.ArrayList: java.lang.Object get(int)>(i1);
+
+        $r12 = (androidx.core.util.Consumer) $r11;
+
+        interfaceinvoke $r12.<androidx.core.util.Consumer: void accept(java.lang.Object)>(r1);
+
+        i1 = i1 + 1;
+
+        goto label8;
+
+     label9:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public volatile void accept(java.lang.Object)
+    {
+        androidx.core.provider.FontRequestWorker$4 r0;
+        java.lang.Object r1;
+        androidx.core.provider.FontRequestWorker$TypefaceResult $r2;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$4;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (androidx.core.provider.FontRequestWorker$TypefaceResult) r1;
+
+        virtualinvoke r0.<androidx.core.provider.FontRequestWorker$4: void accept(androidx.core.provider.FontRequestWorker$TypefaceResult)>($r2);
+
+        return;
+    }
+
+androidx.core.provider.FontRequestWorker$TypefaceResult
+<androidx.core.provider.FontRequestWorker$TypefaceResult: android.graphics.Typeface mTypeface>
+<androidx.core.provider.FontRequestWorker$TypefaceResult: int mResult>
+    void <init>(int)
+    {
+        androidx.core.provider.FontRequestWorker$TypefaceResult r0;
+        int i0;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.core.provider.FontRequestWorker$TypefaceResult: android.graphics.Typeface mTypeface> = null;
+
+        r0.<androidx.core.provider.FontRequestWorker$TypefaceResult: int mResult> = i0;
+
+        return;
+    }
+
+    void <init>(android.graphics.Typeface)
+    {
+        androidx.core.provider.FontRequestWorker$TypefaceResult r0;
+        android.graphics.Typeface r1;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        r1 := @parameter0: android.graphics.Typeface;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.core.provider.FontRequestWorker$TypefaceResult: android.graphics.Typeface mTypeface> = r1;
+
+        r0.<androidx.core.provider.FontRequestWorker$TypefaceResult: int mResult> = 0;
+
+        return;
+    }
+
+    boolean isSuccess()
+    {
+        androidx.core.provider.FontRequestWorker$TypefaceResult r0;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: androidx.core.provider.FontRequestWorker$TypefaceResult;
+
+        $i0 = r0.<androidx.core.provider.FontRequestWorker$TypefaceResult: int mResult>;
+
+        if $i0 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+

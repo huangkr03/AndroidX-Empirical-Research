@@ -1,0 +1,512 @@
+androidx.media3.exoplayer.audio.AudioTimestampPoller
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int STATE_INITIALIZING>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int STATE_TIMESTAMP>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int STATE_TIMESTAMP_ADVANCING>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int STATE_NO_TIMESTAMP>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int STATE_ERROR>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int FAST_POLL_INTERVAL_US>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int SLOW_POLL_INTERVAL_US>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int ERROR_POLL_INTERVAL_US>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int INITIALIZING_DURATION_US>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: int state>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: long initializeSystemTimeUs>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: long sampleIntervalUs>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: long lastTimestampSampleTimeUs>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller: long initialTimestampPositionFrames>
+    public void <init>(android.media.AudioTrack)
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+        android.media.AudioTrack r1;
+        int $i0;
+        androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 $r2;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        r1 := @parameter0: android.media.AudioTrack;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 19 goto label1;
+
+        $r2 = new androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19;
+
+        specialinvoke $r2.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: void <init>(android.media.AudioTrack)>(r1);
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp> = $r2;
+
+        virtualinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void reset()>();
+
+        goto label2;
+
+     label1:
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp> = null;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void updateState(int)>(3);
+
+     label2:
+        return;
+    }
+
+    public boolean maybePollTimestamp(long)
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+        long l0, l1, $l2, $l3, $l4, $l7, $l9, $l10, $l12, $l13, $l15;
+        androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 $r1, $r2, $r3, $r4, $r5;
+        byte $b5, $b8, $b11, $b14;
+        int $i6;
+        java.lang.IllegalStateException $r6;
+        boolean z0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        if $r1 == null goto label01;
+
+        $l2 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long lastTimestampSampleTimeUs>;
+
+        $l4 = l0 - $l2;
+
+        $l3 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long sampleIntervalUs>;
+
+        $b5 = $l4 cmp $l3;
+
+        if $b5 >= 0 goto label02;
+
+     label01:
+        return 0;
+
+     label02:
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long lastTimestampSampleTimeUs> = l0;
+
+        $r2 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        z0 = virtualinvoke $r2.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: boolean maybeUpdateTimestamp()>();
+
+        $i6 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: int state>;
+
+        tableswitch($i6)
+        {
+            case 0: goto label03;
+            case 1: goto label06;
+            case 2: goto label09;
+            case 3: goto label10;
+            case 4: goto label11;
+            default: goto label12;
+        };
+
+     label03:
+        if z0 == 0 goto label05;
+
+        $r4 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        $l12 = virtualinvoke $r4.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long getTimestampSystemTimeUs()>();
+
+        $l13 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long initializeSystemTimeUs>;
+
+        $b14 = $l12 cmp $l13;
+
+        if $b14 < 0 goto label04;
+
+        $r5 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        $l15 = virtualinvoke $r5.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long getTimestampPositionFrames()>();
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long initialTimestampPositionFrames> = $l15;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void updateState(int)>(1);
+
+        goto label13;
+
+     label04:
+        z0 = 0;
+
+        goto label13;
+
+     label05:
+        $l9 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long initializeSystemTimeUs>;
+
+        $l10 = l0 - $l9;
+
+        $b11 = $l10 cmp 500000L;
+
+        if $b11 <= 0 goto label13;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void updateState(int)>(3);
+
+        goto label13;
+
+     label06:
+        if z0 == 0 goto label08;
+
+        $r3 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        l1 = virtualinvoke $r3.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long getTimestampPositionFrames()>();
+
+        $l7 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long initialTimestampPositionFrames>;
+
+        $b8 = l1 cmp $l7;
+
+        if $b8 <= 0 goto label07;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void updateState(int)>(2);
+
+     label07:
+        goto label13;
+
+     label08:
+        virtualinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void reset()>();
+
+        goto label13;
+
+     label09:
+        if z0 != 0 goto label13;
+
+        virtualinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void reset()>();
+
+        goto label13;
+
+     label10:
+        if z0 == 0 goto label13;
+
+        virtualinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void reset()>();
+
+        goto label13;
+
+     label11:
+        goto label13;
+
+     label12:
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r6;
+
+     label13:
+        return z0;
+    }
+
+    public void rejectTimestamp()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void updateState(int)>(4);
+
+        return;
+    }
+
+    public void acceptTimestamp()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+        int $i0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        $i0 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: int state>;
+
+        if $i0 != 4 goto label1;
+
+        virtualinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void reset()>();
+
+     label1:
+        return;
+    }
+
+    public boolean hasTimestamp()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+        int $i0, $i1;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        $i0 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: int state>;
+
+        if $i0 == 1 goto label1;
+
+        $i1 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: int state>;
+
+        if $i1 != 2 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    public boolean hasAdvancingTimestamp()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        $i0 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: int state>;
+
+        if $i0 != 2 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public void reset()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+        androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 $r1;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        $r1 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        if $r1 == null goto label1;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: void updateState(int)>(0);
+
+     label1:
+        return;
+    }
+
+    public long getTimestampSystemTimeUs()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+        androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 $r1, $r2;
+        long $l0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        $r1 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        $l0 = virtualinvoke $r2.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long getTimestampSystemTimeUs()>();
+
+        goto label2;
+
+     label1:
+        $l0 = -9223372036854775807L;
+
+     label2:
+        return $l0;
+    }
+
+    public long getTimestampPositionFrames()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+        androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 $r1, $r2;
+        long $l0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        $r1 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 audioTimestamp>;
+
+        $l0 = virtualinvoke $r2.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long getTimestampPositionFrames()>();
+
+        goto label2;
+
+     label1:
+        $l0 = -1L;
+
+     label2:
+        return $l0;
+    }
+
+    private void updateState(int)
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller r0;
+        int i0;
+        long $l1, $l2;
+        java.lang.IllegalStateException $r1;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller;
+
+        i0 := @parameter0: int;
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: int state> = i0;
+
+        tableswitch(i0)
+        {
+            case 0: goto label1;
+            case 1: goto label2;
+            case 2: goto label3;
+            case 3: goto label3;
+            case 4: goto label4;
+            default: goto label5;
+        };
+
+     label1:
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long lastTimestampSampleTimeUs> = 0L;
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long initialTimestampPositionFrames> = -1L;
+
+        $l1 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l2 = $l1 / 1000L;
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long initializeSystemTimeUs> = $l2;
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long sampleIntervalUs> = 10000L;
+
+        goto label6;
+
+     label2:
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long sampleIntervalUs> = 10000L;
+
+        goto label6;
+
+     label3:
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long sampleIntervalUs> = 10000000L;
+
+        goto label6;
+
+     label4:
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller: long sampleIntervalUs> = 500000L;
+
+        goto label6;
+
+     label5:
+        $r1 = new java.lang.IllegalStateException;
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r1;
+
+     label6:
+        return;
+    }
+
+androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19
+<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: android.media.AudioTrack audioTrack>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: android.media.AudioTimestamp audioTimestamp>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long rawTimestampFramePositionWrapCount>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long lastTimestampRawPositionFrames>
+<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long lastTimestampPositionFrames>
+    public void <init>(android.media.AudioTrack)
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 r0;
+        android.media.AudioTrack r1;
+        android.media.AudioTimestamp $r2;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19;
+
+        r1 := @parameter0: android.media.AudioTrack;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: android.media.AudioTrack audioTrack> = r1;
+
+        $r2 = new android.media.AudioTimestamp;
+
+        specialinvoke $r2.<android.media.AudioTimestamp: void <init>()>();
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: android.media.AudioTimestamp audioTimestamp> = $r2;
+
+        return;
+    }
+
+    public boolean maybeUpdateTimestamp()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 r0;
+        boolean z0;
+        long l0, $l1, $l3, $l4, $l5, $l6, $l7;
+        android.media.AudioTimestamp $r1, $r3;
+        android.media.AudioTrack $r2;
+        byte $b2;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19;
+
+        $r2 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: android.media.AudioTrack audioTrack>;
+
+        $r1 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: android.media.AudioTimestamp audioTimestamp>;
+
+        z0 = virtualinvoke $r2.<android.media.AudioTrack: boolean getTimestamp(android.media.AudioTimestamp)>($r1);
+
+        if z0 == 0 goto label2;
+
+        $r3 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: android.media.AudioTimestamp audioTimestamp>;
+
+        l0 = $r3.<android.media.AudioTimestamp: long framePosition>;
+
+        $l1 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long lastTimestampRawPositionFrames>;
+
+        $b2 = $l1 cmp l0;
+
+        if $b2 <= 0 goto label1;
+
+        $l6 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long rawTimestampFramePositionWrapCount>;
+
+        $l7 = $l6 + 1L;
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long rawTimestampFramePositionWrapCount> = $l7;
+
+     label1:
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long lastTimestampRawPositionFrames> = l0;
+
+        $l3 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long rawTimestampFramePositionWrapCount>;
+
+        $l4 = $l3 << 32;
+
+        $l5 = l0 + $l4;
+
+        r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long lastTimestampPositionFrames> = $l5;
+
+     label2:
+        return z0;
+    }
+
+    public long getTimestampSystemTimeUs()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 r0;
+        android.media.AudioTimestamp $r1;
+        long $l0, $l1;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19;
+
+        $r1 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: android.media.AudioTimestamp audioTimestamp>;
+
+        $l0 = $r1.<android.media.AudioTimestamp: long nanoTime>;
+
+        $l1 = $l0 / 1000L;
+
+        return $l1;
+    }
+
+    public long getTimestampPositionFrames()
+    {
+        androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19 r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19;
+
+        $l0 = r0.<androidx.media3.exoplayer.audio.AudioTimestampPoller$AudioTimestampV19: long lastTimestampPositionFrames>;
+
+        return $l0;
+    }
+

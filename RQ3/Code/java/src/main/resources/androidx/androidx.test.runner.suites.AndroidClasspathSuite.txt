@@ -1,0 +1,106 @@
+androidx.test.runner.suites.AndroidClasspathSuite
+    public void <init>()
+    {
+        androidx.test.runner.suites.AndroidClasspathSuite $r0;
+
+        $r0 := @this: androidx.test.runner.suites.AndroidClasspathSuite;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+androidx.test.runner.suites.AndroidClasspathSuite$RunnerSuite
+    public void <init>(java.lang.Class, org.junit.runners.model.RunnerBuilder) throws org.junit.runners.model.InitializationError
+    {
+        androidx.test.runner.suites.AndroidClasspathSuite$RunnerSuite $r0;
+        java.lang.Class $r1;
+        java.util.List $r2;
+        org.junit.runners.model.RunnerBuilder $r3;
+
+        $r0 := @this: androidx.test.runner.suites.AndroidClasspathSuite$RunnerSuite;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        $r3 := @parameter1: org.junit.runners.model.RunnerBuilder;
+
+        $r2 = staticinvoke <androidx.test.runner.suites.AndroidClasspathSuite$RunnerSuite: java.util.List getRunnersForClasses(org.junit.runners.model.RunnerBuilder)>($r3);
+
+        specialinvoke $r0.<org.junit.runners.Suite: void <init>(java.lang.Class,java.util.List)>($r1, $r2);
+
+        return;
+    }
+
+    private static java.util.List getRunnersForClasses(org.junit.runners.model.RunnerBuilder)
+    {
+        org.junit.runners.model.RunnerBuilder $r0;
+        androidx.test.internal.runner.ClassPathScanner $r1, r11;
+        android.app.Instrumentation $r2;
+        java.util.Collection $r3;
+        java.util.Set $r4;
+        androidx.test.internal.runner.TestLoader $r5;
+        java.util.List $r6;
+        java.lang.Throwable $r7;
+        org.junit.runner.Runner[] $r8;
+        android.content.Context $r9;
+        java.lang.String $r10;
+        java.lang.RuntimeException r12;
+        androidx.test.internal.runner.ErrorReportingRunner r13;
+
+        $r0 := @parameter0: org.junit.runners.model.RunnerBuilder;
+
+        r11 = new androidx.test.internal.runner.ClassPathScanner;
+
+        $r1 = r11;
+
+        $r2 = staticinvoke <androidx.test.platform.app.InstrumentationRegistry: android.app.Instrumentation getInstrumentation()>();
+
+        $r3 = staticinvoke <androidx.test.internal.runner.ClassPathScanner: java.util.Collection getDefaultClasspaths(android.app.Instrumentation)>($r2);
+
+     label1:
+        specialinvoke r11.<androidx.test.internal.runner.ClassPathScanner: void <init>(java.util.Collection)>($r3);
+
+        $r4 = virtualinvoke $r1.<androidx.test.internal.runner.ClassPathScanner: java.util.Set getClassPathEntries()>();
+
+     label2:
+        $r5 = staticinvoke <androidx.test.internal.runner.TestLoader$Factory: androidx.test.internal.runner.TestLoader create(java.lang.ClassLoader,org.junit.runners.model.RunnerBuilder,boolean)>(null, $r0, 1);
+
+        $r3 = (java.util.Collection) $r4;
+
+     label3:
+        $r6 = virtualinvoke $r5.<androidx.test.internal.runner.TestLoader: java.util.List getRunnersFor(java.util.Collection)>($r3);
+
+     label4:
+        return $r6;
+
+     label5:
+        $r7 := @caughtexception;
+
+        $r8 = newarray (org.junit.runner.Runner)[1];
+
+        r13 = new androidx.test.internal.runner.ErrorReportingRunner;
+
+        $r2 = staticinvoke <androidx.test.platform.app.InstrumentationRegistry: android.app.Instrumentation getInstrumentation()>();
+
+        $r9 = virtualinvoke $r2.<android.app.Instrumentation: android.content.Context getContext()>();
+
+        $r10 = virtualinvoke $r9.<android.content.Context: java.lang.String getPackageName()>();
+
+        r12 = new java.lang.RuntimeException;
+
+        specialinvoke r12.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>("Failed to perform classpath scanning to determine tests to run", $r7);
+
+        $r7 = (java.lang.Throwable) r12;
+
+        specialinvoke r13.<androidx.test.internal.runner.ErrorReportingRunner: void <init>(java.lang.String,java.lang.Throwable)>($r10, $r7);
+
+        $r8[0] = r13;
+
+        $r6 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r8);
+
+        return $r6;
+
+        catch java.io.IOException from label1 to label2 with label5;
+        catch java.io.IOException from label3 to label4 with label5;
+    }
+

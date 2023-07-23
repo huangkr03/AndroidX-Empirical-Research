@@ -1,0 +1,1896 @@
+io.grpc.internal.MessageDeframer
+<io.grpc.internal.MessageDeframer: boolean closeWhenComplete>
+<io.grpc.internal.MessageDeframer: boolean compressedFlag>
+<io.grpc.internal.MessageDeframer: int currentMessageSeqNo>
+<io.grpc.internal.MessageDeframer: io.grpc.Decompressor decompressor>
+<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>
+<io.grpc.internal.MessageDeframer: boolean inDelivery>
+<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>
+<io.grpc.internal.MessageDeframer: byte[] inflatedBuffer>
+<io.grpc.internal.MessageDeframer: int inflatedIndex>
+<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$Listener listener>
+<io.grpc.internal.MessageDeframer: int maxInboundMessageSize>
+<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>
+<io.grpc.internal.MessageDeframer: long pendingDeliveries>
+<io.grpc.internal.MessageDeframer: int requiredLength>
+<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state>
+<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>
+<io.grpc.internal.MessageDeframer: boolean stopDelivery>
+<io.grpc.internal.MessageDeframer: io.grpc.internal.TransportTracer transportTracer>
+<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed>
+    public void <init>(io.grpc.internal.MessageDeframer$Listener, io.grpc.Decompressor, int, io.grpc.internal.StatsTraceContext, io.grpc.internal.TransportTracer)
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.Decompressor $r1;
+        int $i0;
+        io.grpc.internal.StatsTraceContext $r2;
+        io.grpc.internal.TransportTracer $r3;
+        io.grpc.internal.MessageDeframer$Listener $r4;
+        io.grpc.internal.MessageDeframer$State $r5;
+        io.grpc.internal.CompositeReadableBuffer $r6;
+        java.lang.Object $r7;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r4 := @parameter0: io.grpc.internal.MessageDeframer$Listener;
+
+        $r1 := @parameter1: io.grpc.Decompressor;
+
+        $i0 := @parameter2: int;
+
+        $r2 := @parameter3: io.grpc.internal.StatsTraceContext;
+
+        $r3 := @parameter4: io.grpc.internal.TransportTracer;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r5 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State HEADER>;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state> = $r5;
+
+        $r0.<io.grpc.internal.MessageDeframer: int requiredLength> = 5;
+
+        $r6 = new io.grpc.internal.CompositeReadableBuffer;
+
+        specialinvoke $r6.<io.grpc.internal.CompositeReadableBuffer: void <init>()>();
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed> = $r6;
+
+        $r0.<io.grpc.internal.MessageDeframer: boolean inDelivery> = 0;
+
+        $r0.<io.grpc.internal.MessageDeframer: int currentMessageSeqNo> = -1;
+
+        $r0.<io.grpc.internal.MessageDeframer: boolean closeWhenComplete> = 0;
+
+        $r0.<io.grpc.internal.MessageDeframer: boolean stopDelivery> = 0;
+
+        $r7 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r4, "sink");
+
+        $r4 = (io.grpc.internal.MessageDeframer$Listener) $r7;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$Listener listener> = $r4;
+
+        $r7 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "decompressor");
+
+        $r1 = (io.grpc.Decompressor) $r7;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.Decompressor decompressor> = $r1;
+
+        $r0.<io.grpc.internal.MessageDeframer: int maxInboundMessageSize> = $i0;
+
+        $r7 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "statsTraceCtx");
+
+        $r2 = (io.grpc.internal.StatsTraceContext) $r7;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx> = $r2;
+
+        $r7 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "transportTracer");
+
+        $r3 = (io.grpc.internal.TransportTracer) $r7;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.TransportTracer transportTracer> = $r3;
+
+        return;
+    }
+
+    private void deliver()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        byte $b0;
+        boolean $z0;
+        long $l1;
+        int[] $r1;
+        io.grpc.internal.MessageDeframer$State $r2;
+        int $i2;
+        java.lang.AssertionError $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        java.lang.Throwable $r6;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $z0 = $r0.<io.grpc.internal.MessageDeframer: boolean inDelivery>;
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label01:
+        $r0.<io.grpc.internal.MessageDeframer: boolean inDelivery> = 1;
+
+     label02:
+        $z0 = $r0.<io.grpc.internal.MessageDeframer: boolean stopDelivery>;
+
+        if $z0 != 0 goto label17;
+
+        $l1 = $r0.<io.grpc.internal.MessageDeframer: long pendingDeliveries>;
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 <= 0 goto label17;
+
+     label03:
+        $z0 = specialinvoke $r0.<io.grpc.internal.MessageDeframer: boolean readRequiredBytes()>();
+
+     label04:
+        if $z0 == 0 goto label17;
+
+        $r1 = <io.grpc.internal.MessageDeframer$1: int[] $SwitchMap$io$grpc$internal$MessageDeframer$State>;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state>;
+
+     label05:
+        $i2 = virtualinvoke $r2.<io.grpc.internal.MessageDeframer$State: int ordinal()>();
+
+     label06:
+        $i2 = $r1[$i2];
+
+        lookupswitch($i2)
+        {
+            case 1: goto label10;
+            case 2: goto label08;
+            default: goto label07;
+        };
+
+     label07:
+        $r3 = new java.lang.AssertionError;
+
+        goto label12;
+
+     label08:
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer: void processBody()>();
+
+     label09:
+        $l1 = $r0.<io.grpc.internal.MessageDeframer: long pendingDeliveries>;
+
+        $l1 = $l1 + -1L;
+
+        $r0.<io.grpc.internal.MessageDeframer: long pendingDeliveries> = $l1;
+
+        goto label02;
+
+     label10:
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer: void processHeader()>();
+
+     label11:
+        goto label02;
+
+     label12:
+        $r4 = new java.lang.StringBuilder;
+
+     label13:
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid state: ");
+
+     label14:
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state>;
+
+     label15:
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.lang.AssertionError: void <init>(java.lang.Object)>($r5);
+
+     label16:
+        throw $r3;
+
+     label17:
+        $z0 = $r0.<io.grpc.internal.MessageDeframer: boolean stopDelivery>;
+
+        if $z0 == 0 goto label20;
+
+     label18:
+        virtualinvoke $r0.<io.grpc.internal.MessageDeframer: void close()>();
+
+     label19:
+        $r0.<io.grpc.internal.MessageDeframer: boolean inDelivery> = 0;
+
+        return;
+
+     label20:
+        $z0 = $r0.<io.grpc.internal.MessageDeframer: boolean closeWhenComplete>;
+
+        if $z0 == 0 goto label24;
+
+     label21:
+        $z0 = specialinvoke $r0.<io.grpc.internal.MessageDeframer: boolean isStalled()>();
+
+     label22:
+        if $z0 == 0 goto label24;
+
+     label23:
+        virtualinvoke $r0.<io.grpc.internal.MessageDeframer: void close()>();
+
+     label24:
+        $r0.<io.grpc.internal.MessageDeframer: boolean inDelivery> = 0;
+
+        return;
+
+     label25:
+        $r6 := @caughtexception;
+
+        $r0.<io.grpc.internal.MessageDeframer: boolean inDelivery> = 0;
+
+        goto label26;
+
+     label26:
+        throw $r6;
+
+        catch java.lang.Throwable from label03 to label04 with label25;
+        catch java.lang.Throwable from label05 to label06 with label25;
+        catch java.lang.Throwable from label08 to label09 with label25;
+        catch java.lang.Throwable from label10 to label11 with label25;
+        catch java.lang.Throwable from label13 to label14 with label25;
+        catch java.lang.Throwable from label15 to label16 with label25;
+        catch java.lang.Throwable from label18 to label19 with label25;
+        catch java.lang.Throwable from label21 to label22 with label25;
+        catch java.lang.Throwable from label23 to label24 with label25;
+    }
+
+    private java.io.InputStream getCompressedBody()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.internal.StatsTraceContext $r1;
+        io.grpc.Decompressor $r2;
+        io.grpc.Codec $r3;
+        io.grpc.internal.CompositeReadableBuffer $r4;
+        java.io.InputStream $r5;
+        int $i0;
+        java.lang.Throwable $r6;
+        io.grpc.Status $r7;
+        io.grpc.StatusRuntimeException $r8;
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream r9;
+        java.lang.RuntimeException r10;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.Decompressor decompressor>;
+
+        $r3 = <io.grpc.Codec$Identity: io.grpc.Codec NONE>;
+
+        if $r2 == $r3 goto label6;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.Decompressor decompressor>;
+
+        $r4 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        $r5 = staticinvoke <io.grpc.internal.ReadableBuffers: java.io.InputStream openStream(io.grpc.internal.ReadableBuffer,boolean)>($r4, 1);
+
+     label1:
+        $r5 = interfaceinvoke $r2.<io.grpc.Decompressor: java.io.InputStream decompress(java.io.InputStream)>($r5);
+
+     label2:
+        r9 = new io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $i0 = $r0.<io.grpc.internal.MessageDeframer: int maxInboundMessageSize>;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+     label3:
+        specialinvoke r9.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void <init>(java.io.InputStream,int,io.grpc.internal.StatsTraceContext)>($r5, $i0, $r1);
+
+     label4:
+        return r9;
+
+     label5:
+        $r6 := @caughtexception;
+
+        r10 = new java.lang.RuntimeException;
+
+        specialinvoke r10.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r6);
+
+        $r6 = (java.lang.Throwable) r10;
+
+        throw $r6;
+
+     label6:
+        $r7 = <io.grpc.Status: io.grpc.Status INTERNAL>;
+
+        $r7 = virtualinvoke $r7.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Can\'t decode compressed gRPC message as compression not configured");
+
+        $r8 = virtualinvoke $r7.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        $r6 = (java.lang.Throwable) $r8;
+
+        throw $r6;
+
+        catch java.io.IOException from label1 to label2 with label5;
+        catch java.io.IOException from label3 to label4 with label5;
+    }
+
+    private java.io.InputStream getUncompressedBody()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.internal.StatsTraceContext $r1;
+        io.grpc.internal.CompositeReadableBuffer $r2;
+        int $i0;
+        long $l1;
+        java.io.InputStream $r3;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        $i0 = virtualinvoke $r2.<io.grpc.internal.CompositeReadableBuffer: int readableBytes()>();
+
+        $l1 = (long) $i0;
+
+        virtualinvoke $r1.<io.grpc.internal.StatsTraceContext: void inboundUncompressedSize(long)>($l1);
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        $r3 = staticinvoke <io.grpc.internal.ReadableBuffers: java.io.InputStream openStream(io.grpc.internal.ReadableBuffer,boolean)>($r2, 1);
+
+        return $r3;
+    }
+
+    private boolean isClosedOrScheduledToClose()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        boolean $z0;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $z0 = virtualinvoke $r0.<io.grpc.internal.MessageDeframer: boolean isClosed()>();
+
+        if $z0 != 0 goto label2;
+
+        $z0 = $r0.<io.grpc.internal.MessageDeframer: boolean closeWhenComplete>;
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    private boolean isStalled()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.internal.GzipInflatingBuffer $r1;
+        boolean $z0;
+        io.grpc.internal.CompositeReadableBuffer $r2;
+        int $i0;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r1 == null goto label1;
+
+        $z0 = virtualinvoke $r1.<io.grpc.internal.GzipInflatingBuffer: boolean isStalled()>();
+
+        return $z0;
+
+     label1:
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed>;
+
+        $i0 = virtualinvoke $r2.<io.grpc.internal.CompositeReadableBuffer: int readableBytes()>();
+
+        if $i0 != 0 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    private void processBody()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.internal.MessageDeframer$SingleMessageProducer $r1;
+        io.grpc.internal.StatsTraceContext $r2;
+        int $i0, $i1;
+        long $l2;
+        boolean $z0;
+        java.io.InputStream $r3;
+        io.grpc.internal.MessageDeframer$Listener $r4;
+        io.grpc.internal.MessageDeframer$State $r5;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $i0 = $r0.<io.grpc.internal.MessageDeframer: int currentMessageSeqNo>;
+
+        $i1 = $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>;
+
+        $l2 = (long) $i1;
+
+        virtualinvoke $r2.<io.grpc.internal.StatsTraceContext: void inboundMessageRead(int,long,long)>($i0, $l2, -1L);
+
+        $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize> = 0;
+
+        $z0 = $r0.<io.grpc.internal.MessageDeframer: boolean compressedFlag>;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = specialinvoke $r0.<io.grpc.internal.MessageDeframer: java.io.InputStream getCompressedBody()>();
+
+        goto label2;
+
+     label1:
+        $r3 = specialinvoke $r0.<io.grpc.internal.MessageDeframer: java.io.InputStream getUncompressedBody()>();
+
+     label2:
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame> = null;
+
+        $r4 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$Listener listener>;
+
+        $r1 = new io.grpc.internal.MessageDeframer$SingleMessageProducer;
+
+        specialinvoke $r1.<io.grpc.internal.MessageDeframer$SingleMessageProducer: void <init>(java.io.InputStream,io.grpc.internal.MessageDeframer$1)>($r3, null);
+
+        interfaceinvoke $r4.<io.grpc.internal.MessageDeframer$Listener: void messagesAvailable(io.grpc.internal.StreamListener$MessageProducer)>($r1);
+
+        $r5 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State HEADER>;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state> = $r5;
+
+        $r0.<io.grpc.internal.MessageDeframer: int requiredLength> = 5;
+
+        return;
+    }
+
+    private void processHeader()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.internal.CompositeReadableBuffer $r1;
+        int $i0, $i1;
+        boolean $z0;
+        io.grpc.internal.StatsTraceContext $r2;
+        io.grpc.internal.TransportTracer $r3;
+        io.grpc.internal.MessageDeframer$State $r4;
+        io.grpc.Status $r5;
+        java.util.Locale $r6;
+        java.lang.Object[] $r7;
+        java.lang.Integer $r8;
+        java.lang.String $r9;
+        io.grpc.StatusRuntimeException $r10;
+        java.lang.Throwable r11;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        $i0 = virtualinvoke $r1.<io.grpc.internal.CompositeReadableBuffer: int readUnsignedByte()>();
+
+        $i1 = $i0 & 254;
+
+        if $i1 != 0 goto label4;
+
+        $i0 = $i0 & 1;
+
+        if $i0 == 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r0.<io.grpc.internal.MessageDeframer: boolean compressedFlag> = $z0;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        $i0 = virtualinvoke $r1.<io.grpc.internal.CompositeReadableBuffer: int readInt()>();
+
+        $r0.<io.grpc.internal.MessageDeframer: int requiredLength> = $i0;
+
+        if $i0 < 0 goto label3;
+
+        $i1 = $r0.<io.grpc.internal.MessageDeframer: int maxInboundMessageSize>;
+
+        if $i0 > $i1 goto label3;
+
+        $i0 = $r0.<io.grpc.internal.MessageDeframer: int currentMessageSeqNo>;
+
+        $i0 = $i0 + 1;
+
+        $r0.<io.grpc.internal.MessageDeframer: int currentMessageSeqNo> = $i0;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        virtualinvoke $r2.<io.grpc.internal.StatsTraceContext: void inboundMessage(int)>($i0);
+
+        $r3 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.TransportTracer transportTracer>;
+
+        virtualinvoke $r3.<io.grpc.internal.TransportTracer: void reportMessageReceived()>();
+
+        $r4 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State BODY>;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state> = $r4;
+
+        return;
+
+     label3:
+        $r5 = <io.grpc.Status: io.grpc.Status RESOURCE_EXHAUSTED>;
+
+        $r6 = <java.util.Locale: java.util.Locale US>;
+
+        $r7 = newarray (java.lang.Object)[2];
+
+        $i0 = $r0.<io.grpc.internal.MessageDeframer: int maxInboundMessageSize>;
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r7[0] = $r8;
+
+        $i0 = $r0.<io.grpc.internal.MessageDeframer: int requiredLength>;
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r7[1] = $r8;
+
+        $r9 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r6, "gRPC message exceeds maximum size %d: %d", $r7);
+
+        $r5 = virtualinvoke $r5.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r9);
+
+        $r10 = virtualinvoke $r5.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        r11 = (java.lang.Throwable) $r10;
+
+        throw r11;
+
+     label4:
+        $r5 = <io.grpc.Status: io.grpc.Status INTERNAL>;
+
+        $r5 = virtualinvoke $r5.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("gRPC frame header malformed: reserved bits not zero");
+
+        $r10 = virtualinvoke $r5.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        r11 = (java.lang.Throwable) $r10;
+
+        throw r11;
+    }
+
+    private boolean readRequiredBytes()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        io.grpc.internal.CompositeReadableBuffer $r1, $r11;
+        io.grpc.internal.GzipInflatingBuffer $r2;
+        byte[] $r3;
+        io.grpc.internal.MessageDeframer$Listener $r4;
+        io.grpc.internal.MessageDeframer$State $r5, $r6;
+        io.grpc.internal.StatsTraceContext $r7;
+        long $l5;
+        io.grpc.internal.ReadableBuffer $r8;
+        java.lang.Throwable $r9, $r10, $r12, $r13;
+        java.lang.RuntimeException r14;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $i0 = 0;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        if $r1 != null goto label03;
+
+        $r11 = new io.grpc.internal.CompositeReadableBuffer;
+
+     label01:
+        specialinvoke $r11.<io.grpc.internal.CompositeReadableBuffer: void <init>()>();
+
+     label02:
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame> = $r11;
+
+        goto label03;
+
+     label03:
+        $i0 = 0;
+
+        $i1 = 0;
+
+     label04:
+        $i2 = $r0.<io.grpc.internal.MessageDeframer: int requiredLength>;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+     label05:
+        $i3 = virtualinvoke $r1.<io.grpc.internal.CompositeReadableBuffer: int readableBytes()>();
+
+     label06:
+        $i2 = $i2 - $i3;
+
+        if $i2 <= 0 goto label38;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r2 == null goto label28;
+
+        $r3 = $r0.<io.grpc.internal.MessageDeframer: byte[] inflatedBuffer>;
+
+        if $r3 == null goto label07;
+
+        $i3 = $r0.<io.grpc.internal.MessageDeframer: int inflatedIndex>;
+
+        $i4 = lengthof $r3;
+
+        if $i3 != $i4 goto label08;
+
+     label07:
+        $i3 = staticinvoke <java.lang.Math: int min(int,int)>($i2, 2097152);
+
+        $r3 = newarray (byte)[$i3];
+
+        $r0.<io.grpc.internal.MessageDeframer: byte[] inflatedBuffer> = $r3;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inflatedIndex> = 0;
+
+     label08:
+        $r3 = $r0.<io.grpc.internal.MessageDeframer: byte[] inflatedBuffer>;
+
+        $i3 = lengthof $r3;
+
+        $i4 = $r0.<io.grpc.internal.MessageDeframer: int inflatedIndex>;
+
+        $i3 = $i3 - $i4;
+
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>($i2, $i3);
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        $r3 = $r0.<io.grpc.internal.MessageDeframer: byte[] inflatedBuffer>;
+
+        $i3 = $r0.<io.grpc.internal.MessageDeframer: int inflatedIndex>;
+
+     label09:
+        $i2 = virtualinvoke $r2.<io.grpc.internal.GzipInflatingBuffer: int inflateBytes(byte[],int,int)>($r3, $i3, $i2);
+
+     label10:
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+     label11:
+        $i3 = virtualinvoke $r2.<io.grpc.internal.GzipInflatingBuffer: int getAndResetBytesConsumed()>();
+
+     label12:
+        $i0 = $i0 + $i3;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+     label13:
+        $i3 = virtualinvoke $r2.<io.grpc.internal.GzipInflatingBuffer: int getAndResetDeflatedBytesConsumed()>();
+
+     label14:
+        $i1 = $i1 + $i3;
+
+        if $i2 != 0 goto label17;
+
+        if $i0 <= 0 goto label16;
+
+        $r4 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$Listener listener>;
+
+        interfaceinvoke $r4.<io.grpc.internal.MessageDeframer$Listener: void bytesRead(int)>($i0);
+
+        $r5 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state>;
+
+        $r6 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State BODY>;
+
+        if $r5 != $r6 goto label16;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r2 == null goto label15;
+
+        $r7 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l5 = (long) $i1;
+
+        virtualinvoke $r7.<io.grpc.internal.StatsTraceContext: void inboundWireSize(long)>($l5);
+
+        $i0 = $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>;
+
+        $i1 = $i0 + $i1;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize> = $i1;
+
+        goto label16;
+
+     label15:
+        $r7 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l5 = (long) $i0;
+
+        virtualinvoke $r7.<io.grpc.internal.StatsTraceContext: void inboundWireSize(long)>($l5);
+
+        $i1 = $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>;
+
+        $i1 = $i1 + $i0;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize> = $i1;
+
+     label16:
+        return 0;
+
+     label17:
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        $r3 = $r0.<io.grpc.internal.MessageDeframer: byte[] inflatedBuffer>;
+
+        $i3 = $r0.<io.grpc.internal.MessageDeframer: int inflatedIndex>;
+
+        $r8 = staticinvoke <io.grpc.internal.ReadableBuffers: io.grpc.internal.ReadableBuffer wrap(byte[],int,int)>($r3, $i3, $i2);
+
+     label18:
+        virtualinvoke $r1.<io.grpc.internal.CompositeReadableBuffer: void addBuffer(io.grpc.internal.ReadableBuffer)>($r8);
+
+     label19:
+        $i3 = $r0.<io.grpc.internal.MessageDeframer: int inflatedIndex>;
+
+        $i2 = $i3 + $i2;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inflatedIndex> = $i2;
+
+        goto label04;
+
+     label20:
+        $r9 := @caughtexception;
+
+        r14 = new java.lang.RuntimeException;
+
+     label21:
+        specialinvoke r14.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r9);
+
+     label22:
+        $r9 = (java.lang.Throwable) r14;
+
+     label23:
+        throw $r9;
+
+     label24:
+        $r10 := @caughtexception;
+
+        r14 = new java.lang.RuntimeException;
+
+     label25:
+        specialinvoke r14.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r10);
+
+     label26:
+        $r9 = (java.lang.Throwable) r14;
+
+     label27:
+        throw $r9;
+
+     label28:
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed>;
+
+     label29:
+        $i3 = virtualinvoke $r1.<io.grpc.internal.CompositeReadableBuffer: int readableBytes()>();
+
+     label30:
+        if $i3 != 0 goto label33;
+
+        if $i0 <= 0 goto label32;
+
+        $r4 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$Listener listener>;
+
+        interfaceinvoke $r4.<io.grpc.internal.MessageDeframer$Listener: void bytesRead(int)>($i0);
+
+        $r5 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state>;
+
+        $r6 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State BODY>;
+
+        if $r5 != $r6 goto label32;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r2 == null goto label31;
+
+        $r7 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l5 = (long) $i1;
+
+        virtualinvoke $r7.<io.grpc.internal.StatsTraceContext: void inboundWireSize(long)>($l5);
+
+        $i0 = $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>;
+
+        $i1 = $i0 + $i1;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize> = $i1;
+
+        goto label32;
+
+     label31:
+        $r7 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l5 = (long) $i0;
+
+        virtualinvoke $r7.<io.grpc.internal.StatsTraceContext: void inboundWireSize(long)>($l5);
+
+        $i1 = $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>;
+
+        $i1 = $i1 + $i0;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize> = $i1;
+
+     label32:
+        return 0;
+
+     label33:
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed>;
+
+     label34:
+        $i3 = virtualinvoke $r1.<io.grpc.internal.CompositeReadableBuffer: int readableBytes()>();
+
+     label35:
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>($i2, $i3);
+
+        $i0 = $i0 + $i2;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        $r11 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed>;
+
+     label36:
+        $r8 = virtualinvoke $r11.<io.grpc.internal.CompositeReadableBuffer: io.grpc.internal.ReadableBuffer readBytes(int)>($i2);
+
+        virtualinvoke $r1.<io.grpc.internal.CompositeReadableBuffer: void addBuffer(io.grpc.internal.ReadableBuffer)>($r8);
+
+     label37:
+        goto label04;
+
+     label38:
+        if $i0 <= 0 goto label40;
+
+        $r4 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$Listener listener>;
+
+        interfaceinvoke $r4.<io.grpc.internal.MessageDeframer$Listener: void bytesRead(int)>($i0);
+
+        $r5 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state>;
+
+        $r6 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State BODY>;
+
+        if $r5 != $r6 goto label40;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r2 == null goto label39;
+
+        $r7 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l5 = (long) $i1;
+
+        virtualinvoke $r7.<io.grpc.internal.StatsTraceContext: void inboundWireSize(long)>($l5);
+
+        $i0 = $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>;
+
+        $i1 = $i0 + $i1;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize> = $i1;
+
+        goto label40;
+
+     label39:
+        $r7 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l5 = (long) $i0;
+
+        virtualinvoke $r7.<io.grpc.internal.StatsTraceContext: void inboundWireSize(long)>($l5);
+
+        $i1 = $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>;
+
+        $i1 = $i1 + $i0;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize> = $i1;
+
+     label40:
+        return 1;
+
+     label41:
+        $r12 := @caughtexception;
+
+        $r13 = $r12;
+
+        goto label43;
+
+     label42:
+        $r13 := @caughtexception;
+
+        $i1 = 0;
+
+     label43:
+        if $i0 <= 0 goto label45;
+
+        $r4 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$Listener listener>;
+
+        interfaceinvoke $r4.<io.grpc.internal.MessageDeframer$Listener: void bytesRead(int)>($i0);
+
+        $r5 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$State state>;
+
+        $r6 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State BODY>;
+
+        if $r5 != $r6 goto label45;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r2 == null goto label44;
+
+        $r7 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l5 = (long) $i1;
+
+        virtualinvoke $r7.<io.grpc.internal.StatsTraceContext: void inboundWireSize(long)>($l5);
+
+        $i0 = $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>;
+
+        $i1 = $i0 + $i1;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize> = $i1;
+
+        goto label45;
+
+     label44:
+        $r7 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l5 = (long) $i0;
+
+        virtualinvoke $r7.<io.grpc.internal.StatsTraceContext: void inboundWireSize(long)>($l5);
+
+        $i1 = $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize>;
+
+        $i1 = $i1 + $i0;
+
+        $r0.<io.grpc.internal.MessageDeframer: int inboundBodyWireSize> = $i1;
+
+     label45:
+        goto label46;
+
+     label46:
+        throw $r13;
+
+        catch java.lang.Throwable from label01 to label02 with label42;
+        catch java.lang.Throwable from label05 to label06 with label41;
+        catch java.io.IOException from label09 to label10 with label24;
+        catch java.io.IOException from label11 to label12 with label24;
+        catch java.io.IOException from label13 to label14 with label24;
+        catch java.util.zip.DataFormatException from label09 to label10 with label20;
+        catch java.util.zip.DataFormatException from label11 to label12 with label20;
+        catch java.util.zip.DataFormatException from label13 to label14 with label20;
+        catch java.lang.Throwable from label09 to label10 with label41;
+        catch java.lang.Throwable from label11 to label12 with label41;
+        catch java.lang.Throwable from label13 to label14 with label41;
+        catch java.io.IOException from label18 to label19 with label24;
+        catch java.util.zip.DataFormatException from label18 to label19 with label20;
+        catch java.lang.Throwable from label18 to label19 with label41;
+        catch java.lang.Throwable from label21 to label22 with label41;
+        catch java.lang.Throwable from label23 to label24 with label41;
+        catch java.lang.Throwable from label25 to label26 with label41;
+        catch java.lang.Throwable from label27 to label28 with label41;
+        catch java.lang.Throwable from label29 to label30 with label41;
+        catch java.lang.Throwable from label34 to label35 with label41;
+        catch java.lang.Throwable from label36 to label37 with label41;
+    }
+
+    public void close()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.internal.GzipInflatingBuffer $r1;
+        boolean $z0, $z1;
+        io.grpc.internal.CompositeReadableBuffer $r2;
+        int $i0;
+        io.grpc.internal.MessageDeframer$Listener $r3;
+        java.lang.Throwable $r4;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $z0 = virtualinvoke $r0.<io.grpc.internal.MessageDeframer: boolean isClosed()>();
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label01:
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        $z0 = 1;
+
+        if $r2 == null goto label02;
+
+        $i0 = virtualinvoke $r2.<io.grpc.internal.CompositeReadableBuffer: int readableBytes()>();
+
+        if $i0 <= 0 goto label02;
+
+        $z1 = 1;
+
+        goto label03;
+
+     label02:
+        $z1 = 0;
+
+     label03:
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r1 == null goto label10;
+
+        if $z1 != 0 goto label07;
+
+     label04:
+        $z1 = virtualinvoke $r1.<io.grpc.internal.GzipInflatingBuffer: boolean hasPartialData()>();
+
+     label05:
+        if $z1 == 0 goto label06;
+
+        goto label07;
+
+     label06:
+        $z0 = 0;
+
+     label07:
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+     label08:
+        virtualinvoke $r1.<io.grpc.internal.GzipInflatingBuffer: void close()>();
+
+     label09:
+        $z1 = $z0;
+
+     label10:
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed>;
+
+        if $r2 == null goto label12;
+
+     label11:
+        virtualinvoke $r2.<io.grpc.internal.CompositeReadableBuffer: void close()>();
+
+     label12:
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame>;
+
+        if $r2 == null goto label14;
+
+     label13:
+        virtualinvoke $r2.<io.grpc.internal.CompositeReadableBuffer: void close()>();
+
+     label14:
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor> = null;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed> = null;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame> = null;
+
+        $r3 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$Listener listener>;
+
+        interfaceinvoke $r3.<io.grpc.internal.MessageDeframer$Listener: void deframerClosed(boolean)>($z1);
+
+        return;
+
+     label15:
+        $r4 := @caughtexception;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor> = null;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed> = null;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer nextFrame> = null;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label04 to label05 with label15;
+        catch java.lang.Throwable from label08 to label09 with label15;
+        catch java.lang.Throwable from label11 to label12 with label15;
+        catch java.lang.Throwable from label13 to label14 with label15;
+    }
+
+    public void closeWhenComplete()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        boolean $z0;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $z0 = virtualinvoke $r0.<io.grpc.internal.MessageDeframer: boolean isClosed()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = specialinvoke $r0.<io.grpc.internal.MessageDeframer: boolean isStalled()>();
+
+        if $z0 == 0 goto label2;
+
+        virtualinvoke $r0.<io.grpc.internal.MessageDeframer: void close()>();
+
+        return;
+
+     label2:
+        $r0.<io.grpc.internal.MessageDeframer: boolean closeWhenComplete> = 1;
+
+        return;
+    }
+
+    public void deframe(io.grpc.internal.ReadableBuffer)
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.internal.ReadableBuffer $r1;
+        boolean $z0, $z1;
+        io.grpc.internal.GzipInflatingBuffer $r2;
+        io.grpc.internal.CompositeReadableBuffer $r3;
+        java.lang.Throwable $r4;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r1 := @parameter0: io.grpc.internal.ReadableBuffer;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "data");
+
+        $z1 = 1;
+
+     label01:
+        $z0 = specialinvoke $r0.<io.grpc.internal.MessageDeframer: boolean isClosedOrScheduledToClose()>();
+
+     label02:
+        if $z0 != 0 goto label10;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r2 == null goto label05;
+
+     label03:
+        virtualinvoke $r2.<io.grpc.internal.GzipInflatingBuffer: void addGzippedBytes(io.grpc.internal.ReadableBuffer)>($r1);
+
+     label04:
+        goto label07;
+
+     label05:
+        $r3 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed>;
+
+     label06:
+        virtualinvoke $r3.<io.grpc.internal.CompositeReadableBuffer: void addBuffer(io.grpc.internal.ReadableBuffer)>($r1);
+
+     label07:
+        $z1 = 0;
+
+     label08:
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer: void deliver()>();
+
+     label09:
+        goto label10;
+
+     label10:
+        if $z1 == 0 goto label13;
+
+        interfaceinvoke $r1.<io.grpc.internal.ReadableBuffer: void close()>();
+
+        return;
+
+     label11:
+        $r4 := @caughtexception;
+
+        if $z1 == 0 goto label12;
+
+        interfaceinvoke $r1.<io.grpc.internal.ReadableBuffer: void close()>();
+
+     label12:
+        throw $r4;
+
+     label13:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.lang.Throwable from label03 to label04 with label11;
+        catch java.lang.Throwable from label06 to label07 with label11;
+        catch java.lang.Throwable from label08 to label09 with label11;
+    }
+
+    public boolean isClosed()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.internal.CompositeReadableBuffer $r1;
+        io.grpc.internal.GzipInflatingBuffer $r2;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed>;
+
+        if $r1 != null goto label1;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r2 != null goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public void request(int)
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        int $i0;
+        long $l1, $l2;
+        boolean $z0;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $i0 := @parameter0: int;
+
+        if $i0 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "numMessages must be > 0");
+
+        $z0 = virtualinvoke $r0.<io.grpc.internal.MessageDeframer: boolean isClosed()>();
+
+        if $z0 == 0 goto label3;
+
+        return;
+
+     label3:
+        $l2 = $r0.<io.grpc.internal.MessageDeframer: long pendingDeliveries>;
+
+        $l1 = (long) $i0;
+
+        $l1 = $l2 + $l1;
+
+        $r0.<io.grpc.internal.MessageDeframer: long pendingDeliveries> = $l1;
+
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer: void deliver()>();
+
+        return;
+    }
+
+    public void setDecompressor(io.grpc.Decompressor)
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        java.lang.Object $r1;
+        io.grpc.Decompressor $r2;
+        io.grpc.internal.GzipInflatingBuffer $r3;
+        boolean $z0;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r2 := @parameter0: io.grpc.Decompressor;
+
+        $r3 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r3 != null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Already set full stream decompressor");
+
+        $r1 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "Can\'t pass an empty decompressor");
+
+        $r2 = (io.grpc.Decompressor) $r1;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.Decompressor decompressor> = $r2;
+
+        return;
+    }
+
+    public void setFullStreamDecompressor(io.grpc.internal.GzipInflatingBuffer)
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        java.lang.Object $r1;
+        io.grpc.internal.GzipInflatingBuffer $r2, $r5;
+        io.grpc.Decompressor $r3;
+        io.grpc.Codec $r4;
+        boolean $z0, $z1;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r2 := @parameter0: io.grpc.internal.GzipInflatingBuffer;
+
+        $r3 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.Decompressor decompressor>;
+
+        $r4 = <io.grpc.Codec$Identity: io.grpc.Codec NONE>;
+
+        $z0 = 1;
+
+        if $r3 != $r4 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z1, "per-message decompressor already set");
+
+        $r5 = $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor>;
+
+        if $r5 != null goto label3;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "full stream decompressor already set");
+
+        $r1 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "Can\'t pass a null full stream decompressor");
+
+        $r2 = (io.grpc.internal.GzipInflatingBuffer) $r1;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.GzipInflatingBuffer fullStreamDecompressor> = $r2;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.CompositeReadableBuffer unprocessed> = null;
+
+        return;
+    }
+
+    void setListener(io.grpc.internal.MessageDeframer$Listener)
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        io.grpc.internal.MessageDeframer$Listener $r1;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r1 := @parameter0: io.grpc.internal.MessageDeframer$Listener;
+
+        $r0.<io.grpc.internal.MessageDeframer: io.grpc.internal.MessageDeframer$Listener listener> = $r1;
+
+        return;
+    }
+
+    public void setMaxInboundMessageSize(int)
+    {
+        io.grpc.internal.MessageDeframer $r0;
+        int $i0;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $i0 := @parameter0: int;
+
+        $r0.<io.grpc.internal.MessageDeframer: int maxInboundMessageSize> = $i0;
+
+        return;
+    }
+
+    void stopDelivery()
+    {
+        io.grpc.internal.MessageDeframer $r0;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer;
+
+        $r0.<io.grpc.internal.MessageDeframer: boolean stopDelivery> = 1;
+
+        return;
+    }
+
+io.grpc.internal.MessageDeframer$1
+<io.grpc.internal.MessageDeframer$1: int[] $SwitchMap$io$grpc$internal$MessageDeframer$State>
+    static void <clinit>()
+    {
+        io.grpc.internal.MessageDeframer$State[] $r0;
+        int $i0;
+        int[] $r1;
+        io.grpc.internal.MessageDeframer$State $r2;
+        java.lang.Throwable $r3, $r4;
+
+        $r0 = staticinvoke <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State[] values()>();
+
+        $i0 = lengthof $r0;
+
+        $r1 = newarray (int)[$i0];
+
+        <io.grpc.internal.MessageDeframer$1: int[] $SwitchMap$io$grpc$internal$MessageDeframer$State> = $r1;
+
+        $r2 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State HEADER>;
+
+     label1:
+        $i0 = virtualinvoke $r2.<io.grpc.internal.MessageDeframer$State: int ordinal()>();
+
+     label2:
+        $r1[$i0] = 1;
+
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+     label4:
+        $r1 = <io.grpc.internal.MessageDeframer$1: int[] $SwitchMap$io$grpc$internal$MessageDeframer$State>;
+
+        $r2 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State BODY>;
+
+     label5:
+        $i0 = virtualinvoke $r2.<io.grpc.internal.MessageDeframer$State: int ordinal()>();
+
+     label6:
+        $r1[$i0] = 2;
+
+        return;
+
+     label7:
+        $r4 := @caughtexception;
+
+        return;
+
+        catch java.lang.NoSuchFieldError from label1 to label2 with label3;
+        catch java.lang.NoSuchFieldError from label5 to label6 with label7;
+    }
+
+io.grpc.internal.MessageDeframer$Listener
+<io.grpc.internal.MessageDeframer$Listener: void bytesRead(int)>
+<io.grpc.internal.MessageDeframer$Listener: void deframeFailed(java.lang.Throwable)>
+<io.grpc.internal.MessageDeframer$Listener: void deframerClosed(boolean)>
+<io.grpc.internal.MessageDeframer$Listener: void messagesAvailable(io.grpc.internal.StreamListener$MessageProducer)>
+io.grpc.internal.MessageDeframer$SingleMessageProducer
+<io.grpc.internal.MessageDeframer$SingleMessageProducer: java.io.InputStream message>
+    private void <init>(java.io.InputStream)
+    {
+        io.grpc.internal.MessageDeframer$SingleMessageProducer $r0;
+        java.io.InputStream $r1;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SingleMessageProducer;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<io.grpc.internal.MessageDeframer$SingleMessageProducer: java.io.InputStream message> = $r1;
+
+        return;
+    }
+
+    void <init>(java.io.InputStream, io.grpc.internal.MessageDeframer$1)
+    {
+        io.grpc.internal.MessageDeframer$SingleMessageProducer $r0;
+        java.io.InputStream $r1;
+        io.grpc.internal.MessageDeframer$1 $r2;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SingleMessageProducer;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $r2 := @parameter1: io.grpc.internal.MessageDeframer$1;
+
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer$SingleMessageProducer: void <init>(java.io.InputStream)>($r1);
+
+        return;
+    }
+
+    public java.io.InputStream next()
+    {
+        io.grpc.internal.MessageDeframer$SingleMessageProducer $r0;
+        java.io.InputStream r1;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SingleMessageProducer;
+
+        r1 = $r0.<io.grpc.internal.MessageDeframer$SingleMessageProducer: java.io.InputStream message>;
+
+        $r0.<io.grpc.internal.MessageDeframer$SingleMessageProducer: java.io.InputStream message> = null;
+
+        return r1;
+    }
+
+io.grpc.internal.MessageDeframer$SizeEnforcingInputStream
+<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>
+<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long mark>
+<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long maxCount>
+<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: int maxMessageSize>
+<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: io.grpc.internal.StatsTraceContext statsTraceCtx>
+    void <init>(java.io.InputStream, int, io.grpc.internal.StatsTraceContext)
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream $r0;
+        java.io.InputStream $r1;
+        int $i0;
+        io.grpc.internal.StatsTraceContext $r2;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: io.grpc.internal.StatsTraceContext;
+
+        specialinvoke $r0.<java.io.FilterInputStream: void <init>(java.io.InputStream)>($r1);
+
+        $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long mark> = -1L;
+
+        $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: int maxMessageSize> = $i0;
+
+        $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: io.grpc.internal.StatsTraceContext statsTraceCtx> = $r2;
+
+        return;
+    }
+
+    private void reportCount()
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream $r0;
+        long $l0, $l1;
+        byte $b2;
+        io.grpc.internal.StatsTraceContext $r1;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $l1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $l0 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long maxCount>;
+
+        $b2 = $l1 cmp $l0;
+
+        if $b2 <= 0 goto label1;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: io.grpc.internal.StatsTraceContext statsTraceCtx>;
+
+        $l0 = $l1 - $l0;
+
+        virtualinvoke $r1.<io.grpc.internal.StatsTraceContext: void inboundUncompressedSize(long)>($l0);
+
+        $l0 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long maxCount> = $l0;
+
+     label1:
+        return;
+    }
+
+    private void verifySize()
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream $r0;
+        byte $b0;
+        long $l1, $l3;
+        int $i2;
+        io.grpc.Status $r1;
+        java.lang.StringBuilder $r2, r5;
+        java.lang.String $r3;
+        io.grpc.StatusRuntimeException $r4;
+        java.lang.Throwable r6;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $l1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $i2 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: int maxMessageSize>;
+
+        $l3 = (long) $i2;
+
+        $b0 = $l1 cmp $l3;
+
+        if $b0 > 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = <io.grpc.Status: io.grpc.Status RESOURCE_EXHAUSTED>;
+
+        r5 = new java.lang.StringBuilder;
+
+        specialinvoke r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Decompressed gRPC message exceeds maximum size ");
+
+        $i2 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: int maxMessageSize>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r1 = virtualinvoke $r1.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r3);
+
+        $r4 = virtualinvoke $r1.<io.grpc.Status: io.grpc.StatusRuntimeException asRuntimeException()>();
+
+        r6 = (java.lang.Throwable) $r4;
+
+        throw r6;
+    }
+
+    public void mark(int)
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream $r0;
+        int $i0;
+        java.io.InputStream $r1;
+        long $l1;
+        java.lang.Throwable $r2;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $i0 := @parameter0: int;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        virtualinvoke $r1.<java.io.InputStream: void mark(int)>($i0);
+
+        $l1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long mark> = $l1;
+
+     label2:
+        exitmonitor $r0;
+
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public int read() throws java.io.IOException
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream $r0;
+        int $i0;
+        java.io.InputStream $r1;
+        long $l1;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        $i0 = virtualinvoke $r1.<java.io.InputStream: int read()>();
+
+        if $i0 == -1 goto label1;
+
+        $l1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $l1 = $l1 + 1L;
+
+        $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count> = $l1;
+
+     label1:
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void verifySize()>();
+
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void reportCount()>();
+
+        return $i0;
+    }
+
+    public int read(byte[], int, int) throws java.io.IOException
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream $r0;
+        int $i0, $i1;
+        byte[] $r1;
+        java.io.InputStream $r2;
+        long $l2, $l3;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $r1 := @parameter0: byte[];
+
+        $i1 := @parameter1: int;
+
+        $i0 := @parameter2: int;
+
+        $r2 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        $i1 = virtualinvoke $r2.<java.io.InputStream: int read(byte[],int,int)>($r1, $i1, $i0);
+
+        if $i1 == -1 goto label1;
+
+        $l2 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $l3 = (long) $i1;
+
+        $l2 = $l2 + $l3;
+
+        $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count> = $l2;
+
+     label1:
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void verifySize()>();
+
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void reportCount()>();
+
+        return $i1;
+    }
+
+    public void reset() throws java.io.IOException
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream $r0;
+        byte $b0;
+        boolean $z0;
+        java.io.InputStream $r1;
+        long $l1;
+        java.lang.Throwable $r2;
+        java.io.IOException r3;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        $z0 = virtualinvoke $r1.<java.io.InputStream: boolean markSupported()>();
+
+        if $z0 == 0 goto label4;
+
+        $l1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long mark>;
+
+        $b0 = $l1 cmp -1L;
+
+        if $b0 == 0 goto label3;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        virtualinvoke $r1.<java.io.InputStream: void reset()>();
+
+        $l1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long mark>;
+
+        $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count> = $l1;
+
+     label2:
+        exitmonitor $r0;
+
+        return;
+
+     label3:
+        r3 = new java.io.IOException;
+
+        specialinvoke r3.<java.io.IOException: void <init>(java.lang.String)>("Mark not set");
+
+        $r2 = (java.lang.Throwable) r3;
+
+        throw $r2;
+
+     label4:
+        r3 = new java.io.IOException;
+
+        specialinvoke r3.<java.io.IOException: void <init>(java.lang.String)>("Mark not supported");
+
+        $r2 = (java.lang.Throwable) r3;
+
+        throw $r2;
+
+     label5:
+        $r2 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label5 with label5;
+    }
+
+    public long skip(long) throws java.io.IOException
+    {
+        io.grpc.internal.MessageDeframer$SizeEnforcingInputStream $r0;
+        long $l0, $l1;
+        java.io.InputStream $r1;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$SizeEnforcingInputStream;
+
+        $l0 := @parameter0: long;
+
+        $r1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: java.io.InputStream in>;
+
+        $l0 = virtualinvoke $r1.<java.io.InputStream: long skip(long)>($l0);
+
+        $l1 = $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count>;
+
+        $l1 = $l1 + $l0;
+
+        $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: long count> = $l1;
+
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void verifySize()>();
+
+        specialinvoke $r0.<io.grpc.internal.MessageDeframer$SizeEnforcingInputStream: void reportCount()>();
+
+        return $l0;
+    }
+
+io.grpc.internal.MessageDeframer$State
+<io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State[] $VALUES>
+<io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State BODY>
+<io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State HEADER>
+    private static io.grpc.internal.MessageDeframer$State[] $values()
+    {
+        io.grpc.internal.MessageDeframer$State[] $r0;
+        io.grpc.internal.MessageDeframer$State $r1;
+
+        $r0 = newarray (io.grpc.internal.MessageDeframer$State)[2];
+
+        $r1 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State HEADER>;
+
+        $r0[0] = $r1;
+
+        $r1 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State BODY>;
+
+        $r0[1] = $r1;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        io.grpc.internal.MessageDeframer$State[] $r0;
+        io.grpc.internal.MessageDeframer$State $r1;
+
+        $r1 = new io.grpc.internal.MessageDeframer$State;
+
+        specialinvoke $r1.<io.grpc.internal.MessageDeframer$State: void <init>(java.lang.String,int)>("HEADER", 0);
+
+        <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State HEADER> = $r1;
+
+        $r1 = new io.grpc.internal.MessageDeframer$State;
+
+        specialinvoke $r1.<io.grpc.internal.MessageDeframer$State: void <init>(java.lang.String,int)>("BODY", 1);
+
+        <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State BODY> = $r1;
+
+        $r0 = staticinvoke <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State[] $values()>();
+
+        <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State[] $VALUES> = $r0;
+
+        return;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        io.grpc.internal.MessageDeframer$State $r0;
+        java.lang.String $r1;
+        int $i0;
+
+        $r0 := @this: io.grpc.internal.MessageDeframer$State;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke $r0.<java.lang.Enum: void <init>(java.lang.String,int)>($r1, $i0);
+
+        return;
+    }
+
+    public static io.grpc.internal.MessageDeframer$State[] values()
+    {
+        java.lang.Object $r0;
+        io.grpc.internal.MessageDeframer$State[] $r1;
+
+        $r1 = <io.grpc.internal.MessageDeframer$State: io.grpc.internal.MessageDeframer$State[] $VALUES>;
+
+        $r0 = virtualinvoke $r1.<java.lang.Object: java.lang.Object clone()>();
+
+        $r1 = (io.grpc.internal.MessageDeframer$State[]) $r0;
+
+        return $r1;
+    }
+

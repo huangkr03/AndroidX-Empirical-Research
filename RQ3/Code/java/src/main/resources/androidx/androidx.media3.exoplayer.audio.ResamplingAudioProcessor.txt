@@ -1,0 +1,302 @@
+androidx.media3.exoplayer.audio.ResamplingAudioProcessor
+    void <init>()
+    {
+        androidx.media3.exoplayer.audio.ResamplingAudioProcessor r0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.ResamplingAudioProcessor;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.BaseAudioProcessor: void <init>()>();
+
+        return;
+    }
+
+    public androidx.media3.common.audio.AudioProcessor$AudioFormat onConfigure(androidx.media3.common.audio.AudioProcessor$AudioFormat) throws androidx.media3.common.audio.AudioProcessor$UnhandledAudioFormatException
+    {
+        androidx.media3.exoplayer.audio.ResamplingAudioProcessor r0;
+        androidx.media3.common.audio.AudioProcessor$AudioFormat r1, $r3;
+        int i0, $i1, $i2;
+        androidx.media3.common.audio.AudioProcessor$UnhandledAudioFormatException $r2;
+
+        r0 := @this: androidx.media3.exoplayer.audio.ResamplingAudioProcessor;
+
+        r1 := @parameter0: androidx.media3.common.audio.AudioProcessor$AudioFormat;
+
+        i0 = r1.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int encoding>;
+
+        if i0 == 3 goto label1;
+
+        if i0 == 2 goto label1;
+
+        if i0 == 268435456 goto label1;
+
+        if i0 == 536870912 goto label1;
+
+        if i0 == 805306368 goto label1;
+
+        if i0 == 4 goto label1;
+
+        $r2 = new androidx.media3.common.audio.AudioProcessor$UnhandledAudioFormatException;
+
+        specialinvoke $r2.<androidx.media3.common.audio.AudioProcessor$UnhandledAudioFormatException: void <init>(androidx.media3.common.audio.AudioProcessor$AudioFormat)>(r1);
+
+        throw $r2;
+
+     label1:
+        if i0 == 2 goto label2;
+
+        $r3 = new androidx.media3.common.audio.AudioProcessor$AudioFormat;
+
+        $i2 = r1.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int sampleRate>;
+
+        $i1 = r1.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int channelCount>;
+
+        specialinvoke $r3.<androidx.media3.common.audio.AudioProcessor$AudioFormat: void <init>(int,int,int)>($i2, $i1, 2);
+
+        goto label3;
+
+     label2:
+        $r3 = <androidx.media3.common.audio.AudioProcessor$AudioFormat: androidx.media3.common.audio.AudioProcessor$AudioFormat NOT_SET>;
+
+     label3:
+        return $r3;
+    }
+
+    public void queueInput(java.nio.ByteBuffer)
+    {
+        androidx.media3.exoplayer.audio.ResamplingAudioProcessor r0;
+        java.nio.ByteBuffer r1, r2;
+        int i0, i1, i2, $i4, $i5, $i6, $i8, $i10, $i12, $i14, $i17, $i25, i27, $i28, i29, i30, i31, i32, i33, $i34;
+        float f0, $f1, $f2;
+        short s3, $s18, $s20, $s21, $s24;
+        androidx.media3.common.audio.AudioProcessor$AudioFormat $r3, $r18;
+        byte $b7, $b9, $b11, $b13, $b15, $b16, $b19, $b22, $b23, $b26;
+        java.lang.IllegalStateException $r16, $r17;
+
+        r0 := @this: androidx.media3.exoplayer.audio.ResamplingAudioProcessor;
+
+        r1 := @parameter0: java.nio.ByteBuffer;
+
+        i0 = virtualinvoke r1.<java.nio.ByteBuffer: int position()>();
+
+        i1 = virtualinvoke r1.<java.nio.ByteBuffer: int limit()>();
+
+        i2 = i1 - i0;
+
+        $r3 = r0.<androidx.media3.exoplayer.audio.ResamplingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i4 = $r3.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int encoding>;
+
+        lookupswitch($i4)
+        {
+            case -1: goto label05;
+            case 0: goto label05;
+            case 2: goto label05;
+            case 3: goto label01;
+            case 4: goto label04;
+            case 268435456: goto label02;
+            case 536870912: goto label03;
+            case 805306368: goto label04;
+            default: goto label05;
+        };
+
+     label01:
+        i27 = i2 * 2;
+
+        goto label06;
+
+     label02:
+        i27 = i2;
+
+        goto label06;
+
+     label03:
+        $i5 = i2 / 3;
+
+        i27 = $i5 * 2;
+
+        goto label06;
+
+     label04:
+        i27 = i2 / 2;
+
+        goto label06;
+
+     label05:
+        $r17 = new java.lang.IllegalStateException;
+
+        specialinvoke $r17.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r17;
+
+     label06:
+        r2 = virtualinvoke r0.<androidx.media3.exoplayer.audio.ResamplingAudioProcessor: java.nio.ByteBuffer replaceOutputBuffer(int)>(i27);
+
+        $r18 = r0.<androidx.media3.exoplayer.audio.ResamplingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i28 = $r18.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int encoding>;
+
+        lookupswitch($i28)
+        {
+            case -1: goto label22;
+            case 0: goto label22;
+            case 2: goto label22;
+            case 3: goto label07;
+            case 4: goto label19;
+            case 268435456: goto label10;
+            case 536870912: goto label13;
+            case 805306368: goto label16;
+            default: goto label22;
+        };
+
+     label07:
+        i29 = i0;
+
+     label08:
+        if i29 >= i1 goto label09;
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>(0);
+
+        $b23 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>(i29);
+
+        $s24 = $b23 & 255;
+
+        $i25 = $s24 - 128;
+
+        $b26 = (byte) $i25;
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>($b26);
+
+        i29 = i29 + 1;
+
+        goto label08;
+
+     label09:
+        goto label23;
+
+     label10:
+        i30 = i0;
+
+     label11:
+        if i30 >= i1 goto label12;
+
+        $i14 = i30 + 1;
+
+        $b15 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i14);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>($b15);
+
+        $b16 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>(i30);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>($b16);
+
+        i30 = i30 + 2;
+
+        goto label11;
+
+     label12:
+        goto label23;
+
+     label13:
+        i31 = i0;
+
+     label14:
+        if i31 >= i1 goto label15;
+
+        $i10 = i31 + 1;
+
+        $b11 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i10);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>($b11);
+
+        $i12 = i31 + 2;
+
+        $b13 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i12);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>($b13);
+
+        i31 = i31 + 3;
+
+        goto label14;
+
+     label15:
+        goto label23;
+
+     label16:
+        i32 = i0;
+
+     label17:
+        if i32 >= i1 goto label18;
+
+        $i6 = i32 + 2;
+
+        $b7 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i6);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>($b7);
+
+        $i8 = i32 + 3;
+
+        $b9 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i8);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>($b9);
+
+        i32 = i32 + 4;
+
+        goto label17;
+
+     label18:
+        goto label23;
+
+     label19:
+        i33 = i0;
+
+     label20:
+        if i33 >= i1 goto label21;
+
+        $f1 = virtualinvoke r1.<java.nio.ByteBuffer: float getFloat(int)>(i33);
+
+        f0 = staticinvoke <androidx.media3.common.util.Util: float constrainValue(float,float,float)>($f1, -1.0F, 1.0F);
+
+        $f2 = f0 * 32767.0F;
+
+        $i17 = (int) $f2;
+
+        s3 = (short) $i17;
+
+        $s18 = s3 & 255;
+
+        $b19 = (byte) $s18;
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>($b19);
+
+        $s20 = s3 >> 8;
+
+        $s21 = $s20 & 255;
+
+        $b22 = (byte) $s21;
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>($b22);
+
+        i33 = i33 + 4;
+
+        goto label20;
+
+     label21:
+        goto label23;
+
+     label22:
+        $r16 = new java.lang.IllegalStateException;
+
+        specialinvoke $r16.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r16;
+
+     label23:
+        $i34 = virtualinvoke r1.<java.nio.ByteBuffer: int limit()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer position(int)>($i34);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.Buffer flip()>();
+
+        return;
+    }
+

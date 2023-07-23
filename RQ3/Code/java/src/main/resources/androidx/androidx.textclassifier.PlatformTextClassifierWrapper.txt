@@ -1,0 +1,268 @@
+androidx.textclassifier.PlatformTextClassifierWrapper
+<androidx.textclassifier.PlatformTextClassifierWrapper: android.view.textclassifier.TextClassifier mPlatformTextClassifier>
+<androidx.textclassifier.PlatformTextClassifierWrapper: android.content.Context mContext>
+<androidx.textclassifier.PlatformTextClassifierWrapper: androidx.textclassifier.TextClassifier mFallback>
+    void <init>(android.content.Context, android.view.textclassifier.TextClassifier)
+    {
+        androidx.textclassifier.PlatformTextClassifierWrapper r0;
+        android.content.Context r1, $r4;
+        android.view.textclassifier.TextClassifier r2, $r6;
+        java.lang.Object $r3, $r5;
+        androidx.textclassifier.LegacyTextClassifier $r7;
+
+        r0 := @this: androidx.textclassifier.PlatformTextClassifierWrapper;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.view.textclassifier.TextClassifier;
+
+        specialinvoke r0.<androidx.textclassifier.TextClassifier: void <init>()>();
+
+        $r3 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r4 = (android.content.Context) $r3;
+
+        r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.content.Context mContext> = $r4;
+
+        $r5 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $r6 = (android.view.textclassifier.TextClassifier) $r5;
+
+        r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.view.textclassifier.TextClassifier mPlatformTextClassifier> = $r6;
+
+        $r7 = staticinvoke <androidx.textclassifier.LegacyTextClassifier: androidx.textclassifier.LegacyTextClassifier of(android.content.Context)>(r1);
+
+        r0.<androidx.textclassifier.PlatformTextClassifierWrapper: androidx.textclassifier.TextClassifier mFallback> = $r7;
+
+        return;
+    }
+
+    static androidx.textclassifier.PlatformTextClassifierWrapper create(android.content.Context)
+    {
+        android.content.Context r0;
+        android.view.textclassifier.TextClassificationManager r1;
+        android.view.textclassifier.TextClassifier r2;
+        java.lang.Object $r3;
+        androidx.textclassifier.PlatformTextClassifierWrapper $r4;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r3 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("textclassification");
+
+        r1 = (android.view.textclassifier.TextClassificationManager) $r3;
+
+        r2 = virtualinvoke r1.<android.view.textclassifier.TextClassificationManager: android.view.textclassifier.TextClassifier getTextClassifier()>();
+
+        $r4 = new androidx.textclassifier.PlatformTextClassifierWrapper;
+
+        specialinvoke $r4.<androidx.textclassifier.PlatformTextClassifierWrapper: void <init>(android.content.Context,android.view.textclassifier.TextClassifier)>(r0, r2);
+
+        return $r4;
+    }
+
+    public androidx.textclassifier.TextSelection suggestSelection(androidx.textclassifier.TextSelection$Request)
+    {
+        androidx.textclassifier.PlatformTextClassifierWrapper r0;
+        androidx.textclassifier.TextSelection$Request r1;
+        int $i0, $i1, $i2;
+        android.view.textclassifier.TextClassifier $r3, $r9;
+        java.lang.CharSequence $r4;
+        androidx.core.os.LocaleListCompat $r5;
+        android.os.LocaleList $r6;
+        android.view.textclassifier.TextSelection $r7, $r12;
+        androidx.textclassifier.TextSelection $r8, $r13;
+        java.lang.Object $r10;
+        android.view.textclassifier.TextSelection$Request $r11;
+
+        r0 := @this: androidx.textclassifier.PlatformTextClassifierWrapper;
+
+        r1 := @parameter0: androidx.textclassifier.TextSelection$Request;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        staticinvoke <androidx.textclassifier.PlatformTextClassifierWrapper: void ensureNotOnMainThread()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label1;
+
+        $r9 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.view.textclassifier.TextClassifier mPlatformTextClassifier>;
+
+        $r10 = virtualinvoke r1.<androidx.textclassifier.TextSelection$Request: java.lang.Object toPlatform()>();
+
+        $r11 = (android.view.textclassifier.TextSelection$Request) $r10;
+
+        $r12 = interfaceinvoke $r9.<android.view.textclassifier.TextClassifier: android.view.textclassifier.TextSelection suggestSelection(android.view.textclassifier.TextSelection$Request)>($r11);
+
+        $r13 = staticinvoke <androidx.textclassifier.TextSelection: androidx.textclassifier.TextSelection fromPlatform(android.view.textclassifier.TextSelection)>($r12);
+
+        return $r13;
+
+     label1:
+        $r3 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.view.textclassifier.TextClassifier mPlatformTextClassifier>;
+
+        $r4 = virtualinvoke r1.<androidx.textclassifier.TextSelection$Request: java.lang.CharSequence getText()>();
+
+        $i1 = virtualinvoke r1.<androidx.textclassifier.TextSelection$Request: int getStartIndex()>();
+
+        $i2 = virtualinvoke r1.<androidx.textclassifier.TextSelection$Request: int getEndIndex()>();
+
+        $r5 = virtualinvoke r1.<androidx.textclassifier.TextSelection$Request: androidx.core.os.LocaleListCompat getDefaultLocales()>();
+
+        $r6 = staticinvoke <androidx.textclassifier.ConvertUtils: android.os.LocaleList unwrapLocalListCompat(androidx.core.os.LocaleListCompat)>($r5);
+
+        $r7 = interfaceinvoke $r3.<android.view.textclassifier.TextClassifier: android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence,int,int,android.os.LocaleList)>($r4, $i1, $i2, $r6);
+
+        $r8 = staticinvoke <androidx.textclassifier.TextSelection: androidx.textclassifier.TextSelection fromPlatform(android.view.textclassifier.TextSelection)>($r7);
+
+        return $r8;
+    }
+
+    public androidx.textclassifier.TextClassification classifyText(androidx.textclassifier.TextClassification$Request)
+    {
+        androidx.textclassifier.PlatformTextClassifierWrapper r0;
+        androidx.textclassifier.TextClassification$Request r1;
+        androidx.textclassifier.TextClassification r2, $r15;
+        int $i0, $i1, $i2;
+        android.content.Context $r4, $r10;
+        android.view.textclassifier.TextClassifier $r5, $r11;
+        java.lang.CharSequence $r6;
+        androidx.core.os.LocaleListCompat $r7;
+        android.os.LocaleList $r8;
+        android.view.textclassifier.TextClassification $r9, $r14;
+        java.lang.Object $r12;
+        android.view.textclassifier.TextClassification$Request $r13;
+
+        r0 := @this: androidx.textclassifier.PlatformTextClassifierWrapper;
+
+        r1 := @parameter0: androidx.textclassifier.TextClassification$Request;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        staticinvoke <androidx.textclassifier.PlatformTextClassifierWrapper: void ensureNotOnMainThread()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label1;
+
+        $r10 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.content.Context mContext>;
+
+        $r11 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.view.textclassifier.TextClassifier mPlatformTextClassifier>;
+
+        $r12 = virtualinvoke r1.<androidx.textclassifier.TextClassification$Request: java.lang.Object toPlatform()>();
+
+        $r13 = (android.view.textclassifier.TextClassification$Request) $r12;
+
+        $r14 = interfaceinvoke $r11.<android.view.textclassifier.TextClassifier: android.view.textclassifier.TextClassification classifyText(android.view.textclassifier.TextClassification$Request)>($r13);
+
+        $r15 = staticinvoke <androidx.textclassifier.TextClassification: androidx.textclassifier.TextClassification fromPlatform(android.content.Context,android.view.textclassifier.TextClassification)>($r10, $r14);
+
+        return $r15;
+
+     label1:
+        $r4 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.content.Context mContext>;
+
+        $r5 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.view.textclassifier.TextClassifier mPlatformTextClassifier>;
+
+        $r6 = virtualinvoke r1.<androidx.textclassifier.TextClassification$Request: java.lang.CharSequence getText()>();
+
+        $i1 = virtualinvoke r1.<androidx.textclassifier.TextClassification$Request: int getStartIndex()>();
+
+        $i2 = virtualinvoke r1.<androidx.textclassifier.TextClassification$Request: int getEndIndex()>();
+
+        $r7 = virtualinvoke r1.<androidx.textclassifier.TextClassification$Request: androidx.core.os.LocaleListCompat getDefaultLocales()>();
+
+        $r8 = staticinvoke <androidx.textclassifier.ConvertUtils: android.os.LocaleList unwrapLocalListCompat(androidx.core.os.LocaleListCompat)>($r7);
+
+        $r9 = interfaceinvoke $r5.<android.view.textclassifier.TextClassifier: android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence,int,int,android.os.LocaleList)>($r6, $i1, $i2, $r8);
+
+        r2 = staticinvoke <androidx.textclassifier.TextClassification: androidx.textclassifier.TextClassification fromPlatform(android.content.Context,android.view.textclassifier.TextClassification)>($r4, $r9);
+
+        return r2;
+    }
+
+    public androidx.textclassifier.TextLinks generateLinks(androidx.textclassifier.TextLinks$Request)
+    {
+        androidx.textclassifier.PlatformTextClassifierWrapper r0;
+        androidx.textclassifier.TextLinks$Request r1;
+        int $i0;
+        androidx.textclassifier.TextClassifier $r3;
+        androidx.textclassifier.TextLinks $r4, $r9;
+        android.view.textclassifier.TextClassifier $r5;
+        android.view.textclassifier.TextLinks$Request $r6;
+        android.view.textclassifier.TextLinks $r7;
+        java.lang.CharSequence $r8;
+
+        r0 := @this: androidx.textclassifier.PlatformTextClassifierWrapper;
+
+        r1 := @parameter0: androidx.textclassifier.TextLinks$Request;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        staticinvoke <androidx.textclassifier.PlatformTextClassifierWrapper: void ensureNotOnMainThread()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label1;
+
+        $r5 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.view.textclassifier.TextClassifier mPlatformTextClassifier>;
+
+        $r6 = virtualinvoke r1.<androidx.textclassifier.TextLinks$Request: android.view.textclassifier.TextLinks$Request toPlatform()>();
+
+        $r7 = interfaceinvoke $r5.<android.view.textclassifier.TextClassifier: android.view.textclassifier.TextLinks generateLinks(android.view.textclassifier.TextLinks$Request)>($r6);
+
+        $r8 = virtualinvoke r1.<androidx.textclassifier.TextLinks$Request: java.lang.CharSequence getText()>();
+
+        $r9 = staticinvoke <androidx.textclassifier.TextLinks: androidx.textclassifier.TextLinks fromPlatform(android.view.textclassifier.TextLinks,java.lang.CharSequence)>($r7, $r8);
+
+        return $r9;
+
+     label1:
+        $r3 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: androidx.textclassifier.TextClassifier mFallback>;
+
+        $r4 = virtualinvoke $r3.<androidx.textclassifier.TextClassifier: androidx.textclassifier.TextLinks generateLinks(androidx.textclassifier.TextLinks$Request)>(r1);
+
+        return $r4;
+    }
+
+    public androidx.textclassifier.ConversationActions suggestConversationActions(androidx.textclassifier.ConversationActions$Request)
+    {
+        androidx.textclassifier.PlatformTextClassifierWrapper r0;
+        androidx.textclassifier.ConversationActions$Request r1;
+        int $i0;
+        androidx.textclassifier.TextClassifier $r3;
+        androidx.textclassifier.ConversationActions $r4, $r8;
+        android.view.textclassifier.TextClassifier $r5;
+        android.view.textclassifier.ConversationActions$Request $r6;
+        android.view.textclassifier.ConversationActions $r7;
+
+        r0 := @this: androidx.textclassifier.PlatformTextClassifierWrapper;
+
+        r1 := @parameter0: androidx.textclassifier.ConversationActions$Request;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        staticinvoke <androidx.textclassifier.PlatformTextClassifierWrapper: void ensureNotOnMainThread()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 29 goto label1;
+
+        $r5 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: android.view.textclassifier.TextClassifier mPlatformTextClassifier>;
+
+        $r6 = virtualinvoke r1.<androidx.textclassifier.ConversationActions$Request: android.view.textclassifier.ConversationActions$Request toPlatform()>();
+
+        $r7 = interfaceinvoke $r5.<android.view.textclassifier.TextClassifier: android.view.textclassifier.ConversationActions suggestConversationActions(android.view.textclassifier.ConversationActions$Request)>($r6);
+
+        $r8 = staticinvoke <androidx.textclassifier.ConversationActions: androidx.textclassifier.ConversationActions fromPlatform(android.view.textclassifier.ConversationActions)>($r7);
+
+        return $r8;
+
+     label1:
+        $r3 = r0.<androidx.textclassifier.PlatformTextClassifierWrapper: androidx.textclassifier.TextClassifier mFallback>;
+
+        $r4 = virtualinvoke $r3.<androidx.textclassifier.TextClassifier: androidx.textclassifier.ConversationActions suggestConversationActions(androidx.textclassifier.ConversationActions$Request)>(r1);
+
+        return $r4;
+    }
+

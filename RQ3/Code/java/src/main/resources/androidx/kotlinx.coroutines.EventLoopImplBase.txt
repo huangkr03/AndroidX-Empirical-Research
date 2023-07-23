@@ -1,0 +1,1632 @@
+kotlinx.coroutines.EventLoopImplBase
+<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>
+<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicBoolean _isCompleted>
+<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>
+    public void <init>()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        kotlinx.atomicfu.AtomicRef $r1;
+        kotlinx.atomicfu.AtomicBoolean $r2;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        specialinvoke $r0.<kotlinx.coroutines.EventLoopImplPlatform: void <init>()>();
+
+        $r1 = staticinvoke <kotlinx.atomicfu.AtomicFU: kotlinx.atomicfu.AtomicRef atomic(java.lang.Object)>(null);
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue> = $r1;
+
+        $r1 = staticinvoke <kotlinx.atomicfu.AtomicFU: kotlinx.atomicfu.AtomicRef atomic(java.lang.Object)>(null);
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed> = $r1;
+
+        $r2 = staticinvoke <kotlinx.atomicfu.AtomicFU: kotlinx.atomicfu.AtomicBoolean atomic(boolean)>(0);
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicBoolean _isCompleted> = $r2;
+
+        return;
+    }
+
+    public static final boolean access$isCompleted(kotlinx.coroutines.EventLoopImplBase)
+    {
+        boolean $z0;
+        kotlinx.coroutines.EventLoopImplBase $r0;
+
+        $r0 := @parameter0: kotlinx.coroutines.EventLoopImplBase;
+
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: boolean isCompleted()>();
+
+        return $z0;
+    }
+
+    private final void closeQueue()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        boolean $z0;
+        java.lang.AssertionError $r1;
+        kotlinx.atomicfu.AtomicRef $r2, $r4;
+        java.lang.Object $r3;
+        kotlinx.coroutines.internal.Symbol $r5;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r6;
+        java.lang.Runnable $r7;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label2;
+
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: boolean isCompleted()>();
+
+        if $z0 == 0 goto label1;
+
+        goto label2;
+
+     label1:
+        $r1 = new java.lang.AssertionError;
+
+        specialinvoke $r1.<java.lang.AssertionError: void <init>()>();
+
+        throw $r1;
+
+     label2:
+        $r2 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+     label3:
+        $r3 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        if $r3 != null goto label4;
+
+        $r4 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        $r5 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getCLOSED_EMPTY$p()>();
+
+        $z0 = virtualinvoke $r4.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>(null, $r5);
+
+        if $z0 == 0 goto label3;
+
+        return;
+
+     label4:
+        $z0 = $r3 instanceof kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        if $z0 == 0 goto label5;
+
+        $r6 = (kotlinx.coroutines.internal.LockFreeTaskQueueCore) $r3;
+
+        virtualinvoke $r6.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: boolean close()>();
+
+        return;
+
+     label5:
+        $r5 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getCLOSED_EMPTY$p()>();
+
+        if $r3 != $r5 goto label6;
+
+        return;
+
+     label6:
+        $r6 = new kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        specialinvoke $r6.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: void <init>(int,boolean)>(8, 1);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r3, "null cannot be cast to non-null type java.lang.Runnable{ kotlinx.coroutines.RunnableKt.Runnable }");
+
+        $r7 = (java.lang.Runnable) $r3;
+
+        virtualinvoke $r6.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int addLast(java.lang.Object)>($r7);
+
+        $r4 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        $z0 = virtualinvoke $r4.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r3, $r6);
+
+        if $z0 == 0 goto label3;
+
+        return;
+    }
+
+    private final java.lang.Runnable dequeue()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        kotlinx.coroutines.internal.Symbol $r1;
+        kotlinx.atomicfu.AtomicRef $r2, $r7;
+        java.lang.Object $r3, $r5;
+        boolean $z0;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r4;
+        java.lang.Runnable $r6;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $r2 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+     label1:
+        $r3 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        if $r3 != null goto label2;
+
+        return null;
+
+     label2:
+        $z0 = $r3 instanceof kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        if $z0 == 0 goto label4;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r3, "null cannot be cast to non-null type kotlinx.coroutines.internal.LockFreeTaskQueueCore<java.lang.Runnable{ kotlinx.coroutines.RunnableKt.Runnable }>{ kotlinx.coroutines.EventLoop_commonKt.Queue<java.lang.Runnable{ kotlinx.coroutines.RunnableKt.Runnable }> }");
+
+        $r4 = (kotlinx.coroutines.internal.LockFreeTaskQueueCore) $r3;
+
+        $r5 = virtualinvoke $r4.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: java.lang.Object removeFirstOrNull()>();
+
+        $r1 = <kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.Symbol REMOVE_FROZEN>;
+
+        if $r5 == $r1 goto label3;
+
+        $r6 = (java.lang.Runnable) $r5;
+
+        return $r6;
+
+     label3:
+        $r7 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        $r4 = virtualinvoke $r4.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore next()>();
+
+        virtualinvoke $r7.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r3, $r4);
+
+        goto label1;
+
+     label4:
+        $r1 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getCLOSED_EMPTY$p()>();
+
+        if $r3 != $r1 goto label5;
+
+        return null;
+
+     label5:
+        $r7 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        $z0 = virtualinvoke $r7.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r3, null);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r3, "null cannot be cast to non-null type java.lang.Runnable{ kotlinx.coroutines.RunnableKt.Runnable }");
+
+        $r6 = (java.lang.Runnable) $r3;
+
+        return $r6;
+    }
+
+    private final boolean enqueueImpl(java.lang.Runnable)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        java.lang.Runnable $r1, $r7;
+        kotlinx.atomicfu.AtomicRef $r2, $r4;
+        java.lang.Object $r3;
+        boolean $z0;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r5;
+        int $i0;
+        kotlinx.coroutines.internal.Symbol $r6;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+     label1:
+        $r3 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: boolean isCompleted()>();
+
+        if $z0 == 0 goto label2;
+
+        return 0;
+
+     label2:
+        if $r3 != null goto label3;
+
+        $r4 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        $z0 = virtualinvoke $r4.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>(null, $r1);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label3:
+        $z0 = $r3 instanceof kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        if $z0 == 0 goto label8;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r3, "null cannot be cast to non-null type kotlinx.coroutines.internal.LockFreeTaskQueueCore<java.lang.Runnable{ kotlinx.coroutines.RunnableKt.Runnable }>{ kotlinx.coroutines.EventLoop_commonKt.Queue<java.lang.Runnable{ kotlinx.coroutines.RunnableKt.Runnable }> }");
+
+        $r5 = (kotlinx.coroutines.internal.LockFreeTaskQueueCore) $r3;
+
+        $i0 = virtualinvoke $r5.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int addLast(java.lang.Object)>($r1);
+
+        lookupswitch($i0)
+        {
+            case 0: goto label7;
+            case 1: goto label6;
+            case 2: goto label5;
+            default: goto label4;
+        };
+
+     label4:
+        goto label1;
+
+     label5:
+        return 0;
+
+     label6:
+        $r4 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        $r5 = virtualinvoke $r5.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore next()>();
+
+        virtualinvoke $r4.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r3, $r5);
+
+        goto label1;
+
+     label7:
+        return 1;
+
+     label8:
+        $r6 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getCLOSED_EMPTY$p()>();
+
+        if $r3 != $r6 goto label9;
+
+        return 0;
+
+     label9:
+        $r5 = new kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        specialinvoke $r5.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: void <init>(int,boolean)>(8, 1);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r3, "null cannot be cast to non-null type java.lang.Runnable{ kotlinx.coroutines.RunnableKt.Runnable }");
+
+        $r7 = (java.lang.Runnable) $r3;
+
+        virtualinvoke $r5.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int addLast(java.lang.Object)>($r7);
+
+        virtualinvoke $r5.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int addLast(java.lang.Object)>($r1);
+
+        $r4 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        $z0 = virtualinvoke $r4.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>($r3, $r5);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+    }
+
+    private final boolean isCompleted()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        boolean $z0;
+        kotlinx.atomicfu.AtomicBoolean $r1;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicBoolean _isCompleted>;
+
+        $z0 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicBoolean: boolean getValue()>();
+
+        return $z0;
+    }
+
+    private final void rescheduleAllDelayed()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        kotlinx.coroutines.AbstractTimeSource $r1;
+        long $l0;
+        kotlinx.atomicfu.AtomicRef $r2;
+        java.lang.Object $r3;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue $r4;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r5;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r6;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $r1 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r1 == null goto label1;
+
+        $l0 = virtualinvoke $r1.<kotlinx.coroutines.AbstractTimeSource: long nanoTime()>();
+
+        goto label2;
+
+     label1:
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+     label2:
+        $r2 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>;
+
+        $r3 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $r4 = (kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue) $r3;
+
+        if $r4 == null goto label4;
+
+        $r5 = virtualinvoke $r4.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: kotlinx.coroutines.internal.ThreadSafeHeapNode removeFirstOrNull()>();
+
+        $r6 = (kotlinx.coroutines.EventLoopImplBase$DelayedTask) $r5;
+
+        if $r6 != null goto label3;
+
+        return;
+
+     label3:
+        virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void reschedule(long,kotlinx.coroutines.EventLoopImplBase$DelayedTask)>($l0, $r6);
+
+        goto label2;
+
+     label4:
+        return;
+    }
+
+    private final int scheduleImpl(long, kotlinx.coroutines.EventLoopImplBase$DelayedTask)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r1;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue $r2;
+        long $l0;
+        boolean $z0;
+        kotlinx.atomicfu.AtomicRef $r3;
+        java.lang.Object $r4;
+        int $i1;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: boolean isCompleted()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        $r3 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>;
+
+        $r4 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $r2 = (kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue) $r4;
+
+        if $r2 != null goto label2;
+
+        $r3 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>;
+
+        $r2 = new kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue;
+
+        specialinvoke $r2.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: void <init>(long)>($l0);
+
+        virtualinvoke $r3.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>(null, $r2);
+
+        $r3 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>;
+
+        $r4 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r4);
+
+        $r2 = (kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue) $r4;
+
+     label2:
+        $i1 = virtualinvoke $r1.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: int scheduleTask(long,kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue,kotlinx.coroutines.EventLoopImplBase)>($l0, $r2, $r0);
+
+        return $i1;
+    }
+
+    private final void setCompleted(boolean)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        boolean $z0;
+        kotlinx.atomicfu.AtomicBoolean $r1;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicBoolean _isCompleted>;
+
+        virtualinvoke $r1.<kotlinx.atomicfu.AtomicBoolean: void setValue(boolean)>($z0);
+
+        return;
+    }
+
+    private final boolean shouldUnpark(kotlinx.coroutines.EventLoopImplBase$DelayedTask)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r1, $r6;
+        kotlinx.atomicfu.AtomicRef $r2;
+        java.lang.Object $r3;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue $r4;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r5;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $r1 := @parameter0: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $r2 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>;
+
+        $r3 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $r4 = (kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue) $r3;
+
+        if $r4 == null goto label1;
+
+        $r5 = virtualinvoke $r4.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: kotlinx.coroutines.internal.ThreadSafeHeapNode peek()>();
+
+        $r6 = (kotlinx.coroutines.EventLoopImplBase$DelayedTask) $r5;
+
+        goto label2;
+
+     label1:
+        $r6 = null;
+
+     label2:
+        if $r6 != $r1 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    public final void dispatch(kotlin.coroutines.CoroutineContext, java.lang.Runnable)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        java.lang.Runnable $r1;
+        kotlin.coroutines.CoroutineContext $r2;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $r2 := @parameter0: kotlin.coroutines.CoroutineContext;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "context");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "block");
+
+        virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void enqueue(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    public void enqueue(java.lang.Runnable)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        java.lang.Runnable $r1;
+        boolean $z0;
+        kotlinx.coroutines.DefaultExecutor $r2;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "task");
+
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: boolean enqueueImpl(java.lang.Runnable)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void unpark()>();
+
+        return;
+
+     label1:
+        $r2 = <kotlinx.coroutines.DefaultExecutor: kotlinx.coroutines.DefaultExecutor INSTANCE>;
+
+        virtualinvoke $r2.<kotlinx.coroutines.DefaultExecutor: void enqueue(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    protected long getNextTime()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        long $l0, $l2;
+        byte $b1;
+        kotlinx.atomicfu.AtomicRef $r1;
+        java.lang.Object $r2;
+        boolean $z0;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r3;
+        kotlinx.coroutines.internal.Symbol $r4;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue $r5;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r6;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r7;
+        kotlinx.coroutines.AbstractTimeSource $r8;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $l0 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplPlatform: long getNextTime()>();
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label1;
+
+        return 0L;
+
+     label1:
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        $r2 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        if $r2 == null goto label4;
+
+        $z0 = $r2 instanceof kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = (kotlinx.coroutines.internal.LockFreeTaskQueueCore) $r2;
+
+        $z0 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: boolean isEmpty()>();
+
+        if $z0 != 0 goto label4;
+
+        return 0L;
+
+     label2:
+        $r4 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getCLOSED_EMPTY$p()>();
+
+        if $r2 != $r4 goto label3;
+
+        return 9223372036854775807L;
+
+     label3:
+        return 0L;
+
+     label4:
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>;
+
+        $r2 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $r5 = (kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue) $r2;
+
+        if $r5 == null goto label8;
+
+        $r6 = virtualinvoke $r5.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: kotlinx.coroutines.internal.ThreadSafeHeapNode peek()>();
+
+        $r7 = (kotlinx.coroutines.EventLoopImplBase$DelayedTask) $r6;
+
+        if $r7 != null goto label5;
+
+        return 9223372036854775807L;
+
+     label5:
+        $l0 = $r7.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime>;
+
+        $r8 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r8 == null goto label6;
+
+        $l2 = virtualinvoke $r8.<kotlinx.coroutines.AbstractTimeSource: long nanoTime()>();
+
+        goto label7;
+
+     label6:
+        $l2 = staticinvoke <java.lang.System: long nanoTime()>();
+
+     label7:
+        $l0 = $l0 - $l2;
+
+        $l0 = staticinvoke <kotlin.ranges.RangesKt: long coerceAtLeast(long,long)>($l0, 0L);
+
+        return $l0;
+
+     label8:
+        return 9223372036854775807L;
+    }
+
+    public kotlinx.coroutines.DisposableHandle invokeOnTimeout(long, java.lang.Runnable, kotlin.coroutines.CoroutineContext)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        java.lang.Runnable $r1;
+        kotlin.coroutines.CoroutineContext $r2;
+        kotlinx.coroutines.DisposableHandle $r3;
+        long $l0;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        $r2 := @parameter2: kotlin.coroutines.CoroutineContext;
+
+        $r3 = staticinvoke <kotlinx.coroutines.Delay$DefaultImpls: kotlinx.coroutines.DisposableHandle invokeOnTimeout(kotlinx.coroutines.Delay,long,java.lang.Runnable,kotlin.coroutines.CoroutineContext)>($r0, $l0, $r1, $r2);
+
+        return $r3;
+    }
+
+    protected boolean isEmpty()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        boolean $z0, $z1;
+        kotlinx.atomicfu.AtomicRef $r1;
+        java.lang.Object $r2;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue $r3;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r4;
+        kotlinx.coroutines.internal.Symbol $r5;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $z0 = virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: boolean isUnconfinedQueueEmpty()>();
+
+        $z1 = 0;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>;
+
+        $r2 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $r3 = (kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue) $r2;
+
+        if $r3 == null goto label2;
+
+        $z0 = virtualinvoke $r3.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        $r2 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        if $r2 != null goto label3;
+
+        $z1 = 1;
+
+        goto label5;
+
+     label3:
+        $z0 = $r2 instanceof kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        if $z0 == 0 goto label4;
+
+        $r4 = (kotlinx.coroutines.internal.LockFreeTaskQueueCore) $r2;
+
+        $z1 = virtualinvoke $r4.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: boolean isEmpty()>();
+
+        goto label5;
+
+     label4:
+        $r5 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getCLOSED_EMPTY$p()>();
+
+        if $r2 != $r5 goto label5;
+
+        $z1 = 1;
+
+        goto label5;
+
+     label5:
+        return $z1;
+    }
+
+    public long processNextEvent()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        boolean $z0;
+        kotlinx.atomicfu.AtomicRef $r1;
+        java.lang.Object $r2;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue $r3;
+        kotlinx.coroutines.AbstractTimeSource $r4;
+        long $l0;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r5, $r6;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r7;
+        java.lang.Throwable $r8;
+        java.lang.Runnable $r9;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $z0 = virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: boolean processUnconfinedEvent()>();
+
+        if $z0 == 0 goto label01;
+
+        return 0L;
+
+     label01:
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>;
+
+        $r2 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $r3 = (kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue) $r2;
+
+        if $r3 == null goto label14;
+
+        $z0 = virtualinvoke $r3.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: boolean isEmpty()>();
+
+        if $z0 != 0 goto label14;
+
+        $r4 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r4 == null goto label02;
+
+        $l0 = virtualinvoke $r4.<kotlinx.coroutines.AbstractTimeSource: long nanoTime()>();
+
+        goto label03;
+
+     label02:
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+     label03:
+        entermonitor $r3;
+
+     label04:
+        $r5 = virtualinvoke $r3.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode firstImpl()>();
+
+     label05:
+        $r6 = null;
+
+        if $r5 != null goto label07;
+
+        exitmonitor $r3;
+
+     label06:
+        goto label12;
+
+     label07:
+        $r7 = (kotlinx.coroutines.EventLoopImplBase$DelayedTask) $r5;
+
+        $z0 = virtualinvoke $r7.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: boolean timeToExecute(long)>($l0);
+
+        if $z0 == 0 goto label08;
+
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: boolean enqueueImpl(java.lang.Runnable)>($r7);
+
+        goto label09;
+
+     label08:
+        $z0 = 0;
+
+     label09:
+        if $z0 == 0 goto label11;
+
+        $r5 = virtualinvoke $r3.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode removeAtImpl(int)>(0);
+
+     label10:
+        $r6 = $r5;
+
+        goto label11;
+
+     label11:
+        exitmonitor $r3;
+
+        goto label06;
+
+     label12:
+        $r7 = (kotlinx.coroutines.EventLoopImplBase$DelayedTask) $r6;
+
+        if $r7 != null goto label03;
+
+        goto label14;
+
+     label13:
+        $r8 := @caughtexception;
+
+        exitmonitor $r3;
+
+        throw $r8;
+
+     label14:
+        $r9 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: java.lang.Runnable dequeue()>();
+
+        if $r9 == null goto label15;
+
+        interfaceinvoke $r9.<java.lang.Runnable: void run()>();
+
+        return 0L;
+
+     label15:
+        $l0 = virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: long getNextTime()>();
+
+        return $l0;
+
+        catch java.lang.Throwable from label04 to label05 with label13;
+        catch java.lang.Throwable from label07 to label10 with label13;
+    }
+
+    protected final void resetAll()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        kotlinx.atomicfu.AtomicRef $r1;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _queue>;
+
+        virtualinvoke $r1.<kotlinx.atomicfu.AtomicRef: void setValue(java.lang.Object)>(null);
+
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase: kotlinx.atomicfu.AtomicRef _delayed>;
+
+        virtualinvoke $r1.<kotlinx.atomicfu.AtomicRef: void setValue(java.lang.Object)>(null);
+
+        return;
+    }
+
+    public final void schedule(long, kotlinx.coroutines.EventLoopImplBase$DelayedTask)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r1;
+        long $l0;
+        int $i1;
+        java.lang.IllegalStateException $r2;
+        java.lang.String $r3;
+        boolean $z0;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "delayedTask");
+
+        $i1 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: int scheduleImpl(long,kotlinx.coroutines.EventLoopImplBase$DelayedTask)>($l0, $r1);
+
+        lookupswitch($i1)
+        {
+            case 0: goto label3;
+            case 1: goto label2;
+            case 2: goto label4;
+            default: goto label1;
+        };
+
+     label1:
+        $r2 = new java.lang.IllegalStateException;
+
+        $r3 = "unexpected result";
+
+        $r3 = virtualinvoke $r3.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r3);
+
+        throw $r2;
+
+     label2:
+        virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void reschedule(long,kotlinx.coroutines.EventLoopImplBase$DelayedTask)>($l0, $r1);
+
+        return;
+
+     label3:
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: boolean shouldUnpark(kotlinx.coroutines.EventLoopImplBase$DelayedTask)>($r1);
+
+        if $z0 == 0 goto label4;
+
+        virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void unpark()>();
+
+     label4:
+        return;
+    }
+
+    protected final kotlinx.coroutines.DisposableHandle scheduleInvokeOnTimeout(long, java.lang.Runnable)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        java.lang.Runnable $r1;
+        long $l0, $l2;
+        byte $b1;
+        kotlinx.coroutines.AbstractTimeSource $r2;
+        kotlinx.coroutines.DisposableHandle $r3;
+        kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask r4;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask r5;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "block");
+
+        $l0 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: long delayToNanos(long)>($l0);
+
+        $b1 = $l0 cmp 4611686018427387903L;
+
+        if $b1 >= 0 goto label3;
+
+        $r2 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r2 == null goto label1;
+
+        $l2 = virtualinvoke $r2.<kotlinx.coroutines.AbstractTimeSource: long nanoTime()>();
+
+        goto label2;
+
+     label1:
+        $l2 = staticinvoke <java.lang.System: long nanoTime()>();
+
+     label2:
+        r4 = new kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask;
+
+        $r3 = r4;
+
+        $l0 = $l0 + $l2;
+
+        specialinvoke r4.<kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask: void <init>(long,java.lang.Runnable)>($l0, $r1);
+
+        r5 = (kotlinx.coroutines.EventLoopImplBase$DelayedTask) $r3;
+
+        virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void schedule(long,kotlinx.coroutines.EventLoopImplBase$DelayedTask)>($l2, r5);
+
+        goto label4;
+
+     label3:
+        $r3 = <kotlinx.coroutines.NonDisposableHandle: kotlinx.coroutines.NonDisposableHandle INSTANCE>;
+
+     label4:
+        return $r3;
+    }
+
+    public void scheduleResumeAfterDelay(long, kotlinx.coroutines.CancellableContinuation)
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        kotlinx.coroutines.CancellableContinuation $r1;
+        long $l0, $l2;
+        byte $b1;
+        kotlinx.coroutines.AbstractTimeSource $r2;
+        kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask $r3;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: kotlinx.coroutines.CancellableContinuation;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "continuation");
+
+        $l0 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: long delayToNanos(long)>($l0);
+
+        $b1 = $l0 cmp 4611686018427387903L;
+
+        if $b1 >= 0 goto label3;
+
+        $r2 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r2 == null goto label1;
+
+        $l2 = virtualinvoke $r2.<kotlinx.coroutines.AbstractTimeSource: long nanoTime()>();
+
+        goto label2;
+
+     label1:
+        $l2 = staticinvoke <java.lang.System: long nanoTime()>();
+
+     label2:
+        $r3 = new kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask;
+
+        $l0 = $l0 + $l2;
+
+        specialinvoke $r3.<kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask: void <init>(kotlinx.coroutines.EventLoopImplBase,long,kotlinx.coroutines.CancellableContinuation)>($r0, $l0, $r1);
+
+        virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void schedule(long,kotlinx.coroutines.EventLoopImplBase$DelayedTask)>($l2, $r3);
+
+        staticinvoke <kotlinx.coroutines.CancellableContinuationKt: void disposeOnCancellation(kotlinx.coroutines.CancellableContinuation,kotlinx.coroutines.DisposableHandle)>($r1, $r3);
+
+     label3:
+        return;
+    }
+
+    public void shutdown()
+    {
+        kotlinx.coroutines.EventLoopImplBase $r0;
+        byte $b0;
+        long $l1;
+        kotlinx.coroutines.ThreadLocalEventLoop $r1;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase;
+
+        $r1 = <kotlinx.coroutines.ThreadLocalEventLoop: kotlinx.coroutines.ThreadLocalEventLoop INSTANCE>;
+
+        virtualinvoke $r1.<kotlinx.coroutines.ThreadLocalEventLoop: void resetEventLoop$third_party_kotlin_kotlinx_coroutines_kotlinx_coroutines()>();
+
+        specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void setCompleted(boolean)>(1);
+
+        specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void closeQueue()>();
+
+     label1:
+        $l1 = virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: long processNextEvent()>();
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 <= 0 goto label1;
+
+        specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase: void rescheduleAllDelayed()>();
+
+        return;
+    }
+
+kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask
+<kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask: kotlinx.coroutines.CancellableContinuation cont>
+<kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask: kotlinx.coroutines.EventLoopImplBase this$0>
+    public void <init>(kotlinx.coroutines.EventLoopImplBase, long, kotlinx.coroutines.CancellableContinuation)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask $r0;
+        kotlinx.coroutines.EventLoopImplBase $r1;
+        long $l0;
+        kotlinx.coroutines.CancellableContinuation $r2;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask;
+
+        $r1 := @parameter0: kotlinx.coroutines.EventLoopImplBase;
+
+        $l0 := @parameter1: long;
+
+        $r2 := @parameter2: kotlinx.coroutines.CancellableContinuation;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "cont");
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask: kotlinx.coroutines.EventLoopImplBase this$0> = $r1;
+
+        specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: void <init>(long)>($l0);
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask: kotlinx.coroutines.CancellableContinuation cont> = $r2;
+
+        return;
+    }
+
+    public void run()
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask $r0;
+        kotlinx.coroutines.CancellableContinuation $r1;
+        kotlinx.coroutines.EventLoopImplBase $r2;
+        kotlin.Unit $r3;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask;
+
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask: kotlinx.coroutines.CancellableContinuation cont>;
+
+        $r2 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask: kotlinx.coroutines.EventLoopImplBase this$0>;
+
+        $r3 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        interfaceinvoke $r1.<kotlinx.coroutines.CancellableContinuation: void resumeUndispatched(kotlinx.coroutines.CoroutineDispatcher,java.lang.Object)>($r2, $r3);
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask $r0;
+        kotlinx.coroutines.CancellableContinuation $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask;
+
+        $r3 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: java.lang.String toString()>();
+
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask: kotlinx.coroutines.CancellableContinuation cont>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask
+<kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask: java.lang.Runnable block>
+    public void <init>(long, java.lang.Runnable)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask $r0;
+        long $l0;
+        java.lang.Runnable $r1;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "block");
+
+        specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: void <init>(long)>($l0);
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask: java.lang.Runnable block> = $r1;
+
+        return;
+    }
+
+    public void run()
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask $r0;
+        java.lang.Runnable $r1;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask;
+
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask: java.lang.Runnable block>;
+
+        interfaceinvoke $r1.<java.lang.Runnable: void run()>();
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask $r0;
+        java.lang.Runnable $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask;
+
+        $r3 = specialinvoke $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: java.lang.String toString()>();
+
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedRunnableTask: java.lang.Runnable block>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+kotlinx.coroutines.EventLoopImplBase$DelayedTask
+<kotlinx.coroutines.EventLoopImplBase$DelayedTask: java.lang.Object _heap>
+<kotlinx.coroutines.EventLoopImplBase$DelayedTask: int index>
+<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime>
+    public void <init>(long)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0;
+        long $l0;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $l0 := @parameter0: long;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime> = $l0;
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: int index> = -1;
+
+        return;
+    }
+
+    public volatile int compareTo(java.lang.Object)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0, $r2;
+        int $i0;
+        java.lang.Object $r1;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = (kotlinx.coroutines.EventLoopImplBase$DelayedTask) $r1;
+
+        $i0 = virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: int compareTo(kotlinx.coroutines.EventLoopImplBase$DelayedTask)>($r2);
+
+        return $i0;
+    }
+
+    public int compareTo(kotlinx.coroutines.EventLoopImplBase$DelayedTask)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0, $r1;
+        long $l0, $l1;
+        byte $b2;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $r1 := @parameter0: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "other");
+
+        $l0 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime>;
+
+        $l1 = $r1.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime>;
+
+        $l0 = $l0 - $l1;
+
+        $b2 = $l0 cmp 0L;
+
+        if $b2 <= 0 goto label1;
+
+        $b2 = 1;
+
+        goto label3;
+
+     label1:
+        $b2 = $l0 cmp 0L;
+
+        if $b2 >= 0 goto label2;
+
+        $b2 = -1;
+
+        goto label3;
+
+     label2:
+        $b2 = 0;
+
+     label3:
+        return $b2;
+    }
+
+    public final void dispose()
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0;
+        java.lang.Object $r1;
+        kotlinx.coroutines.internal.Symbol $r2;
+        boolean $z0;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue $r3;
+        java.lang.Throwable $r4;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: java.lang.Object _heap>;
+
+        $r2 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getDISPOSED_TASK$p()>();
+
+     label2:
+        if $r1 != $r2 goto label3;
+
+        exitmonitor $r0;
+
+        return;
+
+     label3:
+        $z0 = $r1 instanceof kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue;
+
+        if $z0 == 0 goto label4;
+
+        $r3 = (kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue) $r1;
+
+        goto label5;
+
+     label4:
+        $r3 = null;
+
+     label5:
+        if $r3 == null goto label6;
+
+        virtualinvoke $r3.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: boolean remove(kotlinx.coroutines.internal.ThreadSafeHeapNode)>($r0);
+
+     label6:
+        $r2 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getDISPOSED_TASK$p()>();
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: java.lang.Object _heap> = $r2;
+
+     label7:
+        exitmonitor $r0;
+
+        return;
+
+     label8:
+        $r4 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label8;
+        catch java.lang.Throwable from label3 to label7 with label8;
+    }
+
+    public kotlinx.coroutines.internal.ThreadSafeHeap getHeap()
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0;
+        boolean $z0;
+        java.lang.Object $r1;
+        kotlinx.coroutines.internal.ThreadSafeHeap $r2;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $r1 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: java.lang.Object _heap>;
+
+        $z0 = $r1 instanceof kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = (kotlinx.coroutines.internal.ThreadSafeHeap) $r1;
+
+        return $r2;
+
+     label1:
+        return null;
+    }
+
+    public int getIndex()
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0;
+        int i0;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        i0 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: int index>;
+
+        return i0;
+    }
+
+    public final int scheduleTask(long, kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue, kotlinx.coroutines.EventLoopImplBase)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0, $r6;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue $r1;
+        long $l0, $l1, $l2;
+        kotlinx.coroutines.EventLoopImplBase $r2;
+        java.lang.Object $r3;
+        kotlinx.coroutines.internal.Symbol $r4;
+        kotlinx.coroutines.internal.ThreadSafeHeapNode $r5;
+        boolean $z0;
+        byte $b3;
+        java.lang.Throwable $r7, $r8;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $l1 := @parameter0: long;
+
+        $r1 := @parameter1: kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue;
+
+        $r2 := @parameter2: kotlinx.coroutines.EventLoopImplBase;
+
+        entermonitor $r0;
+
+     label01:
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "delayed");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "eventLoop");
+
+        $r3 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: java.lang.Object _heap>;
+
+        $r4 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getDISPOSED_TASK$p()>();
+
+     label02:
+        if $r3 != $r4 goto label03;
+
+        exitmonitor $r0;
+
+        return 2;
+
+     label03:
+        entermonitor $r1;
+
+     label04:
+        $r5 = virtualinvoke $r1.<kotlinx.coroutines.internal.ThreadSafeHeap: kotlinx.coroutines.internal.ThreadSafeHeapNode firstImpl()>();
+
+        $r6 = (kotlinx.coroutines.EventLoopImplBase$DelayedTask) $r5;
+
+        $z0 = staticinvoke <kotlinx.coroutines.EventLoopImplBase: boolean access$isCompleted(kotlinx.coroutines.EventLoopImplBase)>($r2);
+
+     label05:
+        if $z0 == 0 goto label08;
+
+     label06:
+        exitmonitor $r1;
+
+     label07:
+        exitmonitor $r0;
+
+        return 1;
+
+     label08:
+        if $r6 != null goto label10;
+
+     label09:
+        $r1.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: long timeNow> = $l1;
+
+        goto label13;
+
+     label10:
+        $l2 = $r6.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime>;
+
+        $l0 = $l2 - $l1;
+
+        $b3 = $l0 cmp 0L;
+
+        if $b3 < 0 goto label11;
+
+        goto label12;
+
+     label11:
+        $l1 = $l2;
+
+     label12:
+        $l0 = $r1.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: long timeNow>;
+
+        $l0 = $l1 - $l0;
+
+        $b3 = $l0 cmp 0L;
+
+        if $b3 <= 0 goto label13;
+
+        $r1.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: long timeNow> = $l1;
+
+     label13:
+        $l1 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime>;
+
+        $l0 = $r1.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: long timeNow>;
+
+        $l1 = $l1 - $l0;
+
+        $b3 = $l1 cmp 0L;
+
+        if $b3 >= 0 goto label14;
+
+        $l1 = $r1.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: long timeNow>;
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime> = $l1;
+
+     label14:
+        virtualinvoke $r1.<kotlinx.coroutines.internal.ThreadSafeHeap: void addImpl(kotlinx.coroutines.internal.ThreadSafeHeapNode)>($r0);
+
+     label15:
+        exitmonitor $r1;
+
+     label16:
+        exitmonitor $r0;
+
+        return 0;
+
+     label17:
+        $r7 := @caughtexception;
+
+     label18:
+        exitmonitor $r1;
+
+        throw $r7;
+
+     label19:
+        $r8 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r8;
+
+        catch java.lang.Throwable from label01 to label02 with label19;
+        catch java.lang.Throwable from label03 to label04 with label19;
+        catch java.lang.Throwable from label04 to label05 with label17;
+        catch java.lang.Throwable from label06 to label07 with label19;
+        catch java.lang.Throwable from label09 to label15 with label17;
+        catch java.lang.Throwable from label15 to label16 with label19;
+        catch java.lang.Throwable from label18 to label19 with label19;
+    }
+
+    public void setHeap(kotlinx.coroutines.internal.ThreadSafeHeap)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0;
+        kotlinx.coroutines.internal.ThreadSafeHeap $r1;
+        java.lang.Object $r2;
+        kotlinx.coroutines.internal.Symbol $r3;
+        boolean $z0;
+        java.lang.IllegalArgumentException $r4;
+        java.lang.String $r5;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $r1 := @parameter0: kotlinx.coroutines.internal.ThreadSafeHeap;
+
+        $r2 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: java.lang.Object _heap>;
+
+        $r3 = staticinvoke <kotlinx.coroutines.EventLoop_commonKt: kotlinx.coroutines.internal.Symbol access$getDISPOSED_TASK$p()>();
+
+        if $r2 == $r3 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: java.lang.Object _heap> = $r1;
+
+        return;
+
+     label3:
+        $r4 = new java.lang.IllegalArgumentException;
+
+        $r5 = "Failed requirement.";
+
+        $r5 = virtualinvoke $r5.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r5);
+
+        throw $r4;
+    }
+
+    public void setIndex(int)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0;
+        int $i0;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $i0 := @parameter0: int;
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: int index> = $i0;
+
+        return;
+    }
+
+    public final boolean timeToExecute(long)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0;
+        byte $b0;
+        long $l1, $l2;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $l1 := @parameter0: long;
+
+        $l2 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime>;
+
+        $l1 = $l1 - $l2;
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 < 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public java.lang.String toString()
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r0;
+        long $l0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        $l0 = $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTask: long nanoTime>;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Delayed[nanos=");
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue
+<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: long timeNow>
+    public void <init>(long)
+    {
+        kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue $r0;
+        long $l0;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue;
+
+        $l0 := @parameter0: long;
+
+        specialinvoke $r0.<kotlinx.coroutines.internal.ThreadSafeHeap: void <init>()>();
+
+        $r0.<kotlinx.coroutines.EventLoopImplBase$DelayedTaskQueue: long timeNow> = $l0;
+
+        return;
+    }
+

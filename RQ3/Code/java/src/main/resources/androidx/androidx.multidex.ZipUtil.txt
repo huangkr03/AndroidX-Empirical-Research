@@ -1,0 +1,244 @@
+androidx.multidex.ZipUtil
+<androidx.multidex.ZipUtil: int ENDHDR>
+<androidx.multidex.ZipUtil: int ENDSIG>
+<androidx.multidex.ZipUtil: int BUFFER_SIZE>
+    void <init>()
+    {
+        androidx.multidex.ZipUtil r0;
+
+        r0 := @this: androidx.multidex.ZipUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static long getZipCrc(java.io.File) throws java.io.IOException
+    {
+        java.io.File r0;
+        java.io.RandomAccessFile r1, $r4;
+        androidx.multidex.ZipUtil$CentralDirectory r2;
+        long l0;
+        java.lang.Throwable r3, $r5;
+
+        r0 := @parameter0: java.io.File;
+
+        $r4 = new java.io.RandomAccessFile;
+
+        specialinvoke $r4.<java.io.RandomAccessFile: void <init>(java.io.File,java.lang.String)>(r0, "r");
+
+        r1 = $r4;
+
+     label1:
+        r2 = staticinvoke <androidx.multidex.ZipUtil: androidx.multidex.ZipUtil$CentralDirectory findCentralDirectory(java.io.RandomAccessFile)>(r1);
+
+        l0 = staticinvoke <androidx.multidex.ZipUtil: long computeCrcOfCentralDir(java.io.RandomAccessFile,androidx.multidex.ZipUtil$CentralDirectory)>(r1, r2);
+
+     label2:
+        virtualinvoke r1.<java.io.RandomAccessFile: void close()>();
+
+        return l0;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r3 = $r5;
+
+     label4:
+        virtualinvoke r1.<java.io.RandomAccessFile: void close()>();
+
+        throw r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    static androidx.multidex.ZipUtil$CentralDirectory findCentralDirectory(java.io.RandomAccessFile) throws java.io.IOException, java.util.zip.ZipException
+    {
+        java.io.RandomAccessFile r0;
+        int i0, $i9, $i10, $i13, $i14, $i20;
+        androidx.multidex.ZipUtil$CentralDirectory r1, $r3;
+        long $l1, $l11, $l12, $l15, $l16, $l17, l18, l19;
+        byte $b2, $b3, $b4;
+        java.util.zip.ZipException $r2, $r4;
+        java.lang.StringBuilder $r5, $r6, $r7;
+        java.lang.String $r8;
+
+        r0 := @parameter0: java.io.RandomAccessFile;
+
+        $l1 = virtualinvoke r0.<java.io.RandomAccessFile: long length()>();
+
+        l18 = $l1 - 22L;
+
+        $b2 = l18 cmp 0L;
+
+        if $b2 >= 0 goto label1;
+
+        $r4 = new java.util.zip.ZipException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("File too short to be a zip file: ");
+
+        $l17 = virtualinvoke r0.<java.io.RandomAccessFile: long length()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l17);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.util.zip.ZipException: void <init>(java.lang.String)>($r8);
+
+        throw $r4;
+
+     label1:
+        l19 = l18 - 65536L;
+
+        $b3 = l19 cmp 0L;
+
+        if $b3 >= 0 goto label2;
+
+        l19 = 0L;
+
+     label2:
+        i0 = staticinvoke <java.lang.Integer: int reverseBytes(int)>(101010256);
+
+     label3:
+        virtualinvoke r0.<java.io.RandomAccessFile: void seek(long)>(l18);
+
+        $i20 = virtualinvoke r0.<java.io.RandomAccessFile: int readInt()>();
+
+        if $i20 != i0 goto label4;
+
+        goto label5;
+
+     label4:
+        l18 = l18 - 1L;
+
+        $b4 = l18 cmp l19;
+
+        if $b4 >= 0 goto label3;
+
+        $r2 = new java.util.zip.ZipException;
+
+        specialinvoke $r2.<java.util.zip.ZipException: void <init>(java.lang.String)>("End Of Central Directory signature not found");
+
+        throw $r2;
+
+     label5:
+        virtualinvoke r0.<java.io.RandomAccessFile: int skipBytes(int)>(2);
+
+        virtualinvoke r0.<java.io.RandomAccessFile: int skipBytes(int)>(2);
+
+        virtualinvoke r0.<java.io.RandomAccessFile: int skipBytes(int)>(2);
+
+        virtualinvoke r0.<java.io.RandomAccessFile: int skipBytes(int)>(2);
+
+        $r3 = new androidx.multidex.ZipUtil$CentralDirectory;
+
+        specialinvoke $r3.<androidx.multidex.ZipUtil$CentralDirectory: void <init>()>();
+
+        r1 = $r3;
+
+        $i9 = virtualinvoke r0.<java.io.RandomAccessFile: int readInt()>();
+
+        $i10 = staticinvoke <java.lang.Integer: int reverseBytes(int)>($i9);
+
+        $l11 = (long) $i10;
+
+        $l12 = $l11 & 4294967295L;
+
+        r1.<androidx.multidex.ZipUtil$CentralDirectory: long size> = $l12;
+
+        $i13 = virtualinvoke r0.<java.io.RandomAccessFile: int readInt()>();
+
+        $i14 = staticinvoke <java.lang.Integer: int reverseBytes(int)>($i13);
+
+        $l15 = (long) $i14;
+
+        $l16 = $l15 & 4294967295L;
+
+        r1.<androidx.multidex.ZipUtil$CentralDirectory: long offset> = $l16;
+
+        return r1;
+    }
+
+    static long computeCrcOfCentralDir(java.io.RandomAccessFile, androidx.multidex.ZipUtil$CentralDirectory) throws java.io.IOException
+    {
+        java.io.RandomAccessFile r0;
+        androidx.multidex.ZipUtil$CentralDirectory r1;
+        java.util.zip.CRC32 r2, $r4;
+        byte[] r3;
+        long $l0, $l1, $l2, $l3, $l5, l6;
+        byte $b4;
+        int i7, i8, i9;
+
+        r0 := @parameter0: java.io.RandomAccessFile;
+
+        r1 := @parameter1: androidx.multidex.ZipUtil$CentralDirectory;
+
+        $r4 = new java.util.zip.CRC32;
+
+        specialinvoke $r4.<java.util.zip.CRC32: void <init>()>();
+
+        r2 = $r4;
+
+        l6 = r1.<androidx.multidex.ZipUtil$CentralDirectory: long size>;
+
+        $l0 = r1.<androidx.multidex.ZipUtil$CentralDirectory: long offset>;
+
+        virtualinvoke r0.<java.io.RandomAccessFile: void seek(long)>($l0);
+
+        $l1 = staticinvoke <java.lang.Math: long min(long,long)>(16384L, l6);
+
+        i7 = (int) $l1;
+
+        r3 = newarray (byte)[16384];
+
+        i8 = virtualinvoke r0.<java.io.RandomAccessFile: int read(byte[],int,int)>(r3, 0, i7);
+
+     label1:
+        if i8 == -1 goto label3;
+
+        virtualinvoke r2.<java.util.zip.CRC32: void update(byte[],int,int)>(r3, 0, i8);
+
+        $l3 = (long) i8;
+
+        l6 = l6 - $l3;
+
+        $b4 = l6 cmp 0L;
+
+        if $b4 != 0 goto label2;
+
+        goto label3;
+
+     label2:
+        $l5 = staticinvoke <java.lang.Math: long min(long,long)>(16384L, l6);
+
+        i9 = (int) $l5;
+
+        i8 = virtualinvoke r0.<java.io.RandomAccessFile: int read(byte[],int,int)>(r3, 0, i9);
+
+        goto label1;
+
+     label3:
+        $l2 = virtualinvoke r2.<java.util.zip.CRC32: long getValue()>();
+
+        return $l2;
+    }
+
+androidx.multidex.ZipUtil$CentralDirectory
+<androidx.multidex.ZipUtil$CentralDirectory: long offset>
+<androidx.multidex.ZipUtil$CentralDirectory: long size>
+    void <init>()
+    {
+        androidx.multidex.ZipUtil$CentralDirectory r0;
+
+        r0 := @this: androidx.multidex.ZipUtil$CentralDirectory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

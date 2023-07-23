@@ -1,0 +1,627 @@
+androidx.work.impl.background.systemjob.SystemJobService
+<androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>
+<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>
+<androidx.work.impl.background.systemjob.SystemJobService: java.util.Map mJobParameters>
+<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.StartStopTokens mStartStopTokens>
+    public void <init>()
+    {
+        androidx.work.impl.background.systemjob.SystemJobService r0;
+        java.util.HashMap $r1;
+        androidx.work.impl.StartStopTokens $r2;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobService;
+
+        specialinvoke r0.<android.app.job.JobService: void <init>()>();
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.work.impl.background.systemjob.SystemJobService: java.util.Map mJobParameters> = $r1;
+
+        $r2 = new androidx.work.impl.StartStopTokens;
+
+        specialinvoke $r2.<androidx.work.impl.StartStopTokens: void <init>()>();
+
+        r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.StartStopTokens mStartStopTokens> = $r2;
+
+        return;
+    }
+
+    public void onCreate()
+    {
+        androidx.work.impl.background.systemjob.SystemJobService r0;
+        java.lang.Throwable r1, $r6;
+        android.content.Context $r2;
+        androidx.work.impl.WorkManagerImpl $r3, $r4;
+        androidx.work.impl.Processor $r5;
+        java.lang.Class $r7, $r9;
+        android.app.Application $r8;
+        boolean $z0;
+        androidx.work.Logger $r10;
+        java.lang.String $r11;
+        java.lang.IllegalStateException $r12;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobService;
+
+        specialinvoke r0.<android.app.job.JobService: void onCreate()>();
+
+     label1:
+        $r2 = virtualinvoke r0.<androidx.work.impl.background.systemjob.SystemJobService: android.content.Context getApplicationContext()>();
+
+        $r3 = staticinvoke <androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkManagerImpl getInstance(android.content.Context)>($r2);
+
+        r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl> = $r3;
+
+        $r4 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>;
+
+        $r5 = virtualinvoke $r4.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.Processor getProcessor()>();
+
+        virtualinvoke $r5.<androidx.work.impl.Processor: void addExecutionListener(androidx.work.impl.ExecutionListener)>(r0);
+
+     label2:
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r1 = $r6;
+
+        $r7 = class "Landroid/app/Application;";
+
+        $r8 = virtualinvoke r0.<androidx.work.impl.background.systemjob.SystemJobService: android.app.Application getApplication()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.Object: java.lang.Class getClass()>();
+
+        $z0 = virtualinvoke $r7.<java.lang.Object: boolean equals(java.lang.Object)>($r9);
+
+        if $z0 != 0 goto label4;
+
+        $r12 = new java.lang.IllegalStateException;
+
+        specialinvoke $r12.<java.lang.IllegalStateException: void <init>(java.lang.String)>("WorkManager needs to be initialized via a ContentProvider#onCreate() or an Application#onCreate().");
+
+        throw $r12;
+
+     label4:
+        $r10 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r11 = <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>;
+
+        virtualinvoke $r10.<androidx.work.Logger: void warning(java.lang.String,java.lang.String)>($r11, "Could not find WorkManager instance; this may be because an auto-backup is in progress. Ignoring JobScheduler commands for now. Please make sure that you are initializing WorkManager if you have manually disabled WorkManagerInitializer.");
+
+     label5:
+        return;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+    }
+
+    public void onDestroy()
+    {
+        androidx.work.impl.background.systemjob.SystemJobService r0;
+        androidx.work.impl.WorkManagerImpl $r1, $r2;
+        androidx.work.impl.Processor $r3;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobService;
+
+        specialinvoke r0.<android.app.job.JobService: void onDestroy()>();
+
+        $r1 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>;
+
+        $r3 = virtualinvoke $r2.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.Processor getProcessor()>();
+
+        virtualinvoke $r3.<androidx.work.impl.Processor: void removeExecutionListener(androidx.work.impl.ExecutionListener)>(r0);
+
+     label1:
+        return;
+    }
+
+    public boolean onStartJob(android.app.job.JobParameters)
+    {
+        androidx.work.impl.background.systemjob.SystemJobService r0;
+        android.app.job.JobParameters r1;
+        androidx.work.impl.model.WorkGenerationalId r2;
+        java.lang.Throwable r3, $r33;
+        androidx.work.impl.WorkManagerImpl $r4, $r36;
+        java.util.Map $r5, $r6, $r13, r34;
+        boolean $z0;
+        androidx.work.Logger $r7, $r23, $r29, $r31;
+        java.lang.StringBuilder $r8, $r10, $r11, $r24, $r26, $r27;
+        java.lang.String $r9, $r12, $r25, $r28, $r30, $r32;
+        int $i0, $i1;
+        androidx.work.WorkerParameters$RuntimeExtras $r15, r35;
+        android.net.Uri[] $r16, $r21;
+        java.lang.String[] $r17, $r19;
+        android.net.Network $r18;
+        java.util.List $r20, $r22;
+        androidx.work.impl.StartStopTokens $r37;
+        androidx.work.impl.StartStopToken $r38;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobService;
+
+        r1 := @parameter0: android.app.job.JobParameters;
+
+        $r4 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>;
+
+        if $r4 != null goto label01;
+
+        $r31 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r32 = <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>;
+
+        virtualinvoke $r31.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r32, "WorkManager is not initialized; requesting retry.");
+
+        virtualinvoke r0.<androidx.work.impl.background.systemjob.SystemJobService: void jobFinished(android.app.job.JobParameters,boolean)>(r1, 1);
+
+        return 0;
+
+     label01:
+        r2 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.model.WorkGenerationalId workGenerationalIdFromJobParameters(android.app.job.JobParameters)>(r1);
+
+        if r2 != null goto label02;
+
+        $r29 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r30 = <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>;
+
+        virtualinvoke $r29.<androidx.work.Logger: void error(java.lang.String,java.lang.String)>($r30, "WorkSpec id not found!");
+
+        return 0;
+
+     label02:
+        $r5 = r0.<androidx.work.impl.background.systemjob.SystemJobService: java.util.Map mJobParameters>;
+
+        r34 = $r5;
+
+        entermonitor $r5;
+
+     label03:
+        $r6 = r0.<androidx.work.impl.background.systemjob.SystemJobService: java.util.Map mJobParameters>;
+
+        $z0 = interfaceinvoke $r6.<java.util.Map: boolean containsKey(java.lang.Object)>(r2);
+
+        if $z0 == 0 goto label05;
+
+        $r23 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r25 = <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>;
+
+        $r24 = new java.lang.StringBuilder;
+
+        specialinvoke $r24.<java.lang.StringBuilder: void <init>()>();
+
+        $r26 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Job is already being executed by SystemJobService: ");
+
+        $r27 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r28 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r23.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r25, $r28);
+
+        exitmonitor r34;
+
+     label04:
+        return 0;
+
+     label05:
+        $r7 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r9 = <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("onStartJob for ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r7.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r9, $r12);
+
+        $r13 = r0.<androidx.work.impl.background.systemjob.SystemJobService: java.util.Map mJobParameters>;
+
+        interfaceinvoke $r13.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, r1);
+
+        exitmonitor r34;
+
+     label06:
+        goto label09;
+
+     label07:
+        $r33 := @caughtexception;
+
+        r3 = $r33;
+
+        exitmonitor r34;
+
+     label08:
+        throw r3;
+
+     label09:
+        r35 = null;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 24 goto label12;
+
+        $r15 = new androidx.work.WorkerParameters$RuntimeExtras;
+
+        specialinvoke $r15.<androidx.work.WorkerParameters$RuntimeExtras: void <init>()>();
+
+        r35 = $r15;
+
+        $r16 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobService$Api24Impl: android.net.Uri[] getTriggeredContentUris(android.app.job.JobParameters)>(r1);
+
+        if $r16 == null goto label10;
+
+        $r21 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobService$Api24Impl: android.net.Uri[] getTriggeredContentUris(android.app.job.JobParameters)>(r1);
+
+        $r22 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r21);
+
+        r35.<androidx.work.WorkerParameters$RuntimeExtras: java.util.List triggeredContentUris> = $r22;
+
+     label10:
+        $r17 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobService$Api24Impl: java.lang.String[] getTriggeredContentAuthorities(android.app.job.JobParameters)>(r1);
+
+        if $r17 == null goto label11;
+
+        $r19 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobService$Api24Impl: java.lang.String[] getTriggeredContentAuthorities(android.app.job.JobParameters)>(r1);
+
+        $r20 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r19);
+
+        r35.<androidx.work.WorkerParameters$RuntimeExtras: java.util.List triggeredContentAuthorities> = $r20;
+
+     label11:
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 28 goto label12;
+
+        $r18 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobService$Api28Impl: android.net.Network getNetwork(android.app.job.JobParameters)>(r1);
+
+        r35.<androidx.work.WorkerParameters$RuntimeExtras: android.net.Network network> = $r18;
+
+     label12:
+        $r36 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>;
+
+        $r37 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.StartStopTokens mStartStopTokens>;
+
+        $r38 = virtualinvoke $r37.<androidx.work.impl.StartStopTokens: androidx.work.impl.StartStopToken tokenFor(androidx.work.impl.model.WorkGenerationalId)>(r2);
+
+        virtualinvoke $r36.<androidx.work.impl.WorkManagerImpl: void startWork(androidx.work.impl.StartStopToken,androidx.work.WorkerParameters$RuntimeExtras)>($r38, r35);
+
+        return 1;
+
+        catch java.lang.Throwable from label03 to label04 with label07;
+        catch java.lang.Throwable from label05 to label06 with label07;
+        catch java.lang.Throwable from label07 to label08 with label07;
+    }
+
+    public boolean onStopJob(android.app.job.JobParameters)
+    {
+        androidx.work.impl.background.systemjob.SystemJobService r0;
+        android.app.job.JobParameters r1;
+        androidx.work.impl.model.WorkGenerationalId r2;
+        java.lang.Throwable r3, $r23;
+        androidx.work.impl.WorkManagerImpl $r4, $r15, $r18;
+        androidx.work.Logger $r5, $r19, $r21;
+        java.lang.StringBuilder $r6, $r8, $r9;
+        java.lang.String $r7, $r10, $r17, $r20, $r22;
+        java.util.Map $r11, $r12, r24;
+        androidx.work.impl.StartStopTokens $r14;
+        androidx.work.impl.Processor $r16;
+        boolean $z0, $z1;
+        androidx.work.impl.StartStopToken r25;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobService;
+
+        r1 := @parameter0: android.app.job.JobParameters;
+
+        $r4 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>;
+
+        if $r4 != null goto label01;
+
+        $r21 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r22 = <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>;
+
+        virtualinvoke $r21.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r22, "WorkManager is not initialized; requesting retry.");
+
+        return 1;
+
+     label01:
+        r2 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.model.WorkGenerationalId workGenerationalIdFromJobParameters(android.app.job.JobParameters)>(r1);
+
+        if r2 != null goto label02;
+
+        $r19 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r20 = <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>;
+
+        virtualinvoke $r19.<androidx.work.Logger: void error(java.lang.String,java.lang.String)>($r20, "WorkSpec id not found!");
+
+        return 0;
+
+     label02:
+        $r5 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r7 = <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("onStopJob for ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r7, $r10);
+
+        $r11 = r0.<androidx.work.impl.background.systemjob.SystemJobService: java.util.Map mJobParameters>;
+
+        r24 = $r11;
+
+        entermonitor $r11;
+
+     label03:
+        $r12 = r0.<androidx.work.impl.background.systemjob.SystemJobService: java.util.Map mJobParameters>;
+
+        interfaceinvoke $r12.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r2);
+
+        exitmonitor r24;
+
+     label04:
+        goto label07;
+
+     label05:
+        $r23 := @caughtexception;
+
+        r3 = $r23;
+
+        exitmonitor r24;
+
+     label06:
+        throw r3;
+
+     label07:
+        $r14 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.StartStopTokens mStartStopTokens>;
+
+        r25 = virtualinvoke $r14.<androidx.work.impl.StartStopTokens: androidx.work.impl.StartStopToken remove(androidx.work.impl.model.WorkGenerationalId)>(r2);
+
+        if r25 == null goto label08;
+
+        $r18 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>;
+
+        virtualinvoke $r18.<androidx.work.impl.WorkManagerImpl: void stopWork(androidx.work.impl.StartStopToken)>(r25);
+
+     label08:
+        $r15 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>;
+
+        $r16 = virtualinvoke $r15.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.Processor getProcessor()>();
+
+        $r17 = virtualinvoke r2.<androidx.work.impl.model.WorkGenerationalId: java.lang.String getWorkSpecId()>();
+
+        $z0 = virtualinvoke $r16.<androidx.work.impl.Processor: boolean isCancelled(java.lang.String)>($r17);
+
+        if $z0 != 0 goto label09;
+
+        $z1 = 1;
+
+        goto label10;
+
+     label09:
+        $z1 = 0;
+
+     label10:
+        return $z1;
+
+        catch java.lang.Throwable from label03 to label04 with label05;
+        catch java.lang.Throwable from label05 to label06 with label05;
+    }
+
+    public void onExecuted(androidx.work.impl.model.WorkGenerationalId, boolean)
+    {
+        androidx.work.impl.background.systemjob.SystemJobService r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        boolean z0;
+        android.app.job.JobParameters r2;
+        java.util.Map r3, $r12, $r13;
+        java.lang.Throwable r4, $r17;
+        androidx.work.Logger $r5;
+        java.lang.StringBuilder $r6, $r9, $r10;
+        java.lang.String $r7, $r8, $r11;
+        java.lang.Object $r14;
+        androidx.work.impl.StartStopTokens $r15;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobService;
+
+        r1 := @parameter0: androidx.work.impl.model.WorkGenerationalId;
+
+        z0 := @parameter1: boolean;
+
+        $r5 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r7 = <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG>;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke r1.<androidx.work.impl.model.WorkGenerationalId: java.lang.String getWorkSpecId()>();
+
+        $r9 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" executed on JobScheduler");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r7, $r11);
+
+        $r12 = r0.<androidx.work.impl.background.systemjob.SystemJobService: java.util.Map mJobParameters>;
+
+        r3 = $r12;
+
+        entermonitor $r12;
+
+     label1:
+        $r13 = r0.<androidx.work.impl.background.systemjob.SystemJobService: java.util.Map mJobParameters>;
+
+        $r14 = interfaceinvoke $r13.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r1);
+
+        r2 = (android.app.job.JobParameters) $r14;
+
+        exitmonitor r3;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r17 := @caughtexception;
+
+        r4 = $r17;
+
+        exitmonitor r3;
+
+     label4:
+        throw r4;
+
+     label5:
+        $r15 = r0.<androidx.work.impl.background.systemjob.SystemJobService: androidx.work.impl.StartStopTokens mStartStopTokens>;
+
+        virtualinvoke $r15.<androidx.work.impl.StartStopTokens: androidx.work.impl.StartStopToken remove(androidx.work.impl.model.WorkGenerationalId)>(r1);
+
+        if r2 == null goto label6;
+
+        virtualinvoke r0.<androidx.work.impl.background.systemjob.SystemJobService: void jobFinished(android.app.job.JobParameters,boolean)>(r2, z0);
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private static androidx.work.impl.model.WorkGenerationalId workGenerationalIdFromJobParameters(android.app.job.JobParameters)
+    {
+        android.app.job.JobParameters r0;
+        boolean $z0;
+        androidx.work.impl.model.WorkGenerationalId $r1;
+        java.lang.String $r2;
+        int $i0;
+        java.lang.Throwable $r3, r5;
+        android.os.PersistableBundle r4;
+
+        r0 := @parameter0: android.app.job.JobParameters;
+
+     label1:
+        r4 = virtualinvoke r0.<android.app.job.JobParameters: android.os.PersistableBundle getExtras()>();
+
+        if r4 == null goto label3;
+
+        $z0 = virtualinvoke r4.<android.os.PersistableBundle: boolean containsKey(java.lang.String)>("EXTRA_WORK_SPEC_ID");
+
+        if $z0 == 0 goto label3;
+
+        $r1 = new androidx.work.impl.model.WorkGenerationalId;
+
+        $r2 = virtualinvoke r4.<android.os.PersistableBundle: java.lang.String getString(java.lang.String)>("EXTRA_WORK_SPEC_ID");
+
+        $i0 = virtualinvoke r4.<android.os.PersistableBundle: int getInt(java.lang.String)>("EXTRA_WORK_SPEC_GENERATION");
+
+        specialinvoke $r1.<androidx.work.impl.model.WorkGenerationalId: void <init>(java.lang.String,int)>($r2, $i0);
+
+     label2:
+        return $r1;
+
+     label3:
+        goto label5;
+
+     label4:
+        $r3 := @caughtexception;
+
+        r5 = $r3;
+
+     label5:
+        return null;
+
+        catch java.lang.NullPointerException from label1 to label2 with label4;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("SystemJobService");
+
+        <androidx.work.impl.background.systemjob.SystemJobService: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+androidx.work.impl.background.systemjob.SystemJobService$Api24Impl
+    private void <init>()
+    {
+        androidx.work.impl.background.systemjob.SystemJobService$Api24Impl r0;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobService$Api24Impl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static android.net.Uri[] getTriggeredContentUris(android.app.job.JobParameters)
+    {
+        android.app.job.JobParameters r0;
+        android.net.Uri[] $r1;
+
+        r0 := @parameter0: android.app.job.JobParameters;
+
+        $r1 = virtualinvoke r0.<android.app.job.JobParameters: android.net.Uri[] getTriggeredContentUris()>();
+
+        return $r1;
+    }
+
+    static java.lang.String[] getTriggeredContentAuthorities(android.app.job.JobParameters)
+    {
+        android.app.job.JobParameters r0;
+        java.lang.String[] $r1;
+
+        r0 := @parameter0: android.app.job.JobParameters;
+
+        $r1 = virtualinvoke r0.<android.app.job.JobParameters: java.lang.String[] getTriggeredContentAuthorities()>();
+
+        return $r1;
+    }
+
+androidx.work.impl.background.systemjob.SystemJobService$Api28Impl
+    private void <init>()
+    {
+        androidx.work.impl.background.systemjob.SystemJobService$Api28Impl r0;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobService$Api28Impl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static android.net.Network getNetwork(android.app.job.JobParameters)
+    {
+        android.app.job.JobParameters r0;
+        android.net.Network $r1;
+
+        r0 := @parameter0: android.app.job.JobParameters;
+
+        $r1 = virtualinvoke r0.<android.app.job.JobParameters: android.net.Network getNetwork()>();
+
+        return $r1;
+    }
+

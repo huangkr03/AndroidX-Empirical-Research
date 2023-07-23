@@ -1,0 +1,809 @@
+androidx.media3.extractor.ogg.DefaultOggSeeker
+<androidx.media3.extractor.ogg.DefaultOggSeeker: int MATCH_RANGE>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: int MATCH_BYTE_RANGE>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: int DEFAULT_OFFSET>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: int STATE_SEEK_TO_END>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: int STATE_READ_LAST_PAGE>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: int STATE_SEEK>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: int STATE_SKIP>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: int STATE_IDLE>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadStartPosition>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadEndPosition>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.StreamReader streamReader>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: int state>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: long totalGranules>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: long positionBeforeSeekToEnd>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: long targetGranule>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: long start>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: long end>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: long startGranule>
+<androidx.media3.extractor.ogg.DefaultOggSeeker: long endGranule>
+    public void <init>(androidx.media3.extractor.ogg.StreamReader, long, long, long, long, boolean)
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        androidx.media3.extractor.ogg.StreamReader r1;
+        long l0, l1, l2, l3, $l6;
+        boolean z0, $z1;
+        byte $b4, $b5, $b7;
+        androidx.media3.extractor.ogg.OggPageHeader $r2;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        r1 := @parameter0: androidx.media3.extractor.ogg.StreamReader;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        l2 := @parameter3: long;
+
+        l3 := @parameter4: long;
+
+        z0 := @parameter5: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $b4 = l0 cmp 0L;
+
+        if $b4 < 0 goto label1;
+
+        $b5 = l1 cmp l0;
+
+        if $b5 <= 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean)>($z1);
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.StreamReader streamReader> = r1;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadStartPosition> = l0;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadEndPosition> = l1;
+
+        $l6 = l1 - l0;
+
+        $b7 = l2 cmp $l6;
+
+        if $b7 == 0 goto label3;
+
+        if z0 == 0 goto label4;
+
+     label3:
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long totalGranules> = l3;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: int state> = 4;
+
+        goto label5;
+
+     label4:
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: int state> = 0;
+
+     label5:
+        $r2 = new androidx.media3.extractor.ogg.OggPageHeader;
+
+        specialinvoke $r2.<androidx.media3.extractor.ogg.OggPageHeader: void <init>()>();
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader> = $r2;
+
+        return;
+    }
+
+    public long read(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        long l0, l1, $l3, $l4, $l5, $l7, $l8, $l9, $l10, $l11;
+        int $i2;
+        byte $b6, $b12;
+        java.lang.IllegalStateException $r2;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $i2 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: int state>;
+
+        tableswitch($i2)
+        {
+            case 0: goto label2;
+            case 1: goto label3;
+            case 2: goto label4;
+            case 3: goto label6;
+            case 4: goto label1;
+            default: goto label7;
+        };
+
+     label1:
+        return -1L;
+
+     label2:
+        $l9 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long positionBeforeSeekToEnd> = $l9;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: int state> = 1;
+
+        $l10 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadEndPosition>;
+
+        l0 = $l10 - 65307L;
+
+        $l11 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long positionBeforeSeekToEnd>;
+
+        $b12 = l0 cmp $l11;
+
+        if $b12 <= 0 goto label3;
+
+        return l0;
+
+     label3:
+        $l7 = virtualinvoke r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long readGranuleOfLastPage(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long totalGranules> = $l7;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: int state> = 4;
+
+        $l8 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long positionBeforeSeekToEnd>;
+
+        return $l8;
+
+     label4:
+        l1 = specialinvoke r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long getNextSeekPosition(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        $b6 = l1 cmp -1L;
+
+        if $b6 == 0 goto label5;
+
+        return l1;
+
+     label5:
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: int state> = 3;
+
+     label6:
+        specialinvoke r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: void skipToPageOfTargetGranule(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: int state> = 4;
+
+        $l3 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long startGranule>;
+
+        $l4 = $l3 + 2L;
+
+        $l5 = neg $l4;
+
+        return $l5;
+
+     label7:
+        $r2 = new java.lang.IllegalStateException;
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r2;
+    }
+
+    public androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap createSeekMap()
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        long $l0;
+        byte $b1;
+        androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap $r1;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        $l0 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long totalGranules>;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 == 0 goto label1;
+
+        $r1 = new androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap;
+
+        specialinvoke $r1.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: void <init>(androidx.media3.extractor.ogg.DefaultOggSeeker,androidx.media3.extractor.ogg.DefaultOggSeeker$1)>(r0, null);
+
+        goto label2;
+
+     label1:
+        $r1 = null;
+
+     label2:
+        return $r1;
+    }
+
+    public void startSeek(long)
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        long l0, $l1, $l2, $l3, $l4, $l5, $l6;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        l0 := @parameter0: long;
+
+        $l1 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long totalGranules>;
+
+        $l2 = $l1 - 1L;
+
+        $l3 = staticinvoke <androidx.media3.common.util.Util: long constrainValue(long,long,long)>(l0, 0L, $l2);
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long targetGranule> = $l3;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: int state> = 2;
+
+        $l4 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadStartPosition>;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start> = $l4;
+
+        $l5 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadEndPosition>;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long end> = $l5;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long startGranule> = 0L;
+
+        $l6 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long totalGranules>;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long endGranule> = $l6;
+
+        return;
+    }
+
+    private long getNextSeekPosition(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        long l0, l1, l3, l4, $l5, $l6, $l8, $l9, $l10, $l15, $l16, $l17, $l18, $l19, $l20, $l21, $l24, $l25, $l26, $l27, $l28, $l29, $l30, $l31, $l32, $l33, $l34, $l35, $l36, $l37, $l38, $l39, $l40, $l41, $l43, $l45, $l46;
+        int i2, $i11, $i12;
+        byte $b7, $b13, $b14, $b22, $b23, $b42, $b44;
+        androidx.media3.extractor.ogg.OggPageHeader $r2, $r3, $r4, $r5, $r6, $r7, $r8;
+        boolean $z0;
+        java.io.IOException $r9;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $l6 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start>;
+
+        $l5 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long end>;
+
+        $b7 = $l6 cmp $l5;
+
+        if $b7 != 0 goto label1;
+
+        return -1L;
+
+     label1:
+        l0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $r2 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $l8 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long end>;
+
+        $z0 = virtualinvoke $r2.<androidx.media3.extractor.ogg.OggPageHeader: boolean skipToNextPage(androidx.media3.extractor.ExtractorInput,long)>(r1, $l8);
+
+        if $z0 != 0 goto label3;
+
+        $l43 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start>;
+
+        $b44 = $l43 cmp l0;
+
+        if $b44 != 0 goto label2;
+
+        $r9 = new java.io.IOException;
+
+        specialinvoke $r9.<java.io.IOException: void <init>(java.lang.String)>("No ogg page can be found.");
+
+        throw $r9;
+
+     label2:
+        $l45 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start>;
+
+        return $l45;
+
+     label3:
+        $r3 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        virtualinvoke $r3.<androidx.media3.extractor.ogg.OggPageHeader: boolean populate(androidx.media3.extractor.ExtractorInput,boolean)>(r1, 0);
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $l10 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long targetGranule>;
+
+        $r4 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $l9 = $r4.<androidx.media3.extractor.ogg.OggPageHeader: long granulePosition>;
+
+        l1 = $l10 - $l9;
+
+        $r5 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $i12 = $r5.<androidx.media3.extractor.ogg.OggPageHeader: int headerSize>;
+
+        $r6 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $i11 = $r6.<androidx.media3.extractor.ogg.OggPageHeader: int bodySize>;
+
+        i2 = $i12 + $i11;
+
+        $b13 = 0L cmp l1;
+
+        if $b13 > 0 goto label4;
+
+        $b42 = l1 cmp 72000L;
+
+        if $b42 >= 0 goto label4;
+
+        return -1L;
+
+     label4:
+        $b14 = l1 cmp 0L;
+
+        if $b14 >= 0 goto label5;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long end> = l0;
+
+        $r8 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $l41 = $r8.<androidx.media3.extractor.ogg.OggPageHeader: long granulePosition>;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long endGranule> = $l41;
+
+        goto label6;
+
+     label5:
+        $l15 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l16 = (long) i2;
+
+        $l17 = $l15 + $l16;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start> = $l17;
+
+        $r7 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $l18 = $r7.<androidx.media3.extractor.ogg.OggPageHeader: long granulePosition>;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long startGranule> = $l18;
+
+     label6:
+        $l20 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long end>;
+
+        $l19 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start>;
+
+        $l21 = $l20 - $l19;
+
+        $b22 = $l21 cmp 100000L;
+
+        if $b22 >= 0 goto label7;
+
+        $l39 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start>;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long end> = $l39;
+
+        $l40 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start>;
+
+        return $l40;
+
+     label7:
+        $l24 = (long) i2;
+
+        $b23 = l1 cmp 0L;
+
+        if $b23 > 0 goto label8;
+
+        $l46 = 2L;
+
+        goto label9;
+
+     label8:
+        $l46 = 1L;
+
+     label9:
+        l3 = $l24 * $l46;
+
+        $l25 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l34 = $l25 - l3;
+
+        $l27 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long end>;
+
+        $l26 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start>;
+
+        $l28 = $l27 - $l26;
+
+        $l32 = l1 * $l28;
+
+        $l30 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long endGranule>;
+
+        $l29 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long startGranule>;
+
+        $l31 = $l30 - $l29;
+
+        $l33 = $l32 / $l31;
+
+        l4 = $l34 + $l33;
+
+        $l37 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start>;
+
+        $l35 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long end>;
+
+        $l36 = $l35 - 1L;
+
+        $l38 = staticinvoke <androidx.media3.common.util.Util: long constrainValue(long,long,long)>(l4, $l37, $l36);
+
+        return $l38;
+    }
+
+    private void skipToPageOfTargetGranule(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.ogg.OggPageHeader $r2, $r3, $r4, $r5, $r6, $r7;
+        long $l0, $l1, $l6, $l7;
+        byte $b2;
+        int $i3, $i4, $i5;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+     label1:
+        $r2 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        virtualinvoke $r2.<androidx.media3.extractor.ogg.OggPageHeader: boolean skipToNextPage(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        $r3 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        virtualinvoke $r3.<androidx.media3.extractor.ogg.OggPageHeader: boolean populate(androidx.media3.extractor.ExtractorInput,boolean)>(r1, 0);
+
+        $r4 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $l1 = $r4.<androidx.media3.extractor.ogg.OggPageHeader: long granulePosition>;
+
+        $l0 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long targetGranule>;
+
+        $b2 = $l1 cmp $l0;
+
+        if $b2 <= 0 goto label2;
+
+        goto label3;
+
+     label2:
+        $r5 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $i4 = $r5.<androidx.media3.extractor.ogg.OggPageHeader: int headerSize>;
+
+        $r6 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $i3 = $r6.<androidx.media3.extractor.ogg.OggPageHeader: int bodySize>;
+
+        $i5 = $i4 + $i3;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i5);
+
+        $l6 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long start> = $l6;
+
+        $r7 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $l7 = $r7.<androidx.media3.extractor.ogg.OggPageHeader: long granulePosition>;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long startGranule> = $l7;
+
+        goto label1;
+
+     label3:
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        return;
+    }
+
+    long readGranuleOfLastPage(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        boolean z0, $z1, $z3, $z4;
+        androidx.media3.extractor.ogg.OggPageHeader $r2, $r3, $r4, $r5, $r6, $r7, $r8, $r9, $r10, $r11, $r12, $r13;
+        int $i0, $i1, $i2, $i3, $i4, $i8, $i9, $i10;
+        long $l5, $l6, l11;
+        byte $b7;
+        java.io.EOFException $r14;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r2 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        virtualinvoke $r2.<androidx.media3.extractor.ogg.OggPageHeader: void reset()>();
+
+        $r3 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $z1 = virtualinvoke $r3.<androidx.media3.extractor.ogg.OggPageHeader: boolean skipToNextPage(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        if $z1 != 0 goto label1;
+
+        $r14 = new java.io.EOFException;
+
+        specialinvoke $r14.<java.io.EOFException: void <init>()>();
+
+        throw $r14;
+
+     label1:
+        $r4 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        virtualinvoke $r4.<androidx.media3.extractor.ogg.OggPageHeader: boolean populate(androidx.media3.extractor.ExtractorInput,boolean)>(r1, 0);
+
+        $r5 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $i1 = $r5.<androidx.media3.extractor.ogg.OggPageHeader: int headerSize>;
+
+        $r6 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $i0 = $r6.<androidx.media3.extractor.ogg.OggPageHeader: int bodySize>;
+
+        $i2 = $i1 + $i0;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i2);
+
+        $r7 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        l11 = $r7.<androidx.media3.extractor.ogg.OggPageHeader: long granulePosition>;
+
+     label2:
+        $r8 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $i3 = $r8.<androidx.media3.extractor.ogg.OggPageHeader: int type>;
+
+        $i4 = $i3 & 4;
+
+        if $i4 == 4 goto label5;
+
+        $r9 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $z3 = virtualinvoke $r9.<androidx.media3.extractor.ogg.OggPageHeader: boolean skipToNextPage(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        if $z3 == 0 goto label5;
+
+        $l5 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l6 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadEndPosition>;
+
+        $b7 = $l5 cmp $l6;
+
+        if $b7 >= 0 goto label5;
+
+        $r10 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        z0 = virtualinvoke $r10.<androidx.media3.extractor.ogg.OggPageHeader: boolean populate(androidx.media3.extractor.ExtractorInput,boolean)>(r1, 1);
+
+        if z0 == 0 goto label3;
+
+        $r11 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $i9 = $r11.<androidx.media3.extractor.ogg.OggPageHeader: int headerSize>;
+
+        $r12 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        $i8 = $r12.<androidx.media3.extractor.ogg.OggPageHeader: int bodySize>;
+
+        $i10 = $i9 + $i8;
+
+        $z4 = staticinvoke <androidx.media3.extractor.ExtractorUtil: boolean skipFullyQuietly(androidx.media3.extractor.ExtractorInput,int)>(r1, $i10);
+
+        if $z4 != 0 goto label4;
+
+     label3:
+        return l11;
+
+     label4:
+        $r13 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.OggPageHeader pageHeader>;
+
+        l11 = $r13.<androidx.media3.extractor.ogg.OggPageHeader: long granulePosition>;
+
+        goto label2;
+
+     label5:
+        return l11;
+    }
+
+    public volatile androidx.media3.extractor.SeekMap createSeekMap()
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap $r1;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        $r1 = virtualinvoke r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap createSeekMap()>();
+
+        return $r1;
+    }
+
+    static androidx.media3.extractor.ogg.StreamReader access$100(androidx.media3.extractor.ogg.DefaultOggSeeker)
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        androidx.media3.extractor.ogg.StreamReader $r1;
+
+        r0 := @parameter0: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        $r1 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.StreamReader streamReader>;
+
+        return $r1;
+    }
+
+    static long access$200(androidx.media3.extractor.ogg.DefaultOggSeeker)
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        long $l0;
+
+        r0 := @parameter0: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        $l0 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadStartPosition>;
+
+        return $l0;
+    }
+
+    static long access$300(androidx.media3.extractor.ogg.DefaultOggSeeker)
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        long $l0;
+
+        r0 := @parameter0: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        $l0 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long payloadEndPosition>;
+
+        return $l0;
+    }
+
+    static long access$400(androidx.media3.extractor.ogg.DefaultOggSeeker)
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker r0;
+        long $l0;
+
+        r0 := @parameter0: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        $l0 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker: long totalGranules>;
+
+        return $l0;
+    }
+
+androidx.media3.extractor.ogg.DefaultOggSeeker$1
+androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap
+<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>
+    private void <init>(androidx.media3.extractor.ogg.DefaultOggSeeker)
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap r0;
+        androidx.media3.extractor.ogg.DefaultOggSeeker r1;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap;
+
+        r1 := @parameter0: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public boolean isSeekable()
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap r0;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap;
+
+        return 1;
+    }
+
+    public androidx.media3.extractor.SeekMap$SeekPoints getSeekPoints(long)
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap r0;
+        long l0, l1, $l2, $l3, $l4, $l5, $l6, $l7, $l8, $l9, $l10, $l11, $l12, l13, l14;
+        androidx.media3.extractor.ogg.DefaultOggSeeker $r1, $r3, $r4, $r5, $r6, $r7, $r8;
+        androidx.media3.extractor.ogg.StreamReader $r2;
+        androidx.media3.extractor.SeekMap$SeekPoints $r9;
+        androidx.media3.extractor.SeekPoint $r10;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>;
+
+        $r2 = staticinvoke <androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.StreamReader access$100(androidx.media3.extractor.ogg.DefaultOggSeeker)>($r1);
+
+        l1 = virtualinvoke $r2.<androidx.media3.extractor.ogg.StreamReader: long convertTimeToGranule(long)>(l0);
+
+        $r3 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>;
+
+        $l2 = staticinvoke <androidx.media3.extractor.ogg.DefaultOggSeeker: long access$200(androidx.media3.extractor.ogg.DefaultOggSeeker)>($r3);
+
+        $r4 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>;
+
+        $l3 = staticinvoke <androidx.media3.extractor.ogg.DefaultOggSeeker: long access$300(androidx.media3.extractor.ogg.DefaultOggSeeker)>($r4);
+
+        $r5 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>;
+
+        $l4 = staticinvoke <androidx.media3.extractor.ogg.DefaultOggSeeker: long access$200(androidx.media3.extractor.ogg.DefaultOggSeeker)>($r5);
+
+        $l5 = $l3 - $l4;
+
+        $l6 = l1 * $l5;
+
+        $r6 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>;
+
+        $l7 = staticinvoke <androidx.media3.extractor.ogg.DefaultOggSeeker: long access$400(androidx.media3.extractor.ogg.DefaultOggSeeker)>($r6);
+
+        $l8 = $l6 / $l7;
+
+        $l9 = $l2 + $l8;
+
+        l13 = $l9 - 30000L;
+
+        $r7 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>;
+
+        $l10 = staticinvoke <androidx.media3.extractor.ogg.DefaultOggSeeker: long access$200(androidx.media3.extractor.ogg.DefaultOggSeeker)>($r7);
+
+        $r8 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>;
+
+        $l11 = staticinvoke <androidx.media3.extractor.ogg.DefaultOggSeeker: long access$300(androidx.media3.extractor.ogg.DefaultOggSeeker)>($r8);
+
+        $l12 = $l11 - 1L;
+
+        l14 = staticinvoke <androidx.media3.common.util.Util: long constrainValue(long,long,long)>(l13, $l10, $l12);
+
+        $r9 = new androidx.media3.extractor.SeekMap$SeekPoints;
+
+        $r10 = new androidx.media3.extractor.SeekPoint;
+
+        specialinvoke $r10.<androidx.media3.extractor.SeekPoint: void <init>(long,long)>(l0, l14);
+
+        specialinvoke $r9.<androidx.media3.extractor.SeekMap$SeekPoints: void <init>(androidx.media3.extractor.SeekPoint)>($r10);
+
+        return $r9;
+    }
+
+    public long getDurationUs()
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap r0;
+        androidx.media3.extractor.ogg.DefaultOggSeeker $r1, $r3;
+        androidx.media3.extractor.ogg.StreamReader $r2;
+        long $l0, $l1;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap;
+
+        $r1 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>;
+
+        $r2 = staticinvoke <androidx.media3.extractor.ogg.DefaultOggSeeker: androidx.media3.extractor.ogg.StreamReader access$100(androidx.media3.extractor.ogg.DefaultOggSeeker)>($r1);
+
+        $r3 = r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: androidx.media3.extractor.ogg.DefaultOggSeeker this$0>;
+
+        $l0 = staticinvoke <androidx.media3.extractor.ogg.DefaultOggSeeker: long access$400(androidx.media3.extractor.ogg.DefaultOggSeeker)>($r3);
+
+        $l1 = virtualinvoke $r2.<androidx.media3.extractor.ogg.StreamReader: long convertGranuleToTime(long)>($l0);
+
+        return $l1;
+    }
+
+    void <init>(androidx.media3.extractor.ogg.DefaultOggSeeker, androidx.media3.extractor.ogg.DefaultOggSeeker$1)
+    {
+        androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap r0;
+        androidx.media3.extractor.ogg.DefaultOggSeeker r1;
+        androidx.media3.extractor.ogg.DefaultOggSeeker$1 r2;
+
+        r0 := @this: androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap;
+
+        r1 := @parameter0: androidx.media3.extractor.ogg.DefaultOggSeeker;
+
+        r2 := @parameter1: androidx.media3.extractor.ogg.DefaultOggSeeker$1;
+
+        specialinvoke r0.<androidx.media3.extractor.ogg.DefaultOggSeeker$OggSeekMap: void <init>(androidx.media3.extractor.ogg.DefaultOggSeeker)>(r1);
+
+        return;
+    }
+

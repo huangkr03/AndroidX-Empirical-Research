@@ -1,0 +1,284 @@
+androidx.media3.extractor.ogg.OpusReader
+<androidx.media3.extractor.ogg.OpusReader: byte[] OPUS_ID_HEADER_SIGNATURE>
+<androidx.media3.extractor.ogg.OpusReader: byte[] OPUS_COMMENT_HEADER_SIGNATURE>
+<androidx.media3.extractor.ogg.OpusReader: boolean firstCommentHeaderSeen>
+    void <init>()
+    {
+        androidx.media3.extractor.ogg.OpusReader r0;
+
+        r0 := @this: androidx.media3.extractor.ogg.OpusReader;
+
+        specialinvoke r0.<androidx.media3.extractor.ogg.StreamReader: void <init>()>();
+
+        return;
+    }
+
+    public static boolean verifyBitstreamType(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        byte[] $r1;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        $r1 = <androidx.media3.extractor.ogg.OpusReader: byte[] OPUS_ID_HEADER_SIGNATURE>;
+
+        $z0 = staticinvoke <androidx.media3.extractor.ogg.OpusReader: boolean peekPacketStartsWith(androidx.media3.common.util.ParsableByteArray,byte[])>(r0, $r1);
+
+        return $z0;
+    }
+
+    protected void reset(boolean)
+    {
+        androidx.media3.extractor.ogg.OpusReader r0;
+        boolean z0;
+
+        r0 := @this: androidx.media3.extractor.ogg.OpusReader;
+
+        z0 := @parameter0: boolean;
+
+        specialinvoke r0.<androidx.media3.extractor.ogg.StreamReader: void reset(boolean)>(z0);
+
+        if z0 == 0 goto label1;
+
+        r0.<androidx.media3.extractor.ogg.OpusReader: boolean firstCommentHeaderSeen> = 0;
+
+     label1:
+        return;
+    }
+
+    protected long preparePayload(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.ogg.OpusReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        byte[] $r2;
+        long $l0, $l1;
+
+        r0 := @this: androidx.media3.extractor.ogg.OpusReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        $r2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $l0 = staticinvoke <androidx.media3.extractor.OpusUtil: long getPacketDurationUs(byte[])>($r2);
+
+        $l1 = virtualinvoke r0.<androidx.media3.extractor.ogg.OpusReader: long convertTimeToGranule(long)>($l0);
+
+        return $l1;
+    }
+
+    protected boolean readHeaders(androidx.media3.common.util.ParsableByteArray, long, androidx.media3.extractor.ogg.StreamReader$SetupData) throws androidx.media3.common.ParserException
+    {
+        androidx.media3.extractor.ogg.OpusReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        long l0;
+        androidx.media3.extractor.ogg.StreamReader$SetupData r2;
+        java.util.List r3;
+        byte[] $r4, $r5, $r10, $r20, r28;
+        boolean $z0, $z1, $z2;
+        androidx.media3.common.Format $r6, $r8, $r13, $r15, $r19, $r21, $r27;
+        int $i1, $i2, i3;
+        java.lang.String[] $r11;
+        com.google.common.collect.ImmutableList $r12;
+        androidx.media3.common.Format$Builder $r14, $r18, $r22, $r23, $r24, $r25, $r26;
+        androidx.media3.common.Metadata $r16, $r17, r30;
+        androidx.media3.extractor.VorbisUtil$CommentHeader r29;
+
+        r0 := @this: androidx.media3.extractor.ogg.OpusReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        l0 := @parameter1: long;
+
+        r2 := @parameter2: androidx.media3.extractor.ogg.StreamReader$SetupData;
+
+        $r4 = <androidx.media3.extractor.ogg.OpusReader: byte[] OPUS_ID_HEADER_SIGNATURE>;
+
+        $z0 = staticinvoke <androidx.media3.extractor.ogg.OpusReader: boolean peekPacketStartsWith(androidx.media3.common.util.ParsableByteArray,byte[])>(r1, $r4);
+
+        if $z0 == 0 goto label2;
+
+        $r20 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $i2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+        r28 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r20, $i2);
+
+        i3 = staticinvoke <androidx.media3.extractor.OpusUtil: int getChannelCount(byte[])>(r28);
+
+        r3 = staticinvoke <androidx.media3.extractor.OpusUtil: java.util.List buildInitializationData(byte[])>(r28);
+
+        $r21 = r2.<androidx.media3.extractor.ogg.StreamReader$SetupData: androidx.media3.common.Format format>;
+
+        if $r21 == null goto label1;
+
+        return 1;
+
+     label1:
+        $r22 = new androidx.media3.common.Format$Builder;
+
+        specialinvoke $r22.<androidx.media3.common.Format$Builder: void <init>()>();
+
+        $r23 = virtualinvoke $r22.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleMimeType(java.lang.String)>("audio/opus");
+
+        $r24 = virtualinvoke $r23.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setChannelCount(int)>(i3);
+
+        $r25 = virtualinvoke $r24.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleRate(int)>(48000);
+
+        $r26 = virtualinvoke $r25.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setInitializationData(java.util.List)>(r3);
+
+        $r27 = virtualinvoke $r26.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        r2.<androidx.media3.extractor.ogg.StreamReader$SetupData: androidx.media3.common.Format format> = $r27;
+
+        return 1;
+
+     label2:
+        $r5 = <androidx.media3.extractor.ogg.OpusReader: byte[] OPUS_COMMENT_HEADER_SIGNATURE>;
+
+        $z1 = staticinvoke <androidx.media3.extractor.ogg.OpusReader: boolean peekPacketStartsWith(androidx.media3.common.util.ParsableByteArray,byte[])>(r1, $r5);
+
+        if $z1 == 0 goto label5;
+
+        $r8 = r2.<androidx.media3.extractor.ogg.StreamReader$SetupData: androidx.media3.common.Format format>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r8);
+
+        $z2 = r0.<androidx.media3.extractor.ogg.OpusReader: boolean firstCommentHeaderSeen>;
+
+        if $z2 == 0 goto label3;
+
+        return 1;
+
+     label3:
+        r0.<androidx.media3.extractor.ogg.OpusReader: boolean firstCommentHeaderSeen> = 1;
+
+        $r10 = <androidx.media3.extractor.ogg.OpusReader: byte[] OPUS_COMMENT_HEADER_SIGNATURE>;
+
+        $i1 = lengthof $r10;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>($i1);
+
+        r29 = staticinvoke <androidx.media3.extractor.VorbisUtil: androidx.media3.extractor.VorbisUtil$CommentHeader readVorbisCommentHeader(androidx.media3.common.util.ParsableByteArray,boolean,boolean)>(r1, 0, 0);
+
+        $r11 = r29.<androidx.media3.extractor.VorbisUtil$CommentHeader: java.lang.String[] comments>;
+
+        $r12 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.lang.Object[])>($r11);
+
+        r30 = staticinvoke <androidx.media3.extractor.VorbisUtil: androidx.media3.common.Metadata parseVorbisComments(java.util.List)>($r12);
+
+        if r30 != null goto label4;
+
+        return 1;
+
+     label4:
+        $r13 = r2.<androidx.media3.extractor.ogg.StreamReader$SetupData: androidx.media3.common.Format format>;
+
+        $r14 = virtualinvoke $r13.<androidx.media3.common.Format: androidx.media3.common.Format$Builder buildUpon()>();
+
+        $r15 = r2.<androidx.media3.extractor.ogg.StreamReader$SetupData: androidx.media3.common.Format format>;
+
+        $r16 = $r15.<androidx.media3.common.Format: androidx.media3.common.Metadata metadata>;
+
+        $r17 = virtualinvoke r30.<androidx.media3.common.Metadata: androidx.media3.common.Metadata copyWithAppendedEntriesFrom(androidx.media3.common.Metadata)>($r16);
+
+        $r18 = virtualinvoke $r14.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setMetadata(androidx.media3.common.Metadata)>($r17);
+
+        $r19 = virtualinvoke $r18.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        r2.<androidx.media3.extractor.ogg.StreamReader$SetupData: androidx.media3.common.Format format> = $r19;
+
+        return 1;
+
+     label5:
+        $r6 = r2.<androidx.media3.extractor.ogg.StreamReader$SetupData: androidx.media3.common.Format format>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r6);
+
+        return 0;
+    }
+
+    private static boolean peekPacketStartsWith(androidx.media3.common.util.ParsableByteArray, byte[])
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        byte[] r1, r2;
+        int i0, $i1, $i2, $i3, $i4;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r1 := @parameter1: byte[];
+
+        $i1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        $i2 = lengthof r1;
+
+        if $i1 >= $i2 goto label1;
+
+        return 0;
+
+     label1:
+        i0 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        $i3 = lengthof r1;
+
+        r2 = newarray (byte)[$i3];
+
+        $i4 = lengthof r1;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void readBytes(byte[],int,int)>(r2, 0, $i4);
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i0);
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r2, r1);
+
+        return $z0;
+    }
+
+    static void <clinit>()
+    {
+        byte[] $r0, $r1;
+
+        $r0 = newarray (byte)[8];
+
+        $r0[0] = 79;
+
+        $r0[1] = 112;
+
+        $r0[2] = 117;
+
+        $r0[3] = 115;
+
+        $r0[4] = 72;
+
+        $r0[5] = 101;
+
+        $r0[6] = 97;
+
+        $r0[7] = 100;
+
+        <androidx.media3.extractor.ogg.OpusReader: byte[] OPUS_ID_HEADER_SIGNATURE> = $r0;
+
+        $r1 = newarray (byte)[8];
+
+        $r1[0] = 79;
+
+        $r1[1] = 112;
+
+        $r1[2] = 117;
+
+        $r1[3] = 115;
+
+        $r1[4] = 84;
+
+        $r1[5] = 97;
+
+        $r1[6] = 103;
+
+        $r1[7] = 115;
+
+        <androidx.media3.extractor.ogg.OpusReader: byte[] OPUS_COMMENT_HEADER_SIGNATURE> = $r1;
+
+        return;
+    }
+

@@ -1,0 +1,1093 @@
+androidx.camera.core.ImageAnalysisAbstractAnalyzer
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.String TAG>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mRelativeRotation>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mPrevBufferRotationDegrees>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mOutputImageFormat>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOutputImageRotationEnabled>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOnePixelShiftEnabled>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.util.concurrent.Executor mUserExecutor>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.media.ImageWriter mProcessedImageWriter>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mOriginalViewPortCropRect>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mUpdatedViewPortCropRect>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mOriginalSensorToBufferTransformMatrix>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mUpdatedSensorToBufferTransformMatrix>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mRGBConvertedBuffer>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mYRotatedBuffer>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mURotatedBuffer>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mVRotatedBuffer>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.Object mAnalyzerLock>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mIsAttached>
+    void <init>()
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        android.graphics.Rect $r1, $r2;
+        android.graphics.Matrix $r3, $r4;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mOutputImageFormat> = 1;
+
+        $r1 = new android.graphics.Rect;
+
+        specialinvoke $r1.<android.graphics.Rect: void <init>()>();
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mOriginalViewPortCropRect> = $r1;
+
+        $r2 = new android.graphics.Rect;
+
+        specialinvoke $r2.<android.graphics.Rect: void <init>()>();
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mUpdatedViewPortCropRect> = $r2;
+
+        $r3 = new android.graphics.Matrix;
+
+        specialinvoke $r3.<android.graphics.Matrix: void <init>()>();
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mOriginalSensorToBufferTransformMatrix> = $r3;
+
+        $r4 = new android.graphics.Matrix;
+
+        specialinvoke $r4.<android.graphics.Matrix: void <init>()>();
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mUpdatedSensorToBufferTransformMatrix> = $r4;
+
+        $r5 = new java.lang.Object;
+
+        specialinvoke $r5.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.Object mAnalyzerLock> = $r5;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mIsAttached> = 1;
+
+        return;
+    }
+
+    public void onImageAvailable(androidx.camera.core.impl.ImageReaderProxy)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        androidx.camera.core.impl.ImageReaderProxy r1;
+        java.lang.Throwable $r2, r4;
+        androidx.camera.core.ImageProxy r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: androidx.camera.core.impl.ImageReaderProxy;
+
+     label1:
+        r3 = virtualinvoke r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.ImageProxy acquireImage(androidx.camera.core.impl.ImageReaderProxy)>(r1);
+
+        if r3 == null goto label2;
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void onValidImageAvailable(androidx.camera.core.ImageProxy)>(r3);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r4 = $r2;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("ImageAnalysisAnalyzer", "Failed to acquire image.", r4);
+
+     label4:
+        return;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+    }
+
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.ImageProxy acquireImage(androidx.camera.core.impl.ImageReaderProxy)>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void onValidImageAvailable(androidx.camera.core.ImageProxy)>
+<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void clearCache()>
+    com.google.common.util.concurrent.ListenableFuture analyzeImage(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        androidx.camera.core.ImageProxy r1, r10, r24, $r25;
+        java.util.concurrent.Executor r2;
+        androidx.camera.core.ImageAnalysis$Analyzer r3;
+        androidx.camera.core.SafeCloseImageReaderProxy r4;
+        android.media.ImageWriter r5;
+        java.nio.ByteBuffer r6, r7, r8, r9;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+        boolean z0, z1, $z2, $z3, $z4, $z5, $z6, $z8, $z9, $z10;
+        android.graphics.Rect r11, $r16, $r26;
+        android.graphics.Matrix r12, $r17, $r27;
+        java.lang.Object r13, $r15, $r18, r22;
+        java.lang.Throwable r14, $r20, $r21, r23;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Resolver $r19;
+        com.google.common.util.concurrent.ListenableFuture r28;
+        androidx.core.os.OperationCanceledException $r29;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $z2 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOutputImageRotationEnabled>;
+
+        if $z2 == 0 goto label01;
+
+        $i8 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mRelativeRotation>;
+
+        goto label02;
+
+     label01:
+        $i8 = 0;
+
+     label02:
+        i0 = $i8;
+
+        $r15 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.Object mAnalyzerLock>;
+
+        r22 = $r15;
+
+        entermonitor $r15;
+
+     label03:
+        r2 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.util.concurrent.Executor mUserExecutor>;
+
+        r3 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer>;
+
+        $z3 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOutputImageRotationEnabled>;
+
+        if $z3 == 0 goto label04;
+
+        $i7 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mPrevBufferRotationDegrees>;
+
+        if i0 == $i7 goto label04;
+
+        $z9 = 1;
+
+        goto label05;
+
+     label04:
+        $z9 = 0;
+
+     label05:
+        z0 = $z9;
+
+        if z0 == 0 goto label06;
+
+        specialinvoke r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void recreateImageReaderProxy(androidx.camera.core.ImageProxy,int)>(r1, i0);
+
+     label06:
+        $z4 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOutputImageRotationEnabled>;
+
+        if $z4 == 0 goto label07;
+
+        specialinvoke r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void createHelperBuffer(androidx.camera.core.ImageProxy)>(r1);
+
+     label07:
+        r4 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy>;
+
+        r5 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.media.ImageWriter mProcessedImageWriter>;
+
+        r6 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mRGBConvertedBuffer>;
+
+        r7 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mYRotatedBuffer>;
+
+        r8 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mURotatedBuffer>;
+
+        r9 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mVRotatedBuffer>;
+
+        exitmonitor r22;
+
+     label08:
+        goto label11;
+
+     label09:
+        $r20 := @caughtexception;
+
+        r23 = $r20;
+
+        exitmonitor r22;
+
+     label10:
+        throw r23;
+
+     label11:
+        if r3 == null goto label25;
+
+        if r2 == null goto label25;
+
+        $z5 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mIsAttached>;
+
+        if $z5 == 0 goto label25;
+
+        r24 = null;
+
+        if r4 == null goto label14;
+
+        $i5 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mOutputImageFormat>;
+
+        if $i5 != 2 goto label12;
+
+        $z8 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOnePixelShiftEnabled>;
+
+        r24 = staticinvoke <androidx.camera.core.ImageProcessingUtil: androidx.camera.core.ImageProxy convertYUVToRGB(androidx.camera.core.ImageProxy,androidx.camera.core.impl.ImageReaderProxy,java.nio.ByteBuffer,int,boolean)>(r1, r4, r6, i0, $z8);
+
+        goto label14;
+
+     label12:
+        $i6 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mOutputImageFormat>;
+
+        if $i6 != 1 goto label14;
+
+        $z6 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOnePixelShiftEnabled>;
+
+        if $z6 == 0 goto label13;
+
+        staticinvoke <androidx.camera.core.ImageProcessingUtil: boolean applyPixelShiftForYUV(androidx.camera.core.ImageProxy)>(r1);
+
+     label13:
+        if r5 == null goto label14;
+
+        if r7 == null goto label14;
+
+        if r8 == null goto label14;
+
+        if r9 == null goto label14;
+
+        r24 = staticinvoke <androidx.camera.core.ImageProcessingUtil: androidx.camera.core.ImageProxy rotateYUV(androidx.camera.core.ImageProxy,androidx.camera.core.impl.ImageReaderProxy,android.media.ImageWriter,java.nio.ByteBuffer,java.nio.ByteBuffer,java.nio.ByteBuffer,int)>(r1, r4, r5, r7, r8, r9, i0);
+
+     label14:
+        if r24 != null goto label15;
+
+        $z10 = 1;
+
+        goto label16;
+
+     label15:
+        $z10 = 0;
+
+     label16:
+        z1 = $z10;
+
+        if z1 == 0 goto label17;
+
+        $r25 = r1;
+
+        goto label18;
+
+     label17:
+        $r25 = r24;
+
+     label18:
+        r10 = $r25;
+
+        $r16 = new android.graphics.Rect;
+
+        specialinvoke $r16.<android.graphics.Rect: void <init>()>();
+
+        r11 = $r16;
+
+        $r17 = new android.graphics.Matrix;
+
+        specialinvoke $r17.<android.graphics.Matrix: void <init>()>();
+
+        r12 = $r17;
+
+        $r18 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.Object mAnalyzerLock>;
+
+        r13 = $r18;
+
+        entermonitor $r18;
+
+     label19:
+        if z0 == 0 goto label20;
+
+        if z1 != 0 goto label20;
+
+        $i1 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i2 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $i3 = interfaceinvoke r10.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i4 = interfaceinvoke r10.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        specialinvoke r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void recalculateTransformMatrixAndCropRect(int,int,int,int)>($i1, $i2, $i3, $i4);
+
+     label20:
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mPrevBufferRotationDegrees> = i0;
+
+        $r26 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mUpdatedViewPortCropRect>;
+
+        virtualinvoke r11.<android.graphics.Rect: void set(android.graphics.Rect)>($r26);
+
+        $r27 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mUpdatedSensorToBufferTransformMatrix>;
+
+        virtualinvoke r12.<android.graphics.Matrix: void set(android.graphics.Matrix)>($r27);
+
+        exitmonitor r13;
+
+     label21:
+        goto label24;
+
+     label22:
+        $r21 := @caughtexception;
+
+        r14 = $r21;
+
+        exitmonitor r13;
+
+     label23:
+        throw r14;
+
+     label24:
+        $r19 = dynamicinvoke "attachCompleter" <androidx.concurrent.futures.CallbackToFutureAdapter$Resolver (androidx.camera.core.ImageAnalysisAbstractAnalyzer,java.util.concurrent.Executor,androidx.camera.core.ImageProxy,android.graphics.Matrix,androidx.camera.core.ImageProxy,android.graphics.Rect,androidx.camera.core.ImageAnalysis$Analyzer)>(r0, r2, r1, r12, r10, r11, r3) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.Object lambda$analyzeImage$1(java.util.concurrent.Executor,androidx.camera.core.ImageProxy,android.graphics.Matrix,androidx.camera.core.ImageProxy,android.graphics.Rect,androidx.camera.core.ImageAnalysis$Analyzer,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer));
+
+        r28 = staticinvoke <androidx.concurrent.futures.CallbackToFutureAdapter: com.google.common.util.concurrent.ListenableFuture getFuture(androidx.concurrent.futures.CallbackToFutureAdapter$Resolver)>($r19);
+
+        goto label26;
+
+     label25:
+        $r29 = new androidx.core.os.OperationCanceledException;
+
+        specialinvoke $r29.<androidx.core.os.OperationCanceledException: void <init>(java.lang.String)>("No analyzer or executor currently set.");
+
+        r28 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture immediateFailedFuture(java.lang.Throwable)>($r29);
+
+     label26:
+        return r28;
+
+        catch java.lang.Throwable from label03 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label09;
+        catch java.lang.Throwable from label19 to label21 with label22;
+        catch java.lang.Throwable from label22 to label23 with label22;
+    }
+
+    private static androidx.camera.core.SafeCloseImageReaderProxy createImageReaderProxy(int, int, int, int, int)
+    {
+        int i0, i1, i2, i3, i4, i5, i6, $i7, $i8;
+        boolean z0, $z1;
+        androidx.camera.core.SafeCloseImageReaderProxy $r0;
+        androidx.camera.core.impl.ImageReaderProxy $r1;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        i3 := @parameter3: int;
+
+        i4 := @parameter4: int;
+
+        if i2 == 90 goto label1;
+
+        if i2 != 270 goto label2;
+
+     label1:
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        z0 = $z1;
+
+        if z0 == 0 goto label4;
+
+        $i7 = i1;
+
+        goto label5;
+
+     label4:
+        $i7 = i0;
+
+     label5:
+        i5 = $i7;
+
+        if z0 == 0 goto label6;
+
+        $i8 = i0;
+
+        goto label7;
+
+     label6:
+        $i8 = i1;
+
+     label7:
+        i6 = $i8;
+
+        $r0 = new androidx.camera.core.SafeCloseImageReaderProxy;
+
+        $r1 = staticinvoke <androidx.camera.core.ImageReaderProxys: androidx.camera.core.impl.ImageReaderProxy createIsolatedReader(int,int,int,int)>(i5, i6, i3, i4);
+
+        specialinvoke $r0.<androidx.camera.core.SafeCloseImageReaderProxy: void <init>(androidx.camera.core.impl.ImageReaderProxy)>($r1);
+
+        return $r0;
+    }
+
+    void setRelativeRotation(int)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        int i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        i0 := @parameter0: int;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mRelativeRotation> = i0;
+
+        return;
+    }
+
+    void setOutputImageRotationEnabled(boolean)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        boolean z0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        z0 := @parameter0: boolean;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOutputImageRotationEnabled> = z0;
+
+        return;
+    }
+
+    void setOutputImageFormat(int)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        int i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        i0 := @parameter0: int;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mOutputImageFormat> = i0;
+
+        return;
+    }
+
+    void setOnePixelShiftEnabled(boolean)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        boolean z0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        z0 := @parameter0: boolean;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOnePixelShiftEnabled> = z0;
+
+        return;
+    }
+
+    void setViewPortCropRect(android.graphics.Rect)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        android.graphics.Rect r1, $r5, $r6;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r7;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: android.graphics.Rect;
+
+        $r4 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.Object mAnalyzerLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mOriginalViewPortCropRect> = r1;
+
+        $r5 = new android.graphics.Rect;
+
+        $r6 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mOriginalViewPortCropRect>;
+
+        specialinvoke $r5.<android.graphics.Rect: void <init>(android.graphics.Rect)>($r6);
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mUpdatedViewPortCropRect> = $r5;
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    void setSensorToBufferTransformMatrix(android.graphics.Matrix)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        android.graphics.Matrix r1, $r5, $r6;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r7;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: android.graphics.Matrix;
+
+        $r4 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.Object mAnalyzerLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mOriginalSensorToBufferTransformMatrix> = r1;
+
+        $r5 = new android.graphics.Matrix;
+
+        $r6 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mOriginalSensorToBufferTransformMatrix>;
+
+        specialinvoke $r5.<android.graphics.Matrix: void <init>(android.graphics.Matrix)>($r6);
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mUpdatedSensorToBufferTransformMatrix> = $r5;
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    void setProcessedImageReaderProxy(androidx.camera.core.SafeCloseImageReaderProxy)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        androidx.camera.core.SafeCloseImageReaderProxy r1;
+        java.lang.Object r2, $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: androidx.camera.core.SafeCloseImageReaderProxy;
+
+        $r3 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.Object mAnalyzerLock>;
+
+        r2 = $r3;
+
+        entermonitor $r3;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy> = r1;
+
+        exitmonitor r2;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    void setAnalyzer(java.util.concurrent.Executor, androidx.camera.core.ImageAnalysis$Analyzer)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        java.util.concurrent.Executor r1;
+        androidx.camera.core.ImageAnalysis$Analyzer r2;
+        java.lang.Object r3, $r4;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        r2 := @parameter1: androidx.camera.core.ImageAnalysis$Analyzer;
+
+        if r2 != null goto label1;
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void clearCache()>();
+
+     label1:
+        $r4 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.lang.Object mAnalyzerLock>;
+
+        r3 = $r4;
+
+        entermonitor $r4;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer> = r2;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.util.concurrent.Executor mUserExecutor> = r1;
+
+        exitmonitor r3;
+
+        goto label2;
+
+     label2:
+        return;
+    }
+
+    void attach()
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mIsAttached> = 1;
+
+        return;
+    }
+
+    void detach()
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mIsAttached> = 0;
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void clearCache()>();
+
+        return;
+    }
+
+    private void createHelperBuffer(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        androidx.camera.core.ImageProxy r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16;
+        java.nio.ByteBuffer $r2, $r3, $r4, $r5, $r7, $r8, $r10, $r11, $r13, $r14, $r15;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $i0 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mOutputImageFormat>;
+
+        if $i0 != 1 goto label4;
+
+        $r4 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mYRotatedBuffer>;
+
+        if $r4 != null goto label1;
+
+        $i14 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i15 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $i16 = $i14 * $i15;
+
+        $r15 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocateDirect(int)>($i16);
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mYRotatedBuffer> = $r15;
+
+     label1:
+        $r5 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mYRotatedBuffer>;
+
+        virtualinvoke $r5.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        $r7 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mURotatedBuffer>;
+
+        if $r7 != null goto label2;
+
+        $i10 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i11 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $i12 = $i10 * $i11;
+
+        $i13 = $i12 / 4;
+
+        $r14 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocateDirect(int)>($i13);
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mURotatedBuffer> = $r14;
+
+     label2:
+        $r8 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mURotatedBuffer>;
+
+        virtualinvoke $r8.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        $r10 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mVRotatedBuffer>;
+
+        if $r10 != null goto label3;
+
+        $i6 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i7 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $i8 = $i6 * $i7;
+
+        $i9 = $i8 / 4;
+
+        $r13 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocateDirect(int)>($i9);
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mVRotatedBuffer> = $r13;
+
+     label3:
+        $r11 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mVRotatedBuffer>;
+
+        virtualinvoke $r11.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        goto label5;
+
+     label4:
+        $i1 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mOutputImageFormat>;
+
+        if $i1 != 2 goto label5;
+
+        $r2 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mRGBConvertedBuffer>;
+
+        if $r2 != null goto label5;
+
+        $i2 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i3 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $i4 = $i2 * $i3;
+
+        $i5 = $i4 * 4;
+
+        $r3 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocateDirect(int)>($i5);
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: java.nio.ByteBuffer mRGBConvertedBuffer> = $r3;
+
+     label5:
+        return;
+    }
+
+    private void recreateImageReaderProxy(androidx.camera.core.ImageProxy, int)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        androidx.camera.core.ImageProxy r1;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        androidx.camera.core.SafeCloseImageReaderProxy $r2, $r3, $r4, $r5, $r6, $r8, $r10;
+        android.media.ImageWriter $r7, $r11, $r12;
+        android.view.Surface $r9;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: androidx.camera.core.ImageProxy;
+
+        i0 := @parameter1: int;
+
+        $r2 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy>;
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy>;
+
+        virtualinvoke $r3.<androidx.camera.core.SafeCloseImageReaderProxy: void safeClose()>();
+
+        $i1 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i2 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $r4 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy>;
+
+        $i3 = virtualinvoke $r4.<androidx.camera.core.SafeCloseImageReaderProxy: int getImageFormat()>();
+
+        $r5 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy>;
+
+        $i4 = virtualinvoke $r5.<androidx.camera.core.SafeCloseImageReaderProxy: int getMaxImages()>();
+
+        $r6 = staticinvoke <androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy createImageReaderProxy(int,int,int,int,int)>($i1, $i2, i0, $i3, $i4);
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy> = $r6;
+
+        $i5 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i5 < 23 goto label3;
+
+        $i6 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mOutputImageFormat>;
+
+        if $i6 != 1 goto label3;
+
+        $r7 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.media.ImageWriter mProcessedImageWriter>;
+
+        if $r7 == null goto label2;
+
+        $r12 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.media.ImageWriter mProcessedImageWriter>;
+
+        staticinvoke <androidx.camera.core.internal.compat.ImageWriterCompat: void close(android.media.ImageWriter)>($r12);
+
+     label2:
+        $r8 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy>;
+
+        $r9 = virtualinvoke $r8.<androidx.camera.core.SafeCloseImageReaderProxy: android.view.Surface getSurface()>();
+
+        $r10 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: androidx.camera.core.SafeCloseImageReaderProxy mProcessedImageReaderProxy>;
+
+        $i7 = virtualinvoke $r10.<androidx.camera.core.SafeCloseImageReaderProxy: int getMaxImages()>();
+
+        $r11 = staticinvoke <androidx.camera.core.internal.compat.ImageWriterCompat: android.media.ImageWriter newInstance(android.view.Surface,int)>($r9, $i7);
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.media.ImageWriter mProcessedImageWriter> = $r11;
+
+     label3:
+        return;
+    }
+
+    private void recalculateTransformMatrixAndCropRect(int, int, int, int)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        int i0, i1, i2, i3, $i4;
+        android.graphics.Matrix r1, $r4, $r5;
+        android.graphics.Rect $r2, $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        i3 := @parameter3: int;
+
+        $i4 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mRelativeRotation>;
+
+        r1 = staticinvoke <androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix getAdditionalTransformMatrixAppliedByProcessor(int,int,int,int,int)>(i0, i1, i2, i3, $i4);
+
+        $r2 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mOriginalViewPortCropRect>;
+
+        $r3 = staticinvoke <androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect getUpdatedCropRect(android.graphics.Rect,android.graphics.Matrix)>($r2, r1);
+
+        r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Rect mUpdatedViewPortCropRect> = $r3;
+
+        $r5 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mUpdatedSensorToBufferTransformMatrix>;
+
+        $r4 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: android.graphics.Matrix mOriginalSensorToBufferTransformMatrix>;
+
+        virtualinvoke $r5.<android.graphics.Matrix: boolean setConcat(android.graphics.Matrix,android.graphics.Matrix)>($r4, r1);
+
+        return;
+    }
+
+    static android.graphics.Rect getUpdatedCropRect(android.graphics.Rect, android.graphics.Matrix)
+    {
+        android.graphics.Rect r0, r3, $r5;
+        android.graphics.Matrix r1;
+        android.graphics.RectF r2, $r4;
+
+        r0 := @parameter0: android.graphics.Rect;
+
+        r1 := @parameter1: android.graphics.Matrix;
+
+        $r4 = new android.graphics.RectF;
+
+        specialinvoke $r4.<android.graphics.RectF: void <init>(android.graphics.Rect)>(r0);
+
+        r2 = $r4;
+
+        virtualinvoke r1.<android.graphics.Matrix: boolean mapRect(android.graphics.RectF)>(r2);
+
+        $r5 = new android.graphics.Rect;
+
+        specialinvoke $r5.<android.graphics.Rect: void <init>()>();
+
+        r3 = $r5;
+
+        virtualinvoke r2.<android.graphics.RectF: void round(android.graphics.Rect)>(r3);
+
+        return r3;
+    }
+
+    static android.graphics.Matrix getAdditionalTransformMatrixAppliedByProcessor(int, int, int, int, int)
+    {
+        int i0, i1, i2, i3, i4;
+        android.graphics.Matrix r0, $r1, $r6;
+        android.graphics.RectF $r2, $r4, $r5;
+        float $f0, $f1, $f2, $f3, $f4;
+        android.graphics.Matrix$ScaleToFit $r3;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        i3 := @parameter3: int;
+
+        i4 := @parameter4: int;
+
+        $r1 = new android.graphics.Matrix;
+
+        specialinvoke $r1.<android.graphics.Matrix: void <init>()>();
+
+        r0 = $r1;
+
+        if i4 <= 0 goto label1;
+
+        $r2 = new android.graphics.RectF;
+
+        $f1 = (float) i0;
+
+        $f0 = (float) i1;
+
+        specialinvoke $r2.<android.graphics.RectF: void <init>(float,float,float,float)>(0.0F, 0.0F, $f1, $f0);
+
+        $r4 = <androidx.camera.core.impl.utils.TransformUtils: android.graphics.RectF NORMALIZED_RECT>;
+
+        $r3 = <android.graphics.Matrix$ScaleToFit: android.graphics.Matrix$ScaleToFit FILL>;
+
+        virtualinvoke r0.<android.graphics.Matrix: boolean setRectToRect(android.graphics.RectF,android.graphics.RectF,android.graphics.Matrix$ScaleToFit)>($r2, $r4, $r3);
+
+        $f2 = (float) i4;
+
+        virtualinvoke r0.<android.graphics.Matrix: boolean postRotate(float)>($f2);
+
+        $r5 = new android.graphics.RectF;
+
+        $f4 = (float) i2;
+
+        $f3 = (float) i3;
+
+        specialinvoke $r5.<android.graphics.RectF: void <init>(float,float,float,float)>(0.0F, 0.0F, $f4, $f3);
+
+        $r6 = staticinvoke <androidx.camera.core.impl.utils.TransformUtils: android.graphics.Matrix getNormalizedToBuffer(android.graphics.RectF)>($r5);
+
+        virtualinvoke r0.<android.graphics.Matrix: boolean postConcat(android.graphics.Matrix)>($r6);
+
+     label1:
+        return r0;
+    }
+
+    private java.lang.Object lambda$analyzeImage$1(java.util.concurrent.Executor, androidx.camera.core.ImageProxy, android.graphics.Matrix, androidx.camera.core.ImageProxy, android.graphics.Rect, androidx.camera.core.ImageAnalysis$Analyzer, androidx.concurrent.futures.CallbackToFutureAdapter$Completer) throws java.lang.Exception
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        java.util.concurrent.Executor r1;
+        androidx.camera.core.ImageProxy r2, r4;
+        android.graphics.Matrix r3;
+        android.graphics.Rect r5;
+        androidx.camera.core.ImageAnalysis$Analyzer r6;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r7;
+        java.lang.Runnable $r8;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        r2 := @parameter1: androidx.camera.core.ImageProxy;
+
+        r3 := @parameter2: android.graphics.Matrix;
+
+        r4 := @parameter3: androidx.camera.core.ImageProxy;
+
+        r5 := @parameter4: android.graphics.Rect;
+
+        r6 := @parameter5: androidx.camera.core.ImageAnalysis$Analyzer;
+
+        r7 := @parameter6: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        $r8 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.core.ImageAnalysisAbstractAnalyzer,androidx.camera.core.ImageProxy,android.graphics.Matrix,androidx.camera.core.ImageProxy,android.graphics.Rect,androidx.camera.core.ImageAnalysis$Analyzer,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>(r0, r2, r3, r4, r5, r6, r7) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.core.ImageAnalysisAbstractAnalyzer: void lambda$analyzeImage$0(androidx.camera.core.ImageProxy,android.graphics.Matrix,androidx.camera.core.ImageProxy,android.graphics.Rect,androidx.camera.core.ImageAnalysis$Analyzer,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke r1.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r8);
+
+        return "analyzeImage";
+    }
+
+    private void lambda$analyzeImage$0(androidx.camera.core.ImageProxy, android.graphics.Matrix, androidx.camera.core.ImageProxy, android.graphics.Rect, androidx.camera.core.ImageAnalysis$Analyzer, androidx.concurrent.futures.CallbackToFutureAdapter$Completer)
+    {
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer r0;
+        androidx.camera.core.ImageProxy r1, r3;
+        android.graphics.Matrix r2;
+        android.graphics.Rect r4;
+        androidx.camera.core.ImageAnalysis$Analyzer r5;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r6;
+        androidx.camera.core.ImageInfo r7, $r10, $r12;
+        androidx.camera.core.SettableImageProxy r8, $r13;
+        boolean $z0, $z2, $z3;
+        androidx.core.os.OperationCanceledException $r9;
+        androidx.camera.core.impl.TagBundle $r11;
+        long $l0;
+        int $i1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysisAbstractAnalyzer;
+
+        r1 := @parameter0: androidx.camera.core.ImageProxy;
+
+        r2 := @parameter1: android.graphics.Matrix;
+
+        r3 := @parameter2: androidx.camera.core.ImageProxy;
+
+        r4 := @parameter3: android.graphics.Rect;
+
+        r5 := @parameter4: androidx.camera.core.ImageAnalysis$Analyzer;
+
+        r6 := @parameter5: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        $z0 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mIsAttached>;
+
+        if $z0 == 0 goto label4;
+
+        $r10 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageInfo getImageInfo()>();
+
+        $r11 = interfaceinvoke $r10.<androidx.camera.core.ImageInfo: androidx.camera.core.impl.TagBundle getTagBundle()>();
+
+        $r12 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageInfo getImageInfo()>();
+
+        $l0 = interfaceinvoke $r12.<androidx.camera.core.ImageInfo: long getTimestamp()>();
+
+        $z2 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: boolean mOutputImageRotationEnabled>;
+
+        if $z2 == 0 goto label1;
+
+        $i1 = 0;
+
+        goto label2;
+
+     label1:
+        $i1 = r0.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: int mRelativeRotation>;
+
+     label2:
+        r7 = staticinvoke <androidx.camera.core.ImmutableImageInfo: androidx.camera.core.ImageInfo create(androidx.camera.core.impl.TagBundle,long,int,android.graphics.Matrix)>($r11, $l0, $i1, r2);
+
+        $r13 = new androidx.camera.core.SettableImageProxy;
+
+        specialinvoke $r13.<androidx.camera.core.SettableImageProxy: void <init>(androidx.camera.core.ImageProxy,androidx.camera.core.ImageInfo)>(r3, r7);
+
+        r8 = $r13;
+
+        $z3 = virtualinvoke r4.<android.graphics.Rect: boolean isEmpty()>();
+
+        if $z3 != 0 goto label3;
+
+        interfaceinvoke r8.<androidx.camera.core.ImageProxy: void setCropRect(android.graphics.Rect)>(r4);
+
+     label3:
+        interfaceinvoke r5.<androidx.camera.core.ImageAnalysis$Analyzer: void analyze(androidx.camera.core.ImageProxy)>(r8);
+
+        virtualinvoke r6.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+        goto label5;
+
+     label4:
+        $r9 = new androidx.core.os.OperationCanceledException;
+
+        specialinvoke $r9.<androidx.core.os.OperationCanceledException: void <init>(java.lang.String)>("ImageAnalysis is detached");
+
+        virtualinvoke r6.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean setException(java.lang.Throwable)>($r9);
+
+     label5:
+        return;
+    }
+

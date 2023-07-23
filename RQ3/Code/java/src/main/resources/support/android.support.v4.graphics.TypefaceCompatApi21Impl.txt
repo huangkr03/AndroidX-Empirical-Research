@@ -1,0 +1,316 @@
+android.support.v4.graphics.TypefaceCompatApi21Impl
+<android.support.v4.graphics.TypefaceCompatApi21Impl: java.lang.String TAG>
+    void <init>()
+    {
+        android.support.v4.graphics.TypefaceCompatApi21Impl r0;
+
+        r0 := @this: android.support.v4.graphics.TypefaceCompatApi21Impl;
+
+        specialinvoke r0.<android.support.v4.graphics.TypefaceCompatBaseImpl: void <init>()>();
+
+        return;
+    }
+
+    private java.io.File getFile(android.os.ParcelFileDescriptor)
+    {
+        android.support.v4.graphics.TypefaceCompatApi21Impl r0;
+        android.os.ParcelFileDescriptor r1;
+        java.lang.StringBuilder $r2, $r3, $r4;
+        int $i0, $i1;
+        java.lang.String $r5, r9;
+        android.system.StructStat $r6;
+        boolean $z0;
+        java.io.File $r7;
+        java.lang.Throwable $r8, r10;
+
+        r0 := @this: android.support.v4.graphics.TypefaceCompatApi21Impl;
+
+        r1 := @parameter0: android.os.ParcelFileDescriptor;
+
+     label1:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/proc/self/fd/");
+
+        $i0 = virtualinvoke r1.<android.os.ParcelFileDescriptor: int getFd()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r9 = staticinvoke <android.system.Os: java.lang.String readlink(java.lang.String)>($r5);
+
+        $r6 = staticinvoke <android.system.Os: android.system.StructStat stat(java.lang.String)>(r9);
+
+        $i1 = $r6.<android.system.StructStat: int st_mode>;
+
+        $z0 = staticinvoke <android.system.OsConstants: boolean S_ISREG(int)>($i1);
+
+        if $z0 == 0 goto label3;
+
+        $r7 = new java.io.File;
+
+        specialinvoke $r7.<java.io.File: void <init>(java.lang.String)>(r9);
+
+     label2:
+        return $r7;
+
+     label3:
+        return null;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r10 = $r8;
+
+        return null;
+
+        catch android.system.ErrnoException from label1 to label2 with label4;
+    }
+
+    public android.graphics.Typeface createFromFontInfo(android.content.Context, android.os.CancellationSignal, android.support.v4.provider.FontsContractCompat$FontInfo[], int)
+    {
+        android.support.v4.graphics.TypefaceCompatApi21Impl r0;
+        android.content.Context r1;
+        android.os.CancellationSignal r2;
+        android.support.v4.provider.FontsContractCompat$FontInfo[] r3;
+        int i0, $i1;
+        android.support.v4.provider.FontsContractCompat$FontInfo r4;
+        android.content.ContentResolver r5;
+        java.lang.Throwable r6, r7, r8, r9, $r13, $r14, $r15, $r16, $r17, $r18, $r19, $r20, $r21, $r22, r27, r28, r30, r31;
+        android.net.Uri $r10;
+        java.io.FileInputStream $r11, r25;
+        java.io.FileDescriptor $r12;
+        boolean $z0;
+        android.os.ParcelFileDescriptor r23;
+        java.io.File r24;
+        android.graphics.Typeface r26, r29;
+        java.lang.NullPointerException r32, r33, r34;
+
+        r0 := @this: android.support.v4.graphics.TypefaceCompatApi21Impl;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.os.CancellationSignal;
+
+        r3 := @parameter2: android.support.v4.provider.FontsContractCompat$FontInfo[];
+
+        i0 := @parameter3: int;
+
+        $i1 = lengthof r3;
+
+        if $i1 >= 1 goto label01;
+
+        return null;
+
+     label01:
+        r4 = virtualinvoke r0.<android.support.v4.graphics.TypefaceCompatApi21Impl: android.support.v4.provider.FontsContractCompat$FontInfo findBestInfo(android.support.v4.provider.FontsContractCompat$FontInfo[],int)>(r3, i0);
+
+        r5 = virtualinvoke r1.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+     label02:
+        $r10 = virtualinvoke r4.<android.support.v4.provider.FontsContractCompat$FontInfo: android.net.Uri getUri()>();
+
+        r23 = virtualinvoke r5.<android.content.ContentResolver: android.os.ParcelFileDescriptor openFileDescriptor(android.net.Uri,java.lang.String,android.os.CancellationSignal)>($r10, "r", r2);
+
+     label03:
+        r24 = specialinvoke r0.<android.support.v4.graphics.TypefaceCompatApi21Impl: java.io.File getFile(android.os.ParcelFileDescriptor)>(r23);
+
+        if r24 == null goto label04;
+
+        $z0 = virtualinvoke r24.<java.io.File: boolean canRead()>();
+
+        if $z0 != 0 goto label25;
+
+     label04:
+        $r11 = new java.io.FileInputStream;
+
+        $r12 = virtualinvoke r23.<android.os.ParcelFileDescriptor: java.io.FileDescriptor getFileDescriptor()>();
+
+        specialinvoke $r11.<java.io.FileInputStream: void <init>(java.io.FileDescriptor)>($r12);
+
+        r25 = $r11;
+
+     label05:
+        r26 = specialinvoke r0.<android.support.v4.graphics.TypefaceCompatBaseImpl: android.graphics.Typeface createFromInputStream(android.content.Context,java.io.InputStream)>(r1, r25);
+
+     label06:
+        if r25 == null goto label11;
+
+        if null == null goto label10;
+
+     label07:
+        virtualinvoke r25.<java.io.FileInputStream: void close()>();
+
+     label08:
+        goto label11;
+
+     label09:
+        $r19 := @caughtexception;
+
+        r32 = new java.lang.NullPointerException;
+
+        specialinvoke r32.<java.lang.NullPointerException: void <init>(java.lang.String)>("This statement would have triggered an Exception: virtualinvoke l11#5.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(l13#7)");
+
+        throw r32;
+
+     label10:
+        virtualinvoke r25.<java.io.FileInputStream: void close()>();
+
+     label11:
+        if r23 == null goto label16;
+
+        if null == null goto label15;
+
+     label12:
+        virtualinvoke r23.<android.os.ParcelFileDescriptor: void close()>();
+
+     label13:
+        goto label16;
+
+     label14:
+        $r14 := @caughtexception;
+
+        r33 = new java.lang.NullPointerException;
+
+        specialinvoke r33.<java.lang.NullPointerException: void <init>(java.lang.String)>("This statement would have triggered an Exception: virtualinvoke l8#2.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(l13#11)");
+
+        throw r33;
+
+     label15:
+        virtualinvoke r23.<android.os.ParcelFileDescriptor: void close()>();
+
+     label16:
+        return r26;
+
+     label17:
+        $r17 := @caughtexception;
+
+        r27 = $r17;
+
+        r28 = r27;
+
+        throw r27;
+
+     label18:
+        $r22 := @caughtexception;
+
+        r6 = $r22;
+
+     label19:
+        if r25 == null goto label24;
+
+        if r28 == null goto label23;
+
+     label20:
+        virtualinvoke r25.<java.io.FileInputStream: void close()>();
+
+     label21:
+        goto label24;
+
+     label22:
+        $r13 := @caughtexception;
+
+        r7 = $r13;
+
+        virtualinvoke r28.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r7);
+
+        goto label24;
+
+     label23:
+        virtualinvoke r25.<java.io.FileInputStream: void close()>();
+
+     label24:
+        throw r6;
+
+     label25:
+        r29 = staticinvoke <android.graphics.Typeface: android.graphics.Typeface createFromFile(java.io.File)>(r24);
+
+     label26:
+        if r23 == null goto label31;
+
+        if null == null goto label30;
+
+     label27:
+        virtualinvoke r23.<android.os.ParcelFileDescriptor: void close()>();
+
+     label28:
+        goto label31;
+
+     label29:
+        $r15 := @caughtexception;
+
+        r34 = new java.lang.NullPointerException;
+
+        specialinvoke r34.<java.lang.NullPointerException: void <init>(java.lang.String)>("This statement would have triggered an Exception: virtualinvoke l8#2.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(l11#21)");
+
+        throw r34;
+
+     label30:
+        virtualinvoke r23.<android.os.ParcelFileDescriptor: void close()>();
+
+     label31:
+        return r29;
+
+     label32:
+        $r21 := @caughtexception;
+
+        r30 = $r21;
+
+        r31 = r30;
+
+        throw r30;
+
+     label33:
+        $r16 := @caughtexception;
+
+        r8 = $r16;
+
+     label34:
+        if r23 == null goto label39;
+
+        if r31 == null goto label38;
+
+     label35:
+        virtualinvoke r23.<android.os.ParcelFileDescriptor: void close()>();
+
+     label36:
+        goto label39;
+
+     label37:
+        $r18 := @caughtexception;
+
+        r9 = $r18;
+
+        virtualinvoke r31.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r9);
+
+        goto label39;
+
+     label38:
+        virtualinvoke r23.<android.os.ParcelFileDescriptor: void close()>();
+
+     label39:
+        throw r8;
+
+     label40:
+        $r20 := @caughtexception;
+
+        return null;
+
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label12 to label13 with label14;
+        catch java.lang.Throwable from label05 to label06 with label17;
+        catch java.lang.Throwable from label20 to label21 with label22;
+        catch java.lang.Throwable from label17 to label19 with label18;
+        catch java.lang.Throwable from label27 to label28 with label29;
+        catch java.lang.Throwable from label03 to label11 with label32;
+        catch java.lang.Throwable from label17 to label26 with label32;
+        catch java.lang.Throwable from label35 to label36 with label37;
+        catch java.lang.Throwable from label32 to label34 with label33;
+        catch java.io.IOException from label02 to label16 with label40;
+        catch java.io.IOException from label17 to label31 with label40;
+        catch java.io.IOException from label32 to label40 with label40;
+    }
+

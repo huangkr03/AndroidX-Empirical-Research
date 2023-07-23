@@ -1,0 +1,537 @@
+androidx.work.impl.workers.ConstraintTrackingWorker
+<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.WorkerParameters workerParameters>
+<androidx.work.impl.workers.ConstraintTrackingWorker: java.lang.Object lock>
+<androidx.work.impl.workers.ConstraintTrackingWorker: boolean areConstraintsUnmet>
+<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>
+<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.ListenableWorker delegate>
+    public void <init>(android.content.Context, androidx.work.WorkerParameters)
+    {
+        androidx.work.impl.workers.ConstraintTrackingWorker r0;
+        android.content.Context r1;
+        androidx.work.WorkerParameters r2;
+        java.lang.Object $r3;
+        androidx.work.impl.utils.futures.SettableFuture $r4;
+
+        r0 := @this: androidx.work.impl.workers.ConstraintTrackingWorker;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.work.WorkerParameters;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "appContext");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r2, "workerParameters");
+
+        specialinvoke r0.<androidx.work.ListenableWorker: void <init>(android.content.Context,androidx.work.WorkerParameters)>(r1, r2);
+
+        r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.WorkerParameters workerParameters> = r2;
+
+        $r3 = new java.lang.Object;
+
+        specialinvoke $r3.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.work.impl.workers.ConstraintTrackingWorker: java.lang.Object lock> = $r3;
+
+        $r4 = staticinvoke <androidx.work.impl.utils.futures.SettableFuture: androidx.work.impl.utils.futures.SettableFuture create()>();
+
+        r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future> = $r4;
+
+        return;
+    }
+
+    public final androidx.work.ListenableWorker getDelegate()
+    {
+        androidx.work.impl.workers.ConstraintTrackingWorker r0;
+        androidx.work.ListenableWorker $r1;
+
+        r0 := @this: androidx.work.impl.workers.ConstraintTrackingWorker;
+
+        $r1 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.ListenableWorker delegate>;
+
+        return $r1;
+    }
+
+    public com.google.common.util.concurrent.ListenableFuture startWork()
+    {
+        androidx.work.impl.workers.ConstraintTrackingWorker r0;
+        java.util.concurrent.Executor $r1;
+        java.lang.Runnable $r2;
+        androidx.work.impl.utils.futures.SettableFuture $r3;
+        com.google.common.util.concurrent.ListenableFuture $r4;
+
+        r0 := @this: androidx.work.impl.workers.ConstraintTrackingWorker;
+
+        $r1 = virtualinvoke r0.<androidx.work.impl.workers.ConstraintTrackingWorker: java.util.concurrent.Executor getBackgroundExecutor()>();
+
+        $r2 = dynamicinvoke "run" <java.lang.Runnable (androidx.work.impl.workers.ConstraintTrackingWorker)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.work.impl.workers.ConstraintTrackingWorker: void startWork$lambda$0(androidx.work.impl.workers.ConstraintTrackingWorker)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r1.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r2);
+
+        $r3 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r3, "future");
+
+        $r4 = (com.google.common.util.concurrent.ListenableFuture) $r3;
+
+        return $r4;
+    }
+
+    private final void setupAndRunConstraintTrackingWork()
+    {
+        androidx.work.impl.workers.ConstraintTrackingWorker r0;
+        java.lang.String r1, $r19, $r26, $r27, $r32, $r34, $r38, $r44, $r46, $r50, $r55, $r57;
+        androidx.work.Logger r2, $r8;
+        androidx.work.impl.model.WorkSpec r3;
+        androidx.work.impl.constraints.WorkConstraintsTrackerImpl r4, $r20;
+        java.lang.Object r5;
+        androidx.work.impl.utils.futures.SettableFuture $r6, $r33, $r43, $r45, $r47, $r56, $r58;
+        boolean $z0, $z1, $z6, $z7;
+        androidx.work.Data $r7;
+        androidx.work.WorkerFactory $r9;
+        android.content.Context $r10, $r14;
+        androidx.work.WorkerParameters $r11;
+        androidx.work.ListenableWorker $r12, $r13, $r39;
+        androidx.work.impl.WorkManagerImpl $r15, r60;
+        androidx.work.impl.WorkDatabase $r16;
+        androidx.work.impl.model.WorkSpecDao $r17;
+        java.util.UUID $r18, $r25;
+        androidx.work.impl.constraints.trackers.Trackers $r21;
+        androidx.work.impl.constraints.WorkConstraintsCallback $r22;
+        java.util.List $r23;
+        java.lang.Iterable $r24;
+        java.lang.StringBuilder $r28, $r29, $r30, $r31, $r35, $r36, $r37, $r51, $r52, $r53, $r54;
+        com.google.common.util.concurrent.ListenableFuture $r40, r61;
+        java.lang.Runnable $r41;
+        java.util.concurrent.Executor $r42;
+        int $i0;
+        java.lang.Throwable $r48, $r49, r62;
+        java.lang.CharSequence r59;
+
+        r0 := @this: androidx.work.impl.workers.ConstraintTrackingWorker;
+
+        $r6 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        $z0 = virtualinvoke $r6.<androidx.work.impl.utils.futures.SettableFuture: boolean isCancelled()>();
+
+        if $z0 == 0 goto label01;
+
+        return;
+
+     label01:
+        $r7 = virtualinvoke r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.Data getInputData()>();
+
+        r1 = virtualinvoke $r7.<androidx.work.Data: java.lang.String getString(java.lang.String)>("androidx.work.impl.workers.ConstraintTrackingWorker.ARGUMENT_CLASS_NAME");
+
+        $r8 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r8, "get()");
+
+        r2 = $r8;
+
+        r59 = (java.lang.CharSequence) r1;
+
+        if r59 == null goto label02;
+
+        $i0 = interfaceinvoke r59.<java.lang.CharSequence: int length()>();
+
+        if $i0 != 0 goto label03;
+
+     label02:
+        $z7 = 1;
+
+        goto label04;
+
+     label03:
+        $z7 = 0;
+
+     label04:
+        if $z7 == 0 goto label05;
+
+        $r46 = staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: java.lang.String access$getTAG$p()>();
+
+        virtualinvoke r2.<androidx.work.Logger: void error(java.lang.String,java.lang.String)>($r46, "No worker to delegate to.");
+
+        $r47 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r47, "future");
+
+        staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: boolean access$setFailed(androidx.work.impl.utils.futures.SettableFuture)>($r47);
+
+        return;
+
+     label05:
+        $r9 = virtualinvoke r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.WorkerFactory getWorkerFactory()>();
+
+        $r10 = virtualinvoke r0.<androidx.work.impl.workers.ConstraintTrackingWorker: android.content.Context getApplicationContext()>();
+
+        $r11 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.WorkerParameters workerParameters>;
+
+        $r12 = virtualinvoke $r9.<androidx.work.WorkerFactory: androidx.work.ListenableWorker createWorkerWithDefaultFallback(android.content.Context,java.lang.String,androidx.work.WorkerParameters)>($r10, r1, $r11);
+
+        r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.ListenableWorker delegate> = $r12;
+
+        $r13 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.ListenableWorker delegate>;
+
+        if $r13 != null goto label06;
+
+        $r44 = staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: java.lang.String access$getTAG$p()>();
+
+        virtualinvoke r2.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r44, "No worker to delegate to.");
+
+        $r45 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r45, "future");
+
+        staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: boolean access$setFailed(androidx.work.impl.utils.futures.SettableFuture)>($r45);
+
+        return;
+
+     label06:
+        $r14 = virtualinvoke r0.<androidx.work.impl.workers.ConstraintTrackingWorker: android.content.Context getApplicationContext()>();
+
+        $r15 = staticinvoke <androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkManagerImpl getInstance(android.content.Context)>($r14);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r15, "getInstance(applicationContext)");
+
+        r60 = $r15;
+
+        $r16 = virtualinvoke r60.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        $r17 = virtualinvoke $r16.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        $r18 = virtualinvoke r0.<androidx.work.impl.workers.ConstraintTrackingWorker: java.util.UUID getId()>();
+
+        $r19 = virtualinvoke $r18.<java.util.UUID: java.lang.String toString()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r19, "id.toString()");
+
+        r3 = interfaceinvoke $r17.<androidx.work.impl.model.WorkSpecDao: androidx.work.impl.model.WorkSpec getWorkSpec(java.lang.String)>($r19);
+
+        if r3 != null goto label07;
+
+        $r43 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r43, "future");
+
+        staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: boolean access$setFailed(androidx.work.impl.utils.futures.SettableFuture)>($r43);
+
+        return;
+
+     label07:
+        $r20 = new androidx.work.impl.constraints.WorkConstraintsTrackerImpl;
+
+        $r21 = virtualinvoke r60.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.constraints.trackers.Trackers getTrackers()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r21, "workManagerImpl.trackers");
+
+        $r22 = (androidx.work.impl.constraints.WorkConstraintsCallback) r0;
+
+        specialinvoke $r20.<androidx.work.impl.constraints.WorkConstraintsTrackerImpl: void <init>(androidx.work.impl.constraints.trackers.Trackers,androidx.work.impl.constraints.WorkConstraintsCallback)>($r21, $r22);
+
+        r4 = $r20;
+
+        $r23 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List listOf(java.lang.Object)>(r3);
+
+        $r24 = (java.lang.Iterable) $r23;
+
+        virtualinvoke r4.<androidx.work.impl.constraints.WorkConstraintsTrackerImpl: void replace(java.lang.Iterable)>($r24);
+
+        $r25 = virtualinvoke r0.<androidx.work.impl.workers.ConstraintTrackingWorker: java.util.UUID getId()>();
+
+        $r26 = virtualinvoke $r25.<java.util.UUID: java.lang.String toString()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r26, "id.toString()");
+
+        $z1 = virtualinvoke r4.<androidx.work.impl.constraints.WorkConstraintsTrackerImpl: boolean areAllConstraintsMet(java.lang.String)>($r26);
+
+        if $z1 == 0 goto label16;
+
+        $r34 = staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: java.lang.String access$getTAG$p()>();
+
+        $r35 = new java.lang.StringBuilder;
+
+        specialinvoke $r35.<java.lang.StringBuilder: void <init>()>();
+
+        $r36 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Constraints met for delegate ");
+
+        $r37 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r38 = virtualinvoke $r37.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r2.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r34, $r38);
+
+     label08:
+        $r39 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.ListenableWorker delegate>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r39);
+
+        $r40 = virtualinvoke $r39.<androidx.work.ListenableWorker: com.google.common.util.concurrent.ListenableFuture startWork()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r40, "delegate!!.startWork()");
+
+        r61 = $r40;
+
+        $r41 = dynamicinvoke "run" <java.lang.Runnable (androidx.work.impl.workers.ConstraintTrackingWorker,com.google.common.util.concurrent.ListenableFuture)>(r0, r61) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.work.impl.workers.ConstraintTrackingWorker: void setupAndRunConstraintTrackingWork$lambda$2(androidx.work.impl.workers.ConstraintTrackingWorker,com.google.common.util.concurrent.ListenableFuture)>, methodtype: void __METHODTYPE__());
+
+        $r42 = virtualinvoke r0.<androidx.work.impl.workers.ConstraintTrackingWorker: java.util.concurrent.Executor getBackgroundExecutor()>();
+
+        interfaceinvoke r61.<com.google.common.util.concurrent.ListenableFuture: void addListener(java.lang.Runnable,java.util.concurrent.Executor)>($r41, $r42);
+
+     label09:
+        goto label17;
+
+     label10:
+        $r49 := @caughtexception;
+
+        r62 = $r49;
+
+        $r50 = staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: java.lang.String access$getTAG$p()>();
+
+        $r51 = new java.lang.StringBuilder;
+
+        specialinvoke $r51.<java.lang.StringBuilder: void <init>()>();
+
+        $r52 = virtualinvoke $r51.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Delegated worker ");
+
+        $r53 = virtualinvoke $r52.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r54 = virtualinvoke $r53.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" threw exception in startWork.");
+
+        $r55 = virtualinvoke $r54.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r2.<androidx.work.Logger: void debug(java.lang.String,java.lang.String,java.lang.Throwable)>($r50, $r55, r62);
+
+        r5 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: java.lang.Object lock>;
+
+        entermonitor r5;
+
+     label11:
+        $z6 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: boolean areConstraintsUnmet>;
+
+        if $z6 == 0 goto label12;
+
+        $r57 = staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: java.lang.String access$getTAG$p()>();
+
+        virtualinvoke r2.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r57, "Constraints were unmet, Retrying.");
+
+        $r58 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r58, "future");
+
+        staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: boolean access$setRetry(androidx.work.impl.utils.futures.SettableFuture)>($r58);
+
+        goto label13;
+
+     label12:
+        $r56 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r56, "future");
+
+        staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: boolean access$setFailed(androidx.work.impl.utils.futures.SettableFuture)>($r56);
+
+     label13:
+        exitmonitor r5;
+
+        goto label17;
+
+     label14:
+        $r48 := @caughtexception;
+
+     label15:
+        exitmonitor r5;
+
+        throw $r48;
+
+     label16:
+        $r27 = staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: java.lang.String access$getTAG$p()>();
+
+        $r28 = new java.lang.StringBuilder;
+
+        specialinvoke $r28.<java.lang.StringBuilder: void <init>()>();
+
+        $r29 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Constraints not met for delegate ");
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r31 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Requesting retry.");
+
+        $r32 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r2.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r27, $r32);
+
+        $r33 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r33, "future");
+
+        staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: boolean access$setRetry(androidx.work.impl.utils.futures.SettableFuture)>($r33);
+
+     label17:
+        return;
+
+        catch java.lang.Throwable from label11 to label13 with label14;
+        catch java.lang.Throwable from label14 to label15 with label14;
+        catch java.lang.Throwable from label08 to label09 with label10;
+    }
+
+    public void onStopped()
+    {
+        androidx.work.impl.workers.ConstraintTrackingWorker r0;
+        androidx.work.ListenableWorker r1;
+        boolean $z0;
+
+        r0 := @this: androidx.work.impl.workers.ConstraintTrackingWorker;
+
+        specialinvoke r0.<androidx.work.ListenableWorker: void onStopped()>();
+
+        r1 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.ListenableWorker delegate>;
+
+        if r1 == null goto label1;
+
+        $z0 = virtualinvoke r1.<androidx.work.ListenableWorker: boolean isStopped()>();
+
+        if $z0 != 0 goto label1;
+
+        virtualinvoke r1.<androidx.work.ListenableWorker: void stop()>();
+
+     label1:
+        return;
+    }
+
+    public void onAllConstraintsMet(java.util.List)
+    {
+        androidx.work.impl.workers.ConstraintTrackingWorker r0;
+        java.util.List r1;
+
+        r0 := @this: androidx.work.impl.workers.ConstraintTrackingWorker;
+
+        r1 := @parameter0: java.util.List;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "workSpecs");
+
+        return;
+    }
+
+    public void onAllConstraintsNotMet(java.util.List)
+    {
+        androidx.work.impl.workers.ConstraintTrackingWorker r0;
+        java.util.List r1;
+        java.lang.Object r2;
+        androidx.work.Logger $r3;
+        java.lang.String $r4, $r8;
+        java.lang.StringBuilder $r5, $r6, $r7;
+        kotlin.Unit $r9;
+
+        r0 := @this: androidx.work.impl.workers.ConstraintTrackingWorker;
+
+        r1 := @parameter0: java.util.List;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "workSpecs");
+
+        $r3 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r4 = staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: java.lang.String access$getTAG$p()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Constraints changed for ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r4, $r8);
+
+        r2 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: java.lang.Object lock>;
+
+        entermonitor r2;
+
+        r0.<androidx.work.impl.workers.ConstraintTrackingWorker: boolean areConstraintsUnmet> = 1;
+
+        $r9 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        exitmonitor r2;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    private static final void startWork$lambda$0(androidx.work.impl.workers.ConstraintTrackingWorker)
+    {
+        androidx.work.impl.workers.ConstraintTrackingWorker r0;
+
+        r0 := @parameter0: androidx.work.impl.workers.ConstraintTrackingWorker;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "this$0");
+
+        specialinvoke r0.<androidx.work.impl.workers.ConstraintTrackingWorker: void setupAndRunConstraintTrackingWork()>();
+
+        return;
+    }
+
+    private static final void setupAndRunConstraintTrackingWork$lambda$2(androidx.work.impl.workers.ConstraintTrackingWorker, com.google.common.util.concurrent.ListenableFuture)
+    {
+        androidx.work.impl.workers.ConstraintTrackingWorker r0;
+        com.google.common.util.concurrent.ListenableFuture $r1;
+        java.lang.Object r2;
+        boolean $z0;
+        androidx.work.impl.utils.futures.SettableFuture $r3, $r4;
+        java.lang.Throwable $r5;
+        kotlin.Unit $r6;
+
+        r0 := @parameter0: androidx.work.impl.workers.ConstraintTrackingWorker;
+
+        $r1 := @parameter1: com.google.common.util.concurrent.ListenableFuture;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "this$0");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "$innerFuture");
+
+        r2 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: java.lang.Object lock>;
+
+        entermonitor r2;
+
+     label1:
+        $z0 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: boolean areConstraintsUnmet>;
+
+        if $z0 == 0 goto label2;
+
+        $r4 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r4, "future");
+
+        staticinvoke <androidx.work.impl.workers.ConstraintTrackingWorkerKt: boolean access$setRetry(androidx.work.impl.utils.futures.SettableFuture)>($r4);
+
+        goto label3;
+
+     label2:
+        $r3 = r0.<androidx.work.impl.workers.ConstraintTrackingWorker: androidx.work.impl.utils.futures.SettableFuture future>;
+
+        virtualinvoke $r3.<androidx.work.impl.utils.futures.SettableFuture: boolean setFuture(com.google.common.util.concurrent.ListenableFuture)>($r1);
+
+     label3:
+        $r6 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label4:
+        exitmonitor r2;
+
+        goto label7;
+
+     label5:
+        $r5 := @caughtexception;
+
+     label6:
+        exitmonitor r2;
+
+        throw $r5;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+

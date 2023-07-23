@@ -1,0 +1,994 @@
+androidx.media3.effect.MatrixTextureProcessor
+<androidx.media3.effect.MatrixTextureProcessor: java.lang.String VERTEX_SHADER_TRANSFORMATION_PATH>
+<androidx.media3.effect.MatrixTextureProcessor: java.lang.String VERTEX_SHADER_TRANSFORMATION_ES3_PATH>
+<androidx.media3.effect.MatrixTextureProcessor: java.lang.String FRAGMENT_SHADER_TRANSFORMATION_PATH>
+<androidx.media3.effect.MatrixTextureProcessor: java.lang.String FRAGMENT_SHADER_OETF_ES3_PATH>
+<androidx.media3.effect.MatrixTextureProcessor: java.lang.String FRAGMENT_SHADER_TRANSFORMATION_SDR_OETF_ES2_PATH>
+<androidx.media3.effect.MatrixTextureProcessor: java.lang.String FRAGMENT_SHADER_TRANSFORMATION_EXTERNAL_YUV_ES3_PATH>
+<androidx.media3.effect.MatrixTextureProcessor: java.lang.String FRAGMENT_SHADER_TRANSFORMATION_SDR_EXTERNAL_PATH>
+<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList NDC_SQUARE>
+<androidx.media3.effect.MatrixTextureProcessor: float[] BT2020_FULL_RANGE_YUV_TO_RGB_COLOR_TRANSFORM_MATRIX>
+<androidx.media3.effect.MatrixTextureProcessor: float[] BT2020_LIMITED_RANGE_YUV_TO_RGB_COLOR_TRANSFORM_MATRIX>
+<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList matrixTransformations>
+<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList rgbMatrices>
+<androidx.media3.effect.MatrixTextureProcessor: boolean useHdr>
+<androidx.media3.effect.MatrixTextureProcessor: float[][] transformationMatrixCache>
+<androidx.media3.effect.MatrixTextureProcessor: float[][] rgbMatrixCache>
+<androidx.media3.effect.MatrixTextureProcessor: float[] compositeTransformationMatrixArray>
+<androidx.media3.effect.MatrixTextureProcessor: float[] compositeRgbMatrixArray>
+<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix>
+<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon>
+<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram>
+    public static androidx.media3.effect.MatrixTextureProcessor create(android.content.Context, java.util.List, java.util.List, boolean) throws androidx.media3.common.FrameProcessingException
+    {
+        android.content.Context r0;
+        java.util.List r1, r2;
+        boolean z0;
+        androidx.media3.common.util.GlProgram r3;
+        androidx.media3.effect.MatrixTextureProcessor $r4;
+        com.google.common.collect.ImmutableList $r5, $r6;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.util.List;
+
+        r2 := @parameter2: java.util.List;
+
+        z0 := @parameter3: boolean;
+
+        r3 = staticinvoke <androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram createGlProgram(android.content.Context,java.lang.String,java.lang.String)>(r0, "shaders/vertex_shader_transformation_es2.glsl", "shaders/fragment_shader_transformation_es2.glsl");
+
+        $r4 = new androidx.media3.effect.MatrixTextureProcessor;
+
+        $r5 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>(r1);
+
+        $r6 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>(r2);
+
+        specialinvoke $r4.<androidx.media3.effect.MatrixTextureProcessor: void <init>(androidx.media3.common.util.GlProgram,com.google.common.collect.ImmutableList,com.google.common.collect.ImmutableList,boolean)>(r3, $r5, $r6, z0);
+
+        return $r4;
+    }
+
+    public static androidx.media3.effect.MatrixTextureProcessor createWithExternalSamplerApplyingEotf(android.content.Context, java.util.List, java.util.List, androidx.media3.common.ColorInfo) throws androidx.media3.common.FrameProcessingException
+    {
+        android.content.Context r0;
+        java.util.List r1, r2;
+        androidx.media3.common.ColorInfo r3;
+        boolean z0, $z1, $z2;
+        java.lang.String r4, r5, $r13, $r14;
+        androidx.media3.common.util.GlProgram r6;
+        int i0, $i1;
+        androidx.media3.effect.MatrixTextureProcessor $r7;
+        com.google.common.collect.ImmutableList $r8, $r9;
+        androidx.media3.common.FrameProcessingException $r12;
+        float[] $r15;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.util.List;
+
+        r2 := @parameter2: java.util.List;
+
+        r3 := @parameter3: androidx.media3.common.ColorInfo;
+
+        z0 = staticinvoke <androidx.media3.common.ColorInfo: boolean isTransferHdr(androidx.media3.common.ColorInfo)>(r3);
+
+        if z0 == 0 goto label01;
+
+        $r13 = "shaders/vertex_shader_transformation_es3.glsl";
+
+        goto label02;
+
+     label01:
+        $r13 = "shaders/vertex_shader_transformation_es2.glsl";
+
+     label02:
+        r4 = $r13;
+
+        if z0 == 0 goto label03;
+
+        $r14 = "shaders/fragment_shader_transformation_external_yuv_es3.glsl";
+
+        goto label04;
+
+     label03:
+        $r14 = "shaders/fragment_shader_transformation_sdr_external_es2.glsl";
+
+     label04:
+        r5 = $r14;
+
+        r6 = staticinvoke <androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram createGlProgram(android.content.Context,java.lang.String,java.lang.String)>(r0, r4, r5);
+
+        if z0 == 0 goto label11;
+
+        $z1 = staticinvoke <androidx.media3.common.util.GlUtil: boolean isYuvTargetExtensionSupported()>();
+
+        if $z1 != 0 goto label05;
+
+        $r12 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r12.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.String)>("The EXT_YUV_target extension is required for HDR editing input.");
+
+        throw $r12;
+
+     label05:
+        $i1 = r3.<androidx.media3.common.ColorInfo: int colorRange>;
+
+        if $i1 != 1 goto label06;
+
+        $r15 = <androidx.media3.effect.MatrixTextureProcessor: float[] BT2020_FULL_RANGE_YUV_TO_RGB_COLOR_TRANSFORM_MATRIX>;
+
+        goto label07;
+
+     label06:
+        $r15 = <androidx.media3.effect.MatrixTextureProcessor: float[] BT2020_LIMITED_RANGE_YUV_TO_RGB_COLOR_TRANSFORM_MATRIX>;
+
+     label07:
+        virtualinvoke r6.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uYuvToRgbColorTransform", $r15);
+
+        i0 = r3.<androidx.media3.common.ColorInfo: int colorTransfer>;
+
+        if i0 == 7 goto label08;
+
+        if i0 != 6 goto label09;
+
+     label08:
+        $z2 = 1;
+
+        goto label10;
+
+     label09:
+        $z2 = 0;
+
+     label10:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean)>($z2);
+
+        virtualinvoke r6.<androidx.media3.common.util.GlProgram: void setIntUniform(java.lang.String,int)>("uEotfColorTransfer", i0);
+
+        goto label12;
+
+     label11:
+        virtualinvoke r6.<androidx.media3.common.util.GlProgram: void setIntUniform(java.lang.String,int)>("uApplyOetf", 0);
+
+     label12:
+        $r7 = new androidx.media3.effect.MatrixTextureProcessor;
+
+        $r8 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>(r1);
+
+        $r9 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>(r2);
+
+        specialinvoke $r7.<androidx.media3.effect.MatrixTextureProcessor: void <init>(androidx.media3.common.util.GlProgram,com.google.common.collect.ImmutableList,com.google.common.collect.ImmutableList,boolean)>(r6, $r8, $r9, z0);
+
+        return $r7;
+    }
+
+    public static androidx.media3.effect.MatrixTextureProcessor createApplyingOetf(android.content.Context, java.util.List, java.util.List, androidx.media3.common.ColorInfo) throws androidx.media3.common.FrameProcessingException
+    {
+        android.content.Context r0;
+        java.util.List r1, r2;
+        androidx.media3.common.ColorInfo r3;
+        boolean z0, $z1;
+        java.lang.String r4, r5, $r7, $r8;
+        androidx.media3.common.util.GlProgram r6;
+        int i0;
+        androidx.media3.effect.MatrixTextureProcessor $r9;
+        com.google.common.collect.ImmutableList $r10, $r11;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.util.List;
+
+        r2 := @parameter2: java.util.List;
+
+        r3 := @parameter3: androidx.media3.common.ColorInfo;
+
+        z0 = staticinvoke <androidx.media3.common.ColorInfo: boolean isTransferHdr(androidx.media3.common.ColorInfo)>(r3);
+
+        if z0 == 0 goto label1;
+
+        $r7 = "shaders/vertex_shader_transformation_es3.glsl";
+
+        goto label2;
+
+     label1:
+        $r7 = "shaders/vertex_shader_transformation_es2.glsl";
+
+     label2:
+        r4 = $r7;
+
+        if z0 == 0 goto label3;
+
+        $r8 = "shaders/fragment_shader_oetf_es3.glsl";
+
+        goto label4;
+
+     label3:
+        $r8 = "shaders/fragment_shader_transformation_sdr_oetf_es2.glsl";
+
+     label4:
+        r5 = $r8;
+
+        r6 = staticinvoke <androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram createGlProgram(android.content.Context,java.lang.String,java.lang.String)>(r0, r4, r5);
+
+        if z0 == 0 goto label8;
+
+        i0 = r3.<androidx.media3.common.ColorInfo: int colorTransfer>;
+
+        if i0 == 7 goto label5;
+
+        if i0 != 6 goto label6;
+
+     label5:
+        $z1 = 1;
+
+        goto label7;
+
+     label6:
+        $z1 = 0;
+
+     label7:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean)>($z1);
+
+        virtualinvoke r6.<androidx.media3.common.util.GlProgram: void setIntUniform(java.lang.String,int)>("uOetfColorTransfer", i0);
+
+     label8:
+        $r9 = new androidx.media3.effect.MatrixTextureProcessor;
+
+        $r10 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>(r1);
+
+        $r11 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>(r2);
+
+        specialinvoke $r9.<androidx.media3.effect.MatrixTextureProcessor: void <init>(androidx.media3.common.util.GlProgram,com.google.common.collect.ImmutableList,com.google.common.collect.ImmutableList,boolean)>(r6, $r10, $r11, z0);
+
+        return $r9;
+    }
+
+    public static androidx.media3.effect.MatrixTextureProcessor createWithExternalSamplerApplyingEotfThenOetf(android.content.Context, java.util.List, java.util.List, androidx.media3.common.ColorInfo) throws androidx.media3.common.FrameProcessingException
+    {
+        android.content.Context r0;
+        java.util.List r1, r2;
+        androidx.media3.common.ColorInfo r3;
+        boolean z0, $z1;
+        java.lang.String r4, r5, $r13, $r14;
+        androidx.media3.common.util.GlProgram r6;
+        androidx.media3.effect.MatrixTextureProcessor $r7;
+        com.google.common.collect.ImmutableList $r8, $r9;
+        int $i0;
+        androidx.media3.common.FrameProcessingException $r12;
+        float[] $r15;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.util.List;
+
+        r2 := @parameter2: java.util.List;
+
+        r3 := @parameter3: androidx.media3.common.ColorInfo;
+
+        z0 = staticinvoke <androidx.media3.common.ColorInfo: boolean isTransferHdr(androidx.media3.common.ColorInfo)>(r3);
+
+        if z0 == 0 goto label1;
+
+        $r13 = "shaders/vertex_shader_transformation_es3.glsl";
+
+        goto label2;
+
+     label1:
+        $r13 = "shaders/vertex_shader_transformation_es2.glsl";
+
+     label2:
+        r4 = $r13;
+
+        if z0 == 0 goto label3;
+
+        $r14 = "shaders/fragment_shader_transformation_external_yuv_es3.glsl";
+
+        goto label4;
+
+     label3:
+        $r14 = "shaders/fragment_shader_transformation_sdr_external_es2.glsl";
+
+     label4:
+        r5 = $r14;
+
+        r6 = staticinvoke <androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram createGlProgram(android.content.Context,java.lang.String,java.lang.String)>(r0, r4, r5);
+
+        if z0 == 0 goto label8;
+
+        $z1 = staticinvoke <androidx.media3.common.util.GlUtil: boolean isYuvTargetExtensionSupported()>();
+
+        if $z1 != 0 goto label5;
+
+        $r12 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r12.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.String)>("The EXT_YUV_target extension is required for HDR editing input.");
+
+        throw $r12;
+
+     label5:
+        $i0 = r3.<androidx.media3.common.ColorInfo: int colorRange>;
+
+        if $i0 != 1 goto label6;
+
+        $r15 = <androidx.media3.effect.MatrixTextureProcessor: float[] BT2020_FULL_RANGE_YUV_TO_RGB_COLOR_TRANSFORM_MATRIX>;
+
+        goto label7;
+
+     label6:
+        $r15 = <androidx.media3.effect.MatrixTextureProcessor: float[] BT2020_LIMITED_RANGE_YUV_TO_RGB_COLOR_TRANSFORM_MATRIX>;
+
+     label7:
+        virtualinvoke r6.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uYuvToRgbColorTransform", $r15);
+
+        virtualinvoke r6.<androidx.media3.common.util.GlProgram: void setIntUniform(java.lang.String,int)>("uEotfColorTransfer", -1);
+
+        goto label9;
+
+     label8:
+        virtualinvoke r6.<androidx.media3.common.util.GlProgram: void setIntUniform(java.lang.String,int)>("uApplyOetf", 1);
+
+     label9:
+        $r7 = new androidx.media3.effect.MatrixTextureProcessor;
+
+        $r8 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>(r1);
+
+        $r9 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>(r2);
+
+        specialinvoke $r7.<androidx.media3.effect.MatrixTextureProcessor: void <init>(androidx.media3.common.util.GlProgram,com.google.common.collect.ImmutableList,com.google.common.collect.ImmutableList,boolean)>(r6, $r8, $r9, z0);
+
+        return $r7;
+    }
+
+    private void <init>(androidx.media3.common.util.GlProgram, com.google.common.collect.ImmutableList, com.google.common.collect.ImmutableList, boolean)
+    {
+        androidx.media3.effect.MatrixTextureProcessor r0;
+        androidx.media3.common.util.GlProgram r1;
+        com.google.common.collect.ImmutableList r2, r3, $r9;
+        boolean z0;
+        int $i0, $i1;
+        float[][] $r4, $r5;
+        float[] $r6, $r7, $r8;
+
+        r0 := @this: androidx.media3.effect.MatrixTextureProcessor;
+
+        r1 := @parameter0: androidx.media3.common.util.GlProgram;
+
+        r2 := @parameter1: com.google.common.collect.ImmutableList;
+
+        r3 := @parameter2: com.google.common.collect.ImmutableList;
+
+        z0 := @parameter3: boolean;
+
+        specialinvoke r0.<androidx.media3.effect.SingleFrameGlTextureProcessor: void <init>(boolean)>(z0);
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram> = r1;
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList matrixTransformations> = r2;
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList rgbMatrices> = r3;
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: boolean useHdr> = z0;
+
+        $i0 = virtualinvoke r2.<com.google.common.collect.ImmutableList: int size()>();
+
+        $r4 = newmultiarray (float)[$i0][16];
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: float[][] transformationMatrixCache> = $r4;
+
+        $i1 = virtualinvoke r3.<com.google.common.collect.ImmutableList: int size()>();
+
+        $r5 = newmultiarray (float)[$i1][16];
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: float[][] rgbMatrixCache> = $r5;
+
+        $r6 = staticinvoke <androidx.media3.common.util.GlUtil: float[] create4x4IdentityMatrix()>();
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeTransformationMatrixArray> = $r6;
+
+        $r7 = staticinvoke <androidx.media3.common.util.GlUtil: float[] create4x4IdentityMatrix()>();
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeRgbMatrixArray> = $r7;
+
+        $r8 = newarray (float)[16];
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix> = $r8;
+
+        $r9 = <androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList NDC_SQUARE>;
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon> = $r9;
+
+        return;
+    }
+
+    private static androidx.media3.common.util.GlProgram createGlProgram(android.content.Context, java.lang.String, java.lang.String) throws androidx.media3.common.FrameProcessingException
+    {
+        android.content.Context r0;
+        java.lang.String r1, r2;
+        androidx.media3.common.util.GlProgram r3, $r4;
+        java.lang.Throwable $r5, r7;
+        androidx.media3.common.FrameProcessingException $r6;
+        float[] r8;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.lang.String;
+
+     label1:
+        $r4 = new androidx.media3.common.util.GlProgram;
+
+        specialinvoke $r4.<androidx.media3.common.util.GlProgram: void <init>(android.content.Context,java.lang.String,java.lang.String)>(r0, r1, r2);
+
+        r3 = $r4;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r7 = $r5;
+
+        $r6 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r6.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.Throwable)>(r7);
+
+        throw $r6;
+
+     label4:
+        r8 = staticinvoke <androidx.media3.common.util.GlUtil: float[] create4x4IdentityMatrix()>();
+
+        virtualinvoke r3.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uTexTransformationMatrix", r8);
+
+        return r3;
+
+        catch java.io.IOException from label1 to label2 with label3;
+        catch androidx.media3.common.util.GlUtil$GlException from label1 to label2 with label3;
+    }
+
+    public void setTextureTransformMatrix(float[])
+    {
+        androidx.media3.effect.MatrixTextureProcessor r0;
+        float[] r1;
+        androidx.media3.common.util.GlProgram $r2;
+
+        r0 := @this: androidx.media3.effect.MatrixTextureProcessor;
+
+        r1 := @parameter0: float[];
+
+        $r2 = r0.<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uTexTransformationMatrix", r1);
+
+        return;
+    }
+
+    public android.util.Pair configure(int, int)
+    {
+        androidx.media3.effect.MatrixTextureProcessor r0;
+        int i0, i1;
+        com.google.common.collect.ImmutableList $r1;
+        android.util.Pair $r2;
+
+        r0 := @this: androidx.media3.effect.MatrixTextureProcessor;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList matrixTransformations>;
+
+        $r2 = staticinvoke <androidx.media3.effect.MatrixUtils: android.util.Pair configureAndGetOutputSize(int,int,com.google.common.collect.ImmutableList)>(i0, i1, $r1);
+
+        return $r2;
+    }
+
+    public void drawFrame(int, long) throws androidx.media3.common.FrameProcessingException
+    {
+        androidx.media3.effect.MatrixTextureProcessor r0;
+        int i0, $i2, $i3;
+        long l1;
+        java.lang.Throwable r1, $r14;
+        com.google.common.collect.ImmutableList $r2, $r9, $r13;
+        androidx.media3.common.util.GlProgram $r3, $r4, $r6, $r8, $r10, $r12;
+        float[] $r5, $r7, $r11;
+        androidx.media3.common.FrameProcessingException $r15;
+
+        r0 := @this: androidx.media3.effect.MatrixTextureProcessor;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        specialinvoke r0.<androidx.media3.effect.MatrixTextureProcessor: void updateCompositeRgbaMatrixArray(long)>(l1);
+
+        specialinvoke r0.<androidx.media3.effect.MatrixTextureProcessor: void updateCompositeTransformationMatrixAndVisiblePolygon(long)>(l1);
+
+        $r2 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon>;
+
+        $i2 = virtualinvoke $r2.<com.google.common.collect.ImmutableList: int size()>();
+
+        if $i2 >= 3 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r3.<androidx.media3.common.util.GlProgram: void use()>();
+
+        $r4 = r0.<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r4.<androidx.media3.common.util.GlProgram: void setSamplerTexIdUniform(java.lang.String,int,int)>("uTexSampler", i0, 0);
+
+        $r6 = r0.<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $r5 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeTransformationMatrixArray>;
+
+        virtualinvoke $r6.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uTransformationMatrix", $r5);
+
+        $r8 = r0.<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $r7 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeRgbMatrixArray>;
+
+        virtualinvoke $r8.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uRgbMatrix", $r7);
+
+        $r10 = r0.<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $r9 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon>;
+
+        $r11 = staticinvoke <androidx.media3.common.util.GlUtil: float[] createVertexBuffer(java.util.List)>($r9);
+
+        virtualinvoke $r10.<androidx.media3.common.util.GlProgram: void setBufferAttribute(java.lang.String,float[],int)>("aFramePosition", $r11, 4);
+
+        $r12 = r0.<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r12.<androidx.media3.common.util.GlProgram: void bindAttributesAndUniforms()>();
+
+        $r13 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon>;
+
+        $i3 = virtualinvoke $r13.<com.google.common.collect.ImmutableList: int size()>();
+
+        staticinvoke <android.opengl.GLES20: void glDrawArrays(int,int,int)>(6, 0, $i3);
+
+        staticinvoke <androidx.media3.common.util.GlUtil: void checkGlError()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r14 := @caughtexception;
+
+        r1 = $r14;
+
+        $r15 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r15.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.Throwable,long)>(r1, l1);
+
+        throw $r15;
+
+     label4:
+        return;
+
+        catch androidx.media3.common.util.GlUtil$GlException from label1 to label2 with label3;
+    }
+
+    public void release() throws androidx.media3.common.FrameProcessingException
+    {
+        androidx.media3.effect.MatrixTextureProcessor r0;
+        java.lang.Throwable r1, $r3;
+        androidx.media3.common.util.GlProgram $r2;
+        androidx.media3.common.FrameProcessingException $r4;
+
+        r0 := @this: androidx.media3.effect.MatrixTextureProcessor;
+
+        specialinvoke r0.<androidx.media3.effect.SingleFrameGlTextureProcessor: void release()>();
+
+     label1:
+        $r2 = r0.<androidx.media3.effect.MatrixTextureProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.GlProgram: void delete()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+        r1 = $r3;
+
+        $r4 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r4.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.Throwable)>(r1);
+
+        throw $r4;
+
+     label4:
+        return;
+
+        catch androidx.media3.common.util.GlUtil$GlException from label1 to label2 with label3;
+    }
+
+    private void updateCompositeTransformationMatrixAndVisiblePolygon(long)
+    {
+        androidx.media3.effect.MatrixTextureProcessor r0;
+        long l0;
+        float[][] r1, $r5, r26;
+        int i1, $i2, $i3, $i4, $i5, i6, i7;
+        float[] r2, $r6, $r8, $r9, $r11, $r13, $r14, $r15, $r16, $r17, $r25;
+        com.google.common.collect.ImmutableList $r3, $r4, $r7, $r10, $r12, $r18, $r19, $r20, $r21, $r22;
+        boolean $z0;
+        java.lang.Object $r23;
+        androidx.media3.effect.GlMatrixTransformation $r24;
+
+        r0 := @this: androidx.media3.effect.MatrixTextureProcessor;
+
+        l0 := @parameter0: long;
+
+        $r3 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList matrixTransformations>;
+
+        $i2 = virtualinvoke $r3.<com.google.common.collect.ImmutableList: int size()>();
+
+        r1 = newmultiarray (float)[$i2][16];
+
+        i6 = 0;
+
+     label1:
+        $r4 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList matrixTransformations>;
+
+        $i3 = virtualinvoke $r4.<com.google.common.collect.ImmutableList: int size()>();
+
+        if i6 >= $i3 goto label2;
+
+        $r22 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList matrixTransformations>;
+
+        $r23 = virtualinvoke $r22.<com.google.common.collect.ImmutableList: java.lang.Object get(int)>(i6);
+
+        $r24 = (androidx.media3.effect.GlMatrixTransformation) $r23;
+
+        $r25 = interfaceinvoke $r24.<androidx.media3.effect.GlMatrixTransformation: float[] getGlMatrixArray(long)>(l0);
+
+        r1[i6] = $r25;
+
+        i6 = i6 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[][] transformationMatrixCache>;
+
+        $z0 = staticinvoke <androidx.media3.effect.MatrixTextureProcessor: boolean updateMatrixCache(float[][],float[][])>($r5, r1);
+
+        if $z0 != 0 goto label3;
+
+        return;
+
+     label3:
+        $r6 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeTransformationMatrixArray>;
+
+        staticinvoke <androidx.media3.common.util.GlUtil: void setToIdentity(float[])>($r6);
+
+        $r7 = <androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList NDC_SQUARE>;
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon> = $r7;
+
+        r26 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[][] transformationMatrixCache>;
+
+        i1 = lengthof r26;
+
+        i7 = 0;
+
+     label4:
+        if i7 >= i1 goto label6;
+
+        r2 = r26[i7];
+
+        $r14 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix>;
+
+        $r13 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeTransformationMatrixArray>;
+
+        staticinvoke <android.opengl.Matrix: void multiplyMM(float[],int,float[],int,float[],int)>($r14, 0, r2, 0, $r13, 0);
+
+        $r17 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix>;
+
+        $r16 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeTransformationMatrixArray>;
+
+        $r15 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix>;
+
+        $i4 = lengthof $r15;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r17, 0, $r16, 0, $i4);
+
+        $r18 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon>;
+
+        $r19 = staticinvoke <androidx.media3.effect.MatrixUtils: com.google.common.collect.ImmutableList transformPoints(float[],com.google.common.collect.ImmutableList)>(r2, $r18);
+
+        $r20 = staticinvoke <androidx.media3.effect.MatrixUtils: com.google.common.collect.ImmutableList clipConvexPolygonToNdcRange(com.google.common.collect.ImmutableList)>($r19);
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon> = $r20;
+
+        $r21 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon>;
+
+        $i5 = virtualinvoke $r21.<com.google.common.collect.ImmutableList: int size()>();
+
+        if $i5 >= 3 goto label5;
+
+        return;
+
+     label5:
+        i7 = i7 + 1;
+
+        goto label4;
+
+     label6:
+        $r9 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix>;
+
+        $r8 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeTransformationMatrixArray>;
+
+        staticinvoke <android.opengl.Matrix: boolean invertM(float[],int,float[],int)>($r9, 0, $r8, 0);
+
+        $r11 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix>;
+
+        $r10 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon>;
+
+        $r12 = staticinvoke <androidx.media3.effect.MatrixUtils: com.google.common.collect.ImmutableList transformPoints(float[],com.google.common.collect.ImmutableList)>($r11, $r10);
+
+        r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList visiblePolygon> = $r12;
+
+        return;
+    }
+
+    private void updateCompositeRgbaMatrixArray(long)
+    {
+        androidx.media3.effect.MatrixTextureProcessor r0;
+        long l0;
+        float[][] r1, $r4;
+        com.google.common.collect.ImmutableList $r2, $r3, $r5, $r6, $r15;
+        int $i1, $i2, $i3, $i4, i5, i6;
+        boolean $z0, $z1, $z2;
+        float[] $r7, $r10, $r11, $r12, $r13, $r14, $r18;
+        java.lang.Object $r8, $r16;
+        androidx.media3.effect.RgbMatrix $r9, $r17;
+
+        r0 := @this: androidx.media3.effect.MatrixTextureProcessor;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList rgbMatrices>;
+
+        $i1 = virtualinvoke $r2.<com.google.common.collect.ImmutableList: int size()>();
+
+        r1 = newmultiarray (float)[$i1][16];
+
+        i5 = 0;
+
+     label1:
+        $r3 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList rgbMatrices>;
+
+        $i2 = virtualinvoke $r3.<com.google.common.collect.ImmutableList: int size()>();
+
+        if i5 >= $i2 goto label2;
+
+        $r15 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList rgbMatrices>;
+
+        $r16 = virtualinvoke $r15.<com.google.common.collect.ImmutableList: java.lang.Object get(int)>(i5);
+
+        $r17 = (androidx.media3.effect.RgbMatrix) $r16;
+
+        $z2 = r0.<androidx.media3.effect.MatrixTextureProcessor: boolean useHdr>;
+
+        $r18 = interfaceinvoke $r17.<androidx.media3.effect.RgbMatrix: float[] getMatrix(long,boolean)>(l0, $z2);
+
+        r1[i5] = $r18;
+
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label2:
+        $r4 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[][] rgbMatrixCache>;
+
+        $z0 = staticinvoke <androidx.media3.effect.MatrixTextureProcessor: boolean updateMatrixCache(float[][],float[][])>($r4, r1);
+
+        if $z0 != 0 goto label3;
+
+        return;
+
+     label3:
+        i6 = 0;
+
+     label4:
+        $r5 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList rgbMatrices>;
+
+        $i3 = virtualinvoke $r5.<com.google.common.collect.ImmutableList: int size()>();
+
+        if i6 >= $i3 goto label5;
+
+        $r7 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix>;
+
+        $r6 = r0.<androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList rgbMatrices>;
+
+        $r8 = virtualinvoke $r6.<com.google.common.collect.ImmutableList: java.lang.Object get(int)>(i6);
+
+        $r9 = (androidx.media3.effect.RgbMatrix) $r8;
+
+        $z1 = r0.<androidx.media3.effect.MatrixTextureProcessor: boolean useHdr>;
+
+        $r10 = interfaceinvoke $r9.<androidx.media3.effect.RgbMatrix: float[] getMatrix(long,boolean)>(l0, $z1);
+
+        $r11 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeRgbMatrixArray>;
+
+        staticinvoke <android.opengl.Matrix: void multiplyMM(float[],int,float[],int,float[],int)>($r7, 0, $r10, 0, $r11, 0);
+
+        $r14 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix>;
+
+        $r13 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] compositeRgbMatrixArray>;
+
+        $r12 = r0.<androidx.media3.effect.MatrixTextureProcessor: float[] tempResultMatrix>;
+
+        $i4 = lengthof $r12;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r14, 0, $r13, 0, $i4);
+
+        i6 = i6 + 1;
+
+        goto label4;
+
+     label5:
+        return;
+    }
+
+    private static boolean updateMatrixCache(float[][], float[][])
+    {
+        float[][] r0, r1;
+        float[] r2, r3;
+        int $i0, $i1, $i2, i3;
+        boolean $z0, z1, $z2;
+
+        r0 := @parameter0: float[][];
+
+        r1 := @parameter1: float[][];
+
+        z1 = 0;
+
+        i3 = 0;
+
+     label1:
+        $i0 = lengthof r0;
+
+        if i3 >= $i0 goto label5;
+
+        r2 = r0[i3];
+
+        r3 = r1[i3];
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(float[],float[])>(r2, r3);
+
+        if $z0 != 0 goto label4;
+
+        $i1 = lengthof r3;
+
+        if $i1 != 16 goto label2;
+
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean,java.lang.Object)>($z2, "A 4x4 transformation matrix must have 16 elements");
+
+        $i2 = lengthof r3;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>(r3, 0, r2, 0, $i2);
+
+        z1 = 1;
+
+     label4:
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label5:
+        return z1;
+    }
+
+    static void <clinit>()
+    {
+        float[] $r0, $r1, $r2, $r3, $r5, $r6;
+        com.google.common.collect.ImmutableList $r4;
+
+        $r0 = newarray (float)[4];
+
+        $r0[0] = -1.0F;
+
+        $r0[1] = -1.0F;
+
+        $r0[2] = 0.0F;
+
+        $r0[3] = 1.0F;
+
+        $r1 = newarray (float)[4];
+
+        $r1[0] = -1.0F;
+
+        $r1[1] = 1.0F;
+
+        $r1[2] = 0.0F;
+
+        $r1[3] = 1.0F;
+
+        $r2 = newarray (float)[4];
+
+        $r2[0] = 1.0F;
+
+        $r2[1] = 1.0F;
+
+        $r2[2] = 0.0F;
+
+        $r2[3] = 1.0F;
+
+        $r3 = newarray (float)[4];
+
+        $r3[0] = 1.0F;
+
+        $r3[1] = -1.0F;
+
+        $r3[2] = 0.0F;
+
+        $r3[3] = 1.0F;
+
+        $r4 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)>($r0, $r1, $r2, $r3);
+
+        <androidx.media3.effect.MatrixTextureProcessor: com.google.common.collect.ImmutableList NDC_SQUARE> = $r4;
+
+        $r5 = newarray (float)[9];
+
+        $r5[0] = 1.0F;
+
+        $r5[1] = 1.0F;
+
+        $r5[2] = 1.0F;
+
+        $r5[3] = 0.0F;
+
+        $r5[4] = -0.1646F;
+
+        $r5[5] = 1.8814F;
+
+        $r5[6] = 1.4746F;
+
+        $r5[7] = -0.5714F;
+
+        $r5[8] = 0.0F;
+
+        <androidx.media3.effect.MatrixTextureProcessor: float[] BT2020_FULL_RANGE_YUV_TO_RGB_COLOR_TRANSFORM_MATRIX> = $r5;
+
+        $r6 = newarray (float)[9];
+
+        $r6[0] = 1.1689F;
+
+        $r6[1] = 1.1689F;
+
+        $r6[2] = 1.1689F;
+
+        $r6[3] = 0.0F;
+
+        $r6[4] = -0.1881F;
+
+        $r6[5] = 2.1502F;
+
+        $r6[6] = 1.6853F;
+
+        $r6[7] = -0.653F;
+
+        $r6[8] = 0.0F;
+
+        <androidx.media3.effect.MatrixTextureProcessor: float[] BT2020_LIMITED_RANGE_YUV_TO_RGB_COLOR_TRANSFORM_MATRIX> = $r6;
+
+        return;
+    }
+

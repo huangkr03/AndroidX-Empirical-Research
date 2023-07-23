@@ -1,0 +1,1051 @@
+androidx.test.internal.events.client.TestPlatformListener
+<androidx.test.internal.events.client.TestPlatformListener: java.lang.String TAG>
+<androidx.test.internal.events.client.TestPlatformListener: java.lang.String INIT_ERROR>
+<androidx.test.internal.events.client.TestPlatformListener: androidx.test.internal.events.client.TestPlatformEventService notificationService>
+<androidx.test.internal.events.client.TestPlatformListener: java.util.Map testCaseToStatus>
+<androidx.test.internal.events.client.TestPlatformListener: java.util.Set foundTestCases>
+<androidx.test.internal.events.client.TestPlatformListener: java.util.Set finishedTestCases>
+<androidx.test.internal.events.client.TestPlatformListener: java.util.Set startedTestCases>
+<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>
+<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference currentTestCase>
+<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo memoizedTestRun>
+<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicBoolean processCrashed>
+<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResult>
+<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener>
+    private static androidx.test.services.events.TestCaseInfo convertToTestCase(org.junit.runner.Description) throws androidx.test.services.events.TestEventException
+    {
+        org.junit.runner.Description r0;
+        androidx.test.services.events.TestCaseInfo $r1;
+
+        r0 := @parameter0: org.junit.runner.Description;
+
+        $r1 = staticinvoke <androidx.test.services.events.ParcelableConverter: androidx.test.services.events.TestCaseInfo getTestCaseFromDescription(org.junit.runner.Description)>(r0);
+
+        return $r1;
+    }
+
+    private static androidx.test.services.events.TestRunInfo convertToTestRun(org.junit.runner.Description) throws androidx.test.services.events.TestEventException
+    {
+        org.junit.runner.Description r0, r3;
+        java.util.ArrayList r1, $r4;
+        java.util.Iterator r2;
+        java.util.List $r5;
+        boolean $z0;
+        androidx.test.services.events.TestRunInfo $r6;
+        java.lang.String $r7;
+        java.lang.Object $r8;
+        androidx.test.services.events.TestCaseInfo $r9;
+
+        r0 := @parameter0: org.junit.runner.Description;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r1 = $r4;
+
+        $r5 = staticinvoke <androidx.test.internal.events.client.JUnitDescriptionParser: java.util.List getAllTestCaseDescriptions(org.junit.runner.Description)>(r0);
+
+        r2 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.junit.runner.Description) $r8;
+
+        $r9 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestCaseInfo convertToTestCase(org.junit.runner.Description)>(r3);
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>($r9);
+
+        goto label1;
+
+     label2:
+        $r6 = new androidx.test.services.events.TestRunInfo;
+
+        $r7 = virtualinvoke r0.<org.junit.runner.Description: java.lang.String getDisplayName()>();
+
+        specialinvoke $r6.<androidx.test.services.events.TestRunInfo: void <init>(java.lang.String,java.util.List)>($r7, r1);
+
+        return $r6;
+    }
+
+    private androidx.test.services.events.platform.TestPlatformEvent createErrorEvent(org.junit.runner.notification.Failure, androidx.test.services.events.TimeStamp) throws androidx.test.services.events.TestEventException
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.notification.Failure r1;
+        androidx.test.services.events.TimeStamp r2;
+        androidx.test.services.events.ErrorInfo r3;
+        boolean $z0, $z1, $z2;
+        androidx.test.services.events.TestRunInfo $r4, $r6, $r8;
+        androidx.test.services.events.platform.TestRunErrorEvent $r5;
+        org.junit.runner.Description $r7, r11, $r12;
+        androidx.test.services.events.platform.TestCaseErrorEvent $r9;
+        androidx.test.services.events.TestCaseInfo $r10;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.notification.Failure;
+
+        r2 := @parameter1: androidx.test.services.events.TimeStamp;
+
+        r11 = virtualinvoke r1.<org.junit.runner.notification.Failure: org.junit.runner.Description getDescription()>();
+
+        $z0 = virtualinvoke r11.<org.junit.runner.Description: boolean isTest()>();
+
+        if $z0 == 0 goto label1;
+
+        $z1 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: boolean isInitError(org.junit.runner.Description)>(r11);
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        r11 = r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>;
+
+     label2:
+        r3 = staticinvoke <androidx.test.services.events.ErrorInfo: androidx.test.services.events.ErrorInfo createFromFailure(org.junit.runner.notification.Failure)>(r1);
+
+        $r12 = r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>;
+
+        $z2 = virtualinvoke r11.<org.junit.runner.Description: boolean equals(java.lang.Object)>($r12);
+
+        if $z2 != 0 goto label3;
+
+        $r9 = new androidx.test.services.events.platform.TestCaseErrorEvent;
+
+        $r10 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestCaseInfo convertToTestCase(org.junit.runner.Description)>(r11);
+
+        specialinvoke $r9.<androidx.test.services.events.platform.TestCaseErrorEvent: void <init>(androidx.test.services.events.TestCaseInfo,androidx.test.services.events.ErrorInfo,androidx.test.services.events.TimeStamp)>($r10, r3, r2);
+
+        return $r9;
+
+     label3:
+        $r4 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo memoizedTestRun>;
+
+        if $r4 != null goto label4;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TestPlatformListener", "No test run info. Reporting an error before test run has ever started.");
+
+        $r7 = <org.junit.runner.Description: org.junit.runner.Description EMPTY>;
+
+        $r8 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo convertToTestRun(org.junit.runner.Description)>($r7);
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo memoizedTestRun> = $r8;
+
+     label4:
+        $r5 = new androidx.test.services.events.platform.TestRunErrorEvent;
+
+        $r6 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo memoizedTestRun>;
+
+        specialinvoke $r5.<androidx.test.services.events.platform.TestRunErrorEvent: void <init>(androidx.test.services.events.TestRunInfo,androidx.test.services.events.ErrorInfo,androidx.test.services.events.TimeStamp)>($r6, r3, r2);
+
+        return $r5;
+    }
+
+    public void <init>(androidx.test.internal.events.client.TestPlatformEventService)
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        androidx.test.internal.events.client.TestPlatformEventService r1, $r14;
+        org.junit.runner.Description $r2, $r4;
+        java.util.concurrent.atomic.AtomicReference $r3, $r6, $r8, $r9;
+        java.util.concurrent.atomic.AtomicBoolean $r5;
+        org.junit.runner.Result $r7, $r11;
+        java.lang.Object $r10, $r13;
+        org.junit.runner.notification.RunListener $r12;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: androidx.test.internal.events.client.TestPlatformEventService;
+
+        specialinvoke r0.<org.junit.runner.notification.RunListener: void <init>()>();
+
+        $r2 = <org.junit.runner.Description: org.junit.runner.Description EMPTY>;
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription> = $r2;
+
+        $r3 = new java.util.concurrent.atomic.AtomicReference;
+
+        $r4 = <org.junit.runner.Description: org.junit.runner.Description EMPTY>;
+
+        specialinvoke $r3.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>($r4);
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference currentTestCase> = $r3;
+
+        $r5 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r5.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicBoolean processCrashed> = $r5;
+
+        $r6 = new java.util.concurrent.atomic.AtomicReference;
+
+        $r7 = new org.junit.runner.Result;
+
+        specialinvoke $r7.<org.junit.runner.Result: void <init>()>();
+
+        specialinvoke $r6.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>($r7);
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResult> = $r6;
+
+        $r8 = new java.util.concurrent.atomic.AtomicReference;
+
+        $r9 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResult>;
+
+        $r10 = virtualinvoke $r9.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r11 = (org.junit.runner.Result) $r10;
+
+        $r12 = virtualinvoke $r11.<org.junit.runner.Result: org.junit.runner.notification.RunListener createListener()>();
+
+        specialinvoke $r8.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>($r12);
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener> = $r8;
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: void initListener()>();
+
+        $r13 = staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "notificationService cannot be null");
+
+        $r14 = (androidx.test.internal.events.client.TestPlatformEventService) $r13;
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.internal.events.client.TestPlatformEventService notificationService> = $r14;
+
+        return;
+    }
+
+    private void initListener()
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        java.util.HashSet $r1, $r2, $r3;
+        java.util.HashMap $r4;
+        org.junit.runner.Description $r5, $r7;
+        java.util.concurrent.atomic.AtomicReference $r6, $r10, $r11, $r12;
+        java.util.concurrent.atomic.AtomicBoolean $r8;
+        org.junit.runner.Result $r9, $r14;
+        java.lang.Object $r13;
+        org.junit.runner.notification.RunListener $r15;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        $r1 = new java.util.HashSet;
+
+        specialinvoke $r1.<java.util.HashSet: void <init>()>();
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set finishedTestCases> = $r1;
+
+        $r2 = new java.util.HashSet;
+
+        specialinvoke $r2.<java.util.HashSet: void <init>()>();
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set foundTestCases> = $r2;
+
+        $r3 = new java.util.HashSet;
+
+        specialinvoke $r3.<java.util.HashSet: void <init>()>();
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set startedTestCases> = $r3;
+
+        $r4 = new java.util.HashMap;
+
+        specialinvoke $r4.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Map testCaseToStatus> = $r4;
+
+        $r6 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference currentTestCase>;
+
+        $r5 = <org.junit.runner.Description: org.junit.runner.Description EMPTY>;
+
+        virtualinvoke $r6.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r5);
+
+        $r7 = <org.junit.runner.Description: org.junit.runner.Description EMPTY>;
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription> = $r7;
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo memoizedTestRun> = null;
+
+        $r8 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicBoolean processCrashed>;
+
+        virtualinvoke $r8.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(0);
+
+        $r10 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResult>;
+
+        $r9 = new org.junit.runner.Result;
+
+        specialinvoke $r9.<org.junit.runner.Result: void <init>()>();
+
+        virtualinvoke $r10.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r9);
+
+        $r12 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener>;
+
+        $r11 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResult>;
+
+        $r13 = virtualinvoke $r11.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r14 = (org.junit.runner.Result) $r13;
+
+        $r15 = virtualinvoke $r14.<org.junit.runner.Result: org.junit.runner.notification.RunListener createListener()>();
+
+        virtualinvoke $r12.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r15);
+
+        return;
+    }
+
+    private void setRunDescription(org.junit.runner.Description)
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.Description r1, $r2, $r4, $r6, $r9;
+        java.lang.String $r3;
+        boolean $z0;
+        java.util.ArrayList $r5, $r7;
+        int $i0;
+        java.lang.Object $r8;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription> = r1;
+
+     label1:
+        $r2 = r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>;
+
+        $r3 = virtualinvoke $r2.<org.junit.runner.Description: java.lang.String getDisplayName()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("null");
+
+        if $z0 == 0 goto label2;
+
+        $r4 = r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>;
+
+        $r5 = virtualinvoke $r4.<org.junit.runner.Description: java.util.ArrayList getChildren()>();
+
+        $i0 = virtualinvoke $r5.<java.util.ArrayList: int size()>();
+
+        if $i0 != 1 goto label2;
+
+        $r6 = r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>;
+
+        $r7 = virtualinvoke $r6.<org.junit.runner.Description: java.util.ArrayList getChildren()>();
+
+        $r8 = virtualinvoke $r7.<java.util.ArrayList: java.lang.Object get(int)>(0);
+
+        $r9 = (org.junit.runner.Description) $r8;
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription> = $r9;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void testAssumptionFailure(org.junit.runner.notification.Failure)
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.notification.Failure r1;
+        androidx.test.services.events.platform.TestPlatformEvent r2;
+        java.util.concurrent.atomic.AtomicReference $r3;
+        java.lang.Object $r4;
+        org.junit.runner.notification.RunListener $r5;
+        org.junit.runner.Description $r6, $r10;
+        boolean $z0;
+        androidx.test.services.events.TimeStamp $r7;
+        androidx.test.internal.events.client.TestPlatformEventService $r8;
+        java.util.Map $r9;
+        androidx.test.services.events.TestStatus$Status $r11;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.notification.Failure;
+
+        $r3 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r5 = (org.junit.runner.notification.RunListener) $r4;
+
+        virtualinvoke $r5.<org.junit.runner.notification.RunListener: void testAssumptionFailure(org.junit.runner.notification.Failure)>(r1);
+
+        $r6 = virtualinvoke r1.<org.junit.runner.notification.Failure: org.junit.runner.Description getDescription()>();
+
+        $z0 = virtualinvoke $r6.<org.junit.runner.Description: boolean isTest()>();
+
+        if $z0 == 0 goto label1;
+
+        $r9 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Map testCaseToStatus>;
+
+        $r10 = virtualinvoke r1.<org.junit.runner.notification.Failure: org.junit.runner.Description getDescription()>();
+
+        $r11 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status SKIPPED>;
+
+        interfaceinvoke $r9.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r10, $r11);
+
+     label1:
+        $r7 = staticinvoke <androidx.test.services.events.TimeStamp: androidx.test.services.events.TimeStamp now()>();
+
+        r2 = specialinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.platform.TestPlatformEvent createErrorEvent(org.junit.runner.notification.Failure,androidx.test.services.events.TimeStamp)>(r1, $r7);
+
+        $r8 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.internal.events.client.TestPlatformEventService notificationService>;
+
+        interfaceinvoke $r8.<androidx.test.internal.events.client.TestPlatformEventService: void send(androidx.test.services.events.platform.TestPlatformEvent)>(r2);
+
+        goto label2;
+
+     label2:
+        return;
+    }
+
+    public void testFailure(org.junit.runner.notification.Failure) throws java.lang.Exception
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.notification.Failure r1;
+        org.junit.runner.Description r2;
+        androidx.test.services.events.platform.TestPlatformEvent r3;
+        java.util.concurrent.atomic.AtomicReference $r4;
+        java.lang.Object $r5;
+        org.junit.runner.notification.RunListener $r6;
+        boolean $z0, $z1;
+        androidx.test.services.events.TestStatus$Status $r7;
+        java.util.Map $r8;
+        androidx.test.services.events.TimeStamp $r10;
+        androidx.test.internal.events.client.TestPlatformEventService $r11;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.notification.Failure;
+
+        r2 = virtualinvoke r1.<org.junit.runner.notification.Failure: org.junit.runner.Description getDescription()>();
+
+        $r4 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener>;
+
+        $r5 = virtualinvoke $r4.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r6 = (org.junit.runner.notification.RunListener) $r5;
+
+        virtualinvoke $r6.<org.junit.runner.notification.RunListener: void testFailure(org.junit.runner.notification.Failure)>(r1);
+
+        $z0 = virtualinvoke r2.<org.junit.runner.Description: boolean isTest()>();
+
+        if $z0 == 0 goto label1;
+
+        $z1 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: boolean isInitError(org.junit.runner.Description)>(r2);
+
+        if $z1 != 0 goto label1;
+
+        $r8 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Map testCaseToStatus>;
+
+        $r7 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status FAILED>;
+
+        interfaceinvoke $r8.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, $r7);
+
+     label1:
+        $r10 = staticinvoke <androidx.test.services.events.TimeStamp: androidx.test.services.events.TimeStamp now()>();
+
+        r3 = specialinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.platform.TestPlatformEvent createErrorEvent(org.junit.runner.notification.Failure,androidx.test.services.events.TimeStamp)>(r1, $r10);
+
+        $r11 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.internal.events.client.TestPlatformEventService notificationService>;
+
+        interfaceinvoke $r11.<androidx.test.internal.events.client.TestPlatformEventService: void send(androidx.test.services.events.platform.TestPlatformEvent)>(r3);
+
+        goto label2;
+
+     label2:
+        return;
+    }
+
+    public void testFinished(org.junit.runner.Description) throws java.lang.Exception
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.Description r1;
+        androidx.test.services.events.TimeStamp $r2;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        $r2 = staticinvoke <androidx.test.services.events.TimeStamp: androidx.test.services.events.TimeStamp now()>();
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: void testFinishedInternal(org.junit.runner.Description,androidx.test.services.events.TimeStamp)>(r1, $r2);
+
+        return;
+    }
+
+    private void testFinishedInternal(org.junit.runner.Description, androidx.test.services.events.TimeStamp) throws java.lang.Exception
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.Description r1, $r15, $r18;
+        androidx.test.services.events.TimeStamp r2;
+        java.lang.Throwable r3, $r17;
+        boolean $z0;
+        java.util.concurrent.atomic.AtomicReference $r4, $r16, $r19;
+        java.lang.Object $r5, $r13;
+        org.junit.runner.notification.RunListener $r6;
+        java.util.Set $r7;
+        androidx.test.services.events.platform.TestCaseFinishedEvent $r8;
+        androidx.test.internal.events.client.TestPlatformEventService $r9;
+        androidx.test.services.events.TestCaseInfo $r10;
+        androidx.test.services.events.TestStatus $r11;
+        java.util.Map $r12;
+        androidx.test.services.events.TestStatus$Status $r14;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        r2 := @parameter1: androidx.test.services.events.TimeStamp;
+
+        $z0 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: boolean isInitError(org.junit.runner.Description)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r4 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener>;
+
+        $r5 = virtualinvoke $r4.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r6 = (org.junit.runner.notification.RunListener) $r5;
+
+        virtualinvoke $r6.<org.junit.runner.notification.RunListener: void testFinished(org.junit.runner.Description)>(r1);
+
+        $r7 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set finishedTestCases>;
+
+        interfaceinvoke $r7.<java.util.Set: boolean add(java.lang.Object)>(r1);
+
+     label2:
+        $r9 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.internal.events.client.TestPlatformEventService notificationService>;
+
+        $r8 = new androidx.test.services.events.platform.TestCaseFinishedEvent;
+
+        $r10 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestCaseInfo convertToTestCase(org.junit.runner.Description)>(r1);
+
+        $r11 = new androidx.test.services.events.TestStatus;
+
+        $r12 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Map testCaseToStatus>;
+
+        $r13 = interfaceinvoke $r12.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r14 = (androidx.test.services.events.TestStatus$Status) $r13;
+
+        specialinvoke $r11.<androidx.test.services.events.TestStatus: void <init>(androidx.test.services.events.TestStatus$Status)>($r14);
+
+        specialinvoke $r8.<androidx.test.services.events.platform.TestCaseFinishedEvent: void <init>(androidx.test.services.events.TestCaseInfo,androidx.test.services.events.TestStatus,androidx.test.services.events.TimeStamp)>($r10, $r11, r2);
+
+        interfaceinvoke $r9.<androidx.test.internal.events.client.TestPlatformEventService: void send(androidx.test.services.events.platform.TestPlatformEvent)>($r8);
+
+     label3:
+        $r16 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference currentTestCase>;
+
+        $r15 = <org.junit.runner.Description: org.junit.runner.Description EMPTY>;
+
+        virtualinvoke $r16.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r15);
+
+        goto label6;
+
+     label4:
+        $r17 := @caughtexception;
+
+        r3 = $r17;
+
+     label5:
+        $r19 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference currentTestCase>;
+
+        $r18 = <org.junit.runner.Description: org.junit.runner.Description EMPTY>;
+
+        virtualinvoke $r19.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r18);
+
+        throw r3;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void testIgnored(org.junit.runner.Description) throws java.lang.Exception
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.Description r1;
+        java.lang.String r2, r3, r4, $r8, $r9, $r17;
+        java.util.concurrent.atomic.AtomicReference $r5;
+        java.lang.Object $r6;
+        org.junit.runner.notification.RunListener $r7;
+        java.lang.StringBuilder $r10, $r11, $r12, $r13, $r14, $r15, $r16;
+        androidx.test.services.events.TestStatus$Status $r18;
+        java.util.Map $r19;
+        androidx.test.services.events.TimeStamp $r21;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        $r5 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener>;
+
+        $r6 = virtualinvoke $r5.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r7 = (org.junit.runner.notification.RunListener) $r6;
+
+        virtualinvoke $r7.<org.junit.runner.notification.RunListener: void testIgnored(org.junit.runner.Description)>(r1);
+
+        $r8 = virtualinvoke r1.<org.junit.runner.Description: java.lang.String getDisplayName()>();
+
+        $r9 = virtualinvoke r1.<org.junit.runner.Description: java.lang.String getClassName()>();
+
+        r4 = virtualinvoke r1.<org.junit.runner.Description: java.lang.String getMethodName()>();
+
+        r3 = $r9;
+
+        r2 = $r8;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("TestIgnoredEvent(");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("): ");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("#");
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("TestPlatformListener", $r17);
+
+        $r19 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Map testCaseToStatus>;
+
+        $r18 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status IGNORED>;
+
+        interfaceinvoke $r19.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r18);
+
+        $r21 = staticinvoke <androidx.test.services.events.TimeStamp: androidx.test.services.events.TimeStamp now()>();
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: void testFinishedInternal(org.junit.runner.Description,androidx.test.services.events.TimeStamp)>(r1, $r21);
+
+        return;
+    }
+
+    public void testRunFinished(org.junit.runner.Result) throws java.lang.Exception
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.Result r1;
+        java.util.Iterator r2;
+        org.junit.runner.Description r3, $r16;
+        java.util.concurrent.atomic.AtomicReference $r4;
+        java.lang.Object $r5, $r18;
+        org.junit.runner.notification.RunListener $r6;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        java.util.concurrent.atomic.AtomicBoolean $r7;
+        java.util.Set $r8, $r9, $r19, $r20;
+        int $i0, $i1;
+        androidx.test.services.events.platform.TestRunFinishedEvent $r10;
+        androidx.test.services.events.TestStatus $r11;
+        androidx.test.internal.events.client.TestPlatformEventService $r12;
+        androidx.test.services.events.TestRunInfo $r13;
+        androidx.test.services.events.TimeStamp $r14, $r24;
+        androidx.test.services.events.TestStatus$Status $r15, $r21, $r25, $r28, r29, $r30, r31, $r32;
+        java.util.List $r17;
+        java.util.Map $r22, $r26;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.Result;
+
+        $r4 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener>;
+
+        $r5 = virtualinvoke $r4.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r6 = (org.junit.runner.notification.RunListener) $r5;
+
+        virtualinvoke $r6.<org.junit.runner.notification.RunListener: void testRunFinished(org.junit.runner.Result)>(r1);
+
+        $z0 = virtualinvoke r1.<org.junit.runner.Result: boolean wasSuccessful()>();
+
+        if $z0 == 0 goto label01;
+
+        $r28 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status PASSED>;
+
+        goto label02;
+
+     label01:
+        $r28 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status FAILED>;
+
+     label02:
+        r29 = $r28;
+
+        $r7 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicBoolean processCrashed>;
+
+        $z1 = virtualinvoke $r7.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z1 == 0 goto label03;
+
+        $r30 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status FAILED>;
+
+        goto label04;
+
+     label03:
+        $r30 = r29;
+
+     label04:
+        r31 = $r30;
+
+        $r8 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set foundTestCases>;
+
+        $i0 = interfaceinvoke $r8.<java.util.Set: int size()>();
+
+        $r9 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set finishedTestCases>;
+
+        $i1 = interfaceinvoke $r9.<java.util.Set: int size()>();
+
+        if $i0 <= $i1 goto label11;
+
+        $r15 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status PASSED>;
+
+        $z2 = virtualinvoke r31.<androidx.test.services.events.TestStatus$Status: boolean equals(java.lang.Object)>($r15);
+
+        if $z2 == 0 goto label05;
+
+        $r32 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status ABORTED>;
+
+        goto label06;
+
+     label05:
+        $r32 = r31;
+
+     label06:
+        r31 = $r32;
+
+        $r16 = r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>;
+
+        $r17 = staticinvoke <androidx.test.internal.events.client.JUnitDescriptionParser: java.util.List getAllTestCaseDescriptions(org.junit.runner.Description)>($r16);
+
+        r2 = interfaceinvoke $r17.<java.util.List: java.util.Iterator iterator()>();
+
+     label07:
+        $z5 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z5 == 0 goto label11;
+
+        $r18 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.junit.runner.Description) $r18;
+
+        $r19 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set finishedTestCases>;
+
+        $z3 = interfaceinvoke $r19.<java.util.Set: boolean contains(java.lang.Object)>(r3);
+
+        if $z3 != 0 goto label10;
+
+        $r20 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set startedTestCases>;
+
+        $z4 = interfaceinvoke $r20.<java.util.Set: boolean contains(java.lang.Object)>(r3);
+
+        if $z4 == 0 goto label08;
+
+        $r26 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Map testCaseToStatus>;
+
+        $r25 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status ABORTED>;
+
+        interfaceinvoke $r26.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r3, $r25);
+
+        goto label09;
+
+     label08:
+        $r22 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Map testCaseToStatus>;
+
+        $r21 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status CANCELLED>;
+
+        interfaceinvoke $r22.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r3, $r21);
+
+     label09:
+        $r24 = staticinvoke <androidx.test.services.events.TimeStamp: androidx.test.services.events.TimeStamp now()>();
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: void testFinishedInternal(org.junit.runner.Description,androidx.test.services.events.TimeStamp)>(r3, $r24);
+
+     label10:
+        goto label07;
+
+     label11:
+        $r12 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.internal.events.client.TestPlatformEventService notificationService>;
+
+        $r10 = new androidx.test.services.events.platform.TestRunFinishedEvent;
+
+        $r13 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo memoizedTestRun>;
+
+        $r11 = new androidx.test.services.events.TestStatus;
+
+        specialinvoke $r11.<androidx.test.services.events.TestStatus: void <init>(androidx.test.services.events.TestStatus$Status)>(r31);
+
+        $r14 = staticinvoke <androidx.test.services.events.TimeStamp: androidx.test.services.events.TimeStamp now()>();
+
+        specialinvoke $r10.<androidx.test.services.events.platform.TestRunFinishedEvent: void <init>(androidx.test.services.events.TestRunInfo,androidx.test.services.events.TestStatus,androidx.test.services.events.TimeStamp)>($r13, $r11, $r14);
+
+        interfaceinvoke $r12.<androidx.test.internal.events.client.TestPlatformEventService: void send(androidx.test.services.events.platform.TestPlatformEvent)>($r10);
+
+        goto label12;
+
+     label12:
+        return;
+    }
+
+    public void testRunStarted(org.junit.runner.Description) throws java.lang.Exception
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.Description r1, r4, $r8, $r9;
+        java.util.List r2;
+        java.util.Iterator r3;
+        java.util.concurrent.atomic.AtomicReference $r5;
+        java.lang.Object $r6, $r15;
+        org.junit.runner.notification.RunListener $r7;
+        boolean $z0;
+        androidx.test.services.events.TestRunInfo $r10, $r13;
+        androidx.test.services.events.platform.TestRunStartedEvent $r11;
+        androidx.test.internal.events.client.TestPlatformEventService $r12;
+        androidx.test.services.events.TimeStamp $r14;
+        java.util.Set $r16;
+        androidx.test.services.events.TestStatus$Status $r17;
+        java.util.Map $r18;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: void initListener()>();
+
+        $r5 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener>;
+
+        $r6 = virtualinvoke $r5.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r7 = (org.junit.runner.notification.RunListener) $r6;
+
+        virtualinvoke $r7.<org.junit.runner.notification.RunListener: void testRunStarted(org.junit.runner.Description)>(r1);
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: void setRunDescription(org.junit.runner.Description)>(r1);
+
+        $r8 = r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>;
+
+        r2 = staticinvoke <androidx.test.internal.events.client.JUnitDescriptionParser: java.util.List getAllTestCaseDescriptions(org.junit.runner.Description)>($r8);
+
+        r3 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r15 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.junit.runner.Description) $r15;
+
+        $r16 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set foundTestCases>;
+
+        interfaceinvoke $r16.<java.util.Set: boolean add(java.lang.Object)>(r4);
+
+        $r18 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Map testCaseToStatus>;
+
+        $r17 = <androidx.test.services.events.TestStatus$Status: androidx.test.services.events.TestStatus$Status PASSED>;
+
+        interfaceinvoke $r18.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r4, $r17);
+
+        goto label1;
+
+     label2:
+        $r9 = r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>;
+
+        $r10 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo convertToTestRun(org.junit.runner.Description)>($r9);
+
+        r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo memoizedTestRun> = $r10;
+
+        $r12 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.internal.events.client.TestPlatformEventService notificationService>;
+
+        $r11 = new androidx.test.services.events.platform.TestRunStartedEvent;
+
+        $r13 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestRunInfo memoizedTestRun>;
+
+        $r14 = staticinvoke <androidx.test.services.events.TimeStamp: androidx.test.services.events.TimeStamp now()>();
+
+        specialinvoke $r11.<androidx.test.services.events.platform.TestRunStartedEvent: void <init>(androidx.test.services.events.TestRunInfo,androidx.test.services.events.TimeStamp)>($r13, $r14);
+
+        interfaceinvoke $r12.<androidx.test.internal.events.client.TestPlatformEventService: void send(androidx.test.services.events.platform.TestPlatformEvent)>($r11);
+
+        goto label3;
+
+     label3:
+        return;
+    }
+
+    public void testStarted(org.junit.runner.Description) throws java.lang.Exception
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        org.junit.runner.Description r1;
+        boolean $z0;
+        java.util.concurrent.atomic.AtomicReference $r2, $r6;
+        java.lang.Object $r3;
+        org.junit.runner.notification.RunListener $r4;
+        java.util.Set $r5;
+        androidx.test.services.events.platform.TestCaseStartedEvent $r7;
+        androidx.test.internal.events.client.TestPlatformEventService $r8;
+        androidx.test.services.events.TestCaseInfo $r9;
+        androidx.test.services.events.TimeStamp $r10;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        $z0 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: boolean isInitError(org.junit.runner.Description)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResultListener>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r4 = (org.junit.runner.notification.RunListener) $r3;
+
+        virtualinvoke $r4.<org.junit.runner.notification.RunListener: void testStarted(org.junit.runner.Description)>(r1);
+
+        $r5 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.Set startedTestCases>;
+
+        interfaceinvoke $r5.<java.util.Set: boolean add(java.lang.Object)>(r1);
+
+        $r6 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference currentTestCase>;
+
+        virtualinvoke $r6.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>(r1);
+
+        $r8 = r0.<androidx.test.internal.events.client.TestPlatformListener: androidx.test.internal.events.client.TestPlatformEventService notificationService>;
+
+        $r7 = new androidx.test.services.events.platform.TestCaseStartedEvent;
+
+        $r9 = staticinvoke <androidx.test.internal.events.client.TestPlatformListener: androidx.test.services.events.TestCaseInfo convertToTestCase(org.junit.runner.Description)>(r1);
+
+        $r10 = staticinvoke <androidx.test.services.events.TimeStamp: androidx.test.services.events.TimeStamp now()>();
+
+        specialinvoke $r7.<androidx.test.services.events.platform.TestCaseStartedEvent: void <init>(androidx.test.services.events.TestCaseInfo,androidx.test.services.events.TimeStamp)>($r9, $r10);
+
+        interfaceinvoke $r8.<androidx.test.internal.events.client.TestPlatformEventService: void send(androidx.test.services.events.platform.TestPlatformEvent)>($r7);
+
+        goto label2;
+
+     label2:
+        return;
+    }
+
+    private static boolean isInitError(org.junit.runner.Description)
+    {
+        org.junit.runner.Description r0;
+        java.lang.String $r1, $r2;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: org.junit.runner.Description;
+
+        $r1 = virtualinvoke r0.<org.junit.runner.Description: java.lang.String getMethodName()>();
+
+        if $r1 == null goto label1;
+
+        $r2 = virtualinvoke r0.<org.junit.runner.Description: java.lang.String getMethodName()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>("initializationError");
+
+        if $z0 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    public boolean reportProcessCrash(java.lang.Throwable)
+    {
+        androidx.test.internal.events.client.TestPlatformListener r0;
+        java.lang.Throwable r1, r2, $r11;
+        java.util.concurrent.atomic.AtomicBoolean $r3;
+        java.util.concurrent.atomic.AtomicReference $r4, $r8;
+        java.lang.Object $r5, $r9;
+        org.junit.runner.Description $r6, r12;
+        boolean $z0, z1;
+        org.junit.runner.notification.Failure $r7;
+        org.junit.runner.Result $r10;
+
+        r0 := @this: androidx.test.internal.events.client.TestPlatformListener;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $r3 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicBoolean processCrashed>;
+
+        virtualinvoke $r3.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(1);
+
+        z1 = 1;
+
+        $r4 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference currentTestCase>;
+
+        $r5 = virtualinvoke $r4.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        r12 = (org.junit.runner.Description) $r5;
+
+        $r6 = <org.junit.runner.Description: org.junit.runner.Description EMPTY>;
+
+        $z0 = virtualinvoke r12.<org.junit.runner.Description: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label1;
+
+        z1 = 0;
+
+        r12 = r0.<androidx.test.internal.events.client.TestPlatformListener: org.junit.runner.Description testRunDescription>;
+
+     label1:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("TestPlatformListener", "reporting crash as testfailure", r1);
+
+        $r7 = new org.junit.runner.notification.Failure;
+
+        specialinvoke $r7.<org.junit.runner.notification.Failure: void <init>(org.junit.runner.Description,java.lang.Throwable)>(r12, r1);
+
+        virtualinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: void testFailure(org.junit.runner.notification.Failure)>($r7);
+
+        if z1 == 0 goto label2;
+
+        virtualinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: void testFinished(org.junit.runner.Description)>(r12);
+
+     label2:
+        $r8 = r0.<androidx.test.internal.events.client.TestPlatformListener: java.util.concurrent.atomic.AtomicReference ongoingResult>;
+
+        $r9 = virtualinvoke $r8.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r10 = (org.junit.runner.Result) $r9;
+
+        virtualinvoke r0.<androidx.test.internal.events.client.TestPlatformListener: void testRunFinished(org.junit.runner.Result)>($r10);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r11 := @caughtexception;
+
+        r2 = $r11;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("TestPlatformListener", "An exception was encountered while reporting the process crash", r2);
+
+        return 0;
+
+     label5:
+        return 1;
+
+        catch java.lang.Exception from label1 to label3 with label4;
+    }
+

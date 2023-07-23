@@ -1,0 +1,396 @@
+androidx.core.view.DisplayCompat
+<androidx.core.view.DisplayCompat: int DISPLAY_SIZE_4K_WIDTH>
+<androidx.core.view.DisplayCompat: int DISPLAY_SIZE_4K_HEIGHT>
+    private void <init>()
+    {
+        androidx.core.view.DisplayCompat r0;
+
+        r0 := @this: androidx.core.view.DisplayCompat;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static androidx.core.view.DisplayCompat$ModeCompat getMode(android.content.Context, android.view.Display)
+    {
+        android.content.Context r0;
+        android.view.Display r1;
+        int $i0;
+        androidx.core.view.DisplayCompat$ModeCompat $r2, $r4;
+        android.graphics.Point $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.view.Display;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 23 goto label1;
+
+        $r4 = staticinvoke <androidx.core.view.DisplayCompat$Api23Impl: androidx.core.view.DisplayCompat$ModeCompat getMode(android.content.Context,android.view.Display)>(r0, r1);
+
+        return $r4;
+
+     label1:
+        $r2 = new androidx.core.view.DisplayCompat$ModeCompat;
+
+        $r3 = staticinvoke <androidx.core.view.DisplayCompat: android.graphics.Point getDisplaySize(android.content.Context,android.view.Display)>(r0, r1);
+
+        specialinvoke $r2.<androidx.core.view.DisplayCompat$ModeCompat: void <init>(android.graphics.Point)>($r3);
+
+        return $r2;
+    }
+
+    private static android.graphics.Point getDisplaySize(android.content.Context, android.view.Display)
+    {
+        android.content.Context r0;
+        android.view.Display r1;
+        android.graphics.Point $r2, r3, r4;
+        int $i0;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.view.Display;
+
+        r3 = staticinvoke <androidx.core.view.DisplayCompat: android.graphics.Point getCurrentDisplaySizeFromWorkarounds(android.content.Context,android.view.Display)>(r0, r1);
+
+        if r3 == null goto label1;
+
+        return r3;
+
+     label1:
+        $r2 = new android.graphics.Point;
+
+        specialinvoke $r2.<android.graphics.Point: void <init>()>();
+
+        r4 = $r2;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 17 goto label2;
+
+        staticinvoke <androidx.core.view.DisplayCompat$Api17Impl: void getRealSize(android.view.Display,android.graphics.Point)>(r1, r4);
+
+        goto label3;
+
+     label2:
+        virtualinvoke r1.<android.view.Display: void getSize(android.graphics.Point)>(r4);
+
+     label3:
+        return r4;
+    }
+
+    public static androidx.core.view.DisplayCompat$ModeCompat[] getSupportedModes(android.content.Context, android.view.Display)
+    {
+        android.content.Context r0;
+        android.view.Display r1;
+        int $i0;
+        androidx.core.view.DisplayCompat$ModeCompat[] $r2, $r4;
+        androidx.core.view.DisplayCompat$ModeCompat $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.view.Display;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 23 goto label1;
+
+        $r4 = staticinvoke <androidx.core.view.DisplayCompat$Api23Impl: androidx.core.view.DisplayCompat$ModeCompat[] getSupportedModes(android.content.Context,android.view.Display)>(r0, r1);
+
+        return $r4;
+
+     label1:
+        $r2 = newarray (androidx.core.view.DisplayCompat$ModeCompat)[1];
+
+        $r3 = staticinvoke <androidx.core.view.DisplayCompat: androidx.core.view.DisplayCompat$ModeCompat getMode(android.content.Context,android.view.Display)>(r0, r1);
+
+        $r2[0] = $r3;
+
+        return $r2;
+    }
+
+    private static android.graphics.Point parseDisplaySize(java.lang.String) throws java.lang.NumberFormatException
+    {
+        java.lang.String r0, $r2, $r3, $r4;
+        java.lang.String[] r1;
+        int i0, i1, $i2;
+        android.graphics.Point $r5;
+        java.lang.NumberFormatException $r6;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<java.lang.String: java.lang.String trim()>();
+
+        r1 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String,int)>("x", -1);
+
+        $i2 = lengthof r1;
+
+        if $i2 != 2 goto label1;
+
+        $r3 = r1[0];
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r3);
+
+        $r4 = r1[1];
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r4);
+
+        if i0 <= 0 goto label1;
+
+        if i1 <= 0 goto label1;
+
+        $r5 = new android.graphics.Point;
+
+        specialinvoke $r5.<android.graphics.Point: void <init>(int,int)>(i0, i1);
+
+        return $r5;
+
+     label1:
+        $r6 = new java.lang.NumberFormatException;
+
+        specialinvoke $r6.<java.lang.NumberFormatException: void <init>()>();
+
+        throw $r6;
+    }
+
+    private static java.lang.String getSystemProperty(java.lang.String)
+    {
+        java.lang.String r0, $r5;
+        java.lang.reflect.Method r1;
+        java.lang.Class[] $r2;
+        java.lang.Object[] $r3;
+        java.lang.Object $r4;
+        java.lang.Throwable $r6, r8;
+        java.lang.Class r7;
+
+        r0 := @parameter0: java.lang.String;
+
+     label1:
+        r7 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("android.os.SystemProperties");
+
+        $r2 = newarray (java.lang.Class)[1];
+
+        $r2[0] = class "Ljava/lang/String;";
+
+        r1 = virtualinvoke r7.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("get", $r2);
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r3[0] = r0;
+
+        $r4 = virtualinvoke r1.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>(r7, $r3);
+
+        $r5 = (java.lang.String) $r4;
+
+     label2:
+        return $r5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r8 = $r6;
+
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private static boolean isTv(android.content.Context)
+    {
+        android.content.Context r0;
+        android.app.UiModeManager r1;
+        java.lang.Object $r2;
+        int $i0;
+        boolean $z0;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("uimode");
+
+        r1 = (android.app.UiModeManager) $r2;
+
+        if r1 == null goto label1;
+
+        $i0 = virtualinvoke r1.<android.app.UiModeManager: int getCurrentModeType()>();
+
+        if $i0 != 4 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private static android.graphics.Point parsePhysicalDisplaySizeFromSystemProperties(java.lang.String, android.view.Display)
+    {
+        java.lang.String r0, r2;
+        android.view.Display r1;
+        java.lang.Throwable r3, $r5;
+        int $i0;
+        boolean $z0;
+        android.graphics.Point $r4;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: android.view.Display;
+
+        $i0 = virtualinvoke r1.<android.view.Display: int getDisplayId()>();
+
+        if $i0 == 0 goto label1;
+
+        return null;
+
+     label1:
+        r2 = staticinvoke <androidx.core.view.DisplayCompat: java.lang.String getSystemProperty(java.lang.String)>(r0);
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>(r2);
+
+        if $z0 != 0 goto label2;
+
+        if r2 != null goto label3;
+
+     label2:
+        return null;
+
+     label3:
+        $r4 = staticinvoke <androidx.core.view.DisplayCompat: android.graphics.Point parseDisplaySize(java.lang.String)>(r2);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        r3 = $r5;
+
+        return null;
+
+        catch java.lang.NumberFormatException from label3 to label4 with label5;
+    }
+
+    static android.graphics.Point getCurrentDisplaySizeFromWorkarounds(android.content.Context, android.view.Display)
+    {
+        android.content.Context r0;
+        android.view.Display r1;
+        android.graphics.Point r2, $r3, $r4;
+        int $i0;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.view.Display;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 28 goto label1;
+
+        $r3 = staticinvoke <androidx.core.view.DisplayCompat: android.graphics.Point parsePhysicalDisplaySizeFromSystemProperties(java.lang.String,android.view.Display)>("sys.display-size", r1);
+
+        goto label2;
+
+     label1:
+        $r3 = staticinvoke <androidx.core.view.DisplayCompat: android.graphics.Point parsePhysicalDisplaySizeFromSystemProperties(java.lang.String,android.view.Display)>("vendor.display-size", r1);
+
+     label2:
+        r2 = $r3;
+
+        if r2 == null goto label3;
+
+        return r2;
+
+     label3:
+        $z0 = staticinvoke <androidx.core.view.DisplayCompat: boolean isSonyBravia4kTv(android.content.Context)>(r0);
+
+        if $z0 == 0 goto label6;
+
+        $z1 = staticinvoke <androidx.core.view.DisplayCompat: boolean isCurrentModeTheLargestMode(android.view.Display)>(r1);
+
+        if $z1 == 0 goto label4;
+
+        $r4 = new android.graphics.Point;
+
+        specialinvoke $r4.<android.graphics.Point: void <init>(int,int)>(3840, 2160);
+
+        goto label5;
+
+     label4:
+        $r4 = null;
+
+     label5:
+        return $r4;
+
+     label6:
+        return null;
+    }
+
+    private static boolean isSonyBravia4kTv(android.content.Context)
+    {
+        android.content.Context r0;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        java.lang.String $r1, $r2, $r3;
+        android.content.pm.PackageManager $r4;
+
+        r0 := @parameter0: android.content.Context;
+
+        $z0 = staticinvoke <androidx.core.view.DisplayCompat: boolean isTv(android.content.Context)>(r0);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = "Sony";
+
+        $r1 = <android.os.Build: java.lang.String MANUFACTURER>;
+
+        $z1 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z1 == 0 goto label1;
+
+        $r3 = <android.os.Build: java.lang.String MODEL>;
+
+        $z2 = virtualinvoke $r3.<java.lang.String: boolean startsWith(java.lang.String)>("BRAVIA");
+
+        if $z2 == 0 goto label1;
+
+        $r4 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $z3 = virtualinvoke $r4.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("com.sony.dtv.hardware.panel.qfhd");
+
+        if $z3 == 0 goto label1;
+
+        $z4 = 1;
+
+        goto label2;
+
+     label1:
+        $z4 = 0;
+
+     label2:
+        return $z4;
+    }
+
+    static boolean isCurrentModeTheLargestMode(android.view.Display)
+    {
+        android.view.Display r0;
+        int $i0;
+        boolean $z0;
+
+        r0 := @parameter0: android.view.Display;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 23 goto label1;
+
+        $z0 = staticinvoke <androidx.core.view.DisplayCompat$Api23Impl: boolean isCurrentModeTheLargestMode(android.view.Display)>(r0);
+
+        return $z0;
+
+     label1:
+        return 1;
+    }
+

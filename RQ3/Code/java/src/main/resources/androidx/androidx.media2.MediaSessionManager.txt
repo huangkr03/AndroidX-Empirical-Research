@@ -1,0 +1,263 @@
+androidx.media2.MediaSessionManager
+<androidx.media2.MediaSessionManager: java.lang.String TAG>
+<androidx.media2.MediaSessionManager: boolean DEBUG>
+<androidx.media2.MediaSessionManager: java.lang.Object sLock>
+<androidx.media2.MediaSessionManager: androidx.media2.MediaSessionManager sInstance>
+<androidx.media2.MediaSessionManager: android.content.Context mContext>
+    public static androidx.media2.MediaSessionManager getInstance(android.content.Context)
+    {
+        android.content.Context r0, $r7;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r9;
+        androidx.media2.MediaSessionManager $r4, $r5, $r6;
+        java.lang.IllegalArgumentException $r8;
+
+        r0 := @parameter0: android.content.Context;
+
+        if r0 != null goto label1;
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("context cannot be null");
+
+        throw $r8;
+
+     label1:
+        $r3 = <androidx.media2.MediaSessionManager: java.lang.Object sLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label2:
+        $r4 = <androidx.media2.MediaSessionManager: androidx.media2.MediaSessionManager sInstance>;
+
+        if $r4 != null goto label3;
+
+        $r6 = new androidx.media2.MediaSessionManager;
+
+        $r7 = virtualinvoke r0.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        specialinvoke $r6.<androidx.media2.MediaSessionManager: void <init>(android.content.Context)>($r7);
+
+        <androidx.media2.MediaSessionManager: androidx.media2.MediaSessionManager sInstance> = $r6;
+
+     label3:
+        $r5 = <androidx.media2.MediaSessionManager: androidx.media2.MediaSessionManager sInstance>;
+
+        exitmonitor r1;
+
+     label4:
+        return $r5;
+
+     label5:
+        $r9 := @caughtexception;
+
+        r2 = $r9;
+
+        exitmonitor r1;
+
+     label6:
+        throw r2;
+
+        catch java.lang.Throwable from label2 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    private void <init>(android.content.Context)
+    {
+        androidx.media2.MediaSessionManager r0;
+        android.content.Context r1;
+
+        r0 := @this: androidx.media2.MediaSessionManager;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media2.MediaSessionManager: android.content.Context mContext> = r1;
+
+        return;
+    }
+
+    public java.util.Set getSessionServiceTokens()
+    {
+        androidx.media2.MediaSessionManager r0;
+        androidx.collection.ArraySet r1, $r9;
+        android.content.pm.PackageManager r2;
+        java.util.ArrayList r3, $r11;
+        java.util.List r4, r5, r6;
+        android.content.pm.ServiceInfo r7, $r26;
+        androidx.media2.SessionToken r8, $r27, r35;
+        android.content.Context $r10, $r31;
+        android.content.Intent $r12, $r13, $r14;
+        boolean $z0, $z1, $z6;
+        java.lang.StringBuilder $r15, $r16, $r17, $r18, $r21, $r22, $r23;
+        int $i0;
+        java.lang.String $r19, $r24, $r29, $r30;
+        java.lang.Object $r20, $r25;
+        android.content.ComponentName $r28;
+        java.util.Iterator r32, r34;
+        android.content.pm.ResolveInfo r33;
+
+        r0 := @this: androidx.media2.MediaSessionManager;
+
+        $r9 = new androidx.collection.ArraySet;
+
+        specialinvoke $r9.<androidx.collection.ArraySet: void <init>()>();
+
+        r1 = $r9;
+
+        $r10 = r0.<androidx.media2.MediaSessionManager: android.content.Context mContext>;
+
+        r2 = virtualinvoke $r10.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r11 = new java.util.ArrayList;
+
+        specialinvoke $r11.<java.util.ArrayList: void <init>()>();
+
+        r3 = $r11;
+
+        $r12 = new android.content.Intent;
+
+        specialinvoke $r12.<android.content.Intent: void <init>(java.lang.String)>("androidx.media2.MediaLibraryService");
+
+        r4 = virtualinvoke r2.<android.content.pm.PackageManager: java.util.List queryIntentServices(android.content.Intent,int)>($r12, 128);
+
+        if r4 == null goto label1;
+
+        interfaceinvoke r3.<java.util.List: boolean addAll(java.util.Collection)>(r4);
+
+     label1:
+        $r13 = new android.content.Intent;
+
+        specialinvoke $r13.<android.content.Intent: void <init>(java.lang.String)>("androidx.media2.MediaSessionService");
+
+        r5 = virtualinvoke r2.<android.content.pm.PackageManager: java.util.List queryIntentServices(android.content.Intent,int)>($r13, 128);
+
+        if r5 == null goto label2;
+
+        interfaceinvoke r3.<java.util.List: boolean addAll(java.util.Collection)>(r5);
+
+     label2:
+        $r14 = new android.content.Intent;
+
+        specialinvoke $r14.<android.content.Intent: void <init>(java.lang.String)>("android.media.browse.MediaBrowserService");
+
+        r6 = virtualinvoke r2.<android.content.pm.PackageManager: java.util.List queryIntentServices(android.content.Intent,int)>($r14, 128);
+
+        if r6 == null goto label3;
+
+        interfaceinvoke r3.<java.util.List: boolean addAll(java.util.Collection)>(r6);
+
+     label3:
+        r32 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label4:
+        $z6 = interfaceinvoke r32.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label6;
+
+        $r25 = interfaceinvoke r32.<java.util.Iterator: java.lang.Object next()>();
+
+        r33 = (android.content.pm.ResolveInfo) $r25;
+
+        if r33 == null goto label4;
+
+        $r26 = r33.<android.content.pm.ResolveInfo: android.content.pm.ServiceInfo serviceInfo>;
+
+        if $r26 != null goto label5;
+
+        goto label4;
+
+     label5:
+        r7 = r33.<android.content.pm.ResolveInfo: android.content.pm.ServiceInfo serviceInfo>;
+
+        $r27 = new androidx.media2.SessionToken;
+
+        $r31 = r0.<androidx.media2.MediaSessionManager: android.content.Context mContext>;
+
+        $r28 = new android.content.ComponentName;
+
+        $r30 = r7.<android.content.pm.ServiceInfo: java.lang.String packageName>;
+
+        $r29 = r7.<android.content.pm.ServiceInfo: java.lang.String name>;
+
+        specialinvoke $r28.<android.content.ComponentName: void <init>(java.lang.String,java.lang.String)>($r30, $r29);
+
+        specialinvoke $r27.<androidx.media2.SessionToken: void <init>(android.content.Context,android.content.ComponentName)>($r31, $r28);
+
+        r8 = $r27;
+
+        virtualinvoke r1.<androidx.collection.ArraySet: boolean add(java.lang.Object)>(r8);
+
+        goto label4;
+
+     label6:
+        $z0 = <androidx.media2.MediaSessionManager: boolean DEBUG>;
+
+        if $z0 == 0 goto label8;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Found ");
+
+        $i0 = virtualinvoke r1.<androidx.collection.ArraySet: int size()>();
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" session services");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MediaSessionManager", $r19);
+
+        r34 = virtualinvoke r1.<androidx.collection.ArraySet: java.util.Iterator iterator()>();
+
+     label7:
+        $z1 = interfaceinvoke r34.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label8;
+
+        $r20 = interfaceinvoke r34.<java.util.Iterator: java.lang.Object next()>();
+
+        r35 = (androidx.media2.SessionToken) $r20;
+
+        $r21 = new java.lang.StringBuilder;
+
+        specialinvoke $r21.<java.lang.StringBuilder: void <init>()>();
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("   ");
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r35);
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MediaSessionManager", $r24);
+
+        goto label7;
+
+     label8:
+        return r1;
+    }
+
+    static void <clinit>()
+    {
+        boolean $z0;
+        java.lang.Object $r0;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("MediaSessionManager", 3);
+
+        <androidx.media2.MediaSessionManager: boolean DEBUG> = $z0;
+
+        $r0 = new java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        <androidx.media2.MediaSessionManager: java.lang.Object sLock> = $r0;
+
+        return;
+    }
+

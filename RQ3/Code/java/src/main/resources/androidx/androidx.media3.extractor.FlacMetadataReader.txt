@@ -1,0 +1,503 @@
+androidx.media3.extractor.FlacMetadataReader
+<androidx.media3.extractor.FlacMetadataReader: int STREAM_MARKER>
+<androidx.media3.extractor.FlacMetadataReader: int SYNC_CODE>
+<androidx.media3.extractor.FlacMetadataReader: int SEEK_POINT_SIZE>
+    public static androidx.media3.common.Metadata peekId3Metadata(androidx.media3.extractor.ExtractorInput, boolean) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        boolean z0;
+        androidx.media3.extractor.metadata.id3.Id3Decoder$FramePredicate r1, $r4;
+        androidx.media3.common.Metadata r2, $r5;
+        androidx.media3.extractor.Id3Peeker $r3;
+        int $i0;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        z0 := @parameter1: boolean;
+
+        if z0 == 0 goto label1;
+
+        $r4 = null;
+
+        goto label2;
+
+     label1:
+        $r4 = <androidx.media3.extractor.metadata.id3.Id3Decoder: androidx.media3.extractor.metadata.id3.Id3Decoder$FramePredicate NO_FRAMES_PREDICATE>;
+
+     label2:
+        r1 = $r4;
+
+        $r3 = new androidx.media3.extractor.Id3Peeker;
+
+        specialinvoke $r3.<androidx.media3.extractor.Id3Peeker: void <init>()>();
+
+        r2 = virtualinvoke $r3.<androidx.media3.extractor.Id3Peeker: androidx.media3.common.Metadata peekId3Data(androidx.media3.extractor.ExtractorInput,androidx.media3.extractor.metadata.id3.Id3Decoder$FramePredicate)>(r0, r1);
+
+        if r2 == null goto label3;
+
+        $i0 = virtualinvoke r2.<androidx.media3.common.Metadata: int length()>();
+
+        if $i0 != 0 goto label4;
+
+     label3:
+        $r5 = null;
+
+        goto label5;
+
+     label4:
+        $r5 = r2;
+
+     label5:
+        return $r5;
+    }
+
+    public static boolean checkAndPeekStreamMarker(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.common.util.ParsableByteArray r1, $r2;
+        byte[] $r3;
+        long $l0;
+        byte $b1;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r2 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(4);
+
+        r1 = $r2;
+
+        $r3 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r3, 0, 4);
+
+        $l0 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: long readUnsignedInt()>();
+
+        $b1 = $l0 cmp 1716281667L;
+
+        if $b1 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public static androidx.media3.common.Metadata readId3Metadata(androidx.media3.extractor.ExtractorInput, boolean) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        boolean z0;
+        long l0, $l2, $l3;
+        androidx.media3.common.Metadata r1;
+        int i1;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        z0 := @parameter1: boolean;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        l0 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getPeekPosition()>();
+
+        r1 = staticinvoke <androidx.media3.extractor.FlacMetadataReader: androidx.media3.common.Metadata peekId3Metadata(androidx.media3.extractor.ExtractorInput,boolean)>(r0, z0);
+
+        $l2 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getPeekPosition()>();
+
+        $l3 = $l2 - l0;
+
+        i1 = (int) $l3;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>(i1);
+
+        return r1;
+    }
+
+    public static void readStreamMarker(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.common.util.ParsableByteArray r1, r5;
+        byte[] $r3;
+        long $l0;
+        byte $b1;
+        androidx.media3.common.ParserException $r4;
+        java.lang.Throwable r6;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r5 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke r5.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(4);
+
+        r1 = r5;
+
+        $r3 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r3, 0, 4);
+
+        $l0 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: long readUnsignedInt()>();
+
+        $b1 = $l0 cmp 1716281667L;
+
+        if $b1 == 0 goto label1;
+
+        $r4 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>("Failed to read FLAC stream marker.", null);
+
+        r6 = (java.lang.Throwable) $r4;
+
+        throw r6;
+
+     label1:
+        return;
+    }
+
+    public static boolean readMetadataBlock(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder r1;
+        androidx.media3.common.util.ParsableBitArray r2, $r5;
+        boolean z0;
+        int i0, i1, $i2;
+        androidx.media3.extractor.FlacStreamMetadata r3, $r11, $r12, $r13, $r15;
+        androidx.media3.extractor.metadata.flac.PictureFrame r4;
+        byte[] $r6, $r7, $r9;
+        androidx.media3.common.util.ParsableByteArray $r8, r18;
+        com.google.common.collect.ImmutableList $r10;
+        java.lang.IllegalArgumentException $r14;
+        androidx.media3.extractor.FlacStreamMetadata$SeekTable r16;
+        java.util.List r17;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r1 := @parameter1: androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $r5 = new androidx.media3.common.util.ParsableBitArray;
+
+        $r6 = newarray (byte)[4];
+
+        specialinvoke $r5.<androidx.media3.common.util.ParsableBitArray: void <init>(byte[])>($r6);
+
+        r2 = $r5;
+
+        $r7 = r2.<androidx.media3.common.util.ParsableBitArray: byte[] data>;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r7, 0, 4);
+
+        z0 = virtualinvoke r2.<androidx.media3.common.util.ParsableBitArray: boolean readBit()>();
+
+        i0 = virtualinvoke r2.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(7);
+
+        $i2 = virtualinvoke r2.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(24);
+
+        i1 = 4 + $i2;
+
+        if i0 != 0 goto label1;
+
+        $r15 = staticinvoke <androidx.media3.extractor.FlacMetadataReader: androidx.media3.extractor.FlacStreamMetadata readStreamInfoBlock(androidx.media3.extractor.ExtractorInput)>(r0);
+
+        r1.<androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder: androidx.media3.extractor.FlacStreamMetadata flacStreamMetadata> = $r15;
+
+        goto label6;
+
+     label1:
+        r3 = r1.<androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder: androidx.media3.extractor.FlacStreamMetadata flacStreamMetadata>;
+
+        if r3 != null goto label2;
+
+        $r14 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r14.<java.lang.IllegalArgumentException: void <init>()>();
+
+        throw $r14;
+
+     label2:
+        if i0 != 3 goto label3;
+
+        r16 = staticinvoke <androidx.media3.extractor.FlacMetadataReader: androidx.media3.extractor.FlacStreamMetadata$SeekTable readSeekTableMetadataBlock(androidx.media3.extractor.ExtractorInput,int)>(r0, i1);
+
+        $r13 = virtualinvoke r3.<androidx.media3.extractor.FlacStreamMetadata: androidx.media3.extractor.FlacStreamMetadata copyWithSeekTable(androidx.media3.extractor.FlacStreamMetadata$SeekTable)>(r16);
+
+        r1.<androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder: androidx.media3.extractor.FlacStreamMetadata flacStreamMetadata> = $r13;
+
+        goto label6;
+
+     label3:
+        if i0 != 4 goto label4;
+
+        r17 = staticinvoke <androidx.media3.extractor.FlacMetadataReader: java.util.List readVorbisCommentMetadataBlock(androidx.media3.extractor.ExtractorInput,int)>(r0, i1);
+
+        $r12 = virtualinvoke r3.<androidx.media3.extractor.FlacStreamMetadata: androidx.media3.extractor.FlacStreamMetadata copyWithVorbisComments(java.util.List)>(r17);
+
+        r1.<androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder: androidx.media3.extractor.FlacStreamMetadata flacStreamMetadata> = $r12;
+
+        goto label6;
+
+     label4:
+        if i0 != 6 goto label5;
+
+        $r8 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r8.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(i1);
+
+        r18 = $r8;
+
+        $r9 = virtualinvoke r18.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r9, 0, i1);
+
+        virtualinvoke r18.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        r4 = staticinvoke <androidx.media3.extractor.metadata.flac.PictureFrame: androidx.media3.extractor.metadata.flac.PictureFrame fromPictureBlock(androidx.media3.common.util.ParsableByteArray)>(r18);
+
+        $r10 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object)>(r4);
+
+        $r11 = virtualinvoke r3.<androidx.media3.extractor.FlacStreamMetadata: androidx.media3.extractor.FlacStreamMetadata copyWithPictureFrames(java.util.List)>($r10);
+
+        r1.<androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder: androidx.media3.extractor.FlacStreamMetadata flacStreamMetadata> = $r11;
+
+        goto label6;
+
+     label5:
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>(i1);
+
+     label6:
+        return z0;
+    }
+
+    public static androidx.media3.extractor.FlacStreamMetadata$SeekTable readSeekTableMetadataBlock(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0, i2, $i4, $i7, $i10, i13;
+        long l1, l3, $l5, $l6, $l8, $l9, $l12;
+        androidx.media3.extractor.FlacStreamMetadata$SeekTable $r1;
+        byte $b11;
+        long[] r2, r3;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        i0 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedInt24()>();
+
+        $i4 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        $l6 = (long) $i4;
+
+        $l5 = (long) i0;
+
+        l1 = $l6 + $l5;
+
+        i2 = i0 / 18;
+
+        r2 = newarray (long)[i2];
+
+        r3 = newarray (long)[i2];
+
+        i13 = 0;
+
+     label1:
+        if i13 >= i2 goto label3;
+
+        l3 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: long readLong()>();
+
+        $b11 = l3 cmp -1L;
+
+        if $b11 != 0 goto label2;
+
+        r2 = staticinvoke <java.util.Arrays: long[] copyOf(long[],int)>(r2, i13);
+
+        r3 = staticinvoke <java.util.Arrays: long[] copyOf(long[],int)>(r3, i13);
+
+        goto label3;
+
+     label2:
+        r2[i13] = l3;
+
+        $l12 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: long readLong()>();
+
+        r3[i13] = $l12;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(2);
+
+        i13 = i13 + 1;
+
+        goto label1;
+
+     label3:
+        $i7 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        $l8 = (long) $i7;
+
+        $l9 = l1 - $l8;
+
+        $i10 = (int) $l9;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>($i10);
+
+        $r1 = new androidx.media3.extractor.FlacStreamMetadata$SeekTable;
+
+        specialinvoke $r1.<androidx.media3.extractor.FlacStreamMetadata$SeekTable: void <init>(long[],long[])>(r2, r3);
+
+        return $r1;
+    }
+
+    public static int getFrameStartMarker(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.common.util.ParsableByteArray r1, r5;
+        int i0, i1;
+        byte[] $r3;
+        androidx.media3.common.ParserException $r4;
+        java.lang.Throwable r6;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        r5 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke r5.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(2);
+
+        r1 = r5;
+
+        $r3 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r3, 0, 2);
+
+        i0 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        i1 = i0 >> 2;
+
+        if i1 == 16382 goto label1;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $r4 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>("First frame does not start with sync code.", null);
+
+        r6 = (java.lang.Throwable) $r4;
+
+        throw r6;
+
+     label1:
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        return i0;
+    }
+
+    private static androidx.media3.extractor.FlacStreamMetadata readStreamInfoBlock(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        byte[] r1;
+        androidx.media3.extractor.FlacStreamMetadata $r2;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r1 = newarray (byte)[38];
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>(r1, 0, 38);
+
+        $r2 = new androidx.media3.extractor.FlacStreamMetadata;
+
+        specialinvoke $r2.<androidx.media3.extractor.FlacStreamMetadata: void <init>(byte[],int)>(r1, 4);
+
+        return $r2;
+    }
+
+    private static androidx.media3.extractor.FlacStreamMetadata$SeekTable readSeekTableMetadataBlock(androidx.media3.extractor.ExtractorInput, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        int i0;
+        androidx.media3.common.util.ParsableByteArray r1, $r2;
+        byte[] $r3;
+        androidx.media3.extractor.FlacStreamMetadata$SeekTable $r4;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        i0 := @parameter1: int;
+
+        $r2 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(i0);
+
+        r1 = $r2;
+
+        $r3 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r3, 0, i0);
+
+        $r4 = staticinvoke <androidx.media3.extractor.FlacMetadataReader: androidx.media3.extractor.FlacStreamMetadata$SeekTable readSeekTableMetadataBlock(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        return $r4;
+    }
+
+    private static java.util.List readVorbisCommentMetadataBlock(androidx.media3.extractor.ExtractorInput, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        int i0;
+        androidx.media3.common.util.ParsableByteArray r1, $r3;
+        androidx.media3.extractor.VorbisUtil$CommentHeader r2;
+        byte[] $r4;
+        java.lang.String[] $r5;
+        java.util.List $r6;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        i0 := @parameter1: int;
+
+        $r3 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r3.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(i0);
+
+        r1 = $r3;
+
+        $r4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r4, 0, i0);
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        r2 = staticinvoke <androidx.media3.extractor.VorbisUtil: androidx.media3.extractor.VorbisUtil$CommentHeader readVorbisCommentHeader(androidx.media3.common.util.ParsableByteArray,boolean,boolean)>(r1, 0, 0);
+
+        $r5 = r2.<androidx.media3.extractor.VorbisUtil$CommentHeader: java.lang.String[] comments>;
+
+        $r6 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r5);
+
+        return $r6;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.extractor.FlacMetadataReader r0;
+
+        r0 := @this: androidx.media3.extractor.FlacMetadataReader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder
+<androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder: androidx.media3.extractor.FlacStreamMetadata flacStreamMetadata>
+    public void <init>(androidx.media3.extractor.FlacStreamMetadata)
+    {
+        androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder r0;
+        androidx.media3.extractor.FlacStreamMetadata r1;
+
+        r0 := @this: androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder;
+
+        r1 := @parameter0: androidx.media3.extractor.FlacStreamMetadata;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.FlacMetadataReader$FlacStreamMetadataHolder: androidx.media3.extractor.FlacStreamMetadata flacStreamMetadata> = r1;
+
+        return;
+    }
+

@@ -1,0 +1,652 @@
+androidx.media3.common.util.NetworkTypeObserver
+<androidx.media3.common.util.NetworkTypeObserver: androidx.media3.common.util.NetworkTypeObserver staticInstance>
+<androidx.media3.common.util.NetworkTypeObserver: android.os.Handler mainHandler>
+<androidx.media3.common.util.NetworkTypeObserver: java.util.concurrent.CopyOnWriteArrayList listeners>
+<androidx.media3.common.util.NetworkTypeObserver: java.lang.Object networkTypeLock>
+<androidx.media3.common.util.NetworkTypeObserver: int networkType>
+    public static synchronized androidx.media3.common.util.NetworkTypeObserver getInstance(android.content.Context)
+    {
+        android.content.Context r0;
+        androidx.media3.common.util.NetworkTypeObserver $r1, $r2, $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r1 = <androidx.media3.common.util.NetworkTypeObserver: androidx.media3.common.util.NetworkTypeObserver staticInstance>;
+
+        if $r1 != null goto label1;
+
+        $r3 = new androidx.media3.common.util.NetworkTypeObserver;
+
+        specialinvoke $r3.<androidx.media3.common.util.NetworkTypeObserver: void <init>(android.content.Context)>(r0);
+
+        <androidx.media3.common.util.NetworkTypeObserver: androidx.media3.common.util.NetworkTypeObserver staticInstance> = $r3;
+
+     label1:
+        $r2 = <androidx.media3.common.util.NetworkTypeObserver: androidx.media3.common.util.NetworkTypeObserver staticInstance>;
+
+        return $r2;
+    }
+
+    public static synchronized void resetForTests()
+    {
+        <androidx.media3.common.util.NetworkTypeObserver: androidx.media3.common.util.NetworkTypeObserver staticInstance> = null;
+
+        return;
+    }
+
+    private void <init>(android.content.Context)
+    {
+        androidx.media3.common.util.NetworkTypeObserver r0;
+        android.content.Context r1;
+        android.content.IntentFilter r2, $r7;
+        android.os.Handler $r3;
+        android.os.Looper $r4;
+        java.util.concurrent.CopyOnWriteArrayList $r5;
+        java.lang.Object $r6;
+        androidx.media3.common.util.NetworkTypeObserver$Receiver $r8;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new android.os.Handler;
+
+        $r4 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r3.<android.os.Handler: void <init>(android.os.Looper)>($r4);
+
+        r0.<androidx.media3.common.util.NetworkTypeObserver: android.os.Handler mainHandler> = $r3;
+
+        $r5 = new java.util.concurrent.CopyOnWriteArrayList;
+
+        specialinvoke $r5.<java.util.concurrent.CopyOnWriteArrayList: void <init>()>();
+
+        r0.<androidx.media3.common.util.NetworkTypeObserver: java.util.concurrent.CopyOnWriteArrayList listeners> = $r5;
+
+        $r6 = new java.lang.Object;
+
+        specialinvoke $r6.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.common.util.NetworkTypeObserver: java.lang.Object networkTypeLock> = $r6;
+
+        r0.<androidx.media3.common.util.NetworkTypeObserver: int networkType> = 0;
+
+        $r7 = new android.content.IntentFilter;
+
+        specialinvoke $r7.<android.content.IntentFilter: void <init>()>();
+
+        r2 = $r7;
+
+        virtualinvoke r2.<android.content.IntentFilter: void addAction(java.lang.String)>("android.net.conn.CONNECTIVITY_CHANGE");
+
+        $r8 = new androidx.media3.common.util.NetworkTypeObserver$Receiver;
+
+        specialinvoke $r8.<androidx.media3.common.util.NetworkTypeObserver$Receiver: void <init>(androidx.media3.common.util.NetworkTypeObserver,androidx.media3.common.util.NetworkTypeObserver$1)>(r0, null);
+
+        virtualinvoke r1.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>($r8, r2);
+
+        return;
+    }
+
+    public void register(androidx.media3.common.util.NetworkTypeObserver$Listener)
+    {
+        androidx.media3.common.util.NetworkTypeObserver r0;
+        androidx.media3.common.util.NetworkTypeObserver$Listener r1;
+        java.lang.ref.WeakReference $r2;
+        java.util.concurrent.CopyOnWriteArrayList $r3;
+        android.os.Handler $r4;
+        java.lang.Runnable $r5;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver;
+
+        r1 := @parameter0: androidx.media3.common.util.NetworkTypeObserver$Listener;
+
+        specialinvoke r0.<androidx.media3.common.util.NetworkTypeObserver: void removeClearedReferences()>();
+
+        $r3 = r0.<androidx.media3.common.util.NetworkTypeObserver: java.util.concurrent.CopyOnWriteArrayList listeners>;
+
+        $r2 = new java.lang.ref.WeakReference;
+
+        specialinvoke $r2.<java.lang.ref.WeakReference: void <init>(java.lang.Object)>(r1);
+
+        virtualinvoke $r3.<java.util.concurrent.CopyOnWriteArrayList: boolean add(java.lang.Object)>($r2);
+
+        $r4 = r0.<androidx.media3.common.util.NetworkTypeObserver: android.os.Handler mainHandler>;
+
+        $r5 = dynamicinvoke "run" <java.lang.Runnable (androidx.media3.common.util.NetworkTypeObserver,androidx.media3.common.util.NetworkTypeObserver$Listener)>(r0, r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.media3.common.util.NetworkTypeObserver: void lambda$register$0(androidx.media3.common.util.NetworkTypeObserver$Listener)>, methodtype: void __METHODTYPE__());
+
+        virtualinvoke $r4.<android.os.Handler: boolean post(java.lang.Runnable)>($r5);
+
+        return;
+    }
+
+    public int getNetworkType()
+    {
+        androidx.media3.common.util.NetworkTypeObserver r0;
+        java.lang.Object r1, $r2;
+        int $i0;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver;
+
+        $r2 = r0.<androidx.media3.common.util.NetworkTypeObserver: java.lang.Object networkTypeLock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        $i0 = r0.<androidx.media3.common.util.NetworkTypeObserver: int networkType>;
+
+        exitmonitor r1;
+
+        return $i0;
+    }
+
+    private void removeClearedReferences()
+    {
+        androidx.media3.common.util.NetworkTypeObserver r0;
+        java.util.Iterator r1;
+        java.lang.ref.WeakReference r2;
+        java.util.concurrent.CopyOnWriteArrayList $r3, $r6;
+        boolean $z0;
+        java.lang.Object $r4, $r5;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver;
+
+        $r3 = r0.<androidx.media3.common.util.NetworkTypeObserver: java.util.concurrent.CopyOnWriteArrayList listeners>;
+
+        r1 = virtualinvoke $r3.<java.util.concurrent.CopyOnWriteArrayList: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r4 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (java.lang.ref.WeakReference) $r4;
+
+        $r5 = virtualinvoke r2.<java.lang.ref.WeakReference: java.lang.Object get()>();
+
+        if $r5 != null goto label2;
+
+        $r6 = r0.<androidx.media3.common.util.NetworkTypeObserver: java.util.concurrent.CopyOnWriteArrayList listeners>;
+
+        virtualinvoke $r6.<java.util.concurrent.CopyOnWriteArrayList: boolean remove(java.lang.Object)>(r2);
+
+     label2:
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    private void updateNetworkType(int)
+    {
+        androidx.media3.common.util.NetworkTypeObserver r0;
+        int i0, $i1;
+        java.lang.ref.WeakReference r1;
+        androidx.media3.common.util.NetworkTypeObserver$Listener r2;
+        java.lang.Object $r3, $r5, $r6, r8;
+        java.util.concurrent.CopyOnWriteArrayList $r4, $r7;
+        boolean $z0;
+        java.util.Iterator r9;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver;
+
+        i0 := @parameter0: int;
+
+        $r3 = r0.<androidx.media3.common.util.NetworkTypeObserver: java.lang.Object networkTypeLock>;
+
+        r8 = $r3;
+
+        entermonitor $r3;
+
+        $i1 = r0.<androidx.media3.common.util.NetworkTypeObserver: int networkType>;
+
+        if $i1 != i0 goto label1;
+
+        exitmonitor r8;
+
+        return;
+
+     label1:
+        r0.<androidx.media3.common.util.NetworkTypeObserver: int networkType> = i0;
+
+        exitmonitor r8;
+
+        goto label2;
+
+     label2:
+        $r4 = r0.<androidx.media3.common.util.NetworkTypeObserver: java.util.concurrent.CopyOnWriteArrayList listeners>;
+
+        r9 = virtualinvoke $r4.<java.util.concurrent.CopyOnWriteArrayList: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke r9.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r5 = interfaceinvoke r9.<java.util.Iterator: java.lang.Object next()>();
+
+        r1 = (java.lang.ref.WeakReference) $r5;
+
+        $r6 = virtualinvoke r1.<java.lang.ref.WeakReference: java.lang.Object get()>();
+
+        r2 = (androidx.media3.common.util.NetworkTypeObserver$Listener) $r6;
+
+        if r2 == null goto label4;
+
+        interfaceinvoke r2.<androidx.media3.common.util.NetworkTypeObserver$Listener: void onNetworkTypeChanged(int)>(i0);
+
+        goto label5;
+
+     label4:
+        $r7 = r0.<androidx.media3.common.util.NetworkTypeObserver: java.util.concurrent.CopyOnWriteArrayList listeners>;
+
+        virtualinvoke $r7.<java.util.concurrent.CopyOnWriteArrayList: boolean remove(java.lang.Object)>(r1);
+
+     label5:
+        goto label3;
+
+     label6:
+        return;
+    }
+
+    private static int getNetworkTypeFromConnectivityManager(android.content.Context)
+    {
+        android.content.Context r0;
+        android.net.NetworkInfo r1;
+        android.net.ConnectivityManager r2;
+        java.lang.Throwable r3, $r5;
+        java.lang.Object $r4;
+        boolean $z0;
+        int $i0, $i1;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r4 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        r2 = (android.net.ConnectivityManager) $r4;
+
+        if r2 != null goto label01;
+
+        return 0;
+
+     label01:
+        r1 = virtualinvoke r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+     label02:
+        goto label04;
+
+     label03:
+        $r5 := @caughtexception;
+
+        r3 = $r5;
+
+        return 0;
+
+     label04:
+        if r1 == null goto label05;
+
+        $z0 = virtualinvoke r1.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 != 0 goto label06;
+
+     label05:
+        return 1;
+
+     label06:
+        $i0 = virtualinvoke r1.<android.net.NetworkInfo: int getType()>();
+
+        tableswitch($i0)
+        {
+            case 0: goto label09;
+            case 1: goto label07;
+            case 2: goto label11;
+            case 3: goto label11;
+            case 4: goto label09;
+            case 5: goto label09;
+            case 6: goto label08;
+            case 7: goto label11;
+            case 8: goto label11;
+            case 9: goto label10;
+            default: goto label11;
+        };
+
+     label07:
+        return 2;
+
+     label08:
+        return 5;
+
+     label09:
+        $i1 = staticinvoke <androidx.media3.common.util.NetworkTypeObserver: int getMobileNetworkType(android.net.NetworkInfo)>(r1);
+
+        return $i1;
+
+     label10:
+        return 7;
+
+     label11:
+        return 8;
+
+        catch java.lang.SecurityException from label01 to label02 with label03;
+    }
+
+    private static int getMobileNetworkType(android.net.NetworkInfo)
+    {
+        android.net.NetworkInfo r0;
+        int $i0, $i1;
+        byte $b2;
+
+        r0 := @parameter0: android.net.NetworkInfo;
+
+        $i0 = virtualinvoke r0.<android.net.NetworkInfo: int getSubtype()>();
+
+        tableswitch($i0)
+        {
+            case 0: goto label8;
+            case 1: goto label1;
+            case 2: goto label1;
+            case 3: goto label2;
+            case 4: goto label2;
+            case 5: goto label2;
+            case 6: goto label2;
+            case 7: goto label2;
+            case 8: goto label2;
+            case 9: goto label2;
+            case 10: goto label2;
+            case 11: goto label2;
+            case 12: goto label2;
+            case 13: goto label3;
+            case 14: goto label2;
+            case 15: goto label2;
+            case 16: goto label8;
+            case 17: goto label2;
+            case 18: goto label7;
+            case 19: goto label8;
+            case 20: goto label4;
+            default: goto label8;
+        };
+
+     label1:
+        return 3;
+
+     label2:
+        return 4;
+
+     label3:
+        return 5;
+
+     label4:
+        $i1 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i1 < 29 goto label5;
+
+        $b2 = 9;
+
+        goto label6;
+
+     label5:
+        $b2 = 0;
+
+     label6:
+        return $b2;
+
+     label7:
+        return 2;
+
+     label8:
+        return 6;
+    }
+
+    private void lambda$register$0(androidx.media3.common.util.NetworkTypeObserver$Listener)
+    {
+        androidx.media3.common.util.NetworkTypeObserver r0;
+        androidx.media3.common.util.NetworkTypeObserver$Listener r1;
+        int $i0;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver;
+
+        r1 := @parameter0: androidx.media3.common.util.NetworkTypeObserver$Listener;
+
+        $i0 = virtualinvoke r0.<androidx.media3.common.util.NetworkTypeObserver: int getNetworkType()>();
+
+        interfaceinvoke r1.<androidx.media3.common.util.NetworkTypeObserver$Listener: void onNetworkTypeChanged(int)>($i0);
+
+        return;
+    }
+
+    static int access$100(android.content.Context)
+    {
+        android.content.Context r0;
+        int $i0;
+
+        r0 := @parameter0: android.content.Context;
+
+        $i0 = staticinvoke <androidx.media3.common.util.NetworkTypeObserver: int getNetworkTypeFromConnectivityManager(android.content.Context)>(r0);
+
+        return $i0;
+    }
+
+    static void access$200(androidx.media3.common.util.NetworkTypeObserver, int)
+    {
+        androidx.media3.common.util.NetworkTypeObserver r0;
+        int i0;
+
+        r0 := @parameter0: androidx.media3.common.util.NetworkTypeObserver;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<androidx.media3.common.util.NetworkTypeObserver: void updateNetworkType(int)>(i0);
+
+        return;
+    }
+
+androidx.media3.common.util.NetworkTypeObserver$1
+androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback
+<androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback: androidx.media3.common.util.NetworkTypeObserver instance>
+    public void <init>(androidx.media3.common.util.NetworkTypeObserver)
+    {
+        androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback r0;
+        androidx.media3.common.util.NetworkTypeObserver r1;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback;
+
+        r1 := @parameter0: androidx.media3.common.util.NetworkTypeObserver;
+
+        specialinvoke r0.<android.telephony.TelephonyCallback: void <init>()>();
+
+        r0.<androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback: androidx.media3.common.util.NetworkTypeObserver instance> = r1;
+
+        return;
+    }
+
+    public void onDisplayInfoChanged(android.telephony.TelephonyDisplayInfo)
+    {
+        androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback r0;
+        android.telephony.TelephonyDisplayInfo r1;
+        int i0;
+        boolean z0, $z1;
+        androidx.media3.common.util.NetworkTypeObserver $r2;
+        byte $b1;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback;
+
+        r1 := @parameter0: android.telephony.TelephonyDisplayInfo;
+
+        i0 = virtualinvoke r1.<android.telephony.TelephonyDisplayInfo: int getOverrideNetworkType()>();
+
+        if i0 == 3 goto label1;
+
+        if i0 == 4 goto label1;
+
+        if i0 != 5 goto label2;
+
+     label1:
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        z0 = $z1;
+
+        $r2 = r0.<androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback: androidx.media3.common.util.NetworkTypeObserver instance>;
+
+        if z0 == 0 goto label4;
+
+        $b1 = 10;
+
+        goto label5;
+
+     label4:
+        $b1 = 5;
+
+     label5:
+        staticinvoke <androidx.media3.common.util.NetworkTypeObserver: void access$200(androidx.media3.common.util.NetworkTypeObserver,int)>($r2, $b1);
+
+        return;
+    }
+
+androidx.media3.common.util.NetworkTypeObserver$Api31
+    private void <init>()
+    {
+        androidx.media3.common.util.NetworkTypeObserver$Api31 r0;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver$Api31;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void disambiguate4gAnd5gNsa(android.content.Context, androidx.media3.common.util.NetworkTypeObserver)
+    {
+        android.content.Context r0;
+        androidx.media3.common.util.NetworkTypeObserver r1;
+        androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback r2, $r6;
+        java.lang.Object $r3, $r5;
+        android.telephony.TelephonyManager $r4, r9;
+        java.util.concurrent.Executor $r7;
+        java.lang.Throwable $r8, r10;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.media3.common.util.NetworkTypeObserver;
+
+     label1:
+        $r3 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("phone");
+
+        $r4 = (android.telephony.TelephonyManager) $r3;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        r9 = (android.telephony.TelephonyManager) $r5;
+
+        $r6 = new androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback;
+
+        specialinvoke $r6.<androidx.media3.common.util.NetworkTypeObserver$Api31$DisplayInfoCallback: void <init>(androidx.media3.common.util.NetworkTypeObserver)>(r1);
+
+        r2 = $r6;
+
+        $r7 = virtualinvoke r0.<android.content.Context: java.util.concurrent.Executor getMainExecutor()>();
+
+        virtualinvoke r9.<android.telephony.TelephonyManager: void registerTelephonyCallback(java.util.concurrent.Executor,android.telephony.TelephonyCallback)>($r7, r2);
+
+        virtualinvoke r9.<android.telephony.TelephonyManager: void unregisterTelephonyCallback(android.telephony.TelephonyCallback)>(r2);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r10 = $r8;
+
+        staticinvoke <androidx.media3.common.util.NetworkTypeObserver: void access$200(androidx.media3.common.util.NetworkTypeObserver,int)>(r1, 5);
+
+     label4:
+        return;
+
+        catch java.lang.RuntimeException from label1 to label2 with label3;
+    }
+
+androidx.media3.common.util.NetworkTypeObserver$Listener
+<androidx.media3.common.util.NetworkTypeObserver$Listener: void onNetworkTypeChanged(int)>
+androidx.media3.common.util.NetworkTypeObserver$Receiver
+<androidx.media3.common.util.NetworkTypeObserver$Receiver: androidx.media3.common.util.NetworkTypeObserver this$0>
+    private void <init>(androidx.media3.common.util.NetworkTypeObserver)
+    {
+        androidx.media3.common.util.NetworkTypeObserver$Receiver r0;
+        androidx.media3.common.util.NetworkTypeObserver r1;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver$Receiver;
+
+        r1 := @parameter0: androidx.media3.common.util.NetworkTypeObserver;
+
+        r0.<androidx.media3.common.util.NetworkTypeObserver$Receiver: androidx.media3.common.util.NetworkTypeObserver this$0> = r1;
+
+        specialinvoke r0.<android.content.BroadcastReceiver: void <init>()>();
+
+        return;
+    }
+
+    public void onReceive(android.content.Context, android.content.Intent)
+    {
+        androidx.media3.common.util.NetworkTypeObserver$Receiver r0;
+        android.content.Context r1;
+        android.content.Intent r2;
+        int i0, $i1;
+        androidx.media3.common.util.NetworkTypeObserver $r3, $r4;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver$Receiver;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.content.Intent;
+
+        i0 = staticinvoke <androidx.media3.common.util.NetworkTypeObserver: int access$100(android.content.Context)>(r1);
+
+        $i1 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i1 < 31 goto label1;
+
+        if i0 != 5 goto label1;
+
+        $r4 = r0.<androidx.media3.common.util.NetworkTypeObserver$Receiver: androidx.media3.common.util.NetworkTypeObserver this$0>;
+
+        staticinvoke <androidx.media3.common.util.NetworkTypeObserver$Api31: void disambiguate4gAnd5gNsa(android.content.Context,androidx.media3.common.util.NetworkTypeObserver)>(r1, $r4);
+
+        goto label2;
+
+     label1:
+        $r3 = r0.<androidx.media3.common.util.NetworkTypeObserver$Receiver: androidx.media3.common.util.NetworkTypeObserver this$0>;
+
+        staticinvoke <androidx.media3.common.util.NetworkTypeObserver: void access$200(androidx.media3.common.util.NetworkTypeObserver,int)>($r3, i0);
+
+     label2:
+        return;
+    }
+
+    void <init>(androidx.media3.common.util.NetworkTypeObserver, androidx.media3.common.util.NetworkTypeObserver$1)
+    {
+        androidx.media3.common.util.NetworkTypeObserver$Receiver r0;
+        androidx.media3.common.util.NetworkTypeObserver r1;
+        androidx.media3.common.util.NetworkTypeObserver$1 r2;
+
+        r0 := @this: androidx.media3.common.util.NetworkTypeObserver$Receiver;
+
+        r1 := @parameter0: androidx.media3.common.util.NetworkTypeObserver;
+
+        r2 := @parameter1: androidx.media3.common.util.NetworkTypeObserver$1;
+
+        specialinvoke r0.<androidx.media3.common.util.NetworkTypeObserver$Receiver: void <init>(androidx.media3.common.util.NetworkTypeObserver)>(r1);
+
+        return;
+    }
+

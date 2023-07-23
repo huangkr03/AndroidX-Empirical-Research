@@ -1,0 +1,287 @@
+androidx.media3.extractor.ts.Ac4Extractor
+<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.extractor.ExtractorsFactory FACTORY>
+<androidx.media3.extractor.ts.Ac4Extractor: int MAX_SNIFF_BYTES>
+<androidx.media3.extractor.ts.Ac4Extractor: int READ_BUFFER_SIZE>
+<androidx.media3.extractor.ts.Ac4Extractor: int FRAME_HEADER_SIZE>
+<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.extractor.ts.Ac4Reader reader>
+<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.common.util.ParsableByteArray sampleData>
+<androidx.media3.extractor.ts.Ac4Extractor: boolean startedPacket>
+    public void <init>()
+    {
+        androidx.media3.extractor.ts.Ac4Extractor r0;
+        androidx.media3.extractor.ts.Ac4Reader $r1;
+        androidx.media3.common.util.ParsableByteArray $r2;
+
+        r0 := @this: androidx.media3.extractor.ts.Ac4Extractor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new androidx.media3.extractor.ts.Ac4Reader;
+
+        specialinvoke $r1.<androidx.media3.extractor.ts.Ac4Reader: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.extractor.ts.Ac4Reader reader> = $r1;
+
+        $r2 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(16384);
+
+        r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.common.util.ParsableByteArray sampleData> = $r2;
+
+        return;
+    }
+
+    public boolean sniff(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ts.Ac4Extractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.common.util.ParsableByteArray r2, $r3;
+        int i0, i1, $i2, $i3, $i4, $i5, i6, i7, i8, i9;
+        byte[] $r4, $r5, $r6;
+
+        r0 := @this: androidx.media3.extractor.ts.Ac4Extractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r3 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r3.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(10);
+
+        r2 = $r3;
+
+        i6 = 0;
+
+     label1:
+        $r4 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, 10);
+
+        virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $i2 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: int readUnsignedInt24()>();
+
+        if $i2 == 4801587 goto label2;
+
+        goto label3;
+
+     label2:
+        virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(3);
+
+        i7 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: int readSynchSafeInt()>();
+
+        $i3 = 10 + i7;
+
+        i6 = i6 + $i3;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(i7);
+
+        goto label1;
+
+     label3:
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(i6);
+
+        i8 = i6;
+
+        i9 = 0;
+
+     label4:
+        $r5 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r5, 0, 7);
+
+        virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        i0 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        if i0 == 44096 goto label6;
+
+        if i0 == 44097 goto label6;
+
+        i9 = 0;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        i8 = i8 + 1;
+
+        $i5 = i8 - i6;
+
+        if $i5 < 8192 goto label5;
+
+        return 0;
+
+     label5:
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(i8);
+
+        goto label9;
+
+     label6:
+        i9 = i9 + 1;
+
+        if i9 < 4 goto label7;
+
+        return 1;
+
+     label7:
+        $r6 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        i1 = staticinvoke <androidx.media3.extractor.Ac4Util: int parseAc4SyncframeSize(byte[],int)>($r6, i0);
+
+        if i1 != -1 goto label8;
+
+        return 0;
+
+     label8:
+        $i4 = i1 - 7;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>($i4);
+
+     label9:
+        goto label4;
+    }
+
+    public void init(androidx.media3.extractor.ExtractorOutput)
+    {
+        androidx.media3.extractor.ts.Ac4Extractor r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+        androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator $r2;
+        androidx.media3.extractor.ts.Ac4Reader $r3;
+        androidx.media3.extractor.SeekMap$Unseekable $r4;
+
+        r0 := @this: androidx.media3.extractor.ts.Ac4Extractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        $r3 = r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.extractor.ts.Ac4Reader reader>;
+
+        $r2 = new androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator;
+
+        specialinvoke $r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: void <init>(int,int)>(0, 1);
+
+        virtualinvoke $r3.<androidx.media3.extractor.ts.Ac4Reader: void createTracks(androidx.media3.extractor.ExtractorOutput,androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator)>(r1, $r2);
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: void endTracks()>();
+
+        $r4 = new androidx.media3.extractor.SeekMap$Unseekable;
+
+        specialinvoke $r4.<androidx.media3.extractor.SeekMap$Unseekable: void <init>(long)>(-9223372036854775807L);
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: void seekMap(androidx.media3.extractor.SeekMap)>($r4);
+
+        return;
+    }
+
+    public void seek(long, long)
+    {
+        androidx.media3.extractor.ts.Ac4Extractor r0;
+        long l0, l1;
+        androidx.media3.extractor.ts.Ac4Reader $r1;
+
+        r0 := @this: androidx.media3.extractor.ts.Ac4Extractor;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r0.<androidx.media3.extractor.ts.Ac4Extractor: boolean startedPacket> = 0;
+
+        $r1 = r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.extractor.ts.Ac4Reader reader>;
+
+        virtualinvoke $r1.<androidx.media3.extractor.ts.Ac4Reader: void seek()>();
+
+        return;
+    }
+
+    public void release()
+    {
+        androidx.media3.extractor.ts.Ac4Extractor r0;
+
+        r0 := @this: androidx.media3.extractor.ts.Ac4Extractor;
+
+        return;
+    }
+
+    public int read(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.PositionHolder) throws java.io.IOException
+    {
+        androidx.media3.extractor.ts.Ac4Extractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.PositionHolder r2;
+        int i0;
+        androidx.media3.common.util.ParsableByteArray $r3, $r5, $r6, $r7;
+        byte[] $r4;
+        boolean $z0;
+        androidx.media3.extractor.ts.Ac4Reader $r8, $r9;
+
+        r0 := @this: androidx.media3.extractor.ts.Ac4Extractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: androidx.media3.extractor.PositionHolder;
+
+        $r3 = r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        i0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: int read(byte[],int,int)>($r4, 0, 16384);
+
+        if i0 != -1 goto label1;
+
+        return -1;
+
+     label1:
+        $r5 = r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        virtualinvoke $r5.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r6 = r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        virtualinvoke $r6.<androidx.media3.common.util.ParsableByteArray: void setLimit(int)>(i0);
+
+        $z0 = r0.<androidx.media3.extractor.ts.Ac4Extractor: boolean startedPacket>;
+
+        if $z0 != 0 goto label2;
+
+        $r9 = r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.extractor.ts.Ac4Reader reader>;
+
+        virtualinvoke $r9.<androidx.media3.extractor.ts.Ac4Reader: void packetStarted(long,int)>(0L, 4);
+
+        r0.<androidx.media3.extractor.ts.Ac4Extractor: boolean startedPacket> = 1;
+
+     label2:
+        $r8 = r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.extractor.ts.Ac4Reader reader>;
+
+        $r7 = r0.<androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        virtualinvoke $r8.<androidx.media3.extractor.ts.Ac4Reader: void consume(androidx.media3.common.util.ParsableByteArray)>($r7);
+
+        return 0;
+    }
+
+    private static androidx.media3.extractor.Extractor[] lambda$static$0()
+    {
+        androidx.media3.extractor.Extractor[] $r0;
+        androidx.media3.extractor.ts.Ac4Extractor $r1;
+
+        $r0 = newarray (androidx.media3.extractor.Extractor)[1];
+
+        $r1 = new androidx.media3.extractor.ts.Ac4Extractor;
+
+        specialinvoke $r1.<androidx.media3.extractor.ts.Ac4Extractor: void <init>()>();
+
+        $r0[0] = $r1;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.media3.extractor.ExtractorsFactory $r0;
+
+        $r0 = dynamicinvoke "createExtractors" <androidx.media3.extractor.ExtractorsFactory ()>() <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: androidx.media3.extractor.Extractor[] __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.extractor.Extractor[] lambda$static$0()>, methodtype: androidx.media3.extractor.Extractor[] __METHODTYPE__());
+
+        <androidx.media3.extractor.ts.Ac4Extractor: androidx.media3.extractor.ExtractorsFactory FACTORY> = $r0;
+
+        return;
+    }
+

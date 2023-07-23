@@ -1,0 +1,253 @@
+androidx.webkit.ProcessGlobalConfig
+<androidx.webkit.ProcessGlobalConfig: java.util.concurrent.atomic.AtomicReference sProcessGlobalConfig>
+<androidx.webkit.ProcessGlobalConfig: java.lang.Object sLock>
+<androidx.webkit.ProcessGlobalConfig: boolean sApplyCalled>
+<androidx.webkit.ProcessGlobalConfig: java.lang.String mDataDirectorySuffix>
+    public void <init>()
+    {
+        androidx.webkit.ProcessGlobalConfig r0;
+
+        r0 := @this: androidx.webkit.ProcessGlobalConfig;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public androidx.webkit.ProcessGlobalConfig setDataDirectorySuffix(android.content.Context, java.lang.String)
+    {
+        androidx.webkit.ProcessGlobalConfig r0;
+        android.content.Context r1;
+        java.lang.String r2, $r9;
+        androidx.webkit.internal.StartupApiFeature$P r3;
+        boolean $z0, $z1;
+        char $c0;
+        int $i1;
+        java.lang.IllegalArgumentException $r4, $r10;
+        java.lang.StringBuilder $r5, $r6, $r7, $r8;
+        java.lang.UnsupportedOperationException $r11;
+
+        r0 := @this: androidx.webkit.ProcessGlobalConfig;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 = <androidx.webkit.internal.WebViewFeatureInternal: androidx.webkit.internal.StartupApiFeature$P STARTUP_FEATURE_SET_DATA_DIRECTORY_SUFFIX>;
+
+        $z0 = virtualinvoke r3.<androidx.webkit.internal.StartupApiFeature$P: boolean isSupported(android.content.Context)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        $r11 = staticinvoke <androidx.webkit.internal.WebViewFeatureInternal: java.lang.UnsupportedOperationException getUnsupportedOperationException()>();
+
+        throw $r11;
+
+     label1:
+        $z1 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("");
+
+        if $z1 == 0 goto label2;
+
+        $r10 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r10.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Suffix cannot be an empty string");
+
+        throw $r10;
+
+     label2:
+        $c0 = <java.io.File: char separatorChar>;
+
+        $i1 = virtualinvoke r2.<java.lang.String: int indexOf(int)>($c0);
+
+        if $i1 < 0 goto label3;
+
+        $r4 = new java.lang.IllegalArgumentException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Suffix ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" contains a path separator");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r9);
+
+        throw $r4;
+
+     label3:
+        r0.<androidx.webkit.ProcessGlobalConfig: java.lang.String mDataDirectorySuffix> = r2;
+
+        return r0;
+    }
+
+    public static void apply(androidx.webkit.ProcessGlobalConfig)
+    {
+        androidx.webkit.ProcessGlobalConfig r0;
+        java.lang.Object $r1, r11;
+        boolean $z0, $z1, $z2, $z3;
+        java.util.HashMap $r2, r13;
+        java.lang.String $r3, $r7;
+        java.util.concurrent.atomic.AtomicReference $r5;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalStateException $r8, $r9;
+        java.lang.Throwable $r10, r12;
+        androidx.webkit.internal.StartupApiFeature$P r14;
+
+        r0 := @parameter0: androidx.webkit.ProcessGlobalConfig;
+
+        $r1 = <androidx.webkit.ProcessGlobalConfig: java.lang.Object sLock>;
+
+        r11 = $r1;
+
+        entermonitor $r1;
+
+     label01:
+        $z0 = <androidx.webkit.ProcessGlobalConfig: boolean sApplyCalled>;
+
+        if $z0 == 0 goto label02;
+
+        $r9 = new java.lang.IllegalStateException;
+
+        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.String)>("ProcessGlobalConfig#apply was called more than once, which is an illegal operation. The configuration settings provided by ProcessGlobalConfig take effect only once, when WebView is first loaded into the current process. Every process should only ever create a single instance of ProcessGlobalConfig and apply it once, before any calls to android.webkit APIs, such as during early app startup.");
+
+        throw $r9;
+
+     label02:
+        <androidx.webkit.ProcessGlobalConfig: boolean sApplyCalled> = 1;
+
+        exitmonitor r11;
+
+     label03:
+        goto label06;
+
+     label04:
+        $r10 := @caughtexception;
+
+        r12 = $r10;
+
+        exitmonitor r11;
+
+     label05:
+        throw r12;
+
+     label06:
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>()>();
+
+        r13 = $r2;
+
+        $z1 = staticinvoke <androidx.webkit.ProcessGlobalConfig: boolean webViewCurrentlyLoaded()>();
+
+        if $z1 == 0 goto label07;
+
+        $r8 = new java.lang.IllegalStateException;
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.String)>("WebView has already been loaded in the current process, so any attempt to apply the settings in ProcessGlobalConfig will have no effect. ProcessGlobalConfig#apply needs to be called before any calls to android.webkit APIs, such as during early app startup.");
+
+        throw $r8;
+
+     label07:
+        r14 = <androidx.webkit.internal.WebViewFeatureInternal: androidx.webkit.internal.StartupApiFeature$P STARTUP_FEATURE_SET_DATA_DIRECTORY_SUFFIX>;
+
+        $z2 = virtualinvoke r14.<androidx.webkit.internal.StartupApiFeature$P: boolean isSupportedByFramework()>();
+
+        if $z2 == 0 goto label08;
+
+        $r7 = r0.<androidx.webkit.ProcessGlobalConfig: java.lang.String mDataDirectorySuffix>;
+
+        staticinvoke <androidx.webkit.internal.ApiHelperForP: void setDataDirectorySuffix(java.lang.String)>($r7);
+
+        goto label09;
+
+     label08:
+        $r3 = r0.<androidx.webkit.ProcessGlobalConfig: java.lang.String mDataDirectorySuffix>;
+
+        virtualinvoke r13.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("DATA_DIRECTORY_SUFFIX", $r3);
+
+     label09:
+        $r5 = <androidx.webkit.ProcessGlobalConfig: java.util.concurrent.atomic.AtomicReference sProcessGlobalConfig>;
+
+        $z3 = virtualinvoke $r5.<java.util.concurrent.atomic.AtomicReference: boolean compareAndSet(java.lang.Object,java.lang.Object)>(null, r13);
+
+        if $z3 != 0 goto label10;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.String)>("Attempting to set ProcessGlobalConfig#sProcessGlobalConfig when it was already set");
+
+        throw $r6;
+
+     label10:
+        return;
+
+        catch java.lang.Throwable from label01 to label03 with label04;
+        catch java.lang.Throwable from label04 to label05 with label04;
+    }
+
+    private static boolean webViewCurrentlyLoaded()
+    {
+        java.lang.reflect.Field r0;
+        java.lang.Object $r1;
+        java.lang.Throwable $r2, r4;
+        java.lang.Class r3;
+        boolean $z0;
+
+     label1:
+        r3 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("android.webkit.WebViewFactory");
+
+        r0 = virtualinvoke r3.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("sProviderInstance");
+
+        virtualinvoke r0.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        $r1 = virtualinvoke r0.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(null);
+
+        if $r1 == null goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+
+     label4:
+        $r2 := @caughtexception;
+
+        r4 = $r2;
+
+        return 0;
+
+        catch java.lang.Exception from label1 to label3 with label4;
+    }
+
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicReference $r0;
+        java.lang.Object $r1;
+
+        $r0 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r0.<java.util.concurrent.atomic.AtomicReference: void <init>()>();
+
+        <androidx.webkit.ProcessGlobalConfig: java.util.concurrent.atomic.AtomicReference sProcessGlobalConfig> = $r0;
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        <androidx.webkit.ProcessGlobalConfig: java.lang.Object sLock> = $r1;
+
+        <androidx.webkit.ProcessGlobalConfig: boolean sApplyCalled> = 0;
+
+        return;
+    }
+

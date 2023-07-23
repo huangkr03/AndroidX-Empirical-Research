@@ -1,0 +1,1051 @@
+androidx.tvprovider.media.tv.PreviewChannelHelper
+<androidx.tvprovider.media.tv.PreviewChannelHelper: java.lang.String TAG>
+<androidx.tvprovider.media.tv.PreviewChannelHelper: int DEFAULT_URL_CONNNECTION_TIMEOUT_MILLIS>
+<androidx.tvprovider.media.tv.PreviewChannelHelper: int DEFAULT_READ_TIMEOUT_MILLIS>
+<androidx.tvprovider.media.tv.PreviewChannelHelper: int INVALID_CONTENT_ID>
+<androidx.tvprovider.media.tv.PreviewChannelHelper: int mUrlConnectionTimeoutMillis>
+<androidx.tvprovider.media.tv.PreviewChannelHelper: int mUrlReadTimeoutMillis>
+<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>
+    public void <init>(android.content.Context)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        android.content.Context r1;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: void <init>(android.content.Context,int,int)>(r1, 3000, 10000);
+
+        return;
+    }
+
+    public void <init>(android.content.Context, int, int)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        android.content.Context r1;
+        int i0, i1;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        r1 := @parameter0: android.content.Context;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext> = r1;
+
+        r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: int mUrlConnectionTimeoutMillis> = i0;
+
+        r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: int mUrlReadTimeoutMillis> = i1;
+
+        return;
+    }
+
+    public long publishChannel(androidx.tvprovider.media.tv.PreviewChannel) throws java.io.IOException
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        androidx.tvprovider.media.tv.PreviewChannel r1;
+        long l0;
+        boolean z0, $z1;
+        android.content.Context $r2;
+        android.content.ContentResolver $r3;
+        android.net.Uri $r4, $r7, r15;
+        android.content.ContentValues $r5;
+        java.lang.NullPointerException $r6;
+        java.io.IOException $r8;
+        java.lang.StringBuilder $r9, $r10, $r11, $r12;
+        java.lang.String $r13;
+        java.lang.Throwable $r14, r16;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        r1 := @parameter0: androidx.tvprovider.media.tv.PreviewChannel;
+
+     label1:
+        $r2 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r4 = <androidx.tvprovider.media.tv.TvContractCompat$Channels: android.net.Uri CONTENT_URI>;
+
+        $r5 = virtualinvoke r1.<androidx.tvprovider.media.tv.PreviewChannel: android.content.ContentValues toContentValues()>();
+
+        r15 = virtualinvoke $r3.<android.content.ContentResolver: android.net.Uri insert(android.net.Uri,android.content.ContentValues)>($r4, $r5);
+
+        if null == r15 goto label2;
+
+        $r7 = <android.net.Uri: android.net.Uri EMPTY>;
+
+        $z1 = virtualinvoke r15.<android.net.Uri: boolean equals(java.lang.Object)>($r7);
+
+        if $z1 == 0 goto label3;
+
+     label2:
+        $r6 = new java.lang.NullPointerException;
+
+        specialinvoke $r6.<java.lang.NullPointerException: void <init>(java.lang.String)>("Channel insertion failed");
+
+        throw $r6;
+
+     label3:
+        l0 = staticinvoke <android.content.ContentUris: long parseId(android.net.Uri)>(r15);
+
+        z0 = specialinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: boolean addChannelLogo(long,androidx.tvprovider.media.tv.PreviewChannel)>(l0, r1);
+
+        if z0 != 0 goto label4;
+
+        virtualinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: void deletePreviewChannel(long)>(l0);
+
+        $r8 = new java.io.IOException;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to add logo, so channel (ID=");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") was not created");
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String)>($r13);
+
+        throw $r8;
+
+     label4:
+        return l0;
+
+     label5:
+        $r14 := @caughtexception;
+
+        r16 = $r14;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("PreviewChannelHelper", "Your app\'s ability to insert data into the TvProvider may have been revoked.", r16);
+
+        return -1L;
+
+        catch java.lang.SecurityException from label1 to label4 with label5;
+    }
+
+    public long publishDefaultChannel(androidx.tvprovider.media.tv.PreviewChannel) throws java.io.IOException
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        androidx.tvprovider.media.tv.PreviewChannel r1;
+        long l0;
+        android.content.Context $r2;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        r1 := @parameter0: androidx.tvprovider.media.tv.PreviewChannel;
+
+        l0 = virtualinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: long publishChannel(androidx.tvprovider.media.tv.PreviewChannel)>(r1);
+
+        $r2 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: void requestChannelBrowsable(android.content.Context,long)>($r2, l0);
+
+        return l0;
+    }
+
+    public java.util.List getAllChannels()
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        android.database.Cursor r1;
+        java.util.ArrayList r2, $r7;
+        android.content.Context $r3;
+        android.content.ContentResolver $r4;
+        java.lang.String[] $r5;
+        android.net.Uri $r6;
+        boolean $z0, $z2;
+        androidx.tvprovider.media.tv.PreviewChannel $r8;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        $r3 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r6 = <androidx.tvprovider.media.tv.TvContractCompat$Channels: android.net.Uri CONTENT_URI>;
+
+        $r5 = <androidx.tvprovider.media.tv.PreviewChannel$Columns: java.lang.String[] PROJECTION>;
+
+        r1 = virtualinvoke $r4.<android.content.ContentResolver: android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String)>($r6, $r5, null, null, null);
+
+        $r7 = new java.util.ArrayList;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>()>();
+
+        r2 = $r7;
+
+        if r1 == null goto label2;
+
+        $z0 = interfaceinvoke r1.<android.database.Cursor: boolean moveToFirst()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        $r8 = staticinvoke <androidx.tvprovider.media.tv.PreviewChannel: androidx.tvprovider.media.tv.PreviewChannel fromCursor(android.database.Cursor)>(r1);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r8);
+
+        $z2 = interfaceinvoke r1.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z2 != 0 goto label1;
+
+     label2:
+        return r2;
+    }
+
+    public androidx.tvprovider.media.tv.PreviewChannel getPreviewChannel(long)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        android.net.Uri r1;
+        android.database.Cursor r2;
+        android.content.Context $r3;
+        android.content.ContentResolver $r4;
+        java.lang.String[] $r5;
+        boolean $z0;
+        androidx.tvprovider.media.tv.PreviewChannel r6;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        r6 = null;
+
+        r1 = staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: android.net.Uri buildChannelUri(long)>(l0);
+
+        $r3 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r5 = <androidx.tvprovider.media.tv.PreviewChannel$Columns: java.lang.String[] PROJECTION>;
+
+        r2 = virtualinvoke $r4.<android.content.ContentResolver: android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String)>(r1, $r5, null, null, null);
+
+        if r2 == null goto label1;
+
+        $z0 = interfaceinvoke r2.<android.database.Cursor: boolean moveToFirst()>();
+
+        if $z0 == 0 goto label1;
+
+        r6 = staticinvoke <androidx.tvprovider.media.tv.PreviewChannel: androidx.tvprovider.media.tv.PreviewChannel fromCursor(android.database.Cursor)>(r2);
+
+     label1:
+        return r6;
+    }
+
+    public void updatePreviewChannel(long, androidx.tvprovider.media.tv.PreviewChannel) throws java.io.IOException
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        androidx.tvprovider.media.tv.PreviewChannel r1, r2;
+        boolean z0, $z1, $z2;
+        java.io.IOException $r3;
+        java.lang.StringBuilder $r4, $r5, $r6, $r7;
+        java.lang.String $r8;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: androidx.tvprovider.media.tv.PreviewChannel;
+
+        r2 = virtualinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: androidx.tvprovider.media.tv.PreviewChannel getPreviewChannel(long)>(l0);
+
+        if r2 == null goto label1;
+
+        $z1 = virtualinvoke r2.<androidx.tvprovider.media.tv.PreviewChannel: boolean hasAnyUpdatedValues(androidx.tvprovider.media.tv.PreviewChannel)>(r1);
+
+        if $z1 == 0 goto label1;
+
+        virtualinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: void updatePreviewChannelInternal(long,androidx.tvprovider.media.tv.PreviewChannel)>(l0, r1);
+
+     label1:
+        $z2 = virtualinvoke r1.<androidx.tvprovider.media.tv.PreviewChannel: boolean isLogoChanged()>();
+
+        if $z2 == 0 goto label2;
+
+        z0 = specialinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: boolean addChannelLogo(long,androidx.tvprovider.media.tv.PreviewChannel)>(l0, r1);
+
+        if z0 != 0 goto label2;
+
+        $r3 = new java.io.IOException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Fail to update channel (ID=");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") logo.");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.io.IOException: void <init>(java.lang.String)>($r8);
+
+        throw $r3;
+
+     label2:
+        return;
+    }
+
+    protected void updatePreviewChannelInternal(long, androidx.tvprovider.media.tv.PreviewChannel)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        androidx.tvprovider.media.tv.PreviewChannel r1;
+        android.content.Context $r2;
+        android.content.ContentResolver $r3;
+        android.net.Uri $r4;
+        android.content.ContentValues $r5;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: androidx.tvprovider.media.tv.PreviewChannel;
+
+        $r2 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r4 = staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: android.net.Uri buildChannelUri(long)>(l0);
+
+        $r5 = virtualinvoke r1.<androidx.tvprovider.media.tv.PreviewChannel: android.content.ContentValues toContentValues()>();
+
+        virtualinvoke $r3.<android.content.ContentResolver: int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[])>($r4, $r5, null, null);
+
+        return;
+    }
+
+    private boolean addChannelLogo(long, androidx.tvprovider.media.tv.PreviewChannel)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        androidx.tvprovider.media.tv.PreviewChannel r1;
+        android.net.Uri r2, $r9;
+        java.lang.Throwable r3, r4, $r10, $r11, $r12, $r13, $r19, r22, r23, r24;
+        boolean $z0, z1;
+        android.content.Context $r5, $r6;
+        android.content.ContentResolver $r7;
+        android.graphics.Bitmap$CompressFormat $r8;
+        java.lang.StringBuilder $r14, $r15, $r16, $r17;
+        java.lang.String $r18;
+        android.graphics.Bitmap r20;
+        java.io.OutputStream r21;
+        java.lang.NullPointerException r25;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: androidx.tvprovider.media.tv.PreviewChannel;
+
+        z1 = 0;
+
+        $z0 = virtualinvoke r1.<androidx.tvprovider.media.tv.PreviewChannel: boolean isLogoChanged()>();
+
+        if $z0 != 0 goto label01;
+
+        return 0;
+
+     label01:
+        $r5 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        r20 = virtualinvoke r1.<androidx.tvprovider.media.tv.PreviewChannel: android.graphics.Bitmap getLogo(android.content.Context)>($r5);
+
+        if r20 != null goto label02;
+
+        $r9 = virtualinvoke r1.<androidx.tvprovider.media.tv.PreviewChannel: android.net.Uri getLogoUri()>();
+
+        r20 = specialinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.graphics.Bitmap getLogoFromUri(android.net.Uri)>($r9);
+
+     label02:
+        r2 = staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: android.net.Uri buildChannelLogoUri(long)>(l0);
+
+     label03:
+        $r6 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r7 = virtualinvoke $r6.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        r21 = virtualinvoke $r7.<android.content.ContentResolver: java.io.OutputStream openOutputStream(android.net.Uri)>(r2);
+
+     label04:
+        $r8 = <android.graphics.Bitmap$CompressFormat: android.graphics.Bitmap$CompressFormat PNG>;
+
+        z1 = virtualinvoke r20.<android.graphics.Bitmap: boolean compress(android.graphics.Bitmap$CompressFormat,int,java.io.OutputStream)>($r8, 100, r21);
+
+        virtualinvoke r21.<java.io.OutputStream: void flush()>();
+
+     label05:
+        if r21 == null goto label18;
+
+        if null == null goto label09;
+
+     label06:
+        virtualinvoke r21.<java.io.OutputStream: void close()>();
+
+     label07:
+        goto label18;
+
+     label08:
+        $r11 := @caughtexception;
+
+        r25 = new java.lang.NullPointerException;
+
+        specialinvoke r25.<java.lang.NullPointerException: void <init>(java.lang.String)>("This statement would have triggered an Exception: virtualinvoke l8#4.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(l9#5)");
+
+        throw r25;
+
+     label09:
+        virtualinvoke r21.<java.io.OutputStream: void close()>();
+
+        goto label18;
+
+     label10:
+        $r19 := @caughtexception;
+
+        r22 = $r19;
+
+        r23 = r22;
+
+        throw r22;
+
+     label11:
+        $r12 := @caughtexception;
+
+        r3 = $r12;
+
+     label12:
+        if r21 == null goto label17;
+
+        if r23 == null goto label16;
+
+     label13:
+        virtualinvoke r21.<java.io.OutputStream: void close()>();
+
+     label14:
+        goto label17;
+
+     label15:
+        $r10 := @caughtexception;
+
+        r4 = $r10;
+
+        virtualinvoke r23.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r4);
+
+        goto label17;
+
+     label16:
+        virtualinvoke r21.<java.io.OutputStream: void close()>();
+
+     label17:
+        throw r3;
+
+     label18:
+        goto label20;
+
+     label19:
+        $r13 := @caughtexception;
+
+        r24 = $r13;
+
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>()>();
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to add logo to the published channel (ID= ");
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String,java.lang.Throwable)>("PreviewChannelHelper", $r18, r24);
+
+     label20:
+        return z1;
+
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label04 to label05 with label10;
+        catch java.lang.Throwable from label13 to label14 with label15;
+        catch java.lang.Throwable from label10 to label12 with label11;
+        catch android.database.sqlite.SQLiteException from label03 to label18 with label19;
+        catch java.io.IOException from label03 to label18 with label19;
+        catch java.lang.NullPointerException from label03 to label18 with label19;
+    }
+
+    private android.graphics.Bitmap getLogoFromUri(android.net.Uri)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        android.net.Uri r1, $r5;
+        java.lang.String r2, $r6, $r7, $r8, $r17;
+        java.lang.Throwable r3, r4, $r9, $r10, $r11, $r12, $r13, r22, r23, r24;
+        boolean $z0, $z1, $z2;
+        java.lang.StringBuilder $r14, $r15, $r16;
+        java.io.InputStream r18;
+        android.graphics.Bitmap r19;
+        android.content.Context $r20;
+        android.content.ContentResolver $r21;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        r1 := @parameter0: android.net.Uri;
+
+        $r5 = virtualinvoke r1.<android.net.Uri: android.net.Uri normalizeScheme()>();
+
+        r2 = virtualinvoke $r5.<android.net.Uri: java.lang.String getScheme()>();
+
+        r18 = null;
+
+        r19 = null;
+
+     label01:
+        $r6 = "android.resource";
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>(r2);
+
+        if $z0 != 0 goto label02;
+
+        $r7 = "file";
+
+        $z1 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>(r2);
+
+        if $z1 != 0 goto label02;
+
+        $r8 = "content";
+
+        $z2 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(r2);
+
+        if $z2 == 0 goto label03;
+
+     label02:
+        $r20 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r21 = virtualinvoke $r20.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        r18 = virtualinvoke $r21.<android.content.ContentResolver: java.io.InputStream openInputStream(android.net.Uri)>(r1);
+
+        r19 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeStream(java.io.InputStream)>(r18);
+
+        goto label04;
+
+     label03:
+        r19 = virtualinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.graphics.Bitmap downloadBitmap(android.net.Uri)>(r1);
+
+     label04:
+        if r18 == null goto label19;
+
+     label05:
+        virtualinvoke r18.<java.io.InputStream: void close()>();
+
+     label06:
+        goto label19;
+
+     label07:
+        $r10 := @caughtexception;
+
+        r22 = $r10;
+
+        goto label19;
+
+     label08:
+        $r13 := @caughtexception;
+
+        r23 = $r13;
+
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>()>();
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to get logo from the URI: ");
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("PreviewChannelHelper", $r17, r23);
+
+     label09:
+        if r18 == null goto label19;
+
+     label10:
+        virtualinvoke r18.<java.io.InputStream: void close()>();
+
+     label11:
+        goto label19;
+
+     label12:
+        $r12 := @caughtexception;
+
+        r24 = $r12;
+
+        goto label19;
+
+     label13:
+        $r11 := @caughtexception;
+
+        r3 = $r11;
+
+     label14:
+        if r18 == null goto label18;
+
+     label15:
+        virtualinvoke r18.<java.io.InputStream: void close()>();
+
+     label16:
+        goto label18;
+
+     label17:
+        $r9 := @caughtexception;
+
+        r4 = $r9;
+
+     label18:
+        throw r3;
+
+     label19:
+        return r19;
+
+        catch java.io.IOException from label05 to label06 with label07;
+        catch java.io.IOException from label01 to label04 with label08;
+        catch java.io.IOException from label10 to label11 with label12;
+        catch java.lang.Throwable from label01 to label04 with label13;
+        catch java.lang.Throwable from label08 to label09 with label13;
+        catch java.io.IOException from label15 to label16 with label17;
+        catch java.lang.Throwable from label13 to label14 with label13;
+    }
+
+    protected android.graphics.Bitmap downloadBitmap(android.net.Uri) throws java.io.IOException
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        android.net.Uri r1;
+        java.lang.Throwable r2, $r6, $r8, $r9;
+        java.net.URL $r3;
+        java.lang.String $r4;
+        int $i0, $i1;
+        java.net.HttpURLConnection $r5, $r7;
+        java.net.URLConnection r10;
+        java.io.InputStream r11;
+        android.graphics.Bitmap r12;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        r1 := @parameter0: android.net.Uri;
+
+        r10 = null;
+
+        r11 = null;
+
+     label01:
+        $r3 = new java.net.URL;
+
+        $r4 = virtualinvoke r1.<android.net.Uri: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.net.URL: void <init>(java.lang.String)>($r4);
+
+        r10 = virtualinvoke $r3.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $i0 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: int mUrlConnectionTimeoutMillis>;
+
+        virtualinvoke r10.<java.net.URLConnection: void setConnectTimeout(int)>($i0);
+
+        $i1 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: int mUrlReadTimeoutMillis>;
+
+        virtualinvoke r10.<java.net.URLConnection: void setReadTimeout(int)>($i1);
+
+        r11 = virtualinvoke r10.<java.net.URLConnection: java.io.InputStream getInputStream()>();
+
+        r12 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeStream(java.io.InputStream)>(r11);
+
+     label02:
+        if r11 == null goto label06;
+
+     label03:
+        virtualinvoke r11.<java.io.InputStream: void close()>();
+
+     label04:
+        goto label06;
+
+     label05:
+        $r8 := @caughtexception;
+
+     label06:
+        $z0 = r10 instanceof java.net.HttpURLConnection;
+
+        if $z0 == 0 goto label14;
+
+        $r5 = (java.net.HttpURLConnection) r10;
+
+        virtualinvoke $r5.<java.net.HttpURLConnection: void disconnect()>();
+
+        goto label14;
+
+     label07:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+     label08:
+        if r11 == null goto label12;
+
+     label09:
+        virtualinvoke r11.<java.io.InputStream: void close()>();
+
+     label10:
+        goto label12;
+
+     label11:
+        $r9 := @caughtexception;
+
+     label12:
+        $z1 = r10 instanceof java.net.HttpURLConnection;
+
+        if $z1 == 0 goto label13;
+
+        $r7 = (java.net.HttpURLConnection) r10;
+
+        virtualinvoke $r7.<java.net.HttpURLConnection: void disconnect()>();
+
+     label13:
+        throw r2;
+
+     label14:
+        return r12;
+
+        catch java.io.IOException from label03 to label04 with label05;
+        catch java.lang.Throwable from label01 to label02 with label07;
+        catch java.io.IOException from label09 to label10 with label11;
+        catch java.lang.Throwable from label07 to label08 with label07;
+    }
+
+    public void deletePreviewChannel(long)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        android.content.Context $r1;
+        android.content.ContentResolver $r2;
+        android.net.Uri $r3;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r3 = staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: android.net.Uri buildChannelUri(long)>(l0);
+
+        virtualinvoke $r2.<android.content.ContentResolver: int delete(android.net.Uri,java.lang.String,java.lang.String[])>($r3, null, null);
+
+        return;
+    }
+
+    public long publishPreviewProgram(androidx.tvprovider.media.tv.PreviewProgram)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        androidx.tvprovider.media.tv.PreviewProgram r1;
+        long l0;
+        android.content.Context $r2;
+        android.content.ContentResolver $r3;
+        android.net.Uri $r4, r7;
+        android.content.ContentValues $r5;
+        java.lang.Throwable $r6, r8;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        r1 := @parameter0: androidx.tvprovider.media.tv.PreviewProgram;
+
+     label1:
+        $r2 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r4 = <androidx.tvprovider.media.tv.TvContractCompat$PreviewPrograms: android.net.Uri CONTENT_URI>;
+
+        $r5 = virtualinvoke r1.<androidx.tvprovider.media.tv.PreviewProgram: android.content.ContentValues toContentValues()>();
+
+        r7 = virtualinvoke $r3.<android.content.ContentResolver: android.net.Uri insert(android.net.Uri,android.content.ContentValues)>($r4, $r5);
+
+        l0 = staticinvoke <android.content.ContentUris: long parseId(android.net.Uri)>(r7);
+
+     label2:
+        return l0;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r8 = $r6;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("PreviewChannelHelper", "Your app\'s ability to insert data into the TvProvider may have been revoked.", r8);
+
+        return -1L;
+
+        catch java.lang.SecurityException from label1 to label2 with label3;
+    }
+
+    public androidx.tvprovider.media.tv.PreviewProgram getPreviewProgram(long)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        android.net.Uri r1;
+        android.database.Cursor r2;
+        android.content.Context $r3;
+        android.content.ContentResolver $r4;
+        boolean $z0;
+        androidx.tvprovider.media.tv.PreviewProgram r5;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        r5 = null;
+
+        r1 = staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: android.net.Uri buildPreviewProgramUri(long)>(l0);
+
+        $r3 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        r2 = virtualinvoke $r4.<android.content.ContentResolver: android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String)>(r1, null, null, null, null);
+
+        if r2 == null goto label1;
+
+        $z0 = interfaceinvoke r2.<android.database.Cursor: boolean moveToFirst()>();
+
+        if $z0 == 0 goto label1;
+
+        r5 = staticinvoke <androidx.tvprovider.media.tv.PreviewProgram: androidx.tvprovider.media.tv.PreviewProgram fromCursor(android.database.Cursor)>(r2);
+
+     label1:
+        return r5;
+    }
+
+    public void updatePreviewProgram(long, androidx.tvprovider.media.tv.PreviewProgram)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        androidx.tvprovider.media.tv.PreviewProgram r1, r2;
+        boolean $z0;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: androidx.tvprovider.media.tv.PreviewProgram;
+
+        r2 = virtualinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: androidx.tvprovider.media.tv.PreviewProgram getPreviewProgram(long)>(l0);
+
+        if r2 == null goto label1;
+
+        $z0 = virtualinvoke r2.<androidx.tvprovider.media.tv.PreviewProgram: boolean hasAnyUpdatedValues(androidx.tvprovider.media.tv.PreviewProgram)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: void updatePreviewProgramInternal(long,androidx.tvprovider.media.tv.PreviewProgram)>(l0, r1);
+
+     label1:
+        return;
+    }
+
+    void updatePreviewProgramInternal(long, androidx.tvprovider.media.tv.PreviewProgram)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        androidx.tvprovider.media.tv.PreviewProgram r1;
+        android.content.Context $r2;
+        android.content.ContentResolver $r3;
+        android.net.Uri $r4;
+        android.content.ContentValues $r5;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: androidx.tvprovider.media.tv.PreviewProgram;
+
+        $r2 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r4 = staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: android.net.Uri buildPreviewProgramUri(long)>(l0);
+
+        $r5 = virtualinvoke r1.<androidx.tvprovider.media.tv.PreviewProgram: android.content.ContentValues toContentValues()>();
+
+        virtualinvoke $r3.<android.content.ContentResolver: int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[])>($r4, $r5, null, null);
+
+        return;
+    }
+
+    public void deletePreviewProgram(long)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        android.content.Context $r1;
+        android.content.ContentResolver $r2;
+        android.net.Uri $r3;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r3 = staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: android.net.Uri buildPreviewProgramUri(long)>(l0);
+
+        virtualinvoke $r2.<android.content.ContentResolver: int delete(android.net.Uri,java.lang.String,java.lang.String[])>($r3, null, null);
+
+        return;
+    }
+
+    public long publishWatchNextProgram(androidx.tvprovider.media.tv.WatchNextProgram)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        androidx.tvprovider.media.tv.WatchNextProgram r1;
+        android.content.Context $r2;
+        android.content.ContentResolver $r3;
+        android.net.Uri $r4, r7;
+        android.content.ContentValues $r5;
+        long $l0;
+        java.lang.Throwable $r6, r8;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        r1 := @parameter0: androidx.tvprovider.media.tv.WatchNextProgram;
+
+     label1:
+        $r2 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r4 = <androidx.tvprovider.media.tv.TvContractCompat$WatchNextPrograms: android.net.Uri CONTENT_URI>;
+
+        $r5 = virtualinvoke r1.<androidx.tvprovider.media.tv.WatchNextProgram: android.content.ContentValues toContentValues()>();
+
+        r7 = virtualinvoke $r3.<android.content.ContentResolver: android.net.Uri insert(android.net.Uri,android.content.ContentValues)>($r4, $r5);
+
+        $l0 = staticinvoke <android.content.ContentUris: long parseId(android.net.Uri)>(r7);
+
+     label2:
+        return $l0;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r8 = $r6;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("PreviewChannelHelper", "Your app\'s ability to insert data into the TvProvider may have been revoked.", r8);
+
+        return -1L;
+
+        catch java.lang.SecurityException from label1 to label2 with label3;
+    }
+
+    public androidx.tvprovider.media.tv.WatchNextProgram getWatchNextProgram(long)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        android.net.Uri r1;
+        android.database.Cursor r2;
+        android.content.Context $r3;
+        android.content.ContentResolver $r4;
+        boolean $z0;
+        androidx.tvprovider.media.tv.WatchNextProgram r5;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        r5 = null;
+
+        r1 = staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: android.net.Uri buildWatchNextProgramUri(long)>(l0);
+
+        $r3 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        r2 = virtualinvoke $r4.<android.content.ContentResolver: android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String)>(r1, null, null, null, null);
+
+        if r2 == null goto label1;
+
+        $z0 = interfaceinvoke r2.<android.database.Cursor: boolean moveToFirst()>();
+
+        if $z0 == 0 goto label1;
+
+        r5 = staticinvoke <androidx.tvprovider.media.tv.WatchNextProgram: androidx.tvprovider.media.tv.WatchNextProgram fromCursor(android.database.Cursor)>(r2);
+
+     label1:
+        return r5;
+    }
+
+    public void updateWatchNextProgram(androidx.tvprovider.media.tv.WatchNextProgram, long)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        androidx.tvprovider.media.tv.WatchNextProgram r1, r2;
+        long l0;
+        boolean $z0;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        r1 := @parameter0: androidx.tvprovider.media.tv.WatchNextProgram;
+
+        l0 := @parameter1: long;
+
+        r2 = virtualinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: androidx.tvprovider.media.tv.WatchNextProgram getWatchNextProgram(long)>(l0);
+
+        if r2 == null goto label1;
+
+        $z0 = virtualinvoke r2.<androidx.tvprovider.media.tv.WatchNextProgram: boolean hasAnyUpdatedValues(androidx.tvprovider.media.tv.WatchNextProgram)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: void updateWatchNextProgram(long,androidx.tvprovider.media.tv.WatchNextProgram)>(l0, r1);
+
+     label1:
+        return;
+    }
+
+    void updateWatchNextProgram(long, androidx.tvprovider.media.tv.WatchNextProgram)
+    {
+        androidx.tvprovider.media.tv.PreviewChannelHelper r0;
+        long l0;
+        androidx.tvprovider.media.tv.WatchNextProgram r1;
+        android.content.Context $r2;
+        android.content.ContentResolver $r3;
+        android.net.Uri $r4;
+        android.content.ContentValues $r5;
+
+        r0 := @this: androidx.tvprovider.media.tv.PreviewChannelHelper;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: androidx.tvprovider.media.tv.WatchNextProgram;
+
+        $r2 = r0.<androidx.tvprovider.media.tv.PreviewChannelHelper: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r4 = staticinvoke <androidx.tvprovider.media.tv.TvContractCompat: android.net.Uri buildWatchNextProgramUri(long)>(l0);
+
+        $r5 = virtualinvoke r1.<androidx.tvprovider.media.tv.WatchNextProgram: android.content.ContentValues toContentValues()>();
+
+        virtualinvoke $r3.<android.content.ContentResolver: int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[])>($r4, $r5, null, null);
+
+        return;
+    }
+

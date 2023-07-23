@@ -1,0 +1,141 @@
+androidx.media3.datasource.DataSourceUtil
+    private void <init>()
+    {
+        androidx.media3.datasource.DataSourceUtil r0;
+
+        r0 := @this: androidx.media3.datasource.DataSourceUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static byte[] readToEnd(androidx.media3.datasource.DataSource) throws java.io.IOException
+    {
+        androidx.media3.datasource.DataSource r0;
+        byte[] $r1, r2;
+        int $i0, $i1, $i2, $i3, $i4, i5, i6;
+
+        r0 := @parameter0: androidx.media3.datasource.DataSource;
+
+        r2 = newarray (byte)[1024];
+
+        i5 = 0;
+
+        i6 = 0;
+
+     label1:
+        if i6 == -1 goto label3;
+
+        $i0 = lengthof r2;
+
+        if i5 != $i0 goto label2;
+
+        $i3 = lengthof r2;
+
+        $i4 = $i3 * 2;
+
+        r2 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>(r2, $i4);
+
+     label2:
+        $i1 = lengthof r2;
+
+        $i2 = $i1 - i5;
+
+        i6 = interfaceinvoke r0.<androidx.media3.datasource.DataSource: int read(byte[],int,int)>(r2, i5, $i2);
+
+        if i6 == -1 goto label1;
+
+        i5 = i5 + i6;
+
+        goto label1;
+
+     label3:
+        $r1 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>(r2, i5);
+
+        return $r1;
+    }
+
+    public static byte[] readExactly(androidx.media3.datasource.DataSource, int) throws java.io.IOException
+    {
+        androidx.media3.datasource.DataSource r0;
+        int i0, i1, $i2, $i3, i4;
+        byte[] r1;
+        java.lang.IllegalStateException $r2;
+        java.lang.StringBuilder $r3, $r4, $r5, $r6, $r7;
+        java.lang.String $r8;
+
+        r0 := @parameter0: androidx.media3.datasource.DataSource;
+
+        i0 := @parameter1: int;
+
+        r1 = newarray (byte)[i0];
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i0 goto label3;
+
+        $i2 = lengthof r1;
+
+        $i3 = $i2 - i4;
+
+        i1 = interfaceinvoke r0.<androidx.media3.datasource.DataSource: int read(byte[],int,int)>(r1, i4, $i3);
+
+        if i1 != -1 goto label2;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Not enough data could be read: ");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" < ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r8);
+
+        throw $r2;
+
+     label2:
+        i4 = i4 + i1;
+
+        goto label1;
+
+     label3:
+        return r1;
+    }
+
+    public static void closeQuietly(androidx.media3.datasource.DataSource)
+    {
+        androidx.media3.datasource.DataSource r0;
+        java.lang.Throwable r1, $r2;
+
+        r0 := @parameter0: androidx.media3.datasource.DataSource;
+
+     label1:
+        if r0 == null goto label2;
+
+        interfaceinvoke r0.<androidx.media3.datasource.DataSource: void close()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r1 = $r2;
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+

@@ -1,0 +1,351 @@
+androidx.enterprise.feedback.KeyedAppStatesService
+<androidx.enterprise.feedback.KeyedAppStatesService: java.lang.String LOG_TAG>
+    public void <init>()
+    {
+        androidx.enterprise.feedback.KeyedAppStatesService r0;
+
+        r0 := @this: androidx.enterprise.feedback.KeyedAppStatesService;
+
+        specialinvoke r0.<android.app.Service: void <init>()>();
+
+        return;
+    }
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        androidx.enterprise.feedback.KeyedAppStatesService r0;
+        android.content.Intent r1;
+        android.os.Messenger r2, $r3;
+        androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler $r4;
+        android.os.IBinder $r5;
+
+        r0 := @this: androidx.enterprise.feedback.KeyedAppStatesService;
+
+        r1 := @parameter0: android.content.Intent;
+
+        $r3 = new android.os.Messenger;
+
+        $r4 = new androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler;
+
+        specialinvoke $r4.<androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler: void <init>(androidx.enterprise.feedback.KeyedAppStatesService)>(r0);
+
+        specialinvoke $r3.<android.os.Messenger: void <init>(android.os.Handler)>($r4);
+
+        r2 = $r3;
+
+        $r5 = virtualinvoke r2.<android.os.Messenger: android.os.IBinder getBinder()>();
+
+        return $r5;
+    }
+
+<androidx.enterprise.feedback.KeyedAppStatesService: void onReceive(java.util.Collection,boolean)>
+androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler
+<androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler: androidx.enterprise.feedback.KeyedAppStatesService mKeyedAppStatesService>
+    void <init>(androidx.enterprise.feedback.KeyedAppStatesService)
+    {
+        androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler r0;
+        androidx.enterprise.feedback.KeyedAppStatesService r1;
+
+        r0 := @this: androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler;
+
+        r1 := @parameter0: androidx.enterprise.feedback.KeyedAppStatesService;
+
+        specialinvoke r0.<android.os.Handler: void <init>()>();
+
+        r0.<androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler: androidx.enterprise.feedback.KeyedAppStatesService mKeyedAppStatesService> = r1;
+
+        return;
+    }
+
+    public void handleMessage(android.os.Message)
+    {
+        androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler r0;
+        android.os.Message r1;
+        int $i0;
+
+        r0 := @this: androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler;
+
+        r1 := @parameter0: android.os.Message;
+
+        $i0 = r1.<android.os.Message: int what>;
+
+        lookupswitch($i0)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            default: goto label3;
+        };
+
+     label1:
+        specialinvoke r0.<androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler: void handleStateMessage(android.os.Message,boolean)>(r1, 0);
+
+        goto label4;
+
+     label2:
+        specialinvoke r0.<androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler: void handleStateMessage(android.os.Message,boolean)>(r1, 1);
+
+        goto label4;
+
+     label3:
+        specialinvoke r0.<android.os.Handler: void handleMessage(android.os.Message)>(r1);
+
+     label4:
+        return;
+    }
+
+    private void handleStateMessage(android.os.Message, boolean)
+    {
+        androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler r0;
+        android.os.Message r1;
+        boolean z0, $z1;
+        long l0;
+        java.lang.String r2;
+        java.util.Collection r3, $r10;
+        androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask r4, $r8;
+        androidx.enterprise.feedback.KeyedAppStatesService $r5, $r9;
+        android.content.Context $r6;
+        android.content.pm.PackageManager $r7;
+        int $i1;
+        java.lang.Void[] $r11;
+
+        r0 := @this: androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler;
+
+        r1 := @parameter0: android.os.Message;
+
+        z0 := @parameter1: boolean;
+
+        l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r5 = r0.<androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler: androidx.enterprise.feedback.KeyedAppStatesService mKeyedAppStatesService>;
+
+        $r6 = virtualinvoke $r5.<androidx.enterprise.feedback.KeyedAppStatesService: android.content.Context getApplicationContext()>();
+
+        $r7 = virtualinvoke $r6.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $i1 = r1.<android.os.Message: int sendingUid>;
+
+        r2 = virtualinvoke $r7.<android.content.pm.PackageManager: java.lang.String getNameForUid(int)>($i1);
+
+        r3 = staticinvoke <androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler: java.util.Collection extractReceivedKeyedAppStates(android.os.Message,java.lang.String,long)>(r1, r2, l0);
+
+        $z1 = interfaceinvoke r3.<java.util.Collection: boolean isEmpty()>();
+
+        if $z1 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r8 = new androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask;
+
+        $r9 = r0.<androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler: androidx.enterprise.feedback.KeyedAppStatesService mKeyedAppStatesService>;
+
+        $r10 = staticinvoke <androidx.enterprise.feedback.KeyedAppStatesService$IncomingHandler: java.util.Collection deduplicateStates(java.util.Collection)>(r3);
+
+        specialinvoke $r8.<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: void <init>(androidx.enterprise.feedback.KeyedAppStatesService,java.util.Collection,boolean)>($r9, $r10, z0);
+
+        r4 = $r8;
+
+        $r11 = newarray (java.lang.Void)[0];
+
+        virtualinvoke r4.<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: android.os.AsyncTask execute(java.lang.Object[])>($r11);
+
+        return;
+    }
+
+    private static java.util.Collection extractReceivedKeyedAppStates(android.os.Message, java.lang.String, long)
+    {
+        android.os.Message r0;
+        java.lang.String r1;
+        long l0;
+        android.os.Bundle r2, r6;
+        java.util.ArrayList r3, r4, $r8;
+        java.util.Iterator r5;
+        java.lang.Object $r7, $r10;
+        java.util.Collection $r9;
+        boolean $z0, $z2;
+        androidx.enterprise.feedback.ReceivedKeyedAppState $r11;
+        java.util.List $r12, $r13;
+
+        r0 := @parameter0: android.os.Message;
+
+        r1 := @parameter1: java.lang.String;
+
+        l0 := @parameter2: long;
+
+        $r7 = r0.<android.os.Message: java.lang.Object obj>;
+
+        r2 = (android.os.Bundle) $r7;
+
+        goto label1;
+
+     label1:
+        if r2 != null goto label2;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("KeyedAppStatesService", "Could not extract state bundles from message");
+
+        $r13 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r13;
+
+     label2:
+        r3 = virtualinvoke r2.<android.os.Bundle: java.util.ArrayList getParcelableArrayList(java.lang.String)>("androidx.enterprise.feedback.APP_STATES");
+
+        if r3 != null goto label3;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("KeyedAppStatesService", "Could not extract state bundles from message");
+
+        $r12 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r12;
+
+     label3:
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        r4 = $r8;
+
+        r5 = interfaceinvoke r3.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label4:
+        $z2 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label6;
+
+        $r10 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (android.os.Bundle) $r10;
+
+        $z0 = staticinvoke <androidx.enterprise.feedback.KeyedAppState: boolean isValid(android.os.Bundle)>(r6);
+
+        if $z0 != 0 goto label5;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("KeyedAppStatesService", "Invalid KeyedAppState in bundle");
+
+        goto label4;
+
+     label5:
+        $r11 = staticinvoke <androidx.enterprise.feedback.ReceivedKeyedAppState: androidx.enterprise.feedback.ReceivedKeyedAppState fromBundle(android.os.Bundle,java.lang.String,long)>(r6, r1, l0);
+
+        interfaceinvoke r4.<java.util.Collection: boolean add(java.lang.Object)>($r11);
+
+        goto label4;
+
+     label6:
+        $r9 = staticinvoke <java.util.Collections: java.util.Collection unmodifiableCollection(java.util.Collection)>(r4);
+
+        return $r9;
+    }
+
+    private static java.util.Collection deduplicateStates(java.util.Collection)
+    {
+        java.util.Collection r0, $r5;
+        java.util.HashMap r1, $r4;
+        java.util.Iterator r2;
+        androidx.enterprise.feedback.ReceivedKeyedAppState r3;
+        boolean $z0;
+        java.lang.Object $r6;
+        java.lang.String $r7;
+
+        r0 := @parameter0: java.util.Collection;
+
+        $r4 = new java.util.HashMap;
+
+        specialinvoke $r4.<java.util.HashMap: void <init>()>();
+
+        r1 = $r4;
+
+        r2 = interfaceinvoke r0.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.enterprise.feedback.ReceivedKeyedAppState) $r6;
+
+        $r7 = virtualinvoke r3.<androidx.enterprise.feedback.ReceivedKeyedAppState: java.lang.String getKey()>();
+
+        interfaceinvoke r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r7, r3);
+
+        goto label1;
+
+     label2:
+        $r5 = interfaceinvoke r1.<java.util.Map: java.util.Collection values()>();
+
+        return $r5;
+    }
+
+androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask
+<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: androidx.enterprise.feedback.KeyedAppStatesService mKeyedAppStatesService>
+<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: java.util.Collection mStates>
+<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: boolean mRequestSync>
+    void <init>(androidx.enterprise.feedback.KeyedAppStatesService, java.util.Collection, boolean)
+    {
+        androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask r0;
+        androidx.enterprise.feedback.KeyedAppStatesService r1;
+        java.util.Collection r2;
+        boolean z0;
+
+        r0 := @this: androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask;
+
+        r1 := @parameter0: androidx.enterprise.feedback.KeyedAppStatesService;
+
+        r2 := @parameter1: java.util.Collection;
+
+        z0 := @parameter2: boolean;
+
+        specialinvoke r0.<android.os.AsyncTask: void <init>()>();
+
+        r0.<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: androidx.enterprise.feedback.KeyedAppStatesService mKeyedAppStatesService> = r1;
+
+        r0.<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: java.util.Collection mStates> = r2;
+
+        r0.<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: boolean mRequestSync> = z0;
+
+        return;
+    }
+
+    protected transient java.lang.Void doInBackground(java.lang.Void[])
+    {
+        androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask r0;
+        java.lang.Void[] r1;
+        boolean $z0;
+        java.util.Collection $r2;
+        androidx.enterprise.feedback.KeyedAppStatesService $r3;
+
+        r0 := @this: androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask;
+
+        r1 := @parameter0: java.lang.Void[];
+
+        $r3 = r0.<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: androidx.enterprise.feedback.KeyedAppStatesService mKeyedAppStatesService>;
+
+        $r2 = r0.<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: java.util.Collection mStates>;
+
+        $z0 = r0.<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: boolean mRequestSync>;
+
+        virtualinvoke $r3.<androidx.enterprise.feedback.KeyedAppStatesService: void onReceive(java.util.Collection,boolean)>($r2, $z0);
+
+        return null;
+    }
+
+    protected volatile java.lang.Object doInBackground(java.lang.Object[])
+    {
+        androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask r0;
+        java.lang.Object[] r1;
+        java.lang.Void[] $r2;
+        java.lang.Void $r3;
+
+        r0 := @this: androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask;
+
+        r1 := @parameter0: java.lang.Object[];
+
+        $r2 = (java.lang.Void[]) r1;
+
+        $r3 = virtualinvoke r0.<androidx.enterprise.feedback.KeyedAppStatesService$KeyedAppStatesServiceAsyncTask: java.lang.Void doInBackground(java.lang.Void[])>($r2);
+
+        return $r3;
+    }
+

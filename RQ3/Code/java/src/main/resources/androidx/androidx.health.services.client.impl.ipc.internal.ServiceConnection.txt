@@ -1,0 +1,998 @@
+androidx.health.services.client.impl.ipc.internal.ServiceConnection
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.lang.String TAG>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: int MAX_RETRIES>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.content.Context mContext>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Queue mOperationQueue>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ExecutionTracker mExecutionTracker>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Map mRegisteredListeners>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback mCallback>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.os.IBinder mBinder>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean mIsServiceBound>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection: int mServiceConnectionRetry>
+    void <init>(android.content.Context, androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration, androidx.health.services.client.impl.ipc.internal.ExecutionTracker, androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        android.content.Context r1, $r8;
+        androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration r2, $r10;
+        androidx.health.services.client.impl.ipc.internal.ExecutionTracker r3, $r12;
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback r4, $r14;
+        java.util.concurrent.ConcurrentLinkedQueue $r5;
+        java.util.HashMap $r6;
+        java.lang.Object $r7, $r9, $r11, $r13;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration;
+
+        r3 := @parameter2: androidx.health.services.client.impl.ipc.internal.ExecutionTracker;
+
+        r4 := @parameter3: androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r5 = new java.util.concurrent.ConcurrentLinkedQueue;
+
+        specialinvoke $r5.<java.util.concurrent.ConcurrentLinkedQueue: void <init>()>();
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Queue mOperationQueue> = $r5;
+
+        $r6 = new java.util.HashMap;
+
+        specialinvoke $r6.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Map mRegisteredListeners> = $r6;
+
+        $r7 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r8 = (android.content.Context) $r7;
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.content.Context mContext> = $r8;
+
+        $r9 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $r10 = (androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration) $r9;
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration> = $r10;
+
+        $r11 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r3);
+
+        $r12 = (androidx.health.services.client.impl.ipc.internal.ExecutionTracker) $r11;
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ExecutionTracker mExecutionTracker> = $r12;
+
+        $r13 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r4);
+
+        $r14 = (androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback) $r13;
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback mCallback> = $r14;
+
+        return;
+    }
+
+    private java.lang.String getBindPackageName()
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback $r1;
+        boolean $z0;
+        androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration $r2;
+        java.lang.String $r3, $r5;
+        android.content.Context $r4;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        $r1 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback mCallback>;
+
+        $z0 = interfaceinvoke $r1.<androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback: boolean isBindToSelfEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.content.Context mContext>;
+
+        $r5 = virtualinvoke $r4.<android.content.Context: java.lang.String getPackageName()>();
+
+        return $r5;
+
+     label1:
+        $r2 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r3 = virtualinvoke $r2.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getPackageName()>();
+
+        return $r3;
+    }
+
+    public void connect()
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        java.lang.Throwable r1, $r21;
+        boolean $z0, $z1, $z2;
+        android.content.Intent $r2, $r5, $r8;
+        android.content.Context $r3;
+        java.lang.String $r4, $r7, $r12, $r16, $r19, $r25, $r28;
+        androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration $r6, $r11, $r15, $r24;
+        java.lang.StringBuilder $r9, $r10, $r13, $r14, $r17, $r18, $r22, $r23, $r26, $r27;
+        java.util.concurrent.CancellationException $r20;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        $z0 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean mIsServiceBound>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.content.Context mContext>;
+
+        $r2 = new android.content.Intent;
+
+        specialinvoke $r2.<android.content.Intent: void <init>()>();
+
+        $r4 = specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.lang.String getBindPackageName()>();
+
+        $r5 = virtualinvoke $r2.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>($r4);
+
+        $r6 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r7 = virtualinvoke $r6.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getBindAction()>();
+
+        $r8 = virtualinvoke $r5.<android.content.Intent: android.content.Intent setAction(java.lang.String)>($r7);
+
+        $z1 = virtualinvoke $r3.<android.content.Context: boolean bindService(android.content.Intent,android.content.ServiceConnection,int)>($r8, r0, 129);
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean mIsServiceBound> = $z1;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r21 := @caughtexception;
+
+        r1 = $r21;
+
+        $r22 = new java.lang.StringBuilder;
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>()>();
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to bind connection \'");
+
+        $r24 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r25 = virtualinvoke $r24.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getKey()>();
+
+        $r26 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r25);
+
+        $r27 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\', no permission or service not found.");
+
+        $r28 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ServiceConnection", $r28, r1);
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean mIsServiceBound> = 0;
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.os.IBinder mBinder> = null;
+
+        throw r1;
+
+     label4:
+        $z2 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean mIsServiceBound>;
+
+        if $z2 != 0 goto label5;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Connection to service is not available for package \'");
+
+        $r11 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r12 = virtualinvoke $r11.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getPackageName()>();
+
+        $r13 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r12);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\' and action \'");
+
+        $r15 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r16 = virtualinvoke $r15.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getBindAction()>();
+
+        $r17 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r16);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\'.");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("ServiceConnection", $r19);
+
+        $r20 = new java.util.concurrent.CancellationException;
+
+        specialinvoke $r20.<java.util.concurrent.CancellationException: void <init>(java.lang.String)>("Service not available");
+
+        specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void handleNonRetriableDisconnection(java.lang.Throwable)>($r20);
+
+     label5:
+        return;
+
+        catch java.lang.SecurityException from label1 to label2 with label3;
+    }
+
+    private void handleNonRetriableDisconnection(java.lang.Throwable)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        java.lang.Throwable r1;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: int mServiceConnectionRetry> = 10;
+
+        specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void handleRetriableDisconnection(java.lang.Throwable)>(r1);
+
+        return;
+    }
+
+    private synchronized void handleRetriableDisconnection(java.lang.Throwable)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        java.lang.Throwable r1;
+        boolean $z0;
+        int $i0, $i2, $i4, $i5;
+        java.lang.StringBuilder $r2, $r3, $r6, $r7, $r8;
+        androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration $r4;
+        java.lang.String $r5, $r9;
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback $r10;
+        long $l6;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("ServiceConnection", "Connection is already re-established. No need to reconnect again");
+
+        return;
+
+     label1:
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void clearConnection(java.lang.Throwable)>(r1);
+
+        $i0 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: int mServiceConnectionRetry>;
+
+        if $i0 >= 10 goto label2;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("WCS SDK Client \'");
+
+        $r4 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r5 = virtualinvoke $r4.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getClientName()>();
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\' disconnected, retrying connection. Retry attempt: ");
+
+        $i2 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: int mServiceConnectionRetry>;
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ServiceConnection", $r9, r1);
+
+        $r10 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback mCallback>;
+
+        $i4 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: int mServiceConnectionRetry>;
+
+        $i5 = staticinvoke <androidx.health.services.client.impl.ipc.internal.ServiceConnection: int getRetryDelayMs(int)>($i4);
+
+        $l6 = (long) $i5;
+
+        interfaceinvoke $r10.<androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback: void onDisconnected(androidx.health.services.client.impl.ipc.internal.ServiceConnection,long)>(r0, $l6);
+
+        goto label3;
+
+     label2:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("ServiceConnection", "Connection disconnected and maximum number of retries reached.", r1);
+
+     label3:
+        return;
+    }
+
+    private static int getRetryDelayMs(int)
+    {
+        int i0, $i1;
+
+        i0 := @parameter0: int;
+
+        $i1 = 200 << i0;
+
+        return $i1;
+    }
+
+    void clearConnection(java.lang.Throwable)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        java.lang.Throwable r1, r2, $r4;
+        boolean $z0;
+        android.content.Context $r3;
+        androidx.health.services.client.impl.ipc.internal.ExecutionTracker $r5;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean mIsServiceBound>;
+
+        if $z0 == 0 goto label4;
+
+     label1:
+        $r3 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.content.Context mContext>;
+
+        virtualinvoke $r3.<android.content.Context: void unbindService(android.content.ServiceConnection)>(r0);
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean mIsServiceBound> = 0;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r2 = $r4;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("ServiceConnection", "Failed to unbind the service. Ignoring and continuing", r2);
+
+     label4:
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.os.IBinder mBinder> = null;
+
+        $r5 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ExecutionTracker mExecutionTracker>;
+
+        interfaceinvoke $r5.<androidx.health.services.client.impl.ipc.internal.ExecutionTracker: void cancelPendingFutures(java.lang.Throwable)>(r1);
+
+        specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void cancelAllOperationsInQueue(java.lang.Throwable)>(r1);
+
+        return;
+
+        catch java.lang.IllegalArgumentException from label1 to label2 with label3;
+    }
+
+    void enqueue(androidx.health.services.client.impl.ipc.internal.QueueOperation)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        androidx.health.services.client.impl.ipc.internal.QueueOperation r1;
+        boolean $z0;
+        java.util.Queue $r2;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: androidx.health.services.client.impl.ipc.internal.QueueOperation;
+
+        $z0 = specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void execute(androidx.health.services.client.impl.ipc.internal.QueueOperation)>(r1);
+
+        goto label2;
+
+     label1:
+        $r2 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Queue mOperationQueue>;
+
+        interfaceinvoke $r2.<java.util.Queue: boolean add(java.lang.Object)>(r1);
+
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void connect()>();
+
+     label2:
+        return;
+    }
+
+    void registerListener(androidx.health.services.client.impl.ipc.internal.ListenerKey, androidx.health.services.client.impl.ipc.internal.QueueOperation)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        androidx.health.services.client.impl.ipc.internal.ListenerKey r1;
+        androidx.health.services.client.impl.ipc.internal.QueueOperation r2;
+        java.util.Map $r3;
+        boolean $z0;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: androidx.health.services.client.impl.ipc.internal.ListenerKey;
+
+        r2 := @parameter1: androidx.health.services.client.impl.ipc.internal.QueueOperation;
+
+        $r3 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Map mRegisteredListeners>;
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        $z0 = specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void enqueue(androidx.health.services.client.impl.ipc.internal.QueueOperation)>(r2);
+
+        goto label2;
+
+     label1:
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void connect()>();
+
+     label2:
+        return;
+    }
+
+    void unregisterListener(androidx.health.services.client.impl.ipc.internal.ListenerKey, androidx.health.services.client.impl.ipc.internal.QueueOperation)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        androidx.health.services.client.impl.ipc.internal.ListenerKey r1;
+        androidx.health.services.client.impl.ipc.internal.QueueOperation r2;
+        java.util.Map $r3;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: androidx.health.services.client.impl.ipc.internal.ListenerKey;
+
+        r2 := @parameter1: androidx.health.services.client.impl.ipc.internal.QueueOperation;
+
+        $r3 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Map mRegisteredListeners>;
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r1);
+
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void enqueue(androidx.health.services.client.impl.ipc.internal.QueueOperation)>(r2);
+
+        return;
+    }
+
+    void maybeReconnect()
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        java.util.Map $r1;
+        boolean $z0;
+        int $i0, $i1;
+        java.lang.StringBuilder $r2, $r3, $r6, $r7, $r9, $r10, $r13, $r14;
+        androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration $r4, $r11;
+        java.lang.String $r5, $r8, $r12, $r15;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        $r1 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Map mRegisteredListeners>;
+
+        $z0 = interfaceinvoke $r1.<java.util.Map: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("No listeners registered, service ");
+
+        $r11 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r12 = virtualinvoke $r11.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getClientName()>();
+
+        $r13 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r12);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is not automatically reconnected.");
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("ServiceConnection", $r15);
+
+        goto label2;
+
+     label1:
+        $i0 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: int mServiceConnectionRetry>;
+
+        $i1 = $i0 + 1;
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: int mServiceConnectionRetry> = $i1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Listeners for service ");
+
+        $r4 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r5 = virtualinvoke $r4.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getClientName()>();
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" are registered, reconnecting.");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("ServiceConnection", $r8);
+
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void connect()>();
+
+     label2:
+        return;
+    }
+
+    void execute(androidx.health.services.client.impl.ipc.internal.QueueOperation)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        androidx.health.services.client.impl.ipc.internal.QueueOperation r1;
+        androidx.health.services.client.impl.ipc.internal.ExecutionTracker $r2;
+        android.os.IBinder $r4, $r6;
+        java.lang.Object $r5;
+        java.lang.Throwable $r7, $r8, r9, r10;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: androidx.health.services.client.impl.ipc.internal.QueueOperation;
+
+     label1:
+        $r2 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ExecutionTracker mExecutionTracker>;
+
+        interfaceinvoke r1.<androidx.health.services.client.impl.ipc.internal.QueueOperation: androidx.health.services.client.impl.ipc.internal.QueueOperation trackExecution(androidx.health.services.client.impl.ipc.internal.ExecutionTracker)>($r2);
+
+        $r4 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.os.IBinder mBinder>;
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        $r6 = (android.os.IBinder) $r5;
+
+        interfaceinvoke r1.<androidx.health.services.client.impl.ipc.internal.QueueOperation: void execute(android.os.IBinder)>($r6);
+
+     label2:
+        goto label5;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r9 = $r7;
+
+        specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void handleRetriableDisconnection(java.lang.Throwable)>(r9);
+
+        goto label5;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r10 = $r8;
+
+        interfaceinvoke r1.<androidx.health.services.client.impl.ipc.internal.QueueOperation: void setException(java.lang.Throwable)>(r10);
+
+     label5:
+        return;
+
+        catch android.os.DeadObjectException from label1 to label2 with label3;
+        catch android.os.RemoteException from label1 to label2 with label4;
+        catch java.lang.RuntimeException from label1 to label2 with label4;
+    }
+
+    void reRegisterAllListeners()
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        java.util.Iterator r1;
+        java.util.Map$Entry r2;
+        java.util.Map $r3;
+        java.util.Set $r4;
+        boolean $z0;
+        java.lang.Object $r5, $r8, $r11;
+        java.lang.StringBuilder $r6, $r7, $r9;
+        java.lang.String $r10;
+        androidx.health.services.client.impl.ipc.internal.QueueOperation $r12;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        $r3 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Map mRegisteredListeners>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.util.Set entrySet()>();
+
+        r1 = interfaceinvoke $r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (java.util.Map$Entry) $r5;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Re-registering listener: ");
+
+        $r8 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r8);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("ServiceConnection", $r10);
+
+        $r11 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r12 = (androidx.health.services.client.impl.ipc.internal.QueueOperation) $r11;
+
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void execute(androidx.health.services.client.impl.ipc.internal.QueueOperation)>($r12);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    void refreshServiceVersion()
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration $r1;
+        java.util.Queue $r2;
+        androidx.health.services.client.impl.ipc.internal.QueueOperation $r3;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        $r2 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Queue mOperationQueue>;
+
+        $r1 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r3 = virtualinvoke $r1.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: androidx.health.services.client.impl.ipc.internal.QueueOperation getRefreshVersionOperation()>();
+
+        interfaceinvoke $r2.<java.util.Queue: boolean add(java.lang.Object)>($r3);
+
+        return;
+    }
+
+    void flushQueue()
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        java.util.Iterator r1;
+        androidx.health.services.client.impl.ipc.internal.QueueOperation r2;
+        boolean z0, $z1;
+        java.util.ArrayList $r3;
+        java.util.Queue $r4, $r6;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        $r3 = new java.util.ArrayList;
+
+        $r4 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Queue mOperationQueue>;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>(java.util.Collection)>($r4);
+
+        r1 = virtualinvoke $r3.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (androidx.health.services.client.impl.ipc.internal.QueueOperation) $r5;
+
+        $r6 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Queue mOperationQueue>;
+
+        z0 = interfaceinvoke $r6.<java.util.Queue: boolean remove(java.lang.Object)>(r2);
+
+        if z0 == 0 goto label2;
+
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void execute(androidx.health.services.client.impl.ipc.internal.QueueOperation)>(r2);
+
+     label2:
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    private void cancelAllOperationsInQueue(java.lang.Throwable)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        java.lang.Throwable r1;
+        java.util.Iterator r2;
+        androidx.health.services.client.impl.ipc.internal.QueueOperation r3;
+        boolean z0, $z1;
+        java.util.ArrayList $r4;
+        java.util.Queue $r5, $r7;
+        java.lang.Object $r6;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $r4 = new java.util.ArrayList;
+
+        $r5 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Queue mOperationQueue>;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(java.util.Collection)>($r5);
+
+        r2 = virtualinvoke $r4.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.health.services.client.impl.ipc.internal.QueueOperation) $r6;
+
+        $r7 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: java.util.Queue mOperationQueue>;
+
+        z0 = interfaceinvoke $r7.<java.util.Queue: boolean remove(java.lang.Object)>(r3);
+
+        if z0 == 0 goto label2;
+
+        interfaceinvoke r3.<androidx.health.services.client.impl.ipc.internal.QueueOperation: void setException(java.lang.Throwable)>(r1);
+
+        virtualinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void execute(androidx.health.services.client.impl.ipc.internal.QueueOperation)>(r3);
+
+     label2:
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    private boolean isConnected()
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        android.os.IBinder $r1, $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        $r1 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.os.IBinder mBinder>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.os.IBinder mBinder>;
+
+        $z0 = interfaceinvoke $r2.<android.os.IBinder: boolean isBinderAlive()>();
+
+        if $z0 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    public void onServiceConnected(android.content.ComponentName, android.os.IBinder)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        android.content.ComponentName r1;
+        android.os.IBinder r2;
+        java.lang.StringBuilder $r3, $r4, $r5;
+        java.lang.String $r6;
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback $r7;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        r2 := @parameter1: android.os.IBinder;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("onServiceConnected(), componentName = ");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("ServiceConnection", $r6);
+
+        if r2 != null goto label1;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("ServiceConnection", "Service connected but binder is null.");
+
+        return;
+
+     label1:
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: int mServiceConnectionRetry> = 0;
+
+        specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void cleanOnDeath(android.os.IBinder)>(r2);
+
+        r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: android.os.IBinder mBinder> = r2;
+
+        $r7 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback mCallback>;
+
+        interfaceinvoke $r7.<androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback: void onConnected(androidx.health.services.client.impl.ipc.internal.ServiceConnection)>(r0);
+
+        return;
+    }
+
+    private void cleanOnDeath(android.os.IBinder)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        android.os.IBinder r1;
+        java.lang.Throwable r2, $r4;
+        android.os.IBinder$DeathRecipient $r3;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: android.os.IBinder;
+
+     label1:
+        $r3 = dynamicinvoke "binderDied" <android.os.IBinder$DeathRecipient (androidx.health.services.client.impl.ipc.internal.ServiceConnection)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.health.services.client.impl.ipc.internal.ServiceConnection: void lambda$cleanOnDeath$0()>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke r1.<android.os.IBinder: void linkToDeath(android.os.IBinder$DeathRecipient,int)>($r3, 0);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r2 = $r4;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ServiceConnection", "Cannot link to death, binder already died. Cleaning operations.", r2);
+
+        specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void handleRetriableDisconnection(java.lang.Throwable)>(r2);
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public void onServiceDisconnected(android.content.ComponentName)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        android.content.ComponentName r1;
+        java.lang.StringBuilder $r2, $r3, $r4;
+        java.lang.String $r5;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("onServiceDisconnected(), componentName = ");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("ServiceConnection", $r5);
+
+        return;
+    }
+
+    public void onBindingDied(android.content.ComponentName)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        android.content.ComponentName r1;
+        java.lang.StringBuilder $r2, $r3, $r6, $r7;
+        androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration $r4;
+        java.lang.String $r5, $r8;
+        java.util.concurrent.CancellationException $r9;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Binding died for client \'");
+
+        $r4 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r5 = virtualinvoke $r4.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getClientName()>();
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\'.");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("ServiceConnection", $r8);
+
+        $r9 = new java.util.concurrent.CancellationException;
+
+        specialinvoke $r9.<java.util.concurrent.CancellationException: void <init>()>();
+
+        specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void handleRetriableDisconnection(java.lang.Throwable)>($r9);
+
+        return;
+    }
+
+    public void onNullBinding(android.content.ComponentName)
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        android.content.ComponentName r1;
+        java.lang.StringBuilder $r2, $r3, $r6, $r7;
+        androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration $r4;
+        java.lang.String $r5, $r8;
+        java.util.concurrent.CancellationException $r9;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cannot bind client \'");
+
+        $r4 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r5 = virtualinvoke $r4.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getClientName()>();
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\', binder is null");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("ServiceConnection", $r8);
+
+        $r9 = new java.util.concurrent.CancellationException;
+
+        specialinvoke $r9.<java.util.concurrent.CancellationException: void <init>(java.lang.String)>("Null binding");
+
+        specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void handleRetriableDisconnection(java.lang.Throwable)>($r9);
+
+        return;
+    }
+
+    private void lambda$cleanOnDeath$0()
+    {
+        androidx.health.services.client.impl.ipc.internal.ServiceConnection r0;
+        java.lang.StringBuilder $r1, $r2, $r5;
+        androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration $r3;
+        java.lang.String $r4, $r6;
+        java.util.concurrent.CancellationException $r7;
+
+        r0 := @this: androidx.health.services.client.impl.ipc.internal.ServiceConnection;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Binder died for client:");
+
+        $r3 = r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration mConnectionConfiguration>;
+
+        $r4 = virtualinvoke $r3.<androidx.health.services.client.impl.ipc.internal.ConnectionConfiguration: java.lang.String getClientName()>();
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("ServiceConnection", $r6);
+
+        $r7 = new java.util.concurrent.CancellationException;
+
+        specialinvoke $r7.<java.util.concurrent.CancellationException: void <init>()>();
+
+        specialinvoke r0.<androidx.health.services.client.impl.ipc.internal.ServiceConnection: void handleRetriableDisconnection(java.lang.Throwable)>($r7);
+
+        return;
+    }
+
+androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback: void onConnected(androidx.health.services.client.impl.ipc.internal.ServiceConnection)>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback: void onDisconnected(androidx.health.services.client.impl.ipc.internal.ServiceConnection,long)>
+<androidx.health.services.client.impl.ipc.internal.ServiceConnection$Callback: boolean isBindToSelfEnabled()>

@@ -1,0 +1,732 @@
+android.support.design.widget.HeaderBehavior
+<android.support.design.widget.HeaderBehavior: int INVALID_POINTER>
+<android.support.design.widget.HeaderBehavior: java.lang.Runnable flingRunnable>
+<android.support.design.widget.HeaderBehavior: android.widget.OverScroller scroller>
+<android.support.design.widget.HeaderBehavior: boolean isBeingDragged>
+<android.support.design.widget.HeaderBehavior: int activePointerId>
+<android.support.design.widget.HeaderBehavior: int lastMotionY>
+<android.support.design.widget.HeaderBehavior: int touchSlop>
+<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>
+    public void <init>()
+    {
+        android.support.design.widget.HeaderBehavior r0;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        specialinvoke r0.<android.support.design.widget.ViewOffsetBehavior: void <init>()>();
+
+        r0.<android.support.design.widget.HeaderBehavior: int activePointerId> = -1;
+
+        r0.<android.support.design.widget.HeaderBehavior: int touchSlop> = -1;
+
+        return;
+    }
+
+    public void <init>(android.content.Context, android.util.AttributeSet)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.content.Context r1;
+        android.util.AttributeSet r2;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.util.AttributeSet;
+
+        specialinvoke r0.<android.support.design.widget.ViewOffsetBehavior: void <init>(android.content.Context,android.util.AttributeSet)>(r1, r2);
+
+        r0.<android.support.design.widget.HeaderBehavior: int activePointerId> = -1;
+
+        r0.<android.support.design.widget.HeaderBehavior: int touchSlop> = -1;
+
+        return;
+    }
+
+    public boolean onInterceptTouchEvent(android.support.design.widget.CoordinatorLayout, android.view.View, android.view.MotionEvent)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.support.design.widget.CoordinatorLayout r1;
+        android.view.View r2;
+        android.view.MotionEvent r3;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, i10, i11, i12, i13;
+        float $f0, $f1, $f2;
+        boolean $z0, $z1, $z2, $z3;
+        android.view.VelocityTracker $r4, $r5, $r6, $r9;
+        android.content.Context $r7;
+        android.view.ViewConfiguration $r8;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.support.design.widget.CoordinatorLayout;
+
+        r2 := @parameter1: android.view.View;
+
+        r3 := @parameter2: android.view.MotionEvent;
+
+        $i3 = r0.<android.support.design.widget.HeaderBehavior: int touchSlop>;
+
+        if $i3 >= 0 goto label1;
+
+        $r7 = virtualinvoke r1.<android.support.design.widget.CoordinatorLayout: android.content.Context getContext()>();
+
+        $r8 = staticinvoke <android.view.ViewConfiguration: android.view.ViewConfiguration get(android.content.Context)>($r7);
+
+        $i9 = virtualinvoke $r8.<android.view.ViewConfiguration: int getScaledTouchSlop()>();
+
+        r0.<android.support.design.widget.HeaderBehavior: int touchSlop> = $i9;
+
+     label1:
+        i0 = virtualinvoke r3.<android.view.MotionEvent: int getAction()>();
+
+        if i0 != 2 goto label2;
+
+        $z3 = r0.<android.support.design.widget.HeaderBehavior: boolean isBeingDragged>;
+
+        if $z3 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        $i4 = virtualinvoke r3.<android.view.MotionEvent: int getActionMasked()>();
+
+        tableswitch($i4)
+        {
+            case 0: goto label3;
+            case 1: goto label7;
+            case 2: goto label4;
+            case 3: goto label7;
+            default: goto label8;
+        };
+
+     label3:
+        r0.<android.support.design.widget.HeaderBehavior: boolean isBeingDragged> = 0;
+
+        $f1 = virtualinvoke r3.<android.view.MotionEvent: float getX()>();
+
+        i10 = (int) $f1;
+
+        $f2 = virtualinvoke r3.<android.view.MotionEvent: float getY()>();
+
+        i11 = (int) $f2;
+
+        $z1 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: boolean canDragView(android.view.View)>(r2);
+
+        if $z1 == 0 goto label8;
+
+        $z2 = virtualinvoke r1.<android.support.design.widget.CoordinatorLayout: boolean isPointInChildBounds(android.view.View,int,int)>(r2, i10, i11);
+
+        if $z2 == 0 goto label8;
+
+        r0.<android.support.design.widget.HeaderBehavior: int lastMotionY> = i11;
+
+        $i8 = virtualinvoke r3.<android.view.MotionEvent: int getPointerId(int)>(0);
+
+        r0.<android.support.design.widget.HeaderBehavior: int activePointerId> = $i8;
+
+        specialinvoke r0.<android.support.design.widget.HeaderBehavior: void ensureVelocityTracker()>();
+
+        goto label8;
+
+     label4:
+        i12 = r0.<android.support.design.widget.HeaderBehavior: int activePointerId>;
+
+        if i12 != -1 goto label5;
+
+        goto label8;
+
+     label5:
+        i13 = virtualinvoke r3.<android.view.MotionEvent: int findPointerIndex(int)>(i12);
+
+        if i13 != -1 goto label6;
+
+        goto label8;
+
+     label6:
+        $f0 = virtualinvoke r3.<android.view.MotionEvent: float getY(int)>(i13);
+
+        i1 = (int) $f0;
+
+        $i5 = r0.<android.support.design.widget.HeaderBehavior: int lastMotionY>;
+
+        $i6 = i1 - $i5;
+
+        i2 = staticinvoke <java.lang.Math: int abs(int)>($i6);
+
+        $i7 = r0.<android.support.design.widget.HeaderBehavior: int touchSlop>;
+
+        if i2 <= $i7 goto label8;
+
+        r0.<android.support.design.widget.HeaderBehavior: boolean isBeingDragged> = 1;
+
+        r0.<android.support.design.widget.HeaderBehavior: int lastMotionY> = i1;
+
+        goto label8;
+
+     label7:
+        r0.<android.support.design.widget.HeaderBehavior: boolean isBeingDragged> = 0;
+
+        r0.<android.support.design.widget.HeaderBehavior: int activePointerId> = -1;
+
+        $r5 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        if $r5 == null goto label8;
+
+        $r6 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        virtualinvoke $r6.<android.view.VelocityTracker: void recycle()>();
+
+        r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker> = null;
+
+     label8:
+        $r9 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        if $r9 == null goto label9;
+
+        $r4 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        virtualinvoke $r4.<android.view.VelocityTracker: void addMovement(android.view.MotionEvent)>(r3);
+
+     label9:
+        $z0 = r0.<android.support.design.widget.HeaderBehavior: boolean isBeingDragged>;
+
+        return $z0;
+    }
+
+    public boolean onTouchEvent(android.support.design.widget.CoordinatorLayout, android.view.View, android.view.MotionEvent)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.support.design.widget.CoordinatorLayout r1;
+        android.view.View r2;
+        android.view.MotionEvent r3;
+        int $i0, $i1, $i2, $i3, $i4, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, i15, i16, i17, i18, i19;
+        android.view.VelocityTracker $r4, $r5, $r6, $r7, $r8, $r9, $r12, $r13;
+        float $f0, $f1, $f2, f3;
+        boolean $z0, $z2, $z3, $z4;
+        android.content.Context $r10;
+        android.view.ViewConfiguration $r11;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.support.design.widget.CoordinatorLayout;
+
+        r2 := @parameter1: android.view.View;
+
+        r3 := @parameter2: android.view.MotionEvent;
+
+        $i0 = r0.<android.support.design.widget.HeaderBehavior: int touchSlop>;
+
+        if $i0 >= 0 goto label01;
+
+        $r10 = virtualinvoke r1.<android.support.design.widget.CoordinatorLayout: android.content.Context getContext()>();
+
+        $r11 = staticinvoke <android.view.ViewConfiguration: android.view.ViewConfiguration get(android.content.Context)>($r10);
+
+        $i14 = virtualinvoke $r11.<android.view.ViewConfiguration: int getScaledTouchSlop()>();
+
+        r0.<android.support.design.widget.HeaderBehavior: int touchSlop> = $i14;
+
+     label01:
+        $i1 = virtualinvoke r3.<android.view.MotionEvent: int getActionMasked()>();
+
+        tableswitch($i1)
+        {
+            case 0: goto label02;
+            case 1: goto label08;
+            case 2: goto label04;
+            case 3: goto label09;
+            default: goto label10;
+        };
+
+     label02:
+        $f1 = virtualinvoke r3.<android.view.MotionEvent: float getX()>();
+
+        i15 = (int) $f1;
+
+        $f2 = virtualinvoke r3.<android.view.MotionEvent: float getY()>();
+
+        i16 = (int) $f2;
+
+        $z2 = virtualinvoke r1.<android.support.design.widget.CoordinatorLayout: boolean isPointInChildBounds(android.view.View,int,int)>(r2, i15, i16);
+
+        if $z2 == 0 goto label03;
+
+        $z3 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: boolean canDragView(android.view.View)>(r2);
+
+        if $z3 == 0 goto label03;
+
+        r0.<android.support.design.widget.HeaderBehavior: int lastMotionY> = i16;
+
+        $i13 = virtualinvoke r3.<android.view.MotionEvent: int getPointerId(int)>(0);
+
+        r0.<android.support.design.widget.HeaderBehavior: int activePointerId> = $i13;
+
+        specialinvoke r0.<android.support.design.widget.HeaderBehavior: void ensureVelocityTracker()>();
+
+        goto label10;
+
+     label03:
+        return 0;
+
+     label04:
+        $i2 = r0.<android.support.design.widget.HeaderBehavior: int activePointerId>;
+
+        i17 = virtualinvoke r3.<android.view.MotionEvent: int findPointerIndex(int)>($i2);
+
+        if i17 != -1 goto label05;
+
+        return 0;
+
+     label05:
+        $f0 = virtualinvoke r3.<android.view.MotionEvent: float getY(int)>(i17);
+
+        i18 = (int) $f0;
+
+        $i3 = r0.<android.support.design.widget.HeaderBehavior: int lastMotionY>;
+
+        i19 = $i3 - i18;
+
+        $z0 = r0.<android.support.design.widget.HeaderBehavior: boolean isBeingDragged>;
+
+        if $z0 != 0 goto label07;
+
+        $i6 = staticinvoke <java.lang.Math: int abs(int)>(i19);
+
+        $i7 = r0.<android.support.design.widget.HeaderBehavior: int touchSlop>;
+
+        if $i6 <= $i7 goto label07;
+
+        r0.<android.support.design.widget.HeaderBehavior: boolean isBeingDragged> = 1;
+
+        if i19 <= 0 goto label06;
+
+        $i9 = r0.<android.support.design.widget.HeaderBehavior: int touchSlop>;
+
+        i19 = i19 - $i9;
+
+        goto label07;
+
+     label06:
+        $i8 = r0.<android.support.design.widget.HeaderBehavior: int touchSlop>;
+
+        i19 = i19 + $i8;
+
+     label07:
+        $z4 = r0.<android.support.design.widget.HeaderBehavior: boolean isBeingDragged>;
+
+        if $z4 == 0 goto label10;
+
+        r0.<android.support.design.widget.HeaderBehavior: int lastMotionY> = i18;
+
+        $i4 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: int getMaxDragOffset(android.view.View)>(r2);
+
+        virtualinvoke r0.<android.support.design.widget.HeaderBehavior: int scroll(android.support.design.widget.CoordinatorLayout,android.view.View,int,int,int)>(r1, r2, i19, $i4, 0);
+
+        goto label10;
+
+     label08:
+        $r6 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        if $r6 == null goto label09;
+
+        $r7 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        virtualinvoke $r7.<android.view.VelocityTracker: void addMovement(android.view.MotionEvent)>(r3);
+
+        $r8 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        virtualinvoke $r8.<android.view.VelocityTracker: void computeCurrentVelocity(int)>(1000);
+
+        $r9 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        $i10 = r0.<android.support.design.widget.HeaderBehavior: int activePointerId>;
+
+        f3 = virtualinvoke $r9.<android.view.VelocityTracker: float getYVelocity(int)>($i10);
+
+        $i11 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: int getScrollRangeForDragFling(android.view.View)>(r2);
+
+        $i12 = neg $i11;
+
+        virtualinvoke r0.<android.support.design.widget.HeaderBehavior: boolean fling(android.support.design.widget.CoordinatorLayout,android.view.View,int,int,float)>(r1, r2, $i12, 0, f3);
+
+     label09:
+        r0.<android.support.design.widget.HeaderBehavior: boolean isBeingDragged> = 0;
+
+        r0.<android.support.design.widget.HeaderBehavior: int activePointerId> = -1;
+
+        $r12 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        if $r12 == null goto label10;
+
+        $r5 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        virtualinvoke $r5.<android.view.VelocityTracker: void recycle()>();
+
+        r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker> = null;
+
+     label10:
+        $r13 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        if $r13 == null goto label11;
+
+        $r4 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        virtualinvoke $r4.<android.view.VelocityTracker: void addMovement(android.view.MotionEvent)>(r3);
+
+     label11:
+        return 1;
+    }
+
+    int setHeaderTopBottomOffset(android.support.design.widget.CoordinatorLayout, android.view.View, int)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.support.design.widget.CoordinatorLayout r1;
+        android.view.View r2;
+        int i0, $i1;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.support.design.widget.CoordinatorLayout;
+
+        r2 := @parameter1: android.view.View;
+
+        i0 := @parameter2: int;
+
+        $i1 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: int setHeaderTopBottomOffset(android.support.design.widget.CoordinatorLayout,android.view.View,int,int,int)>(r1, r2, i0, -2147483648, 2147483647);
+
+        return $i1;
+    }
+
+    int setHeaderTopBottomOffset(android.support.design.widget.CoordinatorLayout, android.view.View, int, int, int)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.support.design.widget.CoordinatorLayout r1;
+        android.view.View r2;
+        int i0, i1, i2, i3, i4, i5;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.support.design.widget.CoordinatorLayout;
+
+        r2 := @parameter1: android.view.View;
+
+        i3 := @parameter2: int;
+
+        i0 := @parameter3: int;
+
+        i1 := @parameter4: int;
+
+        i2 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: int getTopAndBottomOffset()>();
+
+        i4 = 0;
+
+        if i0 == 0 goto label1;
+
+        if i2 < i0 goto label1;
+
+        if i2 > i1 goto label1;
+
+        i5 = staticinvoke <android.support.design.widget.MathUtils: int constrain(int,int,int)>(i3, i0, i1);
+
+        if i2 == i5 goto label1;
+
+        virtualinvoke r0.<android.support.design.widget.HeaderBehavior: boolean setTopAndBottomOffset(int)>(i5);
+
+        i4 = i2 - i5;
+
+     label1:
+        return i4;
+    }
+
+    int getTopBottomOffsetForScrollingSibling()
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        int $i0;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        $i0 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: int getTopAndBottomOffset()>();
+
+        return $i0;
+    }
+
+    final int scroll(android.support.design.widget.CoordinatorLayout, android.view.View, int, int, int)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.support.design.widget.CoordinatorLayout r1;
+        android.view.View r2;
+        int i0, i1, i2, $i3, $i4, $i5;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.support.design.widget.CoordinatorLayout;
+
+        r2 := @parameter1: android.view.View;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        i2 := @parameter4: int;
+
+        $i3 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: int getTopBottomOffsetForScrollingSibling()>();
+
+        $i4 = $i3 - i0;
+
+        $i5 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: int setHeaderTopBottomOffset(android.support.design.widget.CoordinatorLayout,android.view.View,int,int,int)>(r1, r2, $i4, i1, i2);
+
+        return $i5;
+    }
+
+    final boolean fling(android.support.design.widget.CoordinatorLayout, android.view.View, int, int, float)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.support.design.widget.CoordinatorLayout r1;
+        android.view.View r2;
+        int i0, i1, $i2, $i3;
+        float f0;
+        java.lang.Runnable $r3, $r8, $r11;
+        android.widget.OverScroller $r4, $r5, $r6, $r9;
+        boolean $z0;
+        android.support.design.widget.HeaderBehavior$FlingRunnable $r7;
+        android.content.Context $r10;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.support.design.widget.CoordinatorLayout;
+
+        r2 := @parameter1: android.view.View;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        f0 := @parameter4: float;
+
+        $r3 = r0.<android.support.design.widget.HeaderBehavior: java.lang.Runnable flingRunnable>;
+
+        if $r3 == null goto label1;
+
+        $r11 = r0.<android.support.design.widget.HeaderBehavior: java.lang.Runnable flingRunnable>;
+
+        virtualinvoke r2.<android.view.View: boolean removeCallbacks(java.lang.Runnable)>($r11);
+
+        r0.<android.support.design.widget.HeaderBehavior: java.lang.Runnable flingRunnable> = null;
+
+     label1:
+        $r4 = r0.<android.support.design.widget.HeaderBehavior: android.widget.OverScroller scroller>;
+
+        if $r4 != null goto label2;
+
+        $r9 = new android.widget.OverScroller;
+
+        $r10 = virtualinvoke r2.<android.view.View: android.content.Context getContext()>();
+
+        specialinvoke $r9.<android.widget.OverScroller: void <init>(android.content.Context)>($r10);
+
+        r0.<android.support.design.widget.HeaderBehavior: android.widget.OverScroller scroller> = $r9;
+
+     label2:
+        $r5 = r0.<android.support.design.widget.HeaderBehavior: android.widget.OverScroller scroller>;
+
+        $i2 = virtualinvoke r0.<android.support.design.widget.HeaderBehavior: int getTopAndBottomOffset()>();
+
+        $i3 = staticinvoke <java.lang.Math: int round(float)>(f0);
+
+        virtualinvoke $r5.<android.widget.OverScroller: void fling(int,int,int,int,int,int,int,int)>(0, $i2, 0, $i3, 0, 0, i0, i1);
+
+        $r6 = r0.<android.support.design.widget.HeaderBehavior: android.widget.OverScroller scroller>;
+
+        $z0 = virtualinvoke $r6.<android.widget.OverScroller: boolean computeScrollOffset()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = new android.support.design.widget.HeaderBehavior$FlingRunnable;
+
+        specialinvoke $r7.<android.support.design.widget.HeaderBehavior$FlingRunnable: void <init>(android.support.design.widget.HeaderBehavior,android.support.design.widget.CoordinatorLayout,android.view.View)>(r0, r1, r2);
+
+        r0.<android.support.design.widget.HeaderBehavior: java.lang.Runnable flingRunnable> = $r7;
+
+        $r8 = r0.<android.support.design.widget.HeaderBehavior: java.lang.Runnable flingRunnable>;
+
+        staticinvoke <android.support.v4.view.ViewCompat: void postOnAnimation(android.view.View,java.lang.Runnable)>(r2, $r8);
+
+        return 1;
+
+     label3:
+        virtualinvoke r0.<android.support.design.widget.HeaderBehavior: void onFlingFinished(android.support.design.widget.CoordinatorLayout,android.view.View)>(r1, r2);
+
+        return 0;
+    }
+
+    void onFlingFinished(android.support.design.widget.CoordinatorLayout, android.view.View)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.support.design.widget.CoordinatorLayout r1;
+        android.view.View r2;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.support.design.widget.CoordinatorLayout;
+
+        r2 := @parameter1: android.view.View;
+
+        return;
+    }
+
+    boolean canDragView(android.view.View)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.view.View r1;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.view.View;
+
+        return 0;
+    }
+
+    int getMaxDragOffset(android.view.View)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.view.View r1;
+        int $i0, $i1;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.view.View;
+
+        $i0 = virtualinvoke r1.<android.view.View: int getHeight()>();
+
+        $i1 = neg $i0;
+
+        return $i1;
+    }
+
+    int getScrollRangeForDragFling(android.view.View)
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.view.View r1;
+        int $i0;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        r1 := @parameter0: android.view.View;
+
+        $i0 = virtualinvoke r1.<android.view.View: int getHeight()>();
+
+        return $i0;
+    }
+
+    private void ensureVelocityTracker()
+    {
+        android.support.design.widget.HeaderBehavior r0;
+        android.view.VelocityTracker $r1, $r2;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior;
+
+        $r1 = r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker>;
+
+        if $r1 != null goto label1;
+
+        $r2 = staticinvoke <android.view.VelocityTracker: android.view.VelocityTracker obtain()>();
+
+        r0.<android.support.design.widget.HeaderBehavior: android.view.VelocityTracker velocityTracker> = $r2;
+
+     label1:
+        return;
+    }
+
+android.support.design.widget.HeaderBehavior$FlingRunnable
+<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.CoordinatorLayout parent>
+<android.support.design.widget.HeaderBehavior$FlingRunnable: android.view.View layout>
+<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.HeaderBehavior this$0>
+    void <init>(android.support.design.widget.HeaderBehavior, android.support.design.widget.CoordinatorLayout, android.view.View)
+    {
+        android.support.design.widget.HeaderBehavior$FlingRunnable r0;
+        android.support.design.widget.HeaderBehavior r1;
+        android.support.design.widget.CoordinatorLayout r2;
+        android.view.View r3;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior$FlingRunnable;
+
+        r1 := @parameter0: android.support.design.widget.HeaderBehavior;
+
+        r2 := @parameter1: android.support.design.widget.CoordinatorLayout;
+
+        r3 := @parameter2: android.view.View;
+
+        r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.HeaderBehavior this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.CoordinatorLayout parent> = r2;
+
+        r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.view.View layout> = r3;
+
+        return;
+    }
+
+    public void run()
+    {
+        android.support.design.widget.HeaderBehavior$FlingRunnable r0;
+        android.view.View $r1, $r6, $r13, $r14;
+        android.support.design.widget.HeaderBehavior $r2, $r4, $r8, $r9, $r11;
+        android.widget.OverScroller $r3, $r5, $r10;
+        boolean $z0;
+        android.support.design.widget.CoordinatorLayout $r7, $r12;
+        int $i0;
+
+        r0 := @this: android.support.design.widget.HeaderBehavior$FlingRunnable;
+
+        $r1 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.view.View layout>;
+
+        if $r1 == null goto label2;
+
+        $r2 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.HeaderBehavior this$0>;
+
+        $r3 = $r2.<android.support.design.widget.HeaderBehavior: android.widget.OverScroller scroller>;
+
+        if $r3 == null goto label2;
+
+        $r4 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.HeaderBehavior this$0>;
+
+        $r5 = $r4.<android.support.design.widget.HeaderBehavior: android.widget.OverScroller scroller>;
+
+        $z0 = virtualinvoke $r5.<android.widget.OverScroller: boolean computeScrollOffset()>();
+
+        if $z0 == 0 goto label1;
+
+        $r11 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.HeaderBehavior this$0>;
+
+        $r12 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.CoordinatorLayout parent>;
+
+        $r13 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.view.View layout>;
+
+        $r9 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.HeaderBehavior this$0>;
+
+        $r10 = $r9.<android.support.design.widget.HeaderBehavior: android.widget.OverScroller scroller>;
+
+        $i0 = virtualinvoke $r10.<android.widget.OverScroller: int getCurrY()>();
+
+        virtualinvoke $r11.<android.support.design.widget.HeaderBehavior: int setHeaderTopBottomOffset(android.support.design.widget.CoordinatorLayout,android.view.View,int)>($r12, $r13, $i0);
+
+        $r14 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.view.View layout>;
+
+        staticinvoke <android.support.v4.view.ViewCompat: void postOnAnimation(android.view.View,java.lang.Runnable)>($r14, r0);
+
+        goto label2;
+
+     label1:
+        $r8 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.HeaderBehavior this$0>;
+
+        $r7 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.support.design.widget.CoordinatorLayout parent>;
+
+        $r6 = r0.<android.support.design.widget.HeaderBehavior$FlingRunnable: android.view.View layout>;
+
+        virtualinvoke $r8.<android.support.design.widget.HeaderBehavior: void onFlingFinished(android.support.design.widget.CoordinatorLayout,android.view.View)>($r7, $r6);
+
+     label2:
+        return;
+    }
+

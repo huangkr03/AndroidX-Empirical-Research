@@ -1,0 +1,322 @@
+androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue
+<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int MAX_SEQUENCE_LEAP_ALLOWED>
+<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int QUEUE_SIZE_THRESHOLD_FOR_RESET>
+<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: java.util.TreeSet packetQueue>
+<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastReceivedSequenceNumber>
+<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastDequeuedSequenceNumber>
+<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: boolean started>
+    public void <init>()
+    {
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue r0;
+        java.util.TreeSet $r1;
+        java.util.Comparator $r2;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.TreeSet;
+
+        $r2 = dynamicinvoke "compare" <java.util.Comparator ()>() <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: int __METHODTYPE__(java.lang.Object,java.lang.Object), methodhandle: "REF_INVOKE_STATIC" <androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lambda$new$0(androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer,androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer)>, methodtype: int __METHODTYPE__(androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer,androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer));
+
+        specialinvoke $r1.<java.util.TreeSet: void <init>(java.util.Comparator)>($r2);
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: java.util.TreeSet packetQueue> = $r1;
+
+        virtualinvoke r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: void reset()>();
+
+        return;
+    }
+
+    public synchronized void reset()
+    {
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue r0;
+        java.util.TreeSet $r1;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue;
+
+        $r1 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: java.util.TreeSet packetQueue>;
+
+        virtualinvoke $r1.<java.util.TreeSet: void clear()>();
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: boolean started> = 0;
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastDequeuedSequenceNumber> = -1;
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastReceivedSequenceNumber> = -1;
+
+        return;
+    }
+
+    public synchronized boolean offer(androidx.media3.exoplayer.rtsp.RtpPacket, long)
+    {
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue r0;
+        androidx.media3.exoplayer.rtsp.RtpPacket r1;
+        long l0;
+        int i1, i2, i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10;
+        java.util.TreeSet $r2, $r3;
+        boolean $z0;
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer $r4, $r5, $r6;
+        java.lang.IllegalStateException $r7;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue;
+
+        r1 := @parameter0: androidx.media3.exoplayer.rtsp.RtpPacket;
+
+        l0 := @parameter1: long;
+
+        $r2 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: java.util.TreeSet packetQueue>;
+
+        $i4 = virtualinvoke $r2.<java.util.TreeSet: int size()>();
+
+        if $i4 < 5000 goto label1;
+
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Queue size limit of 5000 reached.");
+
+        throw $r7;
+
+     label1:
+        i1 = r1.<androidx.media3.exoplayer.rtsp.RtpPacket: int sequenceNumber>;
+
+        $z0 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: boolean started>;
+
+        if $z0 != 0 goto label2;
+
+        virtualinvoke r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: void reset()>();
+
+        $i10 = staticinvoke <androidx.media3.exoplayer.rtsp.RtpPacket: int getPreviousSequenceNumber(int)>(i1);
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastDequeuedSequenceNumber> = $i10;
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: boolean started> = 1;
+
+        $r6 = new androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer;
+
+        specialinvoke $r6.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: void <init>(androidx.media3.exoplayer.rtsp.RtpPacket,long)>(r1, l0);
+
+        specialinvoke r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: void addToQueue(androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer)>($r6);
+
+        return 1;
+
+     label2:
+        $i5 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastReceivedSequenceNumber>;
+
+        i2 = staticinvoke <androidx.media3.exoplayer.rtsp.RtpPacket: int getNextSequenceNumber(int)>($i5);
+
+        i3 = staticinvoke <androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int calculateSequenceNumberShift(int,int)>(i1, i2);
+
+        $i6 = staticinvoke <java.lang.Math: int abs(int)>(i3);
+
+        if $i6 >= 1000 goto label3;
+
+        $i8 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastDequeuedSequenceNumber>;
+
+        $i9 = staticinvoke <androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int calculateSequenceNumberShift(int,int)>(i1, $i8);
+
+        if $i9 <= 0 goto label4;
+
+        $r5 = new androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer;
+
+        specialinvoke $r5.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: void <init>(androidx.media3.exoplayer.rtsp.RtpPacket,long)>(r1, l0);
+
+        specialinvoke r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: void addToQueue(androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer)>($r5);
+
+        return 1;
+
+     label3:
+        $i7 = staticinvoke <androidx.media3.exoplayer.rtsp.RtpPacket: int getPreviousSequenceNumber(int)>(i1);
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastDequeuedSequenceNumber> = $i7;
+
+        $r3 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: java.util.TreeSet packetQueue>;
+
+        virtualinvoke $r3.<java.util.TreeSet: void clear()>();
+
+        $r4 = new androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer;
+
+        specialinvoke $r4.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: void <init>(androidx.media3.exoplayer.rtsp.RtpPacket,long)>(r1, l0);
+
+        specialinvoke r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: void addToQueue(androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer)>($r4);
+
+        return 1;
+
+     label4:
+        return 0;
+    }
+
+    public synchronized androidx.media3.exoplayer.rtsp.RtpPacket poll(long)
+    {
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue r0;
+        long l0, $l4;
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer r1;
+        int i1, $i2, $i3;
+        java.util.TreeSet $r2, $r3, $r6;
+        boolean $z0;
+        java.lang.Object $r4;
+        androidx.media3.exoplayer.rtsp.RtpPacket $r5, $r8;
+        byte $b5;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: java.util.TreeSet packetQueue>;
+
+        $z0 = virtualinvoke $r2.<java.util.TreeSet: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        return null;
+
+     label1:
+        $r3 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: java.util.TreeSet packetQueue>;
+
+        $r4 = virtualinvoke $r3.<java.util.TreeSet: java.lang.Object first()>();
+
+        r1 = (androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer) $r4;
+
+        $r5 = r1.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: androidx.media3.exoplayer.rtsp.RtpPacket packet>;
+
+        i1 = $r5.<androidx.media3.exoplayer.rtsp.RtpPacket: int sequenceNumber>;
+
+        $i2 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastDequeuedSequenceNumber>;
+
+        $i3 = staticinvoke <androidx.media3.exoplayer.rtsp.RtpPacket: int getNextSequenceNumber(int)>($i2);
+
+        if i1 == $i3 goto label2;
+
+        $l4 = r1.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: long receivedTimestampMs>;
+
+        $b5 = l0 cmp $l4;
+
+        if $b5 < 0 goto label3;
+
+     label2:
+        $r6 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: java.util.TreeSet packetQueue>;
+
+        virtualinvoke $r6.<java.util.TreeSet: java.lang.Object pollFirst()>();
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastDequeuedSequenceNumber> = i1;
+
+        $r8 = r1.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: androidx.media3.exoplayer.rtsp.RtpPacket packet>;
+
+        return $r8;
+
+     label3:
+        return null;
+    }
+
+    private synchronized void addToQueue(androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer)
+    {
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue r0;
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer r1;
+        androidx.media3.exoplayer.rtsp.RtpPacket $r2;
+        int $i0;
+        java.util.TreeSet $r3;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue;
+
+        r1 := @parameter0: androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer;
+
+        $r2 = r1.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: androidx.media3.exoplayer.rtsp.RtpPacket packet>;
+
+        $i0 = $r2.<androidx.media3.exoplayer.rtsp.RtpPacket: int sequenceNumber>;
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int lastReceivedSequenceNumber> = $i0;
+
+        $r3 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: java.util.TreeSet packetQueue>;
+
+        virtualinvoke $r3.<java.util.TreeSet: boolean add(java.lang.Object)>(r1);
+
+        return;
+    }
+
+    private static int calculateSequenceNumberShift(int, int)
+    {
+        int i0, i1, i2, i3, $i4, $i5, $i6, $i7, $i8;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 = i0 - i1;
+
+        $i4 = staticinvoke <java.lang.Math: int abs(int)>(i2);
+
+        if $i4 <= 1000 goto label3;
+
+        $i5 = staticinvoke <java.lang.Math: int min(int,int)>(i0, i1);
+
+        $i6 = staticinvoke <java.lang.Math: int max(int,int)>(i0, i1);
+
+        $i7 = $i5 - $i6;
+
+        i3 = $i7 + 65535;
+
+        if i3 >= 1000 goto label3;
+
+        if i0 >= i1 goto label1;
+
+        $i8 = i3;
+
+        goto label2;
+
+     label1:
+        $i8 = neg i3;
+
+     label2:
+        return $i8;
+
+     label3:
+        return i2;
+    }
+
+    private static int lambda$new$0(androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer, androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer)
+    {
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer r0, r1;
+        androidx.media3.exoplayer.rtsp.RtpPacket $r2, $r3;
+        int $i0, $i1, $i2;
+
+        r0 := @parameter0: androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer;
+
+        r1 := @parameter1: androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer;
+
+        $r2 = r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: androidx.media3.exoplayer.rtsp.RtpPacket packet>;
+
+        $i1 = $r2.<androidx.media3.exoplayer.rtsp.RtpPacket: int sequenceNumber>;
+
+        $r3 = r1.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: androidx.media3.exoplayer.rtsp.RtpPacket packet>;
+
+        $i0 = $r3.<androidx.media3.exoplayer.rtsp.RtpPacket: int sequenceNumber>;
+
+        $i2 = staticinvoke <androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue: int calculateSequenceNumberShift(int,int)>($i1, $i0);
+
+        return $i2;
+    }
+
+androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer
+<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: androidx.media3.exoplayer.rtsp.RtpPacket packet>
+<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: long receivedTimestampMs>
+    public void <init>(androidx.media3.exoplayer.rtsp.RtpPacket, long)
+    {
+        androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer r0;
+        androidx.media3.exoplayer.rtsp.RtpPacket r1;
+        long l0;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer;
+
+        r1 := @parameter0: androidx.media3.exoplayer.rtsp.RtpPacket;
+
+        l0 := @parameter1: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: androidx.media3.exoplayer.rtsp.RtpPacket packet> = r1;
+
+        r0.<androidx.media3.exoplayer.rtsp.RtpPacketReorderingQueue$RtpPacketContainer: long receivedTimestampMs> = l0;
+
+        return;
+    }
+

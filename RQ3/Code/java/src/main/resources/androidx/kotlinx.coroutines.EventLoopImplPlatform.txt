@@ -1,0 +1,72 @@
+kotlinx.coroutines.EventLoopImplPlatform
+    public void <init>()
+    {
+        kotlinx.coroutines.EventLoopImplPlatform $r0;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplPlatform;
+
+        specialinvoke $r0.<kotlinx.coroutines.EventLoop: void <init>()>();
+
+        return;
+    }
+
+<kotlinx.coroutines.EventLoopImplPlatform: java.lang.Thread getThread()>
+    protected void reschedule(long, kotlinx.coroutines.EventLoopImplBase$DelayedTask)
+    {
+        kotlinx.coroutines.EventLoopImplPlatform $r0;
+        long $l0;
+        kotlinx.coroutines.EventLoopImplBase$DelayedTask $r1;
+        kotlinx.coroutines.DefaultExecutor $r2;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplPlatform;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: kotlinx.coroutines.EventLoopImplBase$DelayedTask;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "delayedTask");
+
+        $r2 = <kotlinx.coroutines.DefaultExecutor: kotlinx.coroutines.DefaultExecutor INSTANCE>;
+
+        virtualinvoke $r2.<kotlinx.coroutines.DefaultExecutor: void schedule(long,kotlinx.coroutines.EventLoopImplBase$DelayedTask)>($l0, $r1);
+
+        return;
+    }
+
+    protected final void unpark()
+    {
+        kotlinx.coroutines.EventLoopImplPlatform $r0;
+        java.lang.Thread $r1, $r2;
+        kotlinx.coroutines.AbstractTimeSource $r3;
+        kotlin.Unit $r4;
+
+        $r0 := @this: kotlinx.coroutines.EventLoopImplPlatform;
+
+        $r1 = virtualinvoke $r0.<kotlinx.coroutines.EventLoopImplPlatform: java.lang.Thread getThread()>();
+
+        $r2 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        if $r2 == $r1 goto label3;
+
+        $r3 = staticinvoke <kotlinx.coroutines.AbstractTimeSourceKt: kotlinx.coroutines.AbstractTimeSource getTimeSource()>();
+
+        if $r3 == null goto label1;
+
+        virtualinvoke $r3.<kotlinx.coroutines.AbstractTimeSource: void unpark(java.lang.Thread)>($r1);
+
+        $r4 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        goto label2;
+
+     label1:
+        $r4 = null;
+
+     label2:
+        if $r4 != null goto label3;
+
+        staticinvoke <java.util.concurrent.locks.LockSupport: void unpark(java.lang.Thread)>($r1);
+
+     label3:
+        return;
+    }
+

@@ -1,0 +1,800 @@
+androidx.media3.extractor.text.subrip.SubripDecoder
+<androidx.media3.extractor.text.subrip.SubripDecoder: float START_FRACTION>
+<androidx.media3.extractor.text.subrip.SubripDecoder: float END_FRACTION>
+<androidx.media3.extractor.text.subrip.SubripDecoder: float MID_FRACTION>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String TAG>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String SUBRIP_TIMECODE>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.util.regex.Pattern SUBRIP_TIMING_LINE>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.util.regex.Pattern SUBRIP_TAG_PATTERN>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String SUBRIP_ALIGNMENT_TAG>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String ALIGN_BOTTOM_LEFT>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String ALIGN_BOTTOM_MID>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String ALIGN_BOTTOM_RIGHT>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String ALIGN_MID_LEFT>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String ALIGN_MID_MID>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String ALIGN_MID_RIGHT>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String ALIGN_TOP_LEFT>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String ALIGN_TOP_MID>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String ALIGN_TOP_RIGHT>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.StringBuilder textBuilder>
+<androidx.media3.extractor.text.subrip.SubripDecoder: java.util.ArrayList tags>
+    public void <init>()
+    {
+        androidx.media3.extractor.text.subrip.SubripDecoder r0;
+        java.lang.StringBuilder $r1;
+        java.util.ArrayList $r2;
+
+        r0 := @this: androidx.media3.extractor.text.subrip.SubripDecoder;
+
+        specialinvoke r0.<androidx.media3.extractor.text.SimpleSubtitleDecoder: void <init>(java.lang.String)>("SubripDecoder");
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.StringBuilder textBuilder> = $r1;
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.util.ArrayList tags> = $r2;
+
+        return;
+    }
+
+    protected androidx.media3.extractor.text.Subtitle decode(byte[], int, boolean)
+    {
+        androidx.media3.extractor.text.subrip.SubripDecoder r0;
+        byte[] r1;
+        int i0, $i1, $i5, $i6, i7;
+        boolean z0, $z1, $z2, $z5;
+        java.util.ArrayList r2, $r7, $r19, $r22, $r25, $r28;
+        androidx.media3.common.util.LongArray r3, $r8;
+        androidx.media3.common.util.ParsableByteArray r4, $r9;
+        java.nio.charset.Charset r5;
+        java.lang.String r6, $r17, $r21, $r30, $r38, $r39, r40, r42, r44, r46;
+        androidx.media3.common.text.Cue[] $r10, r47;
+        java.lang.Object[] $r11;
+        androidx.media3.extractor.text.subrip.SubripSubtitle $r12;
+        java.util.regex.Pattern $r13;
+        java.lang.StringBuilder $r14, $r15, $r16, $r18, $r20, $r27, $r29, $r32, $r35, $r36, $r37;
+        long $l3, $l4;
+        androidx.media3.common.text.Cue $r23, $r24;
+        java.lang.Object $r26;
+        java.lang.Throwable $r34, r41;
+        java.util.regex.Matcher r43;
+        android.text.Spanned r45;
+        long[] r48;
+
+        r0 := @this: androidx.media3.extractor.text.subrip.SubripDecoder;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        z0 := @parameter2: boolean;
+
+        $r7 = new java.util.ArrayList;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>()>();
+
+        r2 = $r7;
+
+        $r8 = new androidx.media3.common.util.LongArray;
+
+        specialinvoke $r8.<androidx.media3.common.util.LongArray: void <init>()>();
+
+        r3 = $r8;
+
+        $r9 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r9.<androidx.media3.common.util.ParsableByteArray: void <init>(byte[],int)>(r1, i0);
+
+        r4 = $r9;
+
+        r5 = specialinvoke r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.nio.charset.Charset detectUtfCharset(androidx.media3.common.util.ParsableByteArray)>(r4);
+
+     label01:
+        $r39 = virtualinvoke r4.<androidx.media3.common.util.ParsableByteArray: java.lang.String readLine(java.nio.charset.Charset)>(r5);
+
+        r40 = $r39;
+
+        if $r39 == null goto label15;
+
+        $i1 = virtualinvoke r40.<java.lang.String: int length()>();
+
+        if $i1 != 0 goto label02;
+
+        goto label01;
+
+     label02:
+        staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r40);
+
+     label03:
+        goto label05;
+
+     label04:
+        $r34 := @caughtexception;
+
+        r41 = $r34;
+
+        $r35 = new java.lang.StringBuilder;
+
+        specialinvoke $r35.<java.lang.StringBuilder: void <init>()>();
+
+        $r36 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Skipping invalid index: ");
+
+        $r37 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r40);
+
+        $r38 = virtualinvoke $r37.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("SubripDecoder", $r38);
+
+        goto label01;
+
+     label05:
+        r42 = virtualinvoke r4.<androidx.media3.common.util.ParsableByteArray: java.lang.String readLine(java.nio.charset.Charset)>(r5);
+
+        if r42 != null goto label06;
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("SubripDecoder", "Unexpected end");
+
+        goto label15;
+
+     label06:
+        $r13 = <androidx.media3.extractor.text.subrip.SubripDecoder: java.util.regex.Pattern SUBRIP_TIMING_LINE>;
+
+        r43 = virtualinvoke $r13.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r42);
+
+        $z1 = virtualinvoke r43.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z1 == 0 goto label07;
+
+        $l3 = staticinvoke <androidx.media3.extractor.text.subrip.SubripDecoder: long parseTimecode(java.util.regex.Matcher,int)>(r43, 1);
+
+        virtualinvoke r3.<androidx.media3.common.util.LongArray: void add(long)>($l3);
+
+        $l4 = staticinvoke <androidx.media3.extractor.text.subrip.SubripDecoder: long parseTimecode(java.util.regex.Matcher,int)>(r43, 6);
+
+        virtualinvoke r3.<androidx.media3.common.util.LongArray: void add(long)>($l4);
+
+        goto label08;
+
+     label07:
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>()>();
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Skipping invalid timing: ");
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r42);
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("SubripDecoder", $r17);
+
+        goto label01;
+
+     label08:
+        $r18 = r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.StringBuilder textBuilder>;
+
+        virtualinvoke $r18.<java.lang.StringBuilder: void setLength(int)>(0);
+
+        $r19 = r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.util.ArrayList tags>;
+
+        virtualinvoke $r19.<java.util.ArrayList: void clear()>();
+
+        r44 = virtualinvoke r4.<androidx.media3.common.util.ParsableByteArray: java.lang.String readLine(java.nio.charset.Charset)>(r5);
+
+     label09:
+        $z2 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>(r44);
+
+        if $z2 != 0 goto label11;
+
+        $r27 = r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.StringBuilder textBuilder>;
+
+        $i6 = virtualinvoke $r27.<java.lang.StringBuilder: int length()>();
+
+        if $i6 <= 0 goto label10;
+
+        $r32 = r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.StringBuilder textBuilder>;
+
+        virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("<br>");
+
+     label10:
+        $r29 = r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.StringBuilder textBuilder>;
+
+        $r28 = r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.util.ArrayList tags>;
+
+        $r30 = specialinvoke r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.String processLine(java.lang.String,java.util.ArrayList)>(r44, $r28);
+
+        virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r30);
+
+        r44 = virtualinvoke r4.<androidx.media3.common.util.ParsableByteArray: java.lang.String readLine(java.nio.charset.Charset)>(r5);
+
+        goto label09;
+
+     label11:
+        $r20 = r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.lang.StringBuilder textBuilder>;
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r45 = staticinvoke <android.text.Html: android.text.Spanned fromHtml(java.lang.String)>($r21);
+
+        r46 = null;
+
+        i7 = 0;
+
+     label12:
+        $r22 = r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.util.ArrayList tags>;
+
+        $i5 = virtualinvoke $r22.<java.util.ArrayList: int size()>();
+
+        if i7 >= $i5 goto label14;
+
+        $r25 = r0.<androidx.media3.extractor.text.subrip.SubripDecoder: java.util.ArrayList tags>;
+
+        $r26 = virtualinvoke $r25.<java.util.ArrayList: java.lang.Object get(int)>(i7);
+
+        r6 = (java.lang.String) $r26;
+
+        $z5 = virtualinvoke r6.<java.lang.String: boolean matches(java.lang.String)>("\\{\\\\an[1-9]\\}");
+
+        if $z5 == 0 goto label13;
+
+        r46 = r6;
+
+        goto label14;
+
+     label13:
+        i7 = i7 + 1;
+
+        goto label12;
+
+     label14:
+        $r23 = specialinvoke r0.<androidx.media3.extractor.text.subrip.SubripDecoder: androidx.media3.common.text.Cue buildCue(android.text.Spanned,java.lang.String)>(r45, r46);
+
+        virtualinvoke r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r23);
+
+        $r24 = <androidx.media3.common.text.Cue: androidx.media3.common.text.Cue EMPTY>;
+
+        virtualinvoke r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r24);
+
+        goto label01;
+
+     label15:
+        $r10 = newarray (androidx.media3.common.text.Cue)[0];
+
+        $r11 = virtualinvoke r2.<java.util.ArrayList: java.lang.Object[] toArray(java.lang.Object[])>($r10);
+
+        r47 = (androidx.media3.common.text.Cue[]) $r11;
+
+        r48 = virtualinvoke r3.<androidx.media3.common.util.LongArray: long[] toArray()>();
+
+        $r12 = new androidx.media3.extractor.text.subrip.SubripSubtitle;
+
+        specialinvoke $r12.<androidx.media3.extractor.text.subrip.SubripSubtitle: void <init>(androidx.media3.common.text.Cue[],long[])>(r47, r48);
+
+        return $r12;
+
+        catch java.lang.NumberFormatException from label02 to label03 with label04;
+    }
+
+    private java.nio.charset.Charset detectUtfCharset(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.text.subrip.SubripDecoder r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        java.nio.charset.Charset r2, $r3;
+
+        r0 := @this: androidx.media3.extractor.text.subrip.SubripDecoder;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: java.nio.charset.Charset readUtfCharsetFromBom()>();
+
+        if r2 == null goto label1;
+
+        $r3 = r2;
+
+        goto label2;
+
+     label1:
+        $r3 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+     label2:
+        return $r3;
+    }
+
+    private java.lang.String processLine(java.lang.String, java.util.ArrayList)
+    {
+        androidx.media3.extractor.text.subrip.SubripDecoder r0;
+        java.util.ArrayList r1;
+        java.lang.StringBuilder r2, $r5;
+        java.util.regex.Matcher r3;
+        java.lang.String r4, $r7, r9, r10;
+        int i0, i1, $i2, $i3, i4;
+        java.util.regex.Pattern $r6;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.text.subrip.SubripDecoder;
+
+        r9 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.util.ArrayList;
+
+        r10 = virtualinvoke r9.<java.lang.String: java.lang.String trim()>();
+
+        i4 = 0;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>(r10);
+
+        r2 = $r5;
+
+        $r6 = <androidx.media3.extractor.text.subrip.SubripDecoder: java.util.regex.Pattern SUBRIP_TAG_PATTERN>;
+
+        r3 = virtualinvoke $r6.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r10);
+
+     label1:
+        $z0 = virtualinvoke r3.<java.util.regex.Matcher: boolean find()>();
+
+        if $z0 == 0 goto label2;
+
+        r4 = virtualinvoke r3.<java.util.regex.Matcher: java.lang.String group()>();
+
+        virtualinvoke r1.<java.util.ArrayList: boolean add(java.lang.Object)>(r4);
+
+        $i2 = virtualinvoke r3.<java.util.regex.Matcher: int start()>();
+
+        i0 = $i2 - i4;
+
+        i1 = virtualinvoke r4.<java.lang.String: int length()>();
+
+        $i3 = i0 + i1;
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder replace(int,int,java.lang.String)>(i0, $i3, "");
+
+        i4 = i4 + i1;
+
+        goto label1;
+
+     label2:
+        $r7 = virtualinvoke r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r7;
+    }
+
+    private androidx.media3.common.text.Cue buildCue(android.text.Spanned, java.lang.String)
+    {
+        androidx.media3.extractor.text.subrip.SubripDecoder r0;
+        android.text.Spanned r1;
+        java.lang.String r2, r12, r13;
+        androidx.media3.common.text.Cue$Builder r3, $r4, $r14, $r15;
+        int $i0, $i3, $i4, $i5;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, $z11, $z12, $z13, $z14, $z15, $z16, $z17;
+        androidx.media3.common.text.Cue $r11, $r16;
+        byte b1, b2;
+        float $f0, $f1;
+
+        r0 := @this: androidx.media3.extractor.text.subrip.SubripDecoder;
+
+        r1 := @parameter0: android.text.Spanned;
+
+        r2 := @parameter1: java.lang.String;
+
+        $r4 = new androidx.media3.common.text.Cue$Builder;
+
+        specialinvoke $r4.<androidx.media3.common.text.Cue$Builder: void <init>()>();
+
+        r3 = virtualinvoke $r4.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setText(java.lang.CharSequence)>(r1);
+
+        if r2 != null goto label01;
+
+        $r11 = virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue build()>();
+
+        return $r11;
+
+     label01:
+        r12 = r2;
+
+        b1 = -1;
+
+        $i0 = virtualinvoke r12.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i0)
+        {
+            case -685620710: goto label02;
+            case -685620679: goto label08;
+            case -685620648: goto label05;
+            case -685620617: goto label03;
+            case -685620586: goto label09;
+            case -685620555: goto label06;
+            case -685620524: goto label04;
+            case -685620493: goto label10;
+            case -685620462: goto label07;
+            default: goto label11;
+        };
+
+     label02:
+        $z17 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("{\\an1}");
+
+        if $z17 == 0 goto label11;
+
+        b1 = 0;
+
+        goto label11;
+
+     label03:
+        $z14 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("{\\an4}");
+
+        if $z14 == 0 goto label11;
+
+        b1 = 1;
+
+        goto label11;
+
+     label04:
+        $z11 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("{\\an7}");
+
+        if $z11 == 0 goto label11;
+
+        b1 = 2;
+
+        goto label11;
+
+     label05:
+        $z15 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("{\\an3}");
+
+        if $z15 == 0 goto label11;
+
+        b1 = 3;
+
+        goto label11;
+
+     label06:
+        $z12 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("{\\an6}");
+
+        if $z12 == 0 goto label11;
+
+        b1 = 4;
+
+        goto label11;
+
+     label07:
+        $z0 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("{\\an9}");
+
+        if $z0 == 0 goto label11;
+
+        b1 = 5;
+
+        goto label11;
+
+     label08:
+        $z16 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("{\\an2}");
+
+        if $z16 == 0 goto label11;
+
+        b1 = 6;
+
+        goto label11;
+
+     label09:
+        $z13 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("{\\an5}");
+
+        if $z13 == 0 goto label11;
+
+        b1 = 7;
+
+        goto label11;
+
+     label10:
+        $z10 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("{\\an8}");
+
+        if $z10 == 0 goto label11;
+
+        b1 = 8;
+
+     label11:
+        tableswitch(b1)
+        {
+            case 0: goto label12;
+            case 1: goto label12;
+            case 2: goto label12;
+            case 3: goto label13;
+            case 4: goto label13;
+            case 5: goto label13;
+            case 6: goto label14;
+            case 7: goto label14;
+            case 8: goto label14;
+            default: goto label14;
+        };
+
+     label12:
+        virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setPositionAnchor(int)>(0);
+
+        goto label15;
+
+     label13:
+        virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setPositionAnchor(int)>(2);
+
+        goto label15;
+
+     label14:
+        virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setPositionAnchor(int)>(1);
+
+     label15:
+        r13 = r2;
+
+        b2 = -1;
+
+        $i3 = virtualinvoke r13.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i3)
+        {
+            case -685620710: goto label16;
+            case -685620679: goto label17;
+            case -685620648: goto label18;
+            case -685620617: goto label22;
+            case -685620586: goto label23;
+            case -685620555: goto label24;
+            case -685620524: goto label19;
+            case -685620493: goto label20;
+            case -685620462: goto label21;
+            default: goto label25;
+        };
+
+     label16:
+        $z9 = virtualinvoke r13.<java.lang.String: boolean equals(java.lang.Object)>("{\\an1}");
+
+        if $z9 == 0 goto label25;
+
+        b2 = 0;
+
+        goto label25;
+
+     label17:
+        $z8 = virtualinvoke r13.<java.lang.String: boolean equals(java.lang.Object)>("{\\an2}");
+
+        if $z8 == 0 goto label25;
+
+        b2 = 1;
+
+        goto label25;
+
+     label18:
+        $z7 = virtualinvoke r13.<java.lang.String: boolean equals(java.lang.Object)>("{\\an3}");
+
+        if $z7 == 0 goto label25;
+
+        b2 = 2;
+
+        goto label25;
+
+     label19:
+        $z3 = virtualinvoke r13.<java.lang.String: boolean equals(java.lang.Object)>("{\\an7}");
+
+        if $z3 == 0 goto label25;
+
+        b2 = 3;
+
+        goto label25;
+
+     label20:
+        $z2 = virtualinvoke r13.<java.lang.String: boolean equals(java.lang.Object)>("{\\an8}");
+
+        if $z2 == 0 goto label25;
+
+        b2 = 4;
+
+        goto label25;
+
+     label21:
+        $z1 = virtualinvoke r13.<java.lang.String: boolean equals(java.lang.Object)>("{\\an9}");
+
+        if $z1 == 0 goto label25;
+
+        b2 = 5;
+
+        goto label25;
+
+     label22:
+        $z6 = virtualinvoke r13.<java.lang.String: boolean equals(java.lang.Object)>("{\\an4}");
+
+        if $z6 == 0 goto label25;
+
+        b2 = 6;
+
+        goto label25;
+
+     label23:
+        $z5 = virtualinvoke r13.<java.lang.String: boolean equals(java.lang.Object)>("{\\an5}");
+
+        if $z5 == 0 goto label25;
+
+        b2 = 7;
+
+        goto label25;
+
+     label24:
+        $z4 = virtualinvoke r13.<java.lang.String: boolean equals(java.lang.Object)>("{\\an6}");
+
+        if $z4 == 0 goto label25;
+
+        b2 = 8;
+
+     label25:
+        tableswitch(b2)
+        {
+            case 0: goto label26;
+            case 1: goto label26;
+            case 2: goto label26;
+            case 3: goto label27;
+            case 4: goto label27;
+            case 5: goto label27;
+            case 6: goto label28;
+            case 7: goto label28;
+            case 8: goto label28;
+            default: goto label28;
+        };
+
+     label26:
+        virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setLineAnchor(int)>(2);
+
+        goto label29;
+
+     label27:
+        virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setLineAnchor(int)>(0);
+
+        goto label29;
+
+     label28:
+        virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setLineAnchor(int)>(1);
+
+     label29:
+        $i4 = virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: int getPositionAnchor()>();
+
+        $f0 = staticinvoke <androidx.media3.extractor.text.subrip.SubripDecoder: float getFractionalPositionForAnchorType(int)>($i4);
+
+        $r14 = virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setPosition(float)>($f0);
+
+        $i5 = virtualinvoke r3.<androidx.media3.common.text.Cue$Builder: int getLineAnchor()>();
+
+        $f1 = staticinvoke <androidx.media3.extractor.text.subrip.SubripDecoder: float getFractionalPositionForAnchorType(int)>($i5);
+
+        $r15 = virtualinvoke $r14.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setLine(float,int)>($f1, 0);
+
+        $r16 = virtualinvoke $r15.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue build()>();
+
+        return $r16;
+    }
+
+    private static long parseTimecode(java.util.regex.Matcher, int)
+    {
+        java.util.regex.Matcher r0;
+        int i0, $i1, $i2, $i6, $i9;
+        java.lang.String r1, r2, $r3, $r5, $r6, $r8;
+        java.lang.Object $r4, $r7;
+        long $l3, $l4, $l5, $l7, $l8, $l10, $l11, $l12, $l13, $l14, $l15, l16, l17, l18;
+
+        r0 := @parameter0: java.util.regex.Matcher;
+
+        i0 := @parameter1: int;
+
+        $i1 = i0 + 1;
+
+        r1 = virtualinvoke r0.<java.util.regex.Matcher: java.lang.String group(int)>($i1);
+
+        if r1 == null goto label1;
+
+        $l12 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r1);
+
+        $l13 = $l12 * 60L;
+
+        $l14 = $l13 * 60L;
+
+        $l15 = $l14 * 1000L;
+
+        goto label2;
+
+     label1:
+        $l15 = 0L;
+
+     label2:
+        l16 = $l15;
+
+        $i2 = i0 + 2;
+
+        $r3 = virtualinvoke r0.<java.util.regex.Matcher: java.lang.String group(int)>($i2);
+
+        $r4 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        $r5 = (java.lang.String) $r4;
+
+        $l3 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r5);
+
+        $l4 = $l3 * 60L;
+
+        $l5 = $l4 * 1000L;
+
+        l17 = l16 + $l5;
+
+        $i6 = i0 + 3;
+
+        $r6 = virtualinvoke r0.<java.util.regex.Matcher: java.lang.String group(int)>($i6);
+
+        $r7 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r6);
+
+        $r8 = (java.lang.String) $r7;
+
+        $l7 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r8);
+
+        $l8 = $l7 * 1000L;
+
+        l18 = l17 + $l8;
+
+        $i9 = i0 + 4;
+
+        r2 = virtualinvoke r0.<java.util.regex.Matcher: java.lang.String group(int)>($i9);
+
+        if r2 == null goto label3;
+
+        $l11 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r2);
+
+        l18 = l18 + $l11;
+
+     label3:
+        $l10 = l18 * 1000L;
+
+        return $l10;
+    }
+
+    static float getFractionalPositionForAnchorType(int)
+    {
+        int i0;
+        java.lang.IllegalArgumentException $r0;
+
+        i0 := @parameter0: int;
+
+        lookupswitch(i0)
+        {
+            case -2147483648: goto label4;
+            case 0: goto label1;
+            case 1: goto label2;
+            case 2: goto label3;
+            default: goto label4;
+        };
+
+     label1:
+        return 0.08F;
+
+     label2:
+        return 0.5F;
+
+     label3:
+        return 0.92F;
+
+     label4:
+        $r0 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r0.<java.lang.IllegalArgumentException: void <init>()>();
+
+        throw $r0;
+    }
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0, $r1;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("\\s*((?:(\\d+):)?(\\d+):(\\d+)(?:,(\\d+))?)\\s*-->\\s*((?:(\\d+):)?(\\d+):(\\d+)(?:,(\\d+))?)\\s*");
+
+        <androidx.media3.extractor.text.subrip.SubripDecoder: java.util.regex.Pattern SUBRIP_TIMING_LINE> = $r0;
+
+        $r1 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("\\{\\\\.*?\\}");
+
+        <androidx.media3.extractor.text.subrip.SubripDecoder: java.util.regex.Pattern SUBRIP_TAG_PATTERN> = $r1;
+
+        return;
+    }
+

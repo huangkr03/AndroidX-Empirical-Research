@@ -1,0 +1,1099 @@
+androidx.work.impl.background.systemjob.SystemJobScheduler
+<androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>
+<androidx.work.impl.background.systemjob.SystemJobScheduler: android.content.Context mContext>
+<androidx.work.impl.background.systemjob.SystemJobScheduler: android.app.job.JobScheduler mJobScheduler>
+<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>
+<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.background.systemjob.SystemJobInfoConverter mSystemJobInfoConverter>
+    public void <init>(android.content.Context, androidx.work.impl.WorkManagerImpl)
+    {
+        androidx.work.impl.background.systemjob.SystemJobScheduler r0;
+        android.content.Context r1;
+        androidx.work.impl.WorkManagerImpl r2;
+        java.lang.Object $r3;
+        androidx.work.impl.background.systemjob.SystemJobInfoConverter $r4;
+        android.app.job.JobScheduler $r5;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobScheduler;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.work.impl.WorkManagerImpl;
+
+        $r3 = virtualinvoke r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("jobscheduler");
+
+        $r5 = (android.app.job.JobScheduler) $r3;
+
+        $r4 = new androidx.work.impl.background.systemjob.SystemJobInfoConverter;
+
+        specialinvoke $r4.<androidx.work.impl.background.systemjob.SystemJobInfoConverter: void <init>(android.content.Context)>(r1);
+
+        specialinvoke r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: void <init>(android.content.Context,androidx.work.impl.WorkManagerImpl,android.app.job.JobScheduler,androidx.work.impl.background.systemjob.SystemJobInfoConverter)>(r1, r2, $r5, $r4);
+
+        return;
+    }
+
+    public void <init>(android.content.Context, androidx.work.impl.WorkManagerImpl, android.app.job.JobScheduler, androidx.work.impl.background.systemjob.SystemJobInfoConverter)
+    {
+        androidx.work.impl.background.systemjob.SystemJobScheduler r0;
+        android.content.Context r1;
+        androidx.work.impl.WorkManagerImpl r2;
+        android.app.job.JobScheduler r3;
+        androidx.work.impl.background.systemjob.SystemJobInfoConverter r4;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobScheduler;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.work.impl.WorkManagerImpl;
+
+        r3 := @parameter2: android.app.job.JobScheduler;
+
+        r4 := @parameter3: androidx.work.impl.background.systemjob.SystemJobInfoConverter;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.content.Context mContext> = r1;
+
+        r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager> = r2;
+
+        r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.app.job.JobScheduler mJobScheduler> = r3;
+
+        r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.background.systemjob.SystemJobInfoConverter mSystemJobInfoConverter> = r4;
+
+        return;
+    }
+
+    public transient void schedule(androidx.work.impl.model.WorkSpec[])
+    {
+        androidx.work.impl.background.systemjob.SystemJobScheduler r0;
+        androidx.work.impl.model.WorkSpec[] r1, r4;
+        androidx.work.impl.WorkDatabase r2, $r33;
+        androidx.work.impl.utils.IdGenerator r3, $r11;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, i8, $i9, i10;
+        androidx.work.impl.model.WorkSpec r5, r6;
+        androidx.work.impl.model.WorkGenerationalId r7;
+        androidx.work.impl.model.SystemIdInfo r8, r52;
+        java.lang.Throwable r9, $r51;
+        androidx.work.impl.WorkManagerImpl $r10, $r17, $r19, $r25, $r27, $r32;
+        androidx.work.impl.model.WorkSpecDao $r12;
+        java.lang.String $r13, $r21, $r37, $r39, $r42, $r45, $r47, $r50;
+        androidx.work.WorkInfo$State $r14, $r15;
+        androidx.work.impl.model.SystemIdInfoDao $r16, $r34;
+        androidx.work.Configuration $r18, $r20, $r26, $r28;
+        android.app.job.JobScheduler $r22;
+        android.content.Context $r23;
+        java.lang.Integer $r24, $r30;
+        boolean $z0;
+        java.lang.Object $r29;
+        androidx.work.Logger $r35, $r43;
+        java.lang.StringBuilder $r36, $r38, $r40, $r41, $r44, $r46, $r48, $r49;
+        java.util.List r53;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobScheduler;
+
+        r1 := @parameter0: androidx.work.impl.model.WorkSpec[];
+
+        $r10 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        r2 = virtualinvoke $r10.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        $r11 = new androidx.work.impl.utils.IdGenerator;
+
+        specialinvoke $r11.<androidx.work.impl.utils.IdGenerator: void <init>(androidx.work.impl.WorkDatabase)>(r2);
+
+        r3 = $r11;
+
+        r4 = r1;
+
+        i0 = lengthof r4;
+
+        i8 = 0;
+
+     label01:
+        if i8 >= i0 goto label18;
+
+        r5 = r4[i8];
+
+        virtualinvoke r2.<androidx.work.impl.WorkDatabase: void beginTransaction()>();
+
+     label02:
+        $r12 = virtualinvoke r2.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        $r13 = r5.<androidx.work.impl.model.WorkSpec: java.lang.String id>;
+
+        r6 = interfaceinvoke $r12.<androidx.work.impl.model.WorkSpecDao: androidx.work.impl.model.WorkSpec getWorkSpec(java.lang.String)>($r13);
+
+        if r6 != null goto label04;
+
+        $r43 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r45 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        $r44 = new java.lang.StringBuilder;
+
+        specialinvoke $r44.<java.lang.StringBuilder: void <init>()>();
+
+        $r46 = virtualinvoke $r44.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Skipping scheduling ");
+
+        $r47 = r5.<androidx.work.impl.model.WorkSpec: java.lang.String id>;
+
+        $r48 = virtualinvoke $r46.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r47);
+
+        $r49 = virtualinvoke $r48.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" because it\'s no longer in the DB");
+
+        $r50 = virtualinvoke $r49.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r43.<androidx.work.Logger: void warning(java.lang.String,java.lang.String)>($r45, $r50);
+
+        virtualinvoke r2.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label03:
+        virtualinvoke r2.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label17;
+
+     label04:
+        $r15 = r6.<androidx.work.impl.model.WorkSpec: androidx.work.WorkInfo$State state>;
+
+        $r14 = <androidx.work.WorkInfo$State: androidx.work.WorkInfo$State ENQUEUED>;
+
+        if $r15 == $r14 goto label06;
+
+        $r35 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r37 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        $r36 = new java.lang.StringBuilder;
+
+        specialinvoke $r36.<java.lang.StringBuilder: void <init>()>();
+
+        $r38 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Skipping scheduling ");
+
+        $r39 = r5.<androidx.work.impl.model.WorkSpec: java.lang.String id>;
+
+        $r40 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r39);
+
+        $r41 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" because it is no longer enqueued");
+
+        $r42 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r35.<androidx.work.Logger: void warning(java.lang.String,java.lang.String)>($r37, $r42);
+
+        virtualinvoke r2.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label05:
+        virtualinvoke r2.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label17;
+
+     label06:
+        r7 = staticinvoke <androidx.work.impl.model.WorkSpecKt: androidx.work.impl.model.WorkGenerationalId generationalId(androidx.work.impl.model.WorkSpec)>(r5);
+
+        $r16 = virtualinvoke r2.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.SystemIdInfoDao systemIdInfoDao()>();
+
+        r8 = interfaceinvoke $r16.<androidx.work.impl.model.SystemIdInfoDao: androidx.work.impl.model.SystemIdInfo getSystemIdInfo(androidx.work.impl.model.WorkGenerationalId)>(r7);
+
+        if r8 == null goto label07;
+
+        $i9 = r8.<androidx.work.impl.model.SystemIdInfo: int systemId>;
+
+        goto label08;
+
+     label07:
+        $r17 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r18 = virtualinvoke $r17.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        $i3 = virtualinvoke $r18.<androidx.work.Configuration: int getMinJobSchedulerId()>();
+
+        $r19 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r20 = virtualinvoke $r19.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        $i4 = virtualinvoke $r20.<androidx.work.Configuration: int getMaxJobSchedulerId()>();
+
+        $i9 = virtualinvoke r3.<androidx.work.impl.utils.IdGenerator: int nextJobSchedulerIdWithRange(int,int)>($i3, $i4);
+
+     label08:
+        i1 = $i9;
+
+        if r8 != null goto label09;
+
+        r52 = staticinvoke <androidx.work.impl.model.SystemIdInfoKt: androidx.work.impl.model.SystemIdInfo systemIdInfo(androidx.work.impl.model.WorkGenerationalId,int)>(r7, i1);
+
+        $r32 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r33 = virtualinvoke $r32.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        $r34 = virtualinvoke $r33.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.SystemIdInfoDao systemIdInfoDao()>();
+
+        interfaceinvoke $r34.<androidx.work.impl.model.SystemIdInfoDao: void insertSystemIdInfo(androidx.work.impl.model.SystemIdInfo)>(r52);
+
+     label09:
+        virtualinvoke r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: void scheduleInternal(androidx.work.impl.model.WorkSpec,int)>(r5, i1);
+
+        $i5 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i5 != 23 goto label13;
+
+        $r23 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.content.Context mContext>;
+
+        $r22 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.app.job.JobScheduler mJobScheduler>;
+
+        $r21 = r5.<androidx.work.impl.model.WorkSpec: java.lang.String id>;
+
+        r53 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: java.util.List getPendingJobIds(android.content.Context,android.app.job.JobScheduler,java.lang.String)>($r23, $r22, $r21);
+
+        if r53 == null goto label13;
+
+        $r24 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        i2 = interfaceinvoke r53.<java.util.List: int indexOf(java.lang.Object)>($r24);
+
+        if i2 < 0 goto label10;
+
+        interfaceinvoke r53.<java.util.List: java.lang.Object remove(int)>(i2);
+
+     label10:
+        $z0 = interfaceinvoke r53.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label11;
+
+        $r29 = interfaceinvoke r53.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r30 = (java.lang.Integer) $r29;
+
+        i10 = virtualinvoke $r30.<java.lang.Integer: int intValue()>();
+
+        goto label12;
+
+     label11:
+        $r25 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r26 = virtualinvoke $r25.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        $i6 = virtualinvoke $r26.<androidx.work.Configuration: int getMinJobSchedulerId()>();
+
+        $r27 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r28 = virtualinvoke $r27.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        $i7 = virtualinvoke $r28.<androidx.work.Configuration: int getMaxJobSchedulerId()>();
+
+        i10 = virtualinvoke r3.<androidx.work.impl.utils.IdGenerator: int nextJobSchedulerIdWithRange(int,int)>($i6, $i7);
+
+     label12:
+        virtualinvoke r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: void scheduleInternal(androidx.work.impl.model.WorkSpec,int)>(r5, i10);
+
+     label13:
+        virtualinvoke r2.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label14:
+        virtualinvoke r2.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label17;
+
+     label15:
+        $r51 := @caughtexception;
+
+        r9 = $r51;
+
+     label16:
+        virtualinvoke r2.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        throw r9;
+
+     label17:
+        i8 = i8 + 1;
+
+        goto label01;
+
+     label18:
+        return;
+
+        catch java.lang.Throwable from label02 to label03 with label15;
+        catch java.lang.Throwable from label04 to label05 with label15;
+        catch java.lang.Throwable from label06 to label14 with label15;
+        catch java.lang.Throwable from label15 to label16 with label15;
+    }
+
+    public void scheduleInternal(androidx.work.impl.model.WorkSpec, int)
+    {
+        androidx.work.impl.background.systemjob.SystemJobScheduler r0;
+        androidx.work.impl.model.WorkSpec r1;
+        int i0, i1, $i2, $i3, i4, $i5;
+        android.app.job.JobInfo r2;
+        java.lang.String r3, $r9, $r11, $r15, $r19, $r21, $r23, $r27, $r29, $r33, $r36, $r52, r56;
+        java.lang.IllegalStateException r4, $r53;
+        androidx.core.util.Consumer r5;
+        androidx.work.impl.background.systemjob.SystemJobInfoConverter $r6;
+        androidx.work.Logger $r7, $r17, $r28, $r31, $r51;
+        java.lang.StringBuilder $r8, $r10, $r12, $r13, $r14, $r18, $r20, $r22, $r32, $r34, $r35;
+        android.app.job.JobScheduler $r16, $r38;
+        boolean $z0;
+        androidx.work.OutOfQuotaPolicy $r24, $r25;
+        java.lang.Object[] $r26, $r41;
+        java.lang.Throwable $r30, $r37, r57, r59;
+        android.content.Context $r39;
+        java.util.Locale $r40;
+        java.lang.Integer $r42, $r47, $r50;
+        androidx.work.impl.WorkManagerImpl $r43, $r48, $r54;
+        androidx.work.impl.WorkDatabase $r44;
+        androidx.work.impl.model.WorkSpecDao $r45;
+        java.util.List $r46, r58;
+        androidx.work.Configuration $r49, $r55;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobScheduler;
+
+        r1 := @parameter0: androidx.work.impl.model.WorkSpec;
+
+        i0 := @parameter1: int;
+
+        $r6 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.background.systemjob.SystemJobInfoConverter mSystemJobInfoConverter>;
+
+        r2 = virtualinvoke $r6.<androidx.work.impl.background.systemjob.SystemJobInfoConverter: android.app.job.JobInfo convert(androidx.work.impl.model.WorkSpec,int)>(r1, i0);
+
+        $r7 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r9 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Scheduling work ID ");
+
+        $r11 = r1.<androidx.work.impl.model.WorkSpec: java.lang.String id>;
+
+        $r12 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Job ID ");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r7.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r9, $r15);
+
+     label1:
+        $r16 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.app.job.JobScheduler mJobScheduler>;
+
+        i4 = virtualinvoke $r16.<android.app.job.JobScheduler: int schedule(android.app.job.JobInfo)>(r2);
+
+        if i4 != 0 goto label2;
+
+        $r17 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r19 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        $r18 = new java.lang.StringBuilder;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>()>();
+
+        $r20 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to schedule work ID ");
+
+        $r21 = r1.<androidx.work.impl.model.WorkSpec: java.lang.String id>;
+
+        $r22 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r21);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r17.<androidx.work.Logger: void warning(java.lang.String,java.lang.String)>($r19, $r23);
+
+        $z0 = r1.<androidx.work.impl.model.WorkSpec: boolean expedited>;
+
+        if $z0 == 0 goto label2;
+
+        $r25 = r1.<androidx.work.impl.model.WorkSpec: androidx.work.OutOfQuotaPolicy outOfQuotaPolicy>;
+
+        $r24 = <androidx.work.OutOfQuotaPolicy: androidx.work.OutOfQuotaPolicy RUN_AS_NON_EXPEDITED_WORK_REQUEST>;
+
+        if $r25 != $r24 goto label2;
+
+        r1.<androidx.work.impl.model.WorkSpec: boolean expedited> = 0;
+
+        $r26 = newarray (java.lang.Object)[1];
+
+        $r27 = r1.<androidx.work.impl.model.WorkSpec: java.lang.String id>;
+
+        $r26[0] = $r27;
+
+        r56 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Scheduling a non-expedited job (work ID %s)", $r26);
+
+        $r28 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r29 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        virtualinvoke $r28.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r29, r56);
+
+        virtualinvoke r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: void scheduleInternal(androidx.work.impl.model.WorkSpec,int)>(r1, i0);
+
+     label2:
+        goto label9;
+
+     label3:
+        $r37 := @caughtexception;
+
+        r57 = $r37;
+
+        $r39 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.content.Context mContext>;
+
+        $r38 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.app.job.JobScheduler mJobScheduler>;
+
+        r58 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: java.util.List getPendingJobs(android.content.Context,android.app.job.JobScheduler)>($r39, $r38);
+
+        if r58 == null goto label4;
+
+        $i5 = interfaceinvoke r58.<java.util.List: int size()>();
+
+        goto label5;
+
+     label4:
+        $i5 = 0;
+
+     label5:
+        i1 = $i5;
+
+        $r40 = staticinvoke <java.util.Locale: java.util.Locale getDefault()>();
+
+        $r41 = newarray (java.lang.Object)[3];
+
+        $r42 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r41[0] = $r42;
+
+        $r43 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r44 = virtualinvoke $r43.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        $r45 = virtualinvoke $r44.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        $r46 = interfaceinvoke $r45.<androidx.work.impl.model.WorkSpecDao: java.util.List getScheduledWork()>();
+
+        $i2 = interfaceinvoke $r46.<java.util.List: int size()>();
+
+        $r47 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $r41[1] = $r47;
+
+        $r48 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r49 = virtualinvoke $r48.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        $i3 = virtualinvoke $r49.<androidx.work.Configuration: int getMaxSchedulerLimit()>();
+
+        $r50 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i3);
+
+        $r41[2] = $r50;
+
+        r3 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r40, "JobScheduler 100 job limit exceeded.  We count %d WorkManager jobs in JobScheduler; we have %d tracked jobs in our DB; our Configuration limit is %d.", $r41);
+
+        $r51 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r52 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        virtualinvoke $r51.<androidx.work.Logger: void error(java.lang.String,java.lang.String)>($r52, r3);
+
+        $r53 = new java.lang.IllegalStateException;
+
+        specialinvoke $r53.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>(r3, r57);
+
+        r4 = $r53;
+
+        $r54 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r55 = virtualinvoke $r54.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        r5 = virtualinvoke $r55.<androidx.work.Configuration: androidx.core.util.Consumer getSchedulingExceptionHandler()>();
+
+        if r5 == null goto label6;
+
+        interfaceinvoke r5.<androidx.core.util.Consumer: void accept(java.lang.Object)>(r4);
+
+        goto label7;
+
+     label6:
+        throw r4;
+
+     label7:
+        goto label9;
+
+     label8:
+        $r30 := @caughtexception;
+
+        r59 = $r30;
+
+        $r31 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r33 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        $r32 = new java.lang.StringBuilder;
+
+        specialinvoke $r32.<java.lang.StringBuilder: void <init>()>();
+
+        $r34 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to schedule ");
+
+        $r35 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r36 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r31.<androidx.work.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>($r33, $r36, r59);
+
+     label9:
+        return;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+        catch java.lang.Throwable from label1 to label2 with label8;
+    }
+
+    public void cancel(java.lang.String)
+    {
+        androidx.work.impl.background.systemjob.SystemJobScheduler r0;
+        java.lang.String r1;
+        java.util.List r2;
+        java.util.Iterator r3;
+        int i0;
+        android.app.job.JobScheduler $r4, $r11;
+        android.content.Context $r5;
+        boolean $z0, $z1;
+        androidx.work.impl.WorkManagerImpl $r6;
+        androidx.work.impl.WorkDatabase $r7;
+        androidx.work.impl.model.SystemIdInfoDao $r8;
+        java.lang.Object $r9;
+        java.lang.Integer $r10;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobScheduler;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r5 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.content.Context mContext>;
+
+        $r4 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.app.job.JobScheduler mJobScheduler>;
+
+        r2 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: java.util.List getPendingJobIds(android.content.Context,android.app.job.JobScheduler,java.lang.String)>($r5, $r4, r1);
+
+        if r2 == null goto label3;
+
+        $z0 = interfaceinvoke r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label3;
+
+        r3 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label2;
+
+        $r9 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (java.lang.Integer) $r9;
+
+        i0 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $r11 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: android.app.job.JobScheduler mJobScheduler>;
+
+        staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: void cancelJobById(android.app.job.JobScheduler,int)>($r11, i0);
+
+        goto label1;
+
+     label2:
+        $r6 = r0.<androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r7 = virtualinvoke $r6.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        $r8 = virtualinvoke $r7.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.SystemIdInfoDao systemIdInfoDao()>();
+
+        interfaceinvoke $r8.<androidx.work.impl.model.SystemIdInfoDao: void removeSystemIdInfo(java.lang.String)>(r1);
+
+     label3:
+        return;
+    }
+
+    public boolean hasLimitedSchedulingSlots()
+    {
+        androidx.work.impl.background.systemjob.SystemJobScheduler r0;
+
+        r0 := @this: androidx.work.impl.background.systemjob.SystemJobScheduler;
+
+        return 1;
+    }
+
+    private static void cancelJobById(android.app.job.JobScheduler, int)
+    {
+        android.app.job.JobScheduler r0;
+        int i0;
+        java.lang.Throwable r1, $r2;
+        androidx.work.Logger $r3;
+        java.lang.String $r4, $r8;
+        java.util.Locale $r5;
+        java.lang.Object[] $r6;
+        java.lang.Integer $r7;
+
+        r0 := @parameter0: android.app.job.JobScheduler;
+
+        i0 := @parameter1: int;
+
+     label1:
+        virtualinvoke r0.<android.app.job.JobScheduler: void cancel(int)>(i0);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r1 = $r2;
+
+        $r3 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r4 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        $r5 = staticinvoke <java.util.Locale: java.util.Locale getDefault()>();
+
+        $r6 = newarray (java.lang.Object)[1];
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r6[0] = $r7;
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r5, "Exception while trying to cancel job (%d)", $r6);
+
+        virtualinvoke $r3.<androidx.work.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>($r4, $r8, r1);
+
+     label4:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public static void cancelAll(android.content.Context)
+    {
+        android.content.Context r0;
+        android.app.job.JobScheduler r1;
+        java.util.List r2;
+        java.util.Iterator r3;
+        android.app.job.JobInfo r4;
+        java.lang.Object $r5, $r6;
+        boolean $z0, $z1;
+        int $i0;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r5 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("jobscheduler");
+
+        r1 = (android.app.job.JobScheduler) $r5;
+
+        if r1 == null goto label2;
+
+        r2 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: java.util.List getPendingJobs(android.content.Context,android.app.job.JobScheduler)>(r0, r1);
+
+        if r2 == null goto label2;
+
+        $z0 = interfaceinvoke r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        r3 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label2;
+
+        $r6 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (android.app.job.JobInfo) $r6;
+
+        $i0 = virtualinvoke r4.<android.app.job.JobInfo: int getId()>();
+
+        staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: void cancelJobById(android.app.job.JobScheduler,int)>(r1, $i0);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static boolean reconcileJobs(android.content.Context, androidx.work.impl.WorkManagerImpl)
+    {
+        android.content.Context r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        android.app.job.JobScheduler r2;
+        java.util.List r3, r4;
+        int i0, $i2, $i3;
+        java.util.HashSet r5, $r12;
+        java.util.Iterator r6, r20, r23;
+        java.lang.String r7, $r16, $r18, r24;
+        java.lang.Throwable r8, $r19;
+        java.lang.Object $r9, $r13, $r14, $r17;
+        androidx.work.impl.WorkDatabase $r10, r25;
+        androidx.work.impl.model.SystemIdInfoDao $r11;
+        boolean $z0, $z1, $z2, $z3, z5, $z6;
+        androidx.work.Logger $r15;
+        android.app.job.JobInfo r21;
+        androidx.work.impl.model.WorkGenerationalId r22;
+        androidx.work.impl.model.WorkSpecDao r26;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.WorkManagerImpl;
+
+        $r9 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("jobscheduler");
+
+        r2 = (android.app.job.JobScheduler) $r9;
+
+        r3 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: java.util.List getPendingJobs(android.content.Context,android.app.job.JobScheduler)>(r0, r2);
+
+        $r10 = virtualinvoke r1.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        $r11 = virtualinvoke $r10.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.SystemIdInfoDao systemIdInfoDao()>();
+
+        r4 = interfaceinvoke $r11.<androidx.work.impl.model.SystemIdInfoDao: java.util.List getWorkSpecIds()>();
+
+        if r3 == null goto label01;
+
+        $i3 = interfaceinvoke r3.<java.util.List: int size()>();
+
+        goto label02;
+
+     label01:
+        $i3 = 0;
+
+     label02:
+        i0 = $i3;
+
+        $r12 = new java.util.HashSet;
+
+        specialinvoke $r12.<java.util.HashSet: void <init>(int)>(i0);
+
+        r5 = $r12;
+
+        if r3 == null goto label06;
+
+        $z2 = interfaceinvoke r3.<java.util.List: boolean isEmpty()>();
+
+        if $z2 != 0 goto label06;
+
+        r20 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label03:
+        $z3 = interfaceinvoke r20.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label06;
+
+        $r17 = interfaceinvoke r20.<java.util.Iterator: java.lang.Object next()>();
+
+        r21 = (android.app.job.JobInfo) $r17;
+
+        r22 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.model.WorkGenerationalId getWorkGenerationalIdFromJobInfo(android.app.job.JobInfo)>(r21);
+
+        if r22 == null goto label04;
+
+        $r18 = virtualinvoke r22.<androidx.work.impl.model.WorkGenerationalId: java.lang.String getWorkSpecId()>();
+
+        interfaceinvoke r5.<java.util.Set: boolean add(java.lang.Object)>($r18);
+
+        goto label05;
+
+     label04:
+        $i2 = virtualinvoke r21.<android.app.job.JobInfo: int getId()>();
+
+        staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: void cancelJobById(android.app.job.JobScheduler,int)>(r2, $i2);
+
+     label05:
+        goto label03;
+
+     label06:
+        z5 = 0;
+
+        r23 = interfaceinvoke r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label07:
+        $z6 = interfaceinvoke r23.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label09;
+
+        $r14 = interfaceinvoke r23.<java.util.Iterator: java.lang.Object next()>();
+
+        r24 = (java.lang.String) $r14;
+
+        $z1 = interfaceinvoke r5.<java.util.Set: boolean contains(java.lang.Object)>(r24);
+
+        if $z1 != 0 goto label08;
+
+        $r15 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r16 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        virtualinvoke $r15.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r16, "Reconciling jobs");
+
+        z5 = 1;
+
+        goto label09;
+
+     label08:
+        goto label07;
+
+     label09:
+        if z5 == 0 goto label16;
+
+        r25 = virtualinvoke r1.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        virtualinvoke r25.<androidx.work.impl.WorkDatabase: void beginTransaction()>();
+
+     label10:
+        r26 = virtualinvoke r25.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        r6 = interfaceinvoke r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label11:
+        $z0 = interfaceinvoke r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label12;
+
+        $r13 = interfaceinvoke r6.<java.util.Iterator: java.lang.Object next()>();
+
+        r7 = (java.lang.String) $r13;
+
+        interfaceinvoke r26.<androidx.work.impl.model.WorkSpecDao: int markWorkSpecScheduled(java.lang.String,long)>(r7, -1L);
+
+        goto label11;
+
+     label12:
+        virtualinvoke r25.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label13:
+        virtualinvoke r25.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label16;
+
+     label14:
+        $r19 := @caughtexception;
+
+        r8 = $r19;
+
+     label15:
+        virtualinvoke r25.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        throw r8;
+
+     label16:
+        return z5;
+
+        catch java.lang.Throwable from label10 to label13 with label14;
+        catch java.lang.Throwable from label14 to label15 with label14;
+    }
+
+    private static java.util.List getPendingJobs(android.content.Context, android.app.job.JobScheduler)
+    {
+        android.content.Context r0;
+        android.app.job.JobScheduler r1;
+        android.content.ComponentName r2, $r6, $r8;
+        java.util.Iterator r3;
+        android.app.job.JobInfo r4;
+        java.util.ArrayList $r5, r14;
+        int $i0;
+        boolean $z0, $z1;
+        java.lang.Object $r7;
+        java.lang.Throwable $r9, r13;
+        androidx.work.Logger $r10;
+        java.lang.String $r11;
+        java.util.List r12;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.app.job.JobScheduler;
+
+        r12 = null;
+
+     label1:
+        r12 = virtualinvoke r1.<android.app.job.JobScheduler: java.util.List getAllPendingJobs()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r9 := @caughtexception;
+
+        r13 = $r9;
+
+        $r10 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r11 = <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG>;
+
+        virtualinvoke $r10.<androidx.work.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>($r11, "getAllPendingJobs() is not reliable on this device.", r13);
+
+     label4:
+        if r12 != null goto label5;
+
+        return null;
+
+     label5:
+        $r5 = new java.util.ArrayList;
+
+        $i0 = interfaceinvoke r12.<java.util.List: int size()>();
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>(int)>($i0);
+
+        r14 = $r5;
+
+        $r6 = new android.content.ComponentName;
+
+        specialinvoke $r6.<android.content.ComponentName: void <init>(android.content.Context,java.lang.Class)>(r0, class "Landroidx/work/impl/background/systemjob/SystemJobService;");
+
+        r2 = $r6;
+
+        r3 = interfaceinvoke r12.<java.util.List: java.util.Iterator iterator()>();
+
+     label6:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label8;
+
+        $r7 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (android.app.job.JobInfo) $r7;
+
+        $r8 = virtualinvoke r4.<android.app.job.JobInfo: android.content.ComponentName getService()>();
+
+        $z1 = virtualinvoke r2.<android.content.ComponentName: boolean equals(java.lang.Object)>($r8);
+
+        if $z1 == 0 goto label7;
+
+        interfaceinvoke r14.<java.util.List: boolean add(java.lang.Object)>(r4);
+
+     label7:
+        goto label6;
+
+     label8:
+        return r14;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private static java.util.List getPendingJobIds(android.content.Context, android.app.job.JobScheduler, java.lang.String)
+    {
+        android.content.Context r0;
+        android.app.job.JobScheduler r1;
+        java.lang.String r2, $r10;
+        java.util.List r3;
+        java.util.ArrayList r4, $r8;
+        java.util.Iterator r5;
+        android.app.job.JobInfo r6;
+        androidx.work.impl.model.WorkGenerationalId r7;
+        boolean $z0, $z1;
+        java.lang.Object $r9;
+        int $i0;
+        java.lang.Integer $r11;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.app.job.JobScheduler;
+
+        r2 := @parameter2: java.lang.String;
+
+        r3 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: java.util.List getPendingJobs(android.content.Context,android.app.job.JobScheduler)>(r0, r1);
+
+        if r3 != null goto label1;
+
+        return null;
+
+     label1:
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>(int)>(2);
+
+        r4 = $r8;
+
+        r5 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r9 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (android.app.job.JobInfo) $r9;
+
+        r7 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: androidx.work.impl.model.WorkGenerationalId getWorkGenerationalIdFromJobInfo(android.app.job.JobInfo)>(r6);
+
+        if r7 == null goto label3;
+
+        $r10 = virtualinvoke r7.<androidx.work.impl.model.WorkGenerationalId: java.lang.String getWorkSpecId()>();
+
+        $z1 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>($r10);
+
+        if $z1 == 0 goto label3;
+
+        $i0 = virtualinvoke r6.<android.app.job.JobInfo: int getId()>();
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        interfaceinvoke r4.<java.util.List: boolean add(java.lang.Object)>($r11);
+
+     label3:
+        goto label2;
+
+     label4:
+        return r4;
+    }
+
+    private static androidx.work.impl.model.WorkGenerationalId getWorkGenerationalIdFromJobInfo(android.app.job.JobInfo)
+    {
+        android.app.job.JobInfo r0;
+        android.os.PersistableBundle r1;
+        boolean $z0;
+        androidx.work.impl.model.WorkGenerationalId $r2;
+        java.lang.String $r3;
+        java.lang.Throwable $r4, r5;
+        int i0;
+
+        r0 := @parameter0: android.app.job.JobInfo;
+
+        r1 = virtualinvoke r0.<android.app.job.JobInfo: android.os.PersistableBundle getExtras()>();
+
+     label1:
+        if r1 == null goto label3;
+
+        $z0 = virtualinvoke r1.<android.os.PersistableBundle: boolean containsKey(java.lang.String)>("EXTRA_WORK_SPEC_ID");
+
+        if $z0 == 0 goto label3;
+
+        i0 = virtualinvoke r1.<android.os.PersistableBundle: int getInt(java.lang.String,int)>("EXTRA_WORK_SPEC_GENERATION", 0);
+
+        $r2 = new androidx.work.impl.model.WorkGenerationalId;
+
+        $r3 = virtualinvoke r1.<android.os.PersistableBundle: java.lang.String getString(java.lang.String)>("EXTRA_WORK_SPEC_ID");
+
+        specialinvoke $r2.<androidx.work.impl.model.WorkGenerationalId: void <init>(java.lang.String,int)>($r3, i0);
+
+     label2:
+        return $r2;
+
+     label3:
+        goto label5;
+
+     label4:
+        $r4 := @caughtexception;
+
+        r5 = $r4;
+
+     label5:
+        return null;
+
+        catch java.lang.NullPointerException from label1 to label2 with label4;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("SystemJobScheduler");
+
+        <androidx.work.impl.background.systemjob.SystemJobScheduler: java.lang.String TAG> = $r0;
+
+        return;
+    }
+

@@ -1,0 +1,136 @@
+android.support.test.services.shellexecutor.BlockingPublish
+<android.support.test.services.shellexecutor.BlockingPublish: java.lang.String TAG>
+<android.support.test.services.shellexecutor.BlockingPublish: int WAIT_INTERVAL>
+<android.support.test.services.shellexecutor.BlockingPublish: int WAIT_TIME>
+<android.support.test.services.shellexecutor.BlockingPublish: java.util.concurrent.CountDownLatch latch>
+<android.support.test.services.shellexecutor.BlockingPublish: android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult publishResult>
+    private void <init>(android.os.Handler)
+    {
+        android.support.test.services.shellexecutor.BlockingPublish $r0;
+        android.os.Handler $r1;
+        java.util.concurrent.CountDownLatch $r2;
+
+        $r0 := @this: android.support.test.services.shellexecutor.BlockingPublish;
+
+        $r1 := @parameter0: android.os.Handler;
+
+        specialinvoke $r0.<android.support.test.services.speakeasy.client.PublishResultReceiver: void <init>(android.os.Handler)>($r1);
+
+        $r2 = new java.util.concurrent.CountDownLatch;
+
+        specialinvoke $r2.<java.util.concurrent.CountDownLatch: void <init>(int)>(1);
+
+        $r0.<android.support.test.services.shellexecutor.BlockingPublish: java.util.concurrent.CountDownLatch latch> = $r2;
+
+        return;
+    }
+
+    public static android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult getResult(android.os.Looper, android.os.IBinder) throws java.lang.InterruptedException
+    {
+        android.os.Looper $r0;
+        android.os.IBinder $r1;
+        android.support.test.services.shellexecutor.BlockingPublish $r2;
+        android.os.Handler $r3;
+        android.support.test.services.speakeasy.client.Connection $r4;
+        android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult $r5;
+
+        $r0 := @parameter0: android.os.Looper;
+
+        $r1 := @parameter1: android.os.IBinder;
+
+        $r2 = new android.support.test.services.shellexecutor.BlockingPublish;
+
+        $r3 = new android.os.Handler;
+
+        specialinvoke $r3.<android.os.Handler: void <init>(android.os.Looper)>($r0);
+
+        specialinvoke $r2.<android.support.test.services.shellexecutor.BlockingPublish: void <init>(android.os.Handler)>($r3);
+
+        $r4 = staticinvoke <android.support.test.services.speakeasy.client.ToolConnection: android.support.test.services.speakeasy.client.Connection makeConnection()>();
+
+        interfaceinvoke $r4.<android.support.test.services.speakeasy.client.Connection: void publish(android.os.IBinder,android.support.test.services.speakeasy.client.PublishResultReceiver)>($r1, $r2);
+
+        $r5 = specialinvoke $r2.<android.support.test.services.shellexecutor.BlockingPublish: android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult waitOnResult()>();
+
+        return $r5;
+    }
+
+    private android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult waitOnResult() throws java.lang.InterruptedException
+    {
+        android.support.test.services.shellexecutor.BlockingPublish $r0;
+        java.util.concurrent.TimeUnit $r1;
+        int $i0;
+        java.util.concurrent.CountDownLatch $r2;
+        boolean $z0;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4;
+        java.lang.InterruptedException $r5;
+        android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult r6;
+
+        $r0 := @this: android.support.test.services.shellexecutor.BlockingPublish;
+
+        $i0 = 0;
+
+     label1:
+        $r2 = $r0.<android.support.test.services.shellexecutor.BlockingPublish: java.util.concurrent.CountDownLatch latch>;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.CountDownLatch: boolean await(long,java.util.concurrent.TimeUnit)>(5L, $r1);
+
+        if $z0 == 0 goto label2;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("PublishResultReceiver", "Publish successful");
+
+        r6 = $r0.<android.support.test.services.shellexecutor.BlockingPublish: android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult publishResult>;
+
+        return r6;
+
+     label2:
+        $i0 = $i0 + 5;
+
+        if $i0 >= 30 goto label3;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(int)>(41);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Waiting ");
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" for SpeakEasy publish");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("PublishResultReceiver", $r4);
+
+        goto label1;
+
+     label3:
+        $r5 = new java.lang.InterruptedException;
+
+        specialinvoke $r5.<java.lang.InterruptedException: void <init>(java.lang.String)>("Timed out after 30 seconds while waiting for SpeakEasy publish");
+
+        throw $r5;
+    }
+
+    protected void handlePublishResult(android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult)
+    {
+        android.support.test.services.shellexecutor.BlockingPublish $r0;
+        android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult $r1;
+        java.util.concurrent.CountDownLatch $r2;
+
+        $r0 := @this: android.support.test.services.shellexecutor.BlockingPublish;
+
+        $r1 := @parameter0: android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult;
+
+        $r0.<android.support.test.services.shellexecutor.BlockingPublish: android.support.test.services.speakeasy.SpeakEasyProtocol$PublishResult publishResult> = $r1;
+
+        $r2 = $r0.<android.support.test.services.shellexecutor.BlockingPublish: java.util.concurrent.CountDownLatch latch>;
+
+        virtualinvoke $r2.<java.util.concurrent.CountDownLatch: void countDown()>();
+
+        return;
+    }
+

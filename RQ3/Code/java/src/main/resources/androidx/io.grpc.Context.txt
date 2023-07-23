@@ -1,0 +1,280 @@
+io.grpc.Context
+<io.grpc.Context: io.grpc.Context ROOT>
+<io.grpc.Context: java.util.logging.Logger log>
+<io.grpc.Context: io.grpc.Context$CancellableContext cancellableAncestor>
+<io.grpc.Context: int generation>
+<io.grpc.Context: io.grpc.PersistentHashArrayMappedTrie$Node keyValueEntries>
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+        io.grpc.Context $r3;
+
+        $r0 = class "Lio/grpc/Context;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.Context: java.util.logging.Logger log> = $r2;
+
+        $r3 = new io.grpc.Context;
+
+        specialinvoke $r3.<io.grpc.Context: void <init>()>();
+
+        <io.grpc.Context: io.grpc.Context ROOT> = $r3;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        io.grpc.Context $r0;
+
+        $r0 := @this: io.grpc.Context;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<io.grpc.Context: io.grpc.Context$CancellableContext cancellableAncestor> = null;
+
+        $r0.<io.grpc.Context: io.grpc.PersistentHashArrayMappedTrie$Node keyValueEntries> = null;
+
+        $r0.<io.grpc.Context: int generation> = 0;
+
+        staticinvoke <io.grpc.Context: void validateGeneration(int)>(0);
+
+        return;
+    }
+
+    static java.lang.Object checkNotNull(java.lang.Object, java.lang.Object)
+    {
+        java.lang.String $r0;
+        java.lang.Object $r1, $r2;
+        java.lang.NullPointerException $r3;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 := @parameter1: java.lang.Object;
+
+        if $r1 == null goto label1;
+
+        return $r1;
+
+     label1:
+        $r3 = new java.lang.NullPointerException;
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke $r3.<java.lang.NullPointerException: void <init>(java.lang.String)>($r0);
+
+        throw $r3;
+    }
+
+    public static io.grpc.Context current()
+    {
+        io.grpc.Context$Storage $r0;
+        io.grpc.Context $r1;
+
+        $r0 = staticinvoke <io.grpc.Context: io.grpc.Context$Storage storage()>();
+
+        $r1 = virtualinvoke $r0.<io.grpc.Context$Storage: io.grpc.Context current()>();
+
+        if $r1 != null goto label1;
+
+        $r1 = <io.grpc.Context: io.grpc.Context ROOT>;
+
+     label1:
+        return $r1;
+    }
+
+    static io.grpc.Context$Storage storage()
+    {
+        io.grpc.Context$Storage r0;
+
+        r0 = <io.grpc.Context$LazyStorage: io.grpc.Context$Storage storage>;
+
+        return r0;
+    }
+
+    private static void validateGeneration(int)
+    {
+        int $i0;
+        java.util.logging.Logger $r0;
+        java.util.logging.Level $r1;
+        java.lang.Exception r2;
+        java.lang.Throwable r3;
+
+        $i0 := @parameter0: int;
+
+        if $i0 != 1000 goto label1;
+
+        $r0 = <io.grpc.Context: java.util.logging.Logger log>;
+
+        $r1 = <java.util.logging.Level: java.util.logging.Level SEVERE>;
+
+        r2 = new java.lang.Exception;
+
+        specialinvoke r2.<java.lang.Exception: void <init>()>();
+
+        r3 = (java.lang.Throwable) r2;
+
+        virtualinvoke $r0.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r1, "io.grpc.Context", "validateGeneration", "Context ancestry chain length is abnormally long. This suggests an error in application code. Length exceeded: 1000", r3);
+
+     label1:
+        return;
+    }
+
+    public void addListener(io.grpc.Context$CancellationListener, java.util.concurrent.Executor)
+    {
+        io.grpc.Context $r0;
+        io.grpc.Context$CancellationListener $r1;
+        java.util.concurrent.Executor $r2;
+        io.grpc.Context$ExecutableListener $r3;
+        io.grpc.Context$CancellableContext $r4;
+
+        $r0 := @this: io.grpc.Context;
+
+        $r1 := @parameter0: io.grpc.Context$CancellationListener;
+
+        $r2 := @parameter1: java.util.concurrent.Executor;
+
+        staticinvoke <io.grpc.Context: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "cancellationListener");
+
+        staticinvoke <io.grpc.Context: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "executor");
+
+        $r4 = $r0.<io.grpc.Context: io.grpc.Context$CancellableContext cancellableAncestor>;
+
+        if $r4 != null goto label1;
+
+        return;
+
+     label1:
+        $r3 = new io.grpc.Context$ExecutableListener;
+
+        specialinvoke $r3.<io.grpc.Context$ExecutableListener: void <init>(java.util.concurrent.Executor,io.grpc.Context$CancellationListener,io.grpc.Context)>($r2, $r1, $r0);
+
+        staticinvoke <io.grpc.Context$CancellableContext: void access$300(io.grpc.Context$CancellableContext,io.grpc.Context$ExecutableListener)>($r4, $r3);
+
+        return;
+    }
+
+    public io.grpc.Context attach()
+    {
+        io.grpc.Context $r0;
+        io.grpc.Context$Storage $r1;
+
+        $r0 := @this: io.grpc.Context;
+
+        $r1 = staticinvoke <io.grpc.Context: io.grpc.Context$Storage storage()>();
+
+        $r0 = virtualinvoke $r1.<io.grpc.Context$Storage: io.grpc.Context doAttach(io.grpc.Context)>($r0);
+
+        if $r0 != null goto label1;
+
+        $r0 = <io.grpc.Context: io.grpc.Context ROOT>;
+
+     label1:
+        return $r0;
+    }
+
+    public java.lang.Throwable cancellationCause()
+    {
+        io.grpc.Context $r0;
+        java.lang.Throwable $r1;
+        io.grpc.Context$CancellableContext $r2;
+
+        $r0 := @this: io.grpc.Context;
+
+        $r2 = $r0.<io.grpc.Context: io.grpc.Context$CancellableContext cancellableAncestor>;
+
+        if $r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = virtualinvoke $r2.<io.grpc.Context$CancellableContext: java.lang.Throwable cancellationCause()>();
+
+        return $r1;
+    }
+
+    public void detach(io.grpc.Context)
+    {
+        io.grpc.Context $r0, $r1;
+        io.grpc.Context$Storage $r2;
+
+        $r0 := @this: io.grpc.Context;
+
+        $r1 := @parameter0: io.grpc.Context;
+
+        staticinvoke <io.grpc.Context: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "toAttach");
+
+        $r2 = staticinvoke <io.grpc.Context: io.grpc.Context$Storage storage()>();
+
+        virtualinvoke $r2.<io.grpc.Context$Storage: void detach(io.grpc.Context,io.grpc.Context)>($r0, $r1);
+
+        return;
+    }
+
+    public io.grpc.Deadline getDeadline()
+    {
+        io.grpc.Context $r0;
+        io.grpc.Deadline $r1;
+        io.grpc.Context$CancellableContext $r2;
+
+        $r0 := @this: io.grpc.Context;
+
+        $r2 = $r0.<io.grpc.Context: io.grpc.Context$CancellableContext cancellableAncestor>;
+
+        if $r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = virtualinvoke $r2.<io.grpc.Context$CancellableContext: io.grpc.Deadline getDeadline()>();
+
+        return $r1;
+    }
+
+    public boolean isCancelled()
+    {
+        io.grpc.Context $r0;
+        boolean $z0;
+        io.grpc.Context$CancellableContext $r1;
+
+        $r0 := @this: io.grpc.Context;
+
+        $r1 = $r0.<io.grpc.Context: io.grpc.Context$CancellableContext cancellableAncestor>;
+
+        if $r1 != null goto label1;
+
+        return 0;
+
+     label1:
+        $z0 = virtualinvoke $r1.<io.grpc.Context$CancellableContext: boolean isCancelled()>();
+
+        return $z0;
+    }
+
+    public void removeListener(io.grpc.Context$CancellationListener)
+    {
+        io.grpc.Context $r0;
+        io.grpc.Context$CancellationListener $r1;
+        io.grpc.Context$CancellableContext $r2;
+
+        $r0 := @this: io.grpc.Context;
+
+        $r1 := @parameter0: io.grpc.Context$CancellationListener;
+
+        $r2 = $r0.<io.grpc.Context: io.grpc.Context$CancellableContext cancellableAncestor>;
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        staticinvoke <io.grpc.Context$CancellableContext: void access$400(io.grpc.Context$CancellableContext,io.grpc.Context$CancellationListener,io.grpc.Context)>($r2, $r1, $r0);
+
+        return;
+    }
+

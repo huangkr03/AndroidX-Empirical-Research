@@ -1,0 +1,716 @@
+kotlinx.coroutines.internal.FastServiceLoader
+<kotlinx.coroutines.internal.FastServiceLoader: kotlinx.coroutines.internal.FastServiceLoader INSTANCE>
+    static void <clinit>()
+    {
+        kotlinx.coroutines.internal.FastServiceLoader $r0;
+
+        $r0 = new kotlinx.coroutines.internal.FastServiceLoader;
+
+        specialinvoke $r0.<kotlinx.coroutines.internal.FastServiceLoader: void <init>()>();
+
+        <kotlinx.coroutines.internal.FastServiceLoader: kotlinx.coroutines.internal.FastServiceLoader INSTANCE> = $r0;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        kotlinx.coroutines.internal.FastServiceLoader $r0;
+
+        $r0 := @this: kotlinx.coroutines.internal.FastServiceLoader;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private final java.lang.Object getProviderInstance(java.lang.String, java.lang.ClassLoader, java.lang.Class)
+    {
+        kotlinx.coroutines.internal.FastServiceLoader $r0;
+        java.lang.String $r1;
+        java.lang.ClassLoader $r2;
+        java.lang.Class $r3, $r4;
+        boolean $z0;
+        java.lang.Class[] $r5;
+        java.lang.reflect.Constructor $r6;
+        java.lang.Object[] $r7;
+        java.lang.Object $r8;
+        java.lang.StringBuilder $r9;
+        java.lang.IllegalArgumentException $r10;
+
+        $r0 := @this: kotlinx.coroutines.internal.FastServiceLoader;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.ClassLoader;
+
+        $r3 := @parameter2: java.lang.Class;
+
+        $r4 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String,boolean,java.lang.ClassLoader)>($r1, 0, $r2);
+
+        $z0 = virtualinvoke $r3.<java.lang.Class: boolean isAssignableFrom(java.lang.Class)>($r4);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = newarray (java.lang.Class)[0];
+
+        $r6 = virtualinvoke $r4.<java.lang.Class: java.lang.reflect.Constructor getDeclaredConstructor(java.lang.Class[])>($r5);
+
+        $r7 = newarray (java.lang.Object)[0];
+
+        $r8 = virtualinvoke $r6.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r7);
+
+        $r8 = virtualinvoke $r3.<java.lang.Class: java.lang.Object cast(java.lang.Object)>($r8);
+
+        return $r8;
+
+     label1:
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Expected service of class ");
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", but found ");
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r1 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r10 = new java.lang.IllegalArgumentException;
+
+        $r1 = virtualinvoke $r1.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r10.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r1);
+
+        throw $r10;
+    }
+
+    private final java.util.List load(java.lang.Class, java.lang.ClassLoader)
+    {
+        kotlinx.coroutines.internal.FastServiceLoader $r0;
+        java.lang.ClassLoader $r1;
+        java.lang.Throwable $r2;
+        java.lang.Class $r3;
+        java.util.List $r4;
+        java.util.ServiceLoader $r5;
+        java.lang.Iterable r6;
+
+        $r0 := @this: kotlinx.coroutines.internal.FastServiceLoader;
+
+        $r3 := @parameter0: java.lang.Class;
+
+        $r1 := @parameter1: java.lang.ClassLoader;
+
+     label1:
+        $r4 = virtualinvoke $r0.<kotlinx.coroutines.internal.FastServiceLoader: java.util.List loadProviders$third_party_kotlin_kotlinx_coroutines_kotlinx_coroutines(java.lang.Class,java.lang.ClassLoader)>($r3, $r1);
+
+     label2:
+        return $r4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r5 = staticinvoke <java.util.ServiceLoader: java.util.ServiceLoader load(java.lang.Class,java.lang.ClassLoader)>($r3, $r1);
+
+        r6 = (java.lang.Iterable) $r5;
+
+        $r4 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List toList(java.lang.Iterable)>(r6);
+
+        return $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private final java.util.List parse(java.net.URL)
+    {
+        kotlinx.coroutines.internal.FastServiceLoader $r0;
+        java.net.URL $r1;
+        java.lang.String $r2, $r3;
+        boolean $z0;
+        java.util.jar.JarFile $r4, r18;
+        java.io.BufferedReader $r5, r21;
+        java.io.InputStreamReader $r6, r20;
+        java.util.zip.ZipEntry $r7, r19;
+        java.io.InputStream $r8;
+        java.util.List $r9;
+        java.lang.Throwable $r10, $r11, $r12, $r13, $r14, $r15, $r16, $r17;
+        java.io.Closeable r22;
+
+        $r0 := @this: kotlinx.coroutines.internal.FastServiceLoader;
+
+        $r1 := @parameter0: java.net.URL;
+
+        $r2 = virtualinvoke $r1.<java.net.URL: java.lang.String toString()>();
+
+        $z0 = staticinvoke <kotlin.text.StringsKt: boolean startsWith$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)>($r2, "jar", 0, 2, null);
+
+        if $z0 == 0 goto label18;
+
+        $r3 = staticinvoke <kotlin.text.StringsKt: java.lang.String substringAfter$default(java.lang.String,java.lang.String,java.lang.String,int,java.lang.Object)>($r2, "jar:file:", null, 2, null);
+
+        $r3 = staticinvoke <kotlin.text.StringsKt: java.lang.String substringBefore$default(java.lang.String,char,java.lang.String,int,java.lang.Object)>($r3, 33, null, 2, null);
+
+        $r2 = staticinvoke <kotlin.text.StringsKt: java.lang.String substringAfter$default(java.lang.String,java.lang.String,java.lang.String,int,java.lang.Object)>($r2, "!/", null, 2, null);
+
+        r18 = new java.util.jar.JarFile;
+
+        $r4 = r18;
+
+        specialinvoke r18.<java.util.jar.JarFile: void <init>(java.lang.String,boolean)>($r3, 0);
+
+        r21 = new java.io.BufferedReader;
+
+        $r5 = r21;
+
+        r20 = new java.io.InputStreamReader;
+
+        $r6 = r20;
+
+        r19 = new java.util.zip.ZipEntry;
+
+        $r7 = r19;
+
+     label01:
+        specialinvoke r19.<java.util.zip.ZipEntry: void <init>(java.lang.String)>($r2);
+
+        $r8 = virtualinvoke $r4.<java.util.jar.JarFile: java.io.InputStream getInputStream(java.util.zip.ZipEntry)>($r7);
+
+        specialinvoke r20.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.lang.String)>($r8, "UTF-8");
+
+        specialinvoke r21.<java.io.BufferedReader: void <init>(java.io.Reader)>($r6);
+
+     label02:
+        $r0 = <kotlinx.coroutines.internal.FastServiceLoader: kotlinx.coroutines.internal.FastServiceLoader INSTANCE>;
+
+     label03:
+        $r9 = specialinvoke $r0.<kotlinx.coroutines.internal.FastServiceLoader: java.util.List parseFile(java.io.BufferedReader)>($r5);
+
+     label04:
+        r22 = (java.io.Closeable) $r5;
+
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r22, null);
+
+     label05:
+        virtualinvoke $r4.<java.util.jar.JarFile: void close()>();
+
+     label06:
+        return $r9;
+
+     label07:
+        $r10 := @caughtexception;
+
+        throw $r10;
+
+     label08:
+        $r11 := @caughtexception;
+
+     label09:
+        throw $r11;
+
+     label10:
+        $r12 := @caughtexception;
+
+        r22 = (java.io.Closeable) $r5;
+
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r22, $r11);
+
+     label11:
+        throw $r12;
+
+     label12:
+        $r13 := @caughtexception;
+
+     label13:
+        throw $r13;
+
+     label14:
+        $r14 := @caughtexception;
+
+     label15:
+        virtualinvoke $r4.<java.util.jar.JarFile: void close()>();
+
+     label16:
+        throw $r14;
+
+     label17:
+        $r15 := @caughtexception;
+
+        staticinvoke <kotlin.ExceptionsKt: void addSuppressed(java.lang.Throwable,java.lang.Throwable)>($r13, $r15);
+
+        throw $r13;
+
+     label18:
+        r21 = new java.io.BufferedReader;
+
+        $r5 = r21;
+
+        r20 = new java.io.InputStreamReader;
+
+        $r8 = virtualinvoke $r1.<java.net.URL: java.io.InputStream openStream()>();
+
+        specialinvoke r20.<java.io.InputStreamReader: void <init>(java.io.InputStream)>($r8);
+
+        specialinvoke r21.<java.io.BufferedReader: void <init>(java.io.Reader)>(r20);
+
+        $r0 = <kotlinx.coroutines.internal.FastServiceLoader: kotlinx.coroutines.internal.FastServiceLoader INSTANCE>;
+
+     label19:
+        $r9 = specialinvoke $r0.<kotlinx.coroutines.internal.FastServiceLoader: java.util.List parseFile(java.io.BufferedReader)>($r5);
+
+     label20:
+        r22 = (java.io.Closeable) $r5;
+
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r22, null);
+
+        return $r9;
+
+     label21:
+        $r16 := @caughtexception;
+
+     label22:
+        throw $r16;
+
+     label23:
+        $r17 := @caughtexception;
+
+        r22 = (java.io.Closeable) $r5;
+
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r22, $r16);
+
+        throw $r17;
+
+        catch java.lang.Throwable from label01 to label02 with label12;
+        catch java.lang.Throwable from label03 to label04 with label08;
+        catch java.lang.Throwable from label05 to label06 with label07;
+        catch java.lang.Throwable from label09 to label10 with label10;
+        catch java.lang.Throwable from label11 to label12 with label12;
+        catch java.lang.Throwable from label13 to label14 with label14;
+        catch java.lang.Throwable from label15 to label16 with label17;
+        catch java.lang.Throwable from label19 to label20 with label21;
+        catch java.lang.Throwable from label22 to label23 with label23;
+    }
+
+    private final java.util.List parseFile(java.io.BufferedReader)
+    {
+        kotlinx.coroutines.internal.FastServiceLoader $r0;
+        java.io.BufferedReader $r1;
+        java.util.LinkedHashSet $r2, r7;
+        java.lang.String $r3;
+        java.util.List $r4;
+        java.lang.CharSequence $r5;
+        boolean $z0, $z1;
+        int $i0, $i1;
+        char $c2;
+        java.lang.StringBuilder $r6, r8;
+        java.lang.IllegalArgumentException r9;
+        java.lang.Iterable r10;
+        java.util.Set r11;
+
+        $r0 := @this: kotlinx.coroutines.internal.FastServiceLoader;
+
+        $r1 := @parameter0: java.io.BufferedReader;
+
+        r7 = new java.util.LinkedHashSet;
+
+        $r2 = r7;
+
+        specialinvoke r7.<java.util.LinkedHashSet: void <init>()>();
+
+     label01:
+        $r3 = virtualinvoke $r1.<java.io.BufferedReader: java.lang.String readLine()>();
+
+        if $r3 != null goto label02;
+
+        r10 = (java.lang.Iterable) $r2;
+
+        $r4 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List toList(java.lang.Iterable)>(r10);
+
+        return $r4;
+
+     label02:
+        $r3 = staticinvoke <kotlin.text.StringsKt: java.lang.String substringBefore$default(java.lang.String,java.lang.String,java.lang.String,int,java.lang.Object)>($r3, "#", null, 2, null);
+
+        $r5 = staticinvoke <kotlin.text.StringsKt: java.lang.CharSequence trim(java.lang.CharSequence)>($r3);
+
+        $r3 = virtualinvoke $r5.<java.lang.Object: java.lang.String toString()>();
+
+        $z0 = 0;
+
+        $i0 = 0;
+
+     label03:
+        $i1 = interfaceinvoke $r3.<java.lang.CharSequence: int length()>();
+
+        if $i0 >= $i1 goto label08;
+
+        $c2 = interfaceinvoke $r3.<java.lang.CharSequence: char charAt(int)>($i0);
+
+        if $c2 == 46 goto label05;
+
+        $z1 = staticinvoke <java.lang.Character: boolean isJavaIdentifierPart(char)>($c2);
+
+        if $z1 == 0 goto label04;
+
+        goto label05;
+
+     label04:
+        $z1 = 0;
+
+        goto label06;
+
+     label05:
+        $z1 = 1;
+
+     label06:
+        if $z1 != 0 goto label07;
+
+        $z1 = 0;
+
+        goto label09;
+
+     label07:
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label08:
+        $z1 = 1;
+
+     label09:
+        if $z1 == 0 goto label11;
+
+        $i0 = interfaceinvoke $r3.<java.lang.CharSequence: int length()>();
+
+        if $i0 <= 0 goto label10;
+
+        $z0 = 1;
+
+        goto label10;
+
+     label10:
+        if $z0 == 0 goto label01;
+
+        r11 = (java.util.Set) $r2;
+
+        interfaceinvoke r11.<java.util.Set: boolean add(java.lang.Object)>($r3);
+
+        goto label01;
+
+     label11:
+        r8 = new java.lang.StringBuilder;
+
+        specialinvoke r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Illegal service provider class name: ");
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r9 = new java.lang.IllegalArgumentException;
+
+        $r3 = virtualinvoke $r3.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r3);
+
+        goto label12;
+
+     label12:
+        throw r9;
+    }
+
+    public final java.util.List loadMainDispatcherFactory$third_party_kotlin_kotlinx_coroutines_kotlinx_coroutines()
+    {
+        kotlinx.coroutines.internal.FastServiceLoader $r0;
+        java.lang.Class $r1, $r6;
+        boolean $z0;
+        java.lang.ClassLoader $r2;
+        java.util.List $r3;
+        java.util.ArrayList $r4, r15;
+        kotlinx.coroutines.internal.MainDispatcherFactory $r5, $r11;
+        java.lang.Class[] $r7;
+        java.lang.reflect.Constructor $r8;
+        java.lang.Object[] $r9;
+        java.lang.Object $r10;
+        java.lang.Throwable $r12, $r13, $r14;
+
+        $r0 := @this: kotlinx.coroutines.internal.FastServiceLoader;
+
+        $r1 = class "Lkotlinx/coroutines/internal/MainDispatcherFactory;";
+
+        $z0 = staticinvoke <kotlinx.coroutines.internal.FastServiceLoaderKt: boolean getANDROID_DETECTED()>();
+
+        if $z0 != 0 goto label01;
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        $r3 = specialinvoke $r0.<kotlinx.coroutines.internal.FastServiceLoader: java.util.List load(java.lang.Class,java.lang.ClassLoader)>(class "Lkotlinx/coroutines/internal/MainDispatcherFactory;", $r2);
+
+        return $r3;
+
+     label01:
+        r15 = new java.util.ArrayList;
+
+        $r4 = r15;
+
+     label02:
+        specialinvoke r15.<java.util.ArrayList: void <init>(int)>(2);
+
+     label03:
+        $r5 = null;
+
+     label04:
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+     label05:
+        $r6 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String,boolean,java.lang.ClassLoader)>("kotlinx.coroutines.android.AndroidDispatcherFactory", 1, $r2);
+
+        $r7 = newarray (java.lang.Class)[0];
+
+     label06:
+        $r8 = virtualinvoke $r6.<java.lang.Class: java.lang.reflect.Constructor getDeclaredConstructor(java.lang.Class[])>($r7);
+
+     label07:
+        $r9 = newarray (java.lang.Object)[0];
+
+     label08:
+        $r10 = virtualinvoke $r8.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r9);
+
+        $r10 = virtualinvoke $r1.<java.lang.Class: java.lang.Object cast(java.lang.Object)>($r10);
+
+     label09:
+        $r11 = (kotlinx.coroutines.internal.MainDispatcherFactory) $r10;
+
+        goto label11;
+
+     label10:
+        $r12 := @caughtexception;
+
+        $r11 = null;
+
+     label11:
+        if $r11 == null goto label13;
+
+     label12:
+        virtualinvoke $r4.<java.util.ArrayList: boolean add(java.lang.Object)>($r11);
+
+     label13:
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+     label14:
+        $r6 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String,boolean,java.lang.ClassLoader)>("kotlinx.coroutines.test.internal.TestMainDispatcherFactory", 1, $r2);
+
+        $r7 = newarray (java.lang.Class)[0];
+
+     label15:
+        $r8 = virtualinvoke $r6.<java.lang.Class: java.lang.reflect.Constructor getDeclaredConstructor(java.lang.Class[])>($r7);
+
+     label16:
+        $r9 = newarray (java.lang.Object)[0];
+
+     label17:
+        $r10 = virtualinvoke $r8.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r9);
+
+        $r10 = virtualinvoke $r1.<java.lang.Class: java.lang.Object cast(java.lang.Object)>($r10);
+
+     label18:
+        $r5 = (kotlinx.coroutines.internal.MainDispatcherFactory) $r10;
+
+        goto label20;
+
+     label19:
+        $r13 := @caughtexception;
+
+     label20:
+        if $r5 == null goto label22;
+
+     label21:
+        virtualinvoke $r4.<java.util.ArrayList: boolean add(java.lang.Object)>($r5);
+
+     label22:
+        $r3 = (java.util.List) $r4;
+
+        return $r3;
+
+     label23:
+        $r14 := @caughtexception;
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        $r3 = specialinvoke $r0.<kotlinx.coroutines.internal.FastServiceLoader: java.util.List load(java.lang.Class,java.lang.ClassLoader)>(class "Lkotlinx/coroutines/internal/MainDispatcherFactory;", $r2);
+
+        return $r3;
+
+        catch java.lang.Throwable from label02 to label03 with label23;
+        catch java.lang.ClassNotFoundException from label04 to label05 with label10;
+        catch java.lang.ClassNotFoundException from label06 to label07 with label10;
+        catch java.lang.ClassNotFoundException from label08 to label09 with label10;
+        catch java.lang.Throwable from label04 to label05 with label23;
+        catch java.lang.Throwable from label06 to label07 with label23;
+        catch java.lang.Throwable from label08 to label09 with label23;
+        catch java.lang.Throwable from label12 to label13 with label23;
+        catch java.lang.ClassNotFoundException from label13 to label14 with label19;
+        catch java.lang.ClassNotFoundException from label15 to label16 with label19;
+        catch java.lang.ClassNotFoundException from label17 to label18 with label19;
+        catch java.lang.Throwable from label13 to label14 with label23;
+        catch java.lang.Throwable from label15 to label16 with label23;
+        catch java.lang.Throwable from label17 to label18 with label23;
+        catch java.lang.Throwable from label21 to label22 with label23;
+    }
+
+    public final java.util.List loadProviders$third_party_kotlin_kotlinx_coroutines_kotlinx_coroutines(java.lang.Class, java.lang.ClassLoader)
+    {
+        kotlinx.coroutines.internal.FastServiceLoader $r0;
+        java.lang.Class $r1;
+        java.lang.ClassLoader $r2;
+        java.lang.String $r3;
+        java.lang.StringBuilder $r4, r13;
+        java.util.Enumeration $r5;
+        java.util.ArrayList $r6, $r7, r14;
+        java.util.Iterator $r8;
+        boolean $z0;
+        java.lang.Object $r9;
+        java.net.URL $r10;
+        java.util.List $r11;
+        java.util.Set $r12;
+        int $i0;
+        java.lang.IllegalArgumentException r15;
+        java.lang.Iterable r16;
+        java.util.Collection r17;
+
+        $r0 := @this: kotlinx.coroutines.internal.FastServiceLoader;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        $r2 := @parameter1: java.lang.ClassLoader;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "service");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "loader");
+
+        $r3 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        r13 = new java.lang.StringBuilder;
+
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("META-INF/services/");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = virtualinvoke $r2.<java.lang.ClassLoader: java.util.Enumeration getResources(java.lang.String)>($r3);
+
+        $r6 = staticinvoke <java.util.Collections: java.util.ArrayList list(java.util.Enumeration)>($r5);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r6, "list(this)");
+
+        r14 = new java.util.ArrayList;
+
+        $r7 = r14;
+
+        specialinvoke r14.<java.util.ArrayList: void <init>()>();
+
+        r16 = (java.lang.Iterable) $r6;
+
+        $r8 = interfaceinvoke r16.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r9 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (java.net.URL) $r9;
+
+        $r0 = <kotlinx.coroutines.internal.FastServiceLoader: kotlinx.coroutines.internal.FastServiceLoader INSTANCE>;
+
+        $r11 = specialinvoke $r0.<kotlinx.coroutines.internal.FastServiceLoader: java.util.List parse(java.net.URL)>($r10);
+
+        r17 = (java.util.Collection) $r7;
+
+        r16 = (java.lang.Iterable) $r11;
+
+        staticinvoke <kotlin.collections.CollectionsKt: boolean addAll(java.util.Collection,java.lang.Iterable)>(r17, r16);
+
+        goto label1;
+
+     label2:
+        r16 = (java.lang.Iterable) $r7;
+
+        $r12 = staticinvoke <kotlin.collections.CollectionsKt: java.util.Set toSet(java.lang.Iterable)>(r16);
+
+        r17 = (java.util.Collection) $r12;
+
+        $z0 = interfaceinvoke r17.<java.util.Collection: boolean isEmpty()>();
+
+        if $z0 != 0 goto label3;
+
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        if $z0 == 0 goto label7;
+
+        $r7 = new java.util.ArrayList;
+
+        $r6 = $r7;
+
+        r16 = (java.lang.Iterable) $r12;
+
+        $i0 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>(r16, 10);
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>(int)>($i0);
+
+        r16 = (java.lang.Iterable) $r12;
+
+        $r8 = interfaceinvoke r16.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label5:
+        $z0 = interfaceinvoke $r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r9 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r3 = (java.lang.String) $r9;
+
+        $r0 = <kotlinx.coroutines.internal.FastServiceLoader: kotlinx.coroutines.internal.FastServiceLoader INSTANCE>;
+
+        $r9 = specialinvoke $r0.<kotlinx.coroutines.internal.FastServiceLoader: java.lang.Object getProviderInstance(java.lang.String,java.lang.ClassLoader,java.lang.Class)>($r3, $r2, $r1);
+
+        r17 = (java.util.Collection) $r6;
+
+        interfaceinvoke r17.<java.util.Collection: boolean add(java.lang.Object)>($r9);
+
+        goto label5;
+
+     label6:
+        $r11 = (java.util.List) $r6;
+
+        return $r11;
+
+     label7:
+        r15 = new java.lang.IllegalArgumentException;
+
+        $r3 = "No providers were loaded with FastServiceLoader";
+
+        $r3 = virtualinvoke $r3.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke r15.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r3);
+
+        goto label8;
+
+     label8:
+        throw r15;
+    }
+

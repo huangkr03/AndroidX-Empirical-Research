@@ -1,0 +1,539 @@
+androidx.appsearch.localstorage.AppSearchMigrationHelper
+<androidx.appsearch.localstorage.AppSearchMigrationHelper: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>
+<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.lang.String mPackageName>
+<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.lang.String mDatabaseName>
+<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.io.File mFile>
+<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.util.Set mDestinationTypes>
+<androidx.appsearch.localstorage.AppSearchMigrationHelper: boolean mAreDocumentsMigrated>
+    void <init>(androidx.appsearch.localstorage.AppSearchImpl, java.lang.String, java.lang.String, java.util.Set) throws java.io.IOException
+    {
+        androidx.appsearch.localstorage.AppSearchMigrationHelper r0;
+        androidx.appsearch.localstorage.AppSearchImpl r1, $r8;
+        java.lang.String r2, r3, $r10, $r12, $r18;
+        java.util.Set r4, $r17;
+        java.util.Iterator r5;
+        androidx.appsearch.app.AppSearchSchema r6;
+        java.lang.Object $r7, $r9, $r11, $r16;
+        java.io.File $r14;
+        androidx.collection.ArraySet $r15;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: androidx.appsearch.localstorage.AppSearchMigrationHelper;
+
+        r1 := @parameter0: androidx.appsearch.localstorage.AppSearchImpl;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: java.lang.String;
+
+        r4 := @parameter3: java.util.Set;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: boolean mAreDocumentsMigrated> = 0;
+
+        $r7 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r8 = (androidx.appsearch.localstorage.AppSearchImpl) $r7;
+
+        r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl> = $r8;
+
+        $r9 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $r10 = (java.lang.String) $r9;
+
+        r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.lang.String mPackageName> = $r10;
+
+        $r11 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r3);
+
+        $r12 = (java.lang.String) $r11;
+
+        r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.lang.String mDatabaseName> = $r12;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r4);
+
+        $r14 = staticinvoke <java.io.File: java.io.File createTempFile(java.lang.String,java.lang.String)>("appsearch", null);
+
+        r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.io.File mFile> = $r14;
+
+        $r15 = new androidx.collection.ArraySet;
+
+        $i0 = interfaceinvoke r4.<java.util.Set: int size()>();
+
+        specialinvoke $r15.<androidx.collection.ArraySet: void <init>(int)>($i0);
+
+        r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.util.Set mDestinationTypes> = $r15;
+
+        r5 = interfaceinvoke r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r16 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (androidx.appsearch.app.AppSearchSchema) $r16;
+
+        $r17 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.util.Set mDestinationTypes>;
+
+        $r18 = virtualinvoke r6.<androidx.appsearch.app.AppSearchSchema: java.lang.String getSchemaType()>();
+
+        interfaceinvoke $r17.<java.util.Set: boolean add(java.lang.Object)>($r18);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void queryAndTransform(java.util.Map, int, int, androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder) throws java.io.IOException, androidx.appsearch.exceptions.AppSearchException
+    {
+        androidx.appsearch.localstorage.AppSearchMigrationHelper r0;
+        java.util.Map r1;
+        int i0, i1, $i2, $i3, i5, i6;
+        androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder r2;
+        java.io.FileOutputStream r3, $r11;
+        androidx.appsearch.app.GenericDocument r4, r46;
+        androidx.appsearch.app.Migrator r5;
+        android.os.Bundle r6;
+        byte[] r7;
+        android.os.Parcel r8;
+        java.lang.Throwable r9, $r41, $r42, $r43, r47, r48;
+        java.io.File $r10, $r12;
+        boolean $z0, $z1, $z2;
+        androidx.appsearch.app.SearchSpec$Builder $r13, $r18, $r19;
+        androidx.appsearch.localstorage.AppSearchImpl $r14, $r25;
+        java.lang.String $r15, $r16, $r26, $r30, $r33, $r37, $r40;
+        java.util.Set $r17, $r32;
+        androidx.appsearch.app.SearchSpec $r20;
+        java.util.List $r21, $r23, $r24, $r27;
+        long $l4;
+        java.lang.Object $r28, $r31;
+        androidx.appsearch.app.SearchResult $r29;
+        androidx.appsearch.exceptions.AppSearchException $r34;
+        java.lang.StringBuilder $r35, $r36, $r38, $r39;
+        com.google.android.icing.protobuf.CodedOutputStream r44;
+        androidx.appsearch.app.SearchResultPage r45;
+
+        r0 := @this: androidx.appsearch.localstorage.AppSearchMigrationHelper;
+
+        r1 := @parameter0: java.util.Map;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder;
+
+        $r10 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.io.File mFile>;
+
+        $z0 = virtualinvoke $r10.<java.io.File: boolean exists()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z0, "Internal temp file does not exist.");
+
+        i5 = 0;
+
+        $r11 = new java.io.FileOutputStream;
+
+        $r12 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.io.File mFile>;
+
+        specialinvoke $r11.<java.io.FileOutputStream: void <init>(java.io.File,boolean)>($r12, 1);
+
+        r3 = $r11;
+
+     label01:
+        r44 = staticinvoke <com.google.android.icing.protobuf.CodedOutputStream: com.google.android.icing.protobuf.CodedOutputStream newInstance(java.io.OutputStream)>(r3);
+
+        $r14 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        $r15 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.lang.String mPackageName>;
+
+        $r16 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.lang.String mDatabaseName>;
+
+        $r13 = new androidx.appsearch.app.SearchSpec$Builder;
+
+        specialinvoke $r13.<androidx.appsearch.app.SearchSpec$Builder: void <init>()>();
+
+        $r17 = interfaceinvoke r1.<java.util.Map: java.util.Set keySet()>();
+
+        $r18 = virtualinvoke $r13.<androidx.appsearch.app.SearchSpec$Builder: androidx.appsearch.app.SearchSpec$Builder addFilterSchemas(java.util.Collection)>($r17);
+
+        $r19 = virtualinvoke $r18.<androidx.appsearch.app.SearchSpec$Builder: androidx.appsearch.app.SearchSpec$Builder setTermMatch(int)>(1);
+
+        $r20 = virtualinvoke $r19.<androidx.appsearch.app.SearchSpec$Builder: androidx.appsearch.app.SearchSpec build()>();
+
+        r45 = virtualinvoke $r14.<androidx.appsearch.localstorage.AppSearchImpl: androidx.appsearch.app.SearchResultPage query(java.lang.String,java.lang.String,java.lang.String,androidx.appsearch.app.SearchSpec,androidx.appsearch.localstorage.AppSearchLogger)>($r15, $r16, "", $r20, null);
+
+     label02:
+        $r21 = virtualinvoke r45.<androidx.appsearch.app.SearchResultPage: java.util.List getResults()>();
+
+        $z1 = interfaceinvoke $r21.<java.util.List: boolean isEmpty()>();
+
+        if $z1 != 0 goto label13;
+
+        i6 = 0;
+
+     label03:
+        $r23 = virtualinvoke r45.<androidx.appsearch.app.SearchResultPage: java.util.List getResults()>();
+
+        $i2 = interfaceinvoke $r23.<java.util.List: int size()>();
+
+        if i6 >= $i2 goto label12;
+
+        $r27 = virtualinvoke r45.<androidx.appsearch.app.SearchResultPage: java.util.List getResults()>();
+
+        $r28 = interfaceinvoke $r27.<java.util.List: java.lang.Object get(int)>(i6);
+
+        $r29 = (androidx.appsearch.app.SearchResult) $r28;
+
+        r4 = virtualinvoke $r29.<androidx.appsearch.app.SearchResult: androidx.appsearch.app.GenericDocument getGenericDocument()>();
+
+        $r30 = virtualinvoke r4.<androidx.appsearch.app.GenericDocument: java.lang.String getSchemaType()>();
+
+        $r31 = interfaceinvoke r1.<java.util.Map: java.lang.Object get(java.lang.Object)>($r30);
+
+        r5 = (androidx.appsearch.app.Migrator) $r31;
+
+        if i0 >= i1 goto label04;
+
+        r46 = virtualinvoke r5.<androidx.appsearch.app.Migrator: androidx.appsearch.app.GenericDocument onUpgrade(int,int,androidx.appsearch.app.GenericDocument)>(i0, i1, r4);
+
+        goto label05;
+
+     label04:
+        r46 = virtualinvoke r5.<androidx.appsearch.app.Migrator: androidx.appsearch.app.GenericDocument onDowngrade(int,int,androidx.appsearch.app.GenericDocument)>(i0, i1, r4);
+
+     label05:
+        $r32 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.util.Set mDestinationTypes>;
+
+        $r33 = virtualinvoke r46.<androidx.appsearch.app.GenericDocument: java.lang.String getSchemaType()>();
+
+        $z2 = interfaceinvoke $r32.<java.util.Set: boolean contains(java.lang.Object)>($r33);
+
+        if $z2 != 0 goto label06;
+
+        $r34 = new androidx.appsearch.exceptions.AppSearchException;
+
+        $r35 = new java.lang.StringBuilder;
+
+        specialinvoke $r35.<java.lang.StringBuilder: void <init>()>();
+
+        $r36 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Receive a migrated document with schema type: ");
+
+        $r37 = virtualinvoke r46.<androidx.appsearch.app.GenericDocument: java.lang.String getSchemaType()>();
+
+        $r38 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r37);
+
+        $r39 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". But the schema types doesn\'t exist in the request");
+
+        $r40 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r34.<androidx.appsearch.exceptions.AppSearchException: void <init>(int,java.lang.String)>(7, $r40);
+
+        throw $r34;
+
+     label06:
+        r6 = virtualinvoke r46.<androidx.appsearch.app.GenericDocument: android.os.Bundle getBundle()>();
+
+        r8 = staticinvoke <android.os.Parcel: android.os.Parcel obtain()>();
+
+     label07:
+        virtualinvoke r8.<android.os.Parcel: void writeBundle(android.os.Bundle)>(r6);
+
+        r7 = virtualinvoke r8.<android.os.Parcel: byte[] marshall()>();
+
+     label08:
+        virtualinvoke r8.<android.os.Parcel: void recycle()>();
+
+        goto label11;
+
+     label09:
+        $r43 := @caughtexception;
+
+        r9 = $r43;
+
+     label10:
+        virtualinvoke r8.<android.os.Parcel: void recycle()>();
+
+        throw r9;
+
+     label11:
+        virtualinvoke r44.<com.google.android.icing.protobuf.CodedOutputStream: void writeByteArrayNoTag(byte[])>(r7);
+
+        i6 = i6 + 1;
+
+        goto label03;
+
+     label12:
+        virtualinvoke r44.<com.google.android.icing.protobuf.CodedOutputStream: void flush()>();
+
+        $r24 = virtualinvoke r45.<androidx.appsearch.app.SearchResultPage: java.util.List getResults()>();
+
+        $i3 = interfaceinvoke $r24.<java.util.List: int size()>();
+
+        i5 = i5 + $i3;
+
+        $r25 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        $r26 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.lang.String mPackageName>;
+
+        $l4 = virtualinvoke r45.<androidx.appsearch.app.SearchResultPage: long getNextPageToken()>();
+
+        r45 = virtualinvoke $r25.<androidx.appsearch.localstorage.AppSearchImpl: androidx.appsearch.app.SearchResultPage getNextPage(java.lang.String,long,androidx.appsearch.localstorage.stats.SearchStats$Builder)>($r26, $l4, null);
+
+        virtualinvoke r3.<java.io.FileOutputStream: void flush()>();
+
+        goto label02;
+
+     label13:
+        virtualinvoke r3.<java.io.FileOutputStream: void close()>();
+
+        goto label19;
+
+     label14:
+        $r42 := @caughtexception;
+
+        r47 = $r42;
+
+     label15:
+        virtualinvoke r3.<java.io.FileOutputStream: void close()>();
+
+     label16:
+        goto label18;
+
+     label17:
+        $r41 := @caughtexception;
+
+        r48 = $r41;
+
+        virtualinvoke r47.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r48);
+
+     label18:
+        throw r47;
+
+     label19:
+        r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: boolean mAreDocumentsMigrated> = 1;
+
+        if r2 == null goto label20;
+
+        virtualinvoke r2.<androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder: androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder setMigratedDocumentCount(int)>(i5);
+
+     label20:
+        return;
+
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label09;
+        catch java.lang.Throwable from label01 to label13 with label14;
+        catch java.lang.Throwable from label15 to label16 with label17;
+    }
+
+    public androidx.appsearch.app.SetSchemaResponse readAndPutDocuments(androidx.appsearch.app.SetSchemaResponse$Builder, androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder) throws java.io.IOException, androidx.appsearch.exceptions.AppSearchException
+    {
+        androidx.appsearch.localstorage.AppSearchMigrationHelper r0;
+        androidx.appsearch.app.SetSchemaResponse$Builder r1;
+        androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder r2;
+        java.io.FileInputStream r3, $r7;
+        androidx.appsearch.app.GenericDocument r4;
+        java.lang.Throwable r5, $r17, $r18, $r25, r27, r28;
+        java.io.File $r6, $r8;
+        boolean $z0, $z1, $z2;
+        com.google.android.icing.proto.PersistType$Code $r9;
+        androidx.appsearch.localstorage.AppSearchImpl $r10, $r15;
+        androidx.appsearch.app.SetSchemaResponse $r11, $r16;
+        java.lang.String $r13, $r14, $r20, $r21, $r22;
+        androidx.appsearch.app.SetSchemaResponse$MigrationFailure $r19;
+        androidx.appsearch.app.AppSearchResult $r23;
+        com.google.android.icing.protobuf.CodedInputStream r26;
+        int i0;
+
+        r0 := @this: androidx.appsearch.localstorage.AppSearchMigrationHelper;
+
+        r1 := @parameter0: androidx.appsearch.app.SetSchemaResponse$Builder;
+
+        r2 := @parameter1: androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder;
+
+        $r6 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.io.File mFile>;
+
+        $z0 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z0, "Internal temp file does not exist.");
+
+        $z1 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: boolean mAreDocumentsMigrated>;
+
+        if $z1 != 0 goto label01;
+
+        $r16 = virtualinvoke r1.<androidx.appsearch.app.SetSchemaResponse$Builder: androidx.appsearch.app.SetSchemaResponse build()>();
+
+        return $r16;
+
+     label01:
+        $r7 = new java.io.FileInputStream;
+
+        $r8 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.io.File mFile>;
+
+        specialinvoke $r7.<java.io.FileInputStream: void <init>(java.io.File)>($r8);
+
+        r3 = $r7;
+
+     label02:
+        r26 = staticinvoke <com.google.android.icing.protobuf.CodedInputStream: com.google.android.icing.protobuf.CodedInputStream newInstance(java.io.InputStream)>(r3);
+
+        i0 = 0;
+
+     label03:
+        $z2 = virtualinvoke r26.<com.google.android.icing.protobuf.CodedInputStream: boolean isAtEnd()>();
+
+        if $z2 != 0 goto label08;
+
+        r4 = staticinvoke <androidx.appsearch.localstorage.AppSearchMigrationHelper: androidx.appsearch.app.GenericDocument readDocumentFromInputStream(com.google.android.icing.protobuf.CodedInputStream)>(r26);
+
+     label04:
+        $r15 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        $r14 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.lang.String mPackageName>;
+
+        $r13 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.lang.String mDatabaseName>;
+
+        virtualinvoke $r15.<androidx.appsearch.localstorage.AppSearchImpl: void putDocument(java.lang.String,java.lang.String,androidx.appsearch.app.GenericDocument,boolean,androidx.appsearch.localstorage.AppSearchLogger)>($r14, $r13, r4, 0, null);
+
+        i0 = i0 + 1;
+
+     label05:
+        goto label07;
+
+     label06:
+        $r18 := @caughtexception;
+
+        r5 = $r18;
+
+        $r19 = new androidx.appsearch.app.SetSchemaResponse$MigrationFailure;
+
+        $r20 = virtualinvoke r4.<androidx.appsearch.app.GenericDocument: java.lang.String getNamespace()>();
+
+        $r21 = virtualinvoke r4.<androidx.appsearch.app.GenericDocument: java.lang.String getId()>();
+
+        $r22 = virtualinvoke r4.<androidx.appsearch.app.GenericDocument: java.lang.String getSchemaType()>();
+
+        $r23 = staticinvoke <androidx.appsearch.app.AppSearchResult: androidx.appsearch.app.AppSearchResult throwableToFailedResult(java.lang.Throwable)>(r5);
+
+        specialinvoke $r19.<androidx.appsearch.app.SetSchemaResponse$MigrationFailure: void <init>(java.lang.String,java.lang.String,java.lang.String,androidx.appsearch.app.AppSearchResult)>($r20, $r21, $r22, $r23);
+
+        virtualinvoke r1.<androidx.appsearch.app.SetSchemaResponse$Builder: androidx.appsearch.app.SetSchemaResponse$Builder addMigrationFailure(androidx.appsearch.app.SetSchemaResponse$MigrationFailure)>($r19);
+
+     label07:
+        goto label03;
+
+     label08:
+        $r10 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        $r9 = <com.google.android.icing.proto.PersistType$Code: com.google.android.icing.proto.PersistType$Code FULL>;
+
+        virtualinvoke $r10.<androidx.appsearch.localstorage.AppSearchImpl: void persistToDisk(com.google.android.icing.proto.PersistType$Code)>($r9);
+
+        if r2 == null goto label09;
+
+        virtualinvoke r2.<androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder: androidx.appsearch.localstorage.stats.SchemaMigrationStats$Builder setSavedDocumentCount(int)>(i0);
+
+     label09:
+        virtualinvoke r3.<java.io.InputStream: void close()>();
+
+        goto label15;
+
+     label10:
+        $r17 := @caughtexception;
+
+        r27 = $r17;
+
+     label11:
+        virtualinvoke r3.<java.io.InputStream: void close()>();
+
+     label12:
+        goto label14;
+
+     label13:
+        $r25 := @caughtexception;
+
+        r28 = $r25;
+
+        virtualinvoke r27.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r28);
+
+     label14:
+        throw r27;
+
+     label15:
+        $r11 = virtualinvoke r1.<androidx.appsearch.app.SetSchemaResponse$Builder: androidx.appsearch.app.SetSchemaResponse build()>();
+
+        return $r11;
+
+        catch java.lang.Throwable from label04 to label05 with label06;
+        catch java.lang.Throwable from label02 to label09 with label10;
+        catch java.lang.Throwable from label11 to label12 with label13;
+    }
+
+    private static androidx.appsearch.app.GenericDocument readDocumentFromInputStream(com.google.android.icing.protobuf.CodedInputStream) throws java.io.IOException
+    {
+        com.google.android.icing.protobuf.CodedInputStream r0;
+        byte[] r1;
+        android.os.Bundle r2;
+        android.os.Parcel r3;
+        java.lang.Throwable r4, $r6;
+        int $i0;
+        androidx.appsearch.app.GenericDocument $r5;
+
+        r0 := @parameter0: com.google.android.icing.protobuf.CodedInputStream;
+
+        r1 = virtualinvoke r0.<com.google.android.icing.protobuf.CodedInputStream: byte[] readByteArray()>();
+
+        r3 = staticinvoke <android.os.Parcel: android.os.Parcel obtain()>();
+
+     label1:
+        $i0 = lengthof r1;
+
+        virtualinvoke r3.<android.os.Parcel: void unmarshall(byte[],int,int)>(r1, 0, $i0);
+
+        virtualinvoke r3.<android.os.Parcel: void setDataPosition(int)>(0);
+
+        r2 = virtualinvoke r3.<android.os.Parcel: android.os.Bundle readBundle()>();
+
+     label2:
+        virtualinvoke r3.<android.os.Parcel: void recycle()>();
+
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r4 = $r6;
+
+     label4:
+        virtualinvoke r3.<android.os.Parcel: void recycle()>();
+
+        throw r4;
+
+     label5:
+        $r5 = new androidx.appsearch.app.GenericDocument;
+
+        specialinvoke $r5.<androidx.appsearch.app.GenericDocument: void <init>(android.os.Bundle)>(r2);
+
+        return $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void close()
+    {
+        androidx.appsearch.localstorage.AppSearchMigrationHelper r0;
+        java.io.File $r1;
+
+        r0 := @this: androidx.appsearch.localstorage.AppSearchMigrationHelper;
+
+        $r1 = r0.<androidx.appsearch.localstorage.AppSearchMigrationHelper: java.io.File mFile>;
+
+        virtualinvoke $r1.<java.io.File: boolean delete()>();
+
+        return;
+    }
+

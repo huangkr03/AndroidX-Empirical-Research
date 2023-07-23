@@ -1,0 +1,2770 @@
+androidx.profileinstaller.ProfileTranscoder
+<androidx.profileinstaller.ProfileTranscoder: int HOT>
+<androidx.profileinstaller.ProfileTranscoder: int STARTUP>
+<androidx.profileinstaller.ProfileTranscoder: int POST_STARTUP>
+<androidx.profileinstaller.ProfileTranscoder: int INLINE_CACHE_MISSING_TYPES_ENCODING>
+<androidx.profileinstaller.ProfileTranscoder: int INLINE_CACHE_MEGAMORPHIC_ENCODING>
+<androidx.profileinstaller.ProfileTranscoder: byte[] MAGIC_PROF>
+<androidx.profileinstaller.ProfileTranscoder: byte[] MAGIC_PROFM>
+    private void <init>()
+    {
+        androidx.profileinstaller.ProfileTranscoder r0;
+
+        r0 := @this: androidx.profileinstaller.ProfileTranscoder;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static byte[] readHeader(java.io.InputStream, byte[]) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        byte[] r1, r2, $r3, $r4;
+        int $i0, $i1;
+        boolean $z0;
+        java.lang.RuntimeException $r5;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: byte[];
+
+        $i0 = lengthof r1;
+
+        r2 = staticinvoke <androidx.profileinstaller.Encoding: byte[] read(java.io.InputStream,int)>(r0, $i0);
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, r2);
+
+        if $z0 != 0 goto label1;
+
+        $r5 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Invalid magic");
+
+        throw $r5;
+
+     label1:
+        $r3 = <androidx.profileinstaller.ProfileVersion: byte[] V010_P>;
+
+        $i1 = lengthof $r3;
+
+        $r4 = staticinvoke <androidx.profileinstaller.Encoding: byte[] read(java.io.InputStream,int)>(r0, $i1);
+
+        return $r4;
+    }
+
+    static void writeHeader(java.io.OutputStream, byte[]) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        byte[] r1, $r2;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: byte[];
+
+        $r2 = <androidx.profileinstaller.ProfileTranscoder: byte[] MAGIC_PROF>;
+
+        virtualinvoke r0.<java.io.OutputStream: void write(byte[])>($r2);
+
+        virtualinvoke r0.<java.io.OutputStream: void write(byte[])>(r1);
+
+        return;
+    }
+
+    static boolean transcodeAndWriteBody(java.io.OutputStream, byte[], androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        byte[] r1, $r3, $r4, $r5, $r6, $r7;
+        androidx.profileinstaller.DexProfileData[] r2;
+        boolean $z0, $z1, $z2, $z3, $z4;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: byte[];
+
+        r2 := @parameter2: androidx.profileinstaller.DexProfileData[];
+
+        $r3 = <androidx.profileinstaller.ProfileVersion: byte[] V015_S>;
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r3);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeProfileForS(java.io.OutputStream,androidx.profileinstaller.DexProfileData[])>(r0, r2);
+
+        return 1;
+
+     label1:
+        $r4 = <androidx.profileinstaller.ProfileVersion: byte[] V010_P>;
+
+        $z1 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r4);
+
+        if $z1 == 0 goto label2;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeProfileForP(java.io.OutputStream,androidx.profileinstaller.DexProfileData[])>(r0, r2);
+
+        return 1;
+
+     label2:
+        $r5 = <androidx.profileinstaller.ProfileVersion: byte[] V005_O>;
+
+        $z2 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r5);
+
+        if $z2 == 0 goto label3;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeProfileForO(java.io.OutputStream,androidx.profileinstaller.DexProfileData[])>(r0, r2);
+
+        return 1;
+
+     label3:
+        $r6 = <androidx.profileinstaller.ProfileVersion: byte[] V009_O_MR1>;
+
+        $z3 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r6);
+
+        if $z3 == 0 goto label4;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeProfileForO_MR1(java.io.OutputStream,androidx.profileinstaller.DexProfileData[])>(r0, r2);
+
+        return 1;
+
+     label4:
+        $r7 = <androidx.profileinstaller.ProfileVersion: byte[] V001_N>;
+
+        $z4 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r7);
+
+        if $z4 == 0 goto label5;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeProfileForN(java.io.OutputStream,androidx.profileinstaller.DexProfileData[])>(r0, r2);
+
+        return 1;
+
+     label5:
+        return 0;
+    }
+
+    private static void writeProfileForN(java.io.OutputStream, androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData[] r1, r2;
+        int i0, i1, $i2, $i3, $i4, $i5, i7, i8, i9, i10;
+        androidx.profileinstaller.DexProfileData r3;
+        java.lang.String r4, $r6, $r7;
+        byte[] $r5;
+        java.util.TreeMap $r8, $r10;
+        int[] $r9, r15;
+        long $l6;
+        java.util.Set $r11;
+        boolean $z0;
+        java.lang.Object $r12;
+        java.lang.Integer $r13;
+        java.util.Iterator r14;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData[];
+
+        $i2 = lengthof r1;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, $i2);
+
+        r2 = r1;
+
+        i0 = lengthof r2;
+
+        i7 = 0;
+
+     label1:
+        if i7 >= i0 goto label6;
+
+        r3 = r2[i7];
+
+        $r7 = r3.<androidx.profileinstaller.DexProfileData: java.lang.String apkName>;
+
+        $r6 = r3.<androidx.profileinstaller.DexProfileData: java.lang.String dexName>;
+
+        $r5 = <androidx.profileinstaller.ProfileVersion: byte[] V001_N>;
+
+        r4 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: java.lang.String generateDexKey(java.lang.String,java.lang.String,byte[])>($r7, $r6, $r5);
+
+        $i3 = staticinvoke <androidx.profileinstaller.Encoding: int utf8Length(java.lang.String)>(r4);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, $i3);
+
+        $r8 = r3.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $i4 = virtualinvoke $r8.<java.util.TreeMap: int size()>();
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, $i4);
+
+        $r9 = r3.<androidx.profileinstaller.DexProfileData: int[] classes>;
+
+        $i5 = lengthof $r9;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, $i5);
+
+        $l6 = r3.<androidx.profileinstaller.DexProfileData: long dexChecksum>;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l6);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeString(java.io.OutputStream,java.lang.String)>(r0, r4);
+
+        $r10 = r3.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $r11 = virtualinvoke $r10.<java.util.TreeMap: java.util.Set keySet()>();
+
+        r14 = interfaceinvoke $r11.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r14.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r12 = interfaceinvoke r14.<java.util.Iterator: java.lang.Object next()>();
+
+        $r13 = (java.lang.Integer) $r12;
+
+        i8 = virtualinvoke $r13.<java.lang.Integer: int intValue()>();
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, i8);
+
+        goto label2;
+
+     label3:
+        r15 = r3.<androidx.profileinstaller.DexProfileData: int[] classes>;
+
+        i9 = lengthof r15;
+
+        i10 = 0;
+
+     label4:
+        if i10 >= i9 goto label5;
+
+        i1 = r15[i10];
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, i1);
+
+        i10 = i10 + 1;
+
+        goto label4;
+
+     label5:
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label6:
+        return;
+    }
+
+    private static void writeProfileForS(java.io.OutputStream, androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData[] r1;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData[];
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeProfileSections(java.io.OutputStream,androidx.profileinstaller.DexProfileData[])>(r0, r1);
+
+        return;
+    }
+
+    private static void writeProfileSections(java.io.OutputStream, androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData[] r1;
+        java.util.ArrayList r2, r3, $r6, $r7;
+        androidx.profileinstaller.WritableFileSection r4, $r8, $r9, $r10;
+        long l0, $l3, $l4, $l7, $l9, $l12, $l14, $l16, $l19, $l21, l22, l23, l24;
+        byte[] r5, $r11, $r12, $r14, $r17, $r18, $r19, $r20, $r21;
+        int $i1, $i2, $i5, $i6, $i8, $i10, $i11, $i13, $i15, $i17, $i18, $i20, i25, i26;
+        java.lang.Object $r13, $r15;
+        androidx.profileinstaller.FileSectionType $r16;
+        boolean $z3;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData[];
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>(int)>(3);
+
+        r2 = $r6;
+
+        $r7 = new java.util.ArrayList;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>(int)>(3);
+
+        r3 = $r7;
+
+        $r8 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: androidx.profileinstaller.WritableFileSection writeDexFileSection(androidx.profileinstaller.DexProfileData[])>(r1);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r8);
+
+        $r9 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: androidx.profileinstaller.WritableFileSection createCompressibleClassSection(androidx.profileinstaller.DexProfileData[])>(r1);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r9);
+
+        $r10 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: androidx.profileinstaller.WritableFileSection createCompressibleMethodsSection(androidx.profileinstaller.DexProfileData[])>(r1);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r10);
+
+        $r11 = <androidx.profileinstaller.ProfileVersion: byte[] V015_S>;
+
+        $i1 = lengthof $r11;
+
+        $l4 = (long) $i1;
+
+        $r12 = <androidx.profileinstaller.ProfileTranscoder: byte[] MAGIC_PROF>;
+
+        $i2 = lengthof $r12;
+
+        $l3 = (long) $i2;
+
+        l22 = $l4 + $l3;
+
+        l23 = l22 + 4L;
+
+        $i5 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        $i6 = 16 * $i5;
+
+        $l7 = (long) $i6;
+
+        l24 = l23 + $l7;
+
+        $i8 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        $l9 = (long) $i8;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l9);
+
+        i25 = 0;
+
+     label1:
+        $i10 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        if i25 >= $i10 goto label4;
+
+        $r15 = interfaceinvoke r2.<java.util.List: java.lang.Object get(int)>(i25);
+
+        r4 = (androidx.profileinstaller.WritableFileSection) $r15;
+
+        $r16 = r4.<androidx.profileinstaller.WritableFileSection: androidx.profileinstaller.FileSectionType mType>;
+
+        $l12 = virtualinvoke $r16.<androidx.profileinstaller.FileSectionType: long getValue()>();
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l12);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, l24);
+
+        $z3 = r4.<androidx.profileinstaller.WritableFileSection: boolean mNeedsCompression>;
+
+        if $z3 == 0 goto label2;
+
+        $r20 = r4.<androidx.profileinstaller.WritableFileSection: byte[] mContents>;
+
+        $i17 = lengthof $r20;
+
+        l0 = (long) $i17;
+
+        $r21 = r4.<androidx.profileinstaller.WritableFileSection: byte[] mContents>;
+
+        r5 = staticinvoke <androidx.profileinstaller.Encoding: byte[] compress(byte[])>($r21);
+
+        interfaceinvoke r3.<java.util.List: boolean add(java.lang.Object)>(r5);
+
+        $i18 = lengthof r5;
+
+        $l19 = (long) $i18;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l19);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, l0);
+
+        $i20 = lengthof r5;
+
+        $l21 = (long) $i20;
+
+        l24 = l24 + $l21;
+
+        goto label3;
+
+     label2:
+        $r17 = r4.<androidx.profileinstaller.WritableFileSection: byte[] mContents>;
+
+        interfaceinvoke r3.<java.util.List: boolean add(java.lang.Object)>($r17);
+
+        $r18 = r4.<androidx.profileinstaller.WritableFileSection: byte[] mContents>;
+
+        $i13 = lengthof $r18;
+
+        $l14 = (long) $i13;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l14);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, 0L);
+
+        $r19 = r4.<androidx.profileinstaller.WritableFileSection: byte[] mContents>;
+
+        $i15 = lengthof $r19;
+
+        $l16 = (long) $i15;
+
+        l24 = l24 + $l16;
+
+     label3:
+        i25 = i25 + 1;
+
+        goto label1;
+
+     label4:
+        i26 = 0;
+
+     label5:
+        $i11 = interfaceinvoke r3.<java.util.List: int size()>();
+
+        if i26 >= $i11 goto label6;
+
+        $r13 = interfaceinvoke r3.<java.util.List: java.lang.Object get(int)>(i26);
+
+        $r14 = (byte[]) $r13;
+
+        virtualinvoke r0.<java.io.OutputStream: void write(byte[])>($r14);
+
+        i26 = i26 + 1;
+
+        goto label5;
+
+     label6:
+        return;
+    }
+
+    private static androidx.profileinstaller.WritableFileSection writeDexFileSection(androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        androidx.profileinstaller.DexProfileData[] r0;
+        java.io.ByteArrayOutputStream r1, $r3;
+        java.lang.String r2, $r11, $r14, $r15;
+        int i0, $i1, $i2, $i3, $i4, $i7, $i9, i11, i12, i13, i14, i15, i16;
+        androidx.profileinstaller.WritableFileSection $r4, r20;
+        androidx.profileinstaller.FileSectionType $r5;
+        java.lang.StringBuilder $r6, $r7, $r8, $r9, $r10;
+        java.lang.RuntimeException $r12;
+        long $l5, $l6, $l8;
+        byte[] $r13, r19;
+        java.lang.Throwable $r16, $r17, r21, r22;
+        byte b10;
+        androidx.profileinstaller.DexProfileData r18;
+
+        r0 := @parameter0: androidx.profileinstaller.DexProfileData[];
+
+        b10 = 0;
+
+        $r3 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r3.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        r1 = $r3;
+
+     label01:
+        i11 = b10 + 2;
+
+        $i1 = lengthof r0;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r1, $i1);
+
+        i12 = 0;
+
+     label02:
+        $i2 = lengthof r0;
+
+        if i12 >= $i2 goto label03;
+
+        r18 = r0[i12];
+
+        i13 = i11 + 4;
+
+        $l5 = r18.<androidx.profileinstaller.DexProfileData: long dexChecksum>;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r1, $l5);
+
+        i14 = i13 + 4;
+
+        $l6 = r18.<androidx.profileinstaller.DexProfileData: long mTypeIdCount>;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r1, $l6);
+
+        i15 = i14 + 4;
+
+        $i7 = r18.<androidx.profileinstaller.DexProfileData: int numMethodIds>;
+
+        $l8 = (long) $i7;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r1, $l8);
+
+        $r15 = r18.<androidx.profileinstaller.DexProfileData: java.lang.String apkName>;
+
+        $r14 = r18.<androidx.profileinstaller.DexProfileData: java.lang.String dexName>;
+
+        $r13 = <androidx.profileinstaller.ProfileVersion: byte[] V015_S>;
+
+        r2 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: java.lang.String generateDexKey(java.lang.String,java.lang.String,byte[])>($r15, $r14, $r13);
+
+        i16 = i15 + 2;
+
+        i0 = staticinvoke <androidx.profileinstaller.Encoding: int utf8Length(java.lang.String)>(r2);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r1, i0);
+
+        $i9 = i0 * 1;
+
+        i11 = i16 + $i9;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeString(java.io.OutputStream,java.lang.String)>(r1, r2);
+
+        i12 = i12 + 1;
+
+        goto label02;
+
+     label03:
+        r19 = virtualinvoke r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        $i3 = lengthof r19;
+
+        if i11 == $i3 goto label04;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Expected size ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i11);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", does not match actual size ");
+
+        $i4 = lengthof r19;
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i4);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r11);
+
+        throw $r12;
+
+     label04:
+        $r4 = new androidx.profileinstaller.WritableFileSection;
+
+        $r5 = <androidx.profileinstaller.FileSectionType: androidx.profileinstaller.FileSectionType DEX_FILES>;
+
+        specialinvoke $r4.<androidx.profileinstaller.WritableFileSection: void <init>(androidx.profileinstaller.FileSectionType,int,byte[],boolean)>($r5, i11, r19, 0);
+
+        r20 = $r4;
+
+     label05:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+        return r20;
+
+     label06:
+        $r17 := @caughtexception;
+
+        r21 = $r17;
+
+     label07:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+     label08:
+        goto label10;
+
+     label09:
+        $r16 := @caughtexception;
+
+        r22 = $r16;
+
+        virtualinvoke r21.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r22);
+
+     label10:
+        throw r21;
+
+        catch java.lang.Throwable from label01 to label05 with label06;
+        catch java.lang.Throwable from label07 to label08 with label09;
+    }
+
+    private static androidx.profileinstaller.WritableFileSection createCompressibleClassSection(androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        androidx.profileinstaller.DexProfileData[] r0;
+        java.io.ByteArrayOutputStream r1, $r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, i6, i7, i8, i9;
+        androidx.profileinstaller.WritableFileSection $r3, r16;
+        androidx.profileinstaller.FileSectionType $r4;
+        java.lang.StringBuilder $r5, $r6, $r7, $r8, $r9;
+        java.lang.String $r10;
+        java.lang.RuntimeException $r11;
+        java.lang.Throwable $r12, $r13, r17, r18;
+        androidx.profileinstaller.DexProfileData r14;
+        byte[] r15;
+
+        r0 := @parameter0: androidx.profileinstaller.DexProfileData[];
+
+        i6 = 0;
+
+        $r2 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r2.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        r1 = $r2;
+
+     label01:
+        i7 = 0;
+
+     label02:
+        $i0 = lengthof r0;
+
+        if i7 >= $i0 goto label03;
+
+        r14 = r0[i7];
+
+        i8 = i6 + 2;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r1, i7);
+
+        i9 = i8 + 2;
+
+        $i3 = r14.<androidx.profileinstaller.DexProfileData: int classSetSize>;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r1, $i3);
+
+        $i4 = r14.<androidx.profileinstaller.DexProfileData: int classSetSize>;
+
+        $i5 = 2 * $i4;
+
+        i6 = i9 + $i5;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeClasses(java.io.OutputStream,androidx.profileinstaller.DexProfileData)>(r1, r14);
+
+        i7 = i7 + 1;
+
+        goto label02;
+
+     label03:
+        r15 = virtualinvoke r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        $i1 = lengthof r15;
+
+        if i6 == $i1 goto label04;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Expected size ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i6);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", does not match actual size ");
+
+        $i2 = lengthof r15;
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r11 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r10);
+
+        throw $r11;
+
+     label04:
+        $r3 = new androidx.profileinstaller.WritableFileSection;
+
+        $r4 = <androidx.profileinstaller.FileSectionType: androidx.profileinstaller.FileSectionType CLASSES>;
+
+        specialinvoke $r3.<androidx.profileinstaller.WritableFileSection: void <init>(androidx.profileinstaller.FileSectionType,int,byte[],boolean)>($r4, i6, r15, 1);
+
+        r16 = $r3;
+
+     label05:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+        return r16;
+
+     label06:
+        $r12 := @caughtexception;
+
+        r17 = $r12;
+
+     label07:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+     label08:
+        goto label10;
+
+     label09:
+        $r13 := @caughtexception;
+
+        r18 = $r13;
+
+        virtualinvoke r17.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r18);
+
+     label10:
+        throw r17;
+
+        catch java.lang.Throwable from label01 to label05 with label06;
+        catch java.lang.Throwable from label07 to label08 with label09;
+    }
+
+    private static androidx.profileinstaller.WritableFileSection createCompressibleMethodsSection(androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        androidx.profileinstaller.DexProfileData[] r0;
+        java.io.ByteArrayOutputStream r1, $r4;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, i9, i10, i11, i12;
+        byte[] r2, r3, r17;
+        androidx.profileinstaller.WritableFileSection $r5, r18;
+        androidx.profileinstaller.FileSectionType $r6;
+        java.lang.StringBuilder $r7, $r8, $r9, $r10, $r11;
+        java.lang.String $r12;
+        java.lang.RuntimeException $r13;
+        long $l8;
+        java.lang.Throwable $r14, $r15, r19, r20;
+        androidx.profileinstaller.DexProfileData r16;
+
+        r0 := @parameter0: androidx.profileinstaller.DexProfileData[];
+
+        i9 = 0;
+
+        $r4 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r4.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        r1 = $r4;
+
+     label01:
+        i10 = 0;
+
+     label02:
+        $i2 = lengthof r0;
+
+        if i10 >= $i2 goto label03;
+
+        r16 = r0[i10];
+
+        i0 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int computeMethodFlags(androidx.profileinstaller.DexProfileData)>(r16);
+
+        r2 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: byte[] createMethodBitmapRegion(androidx.profileinstaller.DexProfileData)>(r16);
+
+        r3 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: byte[] createMethodsWithInlineCaches(androidx.profileinstaller.DexProfileData)>(r16);
+
+        i11 = i9 + 2;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r1, i10);
+
+        $i5 = lengthof r2;
+
+        $i7 = 2 + $i5;
+
+        $i6 = lengthof r3;
+
+        i1 = $i7 + $i6;
+
+        i12 = i11 + 4;
+
+        $l8 = (long) i1;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r1, $l8);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r1, i0);
+
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void write(byte[])>(r2);
+
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void write(byte[])>(r3);
+
+        i9 = i12 + i1;
+
+        i10 = i10 + 1;
+
+        goto label02;
+
+     label03:
+        r17 = virtualinvoke r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        $i3 = lengthof r17;
+
+        if i9 == $i3 goto label04;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Expected size ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i9);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", does not match actual size ");
+
+        $i4 = lengthof r17;
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i4);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r13 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r12);
+
+        throw $r13;
+
+     label04:
+        $r5 = new androidx.profileinstaller.WritableFileSection;
+
+        $r6 = <androidx.profileinstaller.FileSectionType: androidx.profileinstaller.FileSectionType METHODS>;
+
+        specialinvoke $r5.<androidx.profileinstaller.WritableFileSection: void <init>(androidx.profileinstaller.FileSectionType,int,byte[],boolean)>($r6, i9, r17, 1);
+
+        r18 = $r5;
+
+     label05:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+        return r18;
+
+     label06:
+        $r15 := @caughtexception;
+
+        r19 = $r15;
+
+     label07:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+     label08:
+        goto label10;
+
+     label09:
+        $r14 := @caughtexception;
+
+        r20 = $r14;
+
+        virtualinvoke r19.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r20);
+
+     label10:
+        throw r19;
+
+        catch java.lang.Throwable from label01 to label05 with label06;
+        catch java.lang.Throwable from label07 to label08 with label09;
+    }
+
+    private static byte[] createMethodBitmapRegion(androidx.profileinstaller.DexProfileData) throws java.io.IOException
+    {
+        androidx.profileinstaller.DexProfileData r0;
+        java.io.ByteArrayOutputStream r1, $r3;
+        java.lang.Throwable r2, $r4, $r5, r7;
+        byte[] r6;
+
+        r0 := @parameter0: androidx.profileinstaller.DexProfileData;
+
+        $r3 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r3.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        r1 = $r3;
+
+     label1:
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeMethodBitmap(java.io.OutputStream,androidx.profileinstaller.DexProfileData)>(r1, r0);
+
+        r6 = virtualinvoke r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+     label2:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+        return r6;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r7 = $r4;
+
+     label4:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+     label5:
+        goto label7;
+
+     label6:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        virtualinvoke r7.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r2);
+
+     label7:
+        throw r7;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label4 to label5 with label6;
+    }
+
+    private static byte[] createMethodsWithInlineCaches(androidx.profileinstaller.DexProfileData) throws java.io.IOException
+    {
+        androidx.profileinstaller.DexProfileData r0;
+        java.io.ByteArrayOutputStream r1, $r3;
+        java.lang.Throwable r2, $r4, $r5, r7;
+        byte[] r6;
+
+        r0 := @parameter0: androidx.profileinstaller.DexProfileData;
+
+        $r3 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r3.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        r1 = $r3;
+
+     label1:
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeMethodsWithInlineCaches(java.io.OutputStream,androidx.profileinstaller.DexProfileData)>(r1, r0);
+
+        r6 = virtualinvoke r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+     label2:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+        return r6;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r7 = $r4;
+
+     label4:
+        virtualinvoke r1.<java.io.ByteArrayOutputStream: void close()>();
+
+     label5:
+        goto label7;
+
+     label6:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        virtualinvoke r7.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r2);
+
+     label7:
+        throw r7;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label4 to label5 with label6;
+    }
+
+    private static int computeMethodFlags(androidx.profileinstaller.DexProfileData)
+    {
+        androidx.profileinstaller.DexProfileData r0;
+        java.util.Iterator r1;
+        java.util.Map$Entry r2;
+        int i0, i1;
+        java.util.TreeMap $r3;
+        java.util.Set $r4;
+        boolean $z0;
+        java.lang.Object $r5, $r6;
+        java.lang.Integer $r7;
+
+        r0 := @parameter0: androidx.profileinstaller.DexProfileData;
+
+        i1 = 0;
+
+        $r3 = r0.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $r4 = virtualinvoke $r3.<java.util.TreeMap: java.util.Set entrySet()>();
+
+        r1 = interfaceinvoke $r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (java.util.Map$Entry) $r5;
+
+        $r6 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r7 = (java.lang.Integer) $r6;
+
+        i0 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        i1 = i1 | i0;
+
+        goto label1;
+
+     label2:
+        return i1;
+    }
+
+    private static void writeProfileForP(java.io.OutputStream, androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData[] r1;
+        byte[] r2, $r3;
+        int $i0;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData[];
+
+        $r3 = <androidx.profileinstaller.ProfileVersion: byte[] V010_P>;
+
+        r2 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: byte[] createCompressibleBody(androidx.profileinstaller.DexProfileData[],byte[])>(r1, $r3);
+
+        $i0 = lengthof r1;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt8(java.io.OutputStream,int)>(r0, $i0);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeCompressed(java.io.OutputStream,byte[])>(r0, r2);
+
+        return;
+    }
+
+    private static void writeProfileForO_MR1(java.io.OutputStream, androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData[] r1;
+        byte[] r2, $r3;
+        int $i0;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData[];
+
+        $r3 = <androidx.profileinstaller.ProfileVersion: byte[] V009_O_MR1>;
+
+        r2 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: byte[] createCompressibleBody(androidx.profileinstaller.DexProfileData[],byte[])>(r1, $r3);
+
+        $i0 = lengthof r1;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt8(java.io.OutputStream,int)>(r0, $i0);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeCompressed(java.io.OutputStream,byte[])>(r0, r2);
+
+        return;
+    }
+
+    private static void writeProfileForO(java.io.OutputStream, androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData[] r1, r2;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, i9, i10, i11, i12;
+        androidx.profileinstaller.DexProfileData r3;
+        java.lang.String r4, $r7, $r8;
+        java.util.TreeMap $r5, $r10;
+        byte[] $r6;
+        int[] $r9, r15;
+        long $l7, $l8;
+        java.util.Set $r11;
+        boolean $z0;
+        java.lang.Object $r12;
+        java.lang.Integer $r13;
+        java.util.Iterator r14;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData[];
+
+        $i3 = lengthof r1;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt8(java.io.OutputStream,int)>(r0, $i3);
+
+        r2 = r1;
+
+        i0 = lengthof r2;
+
+        i9 = 0;
+
+     label1:
+        if i9 >= i0 goto label6;
+
+        r3 = r2[i9];
+
+        $r5 = r3.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $i4 = virtualinvoke $r5.<java.util.TreeMap: int size()>();
+
+        i1 = $i4 * 4;
+
+        $r8 = r3.<androidx.profileinstaller.DexProfileData: java.lang.String apkName>;
+
+        $r7 = r3.<androidx.profileinstaller.DexProfileData: java.lang.String dexName>;
+
+        $r6 = <androidx.profileinstaller.ProfileVersion: byte[] V005_O>;
+
+        r4 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: java.lang.String generateDexKey(java.lang.String,java.lang.String,byte[])>($r8, $r7, $r6);
+
+        $i5 = staticinvoke <androidx.profileinstaller.Encoding: int utf8Length(java.lang.String)>(r4);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, $i5);
+
+        $r9 = r3.<androidx.profileinstaller.DexProfileData: int[] classes>;
+
+        $i6 = lengthof $r9;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, $i6);
+
+        $l7 = (long) i1;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l7);
+
+        $l8 = r3.<androidx.profileinstaller.DexProfileData: long dexChecksum>;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l8);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeString(java.io.OutputStream,java.lang.String)>(r0, r4);
+
+        $r10 = r3.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $r11 = virtualinvoke $r10.<java.util.TreeMap: java.util.Set keySet()>();
+
+        r14 = interfaceinvoke $r11.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r14.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r12 = interfaceinvoke r14.<java.util.Iterator: java.lang.Object next()>();
+
+        $r13 = (java.lang.Integer) $r12;
+
+        i10 = virtualinvoke $r13.<java.lang.Integer: int intValue()>();
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, i10);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, 0);
+
+        goto label2;
+
+     label3:
+        r15 = r3.<androidx.profileinstaller.DexProfileData: int[] classes>;
+
+        i11 = lengthof r15;
+
+        i12 = 0;
+
+     label4:
+        if i12 >= i11 goto label5;
+
+        i2 = r15[i12];
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, i2);
+
+        i12 = i12 + 1;
+
+        goto label4;
+
+     label5:
+        i9 = i9 + 1;
+
+        goto label1;
+
+     label6:
+        return;
+    }
+
+    private static byte[] createCompressibleBody(androidx.profileinstaller.DexProfileData[], byte[]) throws java.io.IOException
+    {
+        androidx.profileinstaller.DexProfileData[] r0, r18, r22, r25, r28;
+        byte[] r1, $r3, $r4;
+        java.io.ByteArrayOutputStream $r2, r21;
+        boolean $z0;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, i12, i13, i14, i16, i17, i18, i19, i20, i21;
+        java.lang.StringBuilder $r5, $r6, $r7, $r8, $r9;
+        java.lang.String $r10, $r12, $r13, $r14, $r15, $r16, $r17, r20, r24, r27;
+        java.lang.RuntimeException $r11;
+        androidx.profileinstaller.DexProfileData r19, r23, r26, r29;
+        byte b15;
+
+        r0 := @parameter0: androidx.profileinstaller.DexProfileData[];
+
+        r1 := @parameter1: byte[];
+
+        i12 = 0;
+
+        r18 = r0;
+
+        i13 = lengthof r18;
+
+        i14 = 0;
+
+     label01:
+        if i14 >= i13 goto label02;
+
+        r19 = r18[i14];
+
+        b15 = 16;
+
+        $r17 = r19.<androidx.profileinstaller.DexProfileData: java.lang.String apkName>;
+
+        $r16 = r19.<androidx.profileinstaller.DexProfileData: java.lang.String dexName>;
+
+        r20 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: java.lang.String generateDexKey(java.lang.String,java.lang.String,byte[])>($r17, $r16, r1);
+
+        $i2 = staticinvoke <androidx.profileinstaller.Encoding: int utf8Length(java.lang.String)>(r20);
+
+        $i5 = b15 + $i2;
+
+        $i3 = r19.<androidx.profileinstaller.DexProfileData: int classSetSize>;
+
+        $i4 = $i3 * 2;
+
+        $i7 = $i5 + $i4;
+
+        $i6 = r19.<androidx.profileinstaller.DexProfileData: int hotMethodRegionSize>;
+
+        $i9 = $i7 + $i6;
+
+        $i8 = r19.<androidx.profileinstaller.DexProfileData: int numMethodIds>;
+
+        $i10 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int getMethodBitmapStorageSize(int)>($i8);
+
+        $i11 = $i9 + $i10;
+
+        i12 = i12 + $i11;
+
+        i14 = i14 + 1;
+
+        goto label01;
+
+     label02:
+        $r2 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r2.<java.io.ByteArrayOutputStream: void <init>(int)>(i12);
+
+        r21 = $r2;
+
+        $r3 = <androidx.profileinstaller.ProfileVersion: byte[] V009_O_MR1>;
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r3);
+
+        if $z0 == 0 goto label05;
+
+        r22 = r0;
+
+        i16 = lengthof r22;
+
+        i17 = 0;
+
+     label03:
+        if i17 >= i16 goto label04;
+
+        r23 = r22[i17];
+
+        $r15 = r23.<androidx.profileinstaller.DexProfileData: java.lang.String apkName>;
+
+        $r14 = r23.<androidx.profileinstaller.DexProfileData: java.lang.String dexName>;
+
+        r24 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: java.lang.String generateDexKey(java.lang.String,java.lang.String,byte[])>($r15, $r14, r1);
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeLineHeader(java.io.OutputStream,androidx.profileinstaller.DexProfileData,java.lang.String)>(r21, r23, r24);
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeLineData(java.io.OutputStream,androidx.profileinstaller.DexProfileData)>(r21, r23);
+
+        i17 = i17 + 1;
+
+        goto label03;
+
+     label04:
+        goto label09;
+
+     label05:
+        r25 = r0;
+
+        i18 = lengthof r25;
+
+        i19 = 0;
+
+     label06:
+        if i19 >= i18 goto label07;
+
+        r26 = r25[i19];
+
+        $r13 = r26.<androidx.profileinstaller.DexProfileData: java.lang.String apkName>;
+
+        $r12 = r26.<androidx.profileinstaller.DexProfileData: java.lang.String dexName>;
+
+        r27 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: java.lang.String generateDexKey(java.lang.String,java.lang.String,byte[])>($r13, $r12, r1);
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeLineHeader(java.io.OutputStream,androidx.profileinstaller.DexProfileData,java.lang.String)>(r21, r26, r27);
+
+        i19 = i19 + 1;
+
+        goto label06;
+
+     label07:
+        r28 = r0;
+
+        i20 = lengthof r28;
+
+        i21 = 0;
+
+     label08:
+        if i21 >= i20 goto label09;
+
+        r29 = r28[i21];
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeLineData(java.io.OutputStream,androidx.profileinstaller.DexProfileData)>(r21, r29);
+
+        i21 = i21 + 1;
+
+        goto label08;
+
+     label09:
+        $i0 = virtualinvoke r21.<java.io.ByteArrayOutputStream: int size()>();
+
+        if $i0 == i12 goto label10;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("The bytes saved do not match expectation. actual=");
+
+        $i1 = virtualinvoke r21.<java.io.ByteArrayOutputStream: int size()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" expected=");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i12);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r11 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r10);
+
+        throw $r11;
+
+     label10:
+        $r4 = virtualinvoke r21.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        return $r4;
+    }
+
+    private static int getMethodBitmapStorageSize(int)
+    {
+        int i0, i1, $i2, $i3;
+
+        i0 := @parameter0: int;
+
+        i1 = i0 * 2;
+
+        $i2 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int roundUpToByte(int)>(i1);
+
+        $i3 = $i2 / 8;
+
+        return $i3;
+    }
+
+    private static int roundUpToByte(int)
+    {
+        int i0, $i1, $i2, $i3;
+
+        i0 := @parameter0: int;
+
+        $i1 = i0 + 8;
+
+        $i2 = $i1 - 1;
+
+        $i3 = $i2 & -8;
+
+        return $i3;
+    }
+
+    private static void setMethodBitmapBit(byte[], int, int, androidx.profileinstaller.DexProfileData)
+    {
+        byte[] r0;
+        int i0, i1, i2, i3, $i5, $i6, $i7, $i9;
+        androidx.profileinstaller.DexProfileData r1;
+        byte b4, $b8;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r1 := @parameter3: androidx.profileinstaller.DexProfileData;
+
+        $i5 = r1.<androidx.profileinstaller.DexProfileData: int numMethodIds>;
+
+        i2 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int methodFlagBitmapIndex(int,int,int)>(i0, i1, $i5);
+
+        i3 = i2 / 8;
+
+        $b8 = r0[i3];
+
+        $i6 = i2 % 8;
+
+        $i7 = 1 << $i6;
+
+        $i9 = $b8 | $i7;
+
+        b4 = (byte) $i9;
+
+        r0[i3] = b4;
+
+        return;
+    }
+
+    private static void writeLineHeader(java.io.OutputStream, androidx.profileinstaller.DexProfileData, java.lang.String) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData r1;
+        java.lang.String r2;
+        int $i0, $i1, $i2, $i5;
+        long $l3, $l4, $l6;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData;
+
+        r2 := @parameter2: java.lang.String;
+
+        $i0 = staticinvoke <androidx.profileinstaller.Encoding: int utf8Length(java.lang.String)>(r2);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, $i0);
+
+        $i1 = r1.<androidx.profileinstaller.DexProfileData: int classSetSize>;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, $i1);
+
+        $i2 = r1.<androidx.profileinstaller.DexProfileData: int hotMethodRegionSize>;
+
+        $l3 = (long) $i2;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l3);
+
+        $l4 = r1.<androidx.profileinstaller.DexProfileData: long dexChecksum>;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l4);
+
+        $i5 = r1.<androidx.profileinstaller.DexProfileData: int numMethodIds>;
+
+        $l6 = (long) $i5;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l6);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeString(java.io.OutputStream,java.lang.String)>(r0, r2);
+
+        return;
+    }
+
+    private static void writeLineData(java.io.OutputStream, androidx.profileinstaller.DexProfileData) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData r1;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeMethodsWithInlineCaches(java.io.OutputStream,androidx.profileinstaller.DexProfileData)>(r0, r1);
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeClasses(java.io.OutputStream,androidx.profileinstaller.DexProfileData)>(r0, r1);
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void writeMethodBitmap(java.io.OutputStream,androidx.profileinstaller.DexProfileData)>(r0, r1);
+
+        return;
+    }
+
+    private static void writeMethodsWithInlineCaches(java.io.OutputStream, androidx.profileinstaller.DexProfileData) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData r1;
+        java.util.Iterator r2;
+        java.util.Map$Entry r3;
+        int i0, i1, i2, $i3, i4;
+        java.util.TreeMap $r4;
+        java.util.Set $r5;
+        java.lang.Object $r6, $r7, $r9;
+        java.lang.Integer $r8, $r10;
+        boolean $z0;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData;
+
+        i4 = 0;
+
+        $r4 = r1.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $r5 = virtualinvoke $r4.<java.util.TreeMap: java.util.Set entrySet()>();
+
+        r2 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.util.Map$Entry) $r6;
+
+        $r7 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r8 = (java.lang.Integer) $r7;
+
+        i0 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        $r9 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r10 = (java.lang.Integer) $r9;
+
+        i1 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $i3 = i1 & 1;
+
+        if $i3 != 0 goto label2;
+
+        goto label1;
+
+     label2:
+        i2 = i0 - i4;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, i2);
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, 0);
+
+        i4 = i0;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    private static void writeClasses(java.io.OutputStream, androidx.profileinstaller.DexProfileData) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData r1;
+        int[] r2;
+        int i0, i1, $i2, $i3, i4, i5;
+        java.lang.Integer r3;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData;
+
+        i4 = 0;
+
+        r2 = r1.<androidx.profileinstaller.DexProfileData: int[] classes>;
+
+        i0 = lengthof r2;
+
+        i5 = 0;
+
+     label1:
+        if i5 >= i0 goto label2;
+
+        $i2 = r2[i5];
+
+        r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $i3 = virtualinvoke r3.<java.lang.Integer: int intValue()>();
+
+        i1 = $i3 - i4;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt16(java.io.OutputStream,int)>(r0, i1);
+
+        i4 = virtualinvoke r3.<java.lang.Integer: int intValue()>();
+
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private static void writeMethodBitmap(java.io.OutputStream, androidx.profileinstaller.DexProfileData) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        androidx.profileinstaller.DexProfileData r1;
+        byte[] r2;
+        java.util.Iterator r3;
+        java.util.Map$Entry r4;
+        int i0, i1, $i2, $i3, $i4, $i5;
+        java.util.TreeMap $r5;
+        java.util.Set $r6;
+        boolean $z0;
+        java.lang.Object $r7, $r8, $r10;
+        java.lang.Integer $r9, $r11;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData;
+
+        $i2 = r1.<androidx.profileinstaller.DexProfileData: int numMethodIds>;
+
+        $i3 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int getMethodBitmapStorageSize(int)>($i2);
+
+        r2 = newarray (byte)[$i3];
+
+        $r5 = r1.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $r6 = virtualinvoke $r5.<java.util.TreeMap: java.util.Set entrySet()>();
+
+        r3 = interfaceinvoke $r6.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r7 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (java.util.Map$Entry) $r7;
+
+        $r8 = interfaceinvoke r4.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r9 = (java.lang.Integer) $r8;
+
+        i0 = virtualinvoke $r9.<java.lang.Integer: int intValue()>();
+
+        $r10 = interfaceinvoke r4.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r11 = (java.lang.Integer) $r10;
+
+        i1 = virtualinvoke $r11.<java.lang.Integer: int intValue()>();
+
+        $i4 = i1 & 2;
+
+        if $i4 == 0 goto label2;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void setMethodBitmapBit(byte[],int,int,androidx.profileinstaller.DexProfileData)>(r2, 2, i0, r1);
+
+     label2:
+        $i5 = i1 & 4;
+
+        if $i5 == 0 goto label3;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void setMethodBitmapBit(byte[],int,int,androidx.profileinstaller.DexProfileData)>(r2, 4, i0, r1);
+
+     label3:
+        goto label1;
+
+     label4:
+        virtualinvoke r0.<java.io.OutputStream: void write(byte[])>(r2);
+
+        return;
+    }
+
+    static androidx.profileinstaller.DexProfileData[] readProfile(java.io.InputStream, byte[], java.lang.String) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        byte[] r1, r3, $r6;
+        java.lang.String r2;
+        int i0, $i3, $i4, $i5;
+        long l1, l2;
+        java.io.ByteArrayInputStream r4, $r7;
+        java.lang.Throwable r5, $r10, $r11, r13;
+        boolean $z0;
+        java.lang.RuntimeException $r8, $r9;
+        androidx.profileinstaller.DexProfileData[] r12;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: byte[];
+
+        r2 := @parameter2: java.lang.String;
+
+        $r6 = <androidx.profileinstaller.ProfileVersion: byte[] V010_P>;
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r6);
+
+        if $z0 != 0 goto label1;
+
+        $r9 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Unsupported version");
+
+        throw $r9;
+
+     label1:
+        i0 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt8(java.io.InputStream)>(r0);
+
+        l1 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        l2 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        $i4 = (int) l2;
+
+        $i3 = (int) l1;
+
+        r3 = staticinvoke <androidx.profileinstaller.Encoding: byte[] readCompressed(java.io.InputStream,int,int)>(r0, $i4, $i3);
+
+        $i5 = virtualinvoke r0.<java.io.InputStream: int read()>();
+
+        if $i5 <= 0 goto label2;
+
+        $r8 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Content found after the end of file");
+
+        throw $r8;
+
+     label2:
+        $r7 = new java.io.ByteArrayInputStream;
+
+        specialinvoke $r7.<java.io.ByteArrayInputStream: void <init>(byte[])>(r3);
+
+        r4 = $r7;
+
+     label3:
+        r12 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: androidx.profileinstaller.DexProfileData[] readUncompressedBody(java.io.InputStream,java.lang.String,int)>(r4, r2, i0);
+
+     label4:
+        virtualinvoke r4.<java.io.InputStream: void close()>();
+
+        return r12;
+
+     label5:
+        $r11 := @caughtexception;
+
+        r13 = $r11;
+
+     label6:
+        virtualinvoke r4.<java.io.InputStream: void close()>();
+
+     label7:
+        goto label9;
+
+     label8:
+        $r10 := @caughtexception;
+
+        r5 = $r10;
+
+        virtualinvoke r13.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r5);
+
+     label9:
+        throw r13;
+
+        catch java.lang.Throwable from label3 to label4 with label5;
+        catch java.lang.Throwable from label6 to label7 with label8;
+    }
+
+    static androidx.profileinstaller.DexProfileData[] readMeta(java.io.InputStream, byte[], byte[], androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        byte[] r1, r2, $r4, $r5, $r8;
+        androidx.profileinstaller.DexProfileData[] r3, $r7, $r9;
+        boolean z0, $z1, $z2;
+        java.lang.RuntimeException $r6, $r10;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: byte[];
+
+        r2 := @parameter2: byte[];
+
+        r3 := @parameter3: androidx.profileinstaller.DexProfileData[];
+
+        $r4 = <androidx.profileinstaller.ProfileVersion: byte[] METADATA_V001_N>;
+
+        $z1 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r4);
+
+        if $z1 == 0 goto label2;
+
+        $r8 = <androidx.profileinstaller.ProfileVersion: byte[] V015_S>;
+
+        z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>($r8, r2);
+
+        if z0 == 0 goto label1;
+
+        $r10 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Requires new Baseline Profile Metadata. Please rebuild the APK with Android Gradle Plugin 7.2 Canary 7 or higher");
+
+        throw $r10;
+
+     label1:
+        $r9 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: androidx.profileinstaller.DexProfileData[] readMetadata001(java.io.InputStream,byte[],androidx.profileinstaller.DexProfileData[])>(r0, r1, r3);
+
+        return $r9;
+
+     label2:
+        $r5 = <androidx.profileinstaller.ProfileVersion: byte[] METADATA_V002>;
+
+        $z2 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r5);
+
+        if $z2 == 0 goto label3;
+
+        $r7 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: androidx.profileinstaller.DexProfileData[] readMetadataV002(java.io.InputStream,byte[],androidx.profileinstaller.DexProfileData[])>(r0, r2, r3);
+
+        return $r7;
+
+     label3:
+        $r6 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Unsupported meta version");
+
+        throw $r6;
+    }
+
+    static androidx.profileinstaller.DexProfileData[] readMetadata001(java.io.InputStream, byte[], androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        byte[] r1, r3, $r6;
+        androidx.profileinstaller.DexProfileData[] r2, r12;
+        int i0, $i3, $i4, $i5;
+        long l1, l2;
+        java.io.ByteArrayInputStream r4, $r7;
+        java.lang.Throwable r5, $r10, $r11, r13;
+        boolean $z0;
+        java.lang.RuntimeException $r8, $r9;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: byte[];
+
+        r2 := @parameter2: androidx.profileinstaller.DexProfileData[];
+
+        $r6 = <androidx.profileinstaller.ProfileVersion: byte[] METADATA_V001_N>;
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r6);
+
+        if $z0 != 0 goto label1;
+
+        $r9 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Unsupported meta version");
+
+        throw $r9;
+
+     label1:
+        i0 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt8(java.io.InputStream)>(r0);
+
+        l1 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        l2 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        $i4 = (int) l2;
+
+        $i3 = (int) l1;
+
+        r3 = staticinvoke <androidx.profileinstaller.Encoding: byte[] readCompressed(java.io.InputStream,int,int)>(r0, $i4, $i3);
+
+        $i5 = virtualinvoke r0.<java.io.InputStream: int read()>();
+
+        if $i5 <= 0 goto label2;
+
+        $r8 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Content found after the end of file");
+
+        throw $r8;
+
+     label2:
+        $r7 = new java.io.ByteArrayInputStream;
+
+        specialinvoke $r7.<java.io.ByteArrayInputStream: void <init>(byte[])>(r3);
+
+        r4 = $r7;
+
+     label3:
+        r12 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: androidx.profileinstaller.DexProfileData[] readMetadataForNBody(java.io.InputStream,int,androidx.profileinstaller.DexProfileData[])>(r4, i0, r2);
+
+     label4:
+        virtualinvoke r4.<java.io.InputStream: void close()>();
+
+        return r12;
+
+     label5:
+        $r10 := @caughtexception;
+
+        r13 = $r10;
+
+     label6:
+        virtualinvoke r4.<java.io.InputStream: void close()>();
+
+     label7:
+        goto label9;
+
+     label8:
+        $r11 := @caughtexception;
+
+        r5 = $r11;
+
+        virtualinvoke r13.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r5);
+
+     label9:
+        throw r13;
+
+        catch java.lang.Throwable from label3 to label4 with label5;
+        catch java.lang.Throwable from label6 to label7 with label8;
+    }
+
+    static androidx.profileinstaller.DexProfileData[] readMetadataV002(java.io.InputStream, byte[], androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        byte[] r1, r3;
+        androidx.profileinstaller.DexProfileData[] r2, r10;
+        int i0, $i3, $i4, $i5;
+        long l1, l2;
+        java.io.ByteArrayInputStream r4, $r6;
+        java.lang.Throwable r5, $r8, $r9, r11;
+        java.lang.RuntimeException $r7;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: byte[];
+
+        r2 := @parameter2: androidx.profileinstaller.DexProfileData[];
+
+        i0 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        l1 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        l2 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        $i4 = (int) l2;
+
+        $i3 = (int) l1;
+
+        r3 = staticinvoke <androidx.profileinstaller.Encoding: byte[] readCompressed(java.io.InputStream,int,int)>(r0, $i4, $i3);
+
+        $i5 = virtualinvoke r0.<java.io.InputStream: int read()>();
+
+        if $i5 <= 0 goto label1;
+
+        $r7 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Content found after the end of file");
+
+        throw $r7;
+
+     label1:
+        $r6 = new java.io.ByteArrayInputStream;
+
+        specialinvoke $r6.<java.io.ByteArrayInputStream: void <init>(byte[])>(r3);
+
+        r4 = $r6;
+
+     label2:
+        r10 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: androidx.profileinstaller.DexProfileData[] readMetadataV002Body(java.io.InputStream,byte[],int,androidx.profileinstaller.DexProfileData[])>(r4, r1, i0, r2);
+
+     label3:
+        virtualinvoke r4.<java.io.InputStream: void close()>();
+
+        return r10;
+
+     label4:
+        $r9 := @caughtexception;
+
+        r11 = $r9;
+
+     label5:
+        virtualinvoke r4.<java.io.InputStream: void close()>();
+
+     label6:
+        goto label8;
+
+     label7:
+        $r8 := @caughtexception;
+
+        r5 = $r8;
+
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r5);
+
+     label8:
+        throw r11;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+        catch java.lang.Throwable from label5 to label6 with label7;
+    }
+
+    private static androidx.profileinstaller.DexProfileData[] readMetadataV002Body(java.io.InputStream, byte[], int, androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        byte[] r1, $r6;
+        int i0, i1, i3, $i4, $i5, i7;
+        androidx.profileinstaller.DexProfileData[] r2, $r13;
+        java.lang.String r3, $r10;
+        long l2;
+        androidx.profileinstaller.DexProfileData r4;
+        int[] r5;
+        boolean $z0;
+        java.lang.StringBuilder $r7, $r8, $r9;
+        java.lang.RuntimeException $r11, $r12;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: byte[];
+
+        i0 := @parameter2: int;
+
+        r2 := @parameter3: androidx.profileinstaller.DexProfileData[];
+
+        $i4 = virtualinvoke r0.<java.io.InputStream: int available()>();
+
+        if $i4 != 0 goto label1;
+
+        $r13 = newarray (androidx.profileinstaller.DexProfileData)[0];
+
+        return $r13;
+
+     label1:
+        $i5 = lengthof r2;
+
+        if i0 == $i5 goto label2;
+
+        $r12 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Mismatched number of dex files found in metadata");
+
+        throw $r12;
+
+     label2:
+        i7 = 0;
+
+     label3:
+        if i7 >= i0 goto label6;
+
+        staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        i1 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        r3 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.String readString(java.io.InputStream,int)>(r0, i1);
+
+        l2 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        i3 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        r4 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: androidx.profileinstaller.DexProfileData findByDexName(androidx.profileinstaller.DexProfileData[],java.lang.String)>(r2, r3);
+
+        if r4 != null goto label4;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Missing profile key: ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r11 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r10);
+
+        throw $r11;
+
+     label4:
+        r4.<androidx.profileinstaller.DexProfileData: long mTypeIdCount> = l2;
+
+        r5 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int[] readClasses(java.io.InputStream,int)>(r0, i3);
+
+        $r6 = <androidx.profileinstaller.ProfileVersion: byte[] V001_N>;
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, $r6);
+
+        if $z0 == 0 goto label5;
+
+        r4.<androidx.profileinstaller.DexProfileData: int classSetSize> = i3;
+
+        r4.<androidx.profileinstaller.DexProfileData: int[] classes> = r5;
+
+     label5:
+        i7 = i7 + 1;
+
+        goto label3;
+
+     label6:
+        return r2;
+    }
+
+    private static androidx.profileinstaller.DexProfileData findByDexName(androidx.profileinstaller.DexProfileData[], java.lang.String)
+    {
+        androidx.profileinstaller.DexProfileData[] r0;
+        java.lang.String r1, r2, $r4;
+        int $i0, $i1, i2;
+        androidx.profileinstaller.DexProfileData $r3, $r5;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.profileinstaller.DexProfileData[];
+
+        r1 := @parameter1: java.lang.String;
+
+        $i0 = lengthof r0;
+
+        if $i0 > 0 goto label1;
+
+        return null;
+
+     label1:
+        r2 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: java.lang.String extractKey(java.lang.String)>(r1);
+
+        i2 = 0;
+
+     label2:
+        $i1 = lengthof r0;
+
+        if i2 >= $i1 goto label4;
+
+        $r3 = r0[i2];
+
+        $r4 = $r3.<androidx.profileinstaller.DexProfileData: java.lang.String dexName>;
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>(r2);
+
+        if $z0 == 0 goto label3;
+
+        $r5 = r0[i2];
+
+        return $r5;
+
+     label3:
+        i2 = i2 + 1;
+
+        goto label2;
+
+     label4:
+        return null;
+    }
+
+    private static androidx.profileinstaller.DexProfileData[] readMetadataForNBody(java.io.InputStream, int, androidx.profileinstaller.DexProfileData[]) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, i6, i7, i8;
+        androidx.profileinstaller.DexProfileData[] r1, $r10;
+        java.lang.String[] r2;
+        int[] r3, $r6;
+        java.lang.String $r4, $r5, $r8;
+        boolean $z0;
+        java.lang.RuntimeException $r7, $r9;
+        androidx.profileinstaller.DexProfileData r11;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: androidx.profileinstaller.DexProfileData[];
+
+        $i1 = virtualinvoke r0.<java.io.InputStream: int available()>();
+
+        if $i1 != 0 goto label1;
+
+        $r10 = newarray (androidx.profileinstaller.DexProfileData)[0];
+
+        return $r10;
+
+     label1:
+        $i2 = lengthof r1;
+
+        if i0 == $i2 goto label2;
+
+        $r9 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Mismatched number of dex files found in metadata");
+
+        throw $r9;
+
+     label2:
+        r2 = newarray (java.lang.String)[i0];
+
+        r3 = newarray (int)[i0];
+
+        i6 = 0;
+
+     label3:
+        if i6 >= i0 goto label4;
+
+        i7 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        $i5 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        r3[i6] = $i5;
+
+        $r8 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.String readString(java.io.InputStream,int)>(r0, i7);
+
+        r2[i6] = $r8;
+
+        i6 = i6 + 1;
+
+        goto label3;
+
+     label4:
+        i8 = 0;
+
+     label5:
+        if i8 >= i0 goto label7;
+
+        r11 = r1[i8];
+
+        $r5 = r11.<androidx.profileinstaller.DexProfileData: java.lang.String dexName>;
+
+        $r4 = r2[i8];
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 != 0 goto label6;
+
+        $r7 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Order of dexfiles in metadata did not match baseline");
+
+        throw $r7;
+
+     label6:
+        $i3 = r3[i8];
+
+        r11.<androidx.profileinstaller.DexProfileData: int classSetSize> = $i3;
+
+        $i4 = r11.<androidx.profileinstaller.DexProfileData: int classSetSize>;
+
+        $r6 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int[] readClasses(java.io.InputStream,int)>(r0, $i4);
+
+        r11.<androidx.profileinstaller.DexProfileData: int[] classes> = $r6;
+
+        i8 = i8 + 1;
+
+        goto label5;
+
+     label7:
+        return r1;
+    }
+
+    private static java.lang.String generateDexKey(java.lang.String, java.lang.String, byte[])
+    {
+        java.lang.String r0, r1, r3, $r4, $r7, $r10, $r11;
+        byte[] r2;
+        int $i0;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.StringBuilder $r5, $r6, $r8, $r9;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: byte[];
+
+        r3 = staticinvoke <androidx.profileinstaller.ProfileVersion: java.lang.String dexKeySeparator(byte[])>(r2);
+
+        $i0 = virtualinvoke r0.<java.lang.String: int length()>();
+
+        if $i0 > 0 goto label1;
+
+        $r11 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: java.lang.String enforceSeparator(java.lang.String,java.lang.String)>(r1, r3);
+
+        return $r11;
+
+     label1:
+        $z0 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("classes.dex");
+
+        if $z0 == 0 goto label2;
+
+        return r0;
+
+     label2:
+        $z1 = virtualinvoke r1.<java.lang.String: boolean contains(java.lang.CharSequence)>("!");
+
+        if $z1 != 0 goto label3;
+
+        $z2 = virtualinvoke r1.<java.lang.String: boolean contains(java.lang.CharSequence)>(":");
+
+        if $z2 == 0 goto label4;
+
+     label3:
+        $r4 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: java.lang.String enforceSeparator(java.lang.String,java.lang.String)>(r1, r3);
+
+        return $r4;
+
+     label4:
+        $z3 = virtualinvoke r1.<java.lang.String: boolean endsWith(java.lang.String)>(".apk");
+
+        if $z3 == 0 goto label5;
+
+        return r1;
+
+     label5:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r7 = staticinvoke <androidx.profileinstaller.ProfileVersion: java.lang.String dexKeySeparator(byte[])>(r2);
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r10;
+    }
+
+    private static java.lang.String enforceSeparator(java.lang.String, java.lang.String)
+    {
+        java.lang.String r0, r1, $r2, $r3, $r4, $r5;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = "!";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = virtualinvoke r0.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(":", "!");
+
+        return $r5;
+
+     label1:
+        $r3 = ":";
+
+        $z1 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>(r1);
+
+        if $z1 == 0 goto label2;
+
+        $r4 = virtualinvoke r0.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>("!", ":");
+
+        return $r4;
+
+     label2:
+        return r0;
+    }
+
+    private static java.lang.String extractKey(java.lang.String)
+    {
+        java.lang.String r0, $r1;
+        int $i0, i1;
+
+        r0 := @parameter0: java.lang.String;
+
+        i1 = virtualinvoke r0.<java.lang.String: int indexOf(java.lang.String)>("!");
+
+        if i1 >= 0 goto label1;
+
+        i1 = virtualinvoke r0.<java.lang.String: int indexOf(java.lang.String)>(":");
+
+     label1:
+        if i1 <= 0 goto label2;
+
+        $i0 = i1 + 1;
+
+        $r1 = virtualinvoke r0.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        return $r1;
+
+     label2:
+        return r0;
+    }
+
+    private static androidx.profileinstaller.DexProfileData[] readUncompressedBody(java.io.InputStream, java.lang.String, int) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        java.lang.String r1, $r5;
+        int i0, $i3, $i4, $i5, $i6, i7, i8, i9, i11, i12;
+        androidx.profileinstaller.DexProfileData[] r2, $r8, r9;
+        long l1, l2, l10;
+        int[] $r3, $r7;
+        androidx.profileinstaller.DexProfileData $r4, r10;
+        java.util.TreeMap $r6;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: java.lang.String;
+
+        i0 := @parameter2: int;
+
+        $i3 = virtualinvoke r0.<java.io.InputStream: int available()>();
+
+        if $i3 != 0 goto label1;
+
+        $r8 = newarray (androidx.profileinstaller.DexProfileData)[0];
+
+        return $r8;
+
+     label1:
+        r2 = newarray (androidx.profileinstaller.DexProfileData)[i0];
+
+        i7 = 0;
+
+     label2:
+        if i7 >= i0 goto label3;
+
+        i8 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        i9 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        l10 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        l1 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        l2 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt32(java.io.InputStream)>(r0);
+
+        $r4 = new androidx.profileinstaller.DexProfileData;
+
+        $r5 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.String readString(java.io.InputStream,int)>(r0, i8);
+
+        $i5 = (int) l10;
+
+        $i6 = (int) l2;
+
+        $r7 = newarray (int)[i9];
+
+        $r6 = new java.util.TreeMap;
+
+        specialinvoke $r6.<java.util.TreeMap: void <init>()>();
+
+        specialinvoke $r4.<androidx.profileinstaller.DexProfileData: void <init>(java.lang.String,java.lang.String,long,long,int,int,int,int[],java.util.TreeMap)>(r1, $r5, l1, 0L, i9, $i5, $i6, $r7, $r6);
+
+        r2[i7] = $r4;
+
+        i7 = i7 + 1;
+
+        goto label2;
+
+     label3:
+        r9 = r2;
+
+        i11 = lengthof r9;
+
+        i12 = 0;
+
+     label4:
+        if i12 >= i11 goto label5;
+
+        r10 = r9[i12];
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void readHotMethodRegion(java.io.InputStream,androidx.profileinstaller.DexProfileData)>(r0, r10);
+
+        $i4 = r10.<androidx.profileinstaller.DexProfileData: int classSetSize>;
+
+        $r3 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int[] readClasses(java.io.InputStream,int)>(r0, $i4);
+
+        r10.<androidx.profileinstaller.DexProfileData: int[] classes> = $r3;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void readMethodBitmap(java.io.InputStream,androidx.profileinstaller.DexProfileData)>(r0, r10);
+
+        i12 = i12 + 1;
+
+        goto label4;
+
+     label5:
+        return r2;
+    }
+
+    private static void readHotMethodRegion(java.io.InputStream, androidx.profileinstaller.DexProfileData) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        androidx.profileinstaller.DexProfileData r1;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, i7, i8;
+        java.lang.RuntimeException $r2;
+        java.util.TreeMap $r3;
+        java.lang.Integer $r4, $r5;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData;
+
+        $i3 = virtualinvoke r0.<java.io.InputStream: int available()>();
+
+        $i4 = r1.<androidx.profileinstaller.DexProfileData: int hotMethodRegionSize>;
+
+        i0 = $i3 - $i4;
+
+        i7 = 0;
+
+     label1:
+        $i5 = virtualinvoke r0.<java.io.InputStream: int available()>();
+
+        if $i5 <= i0 goto label4;
+
+        i1 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        i2 = i7 + i1;
+
+        $r3 = r1.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i2);
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(1);
+
+        virtualinvoke $r3.<java.util.TreeMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r4, $r5);
+
+        i8 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+     label2:
+        if i8 <= 0 goto label3;
+
+        staticinvoke <androidx.profileinstaller.ProfileTranscoder: void skipInlineCache(java.io.InputStream)>(r0);
+
+        i8 = i8 + -1;
+
+        goto label2;
+
+     label3:
+        i7 = i2;
+
+        goto label1;
+
+     label4:
+        $i6 = virtualinvoke r0.<java.io.InputStream: int available()>();
+
+        if $i6 == i0 goto label5;
+
+        $r2 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Read too much data during profile line parse");
+
+        throw $r2;
+
+     label5:
+        return;
+    }
+
+    private static void skipInlineCache(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        int i3, i4;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        i3 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt8(java.io.InputStream)>(r0);
+
+        if i3 != 6 goto label1;
+
+        return;
+
+     label1:
+        if i3 != 7 goto label2;
+
+        return;
+
+     label2:
+        if i3 <= 0 goto label5;
+
+        staticinvoke <androidx.profileinstaller.Encoding: int readUInt8(java.io.InputStream)>(r0);
+
+        i4 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt8(java.io.InputStream)>(r0);
+
+     label3:
+        if i4 <= 0 goto label4;
+
+        staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        i4 = i4 + -1;
+
+        goto label3;
+
+     label4:
+        i3 = i3 + -1;
+
+        goto label2;
+
+     label5:
+        return;
+    }
+
+    private static int[] readClasses(java.io.InputStream, int) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        int i0, i1, i2, i3, i4;
+        int[] r1;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        i0 := @parameter1: int;
+
+        r1 = newarray (int)[i0];
+
+        i3 = 0;
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i0 goto label2;
+
+        i1 = staticinvoke <androidx.profileinstaller.Encoding: int readUInt16(java.io.InputStream)>(r0);
+
+        i2 = i3 + i1;
+
+        r1[i4] = i2;
+
+        i3 = i2;
+
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label2:
+        return r1;
+    }
+
+    private static void readMethodBitmap(java.io.InputStream, androidx.profileinstaller.DexProfileData) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        androidx.profileinstaller.DexProfileData r1;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, i8;
+        byte[] r2;
+        java.util.BitSet r3;
+        java.util.TreeMap $r4, $r7;
+        java.lang.Integer $r5, $r8, $r9, r11;
+        java.lang.Object $r6;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: androidx.profileinstaller.DexProfileData;
+
+        $i2 = r1.<androidx.profileinstaller.DexProfileData: int numMethodIds>;
+
+        $i3 = $i2 * 2;
+
+        i0 = staticinvoke <androidx.profileinstaller.Encoding: int bitsToBytes(int)>($i3);
+
+        r2 = staticinvoke <androidx.profileinstaller.Encoding: byte[] read(java.io.InputStream,int)>(r0, i0);
+
+        r3 = staticinvoke <java.util.BitSet: java.util.BitSet valueOf(byte[])>(r2);
+
+        i8 = 0;
+
+     label1:
+        $i4 = r1.<androidx.profileinstaller.DexProfileData: int numMethodIds>;
+
+        if i8 >= $i4 goto label4;
+
+        $i5 = r1.<androidx.profileinstaller.DexProfileData: int numMethodIds>;
+
+        i1 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int readFlagsFromBitmap(java.util.BitSet,int,int)>(r3, i8, $i5);
+
+        if i1 == 0 goto label3;
+
+        $r4 = r1.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i8);
+
+        $r6 = virtualinvoke $r4.<java.util.TreeMap: java.lang.Object get(java.lang.Object)>($r5);
+
+        r11 = (java.lang.Integer) $r6;
+
+        if r11 != null goto label2;
+
+        r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+     label2:
+        $r7 = r1.<androidx.profileinstaller.DexProfileData: java.util.TreeMap methods>;
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i8);
+
+        $i6 = virtualinvoke r11.<java.lang.Integer: int intValue()>();
+
+        $i7 = $i6 | i1;
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i7);
+
+        virtualinvoke $r7.<java.util.TreeMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r8, $r9);
+
+     label3:
+        i8 = i8 + 1;
+
+        goto label1;
+
+     label4:
+        return;
+    }
+
+    private static int readFlagsFromBitmap(java.util.BitSet, int, int)
+    {
+        java.util.BitSet r0;
+        int i0, i1, $i2, $i3;
+        boolean $z0, $z1;
+        byte b4;
+
+        r0 := @parameter0: java.util.BitSet;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        b4 = 0;
+
+        $i2 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int methodFlagBitmapIndex(int,int,int)>(2, i0, i1);
+
+        $z0 = virtualinvoke r0.<java.util.BitSet: boolean get(int)>($i2);
+
+        if $z0 == 0 goto label1;
+
+        b4 = b4 | 2;
+
+     label1:
+        $i3 = staticinvoke <androidx.profileinstaller.ProfileTranscoder: int methodFlagBitmapIndex(int,int,int)>(4, i0, i1);
+
+        $z1 = virtualinvoke r0.<java.util.BitSet: boolean get(int)>($i3);
+
+        if $z1 == 0 goto label2;
+
+        b4 = b4 | 4;
+
+     label2:
+        return b4;
+    }
+
+    private static int methodFlagBitmapIndex(int, int, int)
+    {
+        int i0, i1, i2, $i3;
+        java.lang.RuntimeException $r0, $r5;
+        java.lang.StringBuilder $r1, $r2, $r3;
+        java.lang.String $r4;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        tableswitch(i0)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label4;
+            case 4: goto label3;
+            default: goto label4;
+        };
+
+     label1:
+        $r0 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("HOT methods are not stored in the bitmap");
+
+        throw $r0;
+
+     label2:
+        return i1;
+
+     label3:
+        $i3 = i1 + i2;
+
+        return $i3;
+
+     label4:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unexpected flag: ");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r4);
+
+        throw $r5;
+    }
+
+    static void <clinit>()
+    {
+        byte[] $r0, $r1;
+
+        $r0 = newarray (byte)[4];
+
+        $r0[0] = 112;
+
+        $r0[1] = 114;
+
+        $r0[2] = 111;
+
+        $r0[3] = 0;
+
+        <androidx.profileinstaller.ProfileTranscoder: byte[] MAGIC_PROF> = $r0;
+
+        $r1 = newarray (byte)[4];
+
+        $r1[0] = 112;
+
+        $r1[1] = 114;
+
+        $r1[2] = 109;
+
+        $r1[3] = 0;
+
+        <androidx.profileinstaller.ProfileTranscoder: byte[] MAGIC_PROFM> = $r1;
+
+        return;
+    }
+

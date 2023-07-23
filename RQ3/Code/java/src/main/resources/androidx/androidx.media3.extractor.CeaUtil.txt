@@ -1,0 +1,232 @@
+androidx.media3.extractor.CeaUtil
+<androidx.media3.extractor.CeaUtil: java.lang.String TAG>
+<androidx.media3.extractor.CeaUtil: int USER_DATA_IDENTIFIER_GA94>
+<androidx.media3.extractor.CeaUtil: int USER_DATA_TYPE_CODE_MPEG_CC>
+<androidx.media3.extractor.CeaUtil: int PAYLOAD_TYPE_CC>
+<androidx.media3.extractor.CeaUtil: int COUNTRY_CODE>
+<androidx.media3.extractor.CeaUtil: int PROVIDER_CODE_ATSC>
+<androidx.media3.extractor.CeaUtil: int PROVIDER_CODE_DIRECTV>
+    public static void consume(long, androidx.media3.common.util.ParsableByteArray, androidx.media3.extractor.TrackOutput[])
+    {
+        long l0;
+        androidx.media3.common.util.ParsableByteArray r0;
+        androidx.media3.extractor.TrackOutput[] r1;
+        int i1, i2, i3, i4, i5, $i6, $i7, $i8, i9, i10;
+        boolean $z0, $z1, z2, $z3;
+
+        l0 := @parameter0: long;
+
+        r0 := @parameter1: androidx.media3.common.util.ParsableByteArray;
+
+        r1 := @parameter2: androidx.media3.extractor.TrackOutput[];
+
+     label01:
+        $i6 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i6 <= 1 goto label13;
+
+        i1 = staticinvoke <androidx.media3.extractor.CeaUtil: int readNon255TerminatedValue(androidx.media3.common.util.ParsableByteArray)>(r0);
+
+        i2 = staticinvoke <androidx.media3.extractor.CeaUtil: int readNon255TerminatedValue(androidx.media3.common.util.ParsableByteArray)>(r0);
+
+        $i7 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        i9 = $i7 + i2;
+
+        if i2 == -1 goto label02;
+
+        $i8 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if i2 <= $i8 goto label03;
+
+     label02:
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("CeaUtil", "Skipping remainder of malformed SEI NAL unit.");
+
+        i9 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+        goto label12;
+
+     label03:
+        if i1 != 4 goto label12;
+
+        if i2 < 8 goto label12;
+
+        i3 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        i4 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        i10 = 0;
+
+        if i4 != 49 goto label04;
+
+        i10 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+     label04:
+        i5 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        if i4 != 47 goto label05;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(1);
+
+     label05:
+        if i3 != 181 goto label07;
+
+        if i4 == 49 goto label06;
+
+        if i4 != 47 goto label07;
+
+     label06:
+        if i5 != 3 goto label07;
+
+        $z1 = 1;
+
+        goto label08;
+
+     label07:
+        $z1 = 0;
+
+     label08:
+        z2 = $z1;
+
+        if i4 != 49 goto label11;
+
+        $z0 = z2;
+
+        if i10 != 1195456820 goto label09;
+
+        $z3 = 1;
+
+        goto label10;
+
+     label09:
+        $z3 = 0;
+
+     label10:
+        z2 = $z0 & $z3;
+
+     label11:
+        if z2 == 0 goto label12;
+
+        staticinvoke <androidx.media3.extractor.CeaUtil: void consumeCcData(long,androidx.media3.common.util.ParsableByteArray,androidx.media3.extractor.TrackOutput[])>(l0, r0, r1);
+
+     label12:
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i9);
+
+        goto label01;
+
+     label13:
+        return;
+    }
+
+    public static void consumeCcData(long, androidx.media3.common.util.ParsableByteArray, androidx.media3.extractor.TrackOutput[])
+    {
+        long l0;
+        androidx.media3.common.util.ParsableByteArray r0;
+        androidx.media3.extractor.TrackOutput[] r1, r2;
+        int i1, i2, i3, i4, i5, $i6, i8;
+        boolean z0, $z1;
+        androidx.media3.extractor.TrackOutput r3;
+        byte $b7;
+
+        l0 := @parameter0: long;
+
+        r0 := @parameter1: androidx.media3.common.util.ParsableByteArray;
+
+        r1 := @parameter2: androidx.media3.extractor.TrackOutput[];
+
+        i1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i6 = i1 & 64;
+
+        if $i6 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        z0 = $z1;
+
+        if z0 != 0 goto label3;
+
+        return;
+
+     label3:
+        i2 = i1 & 31;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        i3 = i2 * 3;
+
+        i4 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        r2 = r1;
+
+        i5 = lengthof r2;
+
+        i8 = 0;
+
+     label4:
+        if i8 >= i5 goto label6;
+
+        r3 = r2[i8];
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i4);
+
+        interfaceinvoke r3.<androidx.media3.extractor.TrackOutput: void sampleData(androidx.media3.common.util.ParsableByteArray,int)>(r0, i3);
+
+        $b7 = l0 cmp -9223372036854775807L;
+
+        if $b7 == 0 goto label5;
+
+        interfaceinvoke r3.<androidx.media3.extractor.TrackOutput: void sampleMetadata(long,int,int,int,androidx.media3.extractor.TrackOutput$CryptoData)>(l0, 1, i3, 0, null);
+
+     label5:
+        i8 = i8 + 1;
+
+        goto label4;
+
+     label6:
+        return;
+    }
+
+    private static int readNon255TerminatedValue(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0, $i1, i2;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i2 = 0;
+
+     label1:
+        $i1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i1 != 0 goto label2;
+
+        return -1;
+
+     label2:
+        i0 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        i2 = i2 + i0;
+
+        if i0 == 255 goto label1;
+
+        return i2;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.extractor.CeaUtil r0;
+
+        r0 := @this: androidx.media3.extractor.CeaUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

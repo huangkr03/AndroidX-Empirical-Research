@@ -1,0 +1,1042 @@
+kotlinx.coroutines.channels.ArrayChannel
+<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>
+<kotlinx.coroutines.channels.ArrayChannel: int capacity>
+<kotlinx.coroutines.channels.ArrayChannel: int head>
+<kotlinx.coroutines.channels.ArrayChannel: java.util.concurrent.locks.ReentrantLock lock>
+<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.channels.BufferOverflow onBufferOverflow>
+<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>
+    public void <init>(int, kotlinx.coroutines.channels.BufferOverflow, kotlin.jvm.functions.Function1)
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        kotlinx.coroutines.internal.Symbol $r1;
+        int $i0;
+        kotlinx.coroutines.channels.BufferOverflow $r2;
+        kotlin.jvm.functions.Function1 $r3;
+        boolean $z0;
+        java.util.concurrent.locks.ReentrantLock $r4;
+        java.lang.Object[] $r5;
+        kotlinx.atomicfu.AtomicInt $r6;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r8;
+        java.lang.IllegalArgumentException $r9;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $i0 := @parameter0: int;
+
+        $r2 := @parameter1: kotlinx.coroutines.channels.BufferOverflow;
+
+        $r3 := @parameter2: kotlin.jvm.functions.Function1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "onBufferOverflow");
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractChannel: void <init>(kotlin.jvm.functions.Function1)>($r3);
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: int capacity> = $i0;
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.channels.BufferOverflow onBufferOverflow> = $r2;
+
+        if $i0 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        $r4 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r4.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: java.util.concurrent.locks.ReentrantLock lock> = $r4;
+
+        $i0 = staticinvoke <java.lang.Math: int min(int,int)>($i0, 8);
+
+        $r5 = newarray (java.lang.Object)[$i0];
+
+        $r1 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        staticinvoke <kotlin.collections.ArraysKt: void fill$default(java.lang.Object[],java.lang.Object,int,int,int,java.lang.Object)>($r5, $r1, 0, 0, 6, null);
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer> = $r5;
+
+        $r6 = staticinvoke <kotlinx.atomicfu.AtomicFU: kotlinx.atomicfu.AtomicInt atomic(int)>(0);
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size> = $r6;
+
+        return;
+
+     label3:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ArrayChannel capacity must be at least 1, but ");
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" was specified");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+        $r8 = virtualinvoke $r8.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r8);
+
+        throw $r9;
+    }
+
+    private final void enqueueElement(int, java.lang.Object)
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        java.lang.Object $r1;
+        boolean $z0;
+        int $i0, $i1, $i2;
+        java.lang.Object[] $r2;
+        kotlinx.coroutines.channels.BufferOverflow $r3, $r4;
+        java.lang.AssertionError $r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        $i1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int capacity>;
+
+        if $i0 >= $i1 goto label1;
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.ArrayChannel: void ensureCapacity(int)>($i0);
+
+        $r2 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int head>;
+
+        $i0 = $i1 + $i0;
+
+        $i1 = lengthof $r2;
+
+        $i0 = $i0 % $i1;
+
+        $r2[$i0] = $r1;
+
+        return;
+
+     label1:
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label5;
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.channels.BufferOverflow onBufferOverflow>;
+
+        $r4 = <kotlinx.coroutines.channels.BufferOverflow: kotlinx.coroutines.channels.BufferOverflow DROP_OLDEST>;
+
+        if $r3 != $r4 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        goto label5;
+
+     label4:
+        $r5 = new java.lang.AssertionError;
+
+        specialinvoke $r5.<java.lang.AssertionError: void <init>()>();
+
+        throw $r5;
+
+     label5:
+        $r2 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int head>;
+
+        $i2 = lengthof $r2;
+
+        $i2 = $i1 % $i2;
+
+        $r2[$i2] = null;
+
+        $i0 = $i0 + $i1;
+
+        $i2 = lengthof $r2;
+
+        $i0 = $i0 % $i2;
+
+        $r2[$i0] = $r1;
+
+        $i0 = $i1 + 1;
+
+        $i1 = lengthof $r2;
+
+        $i0 = $i0 % $i1;
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: int head> = $i0;
+
+        return;
+    }
+
+    private final void ensureCapacity(int)
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.Object[] $r1, $r2;
+        java.lang.Object $r3;
+        kotlinx.coroutines.internal.Symbol $r4;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $i0 := @parameter0: int;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i2 = lengthof $r1;
+
+        if $i0 < $i2 goto label3;
+
+        $i2 = lengthof $r1;
+
+        $i2 = $i2 + $i2;
+
+        $i3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int capacity>;
+
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>($i2, $i3);
+
+        $r1 = newarray (java.lang.Object)[$i2];
+
+        $i3 = 0;
+
+     label1:
+        if $i3 >= $i0 goto label2;
+
+        $r2 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int head>;
+
+        $i4 = $i1 + $i3;
+
+        $i1 = lengthof $r2;
+
+        $i1 = $i4 % $i1;
+
+        $r3 = $r2[$i1];
+
+        $r1[$i3] = $r3;
+
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label2:
+        $r4 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        staticinvoke <kotlin.collections.ArraysKt: void fill(java.lang.Object[],java.lang.Object,int,int)>($r1, $r4, $i0, $i2);
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer> = $r1;
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: int head> = 0;
+
+     label3:
+        return;
+    }
+
+    private final kotlinx.coroutines.internal.Symbol updateBufferSize(int)
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        int $i0, $i1;
+        kotlinx.coroutines.internal.Symbol $r1;
+        kotlinx.atomicfu.AtomicInt $r2;
+        kotlinx.coroutines.channels.BufferOverflow $r3;
+        int[] $r4;
+        kotlin.NoWhenBranchMatchedException r5;
+        java.lang.Throwable r6;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $i0 := @parameter0: int;
+
+        $i1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int capacity>;
+
+        $r1 = null;
+
+        if $i0 >= $i1 goto label1;
+
+        $r2 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+        $i0 = $i0 + 1;
+
+        virtualinvoke $r2.<kotlinx.atomicfu.AtomicInt: void setValue(int)>($i0);
+
+        return null;
+
+     label1:
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.channels.BufferOverflow onBufferOverflow>;
+
+        $r4 = <kotlinx.coroutines.channels.ArrayChannel$WhenMappings: int[] $EnumSwitchMapping$0>;
+
+        $i0 = virtualinvoke $r3.<kotlinx.coroutines.channels.BufferOverflow: int ordinal()>();
+
+        $i0 = $r4[$i0];
+
+        lookupswitch($i0)
+        {
+            case 1: goto label4;
+            case 2: goto label3;
+            case 3: goto label5;
+            default: goto label2;
+        };
+
+     label2:
+        r5 = new kotlin.NoWhenBranchMatchedException;
+
+        specialinvoke r5.<kotlin.NoWhenBranchMatchedException: void <init>()>();
+
+        r6 = (java.lang.Throwable) r5;
+
+        throw r6;
+
+     label3:
+        $r1 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_SUCCESS>;
+
+        goto label5;
+
+     label4:
+        $r1 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_FAILED>;
+
+     label5:
+        return $r1;
+    }
+
+    protected boolean enqueueReceiveInternal(kotlinx.coroutines.channels.Receive)
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        boolean $z0;
+        kotlinx.coroutines.channels.Receive $r1;
+        java.util.concurrent.locks.ReentrantLock $r2;
+        java.lang.Throwable $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $r1 := @parameter0: kotlinx.coroutines.channels.Receive;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "receive");
+
+        $r2 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r2.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label1:
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractChannel: boolean enqueueReceiveInternal(kotlinx.coroutines.channels.Receive)>($r1);
+
+     label2:
+        interfaceinvoke $r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $z0;
+
+     label3:
+        $r3 := @caughtexception;
+
+        interfaceinvoke $r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    protected java.lang.Object enqueueSend(kotlinx.coroutines.channels.Send)
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        java.lang.Object $r1;
+        kotlinx.coroutines.channels.Send $r2;
+        java.util.concurrent.locks.ReentrantLock $r3;
+        java.lang.Throwable $r4;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $r2 := @parameter0: kotlinx.coroutines.channels.Send;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "send");
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r3.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label1:
+        $r1 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractChannel: java.lang.Object enqueueSend(kotlinx.coroutines.channels.Send)>($r2);
+
+     label2:
+        interfaceinvoke $r3.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r1;
+
+     label3:
+        $r4 := @caughtexception;
+
+        interfaceinvoke $r3.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    protected java.lang.String getBufferDebugString()
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        int $i0, $i1;
+        kotlinx.atomicfu.AtomicInt $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $i0 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int capacity>;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+        $i1 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicInt: int getValue()>();
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("(buffer:capacity=");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",size=");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+    protected final boolean isBufferAlwaysEmpty()
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        return 0;
+    }
+
+    protected final boolean isBufferAlwaysFull()
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        return 0;
+    }
+
+    protected final boolean isBufferEmpty()
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        int $i0;
+        kotlinx.atomicfu.AtomicInt $r1;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+        $i0 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicInt: int getValue()>();
+
+        if $i0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    protected final boolean isBufferFull()
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        int $i0, $i1;
+        kotlinx.atomicfu.AtomicInt $r1;
+        kotlinx.coroutines.channels.BufferOverflow $r2, $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+        $i0 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicInt: int getValue()>();
+
+        $i1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int capacity>;
+
+        if $i0 != $i1 goto label1;
+
+        $r2 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.channels.BufferOverflow onBufferOverflow>;
+
+        $r3 = <kotlinx.coroutines.channels.BufferOverflow: kotlinx.coroutines.channels.BufferOverflow SUSPEND>;
+
+        if $r2 != $r3 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public boolean isClosedForReceive()
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+        boolean $z0;
+        java.lang.Throwable $r2;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label1:
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractChannel: boolean isClosedForReceive()>();
+
+     label2:
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $z0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    protected java.lang.Object offerInternal(java.lang.Object)
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+        java.lang.Object $r2;
+        kotlinx.atomicfu.AtomicInt $r3;
+        int $i0;
+        kotlinx.coroutines.channels.Closed $r4;
+        kotlinx.coroutines.internal.Symbol $r5, $r7;
+        kotlinx.coroutines.channels.ReceiveOrClosed $r6;
+        boolean $z0;
+        java.lang.AssertionError $r8;
+        kotlin.Unit $r9;
+        java.lang.Throwable $r10;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $r2 := @parameter0: java.lang.Object;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+     label01:
+        $i0 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicInt: int getValue()>();
+
+        $r4 = virtualinvoke $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.channels.Closed getClosedForSend()>();
+
+     label02:
+        if $r4 == null goto label03;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r4;
+
+     label03:
+        $r5 = specialinvoke $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.internal.Symbol updateBufferSize(int)>($i0);
+
+     label04:
+        if $r5 == null goto label05;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r5;
+
+     label05:
+        if $i0 != 0 goto label22;
+
+     label06:
+        $r6 = virtualinvoke $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.channels.ReceiveOrClosed takeFirstReceiveOrPeekClosed()>();
+
+     label07:
+        if $r6 != null goto label08;
+
+        goto label22;
+
+     label08:
+        $z0 = $r6 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label11;
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+     label09:
+        virtualinvoke $r3.<kotlinx.atomicfu.AtomicInt: void setValue(int)>($i0);
+
+     label10:
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r6;
+
+     label11:
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r6);
+
+     label12:
+        $r5 = interfaceinvoke $r6.<kotlinx.coroutines.channels.ReceiveOrClosed: kotlinx.coroutines.internal.Symbol tryResumeReceive(java.lang.Object,kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp)>($r2, null);
+
+     label13:
+        if $r5 == null goto label06;
+
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label19;
+
+        $r7 = <kotlinx.coroutines.CancellableContinuationImplKt: kotlinx.coroutines.internal.Symbol RESUME_TOKEN>;
+
+        if $r5 != $r7 goto label14;
+
+        $z0 = 1;
+
+        goto label15;
+
+     label14:
+        $z0 = 0;
+
+     label15:
+        if $z0 == 0 goto label16;
+
+        goto label19;
+
+     label16:
+        $r8 = new java.lang.AssertionError;
+
+     label17:
+        specialinvoke $r8.<java.lang.AssertionError: void <init>()>();
+
+     label18:
+        throw $r8;
+
+     label19:
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+     label20:
+        virtualinvoke $r3.<kotlinx.atomicfu.AtomicInt: void setValue(int)>($i0);
+
+     label21:
+        $r9 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        interfaceinvoke $r6.<kotlinx.coroutines.channels.ReceiveOrClosed: void completeResumeReceive(java.lang.Object)>($r2);
+
+        $r2 = interfaceinvoke $r6.<kotlinx.coroutines.channels.ReceiveOrClosed: java.lang.Object getOfferResult()>();
+
+        return $r2;
+
+     label22:
+        specialinvoke $r0.<kotlinx.coroutines.channels.ArrayChannel: void enqueueElement(int,java.lang.Object)>($i0, $r2);
+
+     label23:
+        $r5 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_SUCCESS>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r5;
+
+     label24:
+        $r10 := @caughtexception;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label25;
+
+     label25:
+        throw $r10;
+
+        catch java.lang.Throwable from label01 to label02 with label24;
+        catch java.lang.Throwable from label03 to label04 with label24;
+        catch java.lang.Throwable from label06 to label07 with label24;
+        catch java.lang.Throwable from label09 to label10 with label24;
+        catch java.lang.Throwable from label12 to label13 with label24;
+        catch java.lang.Throwable from label17 to label18 with label24;
+        catch java.lang.Throwable from label20 to label21 with label24;
+        catch java.lang.Throwable from label22 to label23 with label24;
+    }
+
+    protected void onCancelIdempotent(boolean)
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+        kotlinx.coroutines.internal.Symbol $r2;
+        boolean $z0;
+        kotlin.jvm.functions.Function1 $r3;
+        kotlinx.atomicfu.AtomicInt $r4;
+        int $i0, $i1, $i2, $i3;
+        kotlinx.coroutines.internal.UndeliveredElementException $r5;
+        java.lang.Object[] $r6;
+        java.lang.Object $r7;
+        kotlin.Unit $r8;
+        java.lang.Throwable $r9;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $z0 := @parameter0: boolean;
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlin.jvm.functions.Function1 onUndeliveredElement>;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r4 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+     label01:
+        $i0 = virtualinvoke $r4.<kotlinx.atomicfu.AtomicInt: int getValue()>();
+
+     label02:
+        $r5 = null;
+
+        $i1 = 0;
+
+     label03:
+        if $i1 >= $i0 goto label05;
+
+        $r6 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i2 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int head>;
+
+        $r7 = $r6[$i2];
+
+        if $r3 == null goto label04;
+
+        $r2 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        if $r7 == $r2 goto label04;
+
+        $r5 = staticinvoke <kotlinx.coroutines.internal.OnUndeliveredElementKt: kotlinx.coroutines.internal.UndeliveredElementException callUndeliveredElementCatchingException(kotlin.jvm.functions.Function1,java.lang.Object,kotlinx.coroutines.internal.UndeliveredElementException)>($r3, $r7, $r5);
+
+     label04:
+        $r6 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i2 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int head>;
+
+        $r2 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        $r6[$i2] = $r2;
+
+        $i2 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int head>;
+
+        $i2 = $i2 + 1;
+
+        $r6 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i3 = lengthof $r6;
+
+        $i2 = $i2 % $i3;
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: int head> = $i2;
+
+        $i1 = $i1 + 1;
+
+        goto label03;
+
+     label05:
+        $r4 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+     label06:
+        virtualinvoke $r4.<kotlinx.atomicfu.AtomicInt: void setValue(int)>(0);
+
+     label07:
+        $r8 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractChannel: void onCancelIdempotent(boolean)>($z0);
+
+        if $r5 != null goto label08;
+
+        return;
+
+     label08:
+        throw $r5;
+
+     label09:
+        $r9 := @caughtexception;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label10;
+
+     label10:
+        throw $r9;
+
+        catch java.lang.Throwable from label01 to label02 with label09;
+        catch java.lang.Throwable from label06 to label07 with label09;
+    }
+
+    protected java.lang.Object pollInternal()
+    {
+        kotlinx.coroutines.channels.ArrayChannel $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+        java.lang.Object $r2, $r7;
+        kotlinx.atomicfu.AtomicInt $r3;
+        int $i0, $i1;
+        kotlinx.coroutines.channels.Closed $r4;
+        java.lang.Object[] $r5;
+        kotlinx.coroutines.channels.Send $r6, $r8;
+        boolean $z0, $z1;
+        kotlinx.coroutines.internal.Symbol $r9, $r10;
+        java.lang.AssertionError $r11;
+        kotlin.Unit $r12;
+        java.lang.Throwable $r13;
+
+        $r0 := @this: kotlinx.coroutines.channels.ArrayChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+     label01:
+        $i0 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicInt: int getValue()>();
+
+     label02:
+        if $i0 != 0 goto label06;
+
+     label03:
+        $r4 = virtualinvoke $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.channels.Closed getClosedForSend()>();
+
+     label04:
+        $r2 = $r4;
+
+        if $r4 != null goto label05;
+
+        $r2 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol POLL_FAILED>;
+
+     label05:
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r2;
+
+     label06:
+        $r5 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int head>;
+
+        $r2 = $r5[$i1];
+
+        $r6 = null;
+
+        $r5[$i1] = null;
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+        $i1 = $i0 + -1;
+
+     label07:
+        virtualinvoke $r3.<kotlinx.atomicfu.AtomicInt: void setValue(int)>($i1);
+
+     label08:
+        $r7 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol POLL_FAILED>;
+
+        $i1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int capacity>;
+
+        $z0 = 0;
+
+        if $i0 != $i1 goto label22;
+
+        $r6 = null;
+
+     label09:
+        $r8 = virtualinvoke $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.coroutines.channels.Send takeFirstSendOrPeekClosed()>();
+
+     label10:
+        if $r8 != null goto label11;
+
+        goto label22;
+
+     label11:
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r8);
+
+     label12:
+        $r9 = virtualinvoke $r8.<kotlinx.coroutines.channels.Send: kotlinx.coroutines.internal.Symbol tryResumeSend(kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp)>(null);
+
+     label13:
+        if $r9 == null goto label20;
+
+        $z1 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z1 == 0 goto label18;
+
+        $r10 = <kotlinx.coroutines.CancellableContinuationImplKt: kotlinx.coroutines.internal.Symbol RESUME_TOKEN>;
+
+        if $r9 != $r10 goto label14;
+
+        $z0 = 1;
+
+     label14:
+        if $z0 == 0 goto label15;
+
+        goto label18;
+
+     label15:
+        $r11 = new java.lang.AssertionError;
+
+     label16:
+        specialinvoke $r11.<java.lang.AssertionError: void <init>()>();
+
+     label17:
+        throw $r11;
+
+     label18:
+        $r7 = virtualinvoke $r8.<kotlinx.coroutines.channels.Send: java.lang.Object getPollResult()>();
+
+     label19:
+        $r6 = $r8;
+
+        $z0 = 1;
+
+        goto label22;
+
+     label20:
+        virtualinvoke $r8.<kotlinx.coroutines.channels.Send: void undeliveredElement()>();
+
+     label21:
+        $r6 = $r8;
+
+        goto label09;
+
+     label22:
+        $r9 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol POLL_FAILED>;
+
+        if $r7 == $r9 goto label25;
+
+        $z1 = $r7 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z1 != 0 goto label25;
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ArrayChannel: kotlinx.atomicfu.AtomicInt size>;
+
+     label23:
+        virtualinvoke $r3.<kotlinx.atomicfu.AtomicInt: void setValue(int)>($i0);
+
+     label24:
+        $r5 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i1 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int head>;
+
+        $i0 = $i1 + $i0;
+
+        $i1 = lengthof $r5;
+
+        $i0 = $i0 % $i1;
+
+        $r5[$i0] = $r7;
+
+     label25:
+        $i0 = $r0.<kotlinx.coroutines.channels.ArrayChannel: int head>;
+
+        $i0 = $i0 + 1;
+
+        $r5 = $r0.<kotlinx.coroutines.channels.ArrayChannel: java.lang.Object[] buffer>;
+
+        $i1 = lengthof $r5;
+
+        $i0 = $i0 % $i1;
+
+        $r0.<kotlinx.coroutines.channels.ArrayChannel: int head> = $i0;
+
+        $r12 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        if $z0 == 0 goto label28;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r6);
+
+        virtualinvoke $r6.<kotlinx.coroutines.channels.Send: void completeResumeSend()>();
+
+        return $r2;
+
+     label26:
+        $r13 := @caughtexception;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label27;
+
+     label27:
+        throw $r13;
+
+     label28:
+        return $r2;
+
+        catch java.lang.Throwable from label01 to label02 with label26;
+        catch java.lang.Throwable from label03 to label04 with label26;
+        catch java.lang.Throwable from label07 to label08 with label26;
+        catch java.lang.Throwable from label09 to label10 with label26;
+        catch java.lang.Throwable from label12 to label13 with label26;
+        catch java.lang.Throwable from label16 to label17 with label26;
+        catch java.lang.Throwable from label18 to label19 with label26;
+        catch java.lang.Throwable from label20 to label21 with label26;
+        catch java.lang.Throwable from label23 to label24 with label26;
+    }
+
+kotlinx.coroutines.channels.ArrayChannel$WhenMappings
+<kotlinx.coroutines.channels.ArrayChannel$WhenMappings: int[] $EnumSwitchMapping$0>
+    static void <clinit>()
+    {
+        kotlinx.coroutines.channels.BufferOverflow[] $r0;
+        int $i0;
+        int[] $r1;
+        kotlinx.coroutines.channels.BufferOverflow $r2;
+
+        $r0 = staticinvoke <kotlinx.coroutines.channels.BufferOverflow: kotlinx.coroutines.channels.BufferOverflow[] values()>();
+
+        $i0 = lengthof $r0;
+
+        $r1 = newarray (int)[$i0];
+
+        $r2 = <kotlinx.coroutines.channels.BufferOverflow: kotlinx.coroutines.channels.BufferOverflow SUSPEND>;
+
+        $i0 = virtualinvoke $r2.<kotlinx.coroutines.channels.BufferOverflow: int ordinal()>();
+
+        $r1[$i0] = 1;
+
+        $r2 = <kotlinx.coroutines.channels.BufferOverflow: kotlinx.coroutines.channels.BufferOverflow DROP_LATEST>;
+
+        $i0 = virtualinvoke $r2.<kotlinx.coroutines.channels.BufferOverflow: int ordinal()>();
+
+        $r1[$i0] = 2;
+
+        $r2 = <kotlinx.coroutines.channels.BufferOverflow: kotlinx.coroutines.channels.BufferOverflow DROP_OLDEST>;
+
+        $i0 = virtualinvoke $r2.<kotlinx.coroutines.channels.BufferOverflow: int ordinal()>();
+
+        $r1[$i0] = 3;
+
+        <kotlinx.coroutines.channels.ArrayChannel$WhenMappings: int[] $EnumSwitchMapping$0> = $r1;
+
+        return;
+    }
+

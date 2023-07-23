@@ -1,0 +1,278 @@
+android.support.test.services.shellexecutor.ShellCommandClient
+    public static java.io.InputStream execOnServer(android.content.Context, java.lang.String, java.lang.String, java.util.List, java.util.Map, boolean) throws android.support.test.services.shellexecutor.ShellCommandClient$ClientNotConnected, java.io.IOException, android.os.RemoteException
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2;
+        java.util.List $r3;
+        java.util.Map $r4;
+        boolean $z0, $z1;
+        android.os.ParcelFileDescriptor $r5;
+        java.lang.Throwable $r6, $r13;
+        android.os.Looper $r7, $r8;
+        java.lang.Object $r9, $r10;
+        android.support.test.services.speakeasy.SpeakEasyProtocol$FindResult $r11;
+        java.lang.Boolean $r12;
+        android.os.ParcelFileDescriptor[] $r14;
+        android.os.IBinder $r15;
+        android.support.test.services.shellexecutor.Command $r16;
+        android.os.ParcelFileDescriptor$AutoCloseInputStream $r17, r23;
+        java.lang.IllegalArgumentException r18;
+        java.lang.IllegalStateException r19;
+        java.util.ArrayList r20;
+        java.util.HashMap r21;
+        android.support.test.services.shellexecutor.ShellCommandClient$ClientNotConnected r22;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.util.List;
+
+        $r4 := @parameter4: java.util.Map;
+
+        $z0 := @parameter5: boolean;
+
+        entermonitor class "Landroid/support/test/services/shellexecutor/ShellCommandClient;";
+
+     label01:
+        $z1 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z1 == 0 goto label03;
+
+        r18 = new java.lang.IllegalArgumentException;
+
+        specialinvoke r18.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Null or empty command");
+
+        throw r18;
+
+     label02:
+        $r6 := @caughtexception;
+
+        exitmonitor class "Landroid/support/test/services/shellexecutor/ShellCommandClient;";
+
+        throw $r6;
+
+     label03:
+        $r7 = staticinvoke <android.os.Looper: android.os.Looper myLooper()>();
+
+        $r8 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        if $r7 != $r8 goto label04;
+
+        r19 = new java.lang.IllegalStateException;
+
+        specialinvoke r19.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Shell commands are blocking and should not be run from the main thread");
+
+        throw r19;
+
+     label04:
+        if $r3 != null goto label20;
+
+        r20 = new java.util.ArrayList;
+
+        $r9 = r20;
+
+        specialinvoke r20.<java.util.ArrayList: void <init>()>();
+
+     label05:
+        if $r4 != null goto label19;
+
+        r21 = new java.util.HashMap;
+
+        $r10 = r21;
+
+        specialinvoke r21.<java.util.HashMap: void <init>()>();
+
+     label06:
+        $r7 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        $r11 = staticinvoke <android.support.test.services.shellexecutor.BlockingFind: android.support.test.services.speakeasy.SpeakEasyProtocol$FindResult getResult(android.os.Looper,android.content.Context,java.lang.String)>($r7, $r0, $r1);
+
+     label07:
+        $r12 = $r11.<android.support.test.services.speakeasy.SpeakEasyProtocol$FindResult: java.lang.Boolean found>;
+
+     label08:
+        $z1 = virtualinvoke $r12.<java.lang.Boolean: boolean booleanValue()>();
+
+     label09:
+        if $z1 != 0 goto label17;
+
+     label10:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("ShellCommandClient", "Couldn\'t find a published binder");
+
+     label11:
+        r22 = new android.support.test.services.shellexecutor.ShellCommandClient$ClientNotConnected;
+
+     label12:
+        specialinvoke r22.<android.support.test.services.shellexecutor.ShellCommandClient$ClientNotConnected: void <init>()>();
+
+     label13:
+        $r6 = (java.lang.Throwable) r22;
+
+     label14:
+        throw $r6;
+
+     label15:
+        $r13 := @caughtexception;
+
+     label16:
+        r22 = new android.support.test.services.shellexecutor.ShellCommandClient$ClientNotConnected;
+
+        specialinvoke r22.<android.support.test.services.shellexecutor.ShellCommandClient$ClientNotConnected: void <init>()>();
+
+        $r6 = (java.lang.Throwable) r22;
+
+        throw $r6;
+
+     label17:
+        $r14 = staticinvoke <android.os.ParcelFileDescriptor: android.os.ParcelFileDescriptor[] createPipe()>();
+
+        $r15 = $r11.<android.support.test.services.speakeasy.SpeakEasyProtocol$FindResult: android.os.IBinder binder>;
+
+        $r16 = staticinvoke <android.support.test.services.shellexecutor.Command$Stub: android.support.test.services.shellexecutor.Command asInterface(android.os.IBinder)>($r15);
+
+        $r5 = $r14[1];
+
+        $r3 = (java.util.List) $r9;
+
+        $r4 = (java.util.Map) $r10;
+
+        interfaceinvoke $r16.<android.support.test.services.shellexecutor.Command: void execute(java.lang.String,java.util.List,java.util.Map,boolean,android.os.ParcelFileDescriptor)>($r2, $r3, $r4, $z0, $r5);
+
+        $r5 = $r14[1];
+
+        virtualinvoke $r5.<android.os.ParcelFileDescriptor: void close()>();
+
+        r23 = new android.os.ParcelFileDescriptor$AutoCloseInputStream;
+
+        $r17 = r23;
+
+        $r5 = $r14[0];
+
+        specialinvoke r23.<android.os.ParcelFileDescriptor$AutoCloseInputStream: void <init>(android.os.ParcelFileDescriptor)>($r5);
+
+     label18:
+        exitmonitor class "Landroid/support/test/services/shellexecutor/ShellCommandClient;";
+
+        return $r17;
+
+     label19:
+        $r10 = $r4;
+
+        goto label06;
+
+     label20:
+        $r9 = $r3;
+
+        goto label05;
+
+        catch java.lang.Throwable from label01 to label02 with label02;
+        catch java.lang.Throwable from label03 to label06 with label02;
+        catch java.lang.InterruptedException from label06 to label07 with label15;
+        catch java.lang.InterruptedException from label08 to label09 with label15;
+        catch java.lang.InterruptedException from label10 to label11 with label15;
+        catch java.lang.InterruptedException from label12 to label13 with label15;
+        catch java.lang.InterruptedException from label14 to label15 with label15;
+        catch java.lang.Throwable from label06 to label15 with label02;
+        catch java.lang.Throwable from label16 to label18 with label02;
+    }
+
+    public static java.lang.String execOnServerSync(android.content.Context, java.lang.String, java.lang.String, java.util.List, java.util.Map, boolean) throws android.support.test.services.shellexecutor.ShellCommandClient$ClientNotConnected, java.io.IOException, android.os.RemoteException
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2;
+        java.util.List $r3;
+        java.util.Map $r4;
+        boolean $z0;
+        java.io.InputStream $r5;
+        java.lang.Throwable $r6;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.util.List;
+
+        $r4 := @parameter4: java.util.Map;
+
+        $z0 := @parameter5: boolean;
+
+        entermonitor class "Landroid/support/test/services/shellexecutor/ShellCommandClient;";
+
+     label1:
+        $r5 = staticinvoke <android.support.test.services.shellexecutor.ShellCommandClient: java.io.InputStream execOnServer(android.content.Context,java.lang.String,java.lang.String,java.util.List,java.util.Map,boolean)>($r0, $r1, $r2, $r3, $r4, $z0);
+
+        $r1 = staticinvoke <android.support.test.services.shellexecutor.ShellCommandClient: java.lang.String inputStreamToString(java.io.InputStream)>($r5);
+
+     label2:
+        exitmonitor class "Landroid/support/test/services/shellexecutor/ShellCommandClient;";
+
+        return $r1;
+
+     label3:
+        $r6 := @caughtexception;
+
+        exitmonitor class "Landroid/support/test/services/shellexecutor/ShellCommandClient;";
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private static java.lang.String inputStreamToString(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        java.io.ByteArrayOutputStream $r1;
+        byte[] $r2;
+        int $i0;
+        java.lang.Throwable $r3;
+        java.lang.String $r4;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r1 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r1.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r2 = newarray (byte)[1024];
+
+     label1:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r2);
+
+     label2:
+        if $i0 == -1 goto label7;
+
+     label3:
+        virtualinvoke $r1.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r2, 0, $i0);
+
+     label4:
+        goto label1;
+
+     label5:
+        $r3 := @caughtexception;
+
+        if $r0 == null goto label6;
+
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+     label6:
+        throw $r3;
+
+     label7:
+        if $r0 == null goto label8;
+
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+     label8:
+        $r4 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: java.lang.String toString(java.lang.String)>("UTF-8");
+
+        return $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+

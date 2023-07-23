@@ -1,0 +1,2183 @@
+androidx.camera.core.ImageAnalysis
+<androidx.camera.core.ImageAnalysis: int STRATEGY_KEEP_ONLY_LATEST>
+<androidx.camera.core.ImageAnalysis: int STRATEGY_BLOCK_PRODUCER>
+<androidx.camera.core.ImageAnalysis: int OUTPUT_IMAGE_FORMAT_YUV_420_888>
+<androidx.camera.core.ImageAnalysis: int OUTPUT_IMAGE_FORMAT_RGBA_8888>
+<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Defaults DEFAULT_CONFIG>
+<androidx.camera.core.ImageAnalysis: java.lang.String TAG>
+<androidx.camera.core.ImageAnalysis: int NON_BLOCKING_IMAGE_DEPTH>
+<androidx.camera.core.ImageAnalysis: int DEFAULT_BACKPRESSURE_STRATEGY>
+<androidx.camera.core.ImageAnalysis: int DEFAULT_IMAGE_QUEUE_DEPTH>
+<androidx.camera.core.ImageAnalysis: int DEFAULT_OUTPUT_IMAGE_FORMAT>
+<androidx.camera.core.ImageAnalysis: java.lang.Boolean DEFAULT_ONE_PIXEL_SHIFT_ENABLED>
+<androidx.camera.core.ImageAnalysis: boolean DEFAULT_OUTPUT_IMAGE_ROTATION_ENABLED>
+<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>
+<androidx.camera.core.ImageAnalysis: java.lang.Object mAnalysisLock>
+<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer>
+<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>
+<androidx.camera.core.ImageAnalysis: int COORDINATE_SYSTEM_ORIGINAL>
+    void <init>(androidx.camera.core.impl.ImageAnalysisConfig)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.ImageAnalysisConfig r1, r2;
+        java.lang.Object $r3;
+        androidx.camera.core.impl.UseCaseConfig $r4;
+        int $i0, $i1;
+        androidx.camera.core.ImageAnalysisNonBlockingAnalyzer $r5;
+        java.util.concurrent.Executor $r6, $r7;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r8, $r9;
+        boolean $z0;
+        androidx.camera.core.ImageAnalysisBlockingAnalyzer $r10;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: androidx.camera.core.impl.ImageAnalysisConfig;
+
+        specialinvoke r0.<androidx.camera.core.UseCase: void <init>(androidx.camera.core.impl.UseCaseConfig)>(r1);
+
+        $r3 = new java.lang.Object;
+
+        specialinvoke $r3.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.core.ImageAnalysis: java.lang.Object mAnalysisLock> = $r3;
+
+        $r4 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        r2 = (androidx.camera.core.impl.ImageAnalysisConfig) $r4;
+
+        $i0 = virtualinvoke r2.<androidx.camera.core.impl.ImageAnalysisConfig: int getBackpressureStrategy(int)>(0);
+
+        if $i0 != 1 goto label1;
+
+        $r10 = new androidx.camera.core.ImageAnalysisBlockingAnalyzer;
+
+        specialinvoke $r10.<androidx.camera.core.ImageAnalysisBlockingAnalyzer: void <init>()>();
+
+        r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer> = $r10;
+
+        goto label2;
+
+     label1:
+        $r5 = new androidx.camera.core.ImageAnalysisNonBlockingAnalyzer;
+
+        $r6 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.Executor highPriorityExecutor()>();
+
+        $r7 = virtualinvoke r1.<androidx.camera.core.impl.ImageAnalysisConfig: java.util.concurrent.Executor getBackgroundExecutor(java.util.concurrent.Executor)>($r6);
+
+        specialinvoke $r5.<androidx.camera.core.ImageAnalysisNonBlockingAnalyzer: void <init>(java.util.concurrent.Executor)>($r7);
+
+        r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer> = $r5;
+
+     label2:
+        $r8 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        $i1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getOutputImageFormat()>();
+
+        virtualinvoke $r8.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void setOutputImageFormat(int)>($i1);
+
+        $r9 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        $z0 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: boolean isOutputImageRotationEnabled()>();
+
+        virtualinvoke $r9.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void setOutputImageRotationEnabled(boolean)>($z0);
+
+        return;
+    }
+
+    protected androidx.camera.core.impl.UseCaseConfig onMergeConfig(androidx.camera.core.impl.CameraInfoInternal, androidx.camera.core.impl.UseCaseConfig$Builder)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.CameraInfoInternal r1;
+        androidx.camera.core.impl.UseCaseConfig$Builder r2;
+        java.lang.Boolean r3;
+        boolean z0, $z1, $z2, $z3, $z4;
+        android.util.Size r4, $r17;
+        java.lang.Object r5, $r9;
+        java.lang.Throwable r6, $r16;
+        androidx.camera.core.impl.Quirks $r7;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r8;
+        androidx.camera.core.ImageAnalysis$Analyzer $r10, $r15;
+        androidx.camera.core.impl.UseCaseConfig $r11, $r18;
+        androidx.camera.core.impl.Config$Option $r12, $r14;
+        androidx.camera.core.impl.MutableConfig $r13;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: androidx.camera.core.impl.CameraInfoInternal;
+
+        r2 := @parameter1: androidx.camera.core.impl.UseCaseConfig$Builder;
+
+        r3 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: java.lang.Boolean getOnePixelShiftEnabled()>();
+
+        $r7 = interfaceinvoke r1.<androidx.camera.core.impl.CameraInfoInternal: androidx.camera.core.impl.Quirks getCameraQuirks()>();
+
+        $z1 = virtualinvoke $r7.<androidx.camera.core.impl.Quirks: boolean contains(java.lang.Class)>(class "Landroidx/camera/core/internal/compat/quirk/OnePixelShiftQuirk;");
+
+        if $z1 == 0 goto label01;
+
+        $z3 = 1;
+
+        goto label02;
+
+     label01:
+        $z3 = 0;
+
+     label02:
+        z0 = $z3;
+
+        $r8 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        if r3 != null goto label03;
+
+        $z4 = z0;
+
+        goto label04;
+
+     label03:
+        $z4 = virtualinvoke r3.<java.lang.Boolean: boolean booleanValue()>();
+
+     label04:
+        virtualinvoke $r8.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void setOnePixelShiftEnabled(boolean)>($z4);
+
+        $r9 = r0.<androidx.camera.core.ImageAnalysis: java.lang.Object mAnalysisLock>;
+
+        r5 = $r9;
+
+        entermonitor $r9;
+
+     label05:
+        $r10 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer>;
+
+        if $r10 == null goto label06;
+
+        $r15 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer>;
+
+        $r17 = interfaceinvoke $r15.<androidx.camera.core.ImageAnalysis$Analyzer: android.util.Size getDefaultTargetResolution()>();
+
+        goto label07;
+
+     label06:
+        $r17 = null;
+
+     label07:
+        r4 = $r17;
+
+        exitmonitor r5;
+
+     label08:
+        goto label11;
+
+     label09:
+        $r16 := @caughtexception;
+
+        r6 = $r16;
+
+        exitmonitor r5;
+
+     label10:
+        throw r6;
+
+     label11:
+        if r4 == null goto label12;
+
+        $r11 = interfaceinvoke r2.<androidx.camera.core.impl.UseCaseConfig$Builder: androidx.camera.core.impl.UseCaseConfig getUseCaseConfig()>();
+
+        $r12 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_RESOLUTION>;
+
+        $z2 = interfaceinvoke $r11.<androidx.camera.core.impl.UseCaseConfig: boolean containsOption(androidx.camera.core.impl.Config$Option)>($r12);
+
+        if $z2 != 0 goto label12;
+
+        $r13 = interfaceinvoke r2.<androidx.camera.core.impl.UseCaseConfig$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r14 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_RESOLUTION>;
+
+        interfaceinvoke $r13.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r14, r4);
+
+     label12:
+        $r18 = interfaceinvoke r2.<androidx.camera.core.impl.UseCaseConfig$Builder: androidx.camera.core.impl.UseCaseConfig getUseCaseConfig()>();
+
+        return $r18;
+
+        catch java.lang.Throwable from label05 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label09;
+    }
+
+    androidx.camera.core.impl.SessionConfig$Builder createPipeline(java.lang.String, androidx.camera.core.impl.ImageAnalysisConfig, android.util.Size)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        java.lang.String r1;
+        androidx.camera.core.impl.ImageAnalysisConfig r2;
+        android.util.Size r3;
+        java.util.concurrent.Executor r4, $r7, $r8, r43;
+        int i0, i1, i2, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19, $i21;
+        boolean z0, z1, z2, $z3, $z4, $z5, $z6;
+        byte b3, $b20;
+        androidx.camera.core.SafeCloseImageReaderProxy r5, r37, $r38, r39, r40, r41;
+        androidx.camera.core.impl.SessionConfig$Builder r6;
+        java.lang.Object $r9;
+        androidx.camera.core.ImageReaderProxyProvider $r10, $r35;
+        androidx.camera.core.impl.ImageReaderProxy $r12, $r14, $r36;
+        androidx.camera.core.impl.CameraInternal $r13, $r29, $r32, $r33;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r15, $r28;
+        androidx.camera.core.impl.DeferrableSurface $r16, $r19, $r23, $r27;
+        android.view.Surface $r18;
+        com.google.common.util.concurrent.ListenableFuture $r20;
+        java.lang.Runnable $r21;
+        java.util.concurrent.ScheduledExecutorService $r22;
+        androidx.camera.core.impl.SessionConfig$ErrorListener $r25;
+        java.lang.Boolean $r30, $r31;
+        androidx.camera.core.impl.ImmediateSurface r42;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.camera.core.impl.ImageAnalysisConfig;
+
+        r3 := @parameter2: android.util.Size;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        $r7 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.Executor highPriorityExecutor()>();
+
+        $r8 = virtualinvoke r2.<androidx.camera.core.impl.ImageAnalysisConfig: java.util.concurrent.Executor getBackgroundExecutor(java.util.concurrent.Executor)>($r7);
+
+        $r9 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r8);
+
+        r4 = (java.util.concurrent.Executor) $r9;
+
+        $i4 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getBackpressureStrategy()>();
+
+        if $i4 != 1 goto label01;
+
+        $i17 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getImageQueueDepth()>();
+
+        goto label02;
+
+     label01:
+        $i17 = 4;
+
+     label02:
+        i0 = $i17;
+
+        $r10 = virtualinvoke r2.<androidx.camera.core.impl.ImageAnalysisConfig: androidx.camera.core.ImageReaderProxyProvider getImageReaderProxyProvider()>();
+
+        if $r10 == null goto label03;
+
+        r39 = new androidx.camera.core.SafeCloseImageReaderProxy;
+
+        $r35 = virtualinvoke r2.<androidx.camera.core.impl.ImageAnalysisConfig: androidx.camera.core.ImageReaderProxyProvider getImageReaderProxyProvider()>();
+
+        $i14 = virtualinvoke r3.<android.util.Size: int getWidth()>();
+
+        $i15 = virtualinvoke r3.<android.util.Size: int getHeight()>();
+
+        $i16 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getImageFormat()>();
+
+        $r36 = interfaceinvoke $r35.<androidx.camera.core.ImageReaderProxyProvider: androidx.camera.core.impl.ImageReaderProxy newInstance(int,int,int,int,long)>($i14, $i15, $i16, i0, 0L);
+
+        specialinvoke r39.<androidx.camera.core.SafeCloseImageReaderProxy: void <init>(androidx.camera.core.impl.ImageReaderProxy)>($r36);
+
+        r37 = r39;
+
+        goto label04;
+
+     label03:
+        r40 = new androidx.camera.core.SafeCloseImageReaderProxy;
+
+        $i5 = virtualinvoke r3.<android.util.Size: int getWidth()>();
+
+        $i6 = virtualinvoke r3.<android.util.Size: int getHeight()>();
+
+        $i7 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getImageFormat()>();
+
+        $r12 = staticinvoke <androidx.camera.core.ImageReaderProxys: androidx.camera.core.impl.ImageReaderProxy createIsolatedReader(int,int,int,int)>($i5, $i6, $i7, i0);
+
+        specialinvoke r40.<androidx.camera.core.SafeCloseImageReaderProxy: void <init>(androidx.camera.core.impl.ImageReaderProxy)>($r12);
+
+        r37 = r40;
+
+     label04:
+        $r13 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.CameraInternal getCamera()>();
+
+        if $r13 == null goto label05;
+
+        $r33 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.CameraInternal getCamera()>();
+
+        $z4 = specialinvoke r0.<androidx.camera.core.ImageAnalysis: boolean isFlipWH(androidx.camera.core.impl.CameraInternal)>($r33);
+
+        goto label06;
+
+     label05:
+        $z4 = 0;
+
+     label06:
+        z0 = $z4;
+
+        if z0 == 0 goto label07;
+
+        $i18 = virtualinvoke r3.<android.util.Size: int getHeight()>();
+
+        goto label08;
+
+     label07:
+        $i18 = virtualinvoke r3.<android.util.Size: int getWidth()>();
+
+     label08:
+        i1 = $i18;
+
+        if z0 == 0 goto label09;
+
+        $i19 = virtualinvoke r3.<android.util.Size: int getWidth()>();
+
+        goto label10;
+
+     label09:
+        $i19 = virtualinvoke r3.<android.util.Size: int getHeight()>();
+
+     label10:
+        i2 = $i19;
+
+        $i8 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getOutputImageFormat()>();
+
+        if $i8 != 2 goto label11;
+
+        $b20 = 1;
+
+        goto label12;
+
+     label11:
+        $b20 = 35;
+
+     label12:
+        b3 = $b20;
+
+        $i9 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getImageFormat()>();
+
+        if $i9 != 35 goto label13;
+
+        $i13 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getOutputImageFormat()>();
+
+        if $i13 != 2 goto label13;
+
+        $z5 = 1;
+
+        goto label14;
+
+     label13:
+        $z5 = 0;
+
+     label14:
+        z1 = $z5;
+
+        $i21 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getImageFormat()>();
+
+        if $i21 != 35 goto label17;
+
+        $r29 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.CameraInternal getCamera()>();
+
+        if $r29 == null goto label15;
+
+        $r32 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.CameraInternal getCamera()>();
+
+        $i12 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getRelativeRotation(androidx.camera.core.impl.CameraInternal)>($r32);
+
+        if $i12 != 0 goto label16;
+
+     label15:
+        $r30 = <java.lang.Boolean: java.lang.Boolean TRUE>;
+
+        $r31 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: java.lang.Boolean getOnePixelShiftEnabled()>();
+
+        $z3 = virtualinvoke $r30.<java.lang.Boolean: boolean equals(java.lang.Object)>($r31);
+
+        if $z3 == 0 goto label17;
+
+     label16:
+        $z6 = 1;
+
+        goto label18;
+
+     label17:
+        $z6 = 0;
+
+     label18:
+        z2 = $z6;
+
+        if z1 != 0 goto label19;
+
+        if z2 == 0 goto label20;
+
+     label19:
+        r41 = new androidx.camera.core.SafeCloseImageReaderProxy;
+
+        $r38 = r41;
+
+        $i10 = virtualinvoke r37.<androidx.camera.core.SafeCloseImageReaderProxy: int getMaxImages()>();
+
+        $r14 = staticinvoke <androidx.camera.core.ImageReaderProxys: androidx.camera.core.impl.ImageReaderProxy createIsolatedReader(int,int,int,int)>(i1, i2, b3, $i10);
+
+        specialinvoke r41.<androidx.camera.core.SafeCloseImageReaderProxy: void <init>(androidx.camera.core.impl.ImageReaderProxy)>($r14);
+
+        goto label21;
+
+     label20:
+        $r38 = null;
+
+     label21:
+        r5 = $r38;
+
+        if r5 == null goto label22;
+
+        $r28 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        virtualinvoke $r28.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void setProcessedImageReaderProxy(androidx.camera.core.SafeCloseImageReaderProxy)>(r5);
+
+     label22:
+        specialinvoke r0.<androidx.camera.core.ImageAnalysis: void tryUpdateRelativeRotation()>();
+
+        $r15 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        virtualinvoke r37.<androidx.camera.core.SafeCloseImageReaderProxy: void setOnImageAvailableListener(androidx.camera.core.impl.ImageReaderProxy$OnImageAvailableListener,java.util.concurrent.Executor)>($r15, r4);
+
+        r6 = staticinvoke <androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder createFrom(androidx.camera.core.impl.UseCaseConfig)>(r2);
+
+        $r16 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        if $r16 == null goto label23;
+
+        $r27 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        virtualinvoke $r27.<androidx.camera.core.impl.DeferrableSurface: void close()>();
+
+     label23:
+        r42 = new androidx.camera.core.impl.ImmediateSurface;
+
+        $r18 = virtualinvoke r37.<androidx.camera.core.SafeCloseImageReaderProxy: android.view.Surface getSurface()>();
+
+        $i11 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getImageFormat()>();
+
+        specialinvoke r42.<androidx.camera.core.impl.ImmediateSurface: void <init>(android.view.Surface,android.util.Size,int)>($r18, r3, $i11);
+
+        r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface> = r42;
+
+        $r19 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        $r20 = virtualinvoke $r19.<androidx.camera.core.impl.DeferrableSurface: com.google.common.util.concurrent.ListenableFuture getTerminationFuture()>();
+
+        $r21 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.core.SafeCloseImageReaderProxy,androidx.camera.core.SafeCloseImageReaderProxy)>(r37, r5) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.core.ImageAnalysis: void lambda$createPipeline$0(androidx.camera.core.SafeCloseImageReaderProxy,androidx.camera.core.SafeCloseImageReaderProxy)>, methodtype: void __METHODTYPE__());
+
+        $r22 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.ScheduledExecutorService mainThreadExecutor()>();
+
+        r43 = (java.util.concurrent.Executor) $r22;
+
+        interfaceinvoke $r20.<com.google.common.util.concurrent.ListenableFuture: void addListener(java.lang.Runnable,java.util.concurrent.Executor)>($r21, r43);
+
+        $r23 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        virtualinvoke r6.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder addSurface(androidx.camera.core.impl.DeferrableSurface)>($r23);
+
+        $r25 = dynamicinvoke "onError" <androidx.camera.core.impl.SessionConfig$ErrorListener (androidx.camera.core.ImageAnalysis,java.lang.String,androidx.camera.core.impl.ImageAnalysisConfig,android.util.Size)>(r0, r1, r2, r3) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(androidx.camera.core.impl.SessionConfig,androidx.camera.core.impl.SessionConfig$SessionError), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.core.ImageAnalysis: void lambda$createPipeline$1(java.lang.String,androidx.camera.core.impl.ImageAnalysisConfig,android.util.Size,androidx.camera.core.impl.SessionConfig,androidx.camera.core.impl.SessionConfig$SessionError)>, methodtype: void __METHODTYPE__(androidx.camera.core.impl.SessionConfig,androidx.camera.core.impl.SessionConfig$SessionError));
+
+        virtualinvoke r6.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder addErrorListener(androidx.camera.core.impl.SessionConfig$ErrorListener)>($r25);
+
+        return r6;
+    }
+
+    void clearPipeline()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.DeferrableSurface $r1, $r2;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        $r1 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        virtualinvoke $r2.<androidx.camera.core.impl.DeferrableSurface: void close()>();
+
+        r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface> = null;
+
+     label1:
+        return;
+    }
+
+    public void clearAnalyzer()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r6;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r4;
+        androidx.camera.core.ImageAnalysis$Analyzer $r5;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r3 = r0.<androidx.camera.core.ImageAnalysis: java.lang.Object mAnalysisLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        virtualinvoke $r4.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void setAnalyzer(java.util.concurrent.Executor,androidx.camera.core.ImageAnalysis$Analyzer)>(null, null);
+
+        $r5 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer>;
+
+        if $r5 == null goto label2;
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysis: void notifyInactive()>();
+
+     label2:
+        r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer> = null;
+
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public int getTargetRotation()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        int $i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $i0 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getTargetRotationInternal()>();
+
+        return $i0;
+    }
+
+    public void setTargetRotation(int)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        int i0;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        i0 := @parameter0: int;
+
+        $z0 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: boolean setTargetRotationInternal(int)>(i0);
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<androidx.camera.core.ImageAnalysis: void tryUpdateRelativeRotation()>();
+
+     label1:
+        return;
+    }
+
+    public void setAnalyzer(java.util.concurrent.Executor, androidx.camera.core.ImageAnalysis$Analyzer)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        java.util.concurrent.Executor r1;
+        androidx.camera.core.ImageAnalysis$Analyzer r2, $r7, $r8;
+        java.lang.Object r3, $r5;
+        java.lang.Throwable r4, $r9;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r6;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        r2 := @parameter1: androidx.camera.core.ImageAnalysis$Analyzer;
+
+        $r5 = r0.<androidx.camera.core.ImageAnalysis: java.lang.Object mAnalysisLock>;
+
+        r3 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        $r7 = dynamicinvoke "analyze" <androidx.camera.core.ImageAnalysis$Analyzer (androidx.camera.core.ImageAnalysis$Analyzer)>(r2) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(androidx.camera.core.ImageProxy), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.core.ImageAnalysis: void lambda$setAnalyzer$2(androidx.camera.core.ImageAnalysis$Analyzer,androidx.camera.core.ImageProxy)>, methodtype: void __METHODTYPE__(androidx.camera.core.ImageProxy));
+
+        virtualinvoke $r6.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void setAnalyzer(java.util.concurrent.Executor,androidx.camera.core.ImageAnalysis$Analyzer)>(r1, $r7);
+
+        $r8 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer>;
+
+        if $r8 != null goto label2;
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysis: void notifyActive()>();
+
+     label2:
+        r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Analyzer mSubscribedAnalyzer> = r2;
+
+        exitmonitor r3;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r9 := @caughtexception;
+
+        r4 = $r9;
+
+        exitmonitor r3;
+
+     label5:
+        throw r4;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void setViewPortCropRect(android.graphics.Rect)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        android.graphics.Rect r1;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r2;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: android.graphics.Rect;
+
+        specialinvoke r0.<androidx.camera.core.UseCase: void setViewPortCropRect(android.graphics.Rect)>(r1);
+
+        $r2 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        virtualinvoke $r2.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void setViewPortCropRect(android.graphics.Rect)>(r1);
+
+        return;
+    }
+
+    public void setSensorToBufferTransformMatrix(android.graphics.Matrix)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        android.graphics.Matrix r1;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r2;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: android.graphics.Matrix;
+
+        specialinvoke r0.<androidx.camera.core.UseCase: void setSensorToBufferTransformMatrix(android.graphics.Matrix)>(r1);
+
+        $r2 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        virtualinvoke $r2.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void setSensorToBufferTransformMatrix(android.graphics.Matrix)>(r1);
+
+        return;
+    }
+
+    private boolean isFlipWH(androidx.camera.core.impl.CameraInternal)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.CameraInternal r1;
+        boolean $z0, $z1;
+        int $i0, $i1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: androidx.camera.core.impl.CameraInternal;
+
+        $z0 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: boolean isOutputImageRotationEnabled()>();
+
+        if $z0 == 0 goto label2;
+
+        $i0 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getRelativeRotation(androidx.camera.core.impl.CameraInternal)>(r1);
+
+        $i1 = $i0 % 180;
+
+        if $i1 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label1:
+        $z1 = 0;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    public int getBackpressureStrategy()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.UseCaseConfig $r1;
+        androidx.camera.core.impl.ImageAnalysisConfig $r2;
+        int $i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        $r2 = (androidx.camera.core.impl.ImageAnalysisConfig) $r1;
+
+        $i0 = virtualinvoke $r2.<androidx.camera.core.impl.ImageAnalysisConfig: int getBackpressureStrategy(int)>(0);
+
+        return $i0;
+    }
+
+    public java.util.concurrent.Executor getBackgroundExecutor()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.UseCaseConfig $r1;
+        androidx.camera.core.impl.ImageAnalysisConfig $r2;
+        java.util.concurrent.Executor $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        $r2 = (androidx.camera.core.impl.ImageAnalysisConfig) $r1;
+
+        $r3 = virtualinvoke $r2.<androidx.camera.core.impl.ImageAnalysisConfig: java.util.concurrent.Executor getBackgroundExecutor(java.util.concurrent.Executor)>(null);
+
+        return $r3;
+    }
+
+    public int getImageQueueDepth()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.UseCaseConfig $r1;
+        androidx.camera.core.impl.ImageAnalysisConfig $r2;
+        int $i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        $r2 = (androidx.camera.core.impl.ImageAnalysisConfig) $r1;
+
+        $i0 = virtualinvoke $r2.<androidx.camera.core.impl.ImageAnalysisConfig: int getImageQueueDepth(int)>(6);
+
+        return $i0;
+    }
+
+    public int getOutputImageFormat()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.UseCaseConfig $r1;
+        androidx.camera.core.impl.ImageAnalysisConfig $r2;
+        int $i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        $r2 = (androidx.camera.core.impl.ImageAnalysisConfig) $r1;
+
+        $i0 = virtualinvoke $r2.<androidx.camera.core.impl.ImageAnalysisConfig: int getOutputImageFormat(int)>(1);
+
+        return $i0;
+    }
+
+    public boolean isOutputImageRotationEnabled()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.UseCaseConfig $r1;
+        androidx.camera.core.impl.ImageAnalysisConfig $r2;
+        java.lang.Boolean $r3, $r4;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        $r2 = (androidx.camera.core.impl.ImageAnalysisConfig) $r1;
+
+        $r3 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(0);
+
+        $r4 = virtualinvoke $r2.<androidx.camera.core.impl.ImageAnalysisConfig: java.lang.Boolean isOutputImageRotationEnabled(java.lang.Boolean)>($r3);
+
+        $z0 = virtualinvoke $r4.<java.lang.Boolean: boolean booleanValue()>();
+
+        return $z0;
+    }
+
+    public java.lang.Boolean getOnePixelShiftEnabled()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.UseCaseConfig $r1;
+        java.lang.Boolean $r2, $r4;
+        androidx.camera.core.impl.ImageAnalysisConfig $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        $r3 = (androidx.camera.core.impl.ImageAnalysisConfig) $r1;
+
+        $r2 = <androidx.camera.core.ImageAnalysis: java.lang.Boolean DEFAULT_ONE_PIXEL_SHIFT_ENABLED>;
+
+        $r4 = virtualinvoke $r3.<androidx.camera.core.impl.ImageAnalysisConfig: java.lang.Boolean getOnePixelShiftEnabled(java.lang.Boolean)>($r2);
+
+        return $r4;
+    }
+
+    public androidx.camera.core.ResolutionInfo getResolutionInfo()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.ResolutionInfo $r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r1 = specialinvoke r0.<androidx.camera.core.UseCase: androidx.camera.core.ResolutionInfo getResolutionInfo()>();
+
+        return $r1;
+    }
+
+    public java.lang.String toString()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        java.lang.StringBuilder $r1, $r2, $r4;
+        java.lang.String $r3, $r5;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ImageAnalysis:");
+
+        $r3 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: java.lang.String getName()>();
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    public void onDetached()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysis: void clearPipeline()>();
+
+        $r1 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        virtualinvoke $r1.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void detach()>();
+
+        return;
+    }
+
+    public androidx.camera.core.impl.UseCaseConfig getDefaultConfig(boolean, androidx.camera.core.impl.UseCaseConfigFactory)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        boolean z0;
+        androidx.camera.core.impl.UseCaseConfigFactory r1;
+        androidx.camera.core.impl.UseCaseConfigFactory$CaptureType $r2;
+        androidx.camera.core.impl.UseCaseConfig$Builder $r3;
+        androidx.camera.core.ImageAnalysis$Defaults $r4;
+        androidx.camera.core.impl.ImageAnalysisConfig $r5;
+        androidx.camera.core.impl.Config r6;
+        androidx.camera.core.impl.UseCaseConfig $r7;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        z0 := @parameter0: boolean;
+
+        r1 := @parameter1: androidx.camera.core.impl.UseCaseConfigFactory;
+
+        $r2 = <androidx.camera.core.impl.UseCaseConfigFactory$CaptureType: androidx.camera.core.impl.UseCaseConfigFactory$CaptureType IMAGE_ANALYSIS>;
+
+        r6 = interfaceinvoke r1.<androidx.camera.core.impl.UseCaseConfigFactory: androidx.camera.core.impl.Config getConfig(androidx.camera.core.impl.UseCaseConfigFactory$CaptureType,int)>($r2, 1);
+
+        if z0 == 0 goto label1;
+
+        $r4 = <androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Defaults DEFAULT_CONFIG>;
+
+        $r5 = virtualinvoke $r4.<androidx.camera.core.ImageAnalysis$Defaults: androidx.camera.core.impl.ImageAnalysisConfig getConfig()>();
+
+        r6 = staticinvoke <androidx.camera.core.impl.Config: androidx.camera.core.impl.Config mergeConfigs(androidx.camera.core.impl.Config,androidx.camera.core.impl.Config)>(r6, $r5);
+
+     label1:
+        if r6 != null goto label2;
+
+        $r7 = null;
+
+        goto label3;
+
+     label2:
+        $r3 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.UseCaseConfig$Builder getUseCaseConfigBuilder(androidx.camera.core.impl.Config)>(r6);
+
+        $r7 = interfaceinvoke $r3.<androidx.camera.core.impl.UseCaseConfig$Builder: androidx.camera.core.impl.UseCaseConfig getUseCaseConfig()>();
+
+     label3:
+        return $r7;
+    }
+
+    public void onAttached()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        $r1 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        virtualinvoke $r1.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void attach()>();
+
+        return;
+    }
+
+    public androidx.camera.core.impl.UseCaseConfig$Builder getUseCaseConfigBuilder(androidx.camera.core.impl.Config)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.Config r1;
+        androidx.camera.core.ImageAnalysis$Builder $r2;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: androidx.camera.core.impl.Config;
+
+        $r2 = staticinvoke <androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder fromConfig(androidx.camera.core.impl.Config)>(r1);
+
+        return $r2;
+    }
+
+    protected android.util.Size onSuggestedResolutionUpdated(android.util.Size)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        android.util.Size r1;
+        androidx.camera.core.impl.ImageAnalysisConfig r2;
+        androidx.camera.core.impl.SessionConfig$Builder r3;
+        androidx.camera.core.impl.UseCaseConfig $r4;
+        java.lang.String $r5;
+        androidx.camera.core.impl.SessionConfig $r6;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r4 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        r2 = (androidx.camera.core.impl.ImageAnalysisConfig) $r4;
+
+        $r5 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: java.lang.String getCameraId()>();
+
+        r3 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.SessionConfig$Builder createPipeline(java.lang.String,androidx.camera.core.impl.ImageAnalysisConfig,android.util.Size)>($r5, r2, r1);
+
+        $r6 = virtualinvoke r3.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig build()>();
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysis: void updateSessionConfig(androidx.camera.core.impl.SessionConfig)>($r6);
+
+        return r1;
+    }
+
+    private void tryUpdateRelativeRotation()
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        androidx.camera.core.impl.CameraInternal r1;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r2;
+        int $i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.CameraInternal getCamera()>();
+
+        if r1 == null goto label1;
+
+        $r2 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        $i0 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: int getRelativeRotation(androidx.camera.core.impl.CameraInternal)>(r1);
+
+        virtualinvoke $r2.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void setRelativeRotation(int)>($i0);
+
+     label1:
+        return;
+    }
+
+    private static void lambda$setAnalyzer$2(androidx.camera.core.ImageAnalysis$Analyzer, androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageAnalysis$Analyzer r0;
+        androidx.camera.core.ImageProxy r1;
+
+        r0 := @parameter0: androidx.camera.core.ImageAnalysis$Analyzer;
+
+        r1 := @parameter1: androidx.camera.core.ImageProxy;
+
+        interfaceinvoke r0.<androidx.camera.core.ImageAnalysis$Analyzer: void analyze(androidx.camera.core.ImageProxy)>(r1);
+
+        return;
+    }
+
+    private void lambda$createPipeline$1(java.lang.String, androidx.camera.core.impl.ImageAnalysisConfig, android.util.Size, androidx.camera.core.impl.SessionConfig, androidx.camera.core.impl.SessionConfig$SessionError)
+    {
+        androidx.camera.core.ImageAnalysis r0;
+        java.lang.String r1;
+        androidx.camera.core.impl.ImageAnalysisConfig r2;
+        android.util.Size r3;
+        androidx.camera.core.impl.SessionConfig r4, $r8;
+        androidx.camera.core.impl.SessionConfig$SessionError r5;
+        androidx.camera.core.impl.SessionConfig$Builder r6;
+        androidx.camera.core.ImageAnalysisAbstractAnalyzer $r7;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.camera.core.impl.ImageAnalysisConfig;
+
+        r3 := @parameter2: android.util.Size;
+
+        r4 := @parameter3: androidx.camera.core.impl.SessionConfig;
+
+        r5 := @parameter4: androidx.camera.core.impl.SessionConfig$SessionError;
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysis: void clearPipeline()>();
+
+        $r7 = r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysisAbstractAnalyzer mImageAnalysisAbstractAnalyzer>;
+
+        virtualinvoke $r7.<androidx.camera.core.ImageAnalysisAbstractAnalyzer: void clearCache()>();
+
+        $z0 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: boolean isCurrentCamera(java.lang.String)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        r6 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis: androidx.camera.core.impl.SessionConfig$Builder createPipeline(java.lang.String,androidx.camera.core.impl.ImageAnalysisConfig,android.util.Size)>(r1, r2, r3);
+
+        $r8 = virtualinvoke r6.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig build()>();
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysis: void updateSessionConfig(androidx.camera.core.impl.SessionConfig)>($r8);
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysis: void notifyReset()>();
+
+     label1:
+        return;
+    }
+
+    private static void lambda$createPipeline$0(androidx.camera.core.SafeCloseImageReaderProxy, androidx.camera.core.SafeCloseImageReaderProxy)
+    {
+        androidx.camera.core.SafeCloseImageReaderProxy r0, r1;
+
+        r0 := @parameter0: androidx.camera.core.SafeCloseImageReaderProxy;
+
+        r1 := @parameter1: androidx.camera.core.SafeCloseImageReaderProxy;
+
+        virtualinvoke r0.<androidx.camera.core.SafeCloseImageReaderProxy: void safeClose()>();
+
+        if r1 == null goto label1;
+
+        virtualinvoke r1.<androidx.camera.core.SafeCloseImageReaderProxy: void safeClose()>();
+
+     label1:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.core.ImageAnalysis$Defaults $r0;
+
+        $r0 = new androidx.camera.core.ImageAnalysis$Defaults;
+
+        specialinvoke $r0.<androidx.camera.core.ImageAnalysis$Defaults: void <init>()>();
+
+        <androidx.camera.core.ImageAnalysis: androidx.camera.core.ImageAnalysis$Defaults DEFAULT_CONFIG> = $r0;
+
+        <androidx.camera.core.ImageAnalysis: java.lang.Boolean DEFAULT_ONE_PIXEL_SHIFT_ENABLED> = null;
+
+        return;
+    }
+
+androidx.camera.core.ImageAnalysis$Analyzer
+<androidx.camera.core.ImageAnalysis$Analyzer: void analyze(androidx.camera.core.ImageProxy)>
+    public android.util.Size getDefaultTargetResolution()
+    {
+        androidx.camera.core.ImageAnalysis$Analyzer r0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Analyzer;
+
+        return null;
+    }
+
+    public int getTargetCoordinateSystem()
+    {
+        androidx.camera.core.ImageAnalysis$Analyzer r0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Analyzer;
+
+        return 0;
+    }
+
+    public void updateTransform(android.graphics.Matrix)
+    {
+        androidx.camera.core.ImageAnalysis$Analyzer r0;
+        android.graphics.Matrix r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Analyzer;
+
+        r1 := @parameter0: android.graphics.Matrix;
+
+        return;
+    }
+
+androidx.camera.core.ImageAnalysis$BackpressureStrategy
+androidx.camera.core.ImageAnalysis$Builder
+<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableOptionsBundle mMutableConfig>
+    public void <init>()
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.MutableOptionsBundle $r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        $r1 = staticinvoke <androidx.camera.core.impl.MutableOptionsBundle: androidx.camera.core.impl.MutableOptionsBundle create()>();
+
+        specialinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: void <init>(androidx.camera.core.impl.MutableOptionsBundle)>($r1);
+
+        return;
+    }
+
+    private void <init>(androidx.camera.core.impl.MutableOptionsBundle)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.MutableOptionsBundle r1;
+        java.lang.Class r2;
+        androidx.camera.core.impl.Config$Option $r3;
+        java.lang.Object $r4;
+        boolean $z0;
+        java.lang.IllegalArgumentException $r6;
+        java.lang.StringBuilder $r7, $r8, $r9, $r10, $r11;
+        java.lang.String $r12;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.MutableOptionsBundle;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableOptionsBundle mMutableConfig> = r1;
+
+        $r3 = <androidx.camera.core.internal.TargetConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_CLASS>;
+
+        $r4 = virtualinvoke r1.<androidx.camera.core.impl.MutableOptionsBundle: java.lang.Object retrieveOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, null);
+
+        r2 = (java.lang.Class) $r4;
+
+        if r2 == null goto label1;
+
+        $z0 = virtualinvoke r2.<java.lang.Object: boolean equals(java.lang.Object)>(class "Landroidx/camera/core/ImageAnalysis;");
+
+        if $z0 != 0 goto label1;
+
+        $r6 = new java.lang.IllegalArgumentException;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid target class configuration for ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r12);
+
+        throw $r6;
+
+     label1:
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setTargetClass(java.lang.Class)>(class "Landroidx/camera/core/ImageAnalysis;");
+
+        return;
+    }
+
+    static androidx.camera.core.ImageAnalysis$Builder fromConfig(androidx.camera.core.impl.Config)
+    {
+        androidx.camera.core.impl.Config r0;
+        androidx.camera.core.ImageAnalysis$Builder $r1;
+        androidx.camera.core.impl.MutableOptionsBundle $r2;
+
+        r0 := @parameter0: androidx.camera.core.impl.Config;
+
+        $r1 = new androidx.camera.core.ImageAnalysis$Builder;
+
+        $r2 = staticinvoke <androidx.camera.core.impl.MutableOptionsBundle: androidx.camera.core.impl.MutableOptionsBundle 'from'(androidx.camera.core.impl.Config)>(r0);
+
+        specialinvoke $r1.<androidx.camera.core.ImageAnalysis$Builder: void <init>(androidx.camera.core.impl.MutableOptionsBundle)>($r2);
+
+        return $r1;
+    }
+
+    public static androidx.camera.core.ImageAnalysis$Builder fromConfig(androidx.camera.core.impl.ImageAnalysisConfig)
+    {
+        androidx.camera.core.impl.ImageAnalysisConfig r0;
+        androidx.camera.core.ImageAnalysis$Builder $r1;
+        androidx.camera.core.impl.MutableOptionsBundle $r2;
+
+        r0 := @parameter0: androidx.camera.core.impl.ImageAnalysisConfig;
+
+        $r1 = new androidx.camera.core.ImageAnalysis$Builder;
+
+        $r2 = staticinvoke <androidx.camera.core.impl.MutableOptionsBundle: androidx.camera.core.impl.MutableOptionsBundle 'from'(androidx.camera.core.impl.Config)>(r0);
+
+        specialinvoke $r1.<androidx.camera.core.ImageAnalysis$Builder: void <init>(androidx.camera.core.impl.MutableOptionsBundle)>($r2);
+
+        return $r1;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setBackpressureStrategy(int)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        int i0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageAnalysisConfig: androidx.camera.core.impl.Config$Option OPTION_BACKPRESSURE_STRATEGY>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setImageQueueDepth(int)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        int i0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageAnalysisConfig: androidx.camera.core.impl.Config$Option OPTION_IMAGE_QUEUE_DEPTH>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setOutputImageFormat(int)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        int i0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageAnalysisConfig: androidx.camera.core.impl.Config$Option OPTION_OUTPUT_IMAGE_FORMAT>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setOutputImageRotationEnabled(boolean)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        boolean z0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Boolean $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageAnalysisConfig: androidx.camera.core.impl.Config$Option OPTION_OUTPUT_IMAGE_ROTATION_ENABLED>;
+
+        $r3 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(z0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setOnePixelShiftEnabled(boolean)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        boolean z0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Boolean $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageAnalysisConfig: androidx.camera.core.impl.Config$Option OPTION_ONE_PIXEL_SHIFT_ENABLED>;
+
+        $r3 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(z0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.core.impl.MutableConfig getMutableConfig()
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.MutableOptionsBundle $r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        $r1 = r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableOptionsBundle mMutableConfig>;
+
+        return $r1;
+    }
+
+    public androidx.camera.core.impl.ImageAnalysisConfig getUseCaseConfig()
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.ImageAnalysisConfig $r1;
+        androidx.camera.core.impl.MutableOptionsBundle $r2;
+        androidx.camera.core.impl.OptionsBundle $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        $r1 = new androidx.camera.core.impl.ImageAnalysisConfig;
+
+        $r2 = r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableOptionsBundle mMutableConfig>;
+
+        $r3 = staticinvoke <androidx.camera.core.impl.OptionsBundle: androidx.camera.core.impl.OptionsBundle 'from'(androidx.camera.core.impl.Config)>($r2);
+
+        specialinvoke $r1.<androidx.camera.core.impl.ImageAnalysisConfig: void <init>(androidx.camera.core.impl.OptionsBundle)>($r3);
+
+        return $r1;
+    }
+
+    public androidx.camera.core.ImageAnalysis build()
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.MutableConfig $r1, $r6;
+        androidx.camera.core.impl.Config$Option $r2, $r7;
+        java.lang.Object $r3, $r8;
+        androidx.camera.core.ImageAnalysis $r4;
+        androidx.camera.core.impl.ImageAnalysisConfig $r5;
+        java.lang.IllegalArgumentException $r9;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_ASPECT_RATIO>;
+
+        $r3 = interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: java.lang.Object retrieveOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, null);
+
+        if $r3 == null goto label1;
+
+        $r6 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r7 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_RESOLUTION>;
+
+        $r8 = interfaceinvoke $r6.<androidx.camera.core.impl.MutableConfig: java.lang.Object retrieveOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r7, null);
+
+        if $r8 == null goto label1;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Cannot use both setTargetResolution and setTargetAspectRatio on the same config.");
+
+        throw $r9;
+
+     label1:
+        $r4 = new androidx.camera.core.ImageAnalysis;
+
+        $r5 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.ImageAnalysisConfig getUseCaseConfig()>();
+
+        specialinvoke $r4.<androidx.camera.core.ImageAnalysis: void <init>(androidx.camera.core.impl.ImageAnalysisConfig)>($r5);
+
+        return $r4;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setTargetClass(java.lang.Class)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        java.lang.Class r1;
+        java.lang.String r2, $r9;
+        androidx.camera.core.impl.MutableConfig $r3, $r5;
+        androidx.camera.core.impl.Config$Option $r4, $r6;
+        java.lang.Object $r7;
+        java.lang.StringBuilder $r8, $r10, $r11, $r13;
+        java.util.UUID $r12;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: java.lang.Class;
+
+        $r3 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r4 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_CLASS>;
+
+        interfaceinvoke $r3.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r4, r1);
+
+        $r5 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r6 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_NAME>;
+
+        $r7 = interfaceinvoke $r5.<androidx.camera.core.impl.MutableConfig: java.lang.Object retrieveOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r6, null);
+
+        if null != $r7 goto label1;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke r1.<java.lang.Class: java.lang.String getCanonicalName()>();
+
+        $r10 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-");
+
+        $r12 = staticinvoke <java.util.UUID: java.util.UUID randomUUID()>();
+
+        $r13 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r12);
+
+        r2 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setTargetName(java.lang.String)>(r2);
+
+     label1:
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setTargetName(java.lang.String)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        java.lang.String r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_NAME>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setTargetAspectRatio(int)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        int i0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_ASPECT_RATIO>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setTargetRotation(int)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        int i0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_ROTATION>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setTargetResolution(android.util.Size)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        android.util.Size r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_RESOLUTION>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setDefaultResolution(android.util.Size)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        android.util.Size r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_DEFAULT_RESOLUTION>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setMaxResolution(android.util.Size)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        android.util.Size r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_MAX_RESOLUTION>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setSupportedResolutions(java.util.List)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        java.util.List r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: java.util.List;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_SUPPORTED_RESOLUTIONS>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setBackgroundExecutor(java.util.concurrent.Executor)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        java.util.concurrent.Executor r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.internal.ThreadConfig: androidx.camera.core.impl.Config$Option OPTION_BACKGROUND_EXECUTOR>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setDefaultSessionConfig(androidx.camera.core.impl.SessionConfig)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.SessionConfig r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_DEFAULT_SESSION_CONFIG>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setDefaultCaptureConfig(androidx.camera.core.impl.CaptureConfig)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.CaptureConfig r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.CaptureConfig;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_DEFAULT_CAPTURE_CONFIG>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setSessionOptionUnpacker(androidx.camera.core.impl.SessionConfig$OptionUnpacker)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.SessionConfig$OptionUnpacker r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig$OptionUnpacker;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_SESSION_CONFIG_UNPACKER>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setCaptureOptionUnpacker(androidx.camera.core.impl.CaptureConfig$OptionUnpacker)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.CaptureConfig$OptionUnpacker r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.CaptureConfig$OptionUnpacker;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_CAPTURE_CONFIG_UNPACKER>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setSurfaceOccupancyPriority(int)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        int i0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_SURFACE_OCCUPANCY_PRIORITY>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setCameraSelector(androidx.camera.core.CameraSelector)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.CameraSelector r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_CAMERA_SELECTOR>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setUseCaseEventCallback(androidx.camera.core.UseCase$EventCallback)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.UseCase$EventCallback r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.UseCase$EventCallback;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_USE_CASE_EVENT_CALLBACK>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setImageReaderProxyProvider(androidx.camera.core.ImageReaderProxyProvider)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.ImageReaderProxyProvider r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.ImageReaderProxyProvider;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.ImageAnalysisConfig: androidx.camera.core.impl.Config$Option OPTION_IMAGE_READER_PROXY_PROVIDER>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.core.ImageAnalysis$Builder setZslDisabled(boolean)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        boolean z0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Boolean $r3;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_ZSL_DISABLED>;
+
+        $r3 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(z0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public volatile java.lang.Object setSupportedResolutions(java.util.List)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        java.util.List r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: java.util.List;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setSupportedResolutions(java.util.List)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setMaxResolution(android.util.Size)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        android.util.Size r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setMaxResolution(android.util.Size)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setDefaultResolution(android.util.Size)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        android.util.Size r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setDefaultResolution(android.util.Size)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setTargetResolution(android.util.Size)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        android.util.Size r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setTargetResolution(android.util.Size)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setTargetRotation(int)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r1;
+        int i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setTargetRotation(int)>(i0);
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setTargetAspectRatio(int)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r1;
+        int i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setTargetAspectRatio(int)>(i0);
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setBackgroundExecutor(java.util.concurrent.Executor)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        java.util.concurrent.Executor r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setBackgroundExecutor(java.util.concurrent.Executor)>(r1);
+
+        return $r2;
+    }
+
+    public volatile androidx.camera.core.impl.UseCaseConfig getUseCaseConfig()
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.impl.ImageAnalysisConfig $r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.ImageAnalysisConfig getUseCaseConfig()>();
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setZslDisabled(boolean)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r1;
+        boolean z0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setZslDisabled(boolean)>(z0);
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setCameraSelector(androidx.camera.core.CameraSelector)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        androidx.camera.core.CameraSelector r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setCameraSelector(androidx.camera.core.CameraSelector)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setSurfaceOccupancyPriority(int)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r1;
+        int i0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setSurfaceOccupancyPriority(int)>(i0);
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setCaptureOptionUnpacker(androidx.camera.core.impl.CaptureConfig$OptionUnpacker)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        androidx.camera.core.impl.CaptureConfig$OptionUnpacker r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.CaptureConfig$OptionUnpacker;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setCaptureOptionUnpacker(androidx.camera.core.impl.CaptureConfig$OptionUnpacker)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setSessionOptionUnpacker(androidx.camera.core.impl.SessionConfig$OptionUnpacker)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        androidx.camera.core.impl.SessionConfig$OptionUnpacker r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig$OptionUnpacker;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setSessionOptionUnpacker(androidx.camera.core.impl.SessionConfig$OptionUnpacker)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setDefaultCaptureConfig(androidx.camera.core.impl.CaptureConfig)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        androidx.camera.core.impl.CaptureConfig r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.CaptureConfig;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setDefaultCaptureConfig(androidx.camera.core.impl.CaptureConfig)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setDefaultSessionConfig(androidx.camera.core.impl.SessionConfig)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        androidx.camera.core.impl.SessionConfig r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setDefaultSessionConfig(androidx.camera.core.impl.SessionConfig)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setTargetName(java.lang.String)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        java.lang.String r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setTargetName(java.lang.String)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setTargetClass(java.lang.Class)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        java.lang.Class r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: java.lang.Class;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setTargetClass(java.lang.Class)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object build()
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0;
+        androidx.camera.core.ImageAnalysis $r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis build()>();
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setUseCaseEventCallback(androidx.camera.core.UseCase$EventCallback)
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2;
+        androidx.camera.core.UseCase$EventCallback r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Builder;
+
+        r1 := @parameter0: androidx.camera.core.UseCase$EventCallback;
+
+        $r2 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setUseCaseEventCallback(androidx.camera.core.UseCase$EventCallback)>(r1);
+
+        return $r2;
+    }
+
+androidx.camera.core.ImageAnalysis$Defaults
+<androidx.camera.core.ImageAnalysis$Defaults: android.util.Size DEFAULT_TARGET_RESOLUTION>
+<androidx.camera.core.ImageAnalysis$Defaults: int DEFAULT_SURFACE_OCCUPANCY_PRIORITY>
+<androidx.camera.core.ImageAnalysis$Defaults: int DEFAULT_ASPECT_RATIO>
+<androidx.camera.core.ImageAnalysis$Defaults: androidx.camera.core.impl.ImageAnalysisConfig DEFAULT_CONFIG>
+    public void <init>()
+    {
+        androidx.camera.core.ImageAnalysis$Defaults r0;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Defaults;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public androidx.camera.core.impl.ImageAnalysisConfig getConfig()
+    {
+        androidx.camera.core.ImageAnalysis$Defaults r0;
+        androidx.camera.core.impl.ImageAnalysisConfig $r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Defaults;
+
+        $r1 = <androidx.camera.core.ImageAnalysis$Defaults: androidx.camera.core.impl.ImageAnalysisConfig DEFAULT_CONFIG>;
+
+        return $r1;
+    }
+
+    public volatile androidx.camera.core.impl.Config getConfig()
+    {
+        androidx.camera.core.ImageAnalysis$Defaults r0;
+        androidx.camera.core.impl.ImageAnalysisConfig $r1;
+
+        r0 := @this: androidx.camera.core.ImageAnalysis$Defaults;
+
+        $r1 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Defaults: androidx.camera.core.impl.ImageAnalysisConfig getConfig()>();
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.core.ImageAnalysis$Builder r0, $r2, $r4, $r5;
+        android.util.Size $r1, $r3;
+        androidx.camera.core.impl.ImageAnalysisConfig $r6;
+
+        $r1 = new android.util.Size;
+
+        specialinvoke $r1.<android.util.Size: void <init>(int,int)>(640, 480);
+
+        <androidx.camera.core.ImageAnalysis$Defaults: android.util.Size DEFAULT_TARGET_RESOLUTION> = $r1;
+
+        $r2 = new androidx.camera.core.ImageAnalysis$Builder;
+
+        specialinvoke $r2.<androidx.camera.core.ImageAnalysis$Builder: void <init>()>();
+
+        $r3 = <androidx.camera.core.ImageAnalysis$Defaults: android.util.Size DEFAULT_TARGET_RESOLUTION>;
+
+        $r4 = virtualinvoke $r2.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setDefaultResolution(android.util.Size)>($r3);
+
+        $r5 = virtualinvoke $r4.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setSurfaceOccupancyPriority(int)>(1);
+
+        r0 = virtualinvoke $r5.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.ImageAnalysis$Builder setTargetAspectRatio(int)>(0);
+
+        $r6 = virtualinvoke r0.<androidx.camera.core.ImageAnalysis$Builder: androidx.camera.core.impl.ImageAnalysisConfig getUseCaseConfig()>();
+
+        <androidx.camera.core.ImageAnalysis$Defaults: androidx.camera.core.impl.ImageAnalysisConfig DEFAULT_CONFIG> = $r6;
+
+        return;
+    }
+
+androidx.camera.core.ImageAnalysis$OutputImageFormat

@@ -1,0 +1,314 @@
+androidx.media3.transformer.BaseSamplePipeline
+<androidx.media3.transformer.BaseSamplePipeline: long streamOffsetUs>
+<androidx.media3.transformer.BaseSamplePipeline: long streamStartPositionUs>
+<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.MuxerWrapper muxerWrapper>
+<androidx.media3.transformer.BaseSamplePipeline: int trackType>
+<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.SefSlowMotionFlattener sefVideoSlowMotionFlattener>
+<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer inputBuffer>
+<androidx.media3.transformer.BaseSamplePipeline: boolean muxerWrapperTrackAdded>
+<androidx.media3.transformer.BaseSamplePipeline: boolean isEnded>
+    public void <init>(androidx.media3.common.Format, long, long, boolean, androidx.media3.transformer.MuxerWrapper)
+    {
+        androidx.media3.transformer.BaseSamplePipeline r0;
+        androidx.media3.common.Format r1;
+        long l0, l1;
+        boolean z0;
+        androidx.media3.transformer.MuxerWrapper r2;
+        java.lang.String $r3;
+        int $i2, $i3;
+        androidx.media3.transformer.SefSlowMotionFlattener $r4, $r6;
+
+        r0 := @this: androidx.media3.transformer.BaseSamplePipeline;
+
+        r1 := @parameter0: androidx.media3.common.Format;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        z0 := @parameter3: boolean;
+
+        r2 := @parameter4: androidx.media3.transformer.MuxerWrapper;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.transformer.BaseSamplePipeline: long streamOffsetUs> = l0;
+
+        r0.<androidx.media3.transformer.BaseSamplePipeline: long streamStartPositionUs> = l1;
+
+        r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.MuxerWrapper muxerWrapper> = r2;
+
+        $r3 = r1.<androidx.media3.common.Format: java.lang.String sampleMimeType>;
+
+        $i2 = staticinvoke <androidx.media3.common.MimeTypes: int getTrackType(java.lang.String)>($r3);
+
+        r0.<androidx.media3.transformer.BaseSamplePipeline: int trackType> = $i2;
+
+        if z0 == 0 goto label1;
+
+        $i3 = r0.<androidx.media3.transformer.BaseSamplePipeline: int trackType>;
+
+        if $i3 != 2 goto label1;
+
+        $r4 = new androidx.media3.transformer.SefSlowMotionFlattener;
+
+        $r6 = $r4;
+
+        specialinvoke $r4.<androidx.media3.transformer.SefSlowMotionFlattener: void <init>(androidx.media3.common.Format)>(r1);
+
+        goto label2;
+
+     label1:
+        $r6 = null;
+
+     label2:
+        r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.SefSlowMotionFlattener sefVideoSlowMotionFlattener> = $r6;
+
+        return;
+    }
+
+    public androidx.media3.decoder.DecoderInputBuffer dequeueInputBuffer() throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.BaseSamplePipeline r0;
+        androidx.media3.decoder.DecoderInputBuffer $r1, $r2;
+
+        r0 := @this: androidx.media3.transformer.BaseSamplePipeline;
+
+        $r1 = virtualinvoke r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer dequeueInputBufferInternal()>();
+
+        r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer inputBuffer> = $r1;
+
+        $r2 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer inputBuffer>;
+
+        return $r2;
+    }
+
+    public void queueInputBuffer() throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.BaseSamplePipeline r0;
+        androidx.media3.decoder.DecoderInputBuffer $r1, $r3;
+        java.nio.ByteBuffer $r4;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.transformer.BaseSamplePipeline;
+
+        $r1 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer inputBuffer>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r3 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer inputBuffer>;
+
+        $r4 = $r3.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        $z0 = specialinvoke r0.<androidx.media3.transformer.BaseSamplePipeline: boolean shouldDropInputBuffer()>();
+
+        if $z0 != 0 goto label1;
+
+        virtualinvoke r0.<androidx.media3.transformer.BaseSamplePipeline: void queueInputBufferInternal()>();
+
+     label1:
+        return;
+    }
+
+    public boolean processData() throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.BaseSamplePipeline r0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: androidx.media3.transformer.BaseSamplePipeline;
+
+        $z0 = specialinvoke r0.<androidx.media3.transformer.BaseSamplePipeline: boolean feedMuxer()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = virtualinvoke r0.<androidx.media3.transformer.BaseSamplePipeline: boolean processDataUpToMuxer()>();
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        return $z2;
+    }
+
+    public boolean isEnded()
+    {
+        androidx.media3.transformer.BaseSamplePipeline r0;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.transformer.BaseSamplePipeline;
+
+        $z0 = r0.<androidx.media3.transformer.BaseSamplePipeline: boolean isEnded>;
+
+        return $z0;
+    }
+
+<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer dequeueInputBufferInternal()>
+<androidx.media3.transformer.BaseSamplePipeline: void queueInputBufferInternal()>
+<androidx.media3.transformer.BaseSamplePipeline: boolean processDataUpToMuxer()>
+<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.common.Format getMuxerInputFormat()>
+<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer getMuxerInputBuffer()>
+<androidx.media3.transformer.BaseSamplePipeline: void releaseMuxerInputBuffer()>
+<androidx.media3.transformer.BaseSamplePipeline: boolean isMuxerInputEnded()>
+    private boolean shouldDropInputBuffer()
+    {
+        androidx.media3.transformer.BaseSamplePipeline r0;
+        java.nio.ByteBuffer r1;
+        long l0, $l1, $l2, $l3, $l4, $l5;
+        androidx.media3.decoder.DecoderInputBuffer r2, $r3, $r5, $r6;
+        boolean z0, $z1;
+        androidx.media3.transformer.SefSlowMotionFlattener $r4, $r7, $r8;
+
+        r0 := @this: androidx.media3.transformer.BaseSamplePipeline;
+
+        $r3 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer inputBuffer>;
+
+        r1 = $r3.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        $r4 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.SefSlowMotionFlattener sefVideoSlowMotionFlattener>;
+
+        if $r4 == null goto label1;
+
+        $r5 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer inputBuffer>;
+
+        $z1 = virtualinvoke $r5.<androidx.media3.decoder.DecoderInputBuffer: boolean isEndOfStream()>();
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        $r6 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer inputBuffer>;
+
+        $l2 = $r6.<androidx.media3.decoder.DecoderInputBuffer: long timeUs>;
+
+        $l1 = r0.<androidx.media3.transformer.BaseSamplePipeline: long streamOffsetUs>;
+
+        l0 = $l2 - $l1;
+
+        r2 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer inputBuffer>;
+
+        $r7 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.SefSlowMotionFlattener sefVideoSlowMotionFlattener>;
+
+        z0 = virtualinvoke $r7.<androidx.media3.transformer.SefSlowMotionFlattener: boolean dropOrTransformSample(java.nio.ByteBuffer,long)>(r1, l0);
+
+        if z0 == 0 goto label3;
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer clear()>();
+
+        goto label4;
+
+     label3:
+        $l3 = r0.<androidx.media3.transformer.BaseSamplePipeline: long streamOffsetUs>;
+
+        $r8 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.SefSlowMotionFlattener sefVideoSlowMotionFlattener>;
+
+        $l4 = virtualinvoke $r8.<androidx.media3.transformer.SefSlowMotionFlattener: long getSamplePresentationTimeUs()>();
+
+        $l5 = $l3 + $l4;
+
+        r2.<androidx.media3.decoder.DecoderInputBuffer: long timeUs> = $l5;
+
+     label4:
+        return z0;
+    }
+
+    private boolean feedMuxer() throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.BaseSamplePipeline r0;
+        long l0, $l1, $l2;
+        boolean $z0, $z1, $z2, $z3;
+        java.nio.ByteBuffer $r1, $r4;
+        androidx.media3.transformer.MuxerWrapper $r2, $r5, $r6;
+        int $i3, $i4;
+        java.lang.Object $r3;
+        androidx.media3.common.Format r7;
+        androidx.media3.decoder.DecoderInputBuffer r8;
+
+        r0 := @this: androidx.media3.transformer.BaseSamplePipeline;
+
+        $z0 = r0.<androidx.media3.transformer.BaseSamplePipeline: boolean muxerWrapperTrackAdded>;
+
+        if $z0 != 0 goto label3;
+
+        r7 = virtualinvoke r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.common.Format getMuxerInputFormat()>();
+
+        if r7 != null goto label1;
+
+        return 0;
+
+     label1:
+        $r6 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.MuxerWrapper muxerWrapper>;
+
+        virtualinvoke $r6.<androidx.media3.transformer.MuxerWrapper: void addTrackFormat(androidx.media3.common.Format)>(r7);
+
+        goto label2;
+
+     label2:
+        r0.<androidx.media3.transformer.BaseSamplePipeline: boolean muxerWrapperTrackAdded> = 1;
+
+     label3:
+        $z1 = virtualinvoke r0.<androidx.media3.transformer.BaseSamplePipeline: boolean isMuxerInputEnded()>();
+
+        if $z1 == 0 goto label4;
+
+        $r5 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.MuxerWrapper muxerWrapper>;
+
+        $i4 = r0.<androidx.media3.transformer.BaseSamplePipeline: int trackType>;
+
+        virtualinvoke $r5.<androidx.media3.transformer.MuxerWrapper: void endTrack(int)>($i4);
+
+        r0.<androidx.media3.transformer.BaseSamplePipeline: boolean isEnded> = 1;
+
+        return 0;
+
+     label4:
+        r8 = virtualinvoke r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.decoder.DecoderInputBuffer getMuxerInputBuffer()>();
+
+        if r8 != null goto label5;
+
+        return 0;
+
+     label5:
+        $l2 = r8.<androidx.media3.decoder.DecoderInputBuffer: long timeUs>;
+
+        $l1 = r0.<androidx.media3.transformer.BaseSamplePipeline: long streamStartPositionUs>;
+
+        l0 = $l2 - $l1;
+
+        $r2 = r0.<androidx.media3.transformer.BaseSamplePipeline: androidx.media3.transformer.MuxerWrapper muxerWrapper>;
+
+        $i3 = r0.<androidx.media3.transformer.BaseSamplePipeline: int trackType>;
+
+        $r1 = r8.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r1);
+
+        $r4 = (java.nio.ByteBuffer) $r3;
+
+        $z2 = virtualinvoke r8.<androidx.media3.decoder.DecoderInputBuffer: boolean isKeyFrame()>();
+
+        $z3 = virtualinvoke $r2.<androidx.media3.transformer.MuxerWrapper: boolean writeSample(int,java.nio.ByteBuffer,boolean,long)>($i3, $r4, $z2, l0);
+
+        if $z3 != 0 goto label6;
+
+        return 0;
+
+     label6:
+        goto label7;
+
+     label7:
+        virtualinvoke r0.<androidx.media3.transformer.BaseSamplePipeline: void releaseMuxerInputBuffer()>();
+
+        return 1;
+    }
+

@@ -1,0 +1,1269 @@
+androidx.camera.core.internal.utils.ImageUtil
+<androidx.camera.core.internal.utils.ImageUtil: java.lang.String TAG>
+<androidx.camera.core.internal.utils.ImageUtil: int DEFAULT_RGBA_PIXEL_STRIDE>
+    private void <init>()
+    {
+        androidx.camera.core.internal.utils.ImageUtil r0;
+
+        r0 := @this: androidx.camera.core.internal.utils.ImageUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static android.graphics.Bitmap createBitmapFromPlane(androidx.camera.core.ImageProxy$PlaneProxy[], int, int)
+    {
+        androidx.camera.core.ImageProxy$PlaneProxy[] r0;
+        int i0, i1, $i2, $i3, $i4, $i5;
+        android.graphics.Bitmap r1;
+        androidx.camera.core.ImageProxy$PlaneProxy $r2, $r3, $r5;
+        android.graphics.Bitmap$Config $r4;
+        java.nio.ByteBuffer $r6;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy$PlaneProxy[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $i2 = lengthof r0;
+
+        if $i2 != 1 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.core.util.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "Expect a single plane");
+
+        $r2 = r0[0];
+
+        $i3 = interfaceinvoke $r2.<androidx.camera.core.ImageProxy$PlaneProxy: int getPixelStride()>();
+
+        if $i3 != 4 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        staticinvoke <androidx.core.util.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "Expect pixelStride=4");
+
+        $r3 = r0[0];
+
+        $i4 = interfaceinvoke $r3.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $i5 = 4 * i0;
+
+        if $i4 != $i5 goto label5;
+
+        $z2 = 1;
+
+        goto label6;
+
+     label5:
+        $z2 = 0;
+
+     label6:
+        staticinvoke <androidx.core.util.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "Expect rowStride=width*4");
+
+        $r4 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config ARGB_8888>;
+
+        r1 = staticinvoke <android.graphics.Bitmap: android.graphics.Bitmap createBitmap(int,int,android.graphics.Bitmap$Config)>(i0, i1, $r4);
+
+        $r5 = r0[0];
+
+        $r6 = interfaceinvoke $r5.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        virtualinvoke r1.<android.graphics.Bitmap: void copyPixelsFromBuffer(java.nio.Buffer)>($r6);
+
+        return r1;
+    }
+
+    public static java.nio.ByteBuffer createDirectByteBuffer(android.graphics.Bitmap)
+    {
+        android.graphics.Bitmap r0;
+        java.nio.ByteBuffer r1;
+        android.graphics.Bitmap$Config $r2, $r3;
+        int $i0;
+        boolean $z0;
+
+        r0 := @parameter0: android.graphics.Bitmap;
+
+        $r2 = virtualinvoke r0.<android.graphics.Bitmap: android.graphics.Bitmap$Config getConfig()>();
+
+        $r3 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config ARGB_8888>;
+
+        if $r2 != $r3 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.core.util.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "Only accept Bitmap with ARGB_8888 format for now.");
+
+        $i0 = virtualinvoke r0.<android.graphics.Bitmap: int getAllocationByteCount()>();
+
+        r1 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocateDirect(int)>($i0);
+
+        virtualinvoke r0.<android.graphics.Bitmap: void copyPixelsToBuffer(java.nio.Buffer)>(r1);
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        return r1;
+    }
+
+    public static float[] sizeToVertexes(android.util.Size)
+    {
+        android.util.Size r0;
+        float[] $r1;
+        int $i0, $i1, $i2, $i3;
+        float $f0, $f1, $f2, $f3;
+
+        r0 := @parameter0: android.util.Size;
+
+        $r1 = newarray (float)[8];
+
+        $r1[0] = 0.0F;
+
+        $r1[1] = 0.0F;
+
+        $i0 = virtualinvoke r0.<android.util.Size: int getWidth()>();
+
+        $f0 = (float) $i0;
+
+        $r1[2] = $f0;
+
+        $r1[3] = 0.0F;
+
+        $i1 = virtualinvoke r0.<android.util.Size: int getWidth()>();
+
+        $f1 = (float) $i1;
+
+        $r1[4] = $f1;
+
+        $i2 = virtualinvoke r0.<android.util.Size: int getHeight()>();
+
+        $f2 = (float) $i2;
+
+        $r1[5] = $f2;
+
+        $r1[6] = 0.0F;
+
+        $i3 = virtualinvoke r0.<android.util.Size: int getHeight()>();
+
+        $f3 = (float) $i3;
+
+        $r1[7] = $f3;
+
+        return $r1;
+    }
+
+    public static float min(float, float, float, float)
+    {
+        float f0, f1, f2, f3, $f4, $f5, $f6;
+
+        f0 := @parameter0: float;
+
+        f1 := @parameter1: float;
+
+        f2 := @parameter2: float;
+
+        f3 := @parameter3: float;
+
+        $f4 = staticinvoke <java.lang.Math: float min(float,float)>(f0, f1);
+
+        $f5 = staticinvoke <java.lang.Math: float min(float,float)>(f2, f3);
+
+        $f6 = staticinvoke <java.lang.Math: float min(float,float)>($f4, $f5);
+
+        return $f6;
+    }
+
+    public static android.util.Rational getRotatedAspectRatio(int, android.util.Rational)
+    {
+        int i0, $i1, $i2;
+        android.util.Rational r0, $r1, $r2;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: android.util.Rational;
+
+        if i0 == 90 goto label1;
+
+        if i0 != 270 goto label2;
+
+     label1:
+        $r1 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: android.util.Rational inverseRational(android.util.Rational)>(r0);
+
+        return $r1;
+
+     label2:
+        $r2 = new android.util.Rational;
+
+        $i1 = virtualinvoke r0.<android.util.Rational: int getNumerator()>();
+
+        $i2 = virtualinvoke r0.<android.util.Rational: int getDenominator()>();
+
+        specialinvoke $r2.<android.util.Rational: void <init>(int,int)>($i1, $i2);
+
+        return $r2;
+    }
+
+    public static byte[] jpegImageToJpegByteArray(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageProxy r0;
+        androidx.camera.core.ImageProxy$PlaneProxy[] r1;
+        java.nio.ByteBuffer r2;
+        byte[] r3;
+        int $i0, $i1, $i2;
+        androidx.camera.core.ImageProxy$PlaneProxy $r4;
+        java.lang.IllegalArgumentException $r7;
+        java.lang.StringBuilder $r8, $r9, $r10;
+        java.lang.String $r11;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $i0 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getFormat()>();
+
+        if $i0 == 256 goto label1;
+
+        $r7 = new java.lang.IllegalArgumentException;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Incorrect image format of the input image proxy: ");
+
+        $i2 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getFormat()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r7.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r11);
+
+        throw $r7;
+
+     label1:
+        r1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r4 = r1[0];
+
+        r2 = interfaceinvoke $r4.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        $i1 = virtualinvoke r2.<java.nio.ByteBuffer: int capacity()>();
+
+        r3 = newarray (byte)[$i1];
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[])>(r3);
+
+        return r3;
+    }
+
+    public static byte[] jpegImageToJpegByteArray(androidx.camera.core.ImageProxy, android.graphics.Rect, int) throws androidx.camera.core.internal.utils.ImageUtil$CodecFailedException
+    {
+        androidx.camera.core.ImageProxy r0;
+        android.graphics.Rect r1;
+        int i0, $i1, $i2;
+        java.lang.IllegalArgumentException $r2;
+        java.lang.StringBuilder $r3, $r4, $r5;
+        java.lang.String $r6;
+        byte[] r7, r8;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        r1 := @parameter1: android.graphics.Rect;
+
+        i0 := @parameter2: int;
+
+        $i1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getFormat()>();
+
+        if $i1 == 256 goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Incorrect image format of the input image proxy: ");
+
+        $i2 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getFormat()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r6);
+
+        throw $r2;
+
+     label1:
+        r7 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: byte[] jpegImageToJpegByteArray(androidx.camera.core.ImageProxy)>(r0);
+
+        r8 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: byte[] cropJpegByteArray(byte[],android.graphics.Rect,int)>(r7, r1, i0);
+
+        return r8;
+    }
+
+    public static byte[] yuvImageToJpegByteArray(androidx.camera.core.ImageProxy, android.graphics.Rect, int) throws androidx.camera.core.internal.utils.ImageUtil$CodecFailedException
+    {
+        androidx.camera.core.ImageProxy r0;
+        android.graphics.Rect r1;
+        int i0, $i1, $i2, $i3, $i4;
+        byte[] $r2, $r3;
+        java.lang.IllegalArgumentException $r4;
+        java.lang.StringBuilder $r5, $r6, $r7;
+        java.lang.String $r8;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        r1 := @parameter1: android.graphics.Rect;
+
+        i0 := @parameter2: int;
+
+        $i1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getFormat()>();
+
+        if $i1 == 35 goto label1;
+
+        $r4 = new java.lang.IllegalArgumentException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Incorrect image format of the input image proxy: ");
+
+        $i4 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getFormat()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i4);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r8);
+
+        throw $r4;
+
+     label1:
+        $r2 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: byte[] yuv_420_888toNv21(androidx.camera.core.ImageProxy)>(r0);
+
+        $i2 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i3 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $r3 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: byte[] nv21ToJpeg(byte[],int,int,android.graphics.Rect,int)>($r2, $i2, $i3, r1, i0);
+
+        return $r3;
+    }
+
+    public static byte[] yuv_420_888toNv21(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageProxy r0;
+        androidx.camera.core.ImageProxy$PlaneProxy r1, r2, r3;
+        java.nio.ByteBuffer r4, r5, r6;
+        int i0, i1, i2, i3, i4, i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i20, $i21, $i22, $i23, $i24, $i25, $i26, $i27, i28, i29, i30, i31, i32, i33, i34, i35;
+        byte[] r7, r8, r9;
+        androidx.camera.core.ImageProxy$PlaneProxy[] $r10, $r11, $r12;
+        byte $b18, $b19;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $r10 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        r1 = $r10[0];
+
+        $r11 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        r2 = $r11[1];
+
+        $r12 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        r3 = $r12[2];
+
+        r4 = interfaceinvoke r1.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        r5 = interfaceinvoke r2.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        r6 = interfaceinvoke r3.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        virtualinvoke r4.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        virtualinvoke r5.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        virtualinvoke r6.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        i0 = virtualinvoke r4.<java.nio.ByteBuffer: int remaining()>();
+
+        i28 = 0;
+
+        $i6 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i7 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $i8 = $i6 * $i7;
+
+        $i9 = $i8 / 2;
+
+        $i10 = i0 + $i9;
+
+        r7 = newarray (byte)[$i10];
+
+        i29 = 0;
+
+     label1:
+        $i11 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        if i29 >= $i11 goto label2;
+
+        $i20 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        virtualinvoke r4.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[],int,int)>(r7, i28, $i20);
+
+        $i21 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        i28 = i28 + $i21;
+
+        $i22 = virtualinvoke r4.<java.nio.ByteBuffer: int position()>();
+
+        $i23 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i24 = $i22 - $i23;
+
+        $i25 = interfaceinvoke r1.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $i26 = $i24 + $i25;
+
+        $i27 = staticinvoke <java.lang.Math: int min(int,int)>(i0, $i26);
+
+        virtualinvoke r4.<java.nio.ByteBuffer: java.nio.Buffer position(int)>($i27);
+
+        i29 = i29 + 1;
+
+        goto label1;
+
+     label2:
+        $i12 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        i30 = $i12 / 2;
+
+        $i13 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        i1 = $i13 / 2;
+
+        i2 = interfaceinvoke r3.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        i3 = interfaceinvoke r2.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        i4 = interfaceinvoke r3.<androidx.camera.core.ImageProxy$PlaneProxy: int getPixelStride()>();
+
+        i5 = interfaceinvoke r2.<androidx.camera.core.ImageProxy$PlaneProxy: int getPixelStride()>();
+
+        r8 = newarray (byte)[i2];
+
+        r9 = newarray (byte)[i3];
+
+        i31 = 0;
+
+     label3:
+        if i31 >= i30 goto label6;
+
+        $i14 = virtualinvoke r6.<java.nio.ByteBuffer: int remaining()>();
+
+        $i15 = staticinvoke <java.lang.Math: int min(int,int)>(i2, $i14);
+
+        virtualinvoke r6.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[],int,int)>(r8, 0, $i15);
+
+        $i16 = virtualinvoke r5.<java.nio.ByteBuffer: int remaining()>();
+
+        $i17 = staticinvoke <java.lang.Math: int min(int,int)>(i3, $i16);
+
+        virtualinvoke r5.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[],int,int)>(r9, 0, $i17);
+
+        i32 = 0;
+
+        i33 = 0;
+
+        i34 = 0;
+
+     label4:
+        if i34 >= i1 goto label5;
+
+        i35 = i28 + 1;
+
+        $b18 = r8[i32];
+
+        r7[i28] = $b18;
+
+        i28 = i35 + 1;
+
+        $b19 = r9[i33];
+
+        r7[i35] = $b19;
+
+        i32 = i32 + i4;
+
+        i33 = i33 + i5;
+
+        i34 = i34 + 1;
+
+        goto label4;
+
+     label5:
+        i31 = i31 + 1;
+
+        goto label3;
+
+     label6:
+        return r7;
+    }
+
+    private static byte[] cropJpegByteArray(byte[], android.graphics.Rect, int) throws androidx.camera.core.internal.utils.ImageUtil$CodecFailedException
+    {
+        byte[] r0, $r6;
+        android.graphics.Rect r1;
+        int i0, $i1;
+        android.graphics.Bitmap r2;
+        boolean z0;
+        android.graphics.Bitmap$CompressFormat $r5;
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType $r8, $r10, $r17, $r20;
+        java.lang.Throwable $r11, $r18, r22, r23, r32, r33, r34, r35;
+        java.lang.StringBuilder $r14, $r15, r26;
+        java.lang.String $r16;
+        android.graphics.BitmapRegionDecoder r21;
+        java.io.ByteArrayOutputStream r24, r30;
+        android.graphics.BitmapFactory$Options r25;
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException r27, r28, r29, r31;
+
+        r0 := @parameter0: byte[];
+
+        r1 := @parameter1: android.graphics.Rect;
+
+        i0 := @parameter2: int;
+
+     label1:
+        $i1 = lengthof r0;
+
+        r21 = staticinvoke <android.graphics.BitmapRegionDecoder: android.graphics.BitmapRegionDecoder newInstance(byte[],int,int,boolean)>(r0, 0, $i1, 0);
+
+        r25 = new android.graphics.BitmapFactory$Options;
+
+        specialinvoke r25.<android.graphics.BitmapFactory$Options: void <init>()>();
+
+        r2 = virtualinvoke r21.<android.graphics.BitmapRegionDecoder: android.graphics.Bitmap decodeRegion(android.graphics.Rect,android.graphics.BitmapFactory$Options)>(r1, r25);
+
+        virtualinvoke r21.<android.graphics.BitmapRegionDecoder: void recycle()>();
+
+     label2:
+        goto label5;
+
+     label3:
+        $r11 := @caughtexception;
+
+        r22 = $r11;
+
+        r27 = new androidx.camera.core.internal.utils.ImageUtil$CodecFailedException;
+
+        r26 = new java.lang.StringBuilder;
+
+        specialinvoke r26.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Decode byte array failed with illegal argument.");
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r22);
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r17 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType DECODE_FAILED>;
+
+        specialinvoke r27.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException: void <init>(java.lang.String,androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType)>($r16, $r17);
+
+        r32 = (java.lang.Throwable) r27;
+
+        throw r32;
+
+     label4:
+        $r18 := @caughtexception;
+
+        r23 = $r18;
+
+        r28 = new androidx.camera.core.internal.utils.ImageUtil$CodecFailedException;
+
+        $r20 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType DECODE_FAILED>;
+
+        specialinvoke r28.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException: void <init>(java.lang.String,androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType)>("Decode byte array failed.", $r20);
+
+        r33 = (java.lang.Throwable) r28;
+
+        throw r33;
+
+     label5:
+        if r2 != null goto label6;
+
+        r29 = new androidx.camera.core.internal.utils.ImageUtil$CodecFailedException;
+
+        $r10 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType DECODE_FAILED>;
+
+        specialinvoke r29.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException: void <init>(java.lang.String,androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType)>("Decode byte array failed.", $r10);
+
+        r34 = (java.lang.Throwable) r29;
+
+        throw r34;
+
+     label6:
+        r30 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke r30.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        r24 = r30;
+
+        $r5 = <android.graphics.Bitmap$CompressFormat: android.graphics.Bitmap$CompressFormat JPEG>;
+
+        z0 = virtualinvoke r2.<android.graphics.Bitmap: boolean compress(android.graphics.Bitmap$CompressFormat,int,java.io.OutputStream)>($r5, i0, r24);
+
+        if z0 != 0 goto label7;
+
+        r31 = new androidx.camera.core.internal.utils.ImageUtil$CodecFailedException;
+
+        $r8 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType ENCODE_FAILED>;
+
+        specialinvoke r31.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException: void <init>(java.lang.String,androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType)>("Encode bitmap failed.", $r8);
+
+        r35 = (java.lang.Throwable) r31;
+
+        throw r35;
+
+     label7:
+        virtualinvoke r2.<android.graphics.Bitmap: void recycle()>();
+
+        $r6 = virtualinvoke r24.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        return $r6;
+
+        catch java.lang.IllegalArgumentException from label1 to label2 with label3;
+        catch java.io.IOException from label1 to label2 with label4;
+    }
+
+    public static boolean isAspectRatioValid(android.util.Rational)
+    {
+        android.util.Rational r0;
+        float $f0;
+        byte $b0;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: android.util.Rational;
+
+        if r0 == null goto label1;
+
+        $f0 = virtualinvoke r0.<android.util.Rational: float floatValue()>();
+
+        $b0 = $f0 cmpl 0.0F;
+
+        if $b0 <= 0 goto label1;
+
+        $z0 = virtualinvoke r0.<android.util.Rational: boolean isNaN()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    public static boolean isAspectRatioValid(android.util.Size, android.util.Rational)
+    {
+        android.util.Size r0;
+        android.util.Rational r1;
+        float $f0;
+        byte $b0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: android.util.Size;
+
+        r1 := @parameter1: android.util.Rational;
+
+        if r1 == null goto label1;
+
+        $f0 = virtualinvoke r1.<android.util.Rational: float floatValue()>();
+
+        $b0 = $f0 cmpl 0.0F;
+
+        if $b0 <= 0 goto label1;
+
+        $z0 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: boolean isCropAspectRatioHasEffect(android.util.Size,android.util.Rational)>(r0, r1);
+
+        if $z0 == 0 goto label1;
+
+        $z1 = virtualinvoke r1.<android.util.Rational: boolean isNaN()>();
+
+        if $z1 != 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+
+    public static android.graphics.Rect computeCropRectFromAspectRatio(android.util.Size, android.util.Rational)
+    {
+        android.util.Size r0;
+        android.util.Rational r1;
+        int i0, i1, i2, i3, $i5, $i6, $i7, $i8, i9, i10, i11, i12;
+        float f0, $f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8, $f9, $f10, $f11, $f12, $f13;
+        boolean $z0;
+        byte $b4;
+        android.graphics.Rect $r2;
+
+        r0 := @parameter0: android.util.Size;
+
+        r1 := @parameter1: android.util.Rational;
+
+        $z0 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: boolean isAspectRatioValid(android.util.Rational)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("ImageUtil", "Invalid view ratio.");
+
+        return null;
+
+     label1:
+        i0 = virtualinvoke r0.<android.util.Size: int getWidth()>();
+
+        i1 = virtualinvoke r0.<android.util.Size: int getHeight()>();
+
+        $f2 = (float) i0;
+
+        $f1 = (float) i1;
+
+        f0 = $f2 / $f1;
+
+        i9 = 0;
+
+        i10 = 0;
+
+        i11 = i0;
+
+        i12 = i1;
+
+        i2 = virtualinvoke r1.<android.util.Rational: int getNumerator()>();
+
+        i3 = virtualinvoke r1.<android.util.Rational: int getDenominator()>();
+
+        $f3 = virtualinvoke r1.<android.util.Rational: float floatValue()>();
+
+        $b4 = $f3 cmpl f0;
+
+        if $b4 <= 0 goto label2;
+
+        $f10 = (float) i0;
+
+        $f9 = (float) i2;
+
+        $f12 = $f10 / $f9;
+
+        $f11 = (float) i3;
+
+        $f13 = $f12 * $f11;
+
+        i12 = staticinvoke <java.lang.Math: int round(float)>($f13);
+
+        $i8 = i1 - i12;
+
+        i10 = $i8 / 2;
+
+        goto label3;
+
+     label2:
+        $f5 = (float) i1;
+
+        $f4 = (float) i3;
+
+        $f7 = $f5 / $f4;
+
+        $f6 = (float) i2;
+
+        $f8 = $f7 * $f6;
+
+        i11 = staticinvoke <java.lang.Math: int round(float)>($f8);
+
+        $i5 = i0 - i11;
+
+        i9 = $i5 / 2;
+
+     label3:
+        $r2 = new android.graphics.Rect;
+
+        $i7 = i9 + i11;
+
+        $i6 = i10 + i12;
+
+        specialinvoke $r2.<android.graphics.Rect: void <init>(int,int,int,int)>(i9, i10, $i7, $i6);
+
+        return $r2;
+    }
+
+    public static android.graphics.Rect computeCropRectFromDispatchInfo(android.graphics.Rect, int, android.util.Size, int)
+    {
+        android.graphics.Rect r0, r5, $r9;
+        int i0, i1, $i2;
+        android.util.Size r1;
+        android.graphics.Matrix r2, $r6;
+        float[] r3;
+        float f0, f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8, $f9, $f10, $f11, $f12;
+        android.graphics.RectF r4, $r7, $r8;
+
+        r0 := @parameter0: android.graphics.Rect;
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: android.util.Size;
+
+        i1 := @parameter3: int;
+
+        $r6 = new android.graphics.Matrix;
+
+        specialinvoke $r6.<android.graphics.Matrix: void <init>()>();
+
+        r2 = $r6;
+
+        $i2 = i1 - i0;
+
+        $f2 = (float) $i2;
+
+        virtualinvoke r2.<android.graphics.Matrix: void setRotate(float)>($f2);
+
+        r3 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: float[] sizeToVertexes(android.util.Size)>(r1);
+
+        virtualinvoke r2.<android.graphics.Matrix: void mapPoints(float[])>(r3);
+
+        $f6 = r3[0];
+
+        $f5 = r3[2];
+
+        $f4 = r3[4];
+
+        $f3 = r3[6];
+
+        f0 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: float min(float,float,float,float)>($f6, $f5, $f4, $f3);
+
+        $f10 = r3[1];
+
+        $f9 = r3[3];
+
+        $f8 = r3[5];
+
+        $f7 = r3[7];
+
+        f1 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: float min(float,float,float,float)>($f10, $f9, $f8, $f7);
+
+        $f12 = neg f0;
+
+        $f11 = neg f1;
+
+        virtualinvoke r2.<android.graphics.Matrix: boolean postTranslate(float,float)>($f12, $f11);
+
+        virtualinvoke r2.<android.graphics.Matrix: boolean invert(android.graphics.Matrix)>(r2);
+
+        $r7 = new android.graphics.RectF;
+
+        specialinvoke $r7.<android.graphics.RectF: void <init>()>();
+
+        r4 = $r7;
+
+        $r8 = new android.graphics.RectF;
+
+        specialinvoke $r8.<android.graphics.RectF: void <init>(android.graphics.Rect)>(r0);
+
+        virtualinvoke r2.<android.graphics.Matrix: boolean mapRect(android.graphics.RectF,android.graphics.RectF)>(r4, $r8);
+
+        virtualinvoke r4.<android.graphics.RectF: void sort()>();
+
+        $r9 = new android.graphics.Rect;
+
+        specialinvoke $r9.<android.graphics.Rect: void <init>()>();
+
+        r5 = $r9;
+
+        virtualinvoke r4.<android.graphics.RectF: void round(android.graphics.Rect)>(r5);
+
+        return r5;
+    }
+
+    private static byte[] nv21ToJpeg(byte[], int, int, android.graphics.Rect, int) throws androidx.camera.core.internal.utils.ImageUtil$CodecFailedException
+    {
+        byte[] r0, $r6;
+        int i0, i1, i2;
+        android.graphics.Rect r1, $r10, r13;
+        java.io.ByteArrayOutputStream r2, r11;
+        android.graphics.YuvImage r3, r12;
+        boolean z0;
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType $r8;
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException r14;
+        java.lang.Throwable r15;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r1 := @parameter3: android.graphics.Rect;
+
+        i2 := @parameter4: int;
+
+        r11 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke r11.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        r2 = r11;
+
+        r12 = new android.graphics.YuvImage;
+
+        specialinvoke r12.<android.graphics.YuvImage: void <init>(byte[],int,int,int,int[])>(r0, 17, i0, i1, null);
+
+        r3 = r12;
+
+        if r1 != null goto label1;
+
+        r13 = new android.graphics.Rect;
+
+        $r10 = r13;
+
+        specialinvoke r13.<android.graphics.Rect: void <init>(int,int,int,int)>(0, 0, i0, i1);
+
+        goto label2;
+
+     label1:
+        $r10 = r1;
+
+     label2:
+        z0 = virtualinvoke r3.<android.graphics.YuvImage: boolean compressToJpeg(android.graphics.Rect,int,java.io.OutputStream)>($r10, i2, r2);
+
+        if z0 != 0 goto label3;
+
+        r14 = new androidx.camera.core.internal.utils.ImageUtil$CodecFailedException;
+
+        $r8 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType ENCODE_FAILED>;
+
+        specialinvoke r14.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException: void <init>(java.lang.String,androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType)>("YuvImage failed to encode jpeg.", $r8);
+
+        r15 = (java.lang.Throwable) r14;
+
+        throw r15;
+
+     label3:
+        $r6 = virtualinvoke r2.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        return $r6;
+    }
+
+    private static boolean isCropAspectRatioHasEffect(android.util.Size, android.util.Rational)
+    {
+        android.util.Size r0;
+        android.util.Rational r1;
+        int i0, i1, i2, i3, $i4, $i5;
+        float $f0, $f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8, $f9;
+        boolean $z0;
+
+        r0 := @parameter0: android.util.Size;
+
+        r1 := @parameter1: android.util.Rational;
+
+        i0 = virtualinvoke r0.<android.util.Size: int getWidth()>();
+
+        i1 = virtualinvoke r0.<android.util.Size: int getHeight()>();
+
+        i2 = virtualinvoke r1.<android.util.Rational: int getNumerator()>();
+
+        i3 = virtualinvoke r1.<android.util.Rational: int getDenominator()>();
+
+        $f1 = (float) i0;
+
+        $f0 = (float) i2;
+
+        $f3 = $f1 / $f0;
+
+        $f2 = (float) i3;
+
+        $f4 = $f3 * $f2;
+
+        $i4 = staticinvoke <java.lang.Math: int round(float)>($f4);
+
+        if i1 != $i4 goto label1;
+
+        $f6 = (float) i1;
+
+        $f5 = (float) i3;
+
+        $f8 = $f6 / $f5;
+
+        $f7 = (float) i2;
+
+        $f9 = $f8 * $f7;
+
+        $i5 = staticinvoke <java.lang.Math: int round(float)>($f9);
+
+        if i0 == $i5 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    private static android.util.Rational inverseRational(android.util.Rational)
+    {
+        android.util.Rational r0, $r1;
+        int $i0, $i1;
+
+        r0 := @parameter0: android.util.Rational;
+
+        if r0 != null goto label1;
+
+        return r0;
+
+     label1:
+        $r1 = new android.util.Rational;
+
+        $i0 = virtualinvoke r0.<android.util.Rational: int getDenominator()>();
+
+        $i1 = virtualinvoke r0.<android.util.Rational: int getNumerator()>();
+
+        specialinvoke $r1.<android.util.Rational: void <init>(int,int)>($i0, $i1);
+
+        return $r1;
+    }
+
+    public static boolean shouldCropImage(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageProxy r0;
+        int $i0, $i1, $i2, $i3;
+        android.graphics.Rect $r1, $r2;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $i0 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $r1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: android.graphics.Rect getCropRect()>();
+
+        $i2 = virtualinvoke $r1.<android.graphics.Rect: int width()>();
+
+        $r2 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: android.graphics.Rect getCropRect()>();
+
+        $i3 = virtualinvoke $r2.<android.graphics.Rect: int height()>();
+
+        $z0 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: boolean shouldCropImage(int,int,int,int)>($i0, $i1, $i2, $i3);
+
+        return $z0;
+    }
+
+    public static boolean shouldCropImage(int, int, int, int)
+    {
+        int i0, i1, i2, i3;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        i3 := @parameter3: int;
+
+        if i0 != i2 goto label1;
+
+        if i1 == i3 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType
+<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType ENCODE_FAILED>
+<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType DECODE_FAILED>
+<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType UNKNOWN>
+<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType[] $VALUES>
+    public static androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType[] values()
+    {
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType[]) $r1;
+
+        return $r2;
+    }
+
+    public static androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "Landroidx/camera/core/internal/utils/ImageUtil$CodecFailedException$FailureType;", r0);
+
+        $r2 = (androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType $r0, $r1, $r2, $r4, $r5, $r6;
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType[] $r3;
+
+        $r0 = new androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType;
+
+        specialinvoke $r0.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: void <init>(java.lang.String,int)>("ENCODE_FAILED", 0);
+
+        <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType ENCODE_FAILED> = $r0;
+
+        $r1 = new androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType;
+
+        specialinvoke $r1.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: void <init>(java.lang.String,int)>("DECODE_FAILED", 1);
+
+        <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType DECODE_FAILED> = $r1;
+
+        $r2 = new androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType;
+
+        specialinvoke $r2.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: void <init>(java.lang.String,int)>("UNKNOWN", 2);
+
+        <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType UNKNOWN> = $r2;
+
+        $r3 = newarray (androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType)[3];
+
+        $r4 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType ENCODE_FAILED>;
+
+        $r3[0] = $r4;
+
+        $r5 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType DECODE_FAILED>;
+
+        $r3[1] = $r5;
+
+        $r6 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType UNKNOWN>;
+
+        $r3[2] = $r6;
+
+        <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType[] $VALUES> = $r3;
+
+        return;
+    }
+
+androidx.camera.core.internal.utils.ImageUtil$CodecFailedException
+<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType mFailureType>
+    void <init>(java.lang.String)
+    {
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException r0;
+        java.lang.String r1;
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType $r2;
+
+        r0 := @this: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException;
+
+        r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<java.lang.Exception: void <init>(java.lang.String)>(r1);
+
+        $r2 = <androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType UNKNOWN>;
+
+        r0.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType mFailureType> = $r2;
+
+        return;
+    }
+
+    void <init>(java.lang.String, androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType)
+    {
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException r0;
+        java.lang.String r1;
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType r2;
+
+        r0 := @this: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType;
+
+        specialinvoke r0.<java.lang.Exception: void <init>(java.lang.String)>(r1);
+
+        r0.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType mFailureType> = r2;
+
+        return;
+    }
+
+    public androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType getFailureType()
+    {
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException r0;
+        androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType $r1;
+
+        r0 := @this: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException;
+
+        $r1 = r0.<androidx.camera.core.internal.utils.ImageUtil$CodecFailedException: androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType mFailureType>;
+
+        return $r1;
+    }
+

@@ -1,0 +1,336 @@
+androidx.media3.extractor.mp3.VbriSeeker
+<androidx.media3.extractor.mp3.VbriSeeker: java.lang.String TAG>
+<androidx.media3.extractor.mp3.VbriSeeker: long[] timesUs>
+<androidx.media3.extractor.mp3.VbriSeeker: long[] positions>
+<androidx.media3.extractor.mp3.VbriSeeker: long durationUs>
+<androidx.media3.extractor.mp3.VbriSeeker: long dataEndPosition>
+    public static androidx.media3.extractor.mp3.VbriSeeker create(long, long, androidx.media3.extractor.MpegAudioUtil$Header, androidx.media3.common.util.ParsableByteArray)
+    {
+        long l0, l3, l7, $l8, $l9, $l10, $l11, $l13, $l16, $l17, $l18, $l19, $l20, l22, $l26, $l27, $l28;
+        androidx.media3.extractor.MpegAudioUtil$Header r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        int i1, i2, i4, i5, i6, $i12, i24, i25;
+        long[] r2, r3;
+        byte $b14, $b15;
+        java.lang.StringBuilder $r4, $r5, $r6, $r7, $r8;
+        java.lang.String $r9;
+        short $s23;
+        androidx.media3.extractor.mp3.VbriSeeker $r10;
+
+        l0 := @parameter0: long;
+
+        l22 := @parameter1: long;
+
+        r0 := @parameter2: androidx.media3.extractor.MpegAudioUtil$Header;
+
+        r1 := @parameter3: androidx.media3.common.util.ParsableByteArray;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(10);
+
+        i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        if i1 > 0 goto label01;
+
+        return null;
+
+     label01:
+        i2 = r0.<androidx.media3.extractor.MpegAudioUtil$Header: int sampleRate>;
+
+        $l11 = (long) i1;
+
+        if i2 < 32000 goto label02;
+
+        $s23 = 1152;
+
+        goto label03;
+
+     label02:
+        $s23 = 576;
+
+     label03:
+        $l8 = (long) $s23;
+
+        $l10 = 1000000L * $l8;
+
+        $l9 = (long) i2;
+
+        l3 = staticinvoke <androidx.media3.common.util.Util: long scaleLargeTimestamp(long,long,long)>($l11, $l10, $l9);
+
+        i4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        i5 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        i6 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(2);
+
+        $i12 = r0.<androidx.media3.extractor.MpegAudioUtil$Header: int frameSize>;
+
+        $l13 = (long) $i12;
+
+        l7 = l22 + $l13;
+
+        r2 = newarray (long)[i4];
+
+        r3 = newarray (long)[i4];
+
+        i24 = 0;
+
+     label04:
+        if i24 >= i4 goto label11;
+
+        $l16 = (long) i24;
+
+        $l18 = $l16 * l3;
+
+        $l17 = (long) i4;
+
+        $l19 = $l18 / $l17;
+
+        r2[i24] = $l19;
+
+        $l20 = staticinvoke <java.lang.Math: long max(long,long)>(l22, l7);
+
+        r3[i24] = $l20;
+
+        tableswitch(i6)
+        {
+            case 1: goto label05;
+            case 2: goto label06;
+            case 3: goto label07;
+            case 4: goto label08;
+            default: goto label09;
+        };
+
+     label05:
+        i25 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        goto label10;
+
+     label06:
+        i25 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        goto label10;
+
+     label07:
+        i25 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedInt24()>();
+
+        goto label10;
+
+     label08:
+        i25 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        goto label10;
+
+     label09:
+        return null;
+
+     label10:
+        $l26 = (long) i25;
+
+        $l27 = (long) i5;
+
+        $l28 = $l26 * $l27;
+
+        l22 = l22 + $l28;
+
+        i24 = i24 + 1;
+
+        goto label04;
+
+     label11:
+        $b14 = l0 cmp -1L;
+
+        if $b14 == 0 goto label12;
+
+        $b15 = l0 cmp l22;
+
+        if $b15 == 0 goto label12;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("VBRI data size mismatch: ");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l22);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("VbriSeeker", $r9);
+
+     label12:
+        $r10 = new androidx.media3.extractor.mp3.VbriSeeker;
+
+        specialinvoke $r10.<androidx.media3.extractor.mp3.VbriSeeker: void <init>(long[],long[],long,long)>(r2, r3, l3, l22);
+
+        return $r10;
+    }
+
+    private void <init>(long[], long[], long, long)
+    {
+        androidx.media3.extractor.mp3.VbriSeeker r0;
+        long[] r1, r2;
+        long l0, l1;
+
+        r0 := @this: androidx.media3.extractor.mp3.VbriSeeker;
+
+        r1 := @parameter0: long[];
+
+        r2 := @parameter1: long[];
+
+        l0 := @parameter2: long;
+
+        l1 := @parameter3: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] timesUs> = r1;
+
+        r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] positions> = r2;
+
+        r0.<androidx.media3.extractor.mp3.VbriSeeker: long durationUs> = l0;
+
+        r0.<androidx.media3.extractor.mp3.VbriSeeker: long dataEndPosition> = l1;
+
+        return;
+    }
+
+    public boolean isSeekable()
+    {
+        androidx.media3.extractor.mp3.VbriSeeker r0;
+
+        r0 := @this: androidx.media3.extractor.mp3.VbriSeeker;
+
+        return 1;
+    }
+
+    public androidx.media3.extractor.SeekMap$SeekPoints getSeekPoints(long)
+    {
+        androidx.media3.extractor.mp3.VbriSeeker r0;
+        long l0, $l2, $l3, $l4, $l10, $l11;
+        int i1, $i6, $i7, $i8, $i9;
+        androidx.media3.extractor.SeekPoint r1, r2, $r4, $r9;
+        long[] $r3, $r5, $r6, $r8, $r10, $r11;
+        byte $b5;
+        androidx.media3.extractor.SeekMap$SeekPoints $r7, $r12;
+
+        r0 := @this: androidx.media3.extractor.mp3.VbriSeeker;
+
+        l0 := @parameter0: long;
+
+        $r3 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] timesUs>;
+
+        i1 = staticinvoke <androidx.media3.common.util.Util: int binarySearchFloor(long[],long,boolean,boolean)>($r3, l0, 1, 1);
+
+        $r4 = new androidx.media3.extractor.SeekPoint;
+
+        $r5 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] timesUs>;
+
+        $l3 = $r5[i1];
+
+        $r6 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] positions>;
+
+        $l2 = $r6[i1];
+
+        specialinvoke $r4.<androidx.media3.extractor.SeekPoint: void <init>(long,long)>($l3, $l2);
+
+        r1 = $r4;
+
+        $l4 = r1.<androidx.media3.extractor.SeekPoint: long timeUs>;
+
+        $b5 = $l4 cmp l0;
+
+        if $b5 >= 0 goto label1;
+
+        $r8 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] timesUs>;
+
+        $i6 = lengthof $r8;
+
+        $i7 = $i6 - 1;
+
+        if i1 != $i7 goto label2;
+
+     label1:
+        $r7 = new androidx.media3.extractor.SeekMap$SeekPoints;
+
+        specialinvoke $r7.<androidx.media3.extractor.SeekMap$SeekPoints: void <init>(androidx.media3.extractor.SeekPoint)>(r1);
+
+        return $r7;
+
+     label2:
+        $r9 = new androidx.media3.extractor.SeekPoint;
+
+        $r10 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] timesUs>;
+
+        $i8 = i1 + 1;
+
+        $l11 = $r10[$i8];
+
+        $r11 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] positions>;
+
+        $i9 = i1 + 1;
+
+        $l10 = $r11[$i9];
+
+        specialinvoke $r9.<androidx.media3.extractor.SeekPoint: void <init>(long,long)>($l11, $l10);
+
+        r2 = $r9;
+
+        $r12 = new androidx.media3.extractor.SeekMap$SeekPoints;
+
+        specialinvoke $r12.<androidx.media3.extractor.SeekMap$SeekPoints: void <init>(androidx.media3.extractor.SeekPoint,androidx.media3.extractor.SeekPoint)>(r1, r2);
+
+        return $r12;
+    }
+
+    public long getTimeUs(long)
+    {
+        androidx.media3.extractor.mp3.VbriSeeker r0;
+        long l0, $l2;
+        long[] $r1, $r2;
+        int $i1;
+
+        r0 := @this: androidx.media3.extractor.mp3.VbriSeeker;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] timesUs>;
+
+        $r1 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long[] positions>;
+
+        $i1 = staticinvoke <androidx.media3.common.util.Util: int binarySearchFloor(long[],long,boolean,boolean)>($r1, l0, 1, 1);
+
+        $l2 = $r2[$i1];
+
+        return $l2;
+    }
+
+    public long getDurationUs()
+    {
+        androidx.media3.extractor.mp3.VbriSeeker r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.extractor.mp3.VbriSeeker;
+
+        $l0 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long durationUs>;
+
+        return $l0;
+    }
+
+    public long getDataEndPosition()
+    {
+        androidx.media3.extractor.mp3.VbriSeeker r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.extractor.mp3.VbriSeeker;
+
+        $l0 = r0.<androidx.media3.extractor.mp3.VbriSeeker: long dataEndPosition>;
+
+        return $l0;
+    }
+

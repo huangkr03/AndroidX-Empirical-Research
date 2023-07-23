@@ -1,0 +1,231 @@
+androidx.media3.exoplayer.video.spherical.FrameRotationQueue
+<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: float[] recenterMatrix>
+<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: float[] rotationMatrix>
+<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: androidx.media3.common.util.TimedValueQueue rotations>
+<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: boolean recenterMatrixComputed>
+    public void <init>()
+    {
+        androidx.media3.exoplayer.video.spherical.FrameRotationQueue r0;
+        float[] $r1, $r2;
+        androidx.media3.common.util.TimedValueQueue $r3;
+
+        r0 := @this: androidx.media3.exoplayer.video.spherical.FrameRotationQueue;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = newarray (float)[16];
+
+        r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: float[] recenterMatrix> = $r1;
+
+        $r2 = newarray (float)[16];
+
+        r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: float[] rotationMatrix> = $r2;
+
+        $r3 = new androidx.media3.common.util.TimedValueQueue;
+
+        specialinvoke $r3.<androidx.media3.common.util.TimedValueQueue: void <init>()>();
+
+        r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: androidx.media3.common.util.TimedValueQueue rotations> = $r3;
+
+        return;
+    }
+
+    public void setRotation(long, float[])
+    {
+        androidx.media3.exoplayer.video.spherical.FrameRotationQueue r0;
+        long l0;
+        float[] r1;
+        androidx.media3.common.util.TimedValueQueue $r2;
+
+        r0 := @this: androidx.media3.exoplayer.video.spherical.FrameRotationQueue;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: float[];
+
+        $r2 = r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: androidx.media3.common.util.TimedValueQueue rotations>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.TimedValueQueue: void add(long,java.lang.Object)>(l0, r1);
+
+        return;
+    }
+
+    public void reset()
+    {
+        androidx.media3.exoplayer.video.spherical.FrameRotationQueue r0;
+        androidx.media3.common.util.TimedValueQueue $r1;
+
+        r0 := @this: androidx.media3.exoplayer.video.spherical.FrameRotationQueue;
+
+        $r1 = r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: androidx.media3.common.util.TimedValueQueue rotations>;
+
+        virtualinvoke $r1.<androidx.media3.common.util.TimedValueQueue: void clear()>();
+
+        r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: boolean recenterMatrixComputed> = 0;
+
+        return;
+    }
+
+    public boolean pollRotationMatrix(float[], long)
+    {
+        androidx.media3.exoplayer.video.spherical.FrameRotationQueue r0;
+        float[] r1, r2, $r5, $r6, $r7, $r8, $r9;
+        long l0;
+        androidx.media3.common.util.TimedValueQueue $r3;
+        java.lang.Object $r4;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.exoplayer.video.spherical.FrameRotationQueue;
+
+        r1 := @parameter0: float[];
+
+        l0 := @parameter1: long;
+
+        $r3 = r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: androidx.media3.common.util.TimedValueQueue rotations>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.TimedValueQueue: java.lang.Object pollFloor(long)>(l0);
+
+        r2 = (float[]) $r4;
+
+        if r2 != null goto label1;
+
+        return 0;
+
+     label1:
+        $r5 = r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: float[] rotationMatrix>;
+
+        staticinvoke <androidx.media3.exoplayer.video.spherical.FrameRotationQueue: void getRotationMatrixFromAngleAxis(float[],float[])>($r5, r2);
+
+        $z0 = r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: boolean recenterMatrixComputed>;
+
+        if $z0 != 0 goto label2;
+
+        $r9 = r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: float[] recenterMatrix>;
+
+        $r8 = r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: float[] rotationMatrix>;
+
+        staticinvoke <androidx.media3.exoplayer.video.spherical.FrameRotationQueue: void computeRecenterMatrix(float[],float[])>($r9, $r8);
+
+        r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: boolean recenterMatrixComputed> = 1;
+
+     label2:
+        $r7 = r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: float[] recenterMatrix>;
+
+        $r6 = r0.<androidx.media3.exoplayer.video.spherical.FrameRotationQueue: float[] rotationMatrix>;
+
+        staticinvoke <android.opengl.Matrix: void multiplyMM(float[],int,float[],int,float[],int)>(r1, 0, $r7, 0, $r6, 0);
+
+        return 1;
+    }
+
+    public static void computeRecenterMatrix(float[], float[])
+    {
+        float[] r0, r1;
+        float f0, f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8, $f9, $f10, $f11, $f12, $f13, $f14, $f15, $f16;
+        double $d0, $d1;
+
+        r0 := @parameter0: float[];
+
+        r1 := @parameter1: float[];
+
+        staticinvoke <androidx.media3.common.util.GlUtil: void setToIdentity(float[])>(r0);
+
+        $f3 = r1[10];
+
+        $f2 = r1[10];
+
+        $f7 = $f3 * $f2;
+
+        $f5 = r1[8];
+
+        $f4 = r1[8];
+
+        $f6 = $f5 * $f4;
+
+        f0 = $f7 + $f6;
+
+        $d0 = (double) f0;
+
+        $d1 = staticinvoke <java.lang.Math: double sqrt(double)>($d0);
+
+        f1 = (float) $d1;
+
+        $f8 = r1[10];
+
+        $f9 = $f8 / f1;
+
+        r0[0] = $f9;
+
+        $f10 = r1[8];
+
+        $f11 = $f10 / f1;
+
+        r0[2] = $f11;
+
+        $f12 = r1[8];
+
+        $f13 = neg $f12;
+
+        $f14 = $f13 / f1;
+
+        r0[8] = $f14;
+
+        $f15 = r1[10];
+
+        $f16 = $f15 / f1;
+
+        r0[10] = $f16;
+
+        return;
+    }
+
+    private static void getRotationMatrixFromAngleAxis(float[], float[])
+    {
+        float[] r0, r1;
+        float f0, f1, f2, f3, f4, $f5, $f6, $f7, $f8, $f9;
+        byte $b0;
+        double $d0, $d1;
+
+        r0 := @parameter0: float[];
+
+        r1 := @parameter1: float[];
+
+        f0 = r1[0];
+
+        $f5 = r1[1];
+
+        f1 = neg $f5;
+
+        $f6 = r1[2];
+
+        f2 = neg $f6;
+
+        f3 = staticinvoke <android.opengl.Matrix: float length(float,float,float)>(f0, f1, f2);
+
+        $b0 = f3 cmpl 0.0F;
+
+        if $b0 == 0 goto label1;
+
+        $d0 = (double) f3;
+
+        $d1 = staticinvoke <java.lang.Math: double toDegrees(double)>($d0);
+
+        f4 = (float) $d1;
+
+        $f9 = f0 / f3;
+
+        $f8 = f1 / f3;
+
+        $f7 = f2 / f3;
+
+        staticinvoke <android.opengl.Matrix: void setRotateM(float[],int,float,float,float,float)>(r0, 0, f4, $f9, $f8, $f7);
+
+        goto label2;
+
+     label1:
+        staticinvoke <androidx.media3.common.util.GlUtil: void setToIdentity(float[])>(r0);
+
+     label2:
+        return;
+    }
+

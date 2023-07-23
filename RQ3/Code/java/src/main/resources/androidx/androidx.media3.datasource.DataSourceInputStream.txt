@@ -1,0 +1,208 @@
+androidx.media3.datasource.DataSourceInputStream
+<androidx.media3.datasource.DataSourceInputStream: androidx.media3.datasource.DataSource dataSource>
+<androidx.media3.datasource.DataSourceInputStream: androidx.media3.datasource.DataSpec dataSpec>
+<androidx.media3.datasource.DataSourceInputStream: byte[] singleByteArray>
+<androidx.media3.datasource.DataSourceInputStream: boolean opened>
+<androidx.media3.datasource.DataSourceInputStream: boolean closed>
+<androidx.media3.datasource.DataSourceInputStream: long totalBytesRead>
+    public void <init>(androidx.media3.datasource.DataSource, androidx.media3.datasource.DataSpec)
+    {
+        androidx.media3.datasource.DataSourceInputStream r0;
+        androidx.media3.datasource.DataSource r1;
+        androidx.media3.datasource.DataSpec r2;
+        byte[] $r3;
+
+        r0 := @this: androidx.media3.datasource.DataSourceInputStream;
+
+        r1 := @parameter0: androidx.media3.datasource.DataSource;
+
+        r2 := @parameter1: androidx.media3.datasource.DataSpec;
+
+        specialinvoke r0.<java.io.InputStream: void <init>()>();
+
+        r0.<androidx.media3.datasource.DataSourceInputStream: boolean opened> = 0;
+
+        r0.<androidx.media3.datasource.DataSourceInputStream: boolean closed> = 0;
+
+        r0.<androidx.media3.datasource.DataSourceInputStream: androidx.media3.datasource.DataSource dataSource> = r1;
+
+        r0.<androidx.media3.datasource.DataSourceInputStream: androidx.media3.datasource.DataSpec dataSpec> = r2;
+
+        $r3 = newarray (byte)[1];
+
+        r0.<androidx.media3.datasource.DataSourceInputStream: byte[] singleByteArray> = $r3;
+
+        return;
+    }
+
+    public long bytesRead()
+    {
+        androidx.media3.datasource.DataSourceInputStream r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.datasource.DataSourceInputStream;
+
+        $l0 = r0.<androidx.media3.datasource.DataSourceInputStream: long totalBytesRead>;
+
+        return $l0;
+    }
+
+    public void open() throws java.io.IOException
+    {
+        androidx.media3.datasource.DataSourceInputStream r0;
+
+        r0 := @this: androidx.media3.datasource.DataSourceInputStream;
+
+        specialinvoke r0.<androidx.media3.datasource.DataSourceInputStream: void checkOpened()>();
+
+        return;
+    }
+
+    public int read() throws java.io.IOException
+    {
+        androidx.media3.datasource.DataSourceInputStream r0;
+        int i0;
+        byte[] $r1, $r2;
+        byte $b1;
+        short $s2;
+
+        r0 := @this: androidx.media3.datasource.DataSourceInputStream;
+
+        $r1 = r0.<androidx.media3.datasource.DataSourceInputStream: byte[] singleByteArray>;
+
+        i0 = virtualinvoke r0.<androidx.media3.datasource.DataSourceInputStream: int read(byte[])>($r1);
+
+        if i0 != -1 goto label1;
+
+        $s2 = -1;
+
+        goto label2;
+
+     label1:
+        $r2 = r0.<androidx.media3.datasource.DataSourceInputStream: byte[] singleByteArray>;
+
+        $b1 = $r2[0];
+
+        $s2 = $b1 & 255;
+
+     label2:
+        return $s2;
+    }
+
+    public int read(byte[]) throws java.io.IOException
+    {
+        androidx.media3.datasource.DataSourceInputStream r0;
+        byte[] r1;
+        int $i0, $i1;
+
+        r0 := @this: androidx.media3.datasource.DataSourceInputStream;
+
+        r1 := @parameter0: byte[];
+
+        $i0 = lengthof r1;
+
+        $i1 = virtualinvoke r0.<androidx.media3.datasource.DataSourceInputStream: int read(byte[],int,int)>(r1, 0, $i0);
+
+        return $i1;
+    }
+
+    public int read(byte[], int, int) throws java.io.IOException
+    {
+        androidx.media3.datasource.DataSourceInputStream r0;
+        byte[] r1;
+        int i0, i1, i2;
+        boolean $z0, $z1;
+        androidx.media3.datasource.DataSource $r2;
+        long $l3, $l4, $l5;
+
+        r0 := @this: androidx.media3.datasource.DataSourceInputStream;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $z0 = r0.<androidx.media3.datasource.DataSourceInputStream: boolean closed>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        specialinvoke r0.<androidx.media3.datasource.DataSourceInputStream: void checkOpened()>();
+
+        $r2 = r0.<androidx.media3.datasource.DataSourceInputStream: androidx.media3.datasource.DataSource dataSource>;
+
+        i2 = interfaceinvoke $r2.<androidx.media3.datasource.DataSource: int read(byte[],int,int)>(r1, i0, i1);
+
+        if i2 != -1 goto label3;
+
+        return -1;
+
+     label3:
+        $l4 = r0.<androidx.media3.datasource.DataSourceInputStream: long totalBytesRead>;
+
+        $l3 = (long) i2;
+
+        $l5 = $l4 + $l3;
+
+        r0.<androidx.media3.datasource.DataSourceInputStream: long totalBytesRead> = $l5;
+
+        return i2;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        androidx.media3.datasource.DataSourceInputStream r0;
+        boolean $z0;
+        androidx.media3.datasource.DataSource $r1;
+
+        r0 := @this: androidx.media3.datasource.DataSourceInputStream;
+
+        $z0 = r0.<androidx.media3.datasource.DataSourceInputStream: boolean closed>;
+
+        if $z0 != 0 goto label1;
+
+        $r1 = r0.<androidx.media3.datasource.DataSourceInputStream: androidx.media3.datasource.DataSource dataSource>;
+
+        interfaceinvoke $r1.<androidx.media3.datasource.DataSource: void close()>();
+
+        r0.<androidx.media3.datasource.DataSourceInputStream: boolean closed> = 1;
+
+     label1:
+        return;
+    }
+
+    private void checkOpened() throws java.io.IOException
+    {
+        androidx.media3.datasource.DataSourceInputStream r0;
+        boolean $z0;
+        androidx.media3.datasource.DataSpec $r1;
+        androidx.media3.datasource.DataSource $r2;
+
+        r0 := @this: androidx.media3.datasource.DataSourceInputStream;
+
+        $z0 = r0.<androidx.media3.datasource.DataSourceInputStream: boolean opened>;
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<androidx.media3.datasource.DataSourceInputStream: androidx.media3.datasource.DataSource dataSource>;
+
+        $r1 = r0.<androidx.media3.datasource.DataSourceInputStream: androidx.media3.datasource.DataSpec dataSpec>;
+
+        interfaceinvoke $r2.<androidx.media3.datasource.DataSource: long open(androidx.media3.datasource.DataSpec)>($r1);
+
+        r0.<androidx.media3.datasource.DataSourceInputStream: boolean opened> = 1;
+
+     label1:
+        return;
+    }
+

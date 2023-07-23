@@ -1,0 +1,222 @@
+androidx.wear.tiles.renderer.InlineResourceAccessor
+<androidx.wear.tiles.renderer.InlineResourceAccessor: int RGB565_BYTES_PER_PX>
+<androidx.wear.tiles.renderer.InlineResourceAccessor: android.content.Context mAppContext>
+    public void <init>(android.content.Context)
+    {
+        androidx.wear.tiles.renderer.InlineResourceAccessor r0;
+        android.content.Context r1;
+
+        r0 := @this: androidx.wear.tiles.renderer.InlineResourceAccessor;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.wear.tiles.renderer.InlineResourceAccessor: android.content.Context mAppContext> = r1;
+
+        return;
+    }
+
+    private static android.graphics.Bitmap$Config imageFormatToBitmapConfig(androidx.wear.tiles.proto.ResourceProto$ImageFormat)
+    {
+        androidx.wear.tiles.proto.ResourceProto$ImageFormat r0;
+        int[] $r1;
+        int $i0, $i1;
+        android.graphics.Bitmap$Config $r2;
+
+        r0 := @parameter0: androidx.wear.tiles.proto.ResourceProto$ImageFormat;
+
+        $r1 = <androidx.wear.tiles.renderer.InlineResourceAccessor$1: int[] $SwitchMap$androidx$wear$tiles$proto$ResourceProto$ImageFormat>;
+
+        $i0 = virtualinvoke r0.<androidx.wear.tiles.proto.ResourceProto$ImageFormat: int ordinal()>();
+
+        $i1 = $r1[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label2;
+            default: goto label3;
+        };
+
+     label1:
+        $r2 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config RGB_565>;
+
+        return $r2;
+
+     label2:
+        return null;
+
+     label3:
+        return null;
+    }
+
+    public com.google.common.util.concurrent.ListenableFuture getDrawable(androidx.wear.tiles.proto.ResourceProto$InlineImageResource)
+    {
+        androidx.wear.tiles.renderer.InlineResourceAccessor r0;
+        androidx.wear.tiles.proto.ResourceProto$InlineImageResource r1;
+        android.graphics.Bitmap$Config r2, $r6;
+        androidx.concurrent.futures.ResolvableFuture r3;
+        int i0, i1, i2, $i3, $i4;
+        android.graphics.Bitmap r4;
+        androidx.wear.tiles.proto.ResourceProto$ImageFormat $r5;
+        androidx.wear.tiles.protobuf.ByteString $r7, $r8;
+        byte[] $r9;
+        java.nio.ByteBuffer $r10;
+        android.content.Context $r12;
+        android.content.res.Resources $r13;
+        androidx.wear.tiles.renderer.ResourceAccessors$ResourceAccessException r16, r17;
+        android.graphics.drawable.BitmapDrawable r18;
+        java.lang.Throwable r19, r20;
+
+        r0 := @this: androidx.wear.tiles.renderer.InlineResourceAccessor;
+
+        r1 := @parameter0: androidx.wear.tiles.proto.ResourceProto$InlineImageResource;
+
+        $r5 = virtualinvoke r1.<androidx.wear.tiles.proto.ResourceProto$InlineImageResource: androidx.wear.tiles.proto.ResourceProto$ImageFormat getFormat()>();
+
+        r2 = staticinvoke <androidx.wear.tiles.renderer.InlineResourceAccessor: android.graphics.Bitmap$Config imageFormatToBitmapConfig(androidx.wear.tiles.proto.ResourceProto$ImageFormat)>($r5);
+
+        r3 = staticinvoke <androidx.concurrent.futures.ResolvableFuture: androidx.concurrent.futures.ResolvableFuture create()>();
+
+        $r6 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config RGB_565>;
+
+        if r2 == $r6 goto label1;
+
+        r16 = new androidx.wear.tiles.renderer.ResourceAccessors$ResourceAccessException;
+
+        specialinvoke r16.<androidx.wear.tiles.renderer.ResourceAccessors$ResourceAccessException: void <init>(java.lang.String)>("Unknown image format in image resource.");
+
+        r19 = (java.lang.Throwable) r16;
+
+        virtualinvoke r3.<androidx.concurrent.futures.ResolvableFuture: boolean setException(java.lang.Throwable)>(r19);
+
+        return r3;
+
+     label1:
+        i0 = virtualinvoke r1.<androidx.wear.tiles.proto.ResourceProto$InlineImageResource: int getWidthPx()>();
+
+        i1 = virtualinvoke r1.<androidx.wear.tiles.proto.ResourceProto$InlineImageResource: int getHeightPx()>();
+
+        $i3 = i0 * i1;
+
+        i2 = $i3 * 2;
+
+        $r7 = virtualinvoke r1.<androidx.wear.tiles.proto.ResourceProto$InlineImageResource: androidx.wear.tiles.protobuf.ByteString getData()>();
+
+        $i4 = virtualinvoke $r7.<androidx.wear.tiles.protobuf.ByteString: int size()>();
+
+        if $i4 == i2 goto label2;
+
+        r17 = new androidx.wear.tiles.renderer.ResourceAccessors$ResourceAccessException;
+
+        specialinvoke r17.<androidx.wear.tiles.renderer.ResourceAccessors$ResourceAccessException: void <init>(java.lang.String)>("Mismatch between image data size and dimensions in image resource.");
+
+        r20 = (java.lang.Throwable) r17;
+
+        virtualinvoke r3.<androidx.concurrent.futures.ResolvableFuture: boolean setException(java.lang.Throwable)>(r20);
+
+        return r3;
+
+     label2:
+        r4 = staticinvoke <android.graphics.Bitmap: android.graphics.Bitmap createBitmap(int,int,android.graphics.Bitmap$Config)>(i0, i1, r2);
+
+        $r8 = virtualinvoke r1.<androidx.wear.tiles.proto.ResourceProto$InlineImageResource: androidx.wear.tiles.protobuf.ByteString getData()>();
+
+        $r9 = virtualinvoke $r8.<androidx.wear.tiles.protobuf.ByteString: byte[] toByteArray()>();
+
+        $r10 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>($r9);
+
+        virtualinvoke r4.<android.graphics.Bitmap: void copyPixelsFromBuffer(java.nio.Buffer)>($r10);
+
+        r18 = new android.graphics.drawable.BitmapDrawable;
+
+        $r12 = r0.<androidx.wear.tiles.renderer.InlineResourceAccessor: android.content.Context mAppContext>;
+
+        $r13 = virtualinvoke $r12.<android.content.Context: android.content.res.Resources getResources()>();
+
+        specialinvoke r18.<android.graphics.drawable.BitmapDrawable: void <init>(android.content.res.Resources,android.graphics.Bitmap)>($r13, r4);
+
+        virtualinvoke r3.<androidx.concurrent.futures.ResolvableFuture: boolean set(java.lang.Object)>(r18);
+
+        return r3;
+    }
+
+androidx.wear.tiles.renderer.InlineResourceAccessor$1
+<androidx.wear.tiles.renderer.InlineResourceAccessor$1: int[] $SwitchMap$androidx$wear$tiles$proto$ResourceProto$ImageFormat>
+    static void <clinit>()
+    {
+        androidx.wear.tiles.proto.ResourceProto$ImageFormat[] $r0;
+        int $i0, $i1, $i2, $i3;
+        int[] $r1, $r3, $r5, $r7;
+        androidx.wear.tiles.proto.ResourceProto$ImageFormat $r2, $r4, $r6;
+        java.lang.Throwable $r8, $r9, $r10, r11, r12, r13;
+
+        $r0 = staticinvoke <androidx.wear.tiles.proto.ResourceProto$ImageFormat: androidx.wear.tiles.proto.ResourceProto$ImageFormat[] values()>();
+
+        $i0 = lengthof $r0;
+
+        $r1 = newarray (int)[$i0];
+
+        <androidx.wear.tiles.renderer.InlineResourceAccessor$1: int[] $SwitchMap$androidx$wear$tiles$proto$ResourceProto$ImageFormat> = $r1;
+
+     label01:
+        $r3 = <androidx.wear.tiles.renderer.InlineResourceAccessor$1: int[] $SwitchMap$androidx$wear$tiles$proto$ResourceProto$ImageFormat>;
+
+        $r2 = <androidx.wear.tiles.proto.ResourceProto$ImageFormat: androidx.wear.tiles.proto.ResourceProto$ImageFormat IMAGE_FORMAT_RGB_565>;
+
+        $i1 = virtualinvoke $r2.<androidx.wear.tiles.proto.ResourceProto$ImageFormat: int ordinal()>();
+
+        $r3[$i1] = 1;
+
+     label02:
+        goto label04;
+
+     label03:
+        $r8 := @caughtexception;
+
+        r11 = $r8;
+
+     label04:
+        $r5 = <androidx.wear.tiles.renderer.InlineResourceAccessor$1: int[] $SwitchMap$androidx$wear$tiles$proto$ResourceProto$ImageFormat>;
+
+        $r4 = <androidx.wear.tiles.proto.ResourceProto$ImageFormat: androidx.wear.tiles.proto.ResourceProto$ImageFormat IMAGE_FORMAT_UNDEFINED>;
+
+        $i2 = virtualinvoke $r4.<androidx.wear.tiles.proto.ResourceProto$ImageFormat: int ordinal()>();
+
+        $r5[$i2] = 2;
+
+     label05:
+        goto label07;
+
+     label06:
+        $r9 := @caughtexception;
+
+        r12 = $r9;
+
+     label07:
+        $r7 = <androidx.wear.tiles.renderer.InlineResourceAccessor$1: int[] $SwitchMap$androidx$wear$tiles$proto$ResourceProto$ImageFormat>;
+
+        $r6 = <androidx.wear.tiles.proto.ResourceProto$ImageFormat: androidx.wear.tiles.proto.ResourceProto$ImageFormat UNRECOGNIZED>;
+
+        $i3 = virtualinvoke $r6.<androidx.wear.tiles.proto.ResourceProto$ImageFormat: int ordinal()>();
+
+        $r7[$i3] = 3;
+
+     label08:
+        goto label10;
+
+     label09:
+        $r10 := @caughtexception;
+
+        r13 = $r10;
+
+     label10:
+        return;
+
+        catch java.lang.NoSuchFieldError from label01 to label02 with label03;
+        catch java.lang.NoSuchFieldError from label04 to label05 with label06;
+        catch java.lang.NoSuchFieldError from label07 to label08 with label09;
+    }
+

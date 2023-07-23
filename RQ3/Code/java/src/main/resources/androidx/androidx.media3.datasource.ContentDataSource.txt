@@ -1,0 +1,638 @@
+androidx.media3.datasource.ContentDataSource
+<androidx.media3.datasource.ContentDataSource: android.content.ContentResolver resolver>
+<androidx.media3.datasource.ContentDataSource: android.net.Uri uri>
+<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>
+<androidx.media3.datasource.ContentDataSource: java.io.FileInputStream inputStream>
+<androidx.media3.datasource.ContentDataSource: long bytesRemaining>
+<androidx.media3.datasource.ContentDataSource: boolean opened>
+    public void <init>(android.content.Context)
+    {
+        androidx.media3.datasource.ContentDataSource r0;
+        android.content.Context r1;
+        android.content.ContentResolver $r2;
+
+        r0 := @this: androidx.media3.datasource.ContentDataSource;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<androidx.media3.datasource.BaseDataSource: void <init>(boolean)>(0);
+
+        $r2 = virtualinvoke r1.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        r0.<androidx.media3.datasource.ContentDataSource: android.content.ContentResolver resolver> = $r2;
+
+        return;
+    }
+
+    public long open(androidx.media3.datasource.DataSpec) throws androidx.media3.datasource.ContentDataSource$ContentDataSourceException
+    {
+        androidx.media3.datasource.ContentDataSource r0;
+        androidx.media3.datasource.DataSpec r1;
+        java.io.FileInputStream r2, r34;
+        long l0, l1, l2, $l4, $l5, $l6, $l7, $l10, $l11, $l13, $l15, $l17, $l18, $l20, $l21, $l22, $l24, l26, $l28, $l29, $l31;
+        java.nio.channels.FileChannel r3;
+        android.net.Uri $r4, r26;
+        java.lang.String $r5, $r6, $r20;
+        boolean $z0, $z1;
+        android.content.ContentResolver $r7, $r22;
+        java.io.FileDescriptor $r9;
+        byte $b3, $b8, $b9, $b12, $b14, $b16, $b19, $b23, $b25, $b30;
+        java.lang.StringBuilder $r18, $r19, r31;
+        java.lang.Throwable $r23, r29, r40, r41, r42, r43, r44, r45;
+        android.os.Bundle r27, r30;
+        android.content.res.AssetFileDescriptor r28;
+        short $s27;
+        java.io.IOException r32;
+        androidx.media3.datasource.ContentDataSource$ContentDataSourceException r33, r35, r36, r37, r38, r39;
+
+        r0 := @this: androidx.media3.datasource.ContentDataSource;
+
+        r1 := @parameter0: androidx.media3.datasource.DataSpec;
+
+     label01:
+        r26 = r1.<androidx.media3.datasource.DataSpec: android.net.Uri uri>;
+
+        r0.<androidx.media3.datasource.ContentDataSource: android.net.Uri uri> = r26;
+
+        virtualinvoke r0.<androidx.media3.datasource.ContentDataSource: void transferInitializing(androidx.media3.datasource.DataSpec)>(r1);
+
+        $r5 = "content";
+
+        $r4 = r1.<androidx.media3.datasource.DataSpec: android.net.Uri uri>;
+
+        $r6 = virtualinvoke $r4.<android.net.Uri: java.lang.String getScheme()>();
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label02;
+
+        r30 = new android.os.Bundle;
+
+        specialinvoke r30.<android.os.Bundle: void <init>()>();
+
+        r27 = r30;
+
+        virtualinvoke r27.<android.os.Bundle: void putBoolean(java.lang.String,boolean)>("android.provider.extra.ACCEPT_ORIGINAL_MEDIA_FORMAT", 1);
+
+        $r22 = r0.<androidx.media3.datasource.ContentDataSource: android.content.ContentResolver resolver>;
+
+        r28 = virtualinvoke $r22.<android.content.ContentResolver: android.content.res.AssetFileDescriptor openTypedAssetFileDescriptor(android.net.Uri,java.lang.String,android.os.Bundle)>(r26, "*/*", r27);
+
+        goto label03;
+
+     label02:
+        $r7 = r0.<androidx.media3.datasource.ContentDataSource: android.content.ContentResolver resolver>;
+
+        r28 = virtualinvoke $r7.<android.content.ContentResolver: android.content.res.AssetFileDescriptor openAssetFileDescriptor(android.net.Uri,java.lang.String)>(r26, "r");
+
+     label03:
+        r0.<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = r28;
+
+        if r28 != null goto label04;
+
+        r33 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        r32 = new java.io.IOException;
+
+        r31 = new java.lang.StringBuilder;
+
+        specialinvoke r31.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Could not open file descriptor for: ");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r26);
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r32.<java.io.IOException: void <init>(java.lang.String)>($r20);
+
+        specialinvoke r33.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(r32, 2000);
+
+        r40 = (java.lang.Throwable) r33;
+
+        throw r40;
+
+     label04:
+        l26 = virtualinvoke r28.<android.content.res.AssetFileDescriptor: long getLength()>();
+
+        r34 = new java.io.FileInputStream;
+
+        $r9 = virtualinvoke r28.<android.content.res.AssetFileDescriptor: java.io.FileDescriptor getFileDescriptor()>();
+
+        specialinvoke r34.<java.io.FileInputStream: void <init>(java.io.FileDescriptor)>($r9);
+
+        r2 = r34;
+
+        r0.<androidx.media3.datasource.ContentDataSource: java.io.FileInputStream inputStream> = r2;
+
+        $b3 = l26 cmp -1L;
+
+        if $b3 == 0 goto label05;
+
+        $l24 = r1.<androidx.media3.datasource.DataSpec: long position>;
+
+        $b25 = $l24 cmp l26;
+
+        if $b25 <= 0 goto label05;
+
+        r35 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        specialinvoke r35.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(null, 2008);
+
+        r41 = (java.lang.Throwable) r35;
+
+        throw r41;
+
+     label05:
+        l0 = virtualinvoke r28.<android.content.res.AssetFileDescriptor: long getStartOffset()>();
+
+        $l4 = r1.<androidx.media3.datasource.DataSpec: long position>;
+
+        $l5 = l0 + $l4;
+
+        $l6 = virtualinvoke r2.<java.io.FileInputStream: long skip(long)>($l5);
+
+        l1 = $l6 - l0;
+
+        $l7 = r1.<androidx.media3.datasource.DataSpec: long position>;
+
+        $b8 = l1 cmp $l7;
+
+        if $b8 == 0 goto label06;
+
+        r36 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        specialinvoke r36.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(null, 2008);
+
+        r42 = (java.lang.Throwable) r36;
+
+        throw r42;
+
+     label06:
+        $b9 = l26 cmp -1L;
+
+        if $b9 != 0 goto label09;
+
+        r3 = virtualinvoke r2.<java.io.FileInputStream: java.nio.channels.FileChannel getChannel()>();
+
+        l2 = virtualinvoke r3.<java.nio.channels.FileChannel: long size()>();
+
+        $b19 = l2 cmp 0L;
+
+        if $b19 != 0 goto label07;
+
+        r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining> = -1L;
+
+        goto label08;
+
+     label07:
+        $l20 = virtualinvoke r3.<java.nio.channels.FileChannel: long position()>();
+
+        $l21 = l2 - $l20;
+
+        r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining> = $l21;
+
+        $l22 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+        $b23 = $l22 cmp 0L;
+
+        if $b23 >= 0 goto label08;
+
+        r37 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        specialinvoke r37.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(null, 2008);
+
+        r43 = (java.lang.Throwable) r37;
+
+        throw r43;
+
+     label08:
+        goto label10;
+
+     label09:
+        $l10 = l26 - l1;
+
+        r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining> = $l10;
+
+        $l11 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+        $b12 = $l11 cmp 0L;
+
+        if $b12 >= 0 goto label10;
+
+        r38 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        specialinvoke r38.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(null, 2008);
+
+        r44 = (java.lang.Throwable) r38;
+
+        throw r44;
+
+     label10:
+        goto label14;
+
+     label11:
+        $r23 := @caughtexception;
+
+        r29 = $r23;
+
+        r39 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        $z1 = r29 instanceof java.io.FileNotFoundException;
+
+        if $z1 == 0 goto label12;
+
+        $s27 = 2005;
+
+        goto label13;
+
+     label12:
+        $s27 = 2000;
+
+     label13:
+        specialinvoke r39.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(r29, $s27);
+
+        r45 = (java.lang.Throwable) r39;
+
+        throw r45;
+
+     label14:
+        $l13 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $b14 = $l13 cmp -1L;
+
+        if $b14 == 0 goto label17;
+
+        $l15 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+        $b16 = $l15 cmp -1L;
+
+        if $b16 != 0 goto label15;
+
+        $l28 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        goto label16;
+
+     label15:
+        $l18 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+        $l17 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $l28 = staticinvoke <java.lang.Math: long min(long,long)>($l18, $l17);
+
+     label16:
+        r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining> = $l28;
+
+     label17:
+        r0.<androidx.media3.datasource.ContentDataSource: boolean opened> = 1;
+
+        virtualinvoke r0.<androidx.media3.datasource.ContentDataSource: void transferStarted(androidx.media3.datasource.DataSpec)>(r1);
+
+        $l29 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $b30 = $l29 cmp -1L;
+
+        if $b30 == 0 goto label18;
+
+        $l31 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        goto label19;
+
+     label18:
+        $l31 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+     label19:
+        return $l31;
+
+        catch java.io.IOException from label01 to label10 with label11;
+    }
+
+    public int read(byte[], int, int) throws androidx.media3.datasource.ContentDataSource$ContentDataSourceException
+    {
+        androidx.media3.datasource.ContentDataSource r0;
+        byte[] r1;
+        int i0, i1, i2, $i15, i16;
+        long $l3, $l5, $l7, $l8, $l9, $l10, $l12, $l13, $l14;
+        byte $b4, $b6, $b11;
+        java.io.FileInputStream $r2, $r4;
+        java.lang.Object $r3;
+        java.lang.Throwable $r5, r7, r9;
+        androidx.media3.datasource.ContentDataSource$ContentDataSourceException r8;
+
+        r0 := @this: androidx.media3.datasource.ContentDataSource;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        if i1 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $l3 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+        $b4 = $l3 cmp 0L;
+
+        if $b4 != 0 goto label2;
+
+        return -1;
+
+     label2:
+        $l5 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+        $b6 = $l5 cmp -1L;
+
+        if $b6 != 0 goto label3;
+
+        $i15 = i1;
+
+        goto label4;
+
+     label3:
+        $l8 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+        $l7 = (long) i1;
+
+        $l9 = staticinvoke <java.lang.Math: long min(long,long)>($l8, $l7);
+
+        $i15 = (int) $l9;
+
+     label4:
+        i16 = $i15;
+
+        $r2 = r0.<androidx.media3.datasource.ContentDataSource: java.io.FileInputStream inputStream>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r2);
+
+        $r4 = (java.io.FileInputStream) $r3;
+
+        i2 = virtualinvoke $r4.<java.io.FileInputStream: int read(byte[],int,int)>(r1, i0, i16);
+
+     label5:
+        goto label7;
+
+     label6:
+        $r5 := @caughtexception;
+
+        r7 = $r5;
+
+        r8 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        specialinvoke r8.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(r7, 2000);
+
+        r9 = (java.lang.Throwable) r8;
+
+        throw r9;
+
+     label7:
+        if i2 != -1 goto label8;
+
+        return -1;
+
+     label8:
+        $l10 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+        $b11 = $l10 cmp -1L;
+
+        if $b11 == 0 goto label9;
+
+        $l13 = r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining>;
+
+        $l12 = (long) i2;
+
+        $l14 = $l13 - $l12;
+
+        r0.<androidx.media3.datasource.ContentDataSource: long bytesRemaining> = $l14;
+
+     label9:
+        virtualinvoke r0.<androidx.media3.datasource.ContentDataSource: void bytesTransferred(int)>(i2);
+
+        return i2;
+
+        catch java.io.IOException from label2 to label5 with label6;
+    }
+
+    public android.net.Uri getUri()
+    {
+        androidx.media3.datasource.ContentDataSource r0;
+        android.net.Uri $r1;
+
+        r0 := @this: androidx.media3.datasource.ContentDataSource;
+
+        $r1 = r0.<androidx.media3.datasource.ContentDataSource: android.net.Uri uri>;
+
+        return $r1;
+    }
+
+    public void close() throws androidx.media3.datasource.ContentDataSource$ContentDataSourceException
+    {
+        androidx.media3.datasource.ContentDataSource r0;
+        java.lang.Throwable r1, r2, r3, r4, $r9, $r10, $r12, $r14, $r16, $r17, r20, r21, r25, r26, r27;
+        java.io.FileInputStream $r5, $r8;
+        android.content.res.AssetFileDescriptor $r6, $r7, $r18, $r19;
+        boolean $z0, $z1, $z2, $z3;
+        androidx.media3.datasource.ContentDataSource$ContentDataSourceException r22, r23, r24;
+
+        r0 := @this: androidx.media3.datasource.ContentDataSource;
+
+        r0.<androidx.media3.datasource.ContentDataSource: android.net.Uri uri> = null;
+
+     label01:
+        $r5 = r0.<androidx.media3.datasource.ContentDataSource: java.io.FileInputStream inputStream>;
+
+        if $r5 == null goto label02;
+
+        $r8 = r0.<androidx.media3.datasource.ContentDataSource: java.io.FileInputStream inputStream>;
+
+        virtualinvoke $r8.<java.io.FileInputStream: void close()>();
+
+     label02:
+        r0.<androidx.media3.datasource.ContentDataSource: java.io.FileInputStream inputStream> = null;
+
+     label03:
+        $r6 = r0.<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>;
+
+        if $r6 == null goto label04;
+
+        $r7 = r0.<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>;
+
+        virtualinvoke $r7.<android.content.res.AssetFileDescriptor: void close()>();
+
+     label04:
+        r0.<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = null;
+
+        $z0 = r0.<androidx.media3.datasource.ContentDataSource: boolean opened>;
+
+        if $z0 == 0 goto label09;
+
+        r0.<androidx.media3.datasource.ContentDataSource: boolean opened> = 0;
+
+        virtualinvoke r0.<androidx.media3.datasource.ContentDataSource: void transferEnded()>();
+
+        goto label09;
+
+     label05:
+        $r14 := @caughtexception;
+
+        r20 = $r14;
+
+        r22 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        specialinvoke r22.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(r20, 2000);
+
+        r25 = (java.lang.Throwable) r22;
+
+        throw r25;
+
+     label06:
+        $r16 := @caughtexception;
+
+        r1 = $r16;
+
+     label07:
+        r0.<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = null;
+
+        $z2 = r0.<androidx.media3.datasource.ContentDataSource: boolean opened>;
+
+        if $z2 == 0 goto label08;
+
+        r0.<androidx.media3.datasource.ContentDataSource: boolean opened> = 0;
+
+        virtualinvoke r0.<androidx.media3.datasource.ContentDataSource: void transferEnded()>();
+
+     label08:
+        throw r1;
+
+     label09:
+        goto label20;
+
+     label10:
+        $r12 := @caughtexception;
+
+        r21 = $r12;
+
+        r23 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        specialinvoke r23.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(r21, 2000);
+
+        r26 = (java.lang.Throwable) r23;
+
+        throw r26;
+
+     label11:
+        $r17 := @caughtexception;
+
+        r2 = $r17;
+
+     label12:
+        r0.<androidx.media3.datasource.ContentDataSource: java.io.FileInputStream inputStream> = null;
+
+     label13:
+        $r18 = r0.<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>;
+
+        if $r18 == null goto label14;
+
+        $r19 = r0.<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>;
+
+        virtualinvoke $r19.<android.content.res.AssetFileDescriptor: void close()>();
+
+     label14:
+        r0.<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = null;
+
+        $z3 = r0.<androidx.media3.datasource.ContentDataSource: boolean opened>;
+
+        if $z3 == 0 goto label19;
+
+        r0.<androidx.media3.datasource.ContentDataSource: boolean opened> = 0;
+
+        virtualinvoke r0.<androidx.media3.datasource.ContentDataSource: void transferEnded()>();
+
+        goto label19;
+
+     label15:
+        $r10 := @caughtexception;
+
+        r3 = $r10;
+
+        r24 = new androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        specialinvoke r24.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(r3, 2000);
+
+        r27 = (java.lang.Throwable) r24;
+
+        throw r27;
+
+     label16:
+        $r9 := @caughtexception;
+
+        r4 = $r9;
+
+     label17:
+        r0.<androidx.media3.datasource.ContentDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = null;
+
+        $z1 = r0.<androidx.media3.datasource.ContentDataSource: boolean opened>;
+
+        if $z1 == 0 goto label18;
+
+        r0.<androidx.media3.datasource.ContentDataSource: boolean opened> = 0;
+
+        virtualinvoke r0.<androidx.media3.datasource.ContentDataSource: void transferEnded()>();
+
+     label18:
+        throw r4;
+
+     label19:
+        throw r2;
+
+     label20:
+        return;
+
+        catch java.io.IOException from label03 to label04 with label05;
+        catch java.lang.Throwable from label03 to label04 with label06;
+        catch java.lang.Throwable from label05 to label07 with label06;
+        catch java.io.IOException from label01 to label02 with label10;
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.io.IOException from label13 to label14 with label15;
+        catch java.lang.Throwable from label13 to label14 with label16;
+        catch java.lang.Throwable from label15 to label17 with label16;
+        catch java.lang.Throwable from label10 to label12 with label11;
+    }
+
+androidx.media3.datasource.ContentDataSource$ContentDataSourceException
+    public void <init>(java.io.IOException)
+    {
+        androidx.media3.datasource.ContentDataSource$ContentDataSourceException r0;
+        java.io.IOException r1;
+
+        r0 := @this: androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        r1 := @parameter0: java.io.IOException;
+
+        specialinvoke r0.<androidx.media3.datasource.ContentDataSource$ContentDataSourceException: void <init>(java.io.IOException,int)>(r1, 2000);
+
+        return;
+    }
+
+    public void <init>(java.io.IOException, int)
+    {
+        androidx.media3.datasource.ContentDataSource$ContentDataSourceException r0;
+        java.io.IOException r1;
+        int i0;
+        java.lang.Throwable r2;
+
+        r0 := @this: androidx.media3.datasource.ContentDataSource$ContentDataSourceException;
+
+        r1 := @parameter0: java.io.IOException;
+
+        i0 := @parameter1: int;
+
+        r2 = (java.lang.Throwable) r1;
+
+        specialinvoke r0.<androidx.media3.datasource.DataSourceException: void <init>(java.lang.Throwable,int)>(r2, i0);
+
+        return;
+    }
+

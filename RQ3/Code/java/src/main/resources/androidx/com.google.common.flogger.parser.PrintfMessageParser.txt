@@ -1,0 +1,426 @@
+com.google.common.flogger.parser.PrintfMessageParser
+<com.google.common.flogger.parser.PrintfMessageParser: java.lang.String SYSTEM_NEWLINE>
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <com.google.common.flogger.parser.PrintfMessageParser: java.lang.String getSafeSystemNewline()>();
+
+        <com.google.common.flogger.parser.PrintfMessageParser: java.lang.String SYSTEM_NEWLINE> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.google.common.flogger.parser.PrintfMessageParser $r0;
+
+        $r0 := @this: com.google.common.flogger.parser.PrintfMessageParser;
+
+        specialinvoke $r0.<com.google.common.flogger.parser.MessageParser: void <init>()>();
+
+        return;
+    }
+
+    private static int findFormatChar(java.lang.String, int, int) throws com.google.common.flogger.parser.ParseException
+    {
+        int $i0, $i1, $i2;
+        java.lang.String $r0;
+        char $c3;
+        com.google.common.flogger.parser.ParseException $r1;
+        java.lang.Throwable r2;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+     label1:
+        $i2 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i1 >= $i2 goto label3;
+
+        $c3 = virtualinvoke $r0.<java.lang.String: char charAt(int)>($i1);
+
+        $i2 = $c3 & -33;
+
+        $i2 = $i2 + -65;
+
+        $c3 = (char) $i2;
+
+        if $c3 >= 26 goto label2;
+
+        return $i1;
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $r1 = staticinvoke <com.google.common.flogger.parser.ParseException: com.google.common.flogger.parser.ParseException withStartPosition(java.lang.String,java.lang.String,int)>("unterminated parameter", $r0, $i0);
+
+        goto label4;
+
+     label4:
+        r2 = (java.lang.Throwable) $r1;
+
+        throw r2;
+    }
+
+    static java.lang.String getSafeSystemNewline()
+    {
+        java.lang.String $r0;
+        boolean $z0;
+        java.lang.Throwable $r1;
+
+        $r0 = staticinvoke <java.lang.System: java.lang.String getProperty(java.lang.String)>("line.separator");
+
+     label1:
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean matches(java.lang.String)>("\\n|\\r(?:\\n)?");
+
+     label2:
+        if $z0 == 0 goto label4;
+
+        return $r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+     label4:
+        return "\n";
+
+        catch java.lang.SecurityException from label1 to label2 with label3;
+    }
+
+    static int nextPrintfTerm(java.lang.String, int) throws com.google.common.flogger.parser.ParseException
+    {
+        java.lang.String $r0;
+        int $i0, $i1;
+        char $c2;
+        com.google.common.flogger.parser.ParseException $r1;
+        java.lang.Throwable r2;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+     label1:
+        $i1 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= $i1 goto label6;
+
+        $i1 = $i0 + 1;
+
+        $c2 = virtualinvoke $r0.<java.lang.String: char charAt(int)>($i0);
+
+        if $c2 == 37 goto label2;
+
+        $i0 = $i1;
+
+        goto label1;
+
+     label2:
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i1 >= $i0 goto label5;
+
+        $c2 = virtualinvoke $r0.<java.lang.String: char charAt(int)>($i1);
+
+        if $c2 == 37 goto label4;
+
+        if $c2 != 110 goto label3;
+
+        goto label4;
+
+     label3:
+        $i0 = $i1 + -1;
+
+        return $i0;
+
+     label4:
+        $i0 = $i1 + 1;
+
+        goto label1;
+
+     label5:
+        $i0 = $i1 + -1;
+
+        $r1 = staticinvoke <com.google.common.flogger.parser.ParseException: com.google.common.flogger.parser.ParseException withStartPosition(java.lang.String,java.lang.String,int)>("trailing unquoted \'%\' character", $r0, $i0);
+
+        r2 = (java.lang.Throwable) $r1;
+
+        throw r2;
+
+     label6:
+        return -1;
+    }
+
+    static void unescapePrintf(java.lang.StringBuilder, java.lang.String, int, int)
+    {
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1, $r2;
+        int $i0, $i1, $i2, $i3;
+        char $c4;
+
+        $r0 := @parameter0: java.lang.StringBuilder;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i2 := @parameter2: int;
+
+        $i0 := @parameter3: int;
+
+        $i3 = $i2;
+
+     label1:
+        if $i2 >= $i0 goto label8;
+
+        $i1 = $i2 + 1;
+
+        $c4 = virtualinvoke $r1.<java.lang.String: char charAt(int)>($i2);
+
+        if $c4 == 37 goto label3;
+
+     label2:
+        goto label7;
+
+     label3:
+        if $i1 != $i0 goto label4;
+
+        goto label8;
+
+     label4:
+        $c4 = virtualinvoke $r1.<java.lang.String: char charAt(int)>($i1);
+
+        if $c4 != 37 goto label5;
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.CharSequence,int,int)>($r1, $i3, $i1);
+
+        goto label6;
+
+     label5:
+        if $c4 != 110 goto label2;
+
+        $i2 = $i1 + -1;
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.CharSequence,int,int)>($r1, $i3, $i2);
+
+        $r2 = <com.google.common.flogger.parser.PrintfMessageParser: java.lang.String SYSTEM_NEWLINE>;
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label6:
+        $i3 = $i1 + 1;
+
+        $i2 = $i3;
+
+        goto label1;
+
+     label7:
+        $i2 = $i1;
+
+        goto label1;
+
+     label8:
+        if $i3 >= $i0 goto label9;
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.CharSequence,int,int)>($r1, $i3, $i0);
+
+     label9:
+        return;
+    }
+
+    protected final void parseImpl(com.google.common.flogger.parser.MessageBuilder) throws com.google.common.flogger.parser.ParseException
+    {
+        com.google.common.flogger.parser.PrintfMessageParser $r0;
+        com.google.common.flogger.parser.MessageBuilder $r1;
+        java.lang.String $r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        char $c7, $c8;
+        com.google.common.flogger.parser.ParseException $r3;
+        java.lang.Throwable r4;
+
+        $r0 := @this: com.google.common.flogger.parser.PrintfMessageParser;
+
+        $r1 := @parameter0: com.google.common.flogger.parser.MessageBuilder;
+
+        $r2 = virtualinvoke $r1.<com.google.common.flogger.parser.MessageBuilder: java.lang.String getMessage()>();
+
+        $i0 = staticinvoke <com.google.common.flogger.parser.PrintfMessageParser: int nextPrintfTerm(java.lang.String,int)>($r2, 0);
+
+        $i1 = 0;
+
+        $i2 = -1;
+
+     label01:
+        if $i0 < 0 goto label14;
+
+        $i3 = $i0 + 1;
+
+        $i4 = $i3;
+
+        $i5 = 0;
+
+     label02:
+        $i6 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i4 >= $i6 goto label13;
+
+        $i6 = $i4 + 1;
+
+        $c7 = virtualinvoke $r2.<java.lang.String: char charAt(int)>($i4);
+
+        $i4 = $c7 + -48;
+
+        $c8 = (char) $i4;
+
+        if $c8 >= 10 goto label04;
+
+        $i5 = $i5 * 10;
+
+        $i5 = $i5 + $c8;
+
+        if $i5 >= 1000000 goto label03;
+
+        $i4 = $i6;
+
+        goto label02;
+
+     label03:
+        $r3 = staticinvoke <com.google.common.flogger.parser.ParseException: com.google.common.flogger.parser.ParseException withBounds(java.lang.String,java.lang.String,int,int)>("index too large", $r2, $i0, $i6);
+
+        r4 = (java.lang.Throwable) $r3;
+
+        throw r4;
+
+     label04:
+        if $c7 != 36 goto label08;
+
+        $i2 = $i6 + -1;
+
+        $i2 = $i2 - $i3;
+
+        if $i2 == 0 goto label07;
+
+        $c7 = virtualinvoke $r2.<java.lang.String: char charAt(int)>($i3);
+
+        if $c7 == 48 goto label06;
+
+        $i2 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i6 == $i2 goto label05;
+
+        virtualinvoke $r2.<java.lang.String: char charAt(int)>($i6);
+
+        $i2 = $i5 + -1;
+
+        $i3 = $i6;
+
+        $i6 = $i6 + 1;
+
+        goto label12;
+
+     label05:
+        $r3 = staticinvoke <com.google.common.flogger.parser.ParseException: com.google.common.flogger.parser.ParseException withStartPosition(java.lang.String,java.lang.String,int)>("unterminated parameter", $r2, $i0);
+
+        r4 = (java.lang.Throwable) $r3;
+
+        throw r4;
+
+     label06:
+        $r3 = staticinvoke <com.google.common.flogger.parser.ParseException: com.google.common.flogger.parser.ParseException withBounds(java.lang.String,java.lang.String,int,int)>("index has leading zero", $r2, $i0, $i6);
+
+        r4 = (java.lang.Throwable) $r3;
+
+        throw r4;
+
+     label07:
+        $r3 = staticinvoke <com.google.common.flogger.parser.ParseException: com.google.common.flogger.parser.ParseException withBounds(java.lang.String,java.lang.String,int,int)>("missing index", $r2, $i0, $i6);
+
+        r4 = (java.lang.Throwable) $r3;
+
+        throw r4;
+
+     label08:
+        if $c7 != 60 goto label11;
+
+        if $i2 == -1 goto label10;
+
+        $i3 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i6 == $i3 goto label09;
+
+        virtualinvoke $r2.<java.lang.String: char charAt(int)>($i6);
+
+        $i3 = $i6;
+
+        $i6 = $i6 + 1;
+
+        goto label12;
+
+     label09:
+        $r3 = staticinvoke <com.google.common.flogger.parser.ParseException: com.google.common.flogger.parser.ParseException withStartPosition(java.lang.String,java.lang.String,int)>("unterminated parameter", $r2, $i0);
+
+        r4 = (java.lang.Throwable) $r3;
+
+        throw r4;
+
+     label10:
+        $r3 = staticinvoke <com.google.common.flogger.parser.ParseException: com.google.common.flogger.parser.ParseException withBounds(java.lang.String,java.lang.String,int,int)>("invalid relative parameter", $r2, $i0, $i6);
+
+        r4 = (java.lang.Throwable) $r3;
+
+        throw r4;
+
+     label11:
+        $i2 = $i1;
+
+        $i1 = $i1 + 1;
+
+     label12:
+        $i6 = $i6 + -1;
+
+        $i6 = staticinvoke <com.google.common.flogger.parser.PrintfMessageParser: int findFormatChar(java.lang.String,int,int)>($r2, $i0, $i6);
+
+        $i0 = virtualinvoke $r0.<com.google.common.flogger.parser.PrintfMessageParser: int parsePrintfTerm(com.google.common.flogger.parser.MessageBuilder,int,java.lang.String,int,int,int)>($r1, $i2, $r2, $i0, $i3, $i6);
+
+        $i0 = staticinvoke <com.google.common.flogger.parser.PrintfMessageParser: int nextPrintfTerm(java.lang.String,int)>($r2, $i0);
+
+        goto label01;
+
+     label13:
+        $r3 = staticinvoke <com.google.common.flogger.parser.ParseException: com.google.common.flogger.parser.ParseException withStartPosition(java.lang.String,java.lang.String,int)>("unterminated parameter", $r2, $i0);
+
+        r4 = (java.lang.Throwable) $r3;
+
+        throw r4;
+
+     label14:
+        return;
+    }
+
+<com.google.common.flogger.parser.PrintfMessageParser: int parsePrintfTerm(com.google.common.flogger.parser.MessageBuilder,int,java.lang.String,int,int,int)>
+    public final void unescape(java.lang.StringBuilder, java.lang.String, int, int)
+    {
+        com.google.common.flogger.parser.PrintfMessageParser $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+        int $i0, $i1;
+
+        $r0 := @this: com.google.common.flogger.parser.PrintfMessageParser;
+
+        $r1 := @parameter0: java.lang.StringBuilder;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        staticinvoke <com.google.common.flogger.parser.PrintfMessageParser: void unescapePrintf(java.lang.StringBuilder,java.lang.String,int,int)>($r1, $r2, $i0, $i1);
+
+        return;
+    }
+

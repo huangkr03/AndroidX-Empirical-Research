@@ -1,0 +1,454 @@
+androidx.compose.runtime.Latch
+<androidx.compose.runtime.Latch: java.lang.Object lock>
+<androidx.compose.runtime.Latch: java.util.List awaiters>
+<androidx.compose.runtime.Latch: java.util.List spareList>
+<androidx.compose.runtime.Latch: boolean _isOpen>
+    public void <init>()
+    {
+        androidx.compose.runtime.Latch r0;
+        java.lang.Object $r1;
+        java.util.ArrayList $r2, $r4;
+        java.util.List $r3, $r5;
+
+        r0 := @this: androidx.compose.runtime.Latch;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.compose.runtime.Latch: java.lang.Object lock> = $r1;
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        $r3 = (java.util.List) $r2;
+
+        r0.<androidx.compose.runtime.Latch: java.util.List awaiters> = $r3;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        $r5 = (java.util.List) $r4;
+
+        r0.<androidx.compose.runtime.Latch: java.util.List spareList> = $r5;
+
+        r0.<androidx.compose.runtime.Latch: boolean _isOpen> = 1;
+
+        return;
+    }
+
+    public final boolean isOpen()
+    {
+        androidx.compose.runtime.Latch r0;
+        java.lang.Object r1, r2;
+        boolean $z2;
+
+        r0 := @this: androidx.compose.runtime.Latch;
+
+        r1 = r0.<androidx.compose.runtime.Latch: java.lang.Object lock>;
+
+        r2 = r1;
+
+        entermonitor r2;
+
+        $z2 = r0.<androidx.compose.runtime.Latch: boolean _isOpen>;
+
+        exitmonitor r2;
+
+        goto label1;
+
+     label1:
+        return $z2;
+    }
+
+    public final java.lang.Object withClosed(kotlin.jvm.functions.Function0)
+    {
+        androidx.compose.runtime.Latch r0;
+        kotlin.jvm.functions.Function0 r1;
+        java.lang.Object r2;
+        java.lang.Throwable r3, $r4;
+
+        r0 := @this: androidx.compose.runtime.Latch;
+
+        r1 := @parameter0: kotlin.jvm.functions.Function0;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "block");
+
+        virtualinvoke r0.<androidx.compose.runtime.Latch: void closeLatch()>();
+
+     label1:
+        r2 = interfaceinvoke r1.<kotlin.jvm.functions.Function0: java.lang.Object invoke()>();
+
+     label2:
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyStart(int)>(1);
+
+        virtualinvoke r0.<androidx.compose.runtime.Latch: void openLatch()>();
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyEnd(int)>(1);
+
+        goto label5;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r3 = $r4;
+
+     label4:
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyStart(int)>(1);
+
+        virtualinvoke r0.<androidx.compose.runtime.Latch: void openLatch()>();
+
+        staticinvoke <kotlin.jvm.internal.InlineMarker: void finallyEnd(int)>(1);
+
+        throw r3;
+
+     label5:
+        return r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public final void closeLatch()
+    {
+        androidx.compose.runtime.Latch r0;
+        java.lang.Object r1, r2;
+        kotlin.Unit $r3;
+
+        r0 := @this: androidx.compose.runtime.Latch;
+
+        r1 = r0.<androidx.compose.runtime.Latch: java.lang.Object lock>;
+
+        r2 = r1;
+
+        entermonitor r2;
+
+        r0.<androidx.compose.runtime.Latch: boolean _isOpen> = 0;
+
+        $r3 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        exitmonitor r2;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public final void openLatch()
+    {
+        androidx.compose.runtime.Latch r0;
+        java.lang.Object r1, r2, $r5, $r9;
+        java.util.List r3, $r4;
+        int i0, i1;
+        boolean $z1;
+        kotlin.Result$Companion $r6;
+        kotlin.Unit $r7, $r11;
+        kotlin.coroutines.Continuation $r8;
+        java.lang.Throwable $r10;
+
+        r0 := @this: androidx.compose.runtime.Latch;
+
+        r1 = r0.<androidx.compose.runtime.Latch: java.lang.Object lock>;
+
+        r2 = r1;
+
+        entermonitor r2;
+
+     label1:
+        $z1 = virtualinvoke r0.<androidx.compose.runtime.Latch: boolean isOpen()>();
+
+        if $z1 == 0 goto label3;
+
+     label2:
+        exitmonitor r2;
+
+        return;
+
+     label3:
+        r3 = r0.<androidx.compose.runtime.Latch: java.util.List awaiters>;
+
+        $r4 = r0.<androidx.compose.runtime.Latch: java.util.List spareList>;
+
+        r0.<androidx.compose.runtime.Latch: java.util.List awaiters> = $r4;
+
+        r0.<androidx.compose.runtime.Latch: java.util.List spareList> = r3;
+
+        r0.<androidx.compose.runtime.Latch: boolean _isOpen> = 1;
+
+        i1 = 0;
+
+        i0 = interfaceinvoke r3.<java.util.List: int size()>();
+
+     label4:
+        if i1 >= i0 goto label5;
+
+        $r5 = interfaceinvoke r3.<java.util.List: java.lang.Object get(int)>(i1);
+
+        $r8 = (kotlin.coroutines.Continuation) $r5;
+
+        $r6 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        $r7 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        $r9 = staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r7);
+
+        interfaceinvoke $r8.<kotlin.coroutines.Continuation: void resumeWith(java.lang.Object)>($r9);
+
+        i1 = i1 + 1;
+
+        goto label4;
+
+     label5:
+        interfaceinvoke r3.<java.util.List: void clear()>();
+
+        $r11 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label6:
+        exitmonitor r2;
+
+        goto label9;
+
+     label7:
+        $r10 := @caughtexception;
+
+     label8:
+        exitmonitor r2;
+
+        throw $r10;
+
+     label9:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label7;
+        catch java.lang.Throwable from label3 to label6 with label7;
+        catch java.lang.Throwable from label7 to label8 with label7;
+    }
+
+    public final java.lang.Object await(kotlin.coroutines.Continuation)
+    {
+        androidx.compose.runtime.Latch r0;
+        kotlin.coroutines.Continuation $r1, r2, $r8;
+        kotlinx.coroutines.CancellableContinuationImpl r3, $r7;
+        kotlinx.coroutines.CancellableContinuation r4;
+        java.lang.Object r5, r6, $r12, $r13, $r14;
+        boolean $z5;
+        java.util.List $r9;
+        androidx.compose.runtime.Latch$await$2$2 $r10;
+        kotlin.jvm.functions.Function1 $r11;
+        kotlin.Unit $r15, $r16;
+        java.lang.Throwable $r17, r18;
+
+        r0 := @this: androidx.compose.runtime.Latch;
+
+        $r1 := @parameter0: kotlin.coroutines.Continuation;
+
+        $z5 = virtualinvoke r0.<androidx.compose.runtime.Latch: boolean isOpen()>();
+
+        if $z5 == 0 goto label1;
+
+        $r16 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        return $r16;
+
+     label1:
+        r2 = $r1;
+
+        $r7 = new kotlinx.coroutines.CancellableContinuationImpl;
+
+        $r8 = staticinvoke <kotlin.coroutines.intrinsics.IntrinsicsKt: kotlin.coroutines.Continuation intercepted(kotlin.coroutines.Continuation)>(r2);
+
+        specialinvoke $r7.<kotlinx.coroutines.CancellableContinuationImpl: void <init>(kotlin.coroutines.Continuation,int)>($r8, 1);
+
+        r3 = $r7;
+
+        virtualinvoke r3.<kotlinx.coroutines.CancellableContinuationImpl: void initCancellability()>();
+
+        r4 = (kotlinx.coroutines.CancellableContinuation) r3;
+
+        r5 = staticinvoke <androidx.compose.runtime.Latch: java.lang.Object access$getLock$p(androidx.compose.runtime.Latch)>(r0);
+
+        r6 = r5;
+
+        entermonitor r6;
+
+     label2:
+        $r9 = staticinvoke <androidx.compose.runtime.Latch: java.util.List access$getAwaiters$p(androidx.compose.runtime.Latch)>(r0);
+
+        interfaceinvoke $r9.<java.util.List: boolean add(java.lang.Object)>(r4);
+
+     label3:
+        exitmonitor r6;
+
+        goto label6;
+
+     label4:
+        $r17 := @caughtexception;
+
+        r18 = $r17;
+
+     label5:
+        exitmonitor r6;
+
+        throw r18;
+
+     label6:
+        $r10 = new androidx.compose.runtime.Latch$await$2$2;
+
+        specialinvoke $r10.<androidx.compose.runtime.Latch$await$2$2: void <init>(androidx.compose.runtime.Latch,kotlinx.coroutines.CancellableContinuation)>(r0, r4);
+
+        $r11 = (kotlin.jvm.functions.Function1) $r10;
+
+        interfaceinvoke r4.<kotlinx.coroutines.CancellableContinuation: void invokeOnCancellation(kotlin.jvm.functions.Function1)>($r11);
+
+        $r12 = virtualinvoke r3.<kotlinx.coroutines.CancellableContinuationImpl: java.lang.Object getResult()>();
+
+        $r13 = staticinvoke <kotlin.coroutines.intrinsics.IntrinsicsKt: java.lang.Object getCOROUTINE_SUSPENDED()>();
+
+        if $r12 != $r13 goto label7;
+
+        staticinvoke <kotlin.coroutines.jvm.internal.DebugProbesKt: void probeCoroutineSuspended(kotlin.coroutines.Continuation)>($r1);
+
+     label7:
+        $r14 = staticinvoke <kotlin.coroutines.intrinsics.IntrinsicsKt: java.lang.Object getCOROUTINE_SUSPENDED()>();
+
+        if $r12 != $r14 goto label8;
+
+        return $r12;
+
+     label8:
+        $r15 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        return $r15;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public static final java.util.List access$getAwaiters$p(androidx.compose.runtime.Latch)
+    {
+        androidx.compose.runtime.Latch $r0;
+        java.util.List $r1;
+
+        $r0 := @parameter0: androidx.compose.runtime.Latch;
+
+        $r1 = $r0.<androidx.compose.runtime.Latch: java.util.List awaiters>;
+
+        return $r1;
+    }
+
+    public static final java.lang.Object access$getLock$p(androidx.compose.runtime.Latch)
+    {
+        androidx.compose.runtime.Latch $r0;
+        java.lang.Object $r1;
+
+        $r0 := @parameter0: androidx.compose.runtime.Latch;
+
+        $r1 = $r0.<androidx.compose.runtime.Latch: java.lang.Object lock>;
+
+        return $r1;
+    }
+
+androidx.compose.runtime.Latch$await$2$2
+<androidx.compose.runtime.Latch$await$2$2: androidx.compose.runtime.Latch this$0>
+<androidx.compose.runtime.Latch$await$2$2: kotlinx.coroutines.CancellableContinuation $co>
+    void <init>(androidx.compose.runtime.Latch, kotlinx.coroutines.CancellableContinuation)
+    {
+        androidx.compose.runtime.Latch$await$2$2 r0;
+        androidx.compose.runtime.Latch $r1;
+        kotlinx.coroutines.CancellableContinuation $r2;
+
+        r0 := @this: androidx.compose.runtime.Latch$await$2$2;
+
+        $r1 := @parameter0: androidx.compose.runtime.Latch;
+
+        $r2 := @parameter1: kotlinx.coroutines.CancellableContinuation;
+
+        r0.<androidx.compose.runtime.Latch$await$2$2: androidx.compose.runtime.Latch this$0> = $r1;
+
+        r0.<androidx.compose.runtime.Latch$await$2$2: kotlinx.coroutines.CancellableContinuation $co> = $r2;
+
+        specialinvoke r0.<kotlin.jvm.internal.Lambda: void <init>(int)>(1);
+
+        return;
+    }
+
+    public final void invoke(java.lang.Throwable)
+    {
+        androidx.compose.runtime.Latch$await$2$2 r0;
+        java.lang.Throwable r1, $r8, r10;
+        java.lang.Object r2, r5;
+        androidx.compose.runtime.Latch r3, $r6;
+        kotlinx.coroutines.CancellableContinuation r4;
+        java.util.List $r7;
+        kotlin.Unit r9;
+
+        r0 := @this: androidx.compose.runtime.Latch$await$2$2;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $r6 = r0.<androidx.compose.runtime.Latch$await$2$2: androidx.compose.runtime.Latch this$0>;
+
+        r2 = staticinvoke <androidx.compose.runtime.Latch: java.lang.Object access$getLock$p(androidx.compose.runtime.Latch)>($r6);
+
+        r3 = r0.<androidx.compose.runtime.Latch$await$2$2: androidx.compose.runtime.Latch this$0>;
+
+        r4 = r0.<androidx.compose.runtime.Latch$await$2$2: kotlinx.coroutines.CancellableContinuation $co>;
+
+        r5 = r2;
+
+        entermonitor r5;
+
+     label1:
+        $r7 = staticinvoke <androidx.compose.runtime.Latch: java.util.List access$getAwaiters$p(androidx.compose.runtime.Latch)>(r3);
+
+        interfaceinvoke $r7.<java.util.List: boolean remove(java.lang.Object)>(r4);
+
+        r9 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label2:
+        exitmonitor r5;
+
+        goto label5;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r10 = $r8;
+
+     label4:
+        exitmonitor r5;
+
+        throw r10;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public volatile java.lang.Object invoke(java.lang.Object)
+    {
+        androidx.compose.runtime.Latch$await$2$2 r0;
+        java.lang.Object r1;
+        java.lang.Throwable $r2;
+        kotlin.Unit $r3;
+
+        r0 := @this: androidx.compose.runtime.Latch$await$2$2;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Throwable) r1;
+
+        virtualinvoke r0.<androidx.compose.runtime.Latch$await$2$2: void invoke(java.lang.Throwable)>($r2);
+
+        $r3 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        return $r3;
+    }
+

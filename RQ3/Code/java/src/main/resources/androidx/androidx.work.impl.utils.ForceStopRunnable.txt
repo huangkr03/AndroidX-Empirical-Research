@@ -1,0 +1,857 @@
+androidx.work.impl.utils.ForceStopRunnable
+<androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>
+<androidx.work.impl.utils.ForceStopRunnable: java.lang.String ACTION_FORCE_STOP_RESCHEDULE>
+<androidx.work.impl.utils.ForceStopRunnable: int MAX_ATTEMPTS>
+<androidx.work.impl.utils.ForceStopRunnable: int ALARM_ID>
+<androidx.work.impl.utils.ForceStopRunnable: long BACKOFF_DURATION_MS>
+<androidx.work.impl.utils.ForceStopRunnable: long TEN_YEARS>
+<androidx.work.impl.utils.ForceStopRunnable: android.content.Context mContext>
+<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>
+<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.utils.PreferenceUtils mPreferenceUtils>
+<androidx.work.impl.utils.ForceStopRunnable: int mRetryCount>
+    public void <init>(android.content.Context, androidx.work.impl.WorkManagerImpl)
+    {
+        androidx.work.impl.utils.ForceStopRunnable r0;
+        android.content.Context r1, $r3;
+        androidx.work.impl.WorkManagerImpl r2;
+        androidx.work.impl.utils.PreferenceUtils $r4;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.work.impl.WorkManagerImpl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = virtualinvoke r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        r0.<androidx.work.impl.utils.ForceStopRunnable: android.content.Context mContext> = $r3;
+
+        r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager> = r2;
+
+        $r4 = virtualinvoke r2.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.utils.PreferenceUtils getPreferenceUtils()>();
+
+        r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.utils.PreferenceUtils mPreferenceUtils> = $r4;
+
+        r0.<androidx.work.impl.utils.ForceStopRunnable: int mRetryCount> = 0;
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.work.impl.utils.ForceStopRunnable r0;
+        java.lang.Throwable r1, $r6, $r12, $r14, r28, r32;
+        boolean $z0;
+        android.content.Context $r2;
+        androidx.work.Logger $r3, $r7, $r15, $r21, $r26;
+        java.lang.String $r4, $r8, $r17, $r20, $r22, $r27, r29, r33;
+        androidx.work.impl.WorkManagerImpl $r5, $r10, $r13, $r24, $r36;
+        java.lang.IllegalStateException $r9, $r23, r30, r34;
+        androidx.work.Configuration $r11, $r25;
+        int $i0, $i1, $i2, $i3, $i5;
+        long $l4, $l6, $l7, l8;
+        java.lang.StringBuilder $r16, $r18, $r19;
+        androidx.core.util.Consumer r31, r35;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable;
+
+     label01:
+        $z0 = virtualinvoke r0.<androidx.work.impl.utils.ForceStopRunnable: boolean multiProcessChecks()>();
+
+        if $z0 != 0 goto label03;
+
+     label02:
+        $r5 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        virtualinvoke $r5.<androidx.work.impl.WorkManagerImpl: void onForceStopRunnableCompleted()>();
+
+        return;
+
+     label03:
+        $r2 = r0.<androidx.work.impl.utils.ForceStopRunnable: android.content.Context mContext>;
+
+        staticinvoke <androidx.work.impl.WorkDatabasePathHelper: void migrateDatabase(android.content.Context)>($r2);
+
+     label04:
+        goto label07;
+
+     label05:
+        $r6 := @caughtexception;
+
+        r28 = $r6;
+
+        r29 = "Unexpected SQLite exception during migrations";
+
+        $r7 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r8 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        virtualinvoke $r7.<androidx.work.Logger: void error(java.lang.String,java.lang.String)>($r8, r29);
+
+        $r9 = new java.lang.IllegalStateException;
+
+        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>(r29, r28);
+
+        r30 = $r9;
+
+        $r10 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r11 = virtualinvoke $r10.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        r31 = virtualinvoke $r11.<androidx.work.Configuration: androidx.core.util.Consumer getInitializationExceptionHandler()>();
+
+        if r31 == null goto label06;
+
+        interfaceinvoke r31.<androidx.core.util.Consumer: void accept(java.lang.Object)>(r30);
+
+        goto label13;
+
+     label06:
+        throw r30;
+
+     label07:
+        $r3 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r4 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        virtualinvoke $r3.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r4, "Performing cleanup operations.");
+
+     label08:
+        virtualinvoke r0.<androidx.work.impl.utils.ForceStopRunnable: void forceStopRunnable()>();
+
+     label09:
+        goto label13;
+
+     label10:
+        $r14 := @caughtexception;
+
+        r32 = $r14;
+
+        $i0 = r0.<androidx.work.impl.utils.ForceStopRunnable: int mRetryCount>;
+
+        $i1 = $i0 + 1;
+
+        r0.<androidx.work.impl.utils.ForceStopRunnable: int mRetryCount> = $i1;
+
+        $i2 = r0.<androidx.work.impl.utils.ForceStopRunnable: int mRetryCount>;
+
+        if $i2 < 3 goto label12;
+
+        r33 = "The file system on the device is in a bad state. WorkManager cannot access the app\'s internal data store.";
+
+        $r21 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r22 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        virtualinvoke $r21.<androidx.work.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>($r22, r33, r32);
+
+        $r23 = new java.lang.IllegalStateException;
+
+        specialinvoke $r23.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>(r33, r32);
+
+        r34 = $r23;
+
+        $r24 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r25 = virtualinvoke $r24.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        r35 = virtualinvoke $r25.<androidx.work.Configuration: androidx.core.util.Consumer getInitializationExceptionHandler()>();
+
+        if r35 == null goto label11;
+
+        $r26 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r27 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        virtualinvoke $r26.<androidx.work.Logger: void debug(java.lang.String,java.lang.String,java.lang.Throwable)>($r27, "Routing exception to the specified exception handler", r34);
+
+        interfaceinvoke r35.<androidx.core.util.Consumer: void accept(java.lang.Object)>(r34);
+
+        goto label13;
+
+     label11:
+        throw r34;
+
+     label12:
+        $i3 = r0.<androidx.work.impl.utils.ForceStopRunnable: int mRetryCount>;
+
+        $l4 = (long) $i3;
+
+        l8 = $l4 * 300L;
+
+        $r15 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r17 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        $r16 = new java.lang.StringBuilder;
+
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Retrying after ");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l8);
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r15.<androidx.work.Logger: void debug(java.lang.String,java.lang.String,java.lang.Throwable)>($r17, $r20, r32);
+
+        $i5 = r0.<androidx.work.impl.utils.ForceStopRunnable: int mRetryCount>;
+
+        $l6 = (long) $i5;
+
+        $l7 = $l6 * 300L;
+
+        virtualinvoke r0.<androidx.work.impl.utils.ForceStopRunnable: void sleep(long)>($l7);
+
+        goto label03;
+
+     label13:
+        $r36 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        virtualinvoke $r36.<androidx.work.impl.WorkManagerImpl: void onForceStopRunnableCompleted()>();
+
+        goto label16;
+
+     label14:
+        $r12 := @caughtexception;
+
+        r1 = $r12;
+
+     label15:
+        $r13 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        virtualinvoke $r13.<androidx.work.impl.WorkManagerImpl: void onForceStopRunnableCompleted()>();
+
+        throw r1;
+
+     label16:
+        return;
+
+        catch android.database.sqlite.SQLiteException from label03 to label04 with label05;
+        catch android.database.sqlite.SQLiteCantOpenDatabaseException from label08 to label09 with label10;
+        catch android.database.sqlite.SQLiteDiskIOException from label08 to label09 with label10;
+        catch android.database.sqlite.SQLiteDatabaseCorruptException from label08 to label09 with label10;
+        catch android.database.sqlite.SQLiteDatabaseLockedException from label08 to label09 with label10;
+        catch android.database.sqlite.SQLiteTableLockedException from label08 to label09 with label10;
+        catch android.database.sqlite.SQLiteConstraintException from label08 to label09 with label10;
+        catch android.database.sqlite.SQLiteAccessPermException from label08 to label09 with label10;
+        catch java.lang.Throwable from label01 to label02 with label14;
+        catch java.lang.Throwable from label03 to label13 with label14;
+        catch java.lang.Throwable from label14 to label15 with label14;
+    }
+
+    public boolean isForceStopped()
+    {
+        androidx.work.impl.utils.ForceStopRunnable r0;
+        android.app.PendingIntent r1;
+        android.app.ActivityManager r2;
+        java.util.List r3;
+        long l0, $l5;
+        android.app.ApplicationExitInfo r4;
+        int $i1, $i2, $i3, $i4, i7, i8;
+        android.content.Context $r5, $r6, $r7;
+        java.lang.Object $r8, $r10;
+        boolean $z1;
+        androidx.work.impl.utils.PreferenceUtils $r9;
+        byte $b6;
+        java.lang.Throwable $r11, r14;
+        androidx.work.Logger $r12;
+        java.lang.String $r13;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable;
+
+     label01:
+        i7 = 536870912;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 31 goto label02;
+
+        i7 = i7 | 33554432;
+
+     label02:
+        $r5 = r0.<androidx.work.impl.utils.ForceStopRunnable: android.content.Context mContext>;
+
+        r1 = staticinvoke <androidx.work.impl.utils.ForceStopRunnable: android.app.PendingIntent getPendingIntent(android.content.Context,int)>($r5, i7);
+
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 < 30 goto label08;
+
+        if r1 == null goto label03;
+
+        virtualinvoke r1.<android.app.PendingIntent: void cancel()>();
+
+     label03:
+        $r7 = r0.<androidx.work.impl.utils.ForceStopRunnable: android.content.Context mContext>;
+
+        $r8 = virtualinvoke $r7.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+        r2 = (android.app.ActivityManager) $r8;
+
+        r3 = virtualinvoke r2.<android.app.ActivityManager: java.util.List getHistoricalProcessExitReasons(java.lang.String,int,int)>(null, 0, 0);
+
+        if r3 == null goto label07;
+
+        $z1 = interfaceinvoke r3.<java.util.List: boolean isEmpty()>();
+
+        if $z1 != 0 goto label07;
+
+        $r9 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.utils.PreferenceUtils mPreferenceUtils>;
+
+        l0 = virtualinvoke $r9.<androidx.work.impl.utils.PreferenceUtils: long getLastForceStopEventMillis()>();
+
+        i8 = 0;
+
+     label04:
+        $i3 = interfaceinvoke r3.<java.util.List: int size()>();
+
+        if i8 >= $i3 goto label07;
+
+        $r10 = interfaceinvoke r3.<java.util.List: java.lang.Object get(int)>(i8);
+
+        r4 = (android.app.ApplicationExitInfo) $r10;
+
+        $i4 = virtualinvoke r4.<android.app.ApplicationExitInfo: int getReason()>();
+
+        if $i4 != 10 goto label06;
+
+        $l5 = virtualinvoke r4.<android.app.ApplicationExitInfo: long getTimestamp()>();
+
+        $b6 = $l5 cmp l0;
+
+        if $b6 < 0 goto label06;
+
+     label05:
+        return 1;
+
+     label06:
+        i8 = i8 + 1;
+
+        goto label04;
+
+     label07:
+        goto label10;
+
+     label08:
+        if r1 != null goto label10;
+
+        $r6 = r0.<androidx.work.impl.utils.ForceStopRunnable: android.content.Context mContext>;
+
+        staticinvoke <androidx.work.impl.utils.ForceStopRunnable: void setAlarm(android.content.Context)>($r6);
+
+     label09:
+        return 1;
+
+     label10:
+        return 0;
+
+     label11:
+        $r11 := @caughtexception;
+
+        r14 = $r11;
+
+        $r12 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r13 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        virtualinvoke $r12.<androidx.work.Logger: void warning(java.lang.String,java.lang.String,java.lang.Throwable)>($r13, "Ignoring exception", r14);
+
+        return 1;
+
+        catch java.lang.SecurityException from label01 to label05 with label11;
+        catch java.lang.IllegalArgumentException from label01 to label05 with label11;
+        catch java.lang.SecurityException from label06 to label09 with label11;
+        catch java.lang.IllegalArgumentException from label06 to label09 with label11;
+    }
+
+    public void forceStopRunnable()
+    {
+        androidx.work.impl.utils.ForceStopRunnable r0;
+        boolean z0, $z1, $z2;
+        androidx.work.Logger $r1, $r9, $r13;
+        java.lang.String $r2, $r10, $r14;
+        androidx.work.impl.WorkManagerImpl $r3, $r5, $r7, $r11, $r15, $r16;
+        androidx.work.Configuration $r4;
+        androidx.work.impl.WorkDatabase $r6;
+        java.util.List $r8;
+        androidx.work.impl.utils.PreferenceUtils $r12, $r17;
+        long $l0;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable;
+
+        z0 = virtualinvoke r0.<androidx.work.impl.utils.ForceStopRunnable: boolean cleanUp()>();
+
+        $z1 = virtualinvoke r0.<androidx.work.impl.utils.ForceStopRunnable: boolean shouldRescheduleWorkers()>();
+
+        if $z1 == 0 goto label1;
+
+        $r13 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r14 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        virtualinvoke $r13.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r14, "Rescheduling Workers.");
+
+        $r15 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        virtualinvoke $r15.<androidx.work.impl.WorkManagerImpl: void rescheduleEligibleWork()>();
+
+        $r16 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r17 = virtualinvoke $r16.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.utils.PreferenceUtils getPreferenceUtils()>();
+
+        virtualinvoke $r17.<androidx.work.impl.utils.PreferenceUtils: void setNeedsReschedule(boolean)>(0);
+
+        goto label3;
+
+     label1:
+        $z2 = virtualinvoke r0.<androidx.work.impl.utils.ForceStopRunnable: boolean isForceStopped()>();
+
+        if $z2 == 0 goto label2;
+
+        $r9 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r10 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        virtualinvoke $r9.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r10, "Application was force-stopped, rescheduling.");
+
+        $r11 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        virtualinvoke $r11.<androidx.work.impl.WorkManagerImpl: void rescheduleEligibleWork()>();
+
+        $r12 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.utils.PreferenceUtils mPreferenceUtils>;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        virtualinvoke $r12.<androidx.work.impl.utils.PreferenceUtils: void setLastForceStopEventMillis(long)>($l0);
+
+        goto label3;
+
+     label2:
+        if z0 == 0 goto label3;
+
+        $r1 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r2 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        virtualinvoke $r1.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r2, "Found unfinished work, scheduling it.");
+
+        $r3 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r4 = virtualinvoke $r3.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        $r5 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r6 = virtualinvoke $r5.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        $r7 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r8 = virtualinvoke $r7.<androidx.work.impl.WorkManagerImpl: java.util.List getSchedulers()>();
+
+        staticinvoke <androidx.work.impl.Schedulers: void schedule(androidx.work.Configuration,androidx.work.impl.WorkDatabase,java.util.List)>($r4, $r6, $r8);
+
+     label3:
+        return;
+    }
+
+    public boolean cleanUp()
+    {
+        androidx.work.impl.utils.ForceStopRunnable r0;
+        androidx.work.impl.WorkDatabase r1;
+        androidx.work.impl.model.WorkSpecDao r2;
+        androidx.work.impl.model.WorkProgressDao r3;
+        boolean z0, $z1, $z2, z3, $z4, $z5;
+        java.util.List r4;
+        java.util.Iterator r5;
+        androidx.work.impl.model.WorkSpec r6;
+        java.lang.Throwable r7, $r15;
+        int $i0;
+        androidx.work.impl.WorkManagerImpl $r8, $r13;
+        java.lang.Object $r9;
+        java.lang.String $r10, $r12;
+        androidx.work.WorkInfo$State $r11;
+        android.content.Context $r14;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable;
+
+        z3 = 0;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 23 goto label01;
+
+        $r14 = r0.<androidx.work.impl.utils.ForceStopRunnable: android.content.Context mContext>;
+
+        $r13 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        z3 = staticinvoke <androidx.work.impl.background.systemjob.SystemJobScheduler: boolean reconcileJobs(android.content.Context,androidx.work.impl.WorkManagerImpl)>($r14, $r13);
+
+     label01:
+        $r8 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        r1 = virtualinvoke $r8.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        r2 = virtualinvoke r1.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        r3 = virtualinvoke r1.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkProgressDao workProgressDao()>();
+
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void beginTransaction()>();
+
+     label02:
+        r4 = interfaceinvoke r2.<androidx.work.impl.model.WorkSpecDao: java.util.List getRunningWork()>();
+
+        if r4 == null goto label03;
+
+        $z2 = interfaceinvoke r4.<java.util.List: boolean isEmpty()>();
+
+        if $z2 != 0 goto label03;
+
+        $z4 = 1;
+
+        goto label04;
+
+     label03:
+        $z4 = 0;
+
+     label04:
+        z0 = $z4;
+
+        if z0 == 0 goto label06;
+
+        r5 = interfaceinvoke r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label05:
+        $z1 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label06;
+
+        $r9 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (androidx.work.impl.model.WorkSpec) $r9;
+
+        $r11 = <androidx.work.WorkInfo$State: androidx.work.WorkInfo$State ENQUEUED>;
+
+        $r10 = r6.<androidx.work.impl.model.WorkSpec: java.lang.String id>;
+
+        interfaceinvoke r2.<androidx.work.impl.model.WorkSpecDao: int setState(androidx.work.WorkInfo$State,java.lang.String)>($r11, $r10);
+
+        $r12 = r6.<androidx.work.impl.model.WorkSpec: java.lang.String id>;
+
+        interfaceinvoke r2.<androidx.work.impl.model.WorkSpecDao: int markWorkSpecScheduled(java.lang.String,long)>($r12, -1L);
+
+        goto label05;
+
+     label06:
+        interfaceinvoke r3.<androidx.work.impl.model.WorkProgressDao: void deleteAll()>();
+
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label07:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label10;
+
+     label08:
+        $r15 := @caughtexception;
+
+        r7 = $r15;
+
+     label09:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        throw r7;
+
+     label10:
+        if z0 != 0 goto label11;
+
+        if z3 == 0 goto label12;
+
+     label11:
+        $z5 = 1;
+
+        goto label13;
+
+     label12:
+        $z5 = 0;
+
+     label13:
+        return $z5;
+
+        catch java.lang.Throwable from label02 to label07 with label08;
+        catch java.lang.Throwable from label08 to label09 with label08;
+    }
+
+    public boolean shouldRescheduleWorkers()
+    {
+        androidx.work.impl.utils.ForceStopRunnable r0;
+        androidx.work.impl.WorkManagerImpl $r1;
+        androidx.work.impl.utils.PreferenceUtils $r2;
+        boolean $z0;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable;
+
+        $r1 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        $r2 = virtualinvoke $r1.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.utils.PreferenceUtils getPreferenceUtils()>();
+
+        $z0 = virtualinvoke $r2.<androidx.work.impl.utils.PreferenceUtils: boolean getNeedsReschedule()>();
+
+        return $z0;
+    }
+
+    public boolean multiProcessChecks()
+    {
+        androidx.work.impl.utils.ForceStopRunnable r0;
+        androidx.work.Configuration r1;
+        boolean z0, $z1;
+        androidx.work.impl.WorkManagerImpl $r2;
+        java.lang.String $r3, $r7, $r10, $r12;
+        android.content.Context $r4;
+        androidx.work.Logger $r5, $r11;
+        java.lang.StringBuilder $r6, $r8, $r9;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable;
+
+        $r2 = r0.<androidx.work.impl.utils.ForceStopRunnable: androidx.work.impl.WorkManagerImpl mWorkManager>;
+
+        r1 = virtualinvoke $r2.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        $r3 = virtualinvoke r1.<androidx.work.Configuration: java.lang.String getDefaultProcessName()>();
+
+        $z1 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+        if $z1 == 0 goto label1;
+
+        $r11 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r12 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        virtualinvoke $r11.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r12, "The default process name was not specified.");
+
+        return 1;
+
+     label1:
+        $r4 = r0.<androidx.work.impl.utils.ForceStopRunnable: android.content.Context mContext>;
+
+        z0 = staticinvoke <androidx.work.impl.utils.ProcessUtils: boolean isDefaultProcess(android.content.Context,androidx.work.Configuration)>($r4, r1);
+
+        $r5 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r7 = <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG>;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Is default app process = ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>(z0);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r7, $r10);
+
+        return z0;
+    }
+
+    public void sleep(long)
+    {
+        androidx.work.impl.utils.ForceStopRunnable r0;
+        long l0;
+        java.lang.Throwable r1, $r2;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable;
+
+        l0 := @parameter0: long;
+
+     label1:
+        staticinvoke <java.lang.Thread: void sleep(long)>(l0);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r1 = $r2;
+
+     label4:
+        return;
+
+        catch java.lang.InterruptedException from label1 to label2 with label3;
+    }
+
+    private static android.app.PendingIntent getPendingIntent(android.content.Context, int)
+    {
+        android.content.Context r0;
+        int i0;
+        android.content.Intent r1;
+        android.app.PendingIntent $r2;
+
+        r0 := @parameter0: android.content.Context;
+
+        i0 := @parameter1: int;
+
+        r1 = staticinvoke <androidx.work.impl.utils.ForceStopRunnable: android.content.Intent getIntent(android.content.Context)>(r0);
+
+        $r2 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getBroadcast(android.content.Context,int,android.content.Intent,int)>(r0, -1, r1, i0);
+
+        return $r2;
+    }
+
+    static android.content.Intent getIntent(android.content.Context)
+    {
+        android.content.Context r0;
+        android.content.Intent r1, $r2;
+        android.content.ComponentName $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r2 = new android.content.Intent;
+
+        specialinvoke $r2.<android.content.Intent: void <init>()>();
+
+        r1 = $r2;
+
+        $r3 = new android.content.ComponentName;
+
+        specialinvoke $r3.<android.content.ComponentName: void <init>(android.content.Context,java.lang.Class)>(r0, class "Landroidx/work/impl/utils/ForceStopRunnable$BroadcastReceiver;");
+
+        virtualinvoke r1.<android.content.Intent: android.content.Intent setComponent(android.content.ComponentName)>($r3);
+
+        virtualinvoke r1.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("ACTION_FORCE_STOP_RESCHEDULE");
+
+        return r1;
+    }
+
+    static void setAlarm(android.content.Context)
+    {
+        android.content.Context r0;
+        android.app.AlarmManager r1;
+        android.app.PendingIntent r2;
+        long l0, $l2, $l3;
+        java.lang.Object $r3;
+        int $i1, $i4, i5;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r3 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("alarm");
+
+        r1 = (android.app.AlarmManager) $r3;
+
+        i5 = 134217728;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 31 goto label1;
+
+        i5 = i5 | 33554432;
+
+     label1:
+        r2 = staticinvoke <androidx.work.impl.utils.ForceStopRunnable: android.app.PendingIntent getPendingIntent(android.content.Context,int)>(r0, i5);
+
+        $l2 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l3 = <androidx.work.impl.utils.ForceStopRunnable: long TEN_YEARS>;
+
+        l0 = $l2 + $l3;
+
+        if r1 == null goto label3;
+
+        $i4 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i4 < 19 goto label2;
+
+        virtualinvoke r1.<android.app.AlarmManager: void setExact(int,long,android.app.PendingIntent)>(0, l0, r2);
+
+        goto label3;
+
+     label2:
+        virtualinvoke r1.<android.app.AlarmManager: void set(int,long,android.app.PendingIntent)>(0, l0, r2);
+
+     label3:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        java.util.concurrent.TimeUnit $r1;
+        long $l0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("ForceStopRunnable");
+
+        <androidx.work.impl.utils.ForceStopRunnable: java.lang.String TAG> = $r0;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit DAYS>;
+
+        $l0 = virtualinvoke $r1.<java.util.concurrent.TimeUnit: long toMillis(long)>(3650L);
+
+        <androidx.work.impl.utils.ForceStopRunnable: long TEN_YEARS> = $l0;
+
+        return;
+    }
+
+androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver
+<androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver: java.lang.String TAG>
+    public void <init>()
+    {
+        androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver r0;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver;
+
+        specialinvoke r0.<android.content.BroadcastReceiver: void <init>()>();
+
+        return;
+    }
+
+    public void onReceive(android.content.Context, android.content.Intent)
+    {
+        androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver r0;
+        android.content.Context r1;
+        android.content.Intent r2;
+        java.lang.String r3, $r4, $r6;
+        boolean $z0;
+        androidx.work.Logger $r5;
+
+        r0 := @this: androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.content.Intent;
+
+        if r2 == null goto label1;
+
+        r3 = virtualinvoke r2.<android.content.Intent: java.lang.String getAction()>();
+
+        $r4 = "ACTION_FORCE_STOP_RESCHEDULE";
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r6 = <androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver: java.lang.String TAG>;
+
+        virtualinvoke $r5.<androidx.work.Logger: void verbose(java.lang.String,java.lang.String)>($r6, "Rescheduling alarm that keeps track of force-stops.");
+
+        staticinvoke <androidx.work.impl.utils.ForceStopRunnable: void setAlarm(android.content.Context)>(r1);
+
+     label1:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("ForceStopRunnable$Rcvr");
+
+        <androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver: java.lang.String TAG> = $r0;
+
+        return;
+    }
+

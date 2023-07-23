@@ -1,0 +1,487 @@
+io.grpc.internal.ProxyDetectorImpl
+<io.grpc.internal.ProxyDetectorImpl: io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider DEFAULT_AUTHENTICATOR>
+<io.grpc.internal.ProxyDetectorImpl: com.google.common.base.Supplier DEFAULT_PROXY_SELECTOR>
+<io.grpc.internal.ProxyDetectorImpl: java.util.logging.Logger log>
+<io.grpc.internal.ProxyDetectorImpl: io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider authenticationProvider>
+<io.grpc.internal.ProxyDetectorImpl: java.net.InetSocketAddress overrideProxyAddress>
+<io.grpc.internal.ProxyDetectorImpl: com.google.common.base.Supplier proxySelector>
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+        io.grpc.internal.ProxyDetectorImpl$1 $r3;
+        io.grpc.internal.ProxyDetectorImpl$2 $r4;
+
+        $r0 = class "Lio/grpc/internal/ProxyDetectorImpl;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.internal.ProxyDetectorImpl: java.util.logging.Logger log> = $r2;
+
+        $r3 = new io.grpc.internal.ProxyDetectorImpl$1;
+
+        specialinvoke $r3.<io.grpc.internal.ProxyDetectorImpl$1: void <init>()>();
+
+        <io.grpc.internal.ProxyDetectorImpl: io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider DEFAULT_AUTHENTICATOR> = $r3;
+
+        $r4 = new io.grpc.internal.ProxyDetectorImpl$2;
+
+        specialinvoke $r4.<io.grpc.internal.ProxyDetectorImpl$2: void <init>()>();
+
+        <io.grpc.internal.ProxyDetectorImpl: com.google.common.base.Supplier DEFAULT_PROXY_SELECTOR> = $r4;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        io.grpc.internal.ProxyDetectorImpl $r0;
+        com.google.common.base.Supplier $r1;
+        io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: io.grpc.internal.ProxyDetectorImpl;
+
+        $r1 = <io.grpc.internal.ProxyDetectorImpl: com.google.common.base.Supplier DEFAULT_PROXY_SELECTOR>;
+
+        $r2 = <io.grpc.internal.ProxyDetectorImpl: io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider DEFAULT_AUTHENTICATOR>;
+
+        $r3 = staticinvoke <java.lang.System: java.lang.String getenv(java.lang.String)>("GRPC_PROXY_EXP");
+
+        specialinvoke $r0.<io.grpc.internal.ProxyDetectorImpl: void <init>(com.google.common.base.Supplier,io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider,java.lang.String)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    void <init>(com.google.common.base.Supplier, io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider, java.lang.String)
+    {
+        io.grpc.internal.ProxyDetectorImpl $r0;
+        io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider $r1;
+        java.lang.String $r2;
+        com.google.common.base.Supplier $r3;
+        java.lang.Object $r4;
+        java.net.InetSocketAddress $r5;
+
+        $r0 := @this: io.grpc.internal.ProxyDetectorImpl;
+
+        $r3 := @parameter0: com.google.common.base.Supplier;
+
+        $r1 := @parameter1: io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider;
+
+        $r2 := @parameter2: java.lang.String;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r4 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        $r3 = (com.google.common.base.Supplier) $r4;
+
+        $r0.<io.grpc.internal.ProxyDetectorImpl: com.google.common.base.Supplier proxySelector> = $r3;
+
+        $r4 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r1 = (io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider) $r4;
+
+        $r0.<io.grpc.internal.ProxyDetectorImpl: io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider authenticationProvider> = $r1;
+
+        if $r2 == null goto label1;
+
+        $r5 = staticinvoke <io.grpc.internal.ProxyDetectorImpl: java.net.InetSocketAddress overrideProxy(java.lang.String)>($r2);
+
+        $r0.<io.grpc.internal.ProxyDetectorImpl: java.net.InetSocketAddress overrideProxyAddress> = $r5;
+
+        return;
+
+     label1:
+        $r0.<io.grpc.internal.ProxyDetectorImpl: java.net.InetSocketAddress overrideProxyAddress> = null;
+
+        return;
+    }
+
+    static java.util.logging.Logger access$000()
+    {
+        java.util.logging.Logger r0;
+
+        r0 = <io.grpc.internal.ProxyDetectorImpl: java.util.logging.Logger log>;
+
+        return r0;
+    }
+
+    private io.grpc.ProxiedSocketAddress detectProxy(java.net.InetSocketAddress) throws java.io.IOException
+    {
+        io.grpc.internal.ProxyDetectorImpl $r0;
+        java.net.InetSocketAddress $r1, $r15, $r19;
+        java.lang.String $r2, $r3;
+        java.net.URI $r4;
+        int $i0;
+        com.google.common.base.Supplier $r5;
+        java.lang.Object $r6;
+        java.net.ProxySelector $r7;
+        java.util.logging.Logger $r8;
+        java.util.logging.Level $r9;
+        java.util.List $r10;
+        java.net.Proxy $r11;
+        java.net.Proxy$Type $r12, $r13;
+        java.net.SocketAddress $r14;
+        io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider $r16;
+        java.net.InetAddress $r17;
+        java.net.PasswordAuthentication $r18;
+        boolean $z0;
+        io.grpc.HttpConnectProxiedSocketAddress$Builder $r20;
+        io.grpc.HttpConnectProxiedSocketAddress $r21;
+        char[] $r22;
+        java.lang.Throwable $r23;
+
+        $r0 := @this: io.grpc.internal.ProxyDetectorImpl;
+
+        $r1 := @parameter0: java.net.InetSocketAddress;
+
+        $r2 = null;
+
+        $r3 = staticinvoke <io.grpc.internal.GrpcUtil: java.lang.String getHost(java.net.InetSocketAddress)>($r1);
+
+        $r4 = new java.net.URI;
+
+     label01:
+        $i0 = virtualinvoke $r1.<java.net.InetSocketAddress: int getPort()>();
+
+        specialinvoke $r4.<java.net.URI: void <init>(java.lang.String,java.lang.String,java.lang.String,int,java.lang.String,java.lang.String,java.lang.String)>("https", null, $r3, $i0, null, null, null);
+
+     label02:
+        $r5 = $r0.<io.grpc.internal.ProxyDetectorImpl: com.google.common.base.Supplier proxySelector>;
+
+        $r6 = interfaceinvoke $r5.<com.google.common.base.Supplier: java.lang.Object get()>();
+
+        $r7 = (java.net.ProxySelector) $r6;
+
+        if $r7 != null goto label03;
+
+        $r8 = <io.grpc.internal.ProxyDetectorImpl: java.util.logging.Logger log>;
+
+        $r9 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        virtualinvoke $r8.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String)>($r9, "io.grpc.internal.ProxyDetectorImpl", "detectProxy", "proxy selector is null, so continuing without proxy lookup");
+
+        return null;
+
+     label03:
+        $r10 = virtualinvoke $r7.<java.net.ProxySelector: java.util.List select(java.net.URI)>($r4);
+
+        $i0 = interfaceinvoke $r10.<java.util.List: int size()>();
+
+        if $i0 <= 1 goto label04;
+
+        $r8 = <io.grpc.internal.ProxyDetectorImpl: java.util.logging.Logger log>;
+
+        $r9 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        virtualinvoke $r8.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String)>($r9, "io.grpc.internal.ProxyDetectorImpl", "detectProxy", "More than 1 proxy detected, gRPC will select the first one");
+
+     label04:
+        $r6 = interfaceinvoke $r10.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r11 = (java.net.Proxy) $r6;
+
+        $r12 = virtualinvoke $r11.<java.net.Proxy: java.net.Proxy$Type type()>();
+
+        $r13 = <java.net.Proxy$Type: java.net.Proxy$Type DIRECT>;
+
+        if $r12 != $r13 goto label05;
+
+        return null;
+
+     label05:
+        $r14 = virtualinvoke $r11.<java.net.Proxy: java.net.SocketAddress address()>();
+
+        $r15 = (java.net.InetSocketAddress) $r14;
+
+        $r16 = $r0.<io.grpc.internal.ProxyDetectorImpl: io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider authenticationProvider>;
+
+        $r3 = staticinvoke <io.grpc.internal.GrpcUtil: java.lang.String getHost(java.net.InetSocketAddress)>($r15);
+
+        $r17 = virtualinvoke $r15.<java.net.InetSocketAddress: java.net.InetAddress getAddress()>();
+
+        $i0 = virtualinvoke $r15.<java.net.InetSocketAddress: int getPort()>();
+
+        $r18 = interfaceinvoke $r16.<io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider: java.net.PasswordAuthentication requestPasswordAuthentication(java.lang.String,java.net.InetAddress,int,java.lang.String,java.lang.String,java.lang.String)>($r3, $r17, $i0, "https", "", null);
+
+        $z0 = virtualinvoke $r15.<java.net.InetSocketAddress: boolean isUnresolved()>();
+
+        if $z0 == 0 goto label06;
+
+        $r3 = virtualinvoke $r15.<java.net.InetSocketAddress: java.lang.String getHostName()>();
+
+        $r17 = staticinvoke <java.net.InetAddress: java.net.InetAddress getByName(java.lang.String)>($r3);
+
+        $r19 = new java.net.InetSocketAddress;
+
+        $i0 = virtualinvoke $r15.<java.net.InetSocketAddress: int getPort()>();
+
+        specialinvoke $r19.<java.net.InetSocketAddress: void <init>(java.net.InetAddress,int)>($r17, $i0);
+
+        $r15 = $r19;
+
+        goto label06;
+
+     label06:
+        $r20 = staticinvoke <io.grpc.HttpConnectProxiedSocketAddress: io.grpc.HttpConnectProxiedSocketAddress$Builder newBuilder()>();
+
+        $r20 = virtualinvoke $r20.<io.grpc.HttpConnectProxiedSocketAddress$Builder: io.grpc.HttpConnectProxiedSocketAddress$Builder setTargetAddress(java.net.InetSocketAddress)>($r1);
+
+        $r20 = virtualinvoke $r20.<io.grpc.HttpConnectProxiedSocketAddress$Builder: io.grpc.HttpConnectProxiedSocketAddress$Builder setProxyAddress(java.net.SocketAddress)>($r15);
+
+        if $r18 != null goto label07;
+
+        $r21 = virtualinvoke $r20.<io.grpc.HttpConnectProxiedSocketAddress$Builder: io.grpc.HttpConnectProxiedSocketAddress build()>();
+
+        return $r21;
+
+     label07:
+        $r3 = virtualinvoke $r18.<java.net.PasswordAuthentication: java.lang.String getUserName()>();
+
+        $r20 = virtualinvoke $r20.<io.grpc.HttpConnectProxiedSocketAddress$Builder: io.grpc.HttpConnectProxiedSocketAddress$Builder setUsername(java.lang.String)>($r3);
+
+        $r22 = virtualinvoke $r18.<java.net.PasswordAuthentication: char[] getPassword()>();
+
+        if $r22 != null goto label08;
+
+        goto label09;
+
+     label08:
+        $r2 = new java.lang.String;
+
+        $r22 = virtualinvoke $r18.<java.net.PasswordAuthentication: char[] getPassword()>();
+
+        specialinvoke $r2.<java.lang.String: void <init>(char[])>($r22);
+
+     label09:
+        $r20 = virtualinvoke $r20.<io.grpc.HttpConnectProxiedSocketAddress$Builder: io.grpc.HttpConnectProxiedSocketAddress$Builder setPassword(java.lang.String)>($r2);
+
+        $r21 = virtualinvoke $r20.<io.grpc.HttpConnectProxiedSocketAddress$Builder: io.grpc.HttpConnectProxiedSocketAddress build()>();
+
+        return $r21;
+
+     label10:
+        $r23 := @caughtexception;
+
+        $r8 = <io.grpc.internal.ProxyDetectorImpl: java.util.logging.Logger log>;
+
+        $r9 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        virtualinvoke $r8.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r9, "io.grpc.internal.ProxyDetectorImpl", "detectProxy", "Failed to construct URI for proxy lookup, proceeding without proxy", $r23);
+
+        return null;
+
+        catch java.net.URISyntaxException from label01 to label02 with label10;
+    }
+
+    private static java.net.InetSocketAddress overrideProxy(java.lang.String)
+    {
+        java.lang.String $r0;
+        java.lang.String[] $r1;
+        int $i0;
+        java.util.logging.Logger $r2;
+        java.util.logging.Level $r3;
+        java.net.InetSocketAddress $r4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String,int)>(":", 2);
+
+        $i0 = lengthof $r1;
+
+        if $i0 <= 1 goto label2;
+
+        $r0 = $r1[1];
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r0);
+
+        goto label3;
+
+     label2:
+        $i0 = 80;
+
+     label3:
+        $r2 = <io.grpc.internal.ProxyDetectorImpl: java.util.logging.Logger log>;
+
+        $r3 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        virtualinvoke $r2.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String)>($r3, "io.grpc.internal.ProxyDetectorImpl", "overrideProxy", "Detected GRPC_PROXY_EXP and will honor it, but this feature will be removed in a future release. Use the JVM flags \"-Dhttps.proxyHost=HOST -Dhttps.proxyPort=PORT\" to set the https proxy for this JVM.");
+
+        $r4 = new java.net.InetSocketAddress;
+
+        $r0 = $r1[0];
+
+        specialinvoke $r4.<java.net.InetSocketAddress: void <init>(java.lang.String,int)>($r0, $i0);
+
+        return $r4;
+    }
+
+    public io.grpc.ProxiedSocketAddress proxyFor(java.net.SocketAddress) throws java.io.IOException
+    {
+        io.grpc.internal.ProxyDetectorImpl $r0;
+        java.net.InetSocketAddress $r1;
+        java.net.SocketAddress $r2;
+        boolean $z0;
+        io.grpc.HttpConnectProxiedSocketAddress$Builder $r3;
+        io.grpc.HttpConnectProxiedSocketAddress $r4;
+        io.grpc.ProxiedSocketAddress $r5;
+
+        $r0 := @this: io.grpc.internal.ProxyDetectorImpl;
+
+        $r2 := @parameter0: java.net.SocketAddress;
+
+        $z0 = $r2 instanceof java.net.InetSocketAddress;
+
+        if $z0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        $r1 = $r0.<io.grpc.internal.ProxyDetectorImpl: java.net.InetSocketAddress overrideProxyAddress>;
+
+        if $r1 == null goto label2;
+
+        $r3 = staticinvoke <io.grpc.HttpConnectProxiedSocketAddress: io.grpc.HttpConnectProxiedSocketAddress$Builder newBuilder()>();
+
+        $r1 = $r0.<io.grpc.internal.ProxyDetectorImpl: java.net.InetSocketAddress overrideProxyAddress>;
+
+        $r3 = virtualinvoke $r3.<io.grpc.HttpConnectProxiedSocketAddress$Builder: io.grpc.HttpConnectProxiedSocketAddress$Builder setProxyAddress(java.net.SocketAddress)>($r1);
+
+        $r1 = (java.net.InetSocketAddress) $r2;
+
+        $r3 = virtualinvoke $r3.<io.grpc.HttpConnectProxiedSocketAddress$Builder: io.grpc.HttpConnectProxiedSocketAddress$Builder setTargetAddress(java.net.InetSocketAddress)>($r1);
+
+        $r4 = virtualinvoke $r3.<io.grpc.HttpConnectProxiedSocketAddress$Builder: io.grpc.HttpConnectProxiedSocketAddress build()>();
+
+        return $r4;
+
+     label2:
+        $r1 = (java.net.InetSocketAddress) $r2;
+
+        $r5 = specialinvoke $r0.<io.grpc.internal.ProxyDetectorImpl: io.grpc.ProxiedSocketAddress detectProxy(java.net.InetSocketAddress)>($r1);
+
+        return $r5;
+    }
+
+io.grpc.internal.ProxyDetectorImpl$1
+    void <init>()
+    {
+        io.grpc.internal.ProxyDetectorImpl$1 $r0;
+
+        $r0 := @this: io.grpc.internal.ProxyDetectorImpl$1;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.net.PasswordAuthentication requestPasswordAuthentication(java.lang.String, java.net.InetAddress, int, java.lang.String, java.lang.String, java.lang.String)
+    {
+        io.grpc.internal.ProxyDetectorImpl$1 $r0;
+        java.net.InetAddress $r1;
+        int $i0;
+        java.lang.String $r2, $r3, $r4, $r6;
+        java.net.Authenticator$RequestorType $r5;
+        java.net.URL $r7;
+        java.lang.Throwable $r8;
+        java.util.logging.Logger $r9;
+        java.util.logging.Level $r10;
+        java.lang.Object[] $r11;
+        java.net.PasswordAuthentication $r12;
+
+        $r0 := @this: io.grpc.internal.ProxyDetectorImpl$1;
+
+        $r6 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.net.InetAddress;
+
+        $i0 := @parameter2: int;
+
+        $r2 := @parameter3: java.lang.String;
+
+        $r3 := @parameter4: java.lang.String;
+
+        $r4 := @parameter5: java.lang.String;
+
+        $r7 = new java.net.URL;
+
+     label1:
+        specialinvoke $r7.<java.net.URL: void <init>(java.lang.String,java.lang.String,int,java.lang.String)>($r2, $r6, $i0, "");
+
+     label2:
+        goto label4;
+
+     label3:
+        $r8 := @caughtexception;
+
+        $r9 = staticinvoke <io.grpc.internal.ProxyDetectorImpl: java.util.logging.Logger access$000()>();
+
+        $r10 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        $r11 = newarray (java.lang.Object)[2];
+
+        $r11[0] = $r2;
+
+        $r11[1] = $r6;
+
+        virtualinvoke $r9.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Object[])>($r10, "io.grpc.internal.ProxyDetectorImpl$1", "requestPasswordAuthentication", "failed to create URL for Authenticator: {0} {1}", $r11);
+
+        $r7 = null;
+
+     label4:
+        $r5 = <java.net.Authenticator$RequestorType: java.net.Authenticator$RequestorType PROXY>;
+
+        $r12 = staticinvoke <java.net.Authenticator: java.net.PasswordAuthentication requestPasswordAuthentication(java.lang.String,java.net.InetAddress,int,java.lang.String,java.lang.String,java.lang.String,java.net.URL,java.net.Authenticator$RequestorType)>($r6, $r1, $i0, $r2, $r3, $r4, $r7, $r5);
+
+        return $r12;
+
+        catch java.net.MalformedURLException from label1 to label2 with label3;
+    }
+
+io.grpc.internal.ProxyDetectorImpl$2
+    void <init>()
+    {
+        io.grpc.internal.ProxyDetectorImpl$2 $r0;
+
+        $r0 := @this: io.grpc.internal.ProxyDetectorImpl$2;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public volatile java.lang.Object get()
+    {
+        io.grpc.internal.ProxyDetectorImpl$2 $r0;
+        java.net.ProxySelector $r1;
+
+        $r0 := @this: io.grpc.internal.ProxyDetectorImpl$2;
+
+        $r1 = virtualinvoke $r0.<io.grpc.internal.ProxyDetectorImpl$2: java.net.ProxySelector get()>();
+
+        return $r1;
+    }
+
+    public java.net.ProxySelector get()
+    {
+        io.grpc.internal.ProxyDetectorImpl$2 $r0;
+        java.net.ProxySelector $r1;
+
+        $r0 := @this: io.grpc.internal.ProxyDetectorImpl$2;
+
+        $r1 = staticinvoke <java.net.ProxySelector: java.net.ProxySelector getDefault()>();
+
+        return $r1;
+    }
+
+io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider
+<io.grpc.internal.ProxyDetectorImpl$AuthenticationProvider: java.net.PasswordAuthentication requestPasswordAuthentication(java.lang.String,java.net.InetAddress,int,java.lang.String,java.lang.String,java.lang.String)>

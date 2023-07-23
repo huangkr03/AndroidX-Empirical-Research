@@ -1,0 +1,143 @@
+androidx.work.DelegatingWorkerFactory
+<androidx.work.DelegatingWorkerFactory: java.lang.String TAG>
+<androidx.work.DelegatingWorkerFactory: java.util.List mFactories>
+    public void <init>()
+    {
+        androidx.work.DelegatingWorkerFactory r0;
+        java.util.concurrent.CopyOnWriteArrayList $r1;
+
+        r0 := @this: androidx.work.DelegatingWorkerFactory;
+
+        specialinvoke r0.<androidx.work.WorkerFactory: void <init>()>();
+
+        $r1 = new java.util.concurrent.CopyOnWriteArrayList;
+
+        specialinvoke $r1.<java.util.concurrent.CopyOnWriteArrayList: void <init>()>();
+
+        r0.<androidx.work.DelegatingWorkerFactory: java.util.List mFactories> = $r1;
+
+        return;
+    }
+
+    java.util.List getFactories()
+    {
+        androidx.work.DelegatingWorkerFactory r0;
+        java.util.List $r1;
+
+        r0 := @this: androidx.work.DelegatingWorkerFactory;
+
+        $r1 = r0.<androidx.work.DelegatingWorkerFactory: java.util.List mFactories>;
+
+        return $r1;
+    }
+
+    public final void addFactory(androidx.work.WorkerFactory)
+    {
+        androidx.work.DelegatingWorkerFactory r0;
+        androidx.work.WorkerFactory r1;
+        java.util.List $r2;
+
+        r0 := @this: androidx.work.DelegatingWorkerFactory;
+
+        r1 := @parameter0: androidx.work.WorkerFactory;
+
+        $r2 = r0.<androidx.work.DelegatingWorkerFactory: java.util.List mFactories>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(r1);
+
+        return;
+    }
+
+    public final androidx.work.ListenableWorker createWorker(android.content.Context, java.lang.String, androidx.work.WorkerParameters)
+    {
+        androidx.work.DelegatingWorkerFactory r0;
+        android.content.Context r1;
+        java.lang.String r2, r6, $r15;
+        androidx.work.WorkerParameters r3;
+        java.util.Iterator r4;
+        androidx.work.WorkerFactory r5;
+        java.util.List $r7;
+        boolean $z0;
+        java.lang.Object $r8;
+        java.lang.Throwable $r9, r17;
+        java.lang.StringBuilder $r10, $r11, $r12, $r13;
+        androidx.work.Logger $r14;
+        androidx.work.ListenableWorker r16;
+
+        r0 := @this: androidx.work.DelegatingWorkerFactory;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: androidx.work.WorkerParameters;
+
+        $r7 = r0.<androidx.work.DelegatingWorkerFactory: java.util.List mFactories>;
+
+        r4 = interfaceinvoke $r7.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label7;
+
+        $r8 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (androidx.work.WorkerFactory) $r8;
+
+     label2:
+        r16 = virtualinvoke r5.<androidx.work.WorkerFactory: androidx.work.ListenableWorker createWorker(android.content.Context,java.lang.String,androidx.work.WorkerParameters)>(r1, r2, r3);
+
+        if r16 == null goto label4;
+
+     label3:
+        return r16;
+
+     label4:
+        goto label6;
+
+     label5:
+        $r9 := @caughtexception;
+
+        r17 = $r9;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to instantiate a ListenableWorker (");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        r6 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r14 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r15 = <androidx.work.DelegatingWorkerFactory: java.lang.String TAG>;
+
+        virtualinvoke $r14.<androidx.work.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>($r15, r6, r17);
+
+        throw r17;
+
+     label6:
+        goto label1;
+
+     label7:
+        return null;
+
+        catch java.lang.Throwable from label2 to label3 with label5;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("DelegatingWkrFctry");
+
+        <androidx.work.DelegatingWorkerFactory: java.lang.String TAG> = $r0;
+
+        return;
+    }
+

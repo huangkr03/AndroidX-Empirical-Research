@@ -1,0 +1,267 @@
+android.support.v4.util.Pools
+    private void <init>()
+    {
+        android.support.v4.util.Pools r0;
+
+        r0 := @this: android.support.v4.util.Pools;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+android.support.v4.util.Pools$Pool
+<android.support.v4.util.Pools$Pool: java.lang.Object acquire()>
+<android.support.v4.util.Pools$Pool: boolean release(java.lang.Object)>
+android.support.v4.util.Pools$SimplePool
+<android.support.v4.util.Pools$SimplePool: java.lang.Object[] mPool>
+<android.support.v4.util.Pools$SimplePool: int mPoolSize>
+    public void <init>(int)
+    {
+        android.support.v4.util.Pools$SimplePool r0;
+        int i0;
+        java.lang.Object[] $r1;
+        java.lang.IllegalArgumentException $r2;
+
+        r0 := @this: android.support.v4.util.Pools$SimplePool;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        if i0 > 0 goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("The max pool size must be > 0");
+
+        throw $r2;
+
+     label1:
+        $r1 = newarray (java.lang.Object)[i0];
+
+        r0.<android.support.v4.util.Pools$SimplePool: java.lang.Object[] mPool> = $r1;
+
+        return;
+    }
+
+    public java.lang.Object acquire()
+    {
+        android.support.v4.util.Pools$SimplePool r0;
+        int i0, $i1, $i2, $i3, $i4;
+        java.lang.Object r1;
+        java.lang.Object[] $r2, $r3;
+
+        r0 := @this: android.support.v4.util.Pools$SimplePool;
+
+        $i1 = r0.<android.support.v4.util.Pools$SimplePool: int mPoolSize>;
+
+        if $i1 <= 0 goto label1;
+
+        $i2 = r0.<android.support.v4.util.Pools$SimplePool: int mPoolSize>;
+
+        i0 = $i2 - 1;
+
+        $r2 = r0.<android.support.v4.util.Pools$SimplePool: java.lang.Object[] mPool>;
+
+        r1 = $r2[i0];
+
+        $r3 = r0.<android.support.v4.util.Pools$SimplePool: java.lang.Object[] mPool>;
+
+        $r3[i0] = null;
+
+        $i3 = r0.<android.support.v4.util.Pools$SimplePool: int mPoolSize>;
+
+        $i4 = $i3 - 1;
+
+        r0.<android.support.v4.util.Pools$SimplePool: int mPoolSize> = $i4;
+
+        return r1;
+
+     label1:
+        return null;
+    }
+
+    public boolean release(java.lang.Object)
+    {
+        android.support.v4.util.Pools$SimplePool r0;
+        java.lang.Object r1;
+        boolean $z0;
+        java.lang.Object[] $r2, $r3;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.IllegalStateException $r4;
+
+        r0 := @this: android.support.v4.util.Pools$SimplePool;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $z0 = specialinvoke r0.<android.support.v4.util.Pools$SimplePool: boolean isInPool(java.lang.Object)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = new java.lang.IllegalStateException;
+
+        specialinvoke $r4.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Already in the pool!");
+
+        throw $r4;
+
+     label1:
+        $i1 = r0.<android.support.v4.util.Pools$SimplePool: int mPoolSize>;
+
+        $r2 = r0.<android.support.v4.util.Pools$SimplePool: java.lang.Object[] mPool>;
+
+        $i0 = lengthof $r2;
+
+        if $i1 >= $i0 goto label2;
+
+        $r3 = r0.<android.support.v4.util.Pools$SimplePool: java.lang.Object[] mPool>;
+
+        $i2 = r0.<android.support.v4.util.Pools$SimplePool: int mPoolSize>;
+
+        $r3[$i2] = r1;
+
+        $i3 = r0.<android.support.v4.util.Pools$SimplePool: int mPoolSize>;
+
+        $i4 = $i3 + 1;
+
+        r0.<android.support.v4.util.Pools$SimplePool: int mPoolSize> = $i4;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    private boolean isInPool(java.lang.Object)
+    {
+        android.support.v4.util.Pools$SimplePool r0;
+        java.lang.Object r1, $r3;
+        int $i0, i1;
+        java.lang.Object[] $r2;
+
+        r0 := @this: android.support.v4.util.Pools$SimplePool;
+
+        r1 := @parameter0: java.lang.Object;
+
+        i1 = 0;
+
+     label1:
+        $i0 = r0.<android.support.v4.util.Pools$SimplePool: int mPoolSize>;
+
+        if i1 >= $i0 goto label3;
+
+        $r2 = r0.<android.support.v4.util.Pools$SimplePool: java.lang.Object[] mPool>;
+
+        $r3 = $r2[i1];
+
+        if $r3 != r1 goto label2;
+
+        return 1;
+
+     label2:
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+android.support.v4.util.Pools$SynchronizedPool
+<android.support.v4.util.Pools$SynchronizedPool: java.lang.Object mLock>
+    public void <init>(int)
+    {
+        android.support.v4.util.Pools$SynchronizedPool r0;
+        int i0;
+        java.lang.Object $r1;
+
+        r0 := @this: android.support.v4.util.Pools$SynchronizedPool;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<android.support.v4.util.Pools$SimplePool: void <init>(int)>(i0);
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<android.support.v4.util.Pools$SynchronizedPool: java.lang.Object mLock> = $r1;
+
+        return;
+    }
+
+    public java.lang.Object acquire()
+    {
+        android.support.v4.util.Pools$SynchronizedPool r0;
+        java.lang.Object r1, $r3, $r4;
+        java.lang.Throwable r2, $r5;
+
+        r0 := @this: android.support.v4.util.Pools$SynchronizedPool;
+
+        $r3 = r0.<android.support.v4.util.Pools$SynchronizedPool: java.lang.Object mLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = specialinvoke r0.<android.support.v4.util.Pools$SimplePool: java.lang.Object acquire()>();
+
+        exitmonitor r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public boolean release(java.lang.Object)
+    {
+        android.support.v4.util.Pools$SynchronizedPool r0;
+        java.lang.Object r1, r2, $r4;
+        java.lang.Throwable r3, $r5;
+        boolean $z0;
+
+        r0 := @this: android.support.v4.util.Pools$SynchronizedPool;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r4 = r0.<android.support.v4.util.Pools$SynchronizedPool: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $z0 = specialinvoke r0.<android.support.v4.util.Pools$SimplePool: boolean release(java.lang.Object)>(r1);
+
+        exitmonitor r2;
+
+     label2:
+        return $z0;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r3 = $r5;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+

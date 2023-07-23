@@ -1,0 +1,230 @@
+okio.InputStreamSource
+<okio.InputStreamSource: java.io.InputStream input>
+<okio.InputStreamSource: okio.Timeout timeout>
+    public void <init>(java.io.InputStream, okio.Timeout)
+    {
+        okio.InputStreamSource $r0;
+        java.io.InputStream $r1;
+        okio.Timeout $r2;
+
+        $r0 := @this: okio.InputStreamSource;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $r2 := @parameter1: okio.Timeout;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "input");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "timeout");
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<okio.InputStreamSource: java.io.InputStream input> = $r1;
+
+        $r0.<okio.InputStreamSource: okio.Timeout timeout> = $r2;
+
+        return;
+    }
+
+    public void close()
+    {
+        okio.InputStreamSource $r0;
+        java.io.InputStream $r1;
+
+        $r0 := @this: okio.InputStreamSource;
+
+        $r1 = $r0.<okio.InputStreamSource: java.io.InputStream input>;
+
+        virtualinvoke $r1.<java.io.InputStream: void close()>();
+
+        return;
+    }
+
+    public long read(okio.Buffer, long)
+    {
+        okio.InputStreamSource $r0;
+        byte $b0;
+        okio.Buffer $r1;
+        long $l1, $l3;
+        boolean $z0;
+        okio.Timeout $r2;
+        okio.Segment $r3, $r6;
+        int $i2, $i4;
+        java.io.InputStream $r4;
+        byte[] $r5;
+        java.lang.Throwable $r7;
+        java.lang.StringBuilder $r8, r11;
+        java.lang.String $r9;
+        java.io.IOException r10;
+        java.lang.IllegalArgumentException r12;
+        java.lang.AssertionError r13;
+
+        $r0 := @this: okio.InputStreamSource;
+
+        $r1 := @parameter0: okio.Buffer;
+
+        $l1 := @parameter1: long;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "sink");
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 != 0 goto label01;
+
+        return 0L;
+
+     label01:
+        $b0 = $l1 cmp 0L;
+
+        if $b0 < 0 goto label02;
+
+        $z0 = 1;
+
+        goto label03;
+
+     label02:
+        $z0 = 0;
+
+     label03:
+        if $z0 == 0 goto label18;
+
+        $r2 = $r0.<okio.InputStreamSource: okio.Timeout timeout>;
+
+     label04:
+        virtualinvoke $r2.<okio.Timeout: void throwIfReached()>();
+
+        $r3 = virtualinvoke $r1.<okio.Buffer: okio.Segment writableSegment$third_party_java_src_okio_okio(int)>(1);
+
+     label05:
+        $i2 = $r3.<okio.Segment: int limit>;
+
+        $i2 = 8192 - $i2;
+
+        $l3 = (long) $i2;
+
+        $l1 = staticinvoke <java.lang.Math: long min(long,long)>($l1, $l3);
+
+        $i2 = (int) $l1;
+
+        $r4 = $r0.<okio.InputStreamSource: java.io.InputStream input>;
+
+        $r5 = $r3.<okio.Segment: byte[] data>;
+
+        $i4 = $r3.<okio.Segment: int limit>;
+
+     label06:
+        $i2 = virtualinvoke $r4.<java.io.InputStream: int read(byte[],int,int)>($r5, $i4, $i2);
+
+     label07:
+        if $i2 != -1 goto label11;
+
+        $i2 = $r3.<okio.Segment: int pos>;
+
+        $i4 = $r3.<okio.Segment: int limit>;
+
+        if $i2 != $i4 goto label10;
+
+     label08:
+        $r6 = virtualinvoke $r3.<okio.Segment: okio.Segment pop()>();
+
+     label09:
+        $r1.<okio.Buffer: okio.Segment head> = $r6;
+
+        staticinvoke <okio.SegmentPool: void recycle(okio.Segment)>($r3);
+
+     label10:
+        return -1L;
+
+     label11:
+        $i4 = $r3.<okio.Segment: int limit>;
+
+        $i4 = $i4 + $i2;
+
+        $r3.<okio.Segment: int limit> = $i4;
+
+     label12:
+        $l3 = virtualinvoke $r1.<okio.Buffer: long size()>();
+
+     label13:
+        $l1 = (long) $i2;
+
+        $l3 = $l3 + $l1;
+
+     label14:
+        virtualinvoke $r1.<okio.Buffer: void setSize$third_party_java_src_okio_okio(long)>($l3);
+
+     label15:
+        return $l1;
+
+     label16:
+        $r7 := @caughtexception;
+
+        r13 = (java.lang.AssertionError) $r7;
+
+        $z0 = staticinvoke <okio.Okio: boolean isAndroidGetsocknameError(java.lang.AssertionError)>(r13);
+
+        if $z0 == 0 goto label17;
+
+        r10 = new java.io.IOException;
+
+        specialinvoke r10.<java.io.IOException: void <init>(java.lang.Throwable)>($r7);
+
+        $r7 = (java.lang.Throwable) r10;
+
+        throw $r7;
+
+     label17:
+        throw $r7;
+
+     label18:
+        r11 = new java.lang.StringBuilder;
+
+        specialinvoke r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("byteCount < 0: ");
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r12 = new java.lang.IllegalArgumentException;
+
+        $r9 = virtualinvoke $r9.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke r12.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r9);
+
+        throw r12;
+
+        catch java.lang.AssertionError from label04 to label05 with label16;
+        catch java.lang.AssertionError from label06 to label07 with label16;
+        catch java.lang.AssertionError from label08 to label09 with label16;
+        catch java.lang.AssertionError from label12 to label13 with label16;
+        catch java.lang.AssertionError from label14 to label15 with label16;
+    }
+
+    public java.lang.String toString()
+    {
+        okio.InputStreamSource $r0;
+        java.io.InputStream $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: okio.InputStreamSource;
+
+        $r1 = $r0.<okio.InputStreamSource: java.io.InputStream input>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("source(");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+    }
+

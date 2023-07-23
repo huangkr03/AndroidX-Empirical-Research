@@ -1,0 +1,246 @@
+androidx.test.runner.permission.PermissionRequester
+<androidx.test.runner.permission.PermissionRequester: java.lang.String TAG>
+<androidx.test.runner.permission.PermissionRequester: int androidRuntimeVersion>
+<androidx.test.runner.permission.PermissionRequester: android.content.Context targetContext>
+<androidx.test.runner.permission.PermissionRequester: java.util.HashSet requestedPermissions>
+    private int getAndroidRuntimeVersion()
+    {
+        androidx.test.runner.permission.PermissionRequester r0;
+        int $i0;
+
+        r0 := @this: androidx.test.runner.permission.PermissionRequester;
+
+        $i0 = r0.<androidx.test.runner.permission.PermissionRequester: int androidRuntimeVersion>;
+
+        return $i0;
+    }
+
+    public void <init>()
+    {
+        androidx.test.runner.permission.PermissionRequester r0;
+        android.app.Instrumentation $r1;
+        android.content.Context $r2;
+
+        r0 := @this: androidx.test.runner.permission.PermissionRequester;
+
+        $r1 = staticinvoke <androidx.test.platform.app.InstrumentationRegistry: android.app.Instrumentation getInstrumentation()>();
+
+        $r2 = virtualinvoke $r1.<android.app.Instrumentation: android.content.Context getTargetContext()>();
+
+        specialinvoke r0.<androidx.test.runner.permission.PermissionRequester: void <init>(android.content.Context)>($r2);
+
+        return;
+    }
+
+    void <init>(android.content.Context)
+    {
+        androidx.test.runner.permission.PermissionRequester r0;
+        android.content.Context r1, $r4;
+        int $i0;
+        java.util.HashSet $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: androidx.test.runner.permission.PermissionRequester;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        r0.<androidx.test.runner.permission.PermissionRequester: int androidRuntimeVersion> = $i0;
+
+        $r2 = new java.util.HashSet;
+
+        specialinvoke $r2.<java.util.HashSet: void <init>()>();
+
+        r0.<androidx.test.runner.permission.PermissionRequester: java.util.HashSet requestedPermissions> = $r2;
+
+        $r3 = staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "targetContext cannot be null!");
+
+        $r4 = (android.content.Context) $r3;
+
+        r0.<androidx.test.runner.permission.PermissionRequester: android.content.Context targetContext> = $r4;
+
+        return;
+    }
+
+    public transient void addPermissions(java.lang.String[])
+    {
+        androidx.test.runner.permission.PermissionRequester r0;
+        java.lang.String[] r1, r2;
+        int i0, i1;
+        java.lang.String r3, $r9;
+        androidx.test.runner.permission.GrantPermissionCallable r4, $r6;
+        boolean $z0, $z1, $z2;
+        androidx.test.runner.permission.UiAutomationShellCommand $r7;
+        android.content.Context $r8, $r11;
+        androidx.test.runner.permission.UiAutomationShellCommand$PmCommand $r10;
+        java.util.HashSet $r12;
+
+        r0 := @this: androidx.test.runner.permission.PermissionRequester;
+
+        r1 := @parameter0: java.lang.String[];
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "permissions cannot be null!");
+
+        $z0 = specialinvoke r0.<androidx.test.runner.permission.PermissionRequester: boolean deviceSupportsRuntimePermissions()>();
+
+        if $z0 == 0 goto label2;
+
+        r2 = r1;
+
+        i0 = lengthof r2;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        r3 = r2[i1];
+
+        $z1 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>(r3);
+
+        staticinvoke <junit.framework.Assert: void assertFalse(java.lang.String,boolean)>("Permission String is empty or null!", $z1);
+
+        $r6 = new androidx.test.runner.permission.GrantPermissionCallable;
+
+        $r7 = new androidx.test.runner.permission.UiAutomationShellCommand;
+
+        $r8 = r0.<androidx.test.runner.permission.PermissionRequester: android.content.Context targetContext>;
+
+        $r9 = virtualinvoke $r8.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r10 = <androidx.test.runner.permission.UiAutomationShellCommand$PmCommand: androidx.test.runner.permission.UiAutomationShellCommand$PmCommand GRANT_PERMISSION>;
+
+        specialinvoke $r7.<androidx.test.runner.permission.UiAutomationShellCommand: void <init>(java.lang.String,java.lang.String,androidx.test.runner.permission.UiAutomationShellCommand$PmCommand)>($r9, r3, $r10);
+
+        $r11 = r0.<androidx.test.runner.permission.PermissionRequester: android.content.Context targetContext>;
+
+        specialinvoke $r6.<androidx.test.runner.permission.GrantPermissionCallable: void <init>(androidx.test.runner.permission.ShellCommand,android.content.Context,java.lang.String)>($r7, $r11, r3);
+
+        r4 = $r6;
+
+        $r12 = r0.<androidx.test.runner.permission.PermissionRequester: java.util.HashSet requestedPermissions>;
+
+        $z2 = virtualinvoke $r12.<java.util.HashSet: boolean add(java.lang.Object)>(r4);
+
+        staticinvoke <androidx.test.internal.util.Checks: void checkState(boolean)>($z2);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void requestPermissions()
+    {
+        androidx.test.runner.permission.PermissionRequester r0;
+        java.util.Iterator r1;
+        androidx.test.runner.permission.RequestPermissionCallable r2;
+        java.lang.Throwable r3, $r8;
+        boolean $z0, $z1;
+        java.util.HashSet $r4;
+        java.lang.Object $r5, $r7;
+        androidx.test.runner.permission.RequestPermissionCallable$Result $r6;
+
+        r0 := @this: androidx.test.runner.permission.PermissionRequester;
+
+        $z0 = specialinvoke r0.<androidx.test.runner.permission.PermissionRequester: boolean deviceSupportsRuntimePermissions()>();
+
+        if $z0 == 0 goto label7;
+
+        $r4 = r0.<androidx.test.runner.permission.PermissionRequester: java.util.HashSet requestedPermissions>;
+
+        r1 = virtualinvoke $r4.<java.util.HashSet: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label7;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (androidx.test.runner.permission.RequestPermissionCallable) $r5;
+
+     label2:
+        $r6 = <androidx.test.runner.permission.RequestPermissionCallable$Result: androidx.test.runner.permission.RequestPermissionCallable$Result FAILURE>;
+
+        $r7 = virtualinvoke r2.<androidx.test.runner.permission.RequestPermissionCallable: java.lang.Object call()>();
+
+        if $r6 != $r7 goto label4;
+
+        staticinvoke <junit.framework.Assert: void fail(java.lang.String)>("Failed to grant permissions, see logcat for details");
+
+     label3:
+        return;
+
+     label4:
+        goto label6;
+
+     label5:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("PermissionRequester", "An Exception was thrown while granting permission", r3);
+
+        staticinvoke <junit.framework.Assert: void fail(java.lang.String)>("Failed to grant permissions, see logcat for details");
+
+        return;
+
+     label6:
+        goto label1;
+
+     label7:
+        return;
+
+        catch java.lang.Exception from label2 to label3 with label5;
+    }
+
+    protected void setAndroidRuntimeVersion(int)
+    {
+        androidx.test.runner.permission.PermissionRequester r0;
+        int i0;
+
+        r0 := @this: androidx.test.runner.permission.PermissionRequester;
+
+        i0 := @parameter0: int;
+
+        r0.<androidx.test.runner.permission.PermissionRequester: int androidRuntimeVersion> = i0;
+
+        return;
+    }
+
+    private boolean deviceSupportsRuntimePermissions()
+    {
+        androidx.test.runner.permission.PermissionRequester r0;
+        boolean z0, $z1;
+        int $i0;
+
+        r0 := @this: androidx.test.runner.permission.PermissionRequester;
+
+        $i0 = specialinvoke r0.<androidx.test.runner.permission.PermissionRequester: int getAndroidRuntimeVersion()>();
+
+        if $i0 < 23 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        z0 = $z1;
+
+        if z0 != 0 goto label3;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("PermissionRequester", "Permissions can only be granted on devices running Android M (API 23) orhigher. This rule is ignored.");
+
+     label3:
+        return z0;
+    }
+

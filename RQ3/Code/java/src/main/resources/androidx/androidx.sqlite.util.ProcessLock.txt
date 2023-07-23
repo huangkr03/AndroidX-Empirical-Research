@@ -1,0 +1,327 @@
+androidx.sqlite.util.ProcessLock
+<androidx.sqlite.util.ProcessLock: androidx.sqlite.util.ProcessLock$Companion Companion>
+<androidx.sqlite.util.ProcessLock: boolean processLock>
+<androidx.sqlite.util.ProcessLock: java.io.File lockFile>
+<androidx.sqlite.util.ProcessLock: java.util.concurrent.locks.Lock threadLock>
+<androidx.sqlite.util.ProcessLock: java.nio.channels.FileChannel lockChannel>
+<androidx.sqlite.util.ProcessLock: java.lang.String TAG>
+<androidx.sqlite.util.ProcessLock: java.util.Map threadLocksMap>
+    public void <init>(java.lang.String, java.io.File, boolean)
+    {
+        androidx.sqlite.util.ProcessLock r0;
+        java.lang.String r1, $r7, $r10;
+        java.io.File r2, $r3, $r8;
+        boolean z0;
+        java.lang.StringBuilder $r4, $r5, $r6;
+        androidx.sqlite.util.ProcessLock$Companion $r9;
+        java.util.concurrent.locks.Lock $r11;
+
+        r0 := @this: androidx.sqlite.util.ProcessLock;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.io.File;
+
+        z0 := @parameter2: boolean;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "name");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r2, "lockDir");
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.sqlite.util.ProcessLock: boolean processLock> = z0;
+
+        $r3 = new java.io.File;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".lck");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.io.File: void <init>(java.io.File,java.lang.String)>(r2, $r7);
+
+        r0.<androidx.sqlite.util.ProcessLock: java.io.File lockFile> = $r3;
+
+        $r9 = <androidx.sqlite.util.ProcessLock: androidx.sqlite.util.ProcessLock$Companion Companion>;
+
+        $r8 = r0.<androidx.sqlite.util.ProcessLock: java.io.File lockFile>;
+
+        $r10 = virtualinvoke $r8.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r10, "lockFile.absolutePath");
+
+        $r11 = staticinvoke <androidx.sqlite.util.ProcessLock$Companion: java.util.concurrent.locks.Lock access$getThreadLock(androidx.sqlite.util.ProcessLock$Companion,java.lang.String)>($r9, $r10);
+
+        r0.<androidx.sqlite.util.ProcessLock: java.util.concurrent.locks.Lock threadLock> = $r11;
+
+        return;
+    }
+
+    public final void lock(boolean)
+    {
+        androidx.sqlite.util.ProcessLock r0, r2;
+        boolean z0;
+        java.nio.channels.FileChannel r1;
+        java.util.concurrent.locks.Lock $r3;
+        java.io.File $r4, $r6, r10;
+        java.io.FileOutputStream $r5;
+        java.lang.Throwable $r8, $r9, r11;
+
+        r0 := @this: androidx.sqlite.util.ProcessLock;
+
+        z0 := @parameter0: boolean;
+
+        $r3 = r0.<androidx.sqlite.util.ProcessLock: java.util.concurrent.locks.Lock threadLock>;
+
+        interfaceinvoke $r3.<java.util.concurrent.locks.Lock: void lock()>();
+
+        if z0 == 0 goto label5;
+
+     label1:
+        $r4 = r0.<androidx.sqlite.util.ProcessLock: java.io.File lockFile>;
+
+        r10 = virtualinvoke $r4.<java.io.File: java.io.File getParentFile()>();
+
+        if r10 == null goto label2;
+
+        virtualinvoke r10.<java.io.File: boolean mkdirs()>();
+
+        goto label2;
+
+     label2:
+        $r5 = new java.io.FileOutputStream;
+
+        $r6 = r0.<androidx.sqlite.util.ProcessLock: java.io.File lockFile>;
+
+        specialinvoke $r5.<java.io.FileOutputStream: void <init>(java.io.File)>($r6);
+
+        r1 = virtualinvoke $r5.<java.io.FileOutputStream: java.nio.channels.FileChannel getChannel()>();
+
+        r2 = r0;
+
+        virtualinvoke r1.<java.nio.channels.FileChannel: java.nio.channels.FileLock lock()>();
+
+        r2.<androidx.sqlite.util.ProcessLock: java.nio.channels.FileChannel lockChannel> = r1;
+
+     label3:
+        goto label5;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r11 = $r8;
+
+        r0.<androidx.sqlite.util.ProcessLock: java.nio.channels.FileChannel lockChannel> = null;
+
+        $r9 = (java.lang.Throwable) r11;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("SupportSQLiteLock", "Unable to grab file lock.", $r9);
+
+     label5:
+        return;
+
+        catch java.io.IOException from label1 to label3 with label4;
+    }
+
+    public static void lock$default(androidx.sqlite.util.ProcessLock, boolean, int, java.lang.Object)
+    {
+        androidx.sqlite.util.ProcessLock r0;
+        int i0, $i1;
+        java.lang.Object r1;
+        boolean z0;
+
+        r0 := @parameter0: androidx.sqlite.util.ProcessLock;
+
+        z0 := @parameter1: boolean;
+
+        i0 := @parameter2: int;
+
+        r1 := @parameter3: java.lang.Object;
+
+        $i1 = i0 & 1;
+
+        if $i1 == 0 goto label1;
+
+        z0 = r0.<androidx.sqlite.util.ProcessLock: boolean processLock>;
+
+     label1:
+        virtualinvoke r0.<androidx.sqlite.util.ProcessLock: void lock(boolean)>(z0);
+
+        return;
+    }
+
+    public final void unlock()
+    {
+        androidx.sqlite.util.ProcessLock r0;
+        java.lang.Throwable $r1, r3;
+        java.nio.channels.FileChannel r2;
+        java.util.concurrent.locks.Lock $r4;
+
+        r0 := @this: androidx.sqlite.util.ProcessLock;
+
+     label1:
+        r2 = r0.<androidx.sqlite.util.ProcessLock: java.nio.channels.FileChannel lockChannel>;
+
+        if r2 == null goto label2;
+
+        virtualinvoke r2.<java.nio.channels.FileChannel: void close()>();
+
+        goto label4;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r1 := @caughtexception;
+
+        r3 = $r1;
+
+     label4:
+        $r4 = r0.<androidx.sqlite.util.ProcessLock: java.util.concurrent.locks.Lock threadLock>;
+
+        interfaceinvoke $r4.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public static final java.util.Map access$getThreadLocksMap$cp()
+    {
+        java.util.Map $r0;
+
+        $r0 = <androidx.sqlite.util.ProcessLock: java.util.Map threadLocksMap>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.sqlite.util.ProcessLock$Companion $r0;
+        java.util.HashMap $r1;
+        java.util.Map $r2;
+
+        $r0 = new androidx.sqlite.util.ProcessLock$Companion;
+
+        specialinvoke $r0.<androidx.sqlite.util.ProcessLock$Companion: void <init>(kotlin.jvm.internal.DefaultConstructorMarker)>(null);
+
+        <androidx.sqlite.util.ProcessLock: androidx.sqlite.util.ProcessLock$Companion Companion> = $r0;
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        $r2 = (java.util.Map) $r1;
+
+        <androidx.sqlite.util.ProcessLock: java.util.Map threadLocksMap> = $r2;
+
+        return;
+    }
+
+androidx.sqlite.util.ProcessLock$Companion
+    private void <init>()
+    {
+        androidx.sqlite.util.ProcessLock$Companion r0;
+
+        r0 := @this: androidx.sqlite.util.ProcessLock$Companion;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private final java.util.concurrent.locks.Lock getThreadLock(java.lang.String)
+    {
+        androidx.sqlite.util.ProcessLock$Companion r0;
+        java.lang.String r1;
+        java.util.Map r2, $r3;
+        java.lang.Object r4, $r10;
+        java.util.concurrent.locks.Lock r5, $r9;
+        java.util.concurrent.locks.ReentrantLock $r6;
+        java.lang.Throwable $r8;
+
+        r0 := @this: androidx.sqlite.util.ProcessLock$Companion;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 = staticinvoke <androidx.sqlite.util.ProcessLock: java.util.Map access$getThreadLocksMap$cp()>();
+
+        entermonitor r2;
+
+     label1:
+        $r3 = staticinvoke <androidx.sqlite.util.ProcessLock: java.util.Map access$getThreadLocksMap$cp()>();
+
+        r4 = interfaceinvoke $r3.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        if r4 != null goto label2;
+
+        $r6 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r6.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        $r9 = (java.util.concurrent.locks.Lock) $r6;
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r9);
+
+        $r10 = $r9;
+
+        goto label3;
+
+     label2:
+        $r10 = r4;
+
+     label3:
+        r5 = (java.util.concurrent.locks.Lock) $r10;
+
+     label4:
+        exitmonitor r2;
+
+        return r5;
+
+     label5:
+        $r8 := @caughtexception;
+
+     label6:
+        exitmonitor r2;
+
+        throw $r8;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public static final java.util.concurrent.locks.Lock access$getThreadLock(androidx.sqlite.util.ProcessLock$Companion, java.lang.String)
+    {
+        androidx.sqlite.util.ProcessLock$Companion $r0;
+        java.lang.String r1;
+        java.util.concurrent.locks.Lock $r2;
+
+        $r0 := @parameter0: androidx.sqlite.util.ProcessLock$Companion;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = specialinvoke $r0.<androidx.sqlite.util.ProcessLock$Companion: java.util.concurrent.locks.Lock getThreadLock(java.lang.String)>(r1);
+
+        return $r2;
+    }
+
+    public void <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    {
+        androidx.sqlite.util.ProcessLock$Companion r0;
+        kotlin.jvm.internal.DefaultConstructorMarker $r1;
+
+        r0 := @this: androidx.sqlite.util.ProcessLock$Companion;
+
+        $r1 := @parameter0: kotlin.jvm.internal.DefaultConstructorMarker;
+
+        specialinvoke r0.<androidx.sqlite.util.ProcessLock$Companion: void <init>()>();
+
+        return;
+    }
+

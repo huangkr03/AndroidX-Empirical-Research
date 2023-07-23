@@ -1,0 +1,1005 @@
+androidx.media2.MediaSessionServiceImplBase
+<androidx.media2.MediaSessionServiceImplBase: java.lang.String TAG>
+<androidx.media2.MediaSessionServiceImplBase: boolean DEBUG>
+<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>
+<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub mStub>
+<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionService mInstance>
+<androidx.media2.MediaSessionServiceImplBase: java.util.Map mSessions>
+<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaNotificationHandler mNotificationHandler>
+    void <init>()
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        java.lang.Object $r1;
+        androidx.collection.ArrayMap $r2;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock> = $r1;
+
+        $r2 = new androidx.collection.ArrayMap;
+
+        specialinvoke $r2.<androidx.collection.ArrayMap: void <init>()>();
+
+        r0.<androidx.media2.MediaSessionServiceImplBase: java.util.Map mSessions> = $r2;
+
+        return;
+    }
+
+    public void onCreate(androidx.media2.MediaSessionService)
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        androidx.media2.MediaSessionService r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r7;
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub $r5;
+        androidx.media2.MediaNotificationHandler $r6;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        r1 := @parameter0: androidx.media2.MediaSessionService;
+
+        $r4 = r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionService mInstance> = r1;
+
+        $r5 = new androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub;
+
+        specialinvoke $r5.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: void <init>(androidx.media2.MediaSessionServiceImplBase)>(r0);
+
+        r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub mStub> = $r5;
+
+        $r6 = new androidx.media2.MediaNotificationHandler;
+
+        specialinvoke $r6.<androidx.media2.MediaNotificationHandler: void <init>(androidx.media2.MediaSessionService)>(r1);
+
+        r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaNotificationHandler mNotificationHandler> = $r6;
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        android.content.Intent r1;
+        androidx.media2.MediaSessionService r2;
+        java.lang.String r3;
+        androidx.media2.MediaSession r4;
+        int $i0;
+        boolean $z0, $z1;
+        android.os.IBinder $r5, $r6;
+        byte b2;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        r1 := @parameter0: android.content.Intent;
+
+        r2 = virtualinvoke r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionService getInstance()>();
+
+        if r2 != null goto label1;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("MSS2ImplBase", "Service hasn\'t created before onBind()");
+
+        return null;
+
+     label1:
+        r3 = virtualinvoke r1.<android.content.Intent: java.lang.String getAction()>();
+
+        b2 = -1;
+
+        $i0 = virtualinvoke r3.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i0)
+        {
+            case -1316836312: goto label2;
+            case 1665850838: goto label3;
+            default: goto label4;
+        };
+
+     label2:
+        $z1 = virtualinvoke r3.<java.lang.String: boolean equals(java.lang.Object)>("androidx.media2.MediaSessionService");
+
+        if $z1 == 0 goto label4;
+
+        b2 = 0;
+
+        goto label4;
+
+     label3:
+        $z0 = virtualinvoke r3.<java.lang.String: boolean equals(java.lang.Object)>("android.media.browse.MediaBrowserService");
+
+        if $z0 == 0 goto label4;
+
+        b2 = 1;
+
+     label4:
+        lookupswitch(b2)
+        {
+            case 0: goto label5;
+            case 1: goto label6;
+            default: goto label7;
+        };
+
+     label5:
+        $r6 = virtualinvoke r0.<androidx.media2.MediaSessionServiceImplBase: android.os.IBinder getServiceBinder()>();
+
+        return $r6;
+
+     label6:
+        r4 = virtualinvoke r2.<androidx.media2.MediaSessionService: androidx.media2.MediaSession onGetSession()>();
+
+        virtualinvoke r0.<androidx.media2.MediaSessionServiceImplBase: void addSession(androidx.media2.MediaSession)>(r4);
+
+        $r5 = virtualinvoke r4.<androidx.media2.MediaSession: android.os.IBinder getLegacyBrowerServiceBinder()>();
+
+        return $r5;
+
+     label7:
+        return null;
+    }
+
+    public void onDestroy()
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r6;
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub $r4, $r5;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        $r3 = r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionService mInstance> = null;
+
+        $r4 = r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub mStub>;
+
+        if $r4 == null goto label2;
+
+        $r5 = r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub mStub>;
+
+        virtualinvoke $r5.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: void close()>();
+
+        r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub mStub> = null;
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void addSession(androidx.media2.MediaSession)
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        androidx.media2.MediaSession r1, r2;
+        java.lang.Object $r3, $r6, $r10, r15, r17;
+        java.util.Map $r4, $r7;
+        java.lang.String $r5, $r8;
+        androidx.media2.SessionPlayer $r11;
+        int $i0;
+        androidx.media2.MediaSession$SessionCallback $r12;
+        java.lang.IllegalArgumentException $r13;
+        java.lang.Throwable $r14, r16;
+        androidx.media2.MediaNotificationHandler r18;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        r1 := @parameter0: androidx.media2.MediaSession;
+
+        $r3 = r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>;
+
+        r15 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.media2.MediaSessionServiceImplBase: java.util.Map mSessions>;
+
+        $r5 = virtualinvoke r1.<androidx.media2.MediaSession: java.lang.String getId()>();
+
+        $r6 = interfaceinvoke $r4.<java.util.Map: java.lang.Object get(java.lang.Object)>($r5);
+
+        r2 = (androidx.media2.MediaSession) $r6;
+
+        if r2 == null goto label2;
+
+        if r2 == r1 goto label2;
+
+        $r13 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r13.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Session ID should be unique.");
+
+        throw $r13;
+
+     label2:
+        $r7 = r0.<androidx.media2.MediaSessionServiceImplBase: java.util.Map mSessions>;
+
+        $r8 = virtualinvoke r1.<androidx.media2.MediaSession: java.lang.String getId()>();
+
+        interfaceinvoke $r7.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r8, r1);
+
+        exitmonitor r15;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r14 := @caughtexception;
+
+        r16 = $r14;
+
+        exitmonitor r15;
+
+     label5:
+        throw r16;
+
+     label6:
+        if r2 != null goto label8;
+
+        $r10 = r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>;
+
+        r17 = $r10;
+
+        entermonitor $r10;
+
+        r18 = r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaNotificationHandler mNotificationHandler>;
+
+        exitmonitor r17;
+
+        goto label7;
+
+     label7:
+        $r11 = virtualinvoke r1.<androidx.media2.MediaSession: androidx.media2.SessionPlayer getPlayer()>();
+
+        $i0 = virtualinvoke $r11.<androidx.media2.SessionPlayer: int getPlayerState()>();
+
+        virtualinvoke r18.<androidx.media2.MediaNotificationHandler: void onPlayerStateChanged(androidx.media2.MediaSession,int)>(r1, $i0);
+
+        $r12 = virtualinvoke r1.<androidx.media2.MediaSession: androidx.media2.MediaSession$SessionCallback getCallback()>();
+
+        virtualinvoke $r12.<androidx.media2.MediaSession$SessionCallback: void setForegroundServiceEventCallback(androidx.media2.MediaSession$SessionCallback$ForegroundServiceEventCallback)>(r18);
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void removeSession(androidx.media2.MediaSession)
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        androidx.media2.MediaSession r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r8;
+        java.util.Map $r5;
+        java.lang.String $r6;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        r1 := @parameter0: androidx.media2.MediaSession;
+
+        $r4 = r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.media2.MediaSessionServiceImplBase: java.util.Map mSessions>;
+
+        $r6 = virtualinvoke r1.<androidx.media2.MediaSession: java.lang.String getId()>();
+
+        interfaceinvoke $r5.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r6);
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public int onStartCommand(android.content.Intent, int, int)
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        android.content.Intent r1;
+        int i0, i1, $i2;
+        java.lang.String r2, $r6;
+        androidx.media2.MediaSessionService r3;
+        androidx.media2.MediaSession r4;
+        android.view.KeyEvent r5;
+        boolean $z0;
+        android.os.Parcelable $r7;
+        android.support.v4.media.session.MediaSessionCompat $r8;
+        android.support.v4.media.session.MediaControllerCompat $r9;
+        byte b5;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        r1 := @parameter0: android.content.Intent;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        if r1 == null goto label1;
+
+        $r6 = virtualinvoke r1.<android.content.Intent: java.lang.String getAction()>();
+
+        if $r6 != null goto label2;
+
+     label1:
+        return 1;
+
+     label2:
+        r2 = virtualinvoke r1.<android.content.Intent: java.lang.String getAction()>();
+
+        b5 = -1;
+
+        $i2 = virtualinvoke r2.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i2)
+        {
+            case 1997055314: goto label3;
+            default: goto label4;
+        };
+
+     label3:
+        $z0 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("android.intent.action.MEDIA_BUTTON");
+
+        if $z0 == 0 goto label4;
+
+        b5 = 0;
+
+     label4:
+        lookupswitch(b5)
+        {
+            case 0: goto label5;
+            default: goto label8;
+        };
+
+     label5:
+        r3 = virtualinvoke r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionService getInstance()>();
+
+        if r3 != null goto label6;
+
+        staticinvoke <android.util.Log: int wtf(java.lang.String,java.lang.String)>("MSS2ImplBase", "Service hasn\'t created");
+
+     label6:
+        r4 = virtualinvoke r3.<androidx.media2.MediaSessionService: androidx.media2.MediaSession onGetSession()>();
+
+        if r4 != null goto label7;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("MSS2ImplBase", "No session for handling media key");
+
+        goto label8;
+
+     label7:
+        $r7 = virtualinvoke r1.<android.content.Intent: android.os.Parcelable getParcelableExtra(java.lang.String)>("android.intent.extra.KEY_EVENT");
+
+        r5 = (android.view.KeyEvent) $r7;
+
+        if r5 == null goto label8;
+
+        $r8 = virtualinvoke r4.<androidx.media2.MediaSession: android.support.v4.media.session.MediaSessionCompat getSessionCompat()>();
+
+        $r9 = virtualinvoke $r8.<android.support.v4.media.session.MediaSessionCompat: android.support.v4.media.session.MediaControllerCompat getController()>();
+
+        virtualinvoke $r9.<android.support.v4.media.session.MediaControllerCompat: boolean dispatchMediaButtonEvent(android.view.KeyEvent)>(r5);
+
+        goto label8;
+
+     label8:
+        return 1;
+    }
+
+    public androidx.media2.MediaSessionService$MediaNotification onUpdateNotification(androidx.media2.MediaSession)
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        androidx.media2.MediaSession r1;
+        androidx.media2.MediaNotificationHandler r2;
+        java.lang.Object r3, $r4;
+        androidx.media2.MediaSessionService$MediaNotification $r5;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        r1 := @parameter0: androidx.media2.MediaSession;
+
+        $r4 = r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>;
+
+        r3 = $r4;
+
+        entermonitor $r4;
+
+        r2 = r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaNotificationHandler mNotificationHandler>;
+
+        exitmonitor r3;
+
+        goto label1;
+
+     label1:
+        if r2 != null goto label2;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Service hasn\'t created");
+
+        throw $r6;
+
+     label2:
+        $r5 = virtualinvoke r2.<androidx.media2.MediaNotificationHandler: androidx.media2.MediaSessionService$MediaNotification onUpdateNotification(androidx.media2.MediaSession)>(r1);
+
+        return $r5;
+    }
+
+    public java.util.List getSessions()
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        java.util.ArrayList r1, $r4;
+        java.lang.Object r2, $r5;
+        java.lang.Throwable r3, $r8;
+        java.util.Map $r6;
+        java.util.Collection $r7;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r1 = $r4;
+
+        $r5 = r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>;
+
+        r2 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.media2.MediaSessionServiceImplBase: java.util.Map mSessions>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.util.Collection values()>();
+
+        interfaceinvoke r1.<java.util.List: boolean addAll(java.util.Collection)>($r7);
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    androidx.media2.MediaSessionService getInstance()
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        java.lang.Object r1, $r2;
+        androidx.media2.MediaSessionService $r3;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        $r2 = r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        $r3 = r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionService mInstance>;
+
+        exitmonitor r1;
+
+        return $r3;
+    }
+
+    android.os.IBinder getServiceBinder()
+    {
+        androidx.media2.MediaSessionServiceImplBase r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r6;
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub $r4, $r5;
+        android.os.IBinder $r7;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase;
+
+        $r3 = r0.<androidx.media2.MediaSessionServiceImplBase: java.lang.Object mLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub mStub>;
+
+        if $r4 == null goto label2;
+
+        $r5 = r0.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub mStub>;
+
+        $r7 = virtualinvoke $r5.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: android.os.IBinder asBinder()>();
+
+        goto label3;
+
+     label2:
+        $r7 = null;
+
+     label3:
+        exitmonitor r1;
+
+     label4:
+        return $r7;
+
+     label5:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label6:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1
+<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: java.lang.String val$packageName>
+<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.IMediaController val$caller>
+<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: int val$pid>
+<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: int val$uid>
+<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub this$0>
+    void <init>(androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub, java.lang.String, androidx.media2.IMediaController, int, int)
+    {
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1 r0;
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub r1;
+        java.lang.String r2;
+        androidx.media2.IMediaController r3;
+        int i0, i1;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1;
+
+        r1 := @parameter0: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: androidx.media2.IMediaController;
+
+        i0 := @parameter3: int;
+
+        i1 := @parameter4: int;
+
+        r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub this$0> = r1;
+
+        r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: java.lang.String val$packageName> = r2;
+
+        r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.IMediaController val$caller> = r3;
+
+        r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: int val$pid> = i0;
+
+        r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: int val$uid> = i1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1 r0;
+        java.lang.Throwable r1, r2, r3, $r17, $r18, $r19, $r21, $r22, $r23, r25, r27, r29;
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub $r4;
+        java.lang.ref.WeakReference $r5;
+        java.lang.Object $r6;
+        java.lang.StringBuilder $r7, $r8, $r10;
+        java.lang.String $r9, $r11, $r12;
+        int $i1, $i2;
+        androidx.media2.IMediaController $r13, $r14, $r15, $r16, $r20;
+        boolean z0;
+        androidx.media2.MediaSessionServiceImplBase r24;
+        androidx.media2.MediaSessionService r26;
+        androidx.media2.MediaSession r28;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1;
+
+        z0 = 1;
+
+     label01:
+        $r4 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub this$0>;
+
+        $r5 = $r4.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: java.lang.ref.WeakReference mServiceImpl>;
+
+        $r6 = virtualinvoke $r5.<java.lang.ref.WeakReference: java.lang.Object get()>();
+
+        r24 = (androidx.media2.MediaSessionServiceImplBase) $r6;
+
+        if r24 != null goto label07;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MSS2ImplBase", "ServiceImpl isn\'t available");
+
+     label02:
+        if z0 == 0 goto label06;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MSS2ImplBase", "Service has destroyed prematurely. Rejecting connection");
+
+     label03:
+        $r16 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.IMediaController val$caller>;
+
+        interfaceinvoke $r16.<androidx.media2.IMediaController: void onDisconnected(int)>(0);
+
+     label04:
+        goto label06;
+
+     label05:
+        $r18 := @caughtexception;
+
+        r25 = $r18;
+
+     label06:
+        return;
+
+     label07:
+        r26 = virtualinvoke r24.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionService getInstance()>();
+
+        if r26 != null goto label13;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MSS2ImplBase", "Service isn\'t available");
+
+     label08:
+        if z0 == 0 goto label12;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MSS2ImplBase", "Service has destroyed prematurely. Rejecting connection");
+
+     label09:
+        $r15 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.IMediaController val$caller>;
+
+        interfaceinvoke $r15.<androidx.media2.IMediaController: void onDisconnected(int)>(0);
+
+     label10:
+        goto label12;
+
+     label11:
+        $r17 := @caughtexception;
+
+        r27 = $r17;
+
+     label12:
+        return;
+
+     label13:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Handling incoming connection request from the controller, controller=");
+
+        $r9 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: java.lang.String val$packageName>;
+
+        $r10 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MSS2ImplBase", $r11);
+
+     label14:
+        r28 = virtualinvoke r26.<androidx.media2.MediaSessionService: androidx.media2.MediaSession onGetSession()>();
+
+        virtualinvoke r26.<androidx.media2.MediaSessionService: void addSession(androidx.media2.MediaSession)>(r28);
+
+        z0 = 0;
+
+        $r13 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.IMediaController val$caller>;
+
+        $r12 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: java.lang.String val$packageName>;
+
+        $i2 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: int val$pid>;
+
+        $i1 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: int val$uid>;
+
+        virtualinvoke r28.<androidx.media2.MediaSession: void handleControllerConnectionFromService(androidx.media2.IMediaController,java.lang.String,int,int)>($r13, $r12, $i2, $i1);
+
+     label15:
+        goto label17;
+
+     label16:
+        $r21 := @caughtexception;
+
+        r1 = $r21;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("MSS2ImplBase", "Failed to add a session to session service", r1);
+
+     label17:
+        if z0 == 0 goto label27;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MSS2ImplBase", "Service has destroyed prematurely. Rejecting connection");
+
+     label18:
+        $r14 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.IMediaController val$caller>;
+
+        interfaceinvoke $r14.<androidx.media2.IMediaController: void onDisconnected(int)>(0);
+
+     label19:
+        goto label27;
+
+     label20:
+        $r22 := @caughtexception;
+
+        r29 = $r22;
+
+        goto label27;
+
+     label21:
+        $r19 := @caughtexception;
+
+        r2 = $r19;
+
+     label22:
+        if z0 == 0 goto label26;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MSS2ImplBase", "Service has destroyed prematurely. Rejecting connection");
+
+     label23:
+        $r20 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: androidx.media2.IMediaController val$caller>;
+
+        interfaceinvoke $r20.<androidx.media2.IMediaController: void onDisconnected(int)>(0);
+
+     label24:
+        goto label26;
+
+     label25:
+        $r23 := @caughtexception;
+
+        r3 = $r23;
+
+     label26:
+        throw r2;
+
+     label27:
+        return;
+
+        catch android.os.RemoteException from label03 to label04 with label05;
+        catch android.os.RemoteException from label09 to label10 with label11;
+        catch java.lang.Exception from label14 to label15 with label16;
+        catch android.os.RemoteException from label18 to label19 with label20;
+        catch java.lang.Throwable from label01 to label02 with label21;
+        catch java.lang.Throwable from label07 to label08 with label21;
+        catch java.lang.Throwable from label13 to label17 with label21;
+        catch android.os.RemoteException from label23 to label24 with label25;
+        catch java.lang.Throwable from label21 to label22 with label21;
+    }
+
+androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub
+<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: java.lang.ref.WeakReference mServiceImpl>
+<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: android.os.Handler mHandler>
+    void <init>(androidx.media2.MediaSessionServiceImplBase)
+    {
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub r0;
+        androidx.media2.MediaSessionServiceImplBase r1;
+        java.lang.ref.WeakReference $r2;
+        android.os.Handler $r3;
+        androidx.media2.MediaSessionService $r4;
+        android.os.Looper $r5;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub;
+
+        r1 := @parameter0: androidx.media2.MediaSessionServiceImplBase;
+
+        specialinvoke r0.<androidx.media2.IMediaSessionService$Stub: void <init>()>();
+
+        $r2 = new java.lang.ref.WeakReference;
+
+        specialinvoke $r2.<java.lang.ref.WeakReference: void <init>(java.lang.Object)>(r1);
+
+        r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: java.lang.ref.WeakReference mServiceImpl> = $r2;
+
+        $r3 = new android.os.Handler;
+
+        $r4 = virtualinvoke r1.<androidx.media2.MediaSessionServiceImplBase: androidx.media2.MediaSessionService getInstance()>();
+
+        $r5 = virtualinvoke $r4.<androidx.media2.MediaSessionService: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r3.<android.os.Handler: void <init>(android.os.Looper)>($r5);
+
+        r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: android.os.Handler mHandler> = $r3;
+
+        return;
+    }
+
+    public void connect(androidx.media2.IMediaController, androidx.versionedparcelable.ParcelImpl)
+    {
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub r0;
+        androidx.media2.IMediaController r1;
+        androidx.versionedparcelable.ParcelImpl r2;
+        androidx.media2.MediaSessionServiceImplBase r3;
+        int i0, i1, i3, $i5;
+        long l2;
+        androidx.media2.ConnectionRequest r4;
+        java.lang.String r5, $r13;
+        java.lang.Throwable r6, $r12;
+        java.lang.ref.WeakReference $r7;
+        java.lang.Object $r8;
+        androidx.versionedparcelable.VersionedParcelable $r9;
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1 $r10;
+        android.os.Handler $r11;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub;
+
+        r1 := @parameter0: androidx.media2.IMediaController;
+
+        r2 := @parameter1: androidx.versionedparcelable.ParcelImpl;
+
+        $r7 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: java.lang.ref.WeakReference mServiceImpl>;
+
+        $r8 = virtualinvoke $r7.<java.lang.ref.WeakReference: java.lang.Object get()>();
+
+        r3 = (androidx.media2.MediaSessionServiceImplBase) $r8;
+
+        if r3 != null goto label01;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("MSS2ImplBase", "ServiceImpl isn\'t available");
+
+        return;
+
+     label01:
+        i0 = staticinvoke <android.os.Binder: int getCallingPid()>();
+
+        i1 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        l2 = staticinvoke <android.os.Binder: long clearCallingIdentity()>();
+
+        $r9 = staticinvoke <androidx.media2.MediaUtils: androidx.versionedparcelable.VersionedParcelable fromParcelable(androidx.versionedparcelable.ParcelImpl)>(r2);
+
+        r4 = (androidx.media2.ConnectionRequest) $r9;
+
+        if i0 == 0 goto label02;
+
+        $i5 = i0;
+
+        goto label03;
+
+     label02:
+        $i5 = virtualinvoke r4.<androidx.media2.ConnectionRequest: int getPid()>();
+
+     label03:
+        i3 = $i5;
+
+        if r2 != null goto label04;
+
+        $r13 = null;
+
+        goto label05;
+
+     label04:
+        $r13 = virtualinvoke r4.<androidx.media2.ConnectionRequest: java.lang.String getPackageName()>();
+
+     label05:
+        r5 = $r13;
+
+     label06:
+        $r11 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: android.os.Handler mHandler>;
+
+        $r10 = new androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1;
+
+        specialinvoke $r10.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub$1: void <init>(androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub,java.lang.String,androidx.media2.IMediaController,int,int)>(r0, r5, r1, i3, i1);
+
+        virtualinvoke $r11.<android.os.Handler: boolean post(java.lang.Runnable)>($r10);
+
+     label07:
+        staticinvoke <android.os.Binder: void restoreCallingIdentity(long)>(l2);
+
+        goto label10;
+
+     label08:
+        $r12 := @caughtexception;
+
+        r6 = $r12;
+
+     label09:
+        staticinvoke <android.os.Binder: void restoreCallingIdentity(long)>(l2);
+
+        throw r6;
+
+     label10:
+        return;
+
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label08 to label09 with label08;
+    }
+
+    public void close()
+    {
+        androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub r0;
+        java.lang.ref.WeakReference $r1;
+        android.os.Handler $r2;
+
+        r0 := @this: androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub;
+
+        $r1 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: java.lang.ref.WeakReference mServiceImpl>;
+
+        virtualinvoke $r1.<java.lang.ref.WeakReference: void clear()>();
+
+        $r2 = r0.<androidx.media2.MediaSessionServiceImplBase$MediaSessionServiceStub: android.os.Handler mHandler>;
+
+        virtualinvoke $r2.<android.os.Handler: void removeCallbacksAndMessages(java.lang.Object)>(null);
+
+        return;
+    }
+

@@ -1,0 +1,1489 @@
+androidx.benchmark.macro.perfetto.FrameTimingQuery
+<androidx.benchmark.macro.perfetto.FrameTimingQuery: androidx.benchmark.macro.perfetto.FrameTimingQuery INSTANCE>
+    private void <init>()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery r0;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private final java.lang.String getFullQuery(java.lang.String)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery r0;
+        java.lang.String r1, $r5, $r9, $r13, $r16, $r17;
+        java.lang.StringBuilder $r2, $r3, $r6, $r7, $r10, $r11, $r14, $r15;
+        androidx.benchmark.macro.perfetto.PerfettoTraceProcessor $r4, $r8, $r12;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n        ------ Select all frame-relevant slices from slice table\n        SELECT\n            slice.name as name,\n            slice.ts as ts,\n            slice.dur as dur\n        FROM slice\n            INNER JOIN thread_track on slice.track_id = thread_track.id\n            INNER JOIN thread USING(utid)\n            INNER JOIN process USING(upid)\n        WHERE (\n            ( slice.name LIKE \"Choreographer#doFrame%\" AND process.pid LIKE thread.tid ) OR\n            ( slice.name LIKE \"DrawFrame%\" AND thread.name like \"RenderThread\" )\n        ) AND ");
+
+        $r4 = <androidx.benchmark.macro.perfetto.PerfettoTraceProcessor: androidx.benchmark.macro.perfetto.PerfettoTraceProcessor INSTANCE>;
+
+        $r5 = virtualinvoke $r4.<androidx.benchmark.macro.perfetto.PerfettoTraceProcessor: java.lang.String processNameLikePkg$benchmark_macro_release(java.lang.String)>(r1);
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n        ------ Add in actual frame slices (prepended with \"actual \" to differentiate)\n        UNION\n        SELECT\n            \"actual \" || actual_frame_timeline_slice.name as name,\n            actual_frame_timeline_slice.ts as ts,\n            actual_frame_timeline_slice.dur as dur\n        FROM actual_frame_timeline_slice\n            INNER JOIN process USING(upid)\n        WHERE\n            ");
+
+        $r8 = <androidx.benchmark.macro.perfetto.PerfettoTraceProcessor: androidx.benchmark.macro.perfetto.PerfettoTraceProcessor INSTANCE>;
+
+        $r9 = virtualinvoke $r8.<androidx.benchmark.macro.perfetto.PerfettoTraceProcessor: java.lang.String processNameLikePkg$benchmark_macro_release(java.lang.String)>(r1);
+
+        $r10 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n        ------ Add in expected time slices (prepended with \"expected \" to differentiate)\n        UNION\n        SELECT\n            \"expected \" || expected_frame_timeline_slice.name as name,\n            expected_frame_timeline_slice.ts as ts,\n            expected_frame_timeline_slice.dur as dur\n        FROM expected_frame_timeline_slice\n            INNER JOIN process USING(upid)\n        WHERE\n            ");
+
+        $r12 = <androidx.benchmark.macro.perfetto.PerfettoTraceProcessor: androidx.benchmark.macro.perfetto.PerfettoTraceProcessor INSTANCE>;
+
+        $r13 = virtualinvoke $r12.<androidx.benchmark.macro.perfetto.PerfettoTraceProcessor: java.lang.String processNameLikePkg$benchmark_macro_release(java.lang.String)>(r1);
+
+        $r14 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r13);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n        ORDER BY ts ASC\n    ");
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r17 = staticinvoke <kotlin.text.StringsKt: java.lang.String trimIndent(java.lang.String)>($r16);
+
+        return $r17;
+    }
+
+    private final androidx.benchmark.macro.perfetto.Slice binarySearchFrameId(java.util.List, int)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery r0;
+        java.util.List $r1;
+        int i0, i1;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1 $r2;
+        kotlin.jvm.functions.Function1 $r3;
+        java.lang.Object $r4;
+        androidx.benchmark.macro.perfetto.Slice $r5;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery;
+
+        $r1 := @parameter0: java.util.List;
+
+        i0 := @parameter1: int;
+
+        $r2 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1;
+
+        specialinvoke $r2.<androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1: void <init>(int)>(i0);
+
+        $r3 = (kotlin.jvm.functions.Function1) $r2;
+
+        i1 = staticinvoke <kotlin.collections.CollectionsKt: int binarySearch$default(java.util.List,int,int,kotlin.jvm.functions.Function1,int,java.lang.Object)>($r1, 0, 0, $r3, 3, null);
+
+        if i1 < 0 goto label1;
+
+        $r4 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>(i1);
+
+        $r5 = (androidx.benchmark.macro.perfetto.Slice) $r4;
+
+        goto label2;
+
+     label1:
+        $r5 = (androidx.benchmark.macro.perfetto.Slice) null;
+
+     label2:
+        return $r5;
+    }
+
+    public final java.util.Map getFrameSubMetrics(java.lang.String, int, java.lang.String)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery r0, $r33, $r36, $r38;
+        java.lang.String r1, r2, r3, $r11, $r28, $r42, $r46, $r48, $r52, $r53, $r54, $r55, $r57, $r96, $r97, r102, r115;
+        int i0, $i1, $i2, $i3, $i4, $i5, i13, i14, $i15;
+        java.util.List r4, r9, $r15, $r19, r63, $r83, r85, r88, $r90, $r92, $r95, $r110, r128;
+        java.util.Map r5, r7, $r21, $r49, $r75;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData r6, $r26, $r40, r109, r145;
+        java.lang.Object r8, $r60, r67, $r72, $r77, r82, $r84, $r87, $r89, $r91, $r94, r100, r106, r107, r113, r119, r120, $r125, $r127, r138, $r144;
+        androidx.benchmark.macro.perfetto.PerfettoTraceProcessor $r10;
+        androidx.benchmark.macro.perfetto.Slice$Companion $r12;
+        java.util.ArrayList $r13, $r14, $r17, $r18, $r22, $r31, $r58;
+        boolean $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, $z12, $z14, $z16, $z17, $z18, $z19, $z21, $z22, $z23, $z24, $z25, $z35, z36, $z37, z40, z44, z46, $z47, $z48, $z49, $z50, z51, $z52, $z53, $z55, z56, z58, z62, $z63, $z64, $z66, z67, z69, z73, z76, z78, z80, z81;
+        java.util.LinkedHashMap $r16, $r20, r135;
+        long $l6, $l7, $l8, $l10, $l11, $l12;
+        java.lang.Long $r24;
+        androidx.benchmark.macro.perfetto.Slice $r25, $r35, $r37, $r39, $r61, $r62, r68, r73, r78, $r101, r108, $r114, r121, r126;
+        java.lang.IllegalArgumentException $r27, $r41, $r45, $r47;
+        java.lang.Integer $r29, $r32, $r43;
+        java.util.Collection $r30, $r44, r65, $r70, r104, r117, r130, $r142;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion $r34, r123;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType $r50, $r51, $r79, r80, $r86, r93;
+        java.lang.IllegalStateException $r56;
+        byte $b9;
+        java.lang.Iterable $r64, r69, r74, $r98, r103, $r111, r116, r122, $r134, r136, r140, r141;
+        java.util.Iterator r66, r71, r76, r99, $r105, r112, $r118, r124, $r137, r143;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] r129;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric r132, r133, $r139;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: java.lang.String;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "absoluteTracePath");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r2, "packageName");
+
+        $r10 = <androidx.benchmark.macro.perfetto.PerfettoTraceProcessor: androidx.benchmark.macro.perfetto.PerfettoTraceProcessor INSTANCE>;
+
+        $r11 = specialinvoke r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery: java.lang.String getFullQuery(java.lang.String)>(r2);
+
+        r3 = virtualinvoke $r10.<androidx.benchmark.macro.perfetto.PerfettoTraceProcessor: java.lang.String rawQuery$benchmark_macro_release(java.lang.String,java.lang.String)>(r1, $r11);
+
+        $r12 = <androidx.benchmark.macro.perfetto.Slice: androidx.benchmark.macro.perfetto.Slice$Companion Companion>;
+
+        r63 = virtualinvoke $r12.<androidx.benchmark.macro.perfetto.Slice$Companion: java.util.List parseListFromQueryResult(java.lang.String)>(r3);
+
+        $r64 = (java.lang.Iterable) r63;
+
+        $r13 = new java.util.ArrayList;
+
+        $i1 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r64, 10);
+
+        specialinvoke $r13.<java.util.ArrayList: void <init>(int)>($i1);
+
+        r65 = (java.util.Collection) $r13;
+
+        r66 = interfaceinvoke $r64.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label01:
+        $z2 = interfaceinvoke r66.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label02;
+
+        r67 = interfaceinvoke r66.<java.util.Iterator: java.lang.Object next()>();
+
+        r68 = (androidx.benchmark.macro.perfetto.Slice) r67;
+
+        $l10 = virtualinvoke r68.<androidx.benchmark.macro.perfetto.Slice: long getTs()>();
+
+        $r60 = staticinvoke <kotlin.collections.CollectionsKt: java.lang.Object first(java.util.List)>(r63);
+
+        $r61 = (androidx.benchmark.macro.perfetto.Slice) $r60;
+
+        $l11 = virtualinvoke $r61.<androidx.benchmark.macro.perfetto.Slice: long getTs()>();
+
+        $l12 = $l10 - $l11;
+
+        $r62 = staticinvoke <androidx.benchmark.macro.perfetto.Slice: androidx.benchmark.macro.perfetto.Slice copy$default(androidx.benchmark.macro.perfetto.Slice,java.lang.String,long,long,int,java.lang.Object)>(r68, null, $l12, 0L, 5, null);
+
+        interfaceinvoke r65.<java.util.Collection: boolean add(java.lang.Object)>($r62);
+
+        goto label01;
+
+     label02:
+        r4 = (java.util.List) r65;
+
+        r69 = (java.lang.Iterable) r4;
+
+        $r14 = new java.util.ArrayList;
+
+        specialinvoke $r14.<java.util.ArrayList: void <init>()>();
+
+        $r70 = (java.util.Collection) $r14;
+
+        r71 = interfaceinvoke r69.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label03:
+        $z35 = interfaceinvoke r71.<java.util.Iterator: boolean hasNext()>();
+
+        if $z35 == 0 goto label06;
+
+        $r72 = interfaceinvoke r71.<java.util.Iterator: java.lang.Object next()>();
+
+        r73 = (androidx.benchmark.macro.perfetto.Slice) $r72;
+
+        z36 = 0;
+
+        $l8 = virtualinvoke r73.<androidx.benchmark.macro.perfetto.Slice: long getDur()>();
+
+        $b9 = $l8 cmp 0L;
+
+        if $b9 <= 0 goto label04;
+
+        $z37 = 1;
+
+        goto label05;
+
+     label04:
+        $z37 = 0;
+
+     label05:
+        if $z37 == 0 goto label03;
+
+        interfaceinvoke $r70.<java.util.Collection: boolean add(java.lang.Object)>($r72);
+
+        goto label03;
+
+     label06:
+        $r15 = (java.util.List) $r70;
+
+        r74 = (java.lang.Iterable) $r15;
+
+        $r16 = new java.util.LinkedHashMap;
+
+        specialinvoke $r16.<java.util.LinkedHashMap: void <init>()>();
+
+        $r75 = (java.util.Map) $r16;
+
+        r76 = interfaceinvoke r74.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label07:
+        $z3 = interfaceinvoke r76.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label15;
+
+        $r77 = interfaceinvoke r76.<java.util.Iterator: java.lang.Object next()>();
+
+        r78 = (androidx.benchmark.macro.perfetto.Slice) $r77;
+
+        z40 = 0;
+
+        $r52 = virtualinvoke r78.<androidx.benchmark.macro.perfetto.Slice: java.lang.String getName()>();
+
+        $z22 = staticinvoke <kotlin.text.StringsKt: boolean startsWith$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)>($r52, "Choreographer#doFrame", 0, 2, null);
+
+        if $z22 == 0 goto label08;
+
+        $r79 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType UiThread>;
+
+        goto label12;
+
+     label08:
+        $r53 = virtualinvoke r78.<androidx.benchmark.macro.perfetto.Slice: java.lang.String getName()>();
+
+        $z23 = staticinvoke <kotlin.text.StringsKt: boolean startsWith$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)>($r53, "DrawFrame", 0, 2, null);
+
+        if $z23 == 0 goto label09;
+
+        $r79 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType RenderThread>;
+
+        goto label12;
+
+     label09:
+        $r54 = virtualinvoke r78.<androidx.benchmark.macro.perfetto.Slice: java.lang.String getName()>();
+
+        $z24 = staticinvoke <kotlin.text.StringsKt: boolean startsWith$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)>($r54, "actual ", 0, 2, null);
+
+        if $z24 == 0 goto label10;
+
+        $r79 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Actual>;
+
+        goto label12;
+
+     label10:
+        $r55 = virtualinvoke r78.<androidx.benchmark.macro.perfetto.Slice: java.lang.String getName()>();
+
+        $z25 = staticinvoke <kotlin.text.StringsKt: boolean startsWith$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)>($r55, "expected ", 0, 2, null);
+
+        if $z25 == 0 goto label11;
+
+        $r79 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Expected>;
+
+        goto label12;
+
+     label11:
+        $r56 = new java.lang.IllegalStateException;
+
+        $r57 = staticinvoke <kotlin.jvm.internal.Intrinsics: java.lang.String stringPlus(java.lang.String,java.lang.Object)>("Unexpected slice ", r78);
+
+        specialinvoke $r56.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r57);
+
+        throw $r56;
+
+     label12:
+        r80 = $r79;
+
+        r82 = interfaceinvoke $r75.<java.util.Map: java.lang.Object get(java.lang.Object)>(r80);
+
+        if r82 != null goto label13;
+
+        $r58 = new java.util.ArrayList;
+
+        specialinvoke $r58.<java.util.ArrayList: void <init>()>();
+
+        $r83 = (java.util.List) $r58;
+
+        interfaceinvoke $r75.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r80, $r83);
+
+        $r84 = $r83;
+
+        goto label14;
+
+     label13:
+        $r84 = r82;
+
+     label14:
+        r85 = (java.util.List) $r84;
+
+        interfaceinvoke r85.<java.util.List: boolean add(java.lang.Object)>($r77);
+
+        goto label07;
+
+     label15:
+        r5 = $r75;
+
+        $r86 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType UiThread>;
+
+        $r87 = interfaceinvoke r5.<java.util.Map: java.lang.Object get(java.lang.Object)>($r86);
+
+        if $r87 != null goto label16;
+
+        $r87 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List emptyList()>();
+
+     label16:
+        r88 = (java.util.List) $r87;
+
+        $r51 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType RenderThread>;
+
+        $r89 = interfaceinvoke r5.<java.util.Map: java.lang.Object get(java.lang.Object)>($r51);
+
+        if $r89 != null goto label17;
+
+        z44 = 0;
+
+        $r89 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List emptyList()>();
+
+     label17:
+        $r90 = (java.util.List) $r89;
+
+        $r50 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Actual>;
+
+        $r91 = interfaceinvoke r5.<java.util.Map: java.lang.Object get(java.lang.Object)>($r50);
+
+        if $r91 != null goto label18;
+
+        $r91 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List emptyList()>();
+
+     label18:
+        $r92 = (java.util.List) $r91;
+
+        r93 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Expected>;
+
+        $r94 = interfaceinvoke r5.<java.util.Map: java.lang.Object get(java.lang.Object)>(r93);
+
+        if $r94 != null goto label19;
+
+        z46 = 0;
+
+        $r94 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List emptyList()>();
+
+     label19:
+        $r95 = (java.util.List) $r94;
+
+        $z4 = interfaceinvoke r88.<java.util.List: boolean isEmpty()>();
+
+        if $z4 == 0 goto label20;
+
+        $r49 = staticinvoke <kotlin.collections.MapsKt: java.util.Map emptyMap()>();
+
+        return $r49;
+
+     label20:
+        if i0 >= 31 goto label21;
+
+        $z47 = 1;
+
+        goto label22;
+
+     label21:
+        $z47 = 0;
+
+     label22:
+        $z48 = $z47;
+
+        $z5 = interfaceinvoke $r92.<java.util.List: boolean isEmpty()>();
+
+        if $z5 != $z47 goto label23;
+
+        $z49 = 1;
+
+        goto label24;
+
+     label23:
+        $z49 = 0;
+
+     label24:
+        if $z49 != 0 goto label25;
+
+        $r96 = "Failed requirement.";
+
+        $r47 = new java.lang.IllegalArgumentException;
+
+        $r48 = virtualinvoke $r96.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r47.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r48);
+
+        throw $r47;
+
+     label25:
+        $z6 = interfaceinvoke $r95.<java.util.List: boolean isEmpty()>();
+
+        if $z6 != $z48 goto label26;
+
+        $z50 = 1;
+
+        goto label27;
+
+     label26:
+        $z50 = 0;
+
+     label27:
+        if $z50 != 0 goto label28;
+
+        $r97 = "Failed requirement.";
+
+        $r45 = new java.lang.IllegalArgumentException;
+
+        $r46 = virtualinvoke $r97.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r45.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r46);
+
+        throw $r45;
+
+     label28:
+        if i0 < 31 goto label40;
+
+        $r98 = (java.lang.Iterable) r4;
+
+        z51 = 0;
+
+        $z18 = $r98 instanceof java.util.Collection;
+
+        if $z18 == 0 goto label29;
+
+        $r44 = (java.util.Collection) $r98;
+
+        $z21 = interfaceinvoke $r44.<java.util.Collection: boolean isEmpty()>();
+
+        if $z21 == 0 goto label29;
+
+        $z52 = 1;
+
+        goto label34;
+
+     label29:
+        r99 = interfaceinvoke $r98.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label30:
+        $z53 = interfaceinvoke r99.<java.util.Iterator: boolean hasNext()>();
+
+        if $z53 == 0 goto label33;
+
+        r100 = interfaceinvoke r99.<java.util.Iterator: java.lang.Object next()>();
+
+        $r101 = (androidx.benchmark.macro.perfetto.Slice) r100;
+
+        $r43 = virtualinvoke $r101.<androidx.benchmark.macro.perfetto.Slice: java.lang.Integer getFrameId()>();
+
+        if $r43 != null goto label31;
+
+        $z55 = 1;
+
+        goto label32;
+
+     label31:
+        $z55 = 0;
+
+     label32:
+        if $z55 == 0 goto label30;
+
+        $z52 = 0;
+
+        goto label34;
+
+     label33:
+        $z52 = 1;
+
+     label34:
+        if $z52 != 0 goto label35;
+
+        r102 = "Failed requirement.";
+
+        $r41 = new java.lang.IllegalArgumentException;
+
+        $r42 = virtualinvoke r102.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r41.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r42);
+
+        throw $r41;
+
+     label35:
+        z56 = 0;
+
+        r103 = (java.lang.Iterable) $r90;
+
+        $r31 = new java.util.ArrayList;
+
+        specialinvoke $r31.<java.util.ArrayList: void <init>()>();
+
+        r104 = (java.util.Collection) $r31;
+
+        z58 = 0;
+
+        $r105 = interfaceinvoke r103.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label36:
+        $z19 = interfaceinvoke $r105.<java.util.Iterator: boolean hasNext()>();
+
+        if $z19 == 0 goto label39;
+
+        r106 = interfaceinvoke $r105.<java.util.Iterator: java.lang.Object next()>();
+
+        r107 = r106;
+
+        r108 = (androidx.benchmark.macro.perfetto.Slice) r107;
+
+        $r32 = virtualinvoke r108.<androidx.benchmark.macro.perfetto.Slice: java.lang.Integer getFrameId()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r32);
+
+        i13 = virtualinvoke $r32.<java.lang.Integer: int intValue()>();
+
+        $r34 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion Companion>;
+
+        $r33 = <androidx.benchmark.macro.perfetto.FrameTimingQuery: androidx.benchmark.macro.perfetto.FrameTimingQuery INSTANCE>;
+
+        $r35 = specialinvoke $r33.<androidx.benchmark.macro.perfetto.FrameTimingQuery: androidx.benchmark.macro.perfetto.Slice binarySearchFrameId(java.util.List,int)>(r88, i13);
+
+        $r36 = <androidx.benchmark.macro.perfetto.FrameTimingQuery: androidx.benchmark.macro.perfetto.FrameTimingQuery INSTANCE>;
+
+        $r37 = specialinvoke $r36.<androidx.benchmark.macro.perfetto.FrameTimingQuery: androidx.benchmark.macro.perfetto.Slice binarySearchFrameId(java.util.List,int)>($r95, i13);
+
+        $r38 = <androidx.benchmark.macro.perfetto.FrameTimingQuery: androidx.benchmark.macro.perfetto.FrameTimingQuery INSTANCE>;
+
+        $r39 = specialinvoke $r38.<androidx.benchmark.macro.perfetto.FrameTimingQuery: androidx.benchmark.macro.perfetto.Slice binarySearchFrameId(java.util.List,int)>($r92, i13);
+
+        $r40 = virtualinvoke $r34.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData tryCreate31(androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice)>($r35, r108, $r37, $r39);
+
+        if $r40 != null goto label37;
+
+        goto label38;
+
+     label37:
+        r109 = $r40;
+
+        interfaceinvoke r104.<java.util.Collection: boolean add(java.lang.Object)>(r109);
+
+     label38:
+        goto label36;
+
+     label39:
+        $r110 = (java.util.List) r104;
+
+        goto label55;
+
+     label40:
+        $r111 = (java.lang.Iterable) r4;
+
+        z62 = 0;
+
+        $z7 = $r111 instanceof java.util.Collection;
+
+        if $z7 == 0 goto label41;
+
+        $r30 = (java.util.Collection) $r111;
+
+        $z17 = interfaceinvoke $r30.<java.util.Collection: boolean isEmpty()>();
+
+        if $z17 == 0 goto label41;
+
+        $z63 = 1;
+
+        goto label46;
+
+     label41:
+        r112 = interfaceinvoke $r111.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label42:
+        $z64 = interfaceinvoke r112.<java.util.Iterator: boolean hasNext()>();
+
+        if $z64 == 0 goto label45;
+
+        r113 = interfaceinvoke r112.<java.util.Iterator: java.lang.Object next()>();
+
+        $r114 = (androidx.benchmark.macro.perfetto.Slice) r113;
+
+        $r29 = virtualinvoke $r114.<androidx.benchmark.macro.perfetto.Slice: java.lang.Integer getFrameId()>();
+
+        if $r29 == null goto label43;
+
+        $z66 = 1;
+
+        goto label44;
+
+     label43:
+        $z66 = 0;
+
+     label44:
+        if $z66 == 0 goto label42;
+
+        $z63 = 0;
+
+        goto label46;
+
+     label45:
+        $z63 = 1;
+
+     label46:
+        if $z63 != 0 goto label47;
+
+        r115 = "Failed requirement.";
+
+        $r27 = new java.lang.IllegalArgumentException;
+
+        $r28 = virtualinvoke r115.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r27.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r28);
+
+        throw $r27;
+
+     label47:
+        z67 = 0;
+
+        r116 = (java.lang.Iterable) $r90;
+
+        $r17 = new java.util.ArrayList;
+
+        specialinvoke $r17.<java.util.ArrayList: void <init>()>();
+
+        r117 = (java.util.Collection) $r17;
+
+        z69 = 0;
+
+        $r118 = interfaceinvoke r116.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label48:
+        $z8 = interfaceinvoke $r118.<java.util.Iterator: boolean hasNext()>();
+
+        if $z8 == 0 goto label54;
+
+        r119 = interfaceinvoke $r118.<java.util.Iterator: java.lang.Object next()>();
+
+        r120 = r119;
+
+        r121 = (androidx.benchmark.macro.perfetto.Slice) r120;
+
+        r122 = (java.lang.Iterable) r88;
+
+        r123 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion Companion>;
+
+        r124 = interfaceinvoke r122.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label49:
+        $z14 = interfaceinvoke r124.<java.util.Iterator: boolean hasNext()>();
+
+        if $z14 == 0 goto label50;
+
+        $r125 = interfaceinvoke r124.<java.util.Iterator: java.lang.Object next()>();
+
+        r126 = (androidx.benchmark.macro.perfetto.Slice) $r125;
+
+        $l7 = virtualinvoke r121.<androidx.benchmark.macro.perfetto.Slice: long getTs()>();
+
+        $z16 = virtualinvoke r126.<androidx.benchmark.macro.perfetto.Slice: boolean contains(long)>($l7);
+
+        if $z16 == 0 goto label49;
+
+        $r127 = $r125;
+
+        goto label51;
+
+     label50:
+        $r127 = null;
+
+     label51:
+        $r25 = (androidx.benchmark.macro.perfetto.Slice) $r127;
+
+        $r26 = virtualinvoke r123.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData tryCreateBasic(androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice)>($r25, r121);
+
+        if $r26 != null goto label52;
+
+        goto label53;
+
+     label52:
+        r6 = $r26;
+
+        interfaceinvoke r117.<java.util.Collection: boolean add(java.lang.Object)>(r6);
+
+     label53:
+        goto label48;
+
+     label54:
+        $r110 = (java.util.List) r117;
+
+     label55:
+        r128 = $r110;
+
+        z73 = 0;
+
+        r129 = staticinvoke <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] values()>();
+
+        $r18 = new java.util.ArrayList;
+
+        specialinvoke $r18.<java.util.ArrayList: void <init>()>();
+
+        r130 = (java.util.Collection) $r18;
+
+        i14 = 0;
+
+        $i15 = lengthof r129;
+
+     label56:
+        if i14 >= $i15 goto label57;
+
+        r132 = r129[i14];
+
+        i14 = i14 + 1;
+
+        r133 = r132;
+
+        $z12 = virtualinvoke r133.<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: boolean supportedOnApiLevel(int)>(i0);
+
+        if $z12 == 0 goto label56;
+
+        interfaceinvoke r130.<java.util.Collection: boolean add(java.lang.Object)>(r132);
+
+        goto label56;
+
+     label57:
+        $r19 = (java.util.List) r130;
+
+        $r134 = (java.lang.Iterable) $r19;
+
+        z76 = 0;
+
+        $r20 = new java.util.LinkedHashMap;
+
+        $i2 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r134, 10);
+
+        $i3 = staticinvoke <kotlin.collections.MapsKt: int mapCapacity(int)>($i2);
+
+        $i4 = staticinvoke <kotlin.ranges.RangesKt: int coerceAtLeast(int,int)>($i3, 16);
+
+        specialinvoke $r20.<java.util.LinkedHashMap: void <init>(int)>($i4);
+
+        r135 = $r20;
+
+        r136 = $r134;
+
+        $r137 = interfaceinvoke r136.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label58:
+        $z9 = interfaceinvoke $r137.<java.util.Iterator: boolean hasNext()>();
+
+        if $z9 == 0 goto label61;
+
+        r138 = interfaceinvoke $r137.<java.util.Iterator: java.lang.Object next()>();
+
+        $r139 = (androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric) r138;
+
+        r8 = r138;
+
+        r7 = (java.util.Map) r135;
+
+        z78 = 0;
+
+        r140 = (java.lang.Iterable) r128;
+
+        r141 = r140;
+
+        $r22 = new java.util.ArrayList;
+
+        $i5 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>(r140, 10);
+
+        specialinvoke $r22.<java.util.ArrayList: void <init>(int)>($i5);
+
+        $r142 = (java.util.Collection) $r22;
+
+        z80 = 0;
+
+        r143 = interfaceinvoke r141.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label59:
+        $z10 = interfaceinvoke r143.<java.util.Iterator: boolean hasNext()>();
+
+        if $z10 == 0 goto label60;
+
+        $r144 = interfaceinvoke r143.<java.util.Iterator: java.lang.Object next()>();
+
+        r145 = (androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData) $r144;
+
+        z81 = 0;
+
+        $l6 = virtualinvoke r145.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: long get(androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric)>($r139);
+
+        $r24 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l6);
+
+        interfaceinvoke $r142.<java.util.Collection: boolean add(java.lang.Object)>($r24);
+
+        goto label59;
+
+     label60:
+        r9 = (java.util.List) $r142;
+
+        interfaceinvoke r7.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r8, r9);
+
+        goto label58;
+
+     label61:
+        $r21 = (java.util.Map) r135;
+
+        return $r21;
+    }
+
+    static void <clinit>()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery $r0;
+
+        $r0 = new androidx.benchmark.macro.perfetto.FrameTimingQuery;
+
+        specialinvoke $r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery: void <init>()>();
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery: androidx.benchmark.macro.perfetto.FrameTimingQuery INSTANCE> = $r0;
+
+        return;
+    }
+
+androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1: int $frameId>
+    void <init>(int)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1 r0;
+        int $i0;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1;
+
+        $i0 := @parameter0: int;
+
+        r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1: int $frameId> = $i0;
+
+        specialinvoke r0.<kotlin.jvm.internal.Lambda: void <init>(int)>(1);
+
+        return;
+    }
+
+    public final java.lang.Integer invoke(androidx.benchmark.macro.perfetto.Slice)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1 r0;
+        androidx.benchmark.macro.perfetto.Slice r1;
+        java.lang.Integer $r2, $r3;
+        int $i0, $i1, $i2;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1;
+
+        r1 := @parameter0: androidx.benchmark.macro.perfetto.Slice;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "potentialTarget");
+
+        $r2 = virtualinvoke r1.<androidx.benchmark.macro.perfetto.Slice: java.lang.Integer getFrameId()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $i0 = virtualinvoke $r2.<java.lang.Integer: int intValue()>();
+
+        $i1 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1: int $frameId>;
+
+        $i2 = $i0 - $i1;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        return $r3;
+    }
+
+    public volatile java.lang.Object invoke(java.lang.Object)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1 r0;
+        java.lang.Object r1;
+        androidx.benchmark.macro.perfetto.Slice $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (androidx.benchmark.macro.perfetto.Slice) r1;
+
+        $r3 = virtualinvoke r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$binarySearchFrameId$targetIndex$1: java.lang.Integer invoke(androidx.benchmark.macro.perfetto.Slice)>($r2);
+
+        return $r3;
+    }
+
+androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion
+    private void <init>()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion r0;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public final androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData tryCreateBasic(androidx.benchmark.macro.perfetto.Slice, androidx.benchmark.macro.perfetto.Slice)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion r0;
+        androidx.benchmark.macro.perfetto.Slice r1, r2, r3, r4;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData $r5;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion;
+
+        r1 := @parameter0: androidx.benchmark.macro.perfetto.Slice;
+
+        r2 := @parameter1: androidx.benchmark.macro.perfetto.Slice;
+
+        if r1 != null goto label1;
+
+        $r5 = null;
+
+        goto label3;
+
+     label1:
+        r3 = r1;
+
+        if r2 != null goto label2;
+
+        $r5 = null;
+
+        goto label3;
+
+     label2:
+        r4 = r2;
+
+        $r5 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData;
+
+        specialinvoke $r5.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: void <init>(androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice)>(r1, r2, null, null);
+
+     label3:
+        return $r5;
+    }
+
+    public final androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData tryCreate31(androidx.benchmark.macro.perfetto.Slice, androidx.benchmark.macro.perfetto.Slice, androidx.benchmark.macro.perfetto.Slice, androidx.benchmark.macro.perfetto.Slice)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion r0;
+        androidx.benchmark.macro.perfetto.Slice r1, r2, r3, r4;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData $r5, $r6;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion;
+
+        r1 := @parameter0: androidx.benchmark.macro.perfetto.Slice;
+
+        r2 := @parameter1: androidx.benchmark.macro.perfetto.Slice;
+
+        r3 := @parameter2: androidx.benchmark.macro.perfetto.Slice;
+
+        r4 := @parameter3: androidx.benchmark.macro.perfetto.Slice;
+
+        if r1 == null goto label1;
+
+        if r2 == null goto label1;
+
+        if r3 == null goto label1;
+
+        if r4 == null goto label1;
+
+        $r5 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData;
+
+        $r6 = $r5;
+
+        specialinvoke $r5.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: void <init>(androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice,androidx.benchmark.macro.perfetto.Slice)>(r1, r2, r3, r4);
+
+        goto label2;
+
+     label1:
+        $r6 = (androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData) null;
+
+     label2:
+        return $r6;
+    }
+
+    public void <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion r0;
+        kotlin.jvm.internal.DefaultConstructorMarker $r1;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion;
+
+        $r1 := @parameter0: kotlin.jvm.internal.DefaultConstructorMarker;
+
+        specialinvoke r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion: void <init>()>();
+
+        return;
+    }
+
+androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$WhenMappings
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$WhenMappings: int[] $EnumSwitchMapping$0>
+    static void <clinit>()
+    {
+        int[] r0;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] $r1;
+        int $i0, $i1, $i2, $i3;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric $r2, $r3, $r4;
+
+        $r1 = staticinvoke <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] values()>();
+
+        $i0 = lengthof $r1;
+
+        r0 = newarray (int)[$i0];
+
+        $r2 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameDurationCpuNs>;
+
+        $i1 = virtualinvoke $r2.<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: int ordinal()>();
+
+        r0[$i1] = 1;
+
+        $r3 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameDurationUiNs>;
+
+        $i2 = virtualinvoke $r3.<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: int ordinal()>();
+
+        r0[$i2] = 2;
+
+        $r4 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameOverrunNs>;
+
+        $i3 = virtualinvoke $r4.<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: int ordinal()>();
+
+        r0[$i3] = 3;
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$WhenMappings: int[] $EnumSwitchMapping$0> = r0;
+
+        return;
+    }
+
+androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion Companion>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice uiSlice>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice rtSlice>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice expectedSlice>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice actualSlice>
+    public void <init>(androidx.benchmark.macro.perfetto.Slice, androidx.benchmark.macro.perfetto.Slice, androidx.benchmark.macro.perfetto.Slice, androidx.benchmark.macro.perfetto.Slice)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData r0;
+        androidx.benchmark.macro.perfetto.Slice r1, r2, r3, r4;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData;
+
+        r1 := @parameter0: androidx.benchmark.macro.perfetto.Slice;
+
+        r2 := @parameter1: androidx.benchmark.macro.perfetto.Slice;
+
+        r3 := @parameter2: androidx.benchmark.macro.perfetto.Slice;
+
+        r4 := @parameter3: androidx.benchmark.macro.perfetto.Slice;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "uiSlice");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r2, "rtSlice");
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice uiSlice> = r1;
+
+        r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice rtSlice> = r2;
+
+        r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice expectedSlice> = r3;
+
+        r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice actualSlice> = r4;
+
+        return;
+    }
+
+    public final androidx.benchmark.macro.perfetto.Slice getUiSlice()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData r0;
+        androidx.benchmark.macro.perfetto.Slice $r1;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData;
+
+        $r1 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice uiSlice>;
+
+        return $r1;
+    }
+
+    public final androidx.benchmark.macro.perfetto.Slice getRtSlice()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData r0;
+        androidx.benchmark.macro.perfetto.Slice $r1;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData;
+
+        $r1 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice rtSlice>;
+
+        return $r1;
+    }
+
+    public final androidx.benchmark.macro.perfetto.Slice getExpectedSlice()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData r0;
+        androidx.benchmark.macro.perfetto.Slice $r1;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData;
+
+        $r1 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice expectedSlice>;
+
+        return $r1;
+    }
+
+    public final androidx.benchmark.macro.perfetto.Slice getActualSlice()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData r0;
+        androidx.benchmark.macro.perfetto.Slice $r1;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData;
+
+        $r1 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice actualSlice>;
+
+        return $r1;
+    }
+
+    public final long get(androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData r0;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric r1;
+        int[] $r2;
+        int $i0, $i1;
+        androidx.benchmark.macro.perfetto.Slice $r3, $r4, $r5, $r6, $r7;
+        long $l2, $l3, $l4, $l5, $l6;
+        kotlin.NoWhenBranchMatchedException $r8;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData;
+
+        r1 := @parameter0: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "subMetric");
+
+        $r2 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$WhenMappings: int[] $EnumSwitchMapping$0>;
+
+        $i0 = virtualinvoke r1.<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: int ordinal()>();
+
+        $i1 = $r2[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label3;
+            default: goto label4;
+        };
+
+     label1:
+        $r6 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice rtSlice>;
+
+        $l4 = virtualinvoke $r6.<androidx.benchmark.macro.perfetto.Slice: long getEndTs()>();
+
+        $r7 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice uiSlice>;
+
+        $l5 = virtualinvoke $r7.<androidx.benchmark.macro.perfetto.Slice: long getTs()>();
+
+        $l6 = $l4 - $l5;
+
+        goto label5;
+
+     label2:
+        $r5 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice uiSlice>;
+
+        $l6 = virtualinvoke $r5.<androidx.benchmark.macro.perfetto.Slice: long getDur()>();
+
+        goto label5;
+
+     label3:
+        $r3 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice actualSlice>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r3);
+
+        $l2 = virtualinvoke $r3.<androidx.benchmark.macro.perfetto.Slice: long getEndTs()>();
+
+        $r4 = r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.Slice expectedSlice>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r4);
+
+        $l3 = virtualinvoke $r4.<androidx.benchmark.macro.perfetto.Slice: long getEndTs()>();
+
+        $l6 = $l2 - $l3;
+
+        goto label5;
+
+     label4:
+        $r8 = new kotlin.NoWhenBranchMatchedException;
+
+        specialinvoke $r8.<kotlin.NoWhenBranchMatchedException: void <init>()>();
+
+        throw $r8;
+
+     label5:
+        return $l6;
+    }
+
+    static void <clinit>()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion $r0;
+
+        $r0 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion;
+
+        specialinvoke $r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion: void <init>(kotlin.jvm.internal.DefaultConstructorMarker)>(null);
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameData$Companion Companion> = $r0;
+
+        return;
+    }
+
+androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Expected>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Actual>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType UiThread>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType RenderThread>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[] $VALUES>
+    private void <init>(java.lang.String, int)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType r0;
+        java.lang.String $r1;
+        int $i0;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>($r1, $i0);
+
+        return;
+    }
+
+    public static androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[] values()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[]) $r1;
+
+        return $r2;
+    }
+
+    public static androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "Landroidx/benchmark/macro/perfetto/FrameTimingQuery$FrameSliceType;", r0);
+
+        $r2 = (androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType) $r1;
+
+        return $r2;
+    }
+
+    private static final androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[] $values()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[] r0;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType $r1, $r2, $r3, $r4;
+
+        r0 = newarray (androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType)[4];
+
+        $r1 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Expected>;
+
+        r0[0] = $r1;
+
+        $r2 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Actual>;
+
+        r0[1] = $r2;
+
+        $r3 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType UiThread>;
+
+        r0[2] = $r3;
+
+        $r4 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType RenderThread>;
+
+        r0[3] = $r4;
+
+        return r0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType $r0, $r1, $r2, $r3;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[] $r4;
+
+        $r0 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType;
+
+        specialinvoke $r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: void <init>(java.lang.String,int)>("Expected", 0);
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Expected> = $r0;
+
+        $r1 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType;
+
+        specialinvoke $r1.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: void <init>(java.lang.String,int)>("Actual", 1);
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType Actual> = $r1;
+
+        $r2 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType;
+
+        specialinvoke $r2.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: void <init>(java.lang.String,int)>("UiThread", 2);
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType UiThread> = $r2;
+
+        $r3 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType;
+
+        specialinvoke $r3.<androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: void <init>(java.lang.String,int)>("RenderThread", 3);
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType RenderThread> = $r3;
+
+        $r4 = staticinvoke <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[] $values()>();
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType: androidx.benchmark.macro.perfetto.FrameTimingQuery$FrameSliceType[] $VALUES> = $r4;
+
+        return;
+    }
+
+androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameDurationCpuNs>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameDurationUiNs>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameOverrunNs>
+<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] $VALUES>
+    private void <init>(java.lang.String, int)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric r0;
+        java.lang.String $r1;
+        int $i0;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>($r1, $i0);
+
+        return;
+    }
+
+    public final boolean supportedOnApiLevel(int)
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric r0, $r1;
+        int i0;
+        boolean $z0;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric;
+
+        i0 := @parameter0: int;
+
+        if i0 >= 31 goto label1;
+
+        $r1 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameOverrunNs>;
+
+        if r0 == $r1 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    public static androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] values()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[]) $r1;
+
+        return $r2;
+    }
+
+    public static androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "Landroidx/benchmark/macro/perfetto/FrameTimingQuery$SubMetric;", r0);
+
+        $r2 = (androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric) $r1;
+
+        return $r2;
+    }
+
+    private static final androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] $values()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] r0;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric $r1, $r2, $r3;
+
+        r0 = newarray (androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric)[3];
+
+        $r1 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameDurationCpuNs>;
+
+        r0[0] = $r1;
+
+        $r2 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameDurationUiNs>;
+
+        r0[1] = $r2;
+
+        $r3 = <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameOverrunNs>;
+
+        r0[2] = $r3;
+
+        return r0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric $r0, $r1, $r2;
+        androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] $r3;
+
+        $r0 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric;
+
+        specialinvoke $r0.<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: void <init>(java.lang.String,int)>("FrameDurationCpuNs", 0);
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameDurationCpuNs> = $r0;
+
+        $r1 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric;
+
+        specialinvoke $r1.<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: void <init>(java.lang.String,int)>("FrameDurationUiNs", 1);
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameDurationUiNs> = $r1;
+
+        $r2 = new androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric;
+
+        specialinvoke $r2.<androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: void <init>(java.lang.String,int)>("FrameOverrunNs", 2);
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric FrameOverrunNs> = $r2;
+
+        $r3 = staticinvoke <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] $values()>();
+
+        <androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric: androidx.benchmark.macro.perfetto.FrameTimingQuery$SubMetric[] $VALUES> = $r3;
+
+        return;
+    }
+

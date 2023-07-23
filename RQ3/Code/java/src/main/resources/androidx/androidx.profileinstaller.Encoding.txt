@@ -1,0 +1,620 @@
+androidx.profileinstaller.Encoding
+<androidx.profileinstaller.Encoding: int SIZEOF_BYTE>
+<androidx.profileinstaller.Encoding: int UINT_8_SIZE>
+<androidx.profileinstaller.Encoding: int UINT_16_SIZE>
+<androidx.profileinstaller.Encoding: int UINT_32_SIZE>
+    private void <init>()
+    {
+        androidx.profileinstaller.Encoding r0;
+
+        r0 := @this: androidx.profileinstaller.Encoding;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static int utf8Length(java.lang.String)
+    {
+        java.lang.String r0;
+        java.nio.charset.Charset $r1;
+        byte[] $r2;
+        int $i0;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        $r2 = virtualinvoke r0.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r1);
+
+        $i0 = lengthof $r2;
+
+        return $i0;
+    }
+
+    static void writeUInt(java.io.OutputStream, long, int) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        long l0, $l3, $l4;
+        int i1, $i2, $i5, i7;
+        byte[] r1;
+        byte $b6;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        l0 := @parameter1: long;
+
+        i1 := @parameter2: int;
+
+        r1 = newarray (byte)[i1];
+
+        i7 = 0;
+
+     label1:
+        if i7 >= i1 goto label2;
+
+        $i2 = i7 * 8;
+
+        $l3 = l0 >> $i2;
+
+        $l4 = $l3 & 255L;
+
+        $i5 = (int) $l4;
+
+        $b6 = (byte) $i5;
+
+        r1[i7] = $b6;
+
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label2:
+        virtualinvoke r0.<java.io.OutputStream: void write(byte[])>(r1);
+
+        return;
+    }
+
+    static void writeUInt8(java.io.OutputStream, int) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        int i0;
+        long $l1;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        i0 := @parameter1: int;
+
+        $l1 = (long) i0;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt(java.io.OutputStream,long,int)>(r0, $l1, 1);
+
+        return;
+    }
+
+    static void writeUInt16(java.io.OutputStream, int) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        int i0;
+        long $l1;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        i0 := @parameter1: int;
+
+        $l1 = (long) i0;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt(java.io.OutputStream,long,int)>(r0, $l1, 2);
+
+        return;
+    }
+
+    static void writeUInt32(java.io.OutputStream, long) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        long l0;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        l0 := @parameter1: long;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt(java.io.OutputStream,long,int)>(r0, l0, 4);
+
+        return;
+    }
+
+    static void writeString(java.io.OutputStream, java.lang.String) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        java.lang.String r1;
+        java.nio.charset.Charset $r2;
+        byte[] $r3;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        $r3 = virtualinvoke r1.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r2);
+
+        virtualinvoke r0.<java.io.OutputStream: void write(byte[])>($r3);
+
+        return;
+    }
+
+    static int bitsToBytes(int)
+    {
+        int i0, $i1, $i2, $i3, $i4;
+
+        i0 := @parameter0: int;
+
+        $i1 = i0 + 8;
+
+        $i2 = $i1 - 1;
+
+        $i3 = $i2 & -8;
+
+        $i4 = $i3 / 8;
+
+        return $i4;
+    }
+
+    static byte[] read(java.io.InputStream, int) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        int i0, i1, $i2, i3;
+        byte[] r1;
+        java.lang.StringBuilder $r2, $r3, $r4;
+        java.lang.String $r5;
+        java.lang.RuntimeException $r6;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        i0 := @parameter1: int;
+
+        r1 = newarray (byte)[i0];
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i0 goto label3;
+
+        $i2 = i0 - i3;
+
+        i1 = virtualinvoke r0.<java.io.InputStream: int read(byte[],int,int)>(r1, i3, $i2);
+
+        if i1 >= 0 goto label2;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Not enough bytes to read: ");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r5);
+
+        throw $r6;
+
+     label2:
+        i3 = i3 + i1;
+
+        goto label1;
+
+     label3:
+        return r1;
+    }
+
+    static long readUInt(java.io.InputStream, int) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        int i0, $i4, i7;
+        byte[] r1;
+        long l1, $l5, l6;
+        byte $b2;
+        short $s3;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        i0 := @parameter1: int;
+
+        r1 = staticinvoke <androidx.profileinstaller.Encoding: byte[] read(java.io.InputStream,int)>(r0, i0);
+
+        l6 = 0L;
+
+        i7 = 0;
+
+     label1:
+        if i7 >= i0 goto label2;
+
+        $b2 = r1[i7];
+
+        $s3 = $b2 & 255;
+
+        l1 = (long) $s3;
+
+        $i4 = i7 * 8;
+
+        $l5 = l1 << $i4;
+
+        l6 = l6 + $l5;
+
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label2:
+        return l6;
+    }
+
+    static int readUInt8(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        long $l0;
+        int $i1;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        $l0 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt(java.io.InputStream,int)>(r0, 1);
+
+        $i1 = (int) $l0;
+
+        return $i1;
+    }
+
+    static int readUInt16(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        long $l0;
+        int $i1;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        $l0 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt(java.io.InputStream,int)>(r0, 2);
+
+        $i1 = (int) $l0;
+
+        return $i1;
+    }
+
+    static long readUInt32(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        long $l0;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        $l0 = staticinvoke <androidx.profileinstaller.Encoding: long readUInt(java.io.InputStream,int)>(r0, 4);
+
+        return $l0;
+    }
+
+    static java.lang.String readString(java.io.InputStream, int) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        int i0;
+        java.lang.String $r1;
+        byte[] $r2;
+        java.nio.charset.Charset $r3;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        i0 := @parameter1: int;
+
+        $r1 = new java.lang.String;
+
+        $r2 = staticinvoke <androidx.profileinstaller.Encoding: byte[] read(java.io.InputStream,int)>(r0, i0);
+
+        $r3 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>($r2, $r3);
+
+        return $r1;
+    }
+
+    static byte[] readCompressed(java.io.InputStream, int, int) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        int i0, i1, $i2, $i3, i4, i5, i6;
+        java.util.zip.Inflater r1, $r6;
+        byte[] r2, r3, r25;
+        java.lang.Throwable r4, r5, $r21, $r22;
+        boolean $z0, $z1, $z2;
+        java.lang.RuntimeException $r7, $r14, $r20, $r24;
+        java.lang.StringBuilder $r8, $r9, $r10, $r11, $r12, $r15, $r16, $r17, $r18;
+        java.lang.String $r13, $r19, $r23;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $r6 = new java.util.zip.Inflater;
+
+        specialinvoke $r6.<java.util.zip.Inflater: void <init>()>();
+
+        r1 = $r6;
+
+     label01:
+        r2 = newarray (byte)[i1];
+
+        i4 = 0;
+
+        i5 = 0;
+
+        r3 = newarray (byte)[2048];
+
+     label02:
+        $z0 = virtualinvoke r1.<java.util.zip.Inflater: boolean finished()>();
+
+        if $z0 != 0 goto label08;
+
+        $z2 = virtualinvoke r1.<java.util.zip.Inflater: boolean needsDictionary()>();
+
+        if $z2 != 0 goto label08;
+
+        if i4 >= i0 goto label08;
+
+        i6 = virtualinvoke r0.<java.io.InputStream: int read(byte[])>(r3);
+
+        if i6 >= 0 goto label03;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid zip data. Stream ended after $totalBytesRead bytes. Expected ");
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" bytes");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r20 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r19);
+
+        throw $r20;
+
+     label03:
+        virtualinvoke r1.<java.util.zip.Inflater: void setInput(byte[],int,int)>(r3, 0, i6);
+
+     label04:
+        $i2 = i1 - i5;
+
+        $i3 = virtualinvoke r1.<java.util.zip.Inflater: int inflate(byte[],int,int)>(r2, i5, $i2);
+
+        i5 = i5 + $i3;
+
+     label05:
+        goto label07;
+
+     label06:
+        $r22 := @caughtexception;
+
+        r4 = $r22;
+
+        $r23 = virtualinvoke r4.<java.util.zip.DataFormatException: java.lang.String getMessage()>();
+
+        $r24 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r23);
+
+        throw $r24;
+
+     label07:
+        i4 = i4 + i6;
+
+        goto label02;
+
+     label08:
+        if i4 == i0 goto label09;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Didn\'t read enough bytes during decompression. expected=");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" actual=");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i4);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r14 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>($r13);
+
+        throw $r14;
+
+     label09:
+        $z1 = virtualinvoke r1.<java.util.zip.Inflater: boolean finished()>();
+
+        if $z1 != 0 goto label10;
+
+        $r7 = staticinvoke <androidx.profileinstaller.Encoding: java.lang.RuntimeException error(java.lang.String)>("Inflater did not finish");
+
+        throw $r7;
+
+     label10:
+        r25 = r2;
+
+     label11:
+        virtualinvoke r1.<java.util.zip.Inflater: void end()>();
+
+        return r25;
+
+     label12:
+        $r21 := @caughtexception;
+
+        r5 = $r21;
+
+     label13:
+        virtualinvoke r1.<java.util.zip.Inflater: void end()>();
+
+        throw r5;
+
+        catch java.util.zip.DataFormatException from label04 to label05 with label06;
+        catch java.lang.Throwable from label01 to label11 with label12;
+        catch java.lang.Throwable from label12 to label13 with label12;
+    }
+
+    static void writeCompressed(java.io.OutputStream, byte[]) throws java.io.IOException
+    {
+        java.io.OutputStream r0;
+        byte[] r1, r2;
+        int $i0, $i2;
+        long $l1, $l3;
+
+        r0 := @parameter0: java.io.OutputStream;
+
+        r1 := @parameter1: byte[];
+
+        $i0 = lengthof r1;
+
+        $l1 = (long) $i0;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l1);
+
+        r2 = staticinvoke <androidx.profileinstaller.Encoding: byte[] compress(byte[])>(r1);
+
+        $i2 = lengthof r2;
+
+        $l3 = (long) $i2;
+
+        staticinvoke <androidx.profileinstaller.Encoding: void writeUInt32(java.io.OutputStream,long)>(r0, $l3);
+
+        virtualinvoke r0.<java.io.OutputStream: void write(byte[])>(r2);
+
+        return;
+    }
+
+    static byte[] compress(byte[]) throws java.io.IOException
+    {
+        byte[] r0, $r10;
+        java.util.zip.Deflater r1, $r7;
+        java.io.ByteArrayOutputStream r2, $r8;
+        java.util.zip.DeflaterOutputStream r3, $r9;
+        java.lang.Throwable r4, r5, r6, $r11, $r12, $r13;
+
+        r0 := @parameter0: byte[];
+
+        $r7 = new java.util.zip.Deflater;
+
+        specialinvoke $r7.<java.util.zip.Deflater: void <init>(int)>(1);
+
+        r1 = $r7;
+
+        $r8 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r8.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        r2 = $r8;
+
+     label01:
+        $r9 = new java.util.zip.DeflaterOutputStream;
+
+        specialinvoke $r9.<java.util.zip.DeflaterOutputStream: void <init>(java.io.OutputStream,java.util.zip.Deflater)>(r2, r1);
+
+        r3 = $r9;
+
+     label02:
+        virtualinvoke r3.<java.util.zip.DeflaterOutputStream: void write(byte[])>(r0);
+
+     label03:
+        virtualinvoke r3.<java.util.zip.DeflaterOutputStream: void close()>();
+
+        goto label09;
+
+     label04:
+        $r12 := @caughtexception;
+
+        r4 = $r12;
+
+     label05:
+        virtualinvoke r3.<java.util.zip.DeflaterOutputStream: void close()>();
+
+     label06:
+        goto label08;
+
+     label07:
+        $r11 := @caughtexception;
+
+        r5 = $r11;
+
+        virtualinvoke r4.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r5);
+
+     label08:
+        throw r4;
+
+     label09:
+        virtualinvoke r1.<java.util.zip.Deflater: void end()>();
+
+        goto label12;
+
+     label10:
+        $r13 := @caughtexception;
+
+        r6 = $r13;
+
+     label11:
+        virtualinvoke r1.<java.util.zip.Deflater: void end()>();
+
+        throw r6;
+
+     label12:
+        $r10 = virtualinvoke r2.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        return $r10;
+
+        catch java.lang.Throwable from label02 to label03 with label04;
+        catch java.lang.Throwable from label05 to label06 with label07;
+        catch java.lang.Throwable from label01 to label09 with label10;
+        catch java.lang.Throwable from label10 to label11 with label10;
+    }
+
+    static void writeAll(java.io.InputStream, java.io.OutputStream) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        java.io.OutputStream r1;
+        byte[] r2;
+        int i0, $i1;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: java.io.OutputStream;
+
+        r2 = newarray (byte)[512];
+
+     label1:
+        $i1 = virtualinvoke r0.<java.io.InputStream: int read(byte[])>(r2);
+
+        i0 = $i1;
+
+        if $i1 <= 0 goto label2;
+
+        virtualinvoke r1.<java.io.OutputStream: void write(byte[],int,int)>(r2, 0, i0);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    static java.lang.RuntimeException error(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.IllegalStateException $r1;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = new java.lang.IllegalStateException;
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>(java.lang.String)>(r0);
+
+        return $r1;
+    }
+

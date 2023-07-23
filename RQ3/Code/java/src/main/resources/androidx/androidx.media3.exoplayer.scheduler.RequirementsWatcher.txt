@@ -1,0 +1,633 @@
+androidx.media3.exoplayer.scheduler.RequirementsWatcher
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.content.Context context>
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener listener>
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.Requirements requirements>
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.os.Handler handler>
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver receiver>
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher: int notMetRequirements>
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback networkCallback>
+    public void <init>(android.content.Context, androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener, androidx.media3.exoplayer.scheduler.Requirements)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        android.content.Context r1, $r4;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener r2;
+        androidx.media3.exoplayer.scheduler.Requirements r3;
+        android.os.Handler $r5;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener;
+
+        r3 := @parameter2: androidx.media3.exoplayer.scheduler.Requirements;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = virtualinvoke r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.content.Context context> = $r4;
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener listener> = r2;
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.Requirements requirements> = r3;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Util: android.os.Handler createHandlerForCurrentOrMainLooper()>();
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.os.Handler handler> = $r5;
+
+        return;
+    }
+
+    public int start()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        android.content.IntentFilter r1, $r4;
+        android.content.Context $r2, $r10;
+        androidx.media3.exoplayer.scheduler.Requirements $r3, $r5, $r6, $r12, $r13;
+        int $i0, $i1, $i2, $i3;
+        boolean $z0, $z1, $z2, $z3;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver $r7, $r9;
+        android.os.Handler $r8;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        $r3 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.Requirements requirements>;
+
+        $r2 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.content.Context context>;
+
+        $i0 = virtualinvoke $r3.<androidx.media3.exoplayer.scheduler.Requirements: int getNotMetRequirements(android.content.Context)>($r2);
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: int notMetRequirements> = $i0;
+
+        $r4 = new android.content.IntentFilter;
+
+        specialinvoke $r4.<android.content.IntentFilter: void <init>()>();
+
+        r1 = $r4;
+
+        $r5 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.Requirements requirements>;
+
+        $z0 = virtualinvoke $r5.<androidx.media3.exoplayer.scheduler.Requirements: boolean isNetworkRequired()>();
+
+        if $z0 == 0 goto label2;
+
+        $i3 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i3 < 24 goto label1;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: void registerNetworkCallbackV24()>();
+
+        goto label2;
+
+     label1:
+        virtualinvoke r1.<android.content.IntentFilter: void addAction(java.lang.String)>("android.net.conn.CONNECTIVITY_CHANGE");
+
+     label2:
+        $r12 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.Requirements requirements>;
+
+        $z2 = virtualinvoke $r12.<androidx.media3.exoplayer.scheduler.Requirements: boolean isChargingRequired()>();
+
+        if $z2 == 0 goto label3;
+
+        virtualinvoke r1.<android.content.IntentFilter: void addAction(java.lang.String)>("android.intent.action.ACTION_POWER_CONNECTED");
+
+        virtualinvoke r1.<android.content.IntentFilter: void addAction(java.lang.String)>("android.intent.action.ACTION_POWER_DISCONNECTED");
+
+     label3:
+        $r6 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.Requirements requirements>;
+
+        $z1 = virtualinvoke $r6.<androidx.media3.exoplayer.scheduler.Requirements: boolean isIdleRequired()>();
+
+        if $z1 == 0 goto label5;
+
+        $i2 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i2 < 23 goto label4;
+
+        virtualinvoke r1.<android.content.IntentFilter: void addAction(java.lang.String)>("android.os.action.DEVICE_IDLE_MODE_CHANGED");
+
+        goto label5;
+
+     label4:
+        virtualinvoke r1.<android.content.IntentFilter: void addAction(java.lang.String)>("android.intent.action.SCREEN_ON");
+
+        virtualinvoke r1.<android.content.IntentFilter: void addAction(java.lang.String)>("android.intent.action.SCREEN_OFF");
+
+     label5:
+        $r13 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.Requirements requirements>;
+
+        $z3 = virtualinvoke $r13.<androidx.media3.exoplayer.scheduler.Requirements: boolean isStorageNotLowRequired()>();
+
+        if $z3 == 0 goto label6;
+
+        virtualinvoke r1.<android.content.IntentFilter: void addAction(java.lang.String)>("android.intent.action.DEVICE_STORAGE_LOW");
+
+        virtualinvoke r1.<android.content.IntentFilter: void addAction(java.lang.String)>("android.intent.action.DEVICE_STORAGE_OK");
+
+     label6:
+        $r7 = new androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver;
+
+        specialinvoke $r7.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver: void <init>(androidx.media3.exoplayer.scheduler.RequirementsWatcher,androidx.media3.exoplayer.scheduler.RequirementsWatcher$1)>(r0, null);
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver receiver> = $r7;
+
+        $r10 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.content.Context context>;
+
+        $r9 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver receiver>;
+
+        $r8 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.os.Handler handler>;
+
+        virtualinvoke $r10.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter,java.lang.String,android.os.Handler)>($r9, r1, null, $r8);
+
+        $i1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: int notMetRequirements>;
+
+        return $i1;
+    }
+
+    public void stop()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver $r1;
+        android.content.Context $r2;
+        java.lang.Object $r3;
+        android.content.BroadcastReceiver $r4;
+        int $i0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback $r5;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        $r2 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.content.Context context>;
+
+        $r1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver receiver>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r4 = (android.content.BroadcastReceiver) $r3;
+
+        virtualinvoke $r2.<android.content.Context: void unregisterReceiver(android.content.BroadcastReceiver)>($r4);
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver receiver> = null;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 24 goto label1;
+
+        $r5 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback networkCallback>;
+
+        if $r5 == null goto label1;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: void unregisterNetworkCallbackV24()>();
+
+     label1:
+        return;
+    }
+
+    public androidx.media3.exoplayer.scheduler.Requirements getRequirements()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        androidx.media3.exoplayer.scheduler.Requirements $r1;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        $r1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.Requirements requirements>;
+
+        return $r1;
+    }
+
+    private void registerNetworkCallbackV24()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        android.net.ConnectivityManager r1, $r4;
+        android.content.Context $r2;
+        java.lang.Object $r3, $r5;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback $r6, $r7;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        $r2 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.content.Context context>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r4 = (android.net.ConnectivityManager) $r3;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        r1 = (android.net.ConnectivityManager) $r5;
+
+        $r6 = new androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        specialinvoke $r6.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: void <init>(androidx.media3.exoplayer.scheduler.RequirementsWatcher,androidx.media3.exoplayer.scheduler.RequirementsWatcher$1)>(r0, null);
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback networkCallback> = $r6;
+
+        $r7 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback networkCallback>;
+
+        virtualinvoke r1.<android.net.ConnectivityManager: void registerDefaultNetworkCallback(android.net.ConnectivityManager$NetworkCallback)>($r7);
+
+        return;
+    }
+
+    private void unregisterNetworkCallbackV24()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        android.net.ConnectivityManager r1, $r4;
+        android.content.Context $r2;
+        java.lang.Object $r3, $r5, $r7;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback $r6;
+        android.net.ConnectivityManager$NetworkCallback $r8;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        $r2 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.content.Context context>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("connectivity");
+
+        $r4 = (android.net.ConnectivityManager) $r3;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        r1 = (android.net.ConnectivityManager) $r5;
+
+        $r6 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback networkCallback>;
+
+        $r7 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r6);
+
+        $r8 = (android.net.ConnectivityManager$NetworkCallback) $r7;
+
+        virtualinvoke r1.<android.net.ConnectivityManager: void unregisterNetworkCallback(android.net.ConnectivityManager$NetworkCallback)>($r8);
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback networkCallback> = null;
+
+        return;
+    }
+
+    private void checkRequirements()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        int i0, $i1;
+        android.content.Context $r1;
+        androidx.media3.exoplayer.scheduler.Requirements $r2;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener $r3;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        $r2 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.Requirements requirements>;
+
+        $r1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.content.Context context>;
+
+        i0 = virtualinvoke $r2.<androidx.media3.exoplayer.scheduler.Requirements: int getNotMetRequirements(android.content.Context)>($r1);
+
+        $i1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: int notMetRequirements>;
+
+        if $i1 == i0 goto label1;
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: int notMetRequirements> = i0;
+
+        $r3 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener listener>;
+
+        interfaceinvoke $r3.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener: void onRequirementsStateChanged(androidx.media3.exoplayer.scheduler.RequirementsWatcher,int)>(r0, i0);
+
+     label1:
+        return;
+    }
+
+    private void recheckNotMetNetworkRequirements()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        int $i0, $i1;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        $i0 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: int notMetRequirements>;
+
+        $i1 = $i0 & 3;
+
+        if $i1 != 0 goto label1;
+
+        return;
+
+     label1:
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: void checkRequirements()>();
+
+        return;
+    }
+
+    static void access$200(androidx.media3.exoplayer.scheduler.RequirementsWatcher)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+
+        r0 := @parameter0: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: void checkRequirements()>();
+
+        return;
+    }
+
+    static android.os.Handler access$300(androidx.media3.exoplayer.scheduler.RequirementsWatcher)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        android.os.Handler $r1;
+
+        r0 := @parameter0: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        $r1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.os.Handler handler>;
+
+        return $r1;
+    }
+
+    static androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback access$400(androidx.media3.exoplayer.scheduler.RequirementsWatcher)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback $r1;
+
+        r0 := @parameter0: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        $r1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback networkCallback>;
+
+        return $r1;
+    }
+
+    static void access$500(androidx.media3.exoplayer.scheduler.RequirementsWatcher)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r0;
+
+        r0 := @parameter0: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher: void recheckNotMetNetworkRequirements()>();
+
+        return;
+    }
+
+androidx.media3.exoplayer.scheduler.RequirementsWatcher$1
+androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0>
+    private void <init>(androidx.media3.exoplayer.scheduler.RequirementsWatcher)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver r0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r1;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver;
+
+        r1 := @parameter0: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0> = r1;
+
+        specialinvoke r0.<android.content.BroadcastReceiver: void <init>()>();
+
+        return;
+    }
+
+    public void onReceive(android.content.Context, android.content.Intent)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver r0;
+        android.content.Context r1;
+        android.content.Intent r2;
+        boolean $z0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher $r3;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.content.Intent;
+
+        $z0 = virtualinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver: boolean isInitialStickyBroadcast()>();
+
+        if $z0 != 0 goto label1;
+
+        $r3 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0>;
+
+        staticinvoke <androidx.media3.exoplayer.scheduler.RequirementsWatcher: void access$200(androidx.media3.exoplayer.scheduler.RequirementsWatcher)>($r3);
+
+     label1:
+        return;
+    }
+
+    void <init>(androidx.media3.exoplayer.scheduler.RequirementsWatcher, androidx.media3.exoplayer.scheduler.RequirementsWatcher$1)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver r0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r1;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$1 r2;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver;
+
+        r1 := @parameter0: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        r2 := @parameter1: androidx.media3.exoplayer.scheduler.RequirementsWatcher$1;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$DeviceStatusChangeReceiver: void <init>(androidx.media3.exoplayer.scheduler.RequirementsWatcher)>(r1);
+
+        return;
+    }
+
+androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher$Listener: void onRequirementsStateChanged(androidx.media3.exoplayer.scheduler.RequirementsWatcher,int)>
+androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: boolean receivedCapabilitiesChange>
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: boolean networkValidated>
+<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0>
+    private void <init>(androidx.media3.exoplayer.scheduler.RequirementsWatcher)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r1;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        r1 := @parameter0: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0> = r1;
+
+        specialinvoke r0.<android.net.ConnectivityManager$NetworkCallback: void <init>()>();
+
+        return;
+    }
+
+    public void onAvailable(android.net.Network)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0;
+        android.net.Network r1;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        r1 := @parameter0: android.net.Network;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: void postCheckRequirements()>();
+
+        return;
+    }
+
+    public void onLost(android.net.Network)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0;
+        android.net.Network r1;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        r1 := @parameter0: android.net.Network;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: void postCheckRequirements()>();
+
+        return;
+    }
+
+    public void onBlockedStatusChanged(android.net.Network, boolean)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0;
+        android.net.Network r1;
+        boolean z0;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        r1 := @parameter0: android.net.Network;
+
+        z0 := @parameter1: boolean;
+
+        if z0 != 0 goto label1;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: void postRecheckNotMetNetworkRequirements()>();
+
+     label1:
+        return;
+    }
+
+    public void onCapabilitiesChanged(android.net.Network, android.net.NetworkCapabilities)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0;
+        android.net.Network r1;
+        android.net.NetworkCapabilities r2;
+        boolean z0, $z1, $z2;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        r1 := @parameter0: android.net.Network;
+
+        r2 := @parameter1: android.net.NetworkCapabilities;
+
+        z0 = virtualinvoke r2.<android.net.NetworkCapabilities: boolean hasCapability(int)>(16);
+
+        $z1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: boolean receivedCapabilitiesChange>;
+
+        if $z1 == 0 goto label1;
+
+        $z2 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: boolean networkValidated>;
+
+        if $z2 == z0 goto label2;
+
+     label1:
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: boolean receivedCapabilitiesChange> = 1;
+
+        r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: boolean networkValidated> = z0;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: void postCheckRequirements()>();
+
+        goto label3;
+
+     label2:
+        if z0 == 0 goto label3;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: void postRecheckNotMetNetworkRequirements()>();
+
+     label3:
+        return;
+    }
+
+    private void postCheckRequirements()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher $r1;
+        android.os.Handler $r2;
+        java.lang.Runnable $r3;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        $r1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0>;
+
+        $r2 = staticinvoke <androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.os.Handler access$300(androidx.media3.exoplayer.scheduler.RequirementsWatcher)>($r1);
+
+        $r3 = dynamicinvoke "run" <java.lang.Runnable (androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: void lambda$postCheckRequirements$0()>, methodtype: void __METHODTYPE__());
+
+        virtualinvoke $r2.<android.os.Handler: boolean post(java.lang.Runnable)>($r3);
+
+        return;
+    }
+
+    private void postRecheckNotMetNetworkRequirements()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher $r1;
+        android.os.Handler $r2;
+        java.lang.Runnable $r3;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        $r1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0>;
+
+        $r2 = staticinvoke <androidx.media3.exoplayer.scheduler.RequirementsWatcher: android.os.Handler access$300(androidx.media3.exoplayer.scheduler.RequirementsWatcher)>($r1);
+
+        $r3 = dynamicinvoke "run" <java.lang.Runnable (androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: void lambda$postRecheckNotMetNetworkRequirements$1()>, methodtype: void __METHODTYPE__());
+
+        virtualinvoke $r2.<android.os.Handler: boolean post(java.lang.Runnable)>($r3);
+
+        return;
+    }
+
+    private void lambda$postRecheckNotMetNetworkRequirements$1()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0, $r2;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher $r1, $r3;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        $r1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0>;
+
+        $r2 = staticinvoke <androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback access$400(androidx.media3.exoplayer.scheduler.RequirementsWatcher)>($r1);
+
+        if $r2 == null goto label1;
+
+        $r3 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0>;
+
+        staticinvoke <androidx.media3.exoplayer.scheduler.RequirementsWatcher: void access$500(androidx.media3.exoplayer.scheduler.RequirementsWatcher)>($r3);
+
+     label1:
+        return;
+    }
+
+    private void lambda$postCheckRequirements$0()
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0, $r2;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher $r1, $r3;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        $r1 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0>;
+
+        $r2 = staticinvoke <androidx.media3.exoplayer.scheduler.RequirementsWatcher: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback access$400(androidx.media3.exoplayer.scheduler.RequirementsWatcher)>($r1);
+
+        if $r2 == null goto label1;
+
+        $r3 = r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: androidx.media3.exoplayer.scheduler.RequirementsWatcher this$0>;
+
+        staticinvoke <androidx.media3.exoplayer.scheduler.RequirementsWatcher: void access$200(androidx.media3.exoplayer.scheduler.RequirementsWatcher)>($r3);
+
+     label1:
+        return;
+    }
+
+    void <init>(androidx.media3.exoplayer.scheduler.RequirementsWatcher, androidx.media3.exoplayer.scheduler.RequirementsWatcher$1)
+    {
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback r0;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher r1;
+        androidx.media3.exoplayer.scheduler.RequirementsWatcher$1 r2;
+
+        r0 := @this: androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback;
+
+        r1 := @parameter0: androidx.media3.exoplayer.scheduler.RequirementsWatcher;
+
+        r2 := @parameter1: androidx.media3.exoplayer.scheduler.RequirementsWatcher$1;
+
+        specialinvoke r0.<androidx.media3.exoplayer.scheduler.RequirementsWatcher$NetworkCallback: void <init>(androidx.media3.exoplayer.scheduler.RequirementsWatcher)>(r1);
+
+        return;
+    }
+

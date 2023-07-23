@@ -1,0 +1,117 @@
+androidx.camera.core.internal.utils.ZslRingBuffer
+    public void <init>(int, androidx.camera.core.internal.utils.RingBuffer$OnRemoveCallback)
+    {
+        androidx.camera.core.internal.utils.ZslRingBuffer r0;
+        int i0;
+        androidx.camera.core.internal.utils.RingBuffer$OnRemoveCallback r1;
+
+        r0 := @this: androidx.camera.core.internal.utils.ZslRingBuffer;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: androidx.camera.core.internal.utils.RingBuffer$OnRemoveCallback;
+
+        specialinvoke r0.<androidx.camera.core.internal.utils.ArrayRingBuffer: void <init>(int,androidx.camera.core.internal.utils.RingBuffer$OnRemoveCallback)>(i0, r1);
+
+        return;
+    }
+
+    public void enqueue(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.internal.utils.ZslRingBuffer r0;
+        androidx.camera.core.ImageProxy r1;
+        androidx.camera.core.ImageInfo $r2;
+        boolean $z0;
+        androidx.camera.core.internal.utils.RingBuffer$OnRemoveCallback $r3;
+
+        r0 := @this: androidx.camera.core.internal.utils.ZslRingBuffer;
+
+        r1 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $r2 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageInfo getImageInfo()>();
+
+        $z0 = specialinvoke r0.<androidx.camera.core.internal.utils.ZslRingBuffer: boolean isValidZslFrame(androidx.camera.core.ImageInfo)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<androidx.camera.core.internal.utils.ArrayRingBuffer: void enqueue(java.lang.Object)>(r1);
+
+        goto label2;
+
+     label1:
+        $r3 = r0.<androidx.camera.core.internal.utils.ZslRingBuffer: androidx.camera.core.internal.utils.RingBuffer$OnRemoveCallback mOnRemoveCallback>;
+
+        interfaceinvoke $r3.<androidx.camera.core.internal.utils.RingBuffer$OnRemoveCallback: void onRemove(java.lang.Object)>(r1);
+
+     label2:
+        return;
+    }
+
+    private boolean isValidZslFrame(androidx.camera.core.ImageInfo)
+    {
+        androidx.camera.core.internal.utils.ZslRingBuffer r0;
+        androidx.camera.core.ImageInfo r1;
+        androidx.camera.core.impl.CameraCaptureResult r2;
+        androidx.camera.core.impl.CameraCaptureMetaData$AfState $r3, $r4, $r9, $r10;
+        androidx.camera.core.impl.CameraCaptureMetaData$AeState $r5, $r6;
+        androidx.camera.core.impl.CameraCaptureMetaData$AwbState $r7, $r8;
+
+        r0 := @this: androidx.camera.core.internal.utils.ZslRingBuffer;
+
+        r1 := @parameter0: androidx.camera.core.ImageInfo;
+
+        r2 = staticinvoke <androidx.camera.core.impl.CameraCaptureResults: androidx.camera.core.impl.CameraCaptureResult retrieveCameraCaptureResult(androidx.camera.core.ImageInfo)>(r1);
+
+        $r3 = interfaceinvoke r2.<androidx.camera.core.impl.CameraCaptureResult: androidx.camera.core.impl.CameraCaptureMetaData$AfState getAfState()>();
+
+        $r4 = <androidx.camera.core.impl.CameraCaptureMetaData$AfState: androidx.camera.core.impl.CameraCaptureMetaData$AfState LOCKED_FOCUSED>;
+
+        if $r3 == $r4 goto label1;
+
+        $r9 = interfaceinvoke r2.<androidx.camera.core.impl.CameraCaptureResult: androidx.camera.core.impl.CameraCaptureMetaData$AfState getAfState()>();
+
+        $r10 = <androidx.camera.core.impl.CameraCaptureMetaData$AfState: androidx.camera.core.impl.CameraCaptureMetaData$AfState PASSIVE_FOCUSED>;
+
+        if $r9 == $r10 goto label1;
+
+        return 0;
+
+     label1:
+        $r5 = interfaceinvoke r2.<androidx.camera.core.impl.CameraCaptureResult: androidx.camera.core.impl.CameraCaptureMetaData$AeState getAeState()>();
+
+        $r6 = <androidx.camera.core.impl.CameraCaptureMetaData$AeState: androidx.camera.core.impl.CameraCaptureMetaData$AeState CONVERGED>;
+
+        if $r5 == $r6 goto label2;
+
+        return 0;
+
+     label2:
+        $r7 = interfaceinvoke r2.<androidx.camera.core.impl.CameraCaptureResult: androidx.camera.core.impl.CameraCaptureMetaData$AwbState getAwbState()>();
+
+        $r8 = <androidx.camera.core.impl.CameraCaptureMetaData$AwbState: androidx.camera.core.impl.CameraCaptureMetaData$AwbState CONVERGED>;
+
+        if $r7 == $r8 goto label3;
+
+        return 0;
+
+     label3:
+        return 1;
+    }
+
+    public volatile void enqueue(java.lang.Object)
+    {
+        androidx.camera.core.internal.utils.ZslRingBuffer r0;
+        java.lang.Object r1;
+        androidx.camera.core.ImageProxy $r2;
+
+        r0 := @this: androidx.camera.core.internal.utils.ZslRingBuffer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (androidx.camera.core.ImageProxy) r1;
+
+        virtualinvoke r0.<androidx.camera.core.internal.utils.ZslRingBuffer: void enqueue(androidx.camera.core.ImageProxy)>($r2);
+
+        return;
+    }
+

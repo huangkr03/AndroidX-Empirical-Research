@@ -1,0 +1,280 @@
+android.support.customtabs.PostMessageServiceConnection
+<android.support.customtabs.PostMessageServiceConnection: java.lang.Object mLock>
+<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.ICustomTabsCallback mSessionBinder>
+<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.IPostMessageService mService>
+    public void <init>(android.support.customtabs.CustomTabsSessionToken)
+    {
+        android.support.customtabs.PostMessageServiceConnection r0;
+        android.support.customtabs.CustomTabsSessionToken r1;
+        java.lang.Object $r2;
+        android.os.IBinder $r3;
+        android.support.customtabs.ICustomTabsCallback $r4;
+
+        r0 := @this: android.support.customtabs.PostMessageServiceConnection;
+
+        r1 := @parameter0: android.support.customtabs.CustomTabsSessionToken;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        r0.<android.support.customtabs.PostMessageServiceConnection: java.lang.Object mLock> = $r2;
+
+        $r3 = virtualinvoke r1.<android.support.customtabs.CustomTabsSessionToken: android.os.IBinder getCallbackBinder()>();
+
+        $r4 = staticinvoke <android.support.customtabs.ICustomTabsCallback$Stub: android.support.customtabs.ICustomTabsCallback asInterface(android.os.IBinder)>($r3);
+
+        r0.<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.ICustomTabsCallback mSessionBinder> = $r4;
+
+        return;
+    }
+
+    public boolean bindSessionToPostMessageService(android.content.Context, java.lang.String)
+    {
+        android.support.customtabs.PostMessageServiceConnection r0;
+        android.content.Context r1;
+        java.lang.String r2, $r6;
+        android.content.Intent r3, $r4;
+        java.lang.Class $r5;
+        boolean $z0;
+
+        r0 := @this: android.support.customtabs.PostMessageServiceConnection;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: java.lang.String;
+
+        $r4 = new android.content.Intent;
+
+        specialinvoke $r4.<android.content.Intent: void <init>()>();
+
+        r3 = $r4;
+
+        $r5 = class "Landroid/support/customtabs/PostMessageService;";
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.String getName()>();
+
+        virtualinvoke r3.<android.content.Intent: android.content.Intent setClassName(java.lang.String,java.lang.String)>(r2, $r6);
+
+        $z0 = virtualinvoke r1.<android.content.Context: boolean bindService(android.content.Intent,android.content.ServiceConnection,int)>(r3, r0, 1);
+
+        return $z0;
+    }
+
+    public void unbindFromContext(android.content.Context)
+    {
+        android.support.customtabs.PostMessageServiceConnection r0;
+        android.content.Context r1;
+
+        r0 := @this: android.support.customtabs.PostMessageServiceConnection;
+
+        r1 := @parameter0: android.content.Context;
+
+        virtualinvoke r1.<android.content.Context: void unbindService(android.content.ServiceConnection)>(r0);
+
+        return;
+    }
+
+    public final void onServiceConnected(android.content.ComponentName, android.os.IBinder)
+    {
+        android.support.customtabs.PostMessageServiceConnection r0;
+        android.content.ComponentName r1;
+        android.os.IBinder r2;
+        android.support.customtabs.IPostMessageService $r3;
+
+        r0 := @this: android.support.customtabs.PostMessageServiceConnection;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        r2 := @parameter1: android.os.IBinder;
+
+        $r3 = staticinvoke <android.support.customtabs.IPostMessageService$Stub: android.support.customtabs.IPostMessageService asInterface(android.os.IBinder)>(r2);
+
+        r0.<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.IPostMessageService mService> = $r3;
+
+        virtualinvoke r0.<android.support.customtabs.PostMessageServiceConnection: void onPostMessageServiceConnected()>();
+
+        return;
+    }
+
+    public final void onServiceDisconnected(android.content.ComponentName)
+    {
+        android.support.customtabs.PostMessageServiceConnection r0;
+        android.content.ComponentName r1;
+
+        r0 := @this: android.support.customtabs.PostMessageServiceConnection;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        r0.<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.IPostMessageService mService> = null;
+
+        virtualinvoke r0.<android.support.customtabs.PostMessageServiceConnection: void onPostMessageServiceDisconnected()>();
+
+        return;
+    }
+
+    public final boolean notifyMessageChannelReady(android.os.Bundle)
+    {
+        android.support.customtabs.PostMessageServiceConnection r0;
+        android.os.Bundle r1;
+        java.lang.Object r2, $r6;
+        java.lang.Throwable r3, r4, $r9, $r10;
+        android.support.customtabs.IPostMessageService $r5, $r8;
+        android.support.customtabs.ICustomTabsCallback $r7;
+
+        r0 := @this: android.support.customtabs.PostMessageServiceConnection;
+
+        r1 := @parameter0: android.os.Bundle;
+
+        $r5 = r0.<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.IPostMessageService mService>;
+
+        if $r5 != null goto label01;
+
+        return 0;
+
+     label01:
+        $r6 = r0.<android.support.customtabs.PostMessageServiceConnection: java.lang.Object mLock>;
+
+        r2 = $r6;
+
+        entermonitor $r6;
+
+     label02:
+        $r8 = r0.<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.IPostMessageService mService>;
+
+        $r7 = r0.<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.ICustomTabsCallback mSessionBinder>;
+
+        interfaceinvoke $r8.<android.support.customtabs.IPostMessageService: void onMessageChannelReady(android.support.customtabs.ICustomTabsCallback,android.os.Bundle)>($r7, r1);
+
+     label03:
+        goto label06;
+
+     label04:
+        $r10 := @caughtexception;
+
+        r3 = $r10;
+
+        exitmonitor r2;
+
+     label05:
+        return 0;
+
+     label06:
+        exitmonitor r2;
+
+     label07:
+        goto label10;
+
+     label08:
+        $r9 := @caughtexception;
+
+        r4 = $r9;
+
+        exitmonitor r2;
+
+     label09:
+        throw r4;
+
+     label10:
+        return 1;
+
+        catch android.os.RemoteException from label02 to label03 with label04;
+        catch java.lang.Throwable from label02 to label05 with label08;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label08 to label09 with label08;
+    }
+
+    public final boolean postMessage(java.lang.String, android.os.Bundle)
+    {
+        android.support.customtabs.PostMessageServiceConnection r0;
+        java.lang.String r1;
+        android.os.Bundle r2;
+        java.lang.Object r3, $r7;
+        java.lang.Throwable r4, r5, $r10, $r11;
+        android.support.customtabs.IPostMessageService $r6, $r9;
+        android.support.customtabs.ICustomTabsCallback $r8;
+
+        r0 := @this: android.support.customtabs.PostMessageServiceConnection;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: android.os.Bundle;
+
+        $r6 = r0.<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.IPostMessageService mService>;
+
+        if $r6 != null goto label01;
+
+        return 0;
+
+     label01:
+        $r7 = r0.<android.support.customtabs.PostMessageServiceConnection: java.lang.Object mLock>;
+
+        r3 = $r7;
+
+        entermonitor $r7;
+
+     label02:
+        $r9 = r0.<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.IPostMessageService mService>;
+
+        $r8 = r0.<android.support.customtabs.PostMessageServiceConnection: android.support.customtabs.ICustomTabsCallback mSessionBinder>;
+
+        interfaceinvoke $r9.<android.support.customtabs.IPostMessageService: void onPostMessage(android.support.customtabs.ICustomTabsCallback,java.lang.String,android.os.Bundle)>($r8, r1, r2);
+
+     label03:
+        goto label06;
+
+     label04:
+        $r10 := @caughtexception;
+
+        r4 = $r10;
+
+        exitmonitor r3;
+
+     label05:
+        return 0;
+
+     label06:
+        exitmonitor r3;
+
+     label07:
+        goto label10;
+
+     label08:
+        $r11 := @caughtexception;
+
+        r5 = $r11;
+
+        exitmonitor r3;
+
+     label09:
+        throw r5;
+
+     label10:
+        return 1;
+
+        catch android.os.RemoteException from label02 to label03 with label04;
+        catch java.lang.Throwable from label02 to label05 with label08;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label08 to label09 with label08;
+    }
+
+    public void onPostMessageServiceConnected()
+    {
+        android.support.customtabs.PostMessageServiceConnection r0;
+
+        r0 := @this: android.support.customtabs.PostMessageServiceConnection;
+
+        return;
+    }
+
+    public void onPostMessageServiceDisconnected()
+    {
+        android.support.customtabs.PostMessageServiceConnection r0;
+
+        r0 := @this: android.support.customtabs.PostMessageServiceConnection;
+
+        return;
+    }
+

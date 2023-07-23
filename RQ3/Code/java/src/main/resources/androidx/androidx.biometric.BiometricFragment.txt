@@ -1,0 +1,1796 @@
+androidx.biometric.BiometricFragment
+<androidx.biometric.BiometricFragment: java.lang.String TAG>
+<androidx.biometric.BiometricFragment: int CANCELED_FROM_INTERNAL>
+<androidx.biometric.BiometricFragment: int CANCELED_FROM_USER>
+<androidx.biometric.BiometricFragment: int CANCELED_FROM_NEGATIVE_BUTTON>
+<androidx.biometric.BiometricFragment: int CANCELED_FROM_CLIENT>
+<androidx.biometric.BiometricFragment: java.lang.String FINGERPRINT_DIALOG_FRAGMENT_TAG>
+<androidx.biometric.BiometricFragment: int DISMISS_INSTANTLY_DELAY_MS>
+<androidx.biometric.BiometricFragment: int HIDE_DIALOG_DELAY_MS>
+<androidx.biometric.BiometricFragment: int SHOW_PROMPT_DELAY_MS>
+<androidx.biometric.BiometricFragment: int REQUEST_CONFIRM_CREDENTIAL>
+<androidx.biometric.BiometricFragment: android.os.Handler mHandler>
+<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>
+    public void <init>()
+    {
+        androidx.biometric.BiometricFragment r0;
+        android.os.Handler $r1;
+        android.os.Looper $r2;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        specialinvoke r0.<androidx.fragment.app.Fragment: void <init>()>();
+
+        $r1 = new android.os.Handler;
+
+        $r2 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r1.<android.os.Handler: void <init>(android.os.Looper)>($r2);
+
+        r0.<androidx.biometric.BiometricFragment: android.os.Handler mHandler> = $r1;
+
+        return;
+    }
+
+    static androidx.biometric.BiometricFragment newInstance()
+    {
+        androidx.biometric.BiometricFragment $r0;
+
+        $r0 = new androidx.biometric.BiometricFragment;
+
+        specialinvoke $r0.<androidx.biometric.BiometricFragment: void <init>()>();
+
+        return $r0;
+    }
+
+    public void onCreate(android.os.Bundle)
+    {
+        androidx.biometric.BiometricFragment r0;
+        android.os.Bundle r1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 := @parameter0: android.os.Bundle;
+
+        specialinvoke r0.<androidx.fragment.app.Fragment: void onCreate(android.os.Bundle)>(r1);
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void connectViewModel()>();
+
+        return;
+    }
+
+    public void onStart()
+    {
+        androidx.biometric.BiometricFragment r0;
+        int $i0, $i1;
+        androidx.biometric.BiometricViewModel $r1, $r2, $r4;
+        boolean $z0;
+        androidx.biometric.BiometricFragment$StopIgnoringCancelRunnable $r3;
+        android.os.Handler $r5;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        specialinvoke r0.<androidx.fragment.app.Fragment: void onStart()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 != 29 goto label1;
+
+        $r1 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $i1 = virtualinvoke $r1.<androidx.biometric.BiometricViewModel: int getAllowedAuthenticators()>();
+
+        $z0 = staticinvoke <androidx.biometric.AuthenticatorUtils: boolean isDeviceCredentialAllowed(int)>($i1);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r2.<androidx.biometric.BiometricViewModel: void setIgnoringCancel(boolean)>(1);
+
+        $r5 = r0.<androidx.biometric.BiometricFragment: android.os.Handler mHandler>;
+
+        $r3 = new androidx.biometric.BiometricFragment$StopIgnoringCancelRunnable;
+
+        $r4 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        specialinvoke $r3.<androidx.biometric.BiometricFragment$StopIgnoringCancelRunnable: void <init>(androidx.biometric.BiometricViewModel)>($r4);
+
+        virtualinvoke $r5.<android.os.Handler: boolean postDelayed(java.lang.Runnable,long)>($r3, 250L);
+
+     label1:
+        return;
+    }
+
+    public void onStop()
+    {
+        androidx.biometric.BiometricFragment r0;
+        int $i0;
+        androidx.biometric.BiometricViewModel $r1;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        specialinvoke r0.<androidx.fragment.app.Fragment: void onStop()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 29 goto label1;
+
+        $r1 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z0 = virtualinvoke $r1.<androidx.biometric.BiometricViewModel: boolean isConfirmingDeviceCredential()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = specialinvoke r0.<androidx.biometric.BiometricFragment: boolean isChangingConfigurations()>();
+
+        if $z1 != 0 goto label1;
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void cancelAuthentication(int)>(0);
+
+     label1:
+        return;
+    }
+
+    public void onActivityResult(int, int, android.content.Intent)
+    {
+        androidx.biometric.BiometricFragment r0;
+        int i0, i1;
+        android.content.Intent r1;
+        androidx.biometric.BiometricViewModel $r2;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: android.content.Intent;
+
+        specialinvoke r0.<androidx.fragment.app.Fragment: void onActivityResult(int,int,android.content.Intent)>(i0, i1, r1);
+
+        if i0 != 1 goto label1;
+
+        $r2 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r2.<androidx.biometric.BiometricViewModel: void setConfirmingDeviceCredential(boolean)>(0);
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void handleConfirmCredentialResult(int)>(i1);
+
+     label1:
+        return;
+    }
+
+    private void connectViewModel()
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.fragment.app.FragmentActivity r1, $r3;
+        androidx.lifecycle.ViewModel $r4;
+        androidx.biometric.BiometricViewModel $r5, $r6, $r9, $r12, $r15, $r18, $r21;
+        androidx.lifecycle.LiveData $r7, $r13, $r16, $r19, $r22;
+        androidx.lifecycle.MutableLiveData $r10;
+        androidx.lifecycle.ViewModelProvider r24;
+        androidx.biometric.BiometricFragment$1 r25;
+        androidx.biometric.BiometricFragment$2 r26;
+        androidx.biometric.BiometricFragment$3 r27;
+        androidx.biometric.BiometricFragment$4 r28;
+        androidx.biometric.BiometricFragment$5 r29;
+        androidx.biometric.BiometricFragment$6 r30;
+        androidx.lifecycle.LifecycleOwner r31, r32, r33, r34, r35, r36;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: androidx.fragment.app.FragmentActivity getActivity()>();
+
+        if r1 != null goto label1;
+
+        return;
+
+     label1:
+        r24 = new androidx.lifecycle.ViewModelProvider;
+
+        $r3 = virtualinvoke r0.<androidx.biometric.BiometricFragment: androidx.fragment.app.FragmentActivity getActivity()>();
+
+        specialinvoke r24.<androidx.lifecycle.ViewModelProvider: void <init>(androidx.lifecycle.ViewModelStoreOwner)>($r3);
+
+        $r4 = virtualinvoke r24.<androidx.lifecycle.ViewModelProvider: androidx.lifecycle.ViewModel get(java.lang.Class)>(class "Landroidx/biometric/BiometricViewModel;");
+
+        $r5 = (androidx.biometric.BiometricViewModel) $r4;
+
+        r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel> = $r5;
+
+        $r6 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r7 = virtualinvoke $r6.<androidx.biometric.BiometricViewModel: androidx.lifecycle.LiveData getAuthenticationResult()>();
+
+        r25 = new androidx.biometric.BiometricFragment$1;
+
+        specialinvoke r25.<androidx.biometric.BiometricFragment$1: void <init>(androidx.biometric.BiometricFragment)>(r0);
+
+        r31 = (androidx.lifecycle.LifecycleOwner) r0;
+
+        virtualinvoke $r7.<androidx.lifecycle.LiveData: void observe(androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Observer)>(r31, r25);
+
+        $r9 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r10 = virtualinvoke $r9.<androidx.biometric.BiometricViewModel: androidx.lifecycle.MutableLiveData getAuthenticationError()>();
+
+        r26 = new androidx.biometric.BiometricFragment$2;
+
+        specialinvoke r26.<androidx.biometric.BiometricFragment$2: void <init>(androidx.biometric.BiometricFragment)>(r0);
+
+        r32 = (androidx.lifecycle.LifecycleOwner) r0;
+
+        virtualinvoke $r10.<androidx.lifecycle.MutableLiveData: void observe(androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Observer)>(r32, r26);
+
+        $r12 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r13 = virtualinvoke $r12.<androidx.biometric.BiometricViewModel: androidx.lifecycle.LiveData getAuthenticationHelpMessage()>();
+
+        r27 = new androidx.biometric.BiometricFragment$3;
+
+        specialinvoke r27.<androidx.biometric.BiometricFragment$3: void <init>(androidx.biometric.BiometricFragment)>(r0);
+
+        r33 = (androidx.lifecycle.LifecycleOwner) r0;
+
+        virtualinvoke $r13.<androidx.lifecycle.LiveData: void observe(androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Observer)>(r33, r27);
+
+        $r15 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r16 = virtualinvoke $r15.<androidx.biometric.BiometricViewModel: androidx.lifecycle.LiveData isAuthenticationFailurePending()>();
+
+        r28 = new androidx.biometric.BiometricFragment$4;
+
+        specialinvoke r28.<androidx.biometric.BiometricFragment$4: void <init>(androidx.biometric.BiometricFragment)>(r0);
+
+        r34 = (androidx.lifecycle.LifecycleOwner) r0;
+
+        virtualinvoke $r16.<androidx.lifecycle.LiveData: void observe(androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Observer)>(r34, r28);
+
+        $r18 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r19 = virtualinvoke $r18.<androidx.biometric.BiometricViewModel: androidx.lifecycle.LiveData isNegativeButtonPressPending()>();
+
+        r29 = new androidx.biometric.BiometricFragment$5;
+
+        specialinvoke r29.<androidx.biometric.BiometricFragment$5: void <init>(androidx.biometric.BiometricFragment)>(r0);
+
+        r35 = (androidx.lifecycle.LifecycleOwner) r0;
+
+        virtualinvoke $r19.<androidx.lifecycle.LiveData: void observe(androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Observer)>(r35, r29);
+
+        $r21 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r22 = virtualinvoke $r21.<androidx.biometric.BiometricViewModel: androidx.lifecycle.LiveData isFingerprintDialogCancelPending()>();
+
+        r30 = new androidx.biometric.BiometricFragment$6;
+
+        specialinvoke r30.<androidx.biometric.BiometricFragment$6: void <init>(androidx.biometric.BiometricFragment)>(r0);
+
+        r36 = (androidx.lifecycle.LifecycleOwner) r0;
+
+        virtualinvoke $r22.<androidx.lifecycle.LiveData: void observe(androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Observer)>(r36, r30);
+
+        return;
+    }
+
+    void authenticate(androidx.biometric.BiometricPrompt$PromptInfo, androidx.biometric.BiometricPrompt$CryptoObject)
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.biometric.BiometricPrompt$PromptInfo r1;
+        androidx.biometric.BiometricPrompt$CryptoObject r2, $r13;
+        androidx.fragment.app.FragmentActivity r3;
+        int i0, $i1, $i2, $i3, $i4, $i5;
+        androidx.biometric.BiometricViewModel $r4, $r5, $r9, $r10, $r12, $r14, $r15;
+        androidx.biometric.BiometricFragment$ShowPromptForAuthenticationRunnable $r6;
+        android.os.Handler $r7;
+        boolean $z1, $z2, $z3;
+        androidx.biometric.BiometricManager $r8;
+        java.lang.String $r11;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 := @parameter0: androidx.biometric.BiometricPrompt$PromptInfo;
+
+        r2 := @parameter1: androidx.biometric.BiometricPrompt$CryptoObject;
+
+        r3 = virtualinvoke r0.<androidx.biometric.BiometricFragment: androidx.fragment.app.FragmentActivity getActivity()>();
+
+        if r3 != null goto label1;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("BiometricFragment", "Not launching prompt. Client activity was null.");
+
+        return;
+
+     label1:
+        $r4 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r4.<androidx.biometric.BiometricViewModel: void setPromptInfo(androidx.biometric.BiometricPrompt$PromptInfo)>(r1);
+
+        i0 = staticinvoke <androidx.biometric.AuthenticatorUtils: int getConsolidatedAuthenticators(androidx.biometric.BiometricPrompt$PromptInfo,androidx.biometric.BiometricPrompt$CryptoObject)>(r1, r2);
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 23 goto label2;
+
+        $i5 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i5 >= 30 goto label2;
+
+        if i0 != 15 goto label2;
+
+        if r2 != null goto label2;
+
+        $r12 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r13 = staticinvoke <androidx.biometric.CryptoObjectUtils: androidx.biometric.BiometricPrompt$CryptoObject createFakeCryptoObject()>();
+
+        virtualinvoke $r12.<androidx.biometric.BiometricViewModel: void setCryptoObject(androidx.biometric.BiometricPrompt$CryptoObject)>($r13);
+
+        goto label3;
+
+     label2:
+        $r14 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r14.<androidx.biometric.BiometricViewModel: void setCryptoObject(androidx.biometric.BiometricPrompt$CryptoObject)>(r2);
+
+     label3:
+        $z2 = virtualinvoke r0.<androidx.biometric.BiometricFragment: boolean isManagingDeviceCredentialButton()>();
+
+        if $z2 == 0 goto label4;
+
+        $r10 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $i4 = <androidx.biometric.R$string: int confirm_device_credential_password>;
+
+        $r11 = virtualinvoke r0.<androidx.biometric.BiometricFragment: java.lang.String getString(int)>($i4);
+
+        virtualinvoke $r10.<androidx.biometric.BiometricViewModel: void setNegativeButtonTextOverride(java.lang.CharSequence)>($r11);
+
+        goto label5;
+
+     label4:
+        $r5 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r5.<androidx.biometric.BiometricViewModel: void setNegativeButtonTextOverride(java.lang.CharSequence)>(null);
+
+     label5:
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 < 21 goto label6;
+
+        $z1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: boolean isManagingDeviceCredentialButton()>();
+
+        if $z1 == 0 goto label6;
+
+        $r8 = staticinvoke <androidx.biometric.BiometricManager: androidx.biometric.BiometricManager 'from'(android.content.Context)>(r3);
+
+        $i3 = virtualinvoke $r8.<androidx.biometric.BiometricManager: int canAuthenticate(int)>(255);
+
+        if $i3 == 0 goto label6;
+
+        $r9 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r9.<androidx.biometric.BiometricViewModel: void setAwaitingResult(boolean)>(1);
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void launchConfirmCredentialActivity()>();
+
+        return;
+
+     label6:
+        $r15 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z3 = virtualinvoke $r15.<androidx.biometric.BiometricViewModel: boolean isDelayingPrompt()>();
+
+        if $z3 == 0 goto label7;
+
+        $r7 = r0.<androidx.biometric.BiometricFragment: android.os.Handler mHandler>;
+
+        $r6 = new androidx.biometric.BiometricFragment$ShowPromptForAuthenticationRunnable;
+
+        specialinvoke $r6.<androidx.biometric.BiometricFragment$ShowPromptForAuthenticationRunnable: void <init>(androidx.biometric.BiometricFragment)>(r0);
+
+        virtualinvoke $r7.<android.os.Handler: boolean postDelayed(java.lang.Runnable,long)>($r6, 600L);
+
+        goto label8;
+
+     label7:
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void showPromptForAuthentication()>();
+
+     label8:
+        return;
+    }
+
+    void showPromptForAuthentication()
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.biometric.BiometricViewModel $r1, $r3, $r4;
+        boolean $z0, $z1;
+        android.content.Context $r2;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $r1 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z0 = virtualinvoke $r1.<androidx.biometric.BiometricViewModel: boolean isPromptShowing()>();
+
+        if $z0 != 0 goto label3;
+
+        $r2 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context getContext()>();
+
+        if $r2 != null goto label1;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("BiometricFragment", "Not showing biometric prompt. Context is null.");
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r3.<androidx.biometric.BiometricViewModel: void setPromptShowing(boolean)>(1);
+
+        $r4 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r4.<androidx.biometric.BiometricViewModel: void setAwaitingResult(boolean)>(1);
+
+        $z1 = specialinvoke r0.<androidx.biometric.BiometricFragment: boolean isUsingFingerprintDialog()>();
+
+        if $z1 == 0 goto label2;
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void showFingerprintDialogForAuthentication()>();
+
+        goto label3;
+
+     label2:
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void showBiometricPromptForAuthentication()>();
+
+     label3:
+        return;
+    }
+
+    private void showFingerprintDialogForAuthentication()
+    {
+        androidx.biometric.BiometricFragment r0;
+        android.content.Context r1, $r4;
+        androidx.core.hardware.fingerprint.FingerprintManagerCompat r2;
+        int i0;
+        androidx.biometric.FingerprintDialogFragment r3;
+        boolean $z0, $z1;
+        androidx.biometric.BiometricViewModel $r5, $r7;
+        java.lang.String $r6, $r11;
+        androidx.biometric.BiometricFragment$7 $r8;
+        android.os.Handler $r9;
+        androidx.fragment.app.FragmentManager $r10;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $r4 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context requireContext()>();
+
+        r1 = virtualinvoke $r4.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        r2 = staticinvoke <androidx.core.hardware.fingerprint.FingerprintManagerCompat: androidx.core.hardware.fingerprint.FingerprintManagerCompat 'from'(android.content.Context)>(r1);
+
+        i0 = staticinvoke <androidx.biometric.BiometricFragment: int checkForFingerprintPreAuthenticationErrors(androidx.core.hardware.fingerprint.FingerprintManagerCompat)>(r2);
+
+        if i0 == 0 goto label1;
+
+        $r11 = staticinvoke <androidx.biometric.ErrorUtils: java.lang.String getFingerprintErrorString(android.content.Context,int)>(r1, i0);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorAndDismiss(int,java.lang.CharSequence)>(i0, $r11);
+
+        return;
+
+     label1:
+        $z0 = virtualinvoke r0.<androidx.biometric.BiometricFragment: boolean isAdded()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r5.<androidx.biometric.BiometricViewModel: void setFingerprintDialogDismissedInstantly(boolean)>(1);
+
+        $r6 = <android.os.Build: java.lang.String MODEL>;
+
+        $z1 = staticinvoke <androidx.biometric.DeviceUtils: boolean shouldHideFingerprintDialog(android.content.Context,java.lang.String)>(r1, $r6);
+
+        if $z1 != 0 goto label2;
+
+        $r9 = r0.<androidx.biometric.BiometricFragment: android.os.Handler mHandler>;
+
+        $r8 = new androidx.biometric.BiometricFragment$7;
+
+        specialinvoke $r8.<androidx.biometric.BiometricFragment$7: void <init>(androidx.biometric.BiometricFragment)>(r0);
+
+        virtualinvoke $r9.<android.os.Handler: boolean postDelayed(java.lang.Runnable,long)>($r8, 500L);
+
+        r3 = staticinvoke <androidx.biometric.FingerprintDialogFragment: androidx.biometric.FingerprintDialogFragment newInstance()>();
+
+        $r10 = virtualinvoke r0.<androidx.biometric.BiometricFragment: androidx.fragment.app.FragmentManager getParentFragmentManager()>();
+
+        virtualinvoke r3.<androidx.biometric.FingerprintDialogFragment: void show(androidx.fragment.app.FragmentManager,java.lang.String)>($r10, "androidx.biometric.FingerprintDialogFragment");
+
+     label2:
+        $r7 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r7.<androidx.biometric.BiometricViewModel: void setCanceledFrom(int)>(0);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void authenticateWithFingerprint(androidx.core.hardware.fingerprint.FingerprintManagerCompat,android.content.Context)>(r2, r1);
+
+     label3:
+        return;
+    }
+
+    private void showBiometricPromptForAuthentication()
+    {
+        androidx.biometric.BiometricFragment r0;
+        android.hardware.biometrics.BiometricPrompt$Builder r1;
+        java.lang.CharSequence r2, r3, r4, r5;
+        int i0, $i1, $i2, $i3;
+        android.content.Context $r6, $r7, $r19;
+        androidx.biometric.BiometricViewModel $r8, $r9, $r10, $r11, $r12, $r13, $r14, $r16;
+        boolean $z0, $z1, $z2;
+        java.util.concurrent.Executor $r15;
+        android.content.DialogInterface$OnClickListener $r17;
+        android.hardware.biometrics.BiometricPrompt $r18;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $r6 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context requireContext()>();
+
+        $r7 = virtualinvoke $r6.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        r1 = staticinvoke <androidx.biometric.BiometricFragment$Api28Impl: android.hardware.biometrics.BiometricPrompt$Builder createPromptBuilder(android.content.Context)>($r7);
+
+        $r8 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        r2 = virtualinvoke $r8.<androidx.biometric.BiometricViewModel: java.lang.CharSequence getTitle()>();
+
+        $r9 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        r3 = virtualinvoke $r9.<androidx.biometric.BiometricViewModel: java.lang.CharSequence getSubtitle()>();
+
+        $r10 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        r4 = virtualinvoke $r10.<androidx.biometric.BiometricViewModel: java.lang.CharSequence getDescription()>();
+
+        if r2 == null goto label1;
+
+        staticinvoke <androidx.biometric.BiometricFragment$Api28Impl: void setTitle(android.hardware.biometrics.BiometricPrompt$Builder,java.lang.CharSequence)>(r1, r2);
+
+     label1:
+        if r3 == null goto label2;
+
+        staticinvoke <androidx.biometric.BiometricFragment$Api28Impl: void setSubtitle(android.hardware.biometrics.BiometricPrompt$Builder,java.lang.CharSequence)>(r1, r3);
+
+     label2:
+        if r4 == null goto label3;
+
+        staticinvoke <androidx.biometric.BiometricFragment$Api28Impl: void setDescription(android.hardware.biometrics.BiometricPrompt$Builder,java.lang.CharSequence)>(r1, r4);
+
+     label3:
+        $r11 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        r5 = virtualinvoke $r11.<androidx.biometric.BiometricViewModel: java.lang.CharSequence getNegativeButtonText()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>(r5);
+
+        if $z0 != 0 goto label4;
+
+        $r14 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r15 = virtualinvoke $r14.<androidx.biometric.BiometricViewModel: java.util.concurrent.Executor getClientExecutor()>();
+
+        $r16 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r17 = virtualinvoke $r16.<androidx.biometric.BiometricViewModel: android.content.DialogInterface$OnClickListener getNegativeButtonListener()>();
+
+        staticinvoke <androidx.biometric.BiometricFragment$Api28Impl: void setNegativeButton(android.hardware.biometrics.BiometricPrompt$Builder,java.lang.CharSequence,java.util.concurrent.Executor,android.content.DialogInterface$OnClickListener)>(r1, r5, $r15, $r17);
+
+     label4:
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 29 goto label5;
+
+        $r13 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z2 = virtualinvoke $r13.<androidx.biometric.BiometricViewModel: boolean isConfirmationRequired()>();
+
+        staticinvoke <androidx.biometric.BiometricFragment$Api29Impl: void setConfirmationRequired(android.hardware.biometrics.BiometricPrompt$Builder,boolean)>(r1, $z2);
+
+     label5:
+        $r12 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        i0 = virtualinvoke $r12.<androidx.biometric.BiometricViewModel: int getAllowedAuthenticators()>();
+
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 < 30 goto label6;
+
+        staticinvoke <androidx.biometric.BiometricFragment$Api30Impl: void setAllowedAuthenticators(android.hardware.biometrics.BiometricPrompt$Builder,int)>(r1, i0);
+
+        goto label7;
+
+     label6:
+        $i3 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i3 < 29 goto label7;
+
+        $z1 = staticinvoke <androidx.biometric.AuthenticatorUtils: boolean isDeviceCredentialAllowed(int)>(i0);
+
+        staticinvoke <androidx.biometric.BiometricFragment$Api29Impl: void setDeviceCredentialAllowed(android.hardware.biometrics.BiometricPrompt$Builder,boolean)>(r1, $z1);
+
+     label7:
+        $r18 = staticinvoke <androidx.biometric.BiometricFragment$Api28Impl: android.hardware.biometrics.BiometricPrompt buildPrompt(android.hardware.biometrics.BiometricPrompt$Builder)>(r1);
+
+        $r19 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context getContext()>();
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void authenticateWithBiometricPrompt(android.hardware.biometrics.BiometricPrompt,android.content.Context)>($r18, $r19);
+
+        return;
+    }
+
+    void authenticateWithFingerprint(androidx.core.hardware.fingerprint.FingerprintManagerCompat, android.content.Context)
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.core.hardware.fingerprint.FingerprintManagerCompat r1;
+        android.content.Context r2;
+        androidx.core.hardware.fingerprint.FingerprintManagerCompat$CryptoObject r3;
+        androidx.core.os.CancellationSignal r4;
+        androidx.core.hardware.fingerprint.FingerprintManagerCompat$AuthenticationCallback r5;
+        java.lang.Throwable r6, $r13;
+        boolean z0;
+        androidx.biometric.BiometricViewModel $r7, $r9, $r11;
+        androidx.biometric.BiometricPrompt$CryptoObject $r8;
+        androidx.biometric.CancellationSignalProvider $r10;
+        androidx.biometric.AuthenticationCallbackProvider $r12;
+        java.lang.String $r14;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 := @parameter0: androidx.core.hardware.fingerprint.FingerprintManagerCompat;
+
+        r2 := @parameter1: android.content.Context;
+
+        $r7 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r8 = virtualinvoke $r7.<androidx.biometric.BiometricViewModel: androidx.biometric.BiometricPrompt$CryptoObject getCryptoObject()>();
+
+        r3 = staticinvoke <androidx.biometric.CryptoObjectUtils: androidx.core.hardware.fingerprint.FingerprintManagerCompat$CryptoObject wrapForFingerprintManager(androidx.biometric.BiometricPrompt$CryptoObject)>($r8);
+
+        $r9 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r10 = virtualinvoke $r9.<androidx.biometric.BiometricViewModel: androidx.biometric.CancellationSignalProvider getCancellationSignalProvider()>();
+
+        r4 = virtualinvoke $r10.<androidx.biometric.CancellationSignalProvider: androidx.core.os.CancellationSignal getFingerprintCancellationSignal()>();
+
+        $r11 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r12 = virtualinvoke $r11.<androidx.biometric.BiometricViewModel: androidx.biometric.AuthenticationCallbackProvider getAuthenticationCallbackProvider()>();
+
+        r5 = virtualinvoke $r12.<androidx.biometric.AuthenticationCallbackProvider: androidx.core.hardware.fingerprint.FingerprintManagerCompat$AuthenticationCallback getFingerprintCallback()>();
+
+     label1:
+        virtualinvoke r1.<androidx.core.hardware.fingerprint.FingerprintManagerCompat: void authenticate(androidx.core.hardware.fingerprint.FingerprintManagerCompat$CryptoObject,int,androidx.core.os.CancellationSignal,androidx.core.hardware.fingerprint.FingerprintManagerCompat$AuthenticationCallback,android.os.Handler)>(r3, 0, r4, r5, null);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r13 := @caughtexception;
+
+        r6 = $r13;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("BiometricFragment", "Got NPE while authenticating with fingerprint.", r6);
+
+        z0 = 1;
+
+        $r14 = staticinvoke <androidx.biometric.ErrorUtils: java.lang.String getFingerprintErrorString(android.content.Context,int)>(r2, 1);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorAndDismiss(int,java.lang.CharSequence)>(1, $r14);
+
+     label4:
+        return;
+
+        catch java.lang.NullPointerException from label1 to label2 with label3;
+    }
+
+    void authenticateWithBiometricPrompt(android.hardware.biometrics.BiometricPrompt, android.content.Context)
+    {
+        androidx.biometric.BiometricFragment r0;
+        android.hardware.biometrics.BiometricPrompt r1;
+        android.content.Context r2;
+        android.hardware.biometrics.BiometricPrompt$CryptoObject r3;
+        android.os.CancellationSignal r4;
+        androidx.biometric.BiometricFragment$PromptExecutor r5, $r13;
+        android.hardware.biometrics.BiometricPrompt$AuthenticationCallback r6;
+        java.lang.Throwable r7, $r16;
+        boolean z0;
+        java.lang.String r8, $r17;
+        androidx.biometric.BiometricViewModel $r9, $r11, $r14;
+        androidx.biometric.BiometricPrompt$CryptoObject $r10;
+        androidx.biometric.CancellationSignalProvider $r12;
+        androidx.biometric.AuthenticationCallbackProvider $r15;
+        int $i1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 := @parameter0: android.hardware.biometrics.BiometricPrompt;
+
+        r2 := @parameter1: android.content.Context;
+
+        $r9 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r10 = virtualinvoke $r9.<androidx.biometric.BiometricViewModel: androidx.biometric.BiometricPrompt$CryptoObject getCryptoObject()>();
+
+        r3 = staticinvoke <androidx.biometric.CryptoObjectUtils: android.hardware.biometrics.BiometricPrompt$CryptoObject wrapForBiometricPrompt(androidx.biometric.BiometricPrompt$CryptoObject)>($r10);
+
+        $r11 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r12 = virtualinvoke $r11.<androidx.biometric.BiometricViewModel: androidx.biometric.CancellationSignalProvider getCancellationSignalProvider()>();
+
+        r4 = virtualinvoke $r12.<androidx.biometric.CancellationSignalProvider: android.os.CancellationSignal getBiometricCancellationSignal()>();
+
+        $r13 = new androidx.biometric.BiometricFragment$PromptExecutor;
+
+        specialinvoke $r13.<androidx.biometric.BiometricFragment$PromptExecutor: void <init>()>();
+
+        r5 = $r13;
+
+        $r14 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r15 = virtualinvoke $r14.<androidx.biometric.BiometricViewModel: androidx.biometric.AuthenticationCallbackProvider getAuthenticationCallbackProvider()>();
+
+        r6 = virtualinvoke $r15.<androidx.biometric.AuthenticationCallbackProvider: android.hardware.biometrics.BiometricPrompt$AuthenticationCallback getBiometricCallback()>();
+
+     label1:
+        if r3 != null goto label2;
+
+        staticinvoke <androidx.biometric.BiometricFragment$Api28Impl: void authenticate(android.hardware.biometrics.BiometricPrompt,android.os.CancellationSignal,java.util.concurrent.Executor,android.hardware.biometrics.BiometricPrompt$AuthenticationCallback)>(r1, r4, r5, r6);
+
+        goto label3;
+
+     label2:
+        staticinvoke <androidx.biometric.BiometricFragment$Api28Impl: void authenticate(android.hardware.biometrics.BiometricPrompt,android.hardware.biometrics.BiometricPrompt$CryptoObject,android.os.CancellationSignal,java.util.concurrent.Executor,android.hardware.biometrics.BiometricPrompt$AuthenticationCallback)>(r1, r3, r4, r5, r6);
+
+     label3:
+        goto label7;
+
+     label4:
+        $r16 := @caughtexception;
+
+        r7 = $r16;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("BiometricFragment", "Got NPE while authenticating with biometric prompt.", r7);
+
+        z0 = 1;
+
+        if r2 == null goto label5;
+
+        $i1 = <androidx.biometric.R$string: int default_error_msg>;
+
+        $r17 = virtualinvoke r2.<android.content.Context: java.lang.String getString(int)>($i1);
+
+        goto label6;
+
+     label5:
+        $r17 = "";
+
+     label6:
+        r8 = $r17;
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorAndDismiss(int,java.lang.CharSequence)>(1, r8);
+
+     label7:
+        return;
+
+        catch java.lang.NullPointerException from label1 to label3 with label4;
+    }
+
+    void cancelAuthentication(int)
+    {
+        androidx.biometric.BiometricFragment r0;
+        int i0;
+        byte b1;
+        boolean $z0, $z1;
+        androidx.biometric.BiometricViewModel $r1, $r4, $r5;
+        android.content.Context $r2;
+        java.lang.String $r3;
+        androidx.biometric.CancellationSignalProvider $r6;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        i0 := @parameter0: int;
+
+        if i0 == 3 goto label1;
+
+        $r4 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z1 = virtualinvoke $r4.<androidx.biometric.BiometricViewModel: boolean isIgnoringCancel()>();
+
+        if $z1 == 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = specialinvoke r0.<androidx.biometric.BiometricFragment: boolean isUsingFingerprintDialog()>();
+
+        if $z0 == 0 goto label2;
+
+        $r1 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r1.<androidx.biometric.BiometricViewModel: void setCanceledFrom(int)>(i0);
+
+        if i0 != 1 goto label2;
+
+        b1 = 10;
+
+        $r2 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context getContext()>();
+
+        $r3 = staticinvoke <androidx.biometric.ErrorUtils: java.lang.String getFingerprintErrorString(android.content.Context,int)>($r2, 10);
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorToClient(int,java.lang.CharSequence)>(10, $r3);
+
+     label2:
+        $r5 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r6 = virtualinvoke $r5.<androidx.biometric.BiometricViewModel: androidx.biometric.CancellationSignalProvider getCancellationSignalProvider()>();
+
+        virtualinvoke $r6.<androidx.biometric.CancellationSignalProvider: void cancel()>();
+
+        return;
+    }
+
+    void dismiss()
+    {
+        androidx.biometric.BiometricFragment r0;
+        android.content.Context r1;
+        androidx.biometric.BiometricViewModel $r2, $r3, $r5, $r7;
+        boolean $z0, $z1, $z3;
+        java.lang.String $r4;
+        androidx.biometric.BiometricFragment$StopDelayingPromptRunnable $r6;
+        android.os.Handler $r8;
+        androidx.fragment.app.FragmentManager $r9;
+        androidx.fragment.app.FragmentTransaction $r10, $r11;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $r2 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r2.<androidx.biometric.BiometricViewModel: void setPromptShowing(boolean)>(0);
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void dismissFingerprintDialog()>();
+
+        $r3 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z0 = virtualinvoke $r3.<androidx.biometric.BiometricViewModel: boolean isConfirmingDeviceCredential()>();
+
+        if $z0 != 0 goto label1;
+
+        $z3 = virtualinvoke r0.<androidx.biometric.BiometricFragment: boolean isAdded()>();
+
+        if $z3 == 0 goto label1;
+
+        $r9 = virtualinvoke r0.<androidx.biometric.BiometricFragment: androidx.fragment.app.FragmentManager getParentFragmentManager()>();
+
+        $r10 = virtualinvoke $r9.<androidx.fragment.app.FragmentManager: androidx.fragment.app.FragmentTransaction beginTransaction()>();
+
+        $r11 = virtualinvoke $r10.<androidx.fragment.app.FragmentTransaction: androidx.fragment.app.FragmentTransaction remove(androidx.fragment.app.Fragment)>(r0);
+
+        virtualinvoke $r11.<androidx.fragment.app.FragmentTransaction: int commitAllowingStateLoss()>();
+
+     label1:
+        r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context getContext()>();
+
+        if r1 == null goto label2;
+
+        $r4 = <android.os.Build: java.lang.String MODEL>;
+
+        $z1 = staticinvoke <androidx.biometric.DeviceUtils: boolean shouldDelayShowingPrompt(android.content.Context,java.lang.String)>(r1, $r4);
+
+        if $z1 == 0 goto label2;
+
+        $r5 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r5.<androidx.biometric.BiometricViewModel: void setDelayingPrompt(boolean)>(1);
+
+        $r8 = r0.<androidx.biometric.BiometricFragment: android.os.Handler mHandler>;
+
+        $r6 = new androidx.biometric.BiometricFragment$StopDelayingPromptRunnable;
+
+        $r7 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        specialinvoke $r6.<androidx.biometric.BiometricFragment$StopDelayingPromptRunnable: void <init>(androidx.biometric.BiometricViewModel)>($r7);
+
+        virtualinvoke $r8.<android.os.Handler: boolean postDelayed(java.lang.Runnable,long)>($r6, 600L);
+
+     label2:
+        return;
+    }
+
+    private void dismissFingerprintDialog()
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.fragment.app.FragmentManager r1;
+        androidx.biometric.FingerprintDialogFragment r2;
+        androidx.biometric.BiometricViewModel $r3;
+        boolean $z0, $z1;
+        androidx.fragment.app.Fragment $r4;
+        androidx.fragment.app.FragmentTransaction $r5, $r6;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $r3 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r3.<androidx.biometric.BiometricViewModel: void setPromptShowing(boolean)>(0);
+
+        $z0 = virtualinvoke r0.<androidx.biometric.BiometricFragment: boolean isAdded()>();
+
+        if $z0 == 0 goto label2;
+
+        r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: androidx.fragment.app.FragmentManager getParentFragmentManager()>();
+
+        $r4 = virtualinvoke r1.<androidx.fragment.app.FragmentManager: androidx.fragment.app.Fragment findFragmentByTag(java.lang.String)>("androidx.biometric.FingerprintDialogFragment");
+
+        r2 = (androidx.biometric.FingerprintDialogFragment) $r4;
+
+        if r2 == null goto label2;
+
+        $z1 = virtualinvoke r2.<androidx.biometric.FingerprintDialogFragment: boolean isAdded()>();
+
+        if $z1 == 0 goto label1;
+
+        virtualinvoke r2.<androidx.biometric.FingerprintDialogFragment: void dismissAllowingStateLoss()>();
+
+        goto label2;
+
+     label1:
+        $r5 = virtualinvoke r1.<androidx.fragment.app.FragmentManager: androidx.fragment.app.FragmentTransaction beginTransaction()>();
+
+        $r6 = virtualinvoke $r5.<androidx.fragment.app.FragmentTransaction: androidx.fragment.app.FragmentTransaction remove(androidx.fragment.app.Fragment)>(r2);
+
+        virtualinvoke $r6.<androidx.fragment.app.FragmentTransaction: int commitAllowingStateLoss()>();
+
+     label2:
+        return;
+    }
+
+    void onAuthenticationSucceeded(androidx.biometric.BiometricPrompt$AuthenticationResult)
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.biometric.BiometricPrompt$AuthenticationResult r1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 := @parameter0: androidx.biometric.BiometricPrompt$AuthenticationResult;
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void sendSuccessAndDismiss(androidx.biometric.BiometricPrompt$AuthenticationResult)>(r1);
+
+        return;
+    }
+
+    void onAuthenticationError(int, java.lang.CharSequence)
+    {
+        androidx.biometric.BiometricFragment r0;
+        int i0, i1, i2, $i3, $i4, $i5, $i7, $i8, $i9;
+        java.lang.CharSequence r1, r21, r22, r23, r24, r25;
+        android.content.Context r2, $r8;
+        boolean $z0, $z1, $z3, $z4, $z5, $z6;
+        java.lang.String $r4;
+        java.lang.StringBuilder $r5, $r6, $r7, r20;
+        androidx.biometric.BiometricViewModel $r9, $r12, $r13, $r14;
+        android.os.Handler $r11;
+        long $l6;
+        java.lang.Object $r15, r16, $r17, r18;
+        androidx.biometric.BiometricFragment$8 r19;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: java.lang.CharSequence;
+
+        $z0 = staticinvoke <androidx.biometric.ErrorUtils: boolean isKnownError(int)>(i0);
+
+        if $z0 == 0 goto label01;
+
+        $i9 = i0;
+
+        goto label02;
+
+     label01:
+        $i9 = 8;
+
+     label02:
+        i1 = $i9;
+
+        r2 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context getContext()>();
+
+        $i3 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i3 < 21 goto label03;
+
+        $i7 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i7 >= 29 goto label03;
+
+        $z3 = staticinvoke <androidx.biometric.ErrorUtils: boolean isLockoutError(int)>(i1);
+
+        if $z3 == 0 goto label03;
+
+        if r2 == null goto label03;
+
+        $z4 = staticinvoke <androidx.biometric.KeyguardUtils: boolean isDeviceSecuredWithCredential(android.content.Context)>(r2);
+
+        if $z4 == 0 goto label03;
+
+        $r14 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $i8 = virtualinvoke $r14.<androidx.biometric.BiometricViewModel: int getAllowedAuthenticators()>();
+
+        $z5 = staticinvoke <androidx.biometric.AuthenticatorUtils: boolean isDeviceCredentialAllowed(int)>($i8);
+
+        if $z5 == 0 goto label03;
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void launchConfirmCredentialActivity()>();
+
+        return;
+
+     label03:
+        $z6 = specialinvoke r0.<androidx.biometric.BiometricFragment: boolean isUsingFingerprintDialog()>();
+
+        if $z6 == 0 goto label12;
+
+        if r1 == null goto label04;
+
+        $r15 = r1;
+
+        goto label05;
+
+     label04:
+        $r8 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context getContext()>();
+
+        $r15 = staticinvoke <androidx.biometric.ErrorUtils: java.lang.String getFingerprintErrorString(android.content.Context,int)>($r8, i1);
+
+     label05:
+        r16 = $r15;
+
+        if i1 != 5 goto label08;
+
+        $r13 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        i2 = virtualinvoke $r13.<androidx.biometric.BiometricViewModel: int getCanceledFrom()>();
+
+        if i2 == 0 goto label06;
+
+        if i2 != 3 goto label07;
+
+     label06:
+        r21 = (java.lang.CharSequence) r16;
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorToClient(int,java.lang.CharSequence)>(i1, r21);
+
+     label07:
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void dismiss()>();
+
+        goto label11;
+
+     label08:
+        $r9 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z1 = virtualinvoke $r9.<androidx.biometric.BiometricViewModel: boolean isFingerprintDialogDismissedInstantly()>();
+
+        if $z1 == 0 goto label09;
+
+        r22 = (java.lang.CharSequence) r16;
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorAndDismiss(int,java.lang.CharSequence)>(i1, r22);
+
+        goto label10;
+
+     label09:
+        r23 = (java.lang.CharSequence) r16;
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void showFingerprintErrorMessage(java.lang.CharSequence)>(r23);
+
+        $r11 = r0.<androidx.biometric.BiometricFragment: android.os.Handler mHandler>;
+
+        r19 = new androidx.biometric.BiometricFragment$8;
+
+        r24 = (java.lang.CharSequence) r16;
+
+        specialinvoke r19.<androidx.biometric.BiometricFragment$8: void <init>(androidx.biometric.BiometricFragment,int,java.lang.CharSequence)>(r0, i1, r24);
+
+        $i5 = specialinvoke r0.<androidx.biometric.BiometricFragment: int getDismissDialogDelay()>();
+
+        $l6 = (long) $i5;
+
+        virtualinvoke $r11.<android.os.Handler: boolean postDelayed(java.lang.Runnable,long)>(r19, $l6);
+
+     label10:
+        $r12 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r12.<androidx.biometric.BiometricViewModel: void setFingerprintDialogDismissedInstantly(boolean)>(1);
+
+     label11:
+        goto label15;
+
+     label12:
+        if r1 == null goto label13;
+
+        $r17 = r1;
+
+        goto label14;
+
+     label13:
+        r20 = new java.lang.StringBuilder;
+
+        specialinvoke r20.<java.lang.StringBuilder: void <init>()>();
+
+        $i4 = <androidx.biometric.R$string: int default_error_msg>;
+
+        $r4 = virtualinvoke r0.<androidx.biometric.BiometricFragment: java.lang.String getString(int)>($i4);
+
+        $r5 = virtualinvoke r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r17 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label14:
+        r18 = $r17;
+
+        r25 = (java.lang.CharSequence) r18;
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorAndDismiss(int,java.lang.CharSequence)>(i1, r25);
+
+     label15:
+        return;
+    }
+
+    void onAuthenticationHelp(java.lang.CharSequence)
+    {
+        androidx.biometric.BiometricFragment r0;
+        java.lang.CharSequence r1;
+        boolean $z0;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        $z0 = specialinvoke r0.<androidx.biometric.BiometricFragment: boolean isUsingFingerprintDialog()>();
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void showFingerprintErrorMessage(java.lang.CharSequence)>(r1);
+
+     label1:
+        return;
+    }
+
+    void onAuthenticationFailed()
+    {
+        androidx.biometric.BiometricFragment r0;
+        boolean $z0;
+        int $i0;
+        java.lang.String $r1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $z0 = specialinvoke r0.<androidx.biometric.BiometricFragment: boolean isUsingFingerprintDialog()>();
+
+        if $z0 == 0 goto label1;
+
+        $i0 = <androidx.biometric.R$string: int fingerprint_not_recognized>;
+
+        $r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: java.lang.String getString(int)>($i0);
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void showFingerprintErrorMessage(java.lang.CharSequence)>($r1);
+
+     label1:
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void sendFailureToClient()>();
+
+        return;
+    }
+
+    void onDeviceCredentialButtonPressed()
+    {
+        androidx.biometric.BiometricFragment r0;
+        int $i0;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 21 goto label1;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("BiometricFragment", "Failed to check device credential. Not supported prior to API 21.");
+
+        return;
+
+     label1:
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void launchConfirmCredentialActivity()>();
+
+        return;
+    }
+
+    void onCancelButtonPressed()
+    {
+        androidx.biometric.BiometricFragment r0;
+        java.lang.CharSequence r1, r5;
+        androidx.biometric.BiometricViewModel $r2;
+        int $i0;
+        java.lang.Object $r4;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $r2 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        r1 = virtualinvoke $r2.<androidx.biometric.BiometricViewModel: java.lang.CharSequence getNegativeButtonText()>();
+
+        if r1 == null goto label1;
+
+        $r4 = r1;
+
+        goto label2;
+
+     label1:
+        $i0 = <androidx.biometric.R$string: int default_error_msg>;
+
+        $r4 = virtualinvoke r0.<androidx.biometric.BiometricFragment: java.lang.String getString(int)>($i0);
+
+     label2:
+        r5 = (java.lang.CharSequence) $r4;
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorAndDismiss(int,java.lang.CharSequence)>(13, r5);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void cancelAuthentication(int)>(2);
+
+        return;
+    }
+
+    private void launchConfirmCredentialActivity()
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.fragment.app.FragmentActivity r1;
+        android.app.KeyguardManager r2;
+        java.lang.CharSequence r3, r4, r5, r6, $r15;
+        android.content.Intent r7;
+        androidx.biometric.BiometricViewModel $r8, $r9, $r10, $r11;
+        boolean $z0;
+        int $i0, $i1;
+        java.lang.String $r13, $r14;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: androidx.fragment.app.FragmentActivity getActivity()>();
+
+        if r1 != null goto label1;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("BiometricFragment", "Failed to check device credential. Client FragmentActivity not found.");
+
+        return;
+
+     label1:
+        r2 = staticinvoke <androidx.biometric.KeyguardUtils: android.app.KeyguardManager getKeyguardManager(android.content.Context)>(r1);
+
+        if r2 != null goto label2;
+
+        $i1 = <androidx.biometric.R$string: int generic_error_no_keyguard>;
+
+        $r14 = virtualinvoke r0.<androidx.biometric.BiometricFragment: java.lang.String getString(int)>($i1);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorAndDismiss(int,java.lang.CharSequence)>(12, $r14);
+
+        return;
+
+     label2:
+        $r8 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        r3 = virtualinvoke $r8.<androidx.biometric.BiometricViewModel: java.lang.CharSequence getTitle()>();
+
+        $r9 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        r4 = virtualinvoke $r9.<androidx.biometric.BiometricViewModel: java.lang.CharSequence getSubtitle()>();
+
+        $r10 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        r5 = virtualinvoke $r10.<androidx.biometric.BiometricViewModel: java.lang.CharSequence getDescription()>();
+
+        if r4 == null goto label3;
+
+        $r15 = r4;
+
+        goto label4;
+
+     label3:
+        $r15 = r5;
+
+     label4:
+        r6 = $r15;
+
+        r7 = staticinvoke <androidx.biometric.BiometricFragment$Api21Impl: android.content.Intent createConfirmDeviceCredentialIntent(android.app.KeyguardManager,java.lang.CharSequence,java.lang.CharSequence)>(r2, r3, r6);
+
+        if r7 != null goto label5;
+
+        $i0 = <androidx.biometric.R$string: int generic_error_no_device_credential>;
+
+        $r13 = virtualinvoke r0.<androidx.biometric.BiometricFragment: java.lang.String getString(int)>($i0);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorAndDismiss(int,java.lang.CharSequence)>(14, $r13);
+
+        return;
+
+     label5:
+        $r11 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r11.<androidx.biometric.BiometricViewModel: void setConfirmingDeviceCredential(boolean)>(1);
+
+        $z0 = specialinvoke r0.<androidx.biometric.BiometricFragment: boolean isUsingFingerprintDialog()>();
+
+        if $z0 == 0 goto label6;
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void dismissFingerprintDialog()>();
+
+     label6:
+        virtualinvoke r7.<android.content.Intent: android.content.Intent setFlags(int)>(134742016);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void startActivityForResult(android.content.Intent,int)>(r7, 1);
+
+        return;
+    }
+
+    private void handleConfirmCredentialResult(int)
+    {
+        androidx.biometric.BiometricFragment r0;
+        int i0, $i1;
+        java.lang.String $r1;
+        androidx.biometric.BiometricPrompt$AuthenticationResult $r2;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        i0 := @parameter0: int;
+
+        if i0 != -1 goto label1;
+
+        $r2 = new androidx.biometric.BiometricPrompt$AuthenticationResult;
+
+        specialinvoke $r2.<androidx.biometric.BiometricPrompt$AuthenticationResult: void <init>(androidx.biometric.BiometricPrompt$CryptoObject,int)>(null, 1);
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void sendSuccessAndDismiss(androidx.biometric.BiometricPrompt$AuthenticationResult)>($r2);
+
+        goto label2;
+
+     label1:
+        $i1 = <androidx.biometric.R$string: int generic_error_user_canceled>;
+
+        $r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: java.lang.String getString(int)>($i1);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorAndDismiss(int,java.lang.CharSequence)>(10, $r1);
+
+     label2:
+        return;
+    }
+
+    private void showFingerprintErrorMessage(java.lang.CharSequence)
+    {
+        androidx.biometric.BiometricFragment r0;
+        java.lang.CharSequence r1, r6;
+        java.lang.Object r2, $r5;
+        int $i0;
+        androidx.biometric.BiometricViewModel $r3, $r4;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        if r1 == null goto label1;
+
+        $r5 = r1;
+
+        goto label2;
+
+     label1:
+        $i0 = <androidx.biometric.R$string: int default_error_msg>;
+
+        $r5 = virtualinvoke r0.<androidx.biometric.BiometricFragment: java.lang.String getString(int)>($i0);
+
+     label2:
+        r2 = $r5;
+
+        $r3 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r3.<androidx.biometric.BiometricViewModel: void setFingerprintDialogState(int)>(2);
+
+        $r4 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        r6 = (java.lang.CharSequence) r2;
+
+        virtualinvoke $r4.<androidx.biometric.BiometricViewModel: void setFingerprintDialogHelpMessage(java.lang.CharSequence)>(r6);
+
+        return;
+    }
+
+    private void sendSuccessAndDismiss(androidx.biometric.BiometricPrompt$AuthenticationResult)
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.biometric.BiometricPrompt$AuthenticationResult r1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 := @parameter0: androidx.biometric.BiometricPrompt$AuthenticationResult;
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void sendSuccessToClient(androidx.biometric.BiometricPrompt$AuthenticationResult)>(r1);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void dismiss()>();
+
+        return;
+    }
+
+    void sendErrorAndDismiss(int, java.lang.CharSequence)
+    {
+        androidx.biometric.BiometricFragment r0;
+        int i0;
+        java.lang.CharSequence r1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: java.lang.CharSequence;
+
+        specialinvoke r0.<androidx.biometric.BiometricFragment: void sendErrorToClient(int,java.lang.CharSequence)>(i0, r1);
+
+        virtualinvoke r0.<androidx.biometric.BiometricFragment: void dismiss()>();
+
+        return;
+    }
+
+    private void sendSuccessToClient(androidx.biometric.BiometricPrompt$AuthenticationResult)
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.biometric.BiometricPrompt$AuthenticationResult r1;
+        androidx.biometric.BiometricViewModel $r2, $r3, $r4;
+        boolean $z0;
+        java.util.concurrent.Executor $r5;
+        androidx.biometric.BiometricFragment$9 $r6;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 := @parameter0: androidx.biometric.BiometricPrompt$AuthenticationResult;
+
+        $r2 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z0 = virtualinvoke $r2.<androidx.biometric.BiometricViewModel: boolean isAwaitingResult()>();
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("BiometricFragment", "Success not sent to client. Client is not awaiting a result.");
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r3.<androidx.biometric.BiometricViewModel: void setAwaitingResult(boolean)>(0);
+
+        $r4 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r5 = virtualinvoke $r4.<androidx.biometric.BiometricViewModel: java.util.concurrent.Executor getClientExecutor()>();
+
+        $r6 = new androidx.biometric.BiometricFragment$9;
+
+        specialinvoke $r6.<androidx.biometric.BiometricFragment$9: void <init>(androidx.biometric.BiometricFragment,androidx.biometric.BiometricPrompt$AuthenticationResult)>(r0, r1);
+
+        interfaceinvoke $r5.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r6);
+
+        return;
+    }
+
+    private void sendErrorToClient(int, java.lang.CharSequence)
+    {
+        androidx.biometric.BiometricFragment r0;
+        int i0;
+        java.lang.CharSequence r1;
+        androidx.biometric.BiometricViewModel $r2, $r3, $r4, $r5;
+        boolean $z0, $z1;
+        java.util.concurrent.Executor $r6;
+        androidx.biometric.BiometricFragment$10 $r7;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: java.lang.CharSequence;
+
+        $r2 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z0 = virtualinvoke $r2.<androidx.biometric.BiometricViewModel: boolean isConfirmingDeviceCredential()>();
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>("BiometricFragment", "Error not sent to client. User is confirming their device credential.");
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z1 = virtualinvoke $r3.<androidx.biometric.BiometricViewModel: boolean isAwaitingResult()>();
+
+        if $z1 != 0 goto label2;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("BiometricFragment", "Error not sent to client. Client is not awaiting a result.");
+
+        return;
+
+     label2:
+        $r4 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        virtualinvoke $r4.<androidx.biometric.BiometricViewModel: void setAwaitingResult(boolean)>(0);
+
+        $r5 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r6 = virtualinvoke $r5.<androidx.biometric.BiometricViewModel: java.util.concurrent.Executor getClientExecutor()>();
+
+        $r7 = new androidx.biometric.BiometricFragment$10;
+
+        specialinvoke $r7.<androidx.biometric.BiometricFragment$10: void <init>(androidx.biometric.BiometricFragment,int,java.lang.CharSequence)>(r0, i0, r1);
+
+        interfaceinvoke $r6.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r7);
+
+        return;
+    }
+
+    private void sendFailureToClient()
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.biometric.BiometricViewModel $r1, $r2;
+        boolean $z0;
+        java.util.concurrent.Executor $r3;
+        androidx.biometric.BiometricFragment$11 $r4;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $r1 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $z0 = virtualinvoke $r1.<androidx.biometric.BiometricViewModel: boolean isAwaitingResult()>();
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("BiometricFragment", "Failure not sent to client. Client is not awaiting a result.");
+
+        return;
+
+     label1:
+        $r2 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r3 = virtualinvoke $r2.<androidx.biometric.BiometricViewModel: java.util.concurrent.Executor getClientExecutor()>();
+
+        $r4 = new androidx.biometric.BiometricFragment$11;
+
+        specialinvoke $r4.<androidx.biometric.BiometricFragment$11: void <init>(androidx.biometric.BiometricFragment)>(r0);
+
+        interfaceinvoke $r3.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r4);
+
+        return;
+    }
+
+    private static int checkForFingerprintPreAuthenticationErrors(androidx.core.hardware.fingerprint.FingerprintManagerCompat)
+    {
+        androidx.core.hardware.fingerprint.FingerprintManagerCompat r0;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: androidx.core.hardware.fingerprint.FingerprintManagerCompat;
+
+        $z0 = virtualinvoke r0.<androidx.core.hardware.fingerprint.FingerprintManagerCompat: boolean isHardwareDetected()>();
+
+        if $z0 != 0 goto label1;
+
+        return 12;
+
+     label1:
+        $z1 = virtualinvoke r0.<androidx.core.hardware.fingerprint.FingerprintManagerCompat: boolean hasEnrolledFingerprints()>();
+
+        if $z1 != 0 goto label2;
+
+        return 11;
+
+     label2:
+        return 0;
+    }
+
+    boolean isManagingDeviceCredentialButton()
+    {
+        androidx.biometric.BiometricFragment r0;
+        int $i0, $i1;
+        androidx.biometric.BiometricViewModel $r1;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 > 28 goto label1;
+
+        $r1 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $i1 = virtualinvoke $r1.<androidx.biometric.BiometricViewModel: int getAllowedAuthenticators()>();
+
+        $z0 = staticinvoke <androidx.biometric.AuthenticatorUtils: boolean isDeviceCredentialAllowed(int)>($i1);
+
+        if $z0 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    private boolean isUsingFingerprintDialog()
+    {
+        androidx.biometric.BiometricFragment r0;
+        int $i0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label1;
+
+        $z0 = specialinvoke r0.<androidx.biometric.BiometricFragment: boolean isFingerprintDialogNeededForCrypto()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = specialinvoke r0.<androidx.biometric.BiometricFragment: boolean isFingerprintDialogNeededForErrorHandling()>();
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        return $z2;
+    }
+
+    private boolean isFingerprintDialogNeededForCrypto()
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.fragment.app.FragmentActivity r1;
+        androidx.biometric.BiometricViewModel $r2;
+        androidx.biometric.BiometricPrompt$CryptoObject $r3;
+        java.lang.String $r4, $r5;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: androidx.fragment.app.FragmentActivity getActivity()>();
+
+        if r1 == null goto label1;
+
+        $r2 = r0.<androidx.biometric.BiometricFragment: androidx.biometric.BiometricViewModel mViewModel>;
+
+        $r3 = virtualinvoke $r2.<androidx.biometric.BiometricViewModel: androidx.biometric.BiometricPrompt$CryptoObject getCryptoObject()>();
+
+        if $r3 == null goto label1;
+
+        $r5 = <android.os.Build: java.lang.String MANUFACTURER>;
+
+        $r4 = <android.os.Build: java.lang.String MODEL>;
+
+        $z0 = staticinvoke <androidx.biometric.DeviceUtils: boolean shouldUseFingerprintForCrypto(android.content.Context,java.lang.String,java.lang.String)>(r1, $r5, $r4);
+
+        if $z0 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    private boolean isFingerprintDialogNeededForErrorHandling()
+    {
+        androidx.biometric.BiometricFragment r0;
+        int $i0;
+        android.content.Context $r1;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 != 28 goto label1;
+
+        $r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context getContext()>();
+
+        $z0 = staticinvoke <androidx.biometric.PackageUtils: boolean hasSystemFeatureFingerprint(android.content.Context)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    private boolean isChangingConfigurations()
+    {
+        androidx.biometric.BiometricFragment r0;
+        androidx.fragment.app.FragmentActivity r1;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: androidx.fragment.app.FragmentActivity getActivity()>();
+
+        if r1 == null goto label1;
+
+        $z0 = virtualinvoke r1.<androidx.fragment.app.FragmentActivity: boolean isChangingConfigurations()>();
+
+        if $z0 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    private int getDismissDialogDelay()
+    {
+        androidx.biometric.BiometricFragment r0;
+        android.content.Context r1;
+        java.lang.String $r2;
+        boolean $z0;
+        short $s0;
+
+        r0 := @this: androidx.biometric.BiometricFragment;
+
+        r1 = virtualinvoke r0.<androidx.biometric.BiometricFragment: android.content.Context getContext()>();
+
+        if r1 == null goto label1;
+
+        $r2 = <android.os.Build: java.lang.String MODEL>;
+
+        $z0 = staticinvoke <androidx.biometric.DeviceUtils: boolean shouldHideFingerprintDialog(android.content.Context,java.lang.String)>(r1, $r2);
+
+        if $z0 == 0 goto label1;
+
+        $s0 = 0;
+
+        goto label2;
+
+     label1:
+        $s0 = 2000;
+
+     label2:
+        return $s0;
+    }
+

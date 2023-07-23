@@ -1,0 +1,375 @@
+androidx.work.impl.utils.WorkTimer
+<androidx.work.impl.utils.WorkTimer: java.lang.String TAG>
+<androidx.work.impl.utils.WorkTimer: androidx.work.RunnableScheduler mRunnableScheduler>
+<androidx.work.impl.utils.WorkTimer: java.util.Map mTimerMap>
+<androidx.work.impl.utils.WorkTimer: java.util.Map mListeners>
+<androidx.work.impl.utils.WorkTimer: java.lang.Object mLock>
+    public void <init>(androidx.work.RunnableScheduler)
+    {
+        androidx.work.impl.utils.WorkTimer r0;
+        androidx.work.RunnableScheduler r1;
+        java.util.HashMap $r2, $r3;
+        java.lang.Object $r4;
+
+        r0 := @this: androidx.work.impl.utils.WorkTimer;
+
+        r1 := @parameter0: androidx.work.RunnableScheduler;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.work.impl.utils.WorkTimer: java.util.Map mTimerMap> = $r2;
+
+        $r3 = new java.util.HashMap;
+
+        specialinvoke $r3.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.work.impl.utils.WorkTimer: java.util.Map mListeners> = $r3;
+
+        $r4 = new java.lang.Object;
+
+        specialinvoke $r4.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.work.impl.utils.WorkTimer: java.lang.Object mLock> = $r4;
+
+        r0.<androidx.work.impl.utils.WorkTimer: androidx.work.RunnableScheduler mRunnableScheduler> = r1;
+
+        return;
+    }
+
+    public void startTimer(androidx.work.impl.model.WorkGenerationalId, long, androidx.work.impl.utils.WorkTimer$TimeLimitExceededListener)
+    {
+        androidx.work.impl.utils.WorkTimer r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        long l0;
+        androidx.work.impl.utils.WorkTimer$TimeLimitExceededListener r2;
+        java.lang.Object r3, $r6;
+        androidx.work.impl.utils.WorkTimer$WorkTimerRunnable r4, $r13;
+        java.lang.Throwable r5, $r19;
+        androidx.work.Logger $r7;
+        java.lang.StringBuilder $r8, $r10, $r11;
+        java.lang.String $r9, $r12;
+        java.util.Map $r14, $r16;
+        androidx.work.RunnableScheduler $r18;
+
+        r0 := @this: androidx.work.impl.utils.WorkTimer;
+
+        r1 := @parameter0: androidx.work.impl.model.WorkGenerationalId;
+
+        l0 := @parameter1: long;
+
+        r2 := @parameter2: androidx.work.impl.utils.WorkTimer$TimeLimitExceededListener;
+
+        $r6 = r0.<androidx.work.impl.utils.WorkTimer: java.lang.Object mLock>;
+
+        r3 = $r6;
+
+        entermonitor $r6;
+
+     label1:
+        $r7 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r9 = <androidx.work.impl.utils.WorkTimer: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Starting timer for ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r7.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r9, $r12);
+
+        virtualinvoke r0.<androidx.work.impl.utils.WorkTimer: void stopTimer(androidx.work.impl.model.WorkGenerationalId)>(r1);
+
+        $r13 = new androidx.work.impl.utils.WorkTimer$WorkTimerRunnable;
+
+        specialinvoke $r13.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: void <init>(androidx.work.impl.utils.WorkTimer,androidx.work.impl.model.WorkGenerationalId)>(r0, r1);
+
+        r4 = $r13;
+
+        $r14 = r0.<androidx.work.impl.utils.WorkTimer: java.util.Map mTimerMap>;
+
+        interfaceinvoke $r14.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r4);
+
+        $r16 = r0.<androidx.work.impl.utils.WorkTimer: java.util.Map mListeners>;
+
+        interfaceinvoke $r16.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        $r18 = r0.<androidx.work.impl.utils.WorkTimer: androidx.work.RunnableScheduler mRunnableScheduler>;
+
+        interfaceinvoke $r18.<androidx.work.RunnableScheduler: void scheduleWithDelay(long,java.lang.Runnable)>(l0, r4);
+
+        exitmonitor r3;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r19 := @caughtexception;
+
+        r5 = $r19;
+
+        exitmonitor r3;
+
+     label4:
+        throw r5;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void stopTimer(androidx.work.impl.model.WorkGenerationalId)
+    {
+        androidx.work.impl.utils.WorkTimer r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        java.lang.Object r2, $r5, $r7;
+        androidx.work.impl.utils.WorkTimer$WorkTimerRunnable r3;
+        java.lang.Throwable r4, $r16;
+        java.util.Map $r6, $r14;
+        androidx.work.Logger $r8;
+        java.lang.StringBuilder $r9, $r11, $r12;
+        java.lang.String $r10, $r13;
+
+        r0 := @this: androidx.work.impl.utils.WorkTimer;
+
+        r1 := @parameter0: androidx.work.impl.model.WorkGenerationalId;
+
+        $r5 = r0.<androidx.work.impl.utils.WorkTimer: java.lang.Object mLock>;
+
+        r2 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.work.impl.utils.WorkTimer: java.util.Map mTimerMap>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r1);
+
+        r3 = (androidx.work.impl.utils.WorkTimer$WorkTimerRunnable) $r7;
+
+        if r3 == null goto label2;
+
+        $r8 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r10 = <androidx.work.impl.utils.WorkTimer: java.lang.String TAG>;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Stopping timer for ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r8.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r10, $r13);
+
+        $r14 = r0.<androidx.work.impl.utils.WorkTimer: java.util.Map mListeners>;
+
+        interfaceinvoke $r14.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r1);
+
+     label2:
+        exitmonitor r2;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r16 := @caughtexception;
+
+        r4 = $r16;
+
+        exitmonitor r2;
+
+     label5:
+        throw r4;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public java.util.Map getTimerMap()
+    {
+        androidx.work.impl.utils.WorkTimer r0;
+        java.lang.Object r1, $r2;
+        java.util.Map $r3;
+
+        r0 := @this: androidx.work.impl.utils.WorkTimer;
+
+        $r2 = r0.<androidx.work.impl.utils.WorkTimer: java.lang.Object mLock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        $r3 = r0.<androidx.work.impl.utils.WorkTimer: java.util.Map mTimerMap>;
+
+        exitmonitor r1;
+
+        return $r3;
+    }
+
+    public java.util.Map getListeners()
+    {
+        androidx.work.impl.utils.WorkTimer r0;
+        java.lang.Object r1, $r2;
+        java.util.Map $r3;
+
+        r0 := @this: androidx.work.impl.utils.WorkTimer;
+
+        $r2 = r0.<androidx.work.impl.utils.WorkTimer: java.lang.Object mLock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        $r3 = r0.<androidx.work.impl.utils.WorkTimer: java.util.Map mListeners>;
+
+        exitmonitor r1;
+
+        return $r3;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("WorkTimer");
+
+        <androidx.work.impl.utils.WorkTimer: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+androidx.work.impl.utils.WorkTimer$TimeLimitExceededListener
+<androidx.work.impl.utils.WorkTimer$TimeLimitExceededListener: void onTimeLimitExceeded(androidx.work.impl.model.WorkGenerationalId)>
+androidx.work.impl.utils.WorkTimer$WorkTimerRunnable
+<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: java.lang.String TAG>
+<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.utils.WorkTimer mWorkTimer>
+<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.model.WorkGenerationalId mWorkGenerationalId>
+    void <init>(androidx.work.impl.utils.WorkTimer, androidx.work.impl.model.WorkGenerationalId)
+    {
+        androidx.work.impl.utils.WorkTimer$WorkTimerRunnable r0;
+        androidx.work.impl.utils.WorkTimer r1;
+        androidx.work.impl.model.WorkGenerationalId r2;
+
+        r0 := @this: androidx.work.impl.utils.WorkTimer$WorkTimerRunnable;
+
+        r1 := @parameter0: androidx.work.impl.utils.WorkTimer;
+
+        r2 := @parameter1: androidx.work.impl.model.WorkGenerationalId;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.utils.WorkTimer mWorkTimer> = r1;
+
+        r0.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.model.WorkGenerationalId mWorkGenerationalId> = r2;
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.work.impl.utils.WorkTimer$WorkTimerRunnable r0, r2;
+        java.lang.Object r1, $r6, $r10, $r18;
+        androidx.work.impl.utils.WorkTimer$TimeLimitExceededListener r3;
+        java.lang.Throwable r4, $r20;
+        androidx.work.impl.utils.WorkTimer $r5, $r7, $r15;
+        androidx.work.impl.model.WorkGenerationalId $r8, $r13, $r16, $r19;
+        java.util.Map $r9, $r17;
+        androidx.work.Logger $r11;
+        java.lang.Object[] $r12;
+        java.lang.String $r14;
+
+        r0 := @this: androidx.work.impl.utils.WorkTimer$WorkTimerRunnable;
+
+        $r5 = r0.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.utils.WorkTimer mWorkTimer>;
+
+        $r6 = $r5.<androidx.work.impl.utils.WorkTimer: java.lang.Object mLock>;
+
+        r1 = $r6;
+
+        entermonitor $r6;
+
+     label1:
+        $r7 = r0.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.utils.WorkTimer mWorkTimer>;
+
+        $r9 = $r7.<androidx.work.impl.utils.WorkTimer: java.util.Map mTimerMap>;
+
+        $r8 = r0.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.model.WorkGenerationalId mWorkGenerationalId>;
+
+        $r10 = interfaceinvoke $r9.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r8);
+
+        r2 = (androidx.work.impl.utils.WorkTimer$WorkTimerRunnable) $r10;
+
+        if r2 == null goto label3;
+
+        $r15 = r0.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.utils.WorkTimer mWorkTimer>;
+
+        $r17 = $r15.<androidx.work.impl.utils.WorkTimer: java.util.Map mListeners>;
+
+        $r16 = r0.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.model.WorkGenerationalId mWorkGenerationalId>;
+
+        $r18 = interfaceinvoke $r17.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r16);
+
+        r3 = (androidx.work.impl.utils.WorkTimer$TimeLimitExceededListener) $r18;
+
+        if r3 == null goto label2;
+
+        $r19 = r0.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.model.WorkGenerationalId mWorkGenerationalId>;
+
+        interfaceinvoke r3.<androidx.work.impl.utils.WorkTimer$TimeLimitExceededListener: void onTimeLimitExceeded(androidx.work.impl.model.WorkGenerationalId)>($r19);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r11 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r12 = newarray (java.lang.Object)[1];
+
+        $r13 = r0.<androidx.work.impl.utils.WorkTimer$WorkTimerRunnable: androidx.work.impl.model.WorkGenerationalId mWorkGenerationalId>;
+
+        $r12[0] = $r13;
+
+        $r14 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Timer with %s is already marked as complete.", $r12);
+
+        virtualinvoke $r11.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>("WrkTimerRunnable", $r14);
+
+     label4:
+        exitmonitor r1;
+
+     label5:
+        goto label8;
+
+     label6:
+        $r20 := @caughtexception;
+
+        r4 = $r20;
+
+        exitmonitor r1;
+
+     label7:
+        throw r4;
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label1 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+

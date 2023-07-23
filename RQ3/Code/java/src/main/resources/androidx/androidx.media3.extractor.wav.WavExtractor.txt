@@ -1,0 +1,1895 @@
+androidx.media3.extractor.wav.WavExtractor
+<androidx.media3.extractor.wav.WavExtractor: java.lang.String TAG>
+<androidx.media3.extractor.wav.WavExtractor: int TARGET_SAMPLES_PER_SECOND>
+<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.ExtractorsFactory FACTORY>
+<androidx.media3.extractor.wav.WavExtractor: int STATE_READING_FILE_TYPE>
+<androidx.media3.extractor.wav.WavExtractor: int STATE_READING_RF64_SAMPLE_DATA_SIZE>
+<androidx.media3.extractor.wav.WavExtractor: int STATE_READING_FORMAT>
+<androidx.media3.extractor.wav.WavExtractor: int STATE_SKIPPING_TO_SAMPLE_DATA>
+<androidx.media3.extractor.wav.WavExtractor: int STATE_READING_SAMPLE_DATA>
+<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>
+<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.TrackOutput trackOutput>
+<androidx.media3.extractor.wav.WavExtractor: int state>
+<androidx.media3.extractor.wav.WavExtractor: long rf64SampleDataSize>
+<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.wav.WavExtractor$OutputWriter outputWriter>
+<androidx.media3.extractor.wav.WavExtractor: int dataStartPosition>
+<androidx.media3.extractor.wav.WavExtractor: long dataEndPosition>
+    public void <init>()
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: int state> = 0;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: long rf64SampleDataSize> = -1L;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: int dataStartPosition> = -1;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: long dataEndPosition> = -1L;
+
+        return;
+    }
+
+    public boolean sniff(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $z0 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader: boolean checkFileType(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return $z0;
+    }
+
+    public void init(androidx.media3.extractor.ExtractorOutput)
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+        androidx.media3.extractor.TrackOutput $r2;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput> = r1;
+
+        $r2 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: androidx.media3.extractor.TrackOutput track(int,int)>(0, 1);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.TrackOutput trackOutput> = $r2;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: void endTracks()>();
+
+        return;
+    }
+
+    public void seek(long, long)
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        long l0, l1;
+        byte $b2, $b3;
+        androidx.media3.extractor.wav.WavExtractor$OutputWriter $r1, $r2;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $b2 = l0 cmp 0L;
+
+        if $b2 != 0 goto label1;
+
+        $b3 = 0;
+
+        goto label2;
+
+     label1:
+        $b3 = 4;
+
+     label2:
+        r0.<androidx.media3.extractor.wav.WavExtractor: int state> = $b3;
+
+        $r1 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.wav.WavExtractor$OutputWriter outputWriter>;
+
+        if $r1 == null goto label3;
+
+        $r2 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.wav.WavExtractor$OutputWriter outputWriter>;
+
+        interfaceinvoke $r2.<androidx.media3.extractor.wav.WavExtractor$OutputWriter: void reset(long)>(l1);
+
+     label3:
+        return;
+    }
+
+    public void release()
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        return;
+    }
+
+    public int read(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.PositionHolder) throws java.io.IOException
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.PositionHolder r2;
+        int $i0, $i1;
+        java.lang.IllegalStateException $r3;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: androidx.media3.extractor.PositionHolder;
+
+        specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor: void assertInitialized()>();
+
+        $i0 = r0.<androidx.media3.extractor.wav.WavExtractor: int state>;
+
+        tableswitch($i0)
+        {
+            case 0: goto label1;
+            case 1: goto label2;
+            case 2: goto label3;
+            case 3: goto label4;
+            case 4: goto label5;
+            default: goto label6;
+        };
+
+     label1:
+        specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor: void readFileType(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return 0;
+
+     label2:
+        specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor: void readRf64SampleDataSize(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return 0;
+
+     label3:
+        specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor: void readFormat(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return 0;
+
+     label4:
+        specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor: void skipToSampleData(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return 0;
+
+     label5:
+        $i1 = specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor: int readSampleData(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return $i1;
+
+     label6:
+        $r3 = new java.lang.IllegalStateException;
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r3;
+    }
+
+    private void assertInitialized()
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        androidx.media3.extractor.TrackOutput $r1;
+        androidx.media3.extractor.ExtractorOutput $r3;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        $r1 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r1);
+
+        $r3 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r3);
+
+        return;
+    }
+
+    private void readFileType(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        long $l0, $l3, $l4, $l5;
+        byte $b1;
+        int $i2, $i6, $i7;
+        boolean $z0, $z1;
+        androidx.media3.common.ParserException $r2;
+        java.lang.Throwable r3;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $l0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $i2 = r0.<androidx.media3.extractor.wav.WavExtractor: int dataStartPosition>;
+
+        if $i2 == -1 goto label3;
+
+        $i7 = r0.<androidx.media3.extractor.wav.WavExtractor: int dataStartPosition>;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i7);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: int state> = 4;
+
+        return;
+
+     label3:
+        $z0 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader: boolean checkFileType(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        if $z0 != 0 goto label4;
+
+        $r2 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>("Unsupported or unrecognized wav file type.", null);
+
+        r3 = (java.lang.Throwable) $r2;
+
+        throw r3;
+
+     label4:
+        $l3 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPeekPosition()>();
+
+        $l4 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l5 = $l3 - $l4;
+
+        $i6 = (int) $l5;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i6);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: int state> = 1;
+
+        return;
+    }
+
+    private void readRf64SampleDataSize(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        long $l0;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $l0 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader: long readRf64SampleDataSize(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: long rf64SampleDataSize> = $l0;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: int state> = 2;
+
+        return;
+    }
+
+    private void readFormat(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.wav.WavFormat r2;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        androidx.media3.extractor.TrackOutput $r4, $r12, $r15, $r18;
+        androidx.media3.extractor.ExtractorOutput $r5, $r13, $r16, $r19;
+        java.lang.StringBuilder $r7, $r8, r23;
+        java.lang.String $r9;
+        androidx.media3.common.ParserException $r10;
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r20;
+        androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter r21, r22, r24;
+        java.lang.Throwable r25;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader: androidx.media3.extractor.wav.WavFormat readFormat(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        $i1 = r2.<androidx.media3.extractor.wav.WavFormat: int formatType>;
+
+        if $i1 != 17 goto label1;
+
+        r20 = new androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        $r19 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r18 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        specialinvoke r20.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: void <init>(androidx.media3.extractor.ExtractorOutput,androidx.media3.extractor.TrackOutput,androidx.media3.extractor.wav.WavFormat)>($r19, $r18, r2);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.wav.WavExtractor$OutputWriter outputWriter> = r20;
+
+        goto label5;
+
+     label1:
+        $i2 = r2.<androidx.media3.extractor.wav.WavFormat: int formatType>;
+
+        if $i2 != 6 goto label2;
+
+        r21 = new androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter;
+
+        $r16 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r15 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        specialinvoke r21.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: void <init>(androidx.media3.extractor.ExtractorOutput,androidx.media3.extractor.TrackOutput,androidx.media3.extractor.wav.WavFormat,java.lang.String,int)>($r16, $r15, r2, "audio/g711-alaw", -1);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.wav.WavExtractor$OutputWriter outputWriter> = r21;
+
+        goto label5;
+
+     label2:
+        $i3 = r2.<androidx.media3.extractor.wav.WavFormat: int formatType>;
+
+        if $i3 != 7 goto label3;
+
+        r22 = new androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter;
+
+        $r13 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r12 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        specialinvoke r22.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: void <init>(androidx.media3.extractor.ExtractorOutput,androidx.media3.extractor.TrackOutput,androidx.media3.extractor.wav.WavFormat,java.lang.String,int)>($r13, $r12, r2, "audio/g711-mlaw", -1);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.wav.WavExtractor$OutputWriter outputWriter> = r22;
+
+        goto label5;
+
+     label3:
+        $i5 = r2.<androidx.media3.extractor.wav.WavFormat: int formatType>;
+
+        $i4 = r2.<androidx.media3.extractor.wav.WavFormat: int bitsPerSample>;
+
+        i0 = staticinvoke <androidx.media3.extractor.WavUtil: int getPcmEncodingForType(int,int)>($i5, $i4);
+
+        if i0 != 0 goto label4;
+
+        r23 = new java.lang.StringBuilder;
+
+        specialinvoke r23.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unsupported WAV format type: ");
+
+        $i6 = r2.<androidx.media3.extractor.wav.WavFormat: int formatType>;
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i6);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r10 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForUnsupportedContainerFeature(java.lang.String)>($r9);
+
+        r25 = (java.lang.Throwable) $r10;
+
+        throw r25;
+
+     label4:
+        r24 = new androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter;
+
+        $r5 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r4 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        specialinvoke r24.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: void <init>(androidx.media3.extractor.ExtractorOutput,androidx.media3.extractor.TrackOutput,androidx.media3.extractor.wav.WavFormat,java.lang.String,int)>($r5, $r4, r2, "audio/raw", i0);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.wav.WavExtractor$OutputWriter outputWriter> = r24;
+
+     label5:
+        r0.<androidx.media3.extractor.wav.WavExtractor: int state> = 3;
+
+        return;
+    }
+
+    private void skipToSampleData(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        android.util.Pair r2;
+        long l0, $l2, $l4, $l6, l8, $l10, $l11, $l14;
+        java.lang.Object $r3, $r5, $r14;
+        java.lang.Long $r4, $r6;
+        int $i1, $i9, $i13;
+        byte $b3, $b5, $b7, $b12;
+        java.lang.StringBuilder $r7, $r8, $r9, $r10, $r11;
+        java.lang.String $r12;
+        androidx.media3.extractor.wav.WavExtractor$OutputWriter $r13, $r15;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader: android.util.Pair skipToSampleData(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        $r3 = r2.<android.util.Pair: java.lang.Object first>;
+
+        $r4 = (java.lang.Long) $r3;
+
+        $i1 = virtualinvoke $r4.<java.lang.Long: int intValue()>();
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: int dataStartPosition> = $i1;
+
+        $r5 = r2.<android.util.Pair: java.lang.Object second>;
+
+        $r6 = (java.lang.Long) $r5;
+
+        l8 = virtualinvoke $r6.<java.lang.Long: long longValue()>();
+
+        $l2 = r0.<androidx.media3.extractor.wav.WavExtractor: long rf64SampleDataSize>;
+
+        $b3 = $l2 cmp -1L;
+
+        if $b3 == 0 goto label1;
+
+        $b7 = l8 cmp 4294967295L;
+
+        if $b7 != 0 goto label1;
+
+        l8 = r0.<androidx.media3.extractor.wav.WavExtractor: long rf64SampleDataSize>;
+
+     label1:
+        $i9 = r0.<androidx.media3.extractor.wav.WavExtractor: int dataStartPosition>;
+
+        $l10 = (long) $i9;
+
+        $l11 = $l10 + l8;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: long dataEndPosition> = $l11;
+
+        l0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        $b12 = l0 cmp -1L;
+
+        if $b12 == 0 goto label2;
+
+        $l4 = r0.<androidx.media3.extractor.wav.WavExtractor: long dataEndPosition>;
+
+        $b5 = $l4 cmp l0;
+
+        if $b5 <= 0 goto label2;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Data exceeds input length: ");
+
+        $l6 = r0.<androidx.media3.extractor.wav.WavExtractor: long dataEndPosition>;
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l6);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("WavExtractor", $r12);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: long dataEndPosition> = l0;
+
+     label2:
+        $r13 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.wav.WavExtractor$OutputWriter outputWriter>;
+
+        $r14 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r13);
+
+        $r15 = (androidx.media3.extractor.wav.WavExtractor$OutputWriter) $r14;
+
+        $i13 = r0.<androidx.media3.extractor.wav.WavExtractor: int dataStartPosition>;
+
+        $l14 = r0.<androidx.media3.extractor.wav.WavExtractor: long dataEndPosition>;
+
+        interfaceinvoke $r15.<androidx.media3.extractor.wav.WavExtractor$OutputWriter: void init(int,long)>($i13, $l14);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor: int state> = 4;
+
+        return;
+    }
+
+    private int readSampleData(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.wav.WavExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        long l0, $l1, $l3, $l4;
+        byte $b2, $b5;
+        androidx.media3.extractor.wav.WavExtractor$OutputWriter $r2, $r4;
+        java.lang.Object $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $l1 = r0.<androidx.media3.extractor.wav.WavExtractor: long dataEndPosition>;
+
+        $b2 = $l1 cmp -1L;
+
+        if $b2 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $l3 = r0.<androidx.media3.extractor.wav.WavExtractor: long dataEndPosition>;
+
+        $l4 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        l0 = $l3 - $l4;
+
+        $r2 = r0.<androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.wav.WavExtractor$OutputWriter outputWriter>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r4 = (androidx.media3.extractor.wav.WavExtractor$OutputWriter) $r3;
+
+        $z0 = interfaceinvoke $r4.<androidx.media3.extractor.wav.WavExtractor$OutputWriter: boolean sampleData(androidx.media3.extractor.ExtractorInput,long)>(r1, l0);
+
+        if $z0 == 0 goto label3;
+
+        $b5 = -1;
+
+        goto label4;
+
+     label3:
+        $b5 = 0;
+
+     label4:
+        return $b5;
+    }
+
+    private static androidx.media3.extractor.Extractor[] lambda$static$0()
+    {
+        androidx.media3.extractor.Extractor[] $r0;
+        androidx.media3.extractor.wav.WavExtractor $r1;
+
+        $r0 = newarray (androidx.media3.extractor.Extractor)[1];
+
+        $r1 = new androidx.media3.extractor.wav.WavExtractor;
+
+        specialinvoke $r1.<androidx.media3.extractor.wav.WavExtractor: void <init>()>();
+
+        $r0[0] = $r1;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.media3.extractor.ExtractorsFactory $r0;
+
+        $r0 = dynamicinvoke "createExtractors" <androidx.media3.extractor.ExtractorsFactory ()>() <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: androidx.media3.extractor.Extractor[] __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.Extractor[] lambda$static$0()>, methodtype: androidx.media3.extractor.Extractor[] __METHODTYPE__());
+
+        <androidx.media3.extractor.wav.WavExtractor: androidx.media3.extractor.ExtractorsFactory FACTORY> = $r0;
+
+        return;
+    }
+
+androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int[] INDEX_TABLE>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int[] STEP_TABLE>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.ExtractorOutput extractorOutput>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.TrackOutput trackOutput>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: byte[] inputData>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.common.util.ParsableByteArray decodedData>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int targetSampleSizeFrames>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.common.Format format>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: long startTimeUs>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes>
+<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: long outputFrameCount>
+    public void <init>(androidx.media3.extractor.ExtractorOutput, androidx.media3.extractor.TrackOutput, androidx.media3.extractor.wav.WavFormat) throws androidx.media3.common.ParserException
+    {
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+        androidx.media3.extractor.TrackOutput r2;
+        androidx.media3.extractor.wav.WavFormat r3;
+        androidx.media3.common.util.ParsableByteArray r4, r25, r27;
+        int i0, i1, i2, i3, $i4, $i5, $i6, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19, $i20, $i21, $i22, $i23, $i24, $i25, $i26, $i27, $i28, $i29, $i30, $i31, $i32, $i33;
+        byte[] $r6, $r7;
+        androidx.media3.common.Format$Builder $r10, $r11, $r12, $r13, $r14, $r15, $r16, r28;
+        androidx.media3.common.Format $r17;
+        java.lang.StringBuilder $r19, $r20, $r21, $r22, r26;
+        java.lang.String $r23;
+        androidx.media3.common.ParserException $r24;
+        java.lang.Throwable r29;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        r2 := @parameter1: androidx.media3.extractor.TrackOutput;
+
+        r3 := @parameter2: androidx.media3.extractor.wav.WavFormat;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.ExtractorOutput extractorOutput> = r1;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.TrackOutput trackOutput> = r2;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat> = r3;
+
+        $i4 = r3.<androidx.media3.extractor.wav.WavFormat: int frameRateHz>;
+
+        $i5 = $i4 / 10;
+
+        $i6 = staticinvoke <java.lang.Math: int max(int,int)>(1, $i5);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int targetSampleSizeFrames> = $i6;
+
+        r25 = new androidx.media3.common.util.ParsableByteArray;
+
+        $r6 = r3.<androidx.media3.extractor.wav.WavFormat: byte[] extraData>;
+
+        specialinvoke r25.<androidx.media3.common.util.ParsableByteArray: void <init>(byte[])>($r6);
+
+        r4 = r25;
+
+        virtualinvoke r4.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianUnsignedShort()>();
+
+        $i8 = virtualinvoke r4.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianUnsignedShort()>();
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock> = $i8;
+
+        i0 = r3.<androidx.media3.extractor.wav.WavFormat: int numChannels>;
+
+        $i10 = r3.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        $i9 = 4 * i0;
+
+        $i11 = $i10 - $i9;
+
+        $i14 = $i11 * 8;
+
+        $i12 = r3.<androidx.media3.extractor.wav.WavFormat: int bitsPerSample>;
+
+        $i13 = $i12 * i0;
+
+        $i15 = $i14 / $i13;
+
+        i1 = $i15 + 1;
+
+        $i16 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>;
+
+        if $i16 == i1 goto label1;
+
+        r26 = new java.lang.StringBuilder;
+
+        specialinvoke r26.<java.lang.StringBuilder: void <init>()>();
+
+        $r19 = virtualinvoke r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Expected frames per block: ");
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("; got: ");
+
+        $i33 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>;
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i33);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r24 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>($r23, null);
+
+        r29 = (java.lang.Throwable) $r24;
+
+        throw r29;
+
+     label1:
+        $i18 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int targetSampleSizeFrames>;
+
+        $i17 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>;
+
+        i2 = staticinvoke <androidx.media3.common.util.Util: int ceilDivide(int,int)>($i18, $i17);
+
+        $i19 = r3.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        $i20 = i2 * $i19;
+
+        $r7 = newarray (byte)[$i20];
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: byte[] inputData> = $r7;
+
+        r27 = new androidx.media3.common.util.ParsableByteArray;
+
+        $i21 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>;
+
+        $i22 = staticinvoke <androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int numOutputFramesToBytes(int,int)>($i21, i0);
+
+        $i23 = i2 * $i22;
+
+        specialinvoke r27.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>($i23);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.common.util.ParsableByteArray decodedData> = r27;
+
+        $i25 = r3.<androidx.media3.extractor.wav.WavFormat: int frameRateHz>;
+
+        $i24 = r3.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        $i26 = $i25 * $i24;
+
+        $i28 = $i26 * 8;
+
+        $i27 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>;
+
+        i3 = $i28 / $i27;
+
+        r28 = new androidx.media3.common.Format$Builder;
+
+        specialinvoke r28.<androidx.media3.common.Format$Builder: void <init>()>();
+
+        $r10 = virtualinvoke r28.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleMimeType(java.lang.String)>("audio/raw");
+
+        $r11 = virtualinvoke $r10.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setAverageBitrate(int)>(i3);
+
+        $r12 = virtualinvoke $r11.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setPeakBitrate(int)>(i3);
+
+        $i29 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int targetSampleSizeFrames>;
+
+        $i30 = staticinvoke <androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int numOutputFramesToBytes(int,int)>($i29, i0);
+
+        $r13 = virtualinvoke $r12.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setMaxInputSize(int)>($i30);
+
+        $i31 = r3.<androidx.media3.extractor.wav.WavFormat: int numChannels>;
+
+        $r14 = virtualinvoke $r13.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setChannelCount(int)>($i31);
+
+        $i32 = r3.<androidx.media3.extractor.wav.WavFormat: int frameRateHz>;
+
+        $r15 = virtualinvoke $r14.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleRate(int)>($i32);
+
+        $r16 = virtualinvoke $r15.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setPcmEncoding(int)>(2);
+
+        $r17 = virtualinvoke $r16.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.common.Format format> = $r17;
+
+        return;
+    }
+
+    public void reset(long)
+    {
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r0;
+        long l0;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        l0 := @parameter0: long;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes> = 0;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: long startTimeUs> = l0;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes> = 0;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: long outputFrameCount> = 0L;
+
+        return;
+    }
+
+    public void init(int, long)
+    {
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r0;
+        int i0, $i3;
+        long l1, $l2;
+        androidx.media3.extractor.wav.WavSeekMap $r1;
+        androidx.media3.extractor.wav.WavFormat $r2;
+        androidx.media3.extractor.ExtractorOutput $r3;
+        androidx.media3.common.Format $r4;
+        androidx.media3.extractor.TrackOutput $r5;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        $r3 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r1 = new androidx.media3.extractor.wav.WavSeekMap;
+
+        $r2 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $i3 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>;
+
+        $l2 = (long) i0;
+
+        specialinvoke $r1.<androidx.media3.extractor.wav.WavSeekMap: void <init>(androidx.media3.extractor.wav.WavFormat,int,long,long)>($r2, $i3, $l2, l1);
+
+        interfaceinvoke $r3.<androidx.media3.extractor.ExtractorOutput: void seekMap(androidx.media3.extractor.SeekMap)>($r1);
+
+        $r5 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        $r4 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.common.Format format>;
+
+        interfaceinvoke $r5.<androidx.media3.extractor.TrackOutput: void format(androidx.media3.common.Format)>($r4);
+
+        return;
+    }
+
+    public boolean sampleData(androidx.media3.extractor.ExtractorInput, long) throws java.io.IOException
+    {
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        long l0, $l26, $l27;
+        int i1, i2, i3, i4, $i5, $i6, $i7, $i8, $i9, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19, $i20, $i21, $i22, $i23, $i24, $i25, $i28, $i29, $i30, i31, i32, i33, i34, i35;
+        androidx.media3.extractor.wav.WavFormat $r2, $r3, $r6;
+        byte $b10;
+        androidx.media3.common.util.ParsableByteArray $r4, $r7, $r8;
+        byte[] $r5, $r10;
+        androidx.media3.extractor.TrackOutput $r9;
+        boolean $z0, z1;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        l0 := @parameter1: long;
+
+        $i6 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int targetSampleSizeFrames>;
+
+        $i5 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes>;
+
+        $i7 = specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int numOutputBytesToFrames(int)>($i5);
+
+        i1 = $i6 - $i7;
+
+        $i8 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>;
+
+        i2 = staticinvoke <androidx.media3.common.util.Util: int ceilDivide(int,int)>(i1, $i8);
+
+        $r2 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $i9 = $r2.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        i3 = i2 * $i9;
+
+        $b10 = l0 cmp 0L;
+
+        if $b10 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        z1 = $z0;
+
+     label3:
+        if z1 != 0 goto label6;
+
+        $i23 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes>;
+
+        if $i23 >= i3 goto label6;
+
+        $i24 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes>;
+
+        $i25 = i3 - $i24;
+
+        $l26 = (long) $i25;
+
+        $l27 = staticinvoke <java.lang.Math: long min(long,long)>($l26, l0);
+
+        i31 = (int) $l27;
+
+        $r10 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: byte[] inputData>;
+
+        $i28 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes>;
+
+        i32 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: int read(byte[],int,int)>($r10, $i28, i31);
+
+        if i32 != -1 goto label4;
+
+        z1 = 1;
+
+        goto label5;
+
+     label4:
+        $i29 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes>;
+
+        $i30 = $i29 + i32;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes> = $i30;
+
+     label5:
+        goto label3;
+
+     label6:
+        $i12 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes>;
+
+        $r3 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $i11 = $r3.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        i33 = $i12 / $i11;
+
+        if i33 <= 0 goto label7;
+
+        $r5 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: byte[] inputData>;
+
+        $r4 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.common.util.ParsableByteArray decodedData>;
+
+        specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: void decode(byte[],int,androidx.media3.common.util.ParsableByteArray)>($r5, i33, $r4);
+
+        $i16 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes>;
+
+        $r6 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $i14 = $r6.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        $i15 = i33 * $i14;
+
+        $i17 = $i16 - $i15;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingInputBytes> = $i17;
+
+        $r7 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.common.util.ParsableByteArray decodedData>;
+
+        i34 = virtualinvoke $r7.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+        $r9 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        $r8 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.common.util.ParsableByteArray decodedData>;
+
+        interfaceinvoke $r9.<androidx.media3.extractor.TrackOutput: void sampleData(androidx.media3.common.util.ParsableByteArray,int)>($r8, i34);
+
+        $i18 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes>;
+
+        $i19 = $i18 + i34;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes> = $i19;
+
+        $i20 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes>;
+
+        i4 = specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int numOutputBytesToFrames(int)>($i20);
+
+        $i21 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int targetSampleSizeFrames>;
+
+        if i4 < $i21 goto label7;
+
+        $i22 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int targetSampleSizeFrames>;
+
+        specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: void writeSampleMetadata(int)>($i22);
+
+     label7:
+        if z1 == 0 goto label8;
+
+        $i13 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes>;
+
+        i35 = specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int numOutputBytesToFrames(int)>($i13);
+
+        if i35 <= 0 goto label8;
+
+        specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: void writeSampleMetadata(int)>(i35);
+
+     label8:
+        return z1;
+    }
+
+    private void writeSampleMetadata(int)
+    {
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r0;
+        int i0, i2, i3, $i4, $i9, $i13, $i14;
+        long l1, $l5, $l6, $l7, $l8, $l10, $l11, $l12;
+        androidx.media3.extractor.wav.WavFormat $r1;
+        androidx.media3.extractor.TrackOutput $r2;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        i0 := @parameter0: int;
+
+        $l7 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: long startTimeUs>;
+
+        $l6 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: long outputFrameCount>;
+
+        $r1 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $i4 = $r1.<androidx.media3.extractor.wav.WavFormat: int frameRateHz>;
+
+        $l5 = (long) $i4;
+
+        $l8 = staticinvoke <androidx.media3.common.util.Util: long scaleLargeTimestamp(long,long,long)>($l6, 1000000L, $l5);
+
+        l1 = $l7 + $l8;
+
+        i2 = specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int numOutputFramesToBytes(int)>(i0);
+
+        $i9 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes>;
+
+        i3 = $i9 - i2;
+
+        $r2 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        interfaceinvoke $r2.<androidx.media3.extractor.TrackOutput: void sampleMetadata(long,int,int,int,androidx.media3.extractor.TrackOutput$CryptoData)>(l1, 1, i2, i3, null);
+
+        $l11 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: long outputFrameCount>;
+
+        $l10 = (long) i0;
+
+        $l12 = $l11 + $l10;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: long outputFrameCount> = $l12;
+
+        $i13 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes>;
+
+        $i14 = $i13 - i2;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int pendingOutputBytes> = $i14;
+
+        return;
+    }
+
+    private void decode(byte[], int, androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r0;
+        byte[] r1, $r4;
+        int i0, $i1, $i2, $i3, i4, i5, i6;
+        androidx.media3.common.util.ParsableByteArray r2;
+        androidx.media3.extractor.wav.WavFormat $r3;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.media3.common.util.ParsableByteArray;
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i0 goto label4;
+
+        i5 = 0;
+
+     label2:
+        $r3 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $i3 = $r3.<androidx.media3.extractor.wav.WavFormat: int numChannels>;
+
+        if i5 >= $i3 goto label3;
+
+        $r4 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: void decodeBlockForChannel(byte[],int,int,byte[])>(r1, i4, i5, $r4);
+
+        i5 = i5 + 1;
+
+        goto label2;
+
+     label3:
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label4:
+        $i1 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>;
+
+        $i2 = $i1 * i0;
+
+        i6 = specialinvoke r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int numOutputFramesToBytes(int)>($i2);
+
+        virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: void setLimit(int)>(i6);
+
+        return;
+    }
+
+    private void decodeBlockForChannel(byte[], int, int, byte[])
+    {
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r0;
+        byte[] r1, r2;
+        int i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, $i12, $i13, $i14, $i15, $i20, $i21, $i22, $i25, $i26, $i27, $i28, $i29, $i31, $i33, $i34, $i35, $i36, $i37, $i38, $i40, $i41, $i42, $i43, $i45, $i46, $i48, $i50, $i51, $i52, $i53, i54, i55, i56, i57, i58, i61, i62, i63;
+        short s11, $s17, $s19, $s24, $s44, s59, s60;
+        androidx.media3.extractor.wav.WavFormat $r3, $r4;
+        byte $b16, $b18, $b23, $b30, $b32, $b39, $b47, $b49;
+        int[] $r5, $r6, $r7, $r8;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: byte[];
+
+        $r3 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        i2 = $r3.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        $r4 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        i3 = $r4.<androidx.media3.extractor.wav.WavFormat: int numChannels>;
+
+        i4 = i0 * i2;
+
+        $i12 = i1 * 4;
+
+        i5 = i4 + $i12;
+
+        $i13 = i3 * 4;
+
+        i6 = i5 + $i13;
+
+        $i14 = i2 / i3;
+
+        i7 = $i14 - 4;
+
+        $i15 = i5 + 1;
+
+        $b16 = r1[$i15];
+
+        $s17 = $b16 & 255;
+
+        $i20 = $s17 << 8;
+
+        $b18 = r1[i5];
+
+        $s19 = $b18 & 255;
+
+        $i21 = $i20 | $s19;
+
+        i54 = (short) $i21;
+
+        $i22 = i5 + 2;
+
+        $b23 = r1[$i22];
+
+        $s24 = $b23 & 255;
+
+        i55 = staticinvoke <java.lang.Math: int min(int,int)>($s24, 88);
+
+        $r5 = <androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int[] STEP_TABLE>;
+
+        i56 = $r5[i55];
+
+        $i25 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int framesPerBlock>;
+
+        $i26 = i0 * $i25;
+
+        $i27 = $i26 * i3;
+
+        $i28 = $i27 + i1;
+
+        i57 = $i28 * 2;
+
+        $i29 = i54 & 255;
+
+        $b30 = (byte) $i29;
+
+        r2[i57] = $b30;
+
+        $i33 = i57 + 1;
+
+        $i31 = i54 >> 8;
+
+        $b32 = (byte) $i31;
+
+        r2[$i33] = $b32;
+
+        i58 = 0;
+
+     label1:
+        $i34 = i7 * 2;
+
+        if i58 >= $i34 goto label5;
+
+        i8 = i58 / 8;
+
+        $i35 = i58 / 2;
+
+        i9 = $i35 % 4;
+
+        $i36 = i8 * i3;
+
+        $i37 = $i36 * 4;
+
+        $i38 = i6 + $i37;
+
+        i10 = $i38 + i9;
+
+        $b39 = r1[i10];
+
+        s59 = $b39 & 255;
+
+        $i40 = i58 % 2;
+
+        if $i40 != 0 goto label2;
+
+        s60 = s59 & 15;
+
+        goto label3;
+
+     label2:
+        s60 = s59 >> 4;
+
+     label3:
+        s11 = s60 & 7;
+
+        $i41 = 2 * s11;
+
+        $i42 = $i41 + 1;
+
+        $i43 = $i42 * i56;
+
+        i61 = $i43 >> 3;
+
+        $s44 = s60 & 8;
+
+        if $s44 == 0 goto label4;
+
+        i61 = neg i61;
+
+     label4:
+        i62 = i54 + i61;
+
+        i54 = staticinvoke <androidx.media3.common.util.Util: int constrainValue(int,int,int)>(i62, -32768, 32767);
+
+        $i45 = 2 * i3;
+
+        i57 = i57 + $i45;
+
+        $i46 = i54 & 255;
+
+        $b47 = (byte) $i46;
+
+        r2[i57] = $b47;
+
+        $i50 = i57 + 1;
+
+        $i48 = i54 >> 8;
+
+        $b49 = (byte) $i48;
+
+        r2[$i50] = $b49;
+
+        $r6 = <androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int[] INDEX_TABLE>;
+
+        $i51 = $r6[s60];
+
+        i63 = i55 + $i51;
+
+        $r7 = <androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int[] STEP_TABLE>;
+
+        $i52 = lengthof $r7;
+
+        $i53 = $i52 - 1;
+
+        i55 = staticinvoke <androidx.media3.common.util.Util: int constrainValue(int,int,int)>(i63, 0, $i53);
+
+        $r8 = <androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int[] STEP_TABLE>;
+
+        i56 = $r8[i55];
+
+        i58 = i58 + 1;
+
+        goto label1;
+
+     label5:
+        return;
+    }
+
+    private int numOutputBytesToFrames(int)
+    {
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r0;
+        int i0, $i1, $i2, $i3;
+        androidx.media3.extractor.wav.WavFormat $r1;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $i1 = $r1.<androidx.media3.extractor.wav.WavFormat: int numChannels>;
+
+        $i2 = 2 * $i1;
+
+        $i3 = i0 / $i2;
+
+        return $i3;
+    }
+
+    private int numOutputFramesToBytes(int)
+    {
+        androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter r0;
+        int i0, $i1, $i2;
+        androidx.media3.extractor.wav.WavFormat $r1;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $i1 = $r1.<androidx.media3.extractor.wav.WavFormat: int numChannels>;
+
+        $i2 = staticinvoke <androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int numOutputFramesToBytes(int,int)>(i0, $i1);
+
+        return $i2;
+    }
+
+    private static int numOutputFramesToBytes(int, int)
+    {
+        int i0, i1, $i2, $i3;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $i2 = i0 * 2;
+
+        $i3 = $i2 * i1;
+
+        return $i3;
+    }
+
+    static void <clinit>()
+    {
+        int[] $r0, $r1;
+
+        $r0 = newarray (int)[16];
+
+        $r0[0] = -1;
+
+        $r0[1] = -1;
+
+        $r0[2] = -1;
+
+        $r0[3] = -1;
+
+        $r0[4] = 2;
+
+        $r0[5] = 4;
+
+        $r0[6] = 6;
+
+        $r0[7] = 8;
+
+        $r0[8] = -1;
+
+        $r0[9] = -1;
+
+        $r0[10] = -1;
+
+        $r0[11] = -1;
+
+        $r0[12] = 2;
+
+        $r0[13] = 4;
+
+        $r0[14] = 6;
+
+        $r0[15] = 8;
+
+        <androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int[] INDEX_TABLE> = $r0;
+
+        $r1 = newarray (int)[89];
+
+        $r1[0] = 7;
+
+        $r1[1] = 8;
+
+        $r1[2] = 9;
+
+        $r1[3] = 10;
+
+        $r1[4] = 11;
+
+        $r1[5] = 12;
+
+        $r1[6] = 13;
+
+        $r1[7] = 14;
+
+        $r1[8] = 16;
+
+        $r1[9] = 17;
+
+        $r1[10] = 19;
+
+        $r1[11] = 21;
+
+        $r1[12] = 23;
+
+        $r1[13] = 25;
+
+        $r1[14] = 28;
+
+        $r1[15] = 31;
+
+        $r1[16] = 34;
+
+        $r1[17] = 37;
+
+        $r1[18] = 41;
+
+        $r1[19] = 45;
+
+        $r1[20] = 50;
+
+        $r1[21] = 55;
+
+        $r1[22] = 60;
+
+        $r1[23] = 66;
+
+        $r1[24] = 73;
+
+        $r1[25] = 80;
+
+        $r1[26] = 88;
+
+        $r1[27] = 97;
+
+        $r1[28] = 107;
+
+        $r1[29] = 118;
+
+        $r1[30] = 130;
+
+        $r1[31] = 143;
+
+        $r1[32] = 157;
+
+        $r1[33] = 173;
+
+        $r1[34] = 190;
+
+        $r1[35] = 209;
+
+        $r1[36] = 230;
+
+        $r1[37] = 253;
+
+        $r1[38] = 279;
+
+        $r1[39] = 307;
+
+        $r1[40] = 337;
+
+        $r1[41] = 371;
+
+        $r1[42] = 408;
+
+        $r1[43] = 449;
+
+        $r1[44] = 494;
+
+        $r1[45] = 544;
+
+        $r1[46] = 598;
+
+        $r1[47] = 658;
+
+        $r1[48] = 724;
+
+        $r1[49] = 796;
+
+        $r1[50] = 876;
+
+        $r1[51] = 963;
+
+        $r1[52] = 1060;
+
+        $r1[53] = 1166;
+
+        $r1[54] = 1282;
+
+        $r1[55] = 1411;
+
+        $r1[56] = 1552;
+
+        $r1[57] = 1707;
+
+        $r1[58] = 1878;
+
+        $r1[59] = 2066;
+
+        $r1[60] = 2272;
+
+        $r1[61] = 2499;
+
+        $r1[62] = 2749;
+
+        $r1[63] = 3024;
+
+        $r1[64] = 3327;
+
+        $r1[65] = 3660;
+
+        $r1[66] = 4026;
+
+        $r1[67] = 4428;
+
+        $r1[68] = 4871;
+
+        $r1[69] = 5358;
+
+        $r1[70] = 5894;
+
+        $r1[71] = 6484;
+
+        $r1[72] = 7132;
+
+        $r1[73] = 7845;
+
+        $r1[74] = 8630;
+
+        $r1[75] = 9493;
+
+        $r1[76] = 10442;
+
+        $r1[77] = 11487;
+
+        $r1[78] = 12635;
+
+        $r1[79] = 13899;
+
+        $r1[80] = 15289;
+
+        $r1[81] = 16818;
+
+        $r1[82] = 18500;
+
+        $r1[83] = 20350;
+
+        $r1[84] = 22385;
+
+        $r1[85] = 24623;
+
+        $r1[86] = 27086;
+
+        $r1[87] = 29794;
+
+        $r1[88] = 32767;
+
+        <androidx.media3.extractor.wav.WavExtractor$ImaAdPcmOutputWriter: int[] STEP_TABLE> = $r1;
+
+        return;
+    }
+
+androidx.media3.extractor.wav.WavExtractor$OutputWriter
+<androidx.media3.extractor.wav.WavExtractor$OutputWriter: void reset(long)>
+<androidx.media3.extractor.wav.WavExtractor$OutputWriter: void init(int,long)>
+<androidx.media3.extractor.wav.WavExtractor$OutputWriter: boolean sampleData(androidx.media3.extractor.ExtractorInput,long)>
+androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter
+<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.ExtractorOutput extractorOutput>
+<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.TrackOutput trackOutput>
+<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>
+<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.common.Format format>
+<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int targetSampleSizeBytes>
+<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: long startTimeUs>
+<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int pendingOutputBytes>
+<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: long outputFrameCount>
+    public void <init>(androidx.media3.extractor.ExtractorOutput, androidx.media3.extractor.TrackOutput, androidx.media3.extractor.wav.WavFormat, java.lang.String, int) throws androidx.media3.common.ParserException
+    {
+        androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+        androidx.media3.extractor.TrackOutput r2;
+        androidx.media3.extractor.wav.WavFormat r3;
+        java.lang.String r4, $r19;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16;
+        androidx.media3.common.Format$Builder $r6, $r7, $r8, $r9, $r10, $r11, $r12, r22;
+        androidx.media3.common.Format $r13;
+        java.lang.StringBuilder $r15, $r16, $r17, $r18, r21;
+        androidx.media3.common.ParserException $r20;
+        java.lang.Throwable r23;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        r2 := @parameter1: androidx.media3.extractor.TrackOutput;
+
+        r3 := @parameter2: androidx.media3.extractor.wav.WavFormat;
+
+        r4 := @parameter3: java.lang.String;
+
+        i0 := @parameter4: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.ExtractorOutput extractorOutput> = r1;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.TrackOutput trackOutput> = r2;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat> = r3;
+
+        $i4 = r3.<androidx.media3.extractor.wav.WavFormat: int numChannels>;
+
+        $i3 = r3.<androidx.media3.extractor.wav.WavFormat: int bitsPerSample>;
+
+        $i5 = $i4 * $i3;
+
+        i1 = $i5 / 8;
+
+        $i6 = r3.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        if $i6 == i1 goto label1;
+
+        r21 = new java.lang.StringBuilder;
+
+        specialinvoke r21.<java.lang.StringBuilder: void <init>()>();
+
+        $r15 = virtualinvoke r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Expected block size: ");
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("; got: ");
+
+        $i16 = r3.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i16);
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r20 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>($r19, null);
+
+        r23 = (java.lang.Throwable) $r20;
+
+        throw r23;
+
+     label1:
+        $i7 = r3.<androidx.media3.extractor.wav.WavFormat: int frameRateHz>;
+
+        $i8 = $i7 * i1;
+
+        i2 = $i8 * 8;
+
+        $i9 = r3.<androidx.media3.extractor.wav.WavFormat: int frameRateHz>;
+
+        $i10 = $i9 * i1;
+
+        $i11 = $i10 / 10;
+
+        $i12 = staticinvoke <java.lang.Math: int max(int,int)>(i1, $i11);
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int targetSampleSizeBytes> = $i12;
+
+        r22 = new androidx.media3.common.Format$Builder;
+
+        specialinvoke r22.<androidx.media3.common.Format$Builder: void <init>()>();
+
+        $r6 = virtualinvoke r22.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleMimeType(java.lang.String)>(r4);
+
+        $r7 = virtualinvoke $r6.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setAverageBitrate(int)>(i2);
+
+        $r8 = virtualinvoke $r7.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setPeakBitrate(int)>(i2);
+
+        $i13 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int targetSampleSizeBytes>;
+
+        $r9 = virtualinvoke $r8.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setMaxInputSize(int)>($i13);
+
+        $i14 = r3.<androidx.media3.extractor.wav.WavFormat: int numChannels>;
+
+        $r10 = virtualinvoke $r9.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setChannelCount(int)>($i14);
+
+        $i15 = r3.<androidx.media3.extractor.wav.WavFormat: int frameRateHz>;
+
+        $r11 = virtualinvoke $r10.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleRate(int)>($i15);
+
+        $r12 = virtualinvoke $r11.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setPcmEncoding(int)>(i0);
+
+        $r13 = virtualinvoke $r12.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.common.Format format> = $r13;
+
+        return;
+    }
+
+    public void reset(long)
+    {
+        androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter r0;
+        long l0;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter;
+
+        l0 := @parameter0: long;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: long startTimeUs> = l0;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int pendingOutputBytes> = 0;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: long outputFrameCount> = 0L;
+
+        return;
+    }
+
+    public void init(int, long)
+    {
+        androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter r0;
+        int i0;
+        long l1, $l2;
+        androidx.media3.extractor.wav.WavSeekMap $r1;
+        androidx.media3.extractor.wav.WavFormat $r2;
+        androidx.media3.extractor.ExtractorOutput $r3;
+        androidx.media3.common.Format $r4;
+        androidx.media3.extractor.TrackOutput $r5;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        $r3 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r1 = new androidx.media3.extractor.wav.WavSeekMap;
+
+        $r2 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $l2 = (long) i0;
+
+        specialinvoke $r1.<androidx.media3.extractor.wav.WavSeekMap: void <init>(androidx.media3.extractor.wav.WavFormat,int,long,long)>($r2, 1, $l2, l1);
+
+        interfaceinvoke $r3.<androidx.media3.extractor.ExtractorOutput: void seekMap(androidx.media3.extractor.SeekMap)>($r1);
+
+        $r5 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        $r4 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.common.Format format>;
+
+        interfaceinvoke $r5.<androidx.media3.extractor.TrackOutput: void format(androidx.media3.common.Format)>($r4);
+
+        return;
+    }
+
+    public boolean sampleData(androidx.media3.extractor.ExtractorInput, long) throws java.io.IOException
+    {
+        androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        long l0, $l7, $l8, $l9, $l10, $l12, $l13, $l14, $l20, $l21, $l24, l25;
+        int i1, i2, $i4, $i6, $i11, $i15, $i16, $i17, $i18, $i19, $i22, $i23, i26, i27, i28, i29;
+        byte $b3, $b5;
+        androidx.media3.extractor.wav.WavFormat $r2, $r3;
+        androidx.media3.extractor.TrackOutput $r4, $r5;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        l25 := @parameter1: long;
+
+     label1:
+        $b3 = l25 cmp 0L;
+
+        if $b3 <= 0 goto label4;
+
+        $i16 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int pendingOutputBytes>;
+
+        $i15 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int targetSampleSizeBytes>;
+
+        if $i16 >= $i15 goto label4;
+
+        $i18 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int targetSampleSizeBytes>;
+
+        $i17 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int pendingOutputBytes>;
+
+        $i19 = $i18 - $i17;
+
+        $l20 = (long) $i19;
+
+        $l21 = staticinvoke <java.lang.Math: long min(long,long)>($l20, l25);
+
+        i26 = (int) $l21;
+
+        $r5 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        i27 = interfaceinvoke $r5.<androidx.media3.extractor.TrackOutput: int sampleData(androidx.media3.common.DataReader,int,boolean)>(r1, i26, 1);
+
+        if i27 != -1 goto label2;
+
+        l25 = 0L;
+
+        goto label3;
+
+     label2:
+        $i22 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int pendingOutputBytes>;
+
+        $i23 = $i22 + i27;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int pendingOutputBytes> = $i23;
+
+        $l24 = (long) i27;
+
+        l25 = l25 - $l24;
+
+     label3:
+        goto label1;
+
+     label4:
+        $r2 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        i28 = $r2.<androidx.media3.extractor.wav.WavFormat: int blockSize>;
+
+        $i4 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int pendingOutputBytes>;
+
+        i29 = $i4 / i28;
+
+        if i29 <= 0 goto label5;
+
+        $l9 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: long startTimeUs>;
+
+        $l8 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: long outputFrameCount>;
+
+        $r3 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.wav.WavFormat wavFormat>;
+
+        $i6 = $r3.<androidx.media3.extractor.wav.WavFormat: int frameRateHz>;
+
+        $l7 = (long) $i6;
+
+        $l10 = staticinvoke <androidx.media3.common.util.Util: long scaleLargeTimestamp(long,long,long)>($l8, 1000000L, $l7);
+
+        l0 = $l9 + $l10;
+
+        i1 = i29 * i28;
+
+        $i11 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int pendingOutputBytes>;
+
+        i2 = $i11 - i1;
+
+        $r4 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        interfaceinvoke $r4.<androidx.media3.extractor.TrackOutput: void sampleMetadata(long,int,int,int,androidx.media3.extractor.TrackOutput$CryptoData)>(l0, 1, i1, i2, null);
+
+        $l13 = r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: long outputFrameCount>;
+
+        $l12 = (long) i29;
+
+        $l14 = $l13 + $l12;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: long outputFrameCount> = $l14;
+
+        r0.<androidx.media3.extractor.wav.WavExtractor$PassthroughOutputWriter: int pendingOutputBytes> = i2;
+
+     label5:
+        $b5 = l25 cmp 0L;
+
+        if $b5 > 0 goto label6;
+
+        $z0 = 1;
+
+        goto label7;
+
+     label6:
+        $z0 = 0;
+
+     label7:
+        return $z0;
+    }
+

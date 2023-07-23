@@ -1,0 +1,331 @@
+androidx.test.orchestrator.callback.BundleConverter
+<androidx.test.orchestrator.callback.BundleConverter: java.lang.String KEY_DESCRIPTION>
+<androidx.test.orchestrator.callback.BundleConverter: java.lang.String KEY_FAILURE>
+<androidx.test.orchestrator.callback.BundleConverter: java.lang.String KEY_RESULT>
+    private static android.os.Bundle getBundleFromFailureEvent(androidx.test.services.events.run.TestFailureEvent, androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent)
+    {
+        androidx.test.services.events.run.TestFailureEvent r0;
+        androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent r1;
+        android.os.Bundle r2, $r5;
+        androidx.test.orchestrator.junit.ParcelableDescription r3, $r6;
+        androidx.test.orchestrator.junit.ParcelableFailure r4, $r9;
+        androidx.test.services.events.TestCaseInfo $r7;
+        java.lang.String $r8, $r11, $r12;
+        androidx.test.services.events.FailureInfo $r10;
+
+        r0 := @parameter0: androidx.test.services.events.run.TestFailureEvent;
+
+        r1 := @parameter1: androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent;
+
+        $r5 = new android.os.Bundle;
+
+        specialinvoke $r5.<android.os.Bundle: void <init>()>();
+
+        r2 = $r5;
+
+        $r6 = new androidx.test.orchestrator.junit.ParcelableDescription;
+
+        $r7 = r0.<androidx.test.services.events.run.TestFailureEvent: androidx.test.services.events.TestCaseInfo testCase>;
+
+        $r8 = virtualinvoke $r7.<androidx.test.services.events.TestCaseInfo: java.lang.String getClassAndMethodName()>();
+
+        specialinvoke $r6.<androidx.test.orchestrator.junit.ParcelableDescription: void <init>(java.lang.String)>($r8);
+
+        r3 = $r6;
+
+        $r9 = new androidx.test.orchestrator.junit.ParcelableFailure;
+
+        $r10 = r0.<androidx.test.services.events.run.TestFailureEvent: androidx.test.services.events.FailureInfo failure>;
+
+        $r11 = $r10.<androidx.test.services.events.FailureInfo: java.lang.String stackTrace>;
+
+        specialinvoke $r9.<androidx.test.orchestrator.junit.ParcelableFailure: void <init>(androidx.test.orchestrator.junit.ParcelableDescription,java.lang.String)>(r3, $r11);
+
+        r4 = $r9;
+
+        virtualinvoke r2.<android.os.Bundle: void putParcelable(java.lang.String,android.os.Parcelable)>("failure", r4);
+
+        $r12 = virtualinvoke r1.<androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: java.lang.String name()>();
+
+        virtualinvoke r2.<android.os.Bundle: void putString(java.lang.String,java.lang.String)>("TestEvent", $r12);
+
+        return r2;
+    }
+
+    private static android.os.Bundle getBundleFromTestCaseEvent(androidx.test.services.events.run.TestRunEventWithTestCase, androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent)
+    {
+        androidx.test.services.events.run.TestRunEventWithTestCase r0;
+        androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent r1;
+        android.os.Bundle r2, $r4;
+        androidx.test.orchestrator.junit.ParcelableDescription r3, $r5;
+        androidx.test.services.events.TestCaseInfo $r6;
+        java.lang.String $r7, $r8;
+
+        r0 := @parameter0: androidx.test.services.events.run.TestRunEventWithTestCase;
+
+        r1 := @parameter1: androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent;
+
+        $r4 = new android.os.Bundle;
+
+        specialinvoke $r4.<android.os.Bundle: void <init>()>();
+
+        r2 = $r4;
+
+        $r5 = new androidx.test.orchestrator.junit.ParcelableDescription;
+
+        $r6 = r0.<androidx.test.services.events.run.TestRunEventWithTestCase: androidx.test.services.events.TestCaseInfo testCase>;
+
+        $r7 = virtualinvoke $r6.<androidx.test.services.events.TestCaseInfo: java.lang.String getClassAndMethodName()>();
+
+        specialinvoke $r5.<androidx.test.orchestrator.junit.ParcelableDescription: void <init>(java.lang.String)>($r7);
+
+        r3 = $r5;
+
+        virtualinvoke r2.<android.os.Bundle: void putParcelable(java.lang.String,android.os.Parcelable)>("description", r3);
+
+        $r8 = virtualinvoke r1.<androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: java.lang.String name()>();
+
+        virtualinvoke r2.<android.os.Bundle: void putString(java.lang.String,java.lang.String)>("TestEvent", $r8);
+
+        return r2;
+    }
+
+    public static android.os.Bundle getBundleFromTestRunEvent(androidx.test.services.events.run.TestRunEvent) throws androidx.test.internal.events.client.TestEventClientException
+    {
+        androidx.test.services.events.run.TestRunEvent r0;
+        java.lang.String r1, $r7;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6;
+        java.lang.StringBuilder $r4, $r5, $r6, r28;
+        androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent $r8, $r11, $r16, $r19, $r22, $r25;
+        androidx.test.services.events.run.TestStartedEvent $r9;
+        android.os.Bundle $r10, $r13, $r15, $r18, $r21, $r24, $r27;
+        androidx.test.services.events.run.TestRunStartedEvent $r12;
+        androidx.test.services.events.run.TestRunFinishedEvent $r14;
+        androidx.test.services.events.run.TestIgnoredEvent $r17;
+        androidx.test.services.events.run.TestFinishedEvent $r20;
+        androidx.test.services.events.run.TestFailureEvent $r23;
+        androidx.test.services.events.run.TestAssumptionFailureEvent $r26;
+        androidx.test.internal.events.client.TestEventClientException r29;
+        java.lang.Throwable r30;
+
+        r0 := @parameter0: androidx.test.services.events.run.TestRunEvent;
+
+        $z0 = r0 instanceof androidx.test.services.events.run.TestAssumptionFailureEvent;
+
+        if $z0 == 0 goto label1;
+
+        $r26 = (androidx.test.services.events.run.TestAssumptionFailureEvent) r0;
+
+        $r25 = <androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_ASSUMPTION_FAILURE>;
+
+        $r27 = staticinvoke <androidx.test.orchestrator.callback.BundleConverter: android.os.Bundle getBundleFromFailureEvent(androidx.test.services.events.run.TestFailureEvent,androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent)>($r26, $r25);
+
+        return $r27;
+
+     label1:
+        $z1 = r0 instanceof androidx.test.services.events.run.TestFailureEvent;
+
+        if $z1 == 0 goto label2;
+
+        $r23 = (androidx.test.services.events.run.TestFailureEvent) r0;
+
+        $r22 = <androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_FAILURE>;
+
+        $r24 = staticinvoke <androidx.test.orchestrator.callback.BundleConverter: android.os.Bundle getBundleFromFailureEvent(androidx.test.services.events.run.TestFailureEvent,androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent)>($r23, $r22);
+
+        return $r24;
+
+     label2:
+        $z2 = r0 instanceof androidx.test.services.events.run.TestFinishedEvent;
+
+        if $z2 == 0 goto label3;
+
+        $r20 = (androidx.test.services.events.run.TestFinishedEvent) r0;
+
+        $r19 = <androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_FINISHED>;
+
+        $r21 = staticinvoke <androidx.test.orchestrator.callback.BundleConverter: android.os.Bundle getBundleFromTestCaseEvent(androidx.test.services.events.run.TestRunEventWithTestCase,androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent)>($r20, $r19);
+
+        return $r21;
+
+     label3:
+        $z3 = r0 instanceof androidx.test.services.events.run.TestIgnoredEvent;
+
+        if $z3 == 0 goto label4;
+
+        $r17 = (androidx.test.services.events.run.TestIgnoredEvent) r0;
+
+        $r16 = <androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_IGNORED>;
+
+        $r18 = staticinvoke <androidx.test.orchestrator.callback.BundleConverter: android.os.Bundle getBundleFromTestCaseEvent(androidx.test.services.events.run.TestRunEventWithTestCase,androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent)>($r17, $r16);
+
+        return $r18;
+
+     label4:
+        $z4 = r0 instanceof androidx.test.services.events.run.TestRunFinishedEvent;
+
+        if $z4 == 0 goto label5;
+
+        $r14 = (androidx.test.services.events.run.TestRunFinishedEvent) r0;
+
+        $r15 = staticinvoke <androidx.test.orchestrator.callback.BundleConverter: android.os.Bundle getBundleFromTestRunFinishedEvent(androidx.test.services.events.run.TestRunFinishedEvent)>($r14);
+
+        return $r15;
+
+     label5:
+        $z5 = r0 instanceof androidx.test.services.events.run.TestRunStartedEvent;
+
+        if $z5 == 0 goto label6;
+
+        $r12 = (androidx.test.services.events.run.TestRunStartedEvent) r0;
+
+        $r11 = <androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_RUN_STARTED>;
+
+        $r13 = staticinvoke <androidx.test.orchestrator.callback.BundleConverter: android.os.Bundle getBundleFromTestCaseEvent(androidx.test.services.events.run.TestRunEventWithTestCase,androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent)>($r12, $r11);
+
+        return $r13;
+
+     label6:
+        $z6 = r0 instanceof androidx.test.services.events.run.TestStartedEvent;
+
+        if $z6 == 0 goto label7;
+
+        $r9 = (androidx.test.services.events.run.TestStartedEvent) r0;
+
+        $r8 = <androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_STARTED>;
+
+        $r10 = staticinvoke <androidx.test.orchestrator.callback.BundleConverter: android.os.Bundle getBundleFromTestCaseEvent(androidx.test.services.events.run.TestRunEventWithTestCase,androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent)>($r9, $r8);
+
+        return $r10;
+
+     label7:
+        r29 = new androidx.test.internal.events.client.TestEventClientException;
+
+        r1 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>(r0);
+
+        r28 = new java.lang.StringBuilder;
+
+        specialinvoke r28.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unrecognized test run event type [");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r29.<androidx.test.internal.events.client.TestEventClientException: void <init>(java.lang.String)>($r7);
+
+        r30 = (java.lang.Throwable) r29;
+
+        throw r30;
+    }
+
+    private static android.os.Bundle getBundleFromTestRunFinishedEvent(androidx.test.services.events.run.TestRunFinishedEvent)
+    {
+        androidx.test.services.events.run.TestRunFinishedEvent r0;
+        android.os.Bundle r1, $r3;
+        androidx.test.orchestrator.junit.ParcelableResult r2, $r4;
+        java.util.List $r5, $r6;
+        androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent $r7;
+        java.lang.String $r8;
+
+        r0 := @parameter0: androidx.test.services.events.run.TestRunFinishedEvent;
+
+        $r3 = new android.os.Bundle;
+
+        specialinvoke $r3.<android.os.Bundle: void <init>()>();
+
+        r1 = $r3;
+
+        $r4 = new androidx.test.orchestrator.junit.ParcelableResult;
+
+        $r5 = r0.<androidx.test.services.events.run.TestRunFinishedEvent: java.util.List failures>;
+
+        $r6 = staticinvoke <androidx.test.orchestrator.callback.BundleConverter: java.util.List getParcelableFailureFromList(java.util.List)>($r5);
+
+        specialinvoke $r4.<androidx.test.orchestrator.junit.ParcelableResult: void <init>(java.util.List)>($r6);
+
+        r2 = $r4;
+
+        virtualinvoke r1.<android.os.Bundle: void putParcelable(java.lang.String,android.os.Parcelable)>("result", r2);
+
+        $r7 = <androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_RUN_FINISHED>;
+
+        $r8 = virtualinvoke $r7.<androidx.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: java.lang.String name()>();
+
+        virtualinvoke r1.<android.os.Bundle: void putString(java.lang.String,java.lang.String)>("TestEvent", $r8);
+
+        return r1;
+    }
+
+    private static java.util.List getParcelableFailureFromList(java.util.List)
+    {
+        java.util.List r0;
+        java.util.ArrayList r1, $r6;
+        java.util.Iterator r2;
+        androidx.test.services.events.FailureInfo r3;
+        androidx.test.orchestrator.junit.ParcelableDescription r4, $r8;
+        androidx.test.orchestrator.junit.ParcelableFailure r5, $r11;
+        boolean $z0;
+        java.lang.Object $r7;
+        androidx.test.services.events.TestCaseInfo $r9;
+        java.lang.String $r10, $r12;
+
+        r0 := @parameter0: java.util.List;
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        r1 = $r6;
+
+        r2 = interfaceinvoke r0.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r7 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.test.services.events.FailureInfo) $r7;
+
+        $r8 = new androidx.test.orchestrator.junit.ParcelableDescription;
+
+        $r9 = r3.<androidx.test.services.events.FailureInfo: androidx.test.services.events.TestCaseInfo testCase>;
+
+        $r10 = virtualinvoke $r9.<androidx.test.services.events.TestCaseInfo: java.lang.String getClassAndMethodName()>();
+
+        specialinvoke $r8.<androidx.test.orchestrator.junit.ParcelableDescription: void <init>(java.lang.String)>($r10);
+
+        r4 = $r8;
+
+        $r11 = new androidx.test.orchestrator.junit.ParcelableFailure;
+
+        $r12 = r3.<androidx.test.services.events.FailureInfo: java.lang.String stackTrace>;
+
+        specialinvoke $r11.<androidx.test.orchestrator.junit.ParcelableFailure: void <init>(androidx.test.orchestrator.junit.ParcelableDescription,java.lang.String)>(r4, $r12);
+
+        r5 = $r11;
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>(r5);
+
+        goto label1;
+
+     label2:
+        return r1;
+    }
+
+    private void <init>()
+    {
+        androidx.test.orchestrator.callback.BundleConverter r0;
+
+        r0 := @this: androidx.test.orchestrator.callback.BundleConverter;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

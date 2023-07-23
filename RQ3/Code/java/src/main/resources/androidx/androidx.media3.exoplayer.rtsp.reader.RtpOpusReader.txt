@@ -1,0 +1,277 @@
+androidx.media3.exoplayer.rtsp.reader.RtpOpusReader
+<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: java.lang.String TAG>
+<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: int MEDIA_CLOCK_FREQUENCY>
+<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.exoplayer.rtsp.RtpPayloadFormat payloadFormat>
+<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.extractor.TrackOutput trackOutput>
+<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: long firstReceivedTimestamp>
+<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: long startTimeOffsetUs>
+<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: int previousSequenceNumber>
+<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: boolean foundOpusIDHeader>
+<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: boolean foundOpusCommentHeader>
+    public void <init>(androidx.media3.exoplayer.rtsp.RtpPayloadFormat)
+    {
+        androidx.media3.exoplayer.rtsp.reader.RtpOpusReader r0;
+        androidx.media3.exoplayer.rtsp.RtpPayloadFormat r1;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.reader.RtpOpusReader;
+
+        r1 := @parameter0: androidx.media3.exoplayer.rtsp.RtpPayloadFormat;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.exoplayer.rtsp.RtpPayloadFormat payloadFormat> = r1;
+
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: long firstReceivedTimestamp> = -1L;
+
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: int previousSequenceNumber> = -1;
+
+        return;
+    }
+
+    public void createTracks(androidx.media3.extractor.ExtractorOutput, int)
+    {
+        androidx.media3.exoplayer.rtsp.reader.RtpOpusReader r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+        int i0;
+        androidx.media3.extractor.TrackOutput $r2, $r5;
+        androidx.media3.exoplayer.rtsp.RtpPayloadFormat $r3;
+        androidx.media3.common.Format $r4;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.reader.RtpOpusReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        i0 := @parameter1: int;
+
+        $r2 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: androidx.media3.extractor.TrackOutput track(int,int)>(i0, 1);
+
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.extractor.TrackOutput trackOutput> = $r2;
+
+        $r5 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        $r3 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.exoplayer.rtsp.RtpPayloadFormat payloadFormat>;
+
+        $r4 = $r3.<androidx.media3.exoplayer.rtsp.RtpPayloadFormat: androidx.media3.common.Format format>;
+
+        interfaceinvoke $r5.<androidx.media3.extractor.TrackOutput: void format(androidx.media3.common.Format)>($r4);
+
+        return;
+    }
+
+    public void onReceivingFirstPacket(long, int)
+    {
+        androidx.media3.exoplayer.rtsp.reader.RtpOpusReader r0;
+        long l0;
+        int i1;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.reader.RtpOpusReader;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: long firstReceivedTimestamp> = l0;
+
+        return;
+    }
+
+    public void consume(androidx.media3.common.util.ParsableByteArray, long, int, boolean)
+    {
+        androidx.media3.exoplayer.rtsp.reader.RtpOpusReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        long l0, l2, $l4, $l5;
+        int i1, $i3, i6, i7, i8;
+        boolean z0, $z1, $z2, $z3, $z4;
+        androidx.media3.extractor.TrackOutput $r2, $r4, $r5, $r14;
+        java.lang.Object[] $r6;
+        java.lang.Integer $r7, $r8;
+        java.lang.String $r9, r18;
+        byte[] $r10;
+        androidx.media3.exoplayer.rtsp.RtpPayloadFormat $r11;
+        androidx.media3.common.Format $r12, $r15;
+        java.util.List r16;
+        androidx.media3.common.Format$Builder r17;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.reader.RtpOpusReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        l0 := @parameter1: long;
+
+        i1 := @parameter2: int;
+
+        z0 := @parameter3: boolean;
+
+        $r2 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r2);
+
+        $z1 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: boolean foundOpusIDHeader>;
+
+        if $z1 != 0 goto label1;
+
+        staticinvoke <androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: void validateOpusIdHeader(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        $r10 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        r16 = staticinvoke <androidx.media3.extractor.OpusUtil: java.util.List buildInitializationData(byte[])>($r10);
+
+        $r11 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.exoplayer.rtsp.RtpPayloadFormat payloadFormat>;
+
+        $r12 = $r11.<androidx.media3.exoplayer.rtsp.RtpPayloadFormat: androidx.media3.common.Format format>;
+
+        r17 = virtualinvoke $r12.<androidx.media3.common.Format: androidx.media3.common.Format$Builder buildUpon()>();
+
+        virtualinvoke r17.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setInitializationData(java.util.List)>(r16);
+
+        $r14 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        $r15 = virtualinvoke r17.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        interfaceinvoke $r14.<androidx.media3.extractor.TrackOutput: void format(androidx.media3.common.Format)>($r15);
+
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: boolean foundOpusIDHeader> = 1;
+
+        goto label6;
+
+     label1:
+        $z2 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: boolean foundOpusCommentHeader>;
+
+        if $z2 != 0 goto label4;
+
+        i6 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+        if i6 < 8 goto label2;
+
+        $z4 = 1;
+
+        goto label3;
+
+     label2:
+        $z4 = 0;
+
+     label3:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z4, "Comment Header has insufficient data");
+
+        r18 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: java.lang.String readString(int)>(8);
+
+        $z3 = virtualinvoke r18.<java.lang.String: boolean equals(java.lang.Object)>("OpusTags");
+
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z3, "Comment Header should follow ID Header");
+
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: boolean foundOpusCommentHeader> = 1;
+
+        goto label6;
+
+     label4:
+        $i3 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: int previousSequenceNumber>;
+
+        i7 = staticinvoke <androidx.media3.exoplayer.rtsp.RtpPacket: int getNextSequenceNumber(int)>($i3);
+
+        if i1 == i7 goto label5;
+
+        $r6 = newarray (java.lang.Object)[2];
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i7);
+
+        $r6[0] = $r7;
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r6[1] = $r8;
+
+        $r9 = staticinvoke <androidx.media3.common.util.Util: java.lang.String formatInvariant(java.lang.String,java.lang.Object[])>("Received RTP packet with unexpected sequence number. Expected: %d; received: %d.", $r6);
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("RtpOpusReader", $r9);
+
+     label5:
+        i8 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        $r4 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        interfaceinvoke $r4.<androidx.media3.extractor.TrackOutput: void sampleData(androidx.media3.common.util.ParsableByteArray,int)>(r1, i8);
+
+        $l5 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: long startTimeOffsetUs>;
+
+        $l4 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: long firstReceivedTimestamp>;
+
+        l2 = staticinvoke <androidx.media3.exoplayer.rtsp.reader.RtpReaderUtils: long toSampleTimeUs(long,long,long,int)>($l5, l0, $l4, 48000);
+
+        $r5 = r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        interfaceinvoke $r5.<androidx.media3.extractor.TrackOutput: void sampleMetadata(long,int,int,int,androidx.media3.extractor.TrackOutput$CryptoData)>(l2, 1, i8, 0, null);
+
+     label6:
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: int previousSequenceNumber> = i1;
+
+        return;
+    }
+
+    public void seek(long, long)
+    {
+        androidx.media3.exoplayer.rtsp.reader.RtpOpusReader r0;
+        long l0, l1;
+
+        r0 := @this: androidx.media3.exoplayer.rtsp.reader.RtpOpusReader;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: long firstReceivedTimestamp> = l0;
+
+        r0.<androidx.media3.exoplayer.rtsp.reader.RtpOpusReader: long startTimeOffsetUs> = l1;
+
+        return;
+    }
+
+    private static void validateOpusIdHeader(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0, i1, $i2;
+        java.lang.String r1;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i0 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        i1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+        if i1 <= 18 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "ID Header has insufficient data");
+
+        r1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: java.lang.String readString(int)>(8);
+
+        $z0 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("OpusHead");
+
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, "ID Header missing");
+
+        $i2 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        if $i2 != 1 goto label3;
+
+        $z2 = 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z2, "version number must always be 1");
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i0);
+
+        return;
+    }
+

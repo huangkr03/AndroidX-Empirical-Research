@@ -1,0 +1,252 @@
+androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor
+<androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor: int FLOAT_NAN_AS_INT>
+<androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor: double PCM_32_BIT_INT_TO_PCM_32_BIT_FLOAT_FACTOR>
+    void <init>()
+    {
+        androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor r0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.BaseAudioProcessor: void <init>()>();
+
+        return;
+    }
+
+    public androidx.media3.common.audio.AudioProcessor$AudioFormat onConfigure(androidx.media3.common.audio.AudioProcessor$AudioFormat) throws androidx.media3.common.audio.AudioProcessor$UnhandledAudioFormatException
+    {
+        androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor r0;
+        androidx.media3.common.audio.AudioProcessor$AudioFormat r1, $r3;
+        int i0, $i1, $i2;
+        boolean $z0;
+        androidx.media3.common.audio.AudioProcessor$UnhandledAudioFormatException $r2;
+
+        r0 := @this: androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor;
+
+        r1 := @parameter0: androidx.media3.common.audio.AudioProcessor$AudioFormat;
+
+        i0 = r1.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int encoding>;
+
+        $z0 = staticinvoke <androidx.media3.common.util.Util: boolean isEncodingHighResolutionPcm(int)>(i0);
+
+        if $z0 != 0 goto label1;
+
+        $r2 = new androidx.media3.common.audio.AudioProcessor$UnhandledAudioFormatException;
+
+        specialinvoke $r2.<androidx.media3.common.audio.AudioProcessor$UnhandledAudioFormatException: void <init>(androidx.media3.common.audio.AudioProcessor$AudioFormat)>(r1);
+
+        throw $r2;
+
+     label1:
+        if i0 == 4 goto label2;
+
+        $r3 = new androidx.media3.common.audio.AudioProcessor$AudioFormat;
+
+        $i2 = r1.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int sampleRate>;
+
+        $i1 = r1.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int channelCount>;
+
+        specialinvoke $r3.<androidx.media3.common.audio.AudioProcessor$AudioFormat: void <init>(int,int,int)>($i2, $i1, 4);
+
+        goto label3;
+
+     label2:
+        $r3 = <androidx.media3.common.audio.AudioProcessor$AudioFormat: androidx.media3.common.audio.AudioProcessor$AudioFormat NOT_SET>;
+
+     label3:
+        return $r3;
+    }
+
+    public void queueInput(java.nio.ByteBuffer)
+    {
+        androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor r0;
+        java.nio.ByteBuffer r1, r6;
+        int i0, i1, i2, $i3, $i4, $i6, $i10, $i11, $i12, $i15, $i16, $i17, $i20, $i21, $i22, $i25, $i26, $i29, $i30, $i31, $i34, i35, i36, i37, i38;
+        androidx.media3.common.audio.AudioProcessor$AudioFormat $r2;
+        byte $b5, $b8, $b13, $b18, $b23, $b27, $b32;
+        short $s7, $s9, $s14, $s19, $s24, $s28, $s33;
+        java.lang.IllegalStateException $r5;
+
+        r0 := @this: androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor;
+
+        r1 := @parameter0: java.nio.ByteBuffer;
+
+        i0 = virtualinvoke r1.<java.nio.ByteBuffer: int position()>();
+
+        i1 = virtualinvoke r1.<java.nio.ByteBuffer: int limit()>();
+
+        i2 = i1 - i0;
+
+        $r2 = r0.<androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i3 = $r2.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int encoding>;
+
+        lookupswitch($i3)
+        {
+            case -1: goto label7;
+            case 0: goto label7;
+            case 2: goto label7;
+            case 3: goto label7;
+            case 4: goto label7;
+            case 268435456: goto label7;
+            case 536870912: goto label1;
+            case 805306368: goto label4;
+            default: goto label7;
+        };
+
+     label1:
+        $i21 = i2 / 3;
+
+        $i22 = $i21 * 4;
+
+        r6 = virtualinvoke r0.<androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor: java.nio.ByteBuffer replaceOutputBuffer(int)>($i22);
+
+        i35 = i0;
+
+     label2:
+        if i35 >= i1 goto label3;
+
+        $b23 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>(i35);
+
+        $s24 = $b23 & 255;
+
+        $i26 = $s24 << 8;
+
+        $i25 = i35 + 1;
+
+        $b27 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i25);
+
+        $s28 = $b27 & 255;
+
+        $i29 = $s28 << 16;
+
+        $i31 = $i26 | $i29;
+
+        $i30 = i35 + 2;
+
+        $b32 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i30);
+
+        $s33 = $b32 & 255;
+
+        $i34 = $s33 << 24;
+
+        i36 = $i31 | $i34;
+
+        staticinvoke <androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor: void writePcm32BitFloat(int,java.nio.ByteBuffer)>(i36, r6);
+
+        i35 = i35 + 3;
+
+        goto label2;
+
+     label3:
+        goto label8;
+
+     label4:
+        r6 = virtualinvoke r0.<androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor: java.nio.ByteBuffer replaceOutputBuffer(int)>(i2);
+
+        i37 = i0;
+
+     label5:
+        if i37 >= i1 goto label6;
+
+        $b5 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>(i37);
+
+        $s7 = $b5 & 255;
+
+        $i6 = i37 + 1;
+
+        $b8 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i6);
+
+        $s9 = $b8 & 255;
+
+        $i10 = $s9 << 8;
+
+        $i12 = $s7 | $i10;
+
+        $i11 = i37 + 2;
+
+        $b13 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i11);
+
+        $s14 = $b13 & 255;
+
+        $i15 = $s14 << 16;
+
+        $i17 = $i12 | $i15;
+
+        $i16 = i37 + 3;
+
+        $b18 = virtualinvoke r1.<java.nio.ByteBuffer: byte get(int)>($i16);
+
+        $s19 = $b18 & 255;
+
+        $i20 = $s19 << 24;
+
+        i38 = $i17 | $i20;
+
+        staticinvoke <androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor: void writePcm32BitFloat(int,java.nio.ByteBuffer)>(i38, r6);
+
+        i37 = i37 + 4;
+
+        goto label5;
+
+     label6:
+        goto label8;
+
+     label7:
+        $r5 = new java.lang.IllegalStateException;
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r5;
+
+     label8:
+        $i4 = virtualinvoke r1.<java.nio.ByteBuffer: int limit()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer position(int)>($i4);
+
+        virtualinvoke r6.<java.nio.ByteBuffer: java.nio.Buffer flip()>();
+
+        return;
+    }
+
+    private static void writePcm32BitFloat(int, java.nio.ByteBuffer)
+    {
+        int i0, $i1, i2;
+        java.nio.ByteBuffer r0;
+        float f0;
+        double $d0, $d1;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: java.nio.ByteBuffer;
+
+        $d0 = (double) i0;
+
+        $d1 = 4.656612875245797E-10 * $d0;
+
+        f0 = (float) $d1;
+
+        i2 = staticinvoke <java.lang.Float: int floatToIntBits(float)>(f0);
+
+        $i1 = <androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor: int FLOAT_NAN_AS_INT>;
+
+        if i2 != $i1 goto label1;
+
+        i2 = staticinvoke <java.lang.Float: int floatToIntBits(float)>(0.0F);
+
+     label1:
+        virtualinvoke r0.<java.nio.ByteBuffer: java.nio.ByteBuffer putInt(int)>(i2);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        int $i0;
+
+        $i0 = staticinvoke <java.lang.Float: int floatToIntBits(float)>(#NaNF);
+
+        <androidx.media3.exoplayer.audio.FloatResamplingAudioProcessor: int FLOAT_NAN_AS_INT> = $i0;
+
+        return;
+    }
+

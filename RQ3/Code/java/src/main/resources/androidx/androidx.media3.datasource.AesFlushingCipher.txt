@@ -1,0 +1,428 @@
+androidx.media3.datasource.AesFlushingCipher
+<androidx.media3.datasource.AesFlushingCipher: javax.crypto.Cipher cipher>
+<androidx.media3.datasource.AesFlushingCipher: int blockSize>
+<androidx.media3.datasource.AesFlushingCipher: byte[] zerosBlock>
+<androidx.media3.datasource.AesFlushingCipher: byte[] flushedBlock>
+<androidx.media3.datasource.AesFlushingCipher: int pendingXorBytes>
+    public void <init>(int, byte[], java.lang.String, long)
+    {
+        androidx.media3.datasource.AesFlushingCipher r0;
+        int i0;
+        byte[] r1;
+        java.lang.String r2;
+        long l1, $l2;
+
+        r0 := @this: androidx.media3.datasource.AesFlushingCipher;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: byte[];
+
+        r2 := @parameter2: java.lang.String;
+
+        l1 := @parameter3: long;
+
+        $l2 = staticinvoke <androidx.media3.datasource.AesFlushingCipher: long getFNV64Hash(java.lang.String)>(r2);
+
+        specialinvoke r0.<androidx.media3.datasource.AesFlushingCipher: void <init>(int,byte[],long,long)>(i0, r1, $l2, l1);
+
+        return;
+    }
+
+    public void <init>(int, byte[], long, long)
+    {
+        androidx.media3.datasource.AesFlushingCipher r0;
+        int i0, i3, $i4, $i5, $i6, $i7, $i9;
+        byte[] r1, $r4, $r5, $r13, $r14;
+        long l1, l2, $l8, $l10, $l11, l12;
+        javax.crypto.Cipher $r2, $r3, $r7, $r8;
+        javax.crypto.spec.SecretKeySpec $r6;
+        java.lang.String $r9, $r11;
+        java.lang.String[] $r10;
+        javax.crypto.spec.IvParameterSpec $r12;
+        java.lang.Throwable $r15, r17;
+        java.lang.RuntimeException $r16;
+
+        r0 := @this: androidx.media3.datasource.AesFlushingCipher;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: byte[];
+
+        l1 := @parameter2: long;
+
+        l2 := @parameter3: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+     label1:
+        $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>("AES/CTR/NoPadding");
+
+        r0.<androidx.media3.datasource.AesFlushingCipher: javax.crypto.Cipher cipher> = $r2;
+
+        $r3 = r0.<androidx.media3.datasource.AesFlushingCipher: javax.crypto.Cipher cipher>;
+
+        $i4 = virtualinvoke $r3.<javax.crypto.Cipher: int getBlockSize()>();
+
+        r0.<androidx.media3.datasource.AesFlushingCipher: int blockSize> = $i4;
+
+        $i5 = r0.<androidx.media3.datasource.AesFlushingCipher: int blockSize>;
+
+        $r4 = newarray (byte)[$i5];
+
+        r0.<androidx.media3.datasource.AesFlushingCipher: byte[] zerosBlock> = $r4;
+
+        $i6 = r0.<androidx.media3.datasource.AesFlushingCipher: int blockSize>;
+
+        $r5 = newarray (byte)[$i6];
+
+        r0.<androidx.media3.datasource.AesFlushingCipher: byte[] flushedBlock> = $r5;
+
+        $i7 = r0.<androidx.media3.datasource.AesFlushingCipher: int blockSize>;
+
+        $l8 = (long) $i7;
+
+        l12 = l2 / $l8;
+
+        $i9 = r0.<androidx.media3.datasource.AesFlushingCipher: int blockSize>;
+
+        $l10 = (long) $i9;
+
+        $l11 = l2 % $l10;
+
+        i3 = (int) $l11;
+
+        $r8 = r0.<androidx.media3.datasource.AesFlushingCipher: javax.crypto.Cipher cipher>;
+
+        $r6 = new javax.crypto.spec.SecretKeySpec;
+
+        $r7 = r0.<androidx.media3.datasource.AesFlushingCipher: javax.crypto.Cipher cipher>;
+
+        $r9 = virtualinvoke $r7.<javax.crypto.Cipher: java.lang.String getAlgorithm()>();
+
+        $r10 = staticinvoke <androidx.media3.common.util.Util: java.lang.String[] splitAtFirst(java.lang.String,java.lang.String)>($r9, "/");
+
+        $r11 = $r10[0];
+
+        specialinvoke $r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>(r1, $r11);
+
+        $r12 = new javax.crypto.spec.IvParameterSpec;
+
+        $r13 = specialinvoke r0.<androidx.media3.datasource.AesFlushingCipher: byte[] getInitializationVector(long,long)>(l1, l12);
+
+        specialinvoke $r12.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r13);
+
+        virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(i0, $r6, $r12);
+
+        if i3 == 0 goto label2;
+
+        $r14 = newarray (byte)[i3];
+
+        virtualinvoke r0.<androidx.media3.datasource.AesFlushingCipher: void updateInPlace(byte[],int,int)>($r14, 0, i3);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r15 := @caughtexception;
+
+        r17 = $r15;
+
+        $r16 = new java.lang.RuntimeException;
+
+        specialinvoke $r16.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r17);
+
+        throw $r16;
+
+     label4:
+        return;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch javax.crypto.NoSuchPaddingException from label1 to label2 with label3;
+        catch java.security.InvalidKeyException from label1 to label2 with label3;
+        catch java.security.InvalidAlgorithmParameterException from label1 to label2 with label3;
+    }
+
+    public void updateInPlace(byte[], int, int)
+    {
+        androidx.media3.datasource.AesFlushingCipher r0;
+        byte[] r1;
+        int i0, i1;
+
+        r0 := @this: androidx.media3.datasource.AesFlushingCipher;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        virtualinvoke r0.<androidx.media3.datasource.AesFlushingCipher: void update(byte[],int,int,byte[],int)>(r1, i0, i1, r1, i0);
+
+        return;
+    }
+
+    public void update(byte[], int, int, byte[], int)
+    {
+        androidx.media3.datasource.AesFlushingCipher r0;
+        byte[] r1, r2, $r3, $r4, $r5, $r6;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i9, $i10, $i11, $i16, $i17, i18, i19, i20, i21, i22, i23, i24;
+        byte $b8, $b12, $b13, $b14, $b15;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.media3.datasource.AesFlushingCipher;
+
+        r1 := @parameter0: byte[];
+
+        i18 := @parameter1: int;
+
+        i19 := @parameter2: int;
+
+        r2 := @parameter3: byte[];
+
+        i20 := @parameter4: int;
+
+     label1:
+        $i1 = r0.<androidx.media3.datasource.AesFlushingCipher: int pendingXorBytes>;
+
+        if $i1 <= 0 goto label2;
+
+        $b13 = r1[i18];
+
+        $r6 = r0.<androidx.media3.datasource.AesFlushingCipher: byte[] flushedBlock>;
+
+        $i10 = r0.<androidx.media3.datasource.AesFlushingCipher: int blockSize>;
+
+        $i9 = r0.<androidx.media3.datasource.AesFlushingCipher: int pendingXorBytes>;
+
+        $i11 = $i10 - $i9;
+
+        $b12 = $r6[$i11];
+
+        $b14 = $b13 ^ $b12;
+
+        $b15 = (byte) $b14;
+
+        r2[i20] = $b15;
+
+        i20 = i20 + 1;
+
+        i18 = i18 + 1;
+
+        $i16 = r0.<androidx.media3.datasource.AesFlushingCipher: int pendingXorBytes>;
+
+        $i17 = $i16 - 1;
+
+        r0.<androidx.media3.datasource.AesFlushingCipher: int pendingXorBytes> = $i17;
+
+        i19 = i19 + -1;
+
+        if i19 != 0 goto label1;
+
+        return;
+
+     label2:
+        i21 = specialinvoke r0.<androidx.media3.datasource.AesFlushingCipher: int nonFlushingUpdate(byte[],int,int,byte[],int)>(r1, i18, i19, r2, i20);
+
+        if i19 != i21 goto label3;
+
+        return;
+
+     label3:
+        i0 = i19 - i21;
+
+        $i2 = r0.<androidx.media3.datasource.AesFlushingCipher: int blockSize>;
+
+        if i0 >= $i2 goto label4;
+
+        $z0 = 1;
+
+        goto label5;
+
+     label4:
+        $z0 = 0;
+
+     label5:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z0);
+
+        i22 = i20 + i21;
+
+        $i3 = r0.<androidx.media3.datasource.AesFlushingCipher: int blockSize>;
+
+        $i4 = $i3 - i0;
+
+        r0.<androidx.media3.datasource.AesFlushingCipher: int pendingXorBytes> = $i4;
+
+        $r4 = r0.<androidx.media3.datasource.AesFlushingCipher: byte[] zerosBlock>;
+
+        $i5 = r0.<androidx.media3.datasource.AesFlushingCipher: int pendingXorBytes>;
+
+        $r3 = r0.<androidx.media3.datasource.AesFlushingCipher: byte[] flushedBlock>;
+
+        i23 = specialinvoke r0.<androidx.media3.datasource.AesFlushingCipher: int nonFlushingUpdate(byte[],int,int,byte[],int)>($r4, 0, $i5, $r3, 0);
+
+        $i6 = r0.<androidx.media3.datasource.AesFlushingCipher: int blockSize>;
+
+        if i23 != $i6 goto label6;
+
+        $z1 = 1;
+
+        goto label7;
+
+     label6:
+        $z1 = 0;
+
+     label7:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        i24 = 0;
+
+     label8:
+        if i24 >= i0 goto label9;
+
+        $i7 = i22;
+
+        i22 = i22 + 1;
+
+        $r5 = r0.<androidx.media3.datasource.AesFlushingCipher: byte[] flushedBlock>;
+
+        $b8 = $r5[i24];
+
+        r2[$i7] = $b8;
+
+        i24 = i24 + 1;
+
+        goto label8;
+
+     label9:
+        return;
+    }
+
+    private int nonFlushingUpdate(byte[], int, int, byte[], int)
+    {
+        androidx.media3.datasource.AesFlushingCipher r0;
+        byte[] r1, r2;
+        int i0, i1, i2, $i3;
+        java.lang.Throwable r3, $r5;
+        javax.crypto.Cipher $r4;
+        java.lang.RuntimeException $r6;
+
+        r0 := @this: androidx.media3.datasource.AesFlushingCipher;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: byte[];
+
+        i2 := @parameter4: int;
+
+     label1:
+        $r4 = r0.<androidx.media3.datasource.AesFlushingCipher: javax.crypto.Cipher cipher>;
+
+        $i3 = virtualinvoke $r4.<javax.crypto.Cipher: int update(byte[],int,int,byte[],int)>(r1, i0, i1, r2, i2);
+
+     label2:
+        return $i3;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r3 = $r5;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r3);
+
+        throw $r6;
+
+        catch javax.crypto.ShortBufferException from label1 to label2 with label3;
+    }
+
+    private byte[] getInitializationVector(long, long)
+    {
+        androidx.media3.datasource.AesFlushingCipher r0;
+        long l0, l1;
+        java.nio.ByteBuffer $r1, $r2, $r3;
+        byte[] $r4;
+
+        r0 := @this: androidx.media3.datasource.AesFlushingCipher;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocate(int)>(16);
+
+        $r2 = virtualinvoke $r1.<java.nio.ByteBuffer: java.nio.ByteBuffer putLong(long)>(l0);
+
+        $r3 = virtualinvoke $r2.<java.nio.ByteBuffer: java.nio.ByteBuffer putLong(long)>(l1);
+
+        $r4 = virtualinvoke $r3.<java.nio.ByteBuffer: byte[] array()>();
+
+        return $r4;
+    }
+
+    private static long getFNV64Hash(java.lang.String)
+    {
+        java.lang.String r0;
+        int $i0, i15;
+        char $c1;
+        long $l2, $l3, $l4, $l5, $l6, $l7, $l8, $l9, $l10, $l11, $l12, $l13, l14, l16;
+
+        r0 := @parameter0: java.lang.String;
+
+        if r0 != null goto label1;
+
+        return 0L;
+
+     label1:
+        l14 = 0L;
+
+        i15 = 0;
+
+     label2:
+        $i0 = virtualinvoke r0.<java.lang.String: int length()>();
+
+        if i15 >= $i0 goto label3;
+
+        $c1 = virtualinvoke r0.<java.lang.String: char charAt(int)>(i15);
+
+        $l2 = (long) $c1;
+
+        l16 = l14 ^ $l2;
+
+        $l4 = l16 << 1;
+
+        $l3 = l16 << 4;
+
+        $l6 = $l4 + $l3;
+
+        $l5 = l16 << 5;
+
+        $l8 = $l6 + $l5;
+
+        $l7 = l16 << 7;
+
+        $l10 = $l8 + $l7;
+
+        $l9 = l16 << 8;
+
+        $l12 = $l10 + $l9;
+
+        $l11 = l16 << 40;
+
+        $l13 = $l12 + $l11;
+
+        l14 = l16 + $l13;
+
+        i15 = i15 + 1;
+
+        goto label2;
+
+     label3:
+        return l14;
+    }
+

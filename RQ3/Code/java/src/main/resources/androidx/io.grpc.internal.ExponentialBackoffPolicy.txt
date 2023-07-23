@@ -1,0 +1,162 @@
+io.grpc.internal.ExponentialBackoffPolicy
+<io.grpc.internal.ExponentialBackoffPolicy: long initialBackoffNanos>
+<io.grpc.internal.ExponentialBackoffPolicy: double jitter>
+<io.grpc.internal.ExponentialBackoffPolicy: long maxBackoffNanos>
+<io.grpc.internal.ExponentialBackoffPolicy: double multiplier>
+<io.grpc.internal.ExponentialBackoffPolicy: long nextBackoffNanos>
+<io.grpc.internal.ExponentialBackoffPolicy: java.util.Random random>
+    public void <init>()
+    {
+        io.grpc.internal.ExponentialBackoffPolicy $r0;
+        java.util.Random $r1;
+        java.util.concurrent.TimeUnit $r2;
+        long $l0;
+
+        $r0 := @this: io.grpc.internal.ExponentialBackoffPolicy;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.Random;
+
+        specialinvoke $r1.<java.util.Random: void <init>()>();
+
+        $r0.<io.grpc.internal.ExponentialBackoffPolicy: java.util.Random random> = $r1;
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.TimeUnit: long toNanos(long)>(1L);
+
+        $r0.<io.grpc.internal.ExponentialBackoffPolicy: long initialBackoffNanos> = $l0;
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MINUTES>;
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.TimeUnit: long toNanos(long)>(2L);
+
+        $r0.<io.grpc.internal.ExponentialBackoffPolicy: long maxBackoffNanos> = $l0;
+
+        $r0.<io.grpc.internal.ExponentialBackoffPolicy: double multiplier> = 1.6;
+
+        $r0.<io.grpc.internal.ExponentialBackoffPolicy: double jitter> = 0.2;
+
+        $l0 = $r0.<io.grpc.internal.ExponentialBackoffPolicy: long initialBackoffNanos>;
+
+        $r0.<io.grpc.internal.ExponentialBackoffPolicy: long nextBackoffNanos> = $l0;
+
+        return;
+    }
+
+    private long uniformRandom(double, double)
+    {
+        io.grpc.internal.ExponentialBackoffPolicy $r0;
+        double $d0, $d1, $d2;
+        byte $b0;
+        boolean $z0;
+        java.util.Random $r1;
+        long $l1;
+
+        $r0 := @this: io.grpc.internal.ExponentialBackoffPolicy;
+
+        $d1 := @parameter0: double;
+
+        $d2 := @parameter1: double;
+
+        $b0 = $d2 cmpl $d1;
+
+        if $b0 < 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean)>($z0);
+
+        $r1 = $r0.<io.grpc.internal.ExponentialBackoffPolicy: java.util.Random random>;
+
+        $d0 = virtualinvoke $r1.<java.util.Random: double nextDouble()>();
+
+        $d2 = $d2 - $d1;
+
+        $d2 = $d0 * $d2;
+
+        $d1 = $d2 + $d1;
+
+        $l1 = (long) $d1;
+
+        return $l1;
+    }
+
+    public long nextBackoffNanos()
+    {
+        io.grpc.internal.ExponentialBackoffPolicy $r0;
+        long $l0, $l1, $l2;
+        double $d0, $d1, $d2;
+
+        $r0 := @this: io.grpc.internal.ExponentialBackoffPolicy;
+
+        $l0 = $r0.<io.grpc.internal.ExponentialBackoffPolicy: long nextBackoffNanos>;
+
+        $d0 = (double) $l0;
+
+        $d1 = $r0.<io.grpc.internal.ExponentialBackoffPolicy: double multiplier>;
+
+        staticinvoke <java.lang.Double: boolean isNaN(double)>($d0);
+
+        $d1 = $d1 * $d0;
+
+        $l1 = (long) $d1;
+
+        $l2 = $r0.<io.grpc.internal.ExponentialBackoffPolicy: long maxBackoffNanos>;
+
+        $l1 = staticinvoke <java.lang.Math: long min(long,long)>($l1, $l2);
+
+        $r0.<io.grpc.internal.ExponentialBackoffPolicy: long nextBackoffNanos> = $l1;
+
+        $d1 = $r0.<io.grpc.internal.ExponentialBackoffPolicy: double jitter>;
+
+        $d2 = neg $d1;
+
+        staticinvoke <java.lang.Double: boolean isNaN(double)>($d0);
+
+        $d2 = $d2 * $d0;
+
+        staticinvoke <java.lang.Double: boolean isNaN(double)>($d0);
+
+        $d0 = $d1 * $d0;
+
+        $l1 = specialinvoke $r0.<io.grpc.internal.ExponentialBackoffPolicy: long uniformRandom(double,double)>($d2, $d0);
+
+        $l0 = $l0 + $l1;
+
+        return $l0;
+    }
+
+io.grpc.internal.ExponentialBackoffPolicy$Provider
+    public void <init>()
+    {
+        io.grpc.internal.ExponentialBackoffPolicy$Provider $r0;
+
+        $r0 := @this: io.grpc.internal.ExponentialBackoffPolicy$Provider;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public io.grpc.internal.BackoffPolicy get()
+    {
+        io.grpc.internal.ExponentialBackoffPolicy$Provider $r0;
+        io.grpc.internal.ExponentialBackoffPolicy $r1;
+
+        $r0 := @this: io.grpc.internal.ExponentialBackoffPolicy$Provider;
+
+        $r1 = new io.grpc.internal.ExponentialBackoffPolicy;
+
+        specialinvoke $r1.<io.grpc.internal.ExponentialBackoffPolicy: void <init>()>();
+
+        return $r1;
+    }
+

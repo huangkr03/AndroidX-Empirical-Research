@@ -1,0 +1,634 @@
+androidx.camera.mlkit.vision.MlKitAnalyzer
+<androidx.camera.mlkit.vision.MlKitAnalyzer: java.lang.String TAG>
+<androidx.camera.mlkit.vision.MlKitAnalyzer: android.util.Size DEFAULT_SIZE>
+<androidx.camera.mlkit.vision.MlKitAnalyzer: java.util.List mDetectors>
+<androidx.camera.mlkit.vision.MlKitAnalyzer: int mTargetCoordinateSystem>
+<androidx.camera.mlkit.vision.MlKitAnalyzer: androidx.core.util.Consumer mConsumer>
+<androidx.camera.mlkit.vision.MlKitAnalyzer: androidx.camera.view.transform.ImageProxyTransformFactory mImageAnalysisTransformFactory>
+<androidx.camera.mlkit.vision.MlKitAnalyzer: java.util.concurrent.Executor mExecutor>
+<androidx.camera.mlkit.vision.MlKitAnalyzer: android.graphics.Matrix mSensorToTarget>
+    public void <init>(java.util.List, int, java.util.concurrent.Executor, androidx.core.util.Consumer)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer r0;
+        java.util.List r1;
+        int i0, $i1;
+        java.util.concurrent.Executor r2;
+        androidx.core.util.Consumer r3;
+        java.util.Iterator r4;
+        com.google.mlkit.vision.interfaces.Detector r5;
+        java.util.ArrayList $r6;
+        androidx.camera.view.transform.ImageProxyTransformFactory $r7, $r8;
+        boolean $z0, $z1;
+        java.lang.Object $r9;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer;
+
+        r1 := @parameter0: java.util.List;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: java.util.concurrent.Executor;
+
+        r3 := @parameter3: androidx.core.util.Consumer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        if i0 == 0 goto label4;
+
+        r4 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r9 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (com.google.mlkit.vision.interfaces.Detector) $r9;
+
+        $i1 = interfaceinvoke r5.<com.google.mlkit.vision.interfaces.Detector: int getDetectorType()>();
+
+        if $i1 == 7 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        staticinvoke <com.google.android.gms.common.internal.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "Segmentation only works with COORDINATE_SYSTEM_ORIGINAL");
+
+        goto label1;
+
+     label4:
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>(java.util.Collection)>(r1);
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: java.util.List mDetectors> = $r6;
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: int mTargetCoordinateSystem> = i0;
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: androidx.core.util.Consumer mConsumer> = r3;
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: java.util.concurrent.Executor mExecutor> = r2;
+
+        $r7 = new androidx.camera.view.transform.ImageProxyTransformFactory;
+
+        specialinvoke $r7.<androidx.camera.view.transform.ImageProxyTransformFactory: void <init>()>();
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: androidx.camera.view.transform.ImageProxyTransformFactory mImageAnalysisTransformFactory> = $r7;
+
+        $r8 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: androidx.camera.view.transform.ImageProxyTransformFactory mImageAnalysisTransformFactory>;
+
+        virtualinvoke $r8.<androidx.camera.view.transform.ImageProxyTransformFactory: void setUsingRotationDegrees(boolean)>(1);
+
+        return;
+    }
+
+    public final void analyze(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer r0;
+        androidx.camera.core.ImageProxy r1;
+        android.graphics.Matrix r2, r3, $r7;
+        androidx.camera.view.transform.OutputTransform r4, $r15;
+        android.util.Size r5, $r11;
+        androidx.camera.view.transform.CoordinateTransform r6, $r14;
+        int $i0, $i1, $i2;
+        java.util.HashMap $r8, $r9;
+        androidx.camera.view.transform.ImageProxyTransformFactory $r10;
+        android.graphics.Rect $r12, $r13;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer;
+
+        r1 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $r7 = new android.graphics.Matrix;
+
+        specialinvoke $r7.<android.graphics.Matrix: void <init>()>();
+
+        r2 = $r7;
+
+        $i0 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: int mTargetCoordinateSystem>;
+
+        if $i0 == 0 goto label2;
+
+        r3 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: android.graphics.Matrix mSensorToTarget>;
+
+        if r3 != null goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("MlKitAnalyzer", "Transform is null.");
+
+        interfaceinvoke r1.<androidx.camera.core.ImageProxy: void close()>();
+
+        return;
+
+     label1:
+        $r10 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: androidx.camera.view.transform.ImageProxyTransformFactory mImageAnalysisTransformFactory>;
+
+        r4 = virtualinvoke $r10.<androidx.camera.view.transform.ImageProxyTransformFactory: androidx.camera.view.transform.OutputTransform getOutputTransform(androidx.camera.core.ImageProxy)>(r1);
+
+        $r11 = new android.util.Size;
+
+        $r12 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: android.graphics.Rect getCropRect()>();
+
+        $i1 = virtualinvoke $r12.<android.graphics.Rect: int width()>();
+
+        $r13 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: android.graphics.Rect getCropRect()>();
+
+        $i2 = virtualinvoke $r13.<android.graphics.Rect: int height()>();
+
+        specialinvoke $r11.<android.util.Size: void <init>(int,int)>($i1, $i2);
+
+        r5 = $r11;
+
+        $r14 = new androidx.camera.view.transform.CoordinateTransform;
+
+        $r15 = new androidx.camera.view.transform.OutputTransform;
+
+        specialinvoke $r15.<androidx.camera.view.transform.OutputTransform: void <init>(android.graphics.Matrix,android.util.Size)>(r3, r5);
+
+        specialinvoke $r14.<androidx.camera.view.transform.CoordinateTransform: void <init>(androidx.camera.view.transform.OutputTransform,androidx.camera.view.transform.OutputTransform)>(r4, $r15);
+
+        r6 = $r14;
+
+        virtualinvoke r6.<androidx.camera.view.transform.CoordinateTransform: void transform(android.graphics.Matrix)>(r2);
+
+     label2:
+        $r8 = new java.util.HashMap;
+
+        specialinvoke $r8.<java.util.HashMap: void <init>()>();
+
+        $r9 = new java.util.HashMap;
+
+        specialinvoke $r9.<java.util.HashMap: void <init>()>();
+
+        specialinvoke r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: void detectRecursively(androidx.camera.core.ImageProxy,int,android.graphics.Matrix,java.util.Map,java.util.Map)>(r1, 0, r2, $r8, $r9);
+
+        return;
+    }
+
+    private void detectRecursively(androidx.camera.core.ImageProxy, int, android.graphics.Matrix, java.util.Map, java.util.Map)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer r0;
+        androidx.camera.core.ImageProxy r1;
+        int i0, i1, $i2, $i3, $i4;
+        android.graphics.Matrix r2;
+        java.util.Map r3, r4;
+        android.media.Image r5;
+        com.google.mlkit.vision.interfaces.Detector r6;
+        com.google.android.gms.tasks.Task r7;
+        java.lang.Throwable r8, $r18;
+        java.util.List $r9, $r10;
+        java.lang.Object $r11;
+        androidx.camera.core.ImageInfo $r12;
+        java.util.concurrent.Executor $r13, $r16;
+        com.google.android.gms.tasks.OnCompleteListener $r14;
+        java.lang.Runnable $r17;
+        java.lang.RuntimeException $r19;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer;
+
+        r1 := @parameter0: androidx.camera.core.ImageProxy;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: android.graphics.Matrix;
+
+        r3 := @parameter3: java.util.Map;
+
+        r4 := @parameter4: java.util.Map;
+
+        r5 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: android.media.Image getImage()>();
+
+        if r5 != null goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("MlKitAnalyzer", "Image is null.");
+
+        interfaceinvoke r1.<androidx.camera.core.ImageProxy: void close()>();
+
+        return;
+
+     label1:
+        $r9 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: java.util.List mDetectors>;
+
+        $i2 = interfaceinvoke $r9.<java.util.List: int size()>();
+
+        $i3 = $i2 - 1;
+
+        if i0 <= $i3 goto label2;
+
+        interfaceinvoke r1.<androidx.camera.core.ImageProxy: void close()>();
+
+        $r16 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: java.util.concurrent.Executor mExecutor>;
+
+        $r17 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.mlkit.vision.MlKitAnalyzer,java.util.Map,androidx.camera.core.ImageProxy,java.util.Map)>(r0, r3, r1, r4) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.mlkit.vision.MlKitAnalyzer: void lambda$detectRecursively$0(java.util.Map,androidx.camera.core.ImageProxy,java.util.Map)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r16.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r17);
+
+        return;
+
+     label2:
+        $r10 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: java.util.List mDetectors>;
+
+        $r11 = interfaceinvoke $r10.<java.util.List: java.lang.Object get(int)>(i0);
+
+        r6 = (com.google.mlkit.vision.interfaces.Detector) $r11;
+
+        $r12 = interfaceinvoke r1.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageInfo getImageInfo()>();
+
+        i1 = interfaceinvoke $r12.<androidx.camera.core.ImageInfo: int getRotationDegrees()>();
+
+     label3:
+        r7 = interfaceinvoke r6.<com.google.mlkit.vision.interfaces.Detector: com.google.android.gms.tasks.Task process(android.media.Image,int,android.graphics.Matrix)>(r5, i1, r2);
+
+     label4:
+        goto label6;
+
+     label5:
+        $r18 := @caughtexception;
+
+        r8 = $r18;
+
+        $r19 = new java.lang.RuntimeException;
+
+        specialinvoke $r19.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>("Failed to process the image.", r8);
+
+        interfaceinvoke r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r6, $r19);
+
+        $i4 = i0 + 1;
+
+        specialinvoke r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: void detectRecursively(androidx.camera.core.ImageProxy,int,android.graphics.Matrix,java.util.Map,java.util.Map)>(r1, $i4, r2, r3, r4);
+
+        return;
+
+     label6:
+        $r13 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: java.util.concurrent.Executor mExecutor>;
+
+        $r14 = dynamicinvoke "onComplete" <com.google.android.gms.tasks.OnCompleteListener (androidx.camera.mlkit.vision.MlKitAnalyzer,java.util.Map,com.google.mlkit.vision.interfaces.Detector,java.util.Map,androidx.camera.core.ImageProxy,int,android.graphics.Matrix)>(r0, r4, r6, r3, r1, i0, r2) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(com.google.android.gms.tasks.Task), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.mlkit.vision.MlKitAnalyzer: void lambda$detectRecursively$1(java.util.Map,com.google.mlkit.vision.interfaces.Detector,java.util.Map,androidx.camera.core.ImageProxy,int,android.graphics.Matrix,com.google.android.gms.tasks.Task)>, methodtype: void __METHODTYPE__(com.google.android.gms.tasks.Task));
+
+        virtualinvoke r7.<com.google.android.gms.tasks.Task: com.google.android.gms.tasks.Task addOnCompleteListener(java.util.concurrent.Executor,com.google.android.gms.tasks.OnCompleteListener)>($r13, $r14);
+
+        return;
+
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public final android.util.Size getDefaultTargetResolution()
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer r0;
+        java.util.Iterator r1;
+        com.google.mlkit.vision.interfaces.Detector r2;
+        android.util.Size r3, r6;
+        java.util.List $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer;
+
+        r6 = <androidx.camera.mlkit.vision.MlKitAnalyzer: android.util.Size DEFAULT_SIZE>;
+
+        $r4 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: java.util.List mDetectors>;
+
+        r1 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (com.google.mlkit.vision.interfaces.Detector) $r5;
+
+        $i0 = interfaceinvoke r2.<com.google.mlkit.vision.interfaces.Detector: int getDetectorType()>();
+
+        r3 = specialinvoke r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: android.util.Size getTargetResolution(int)>($i0);
+
+        $i1 = virtualinvoke r3.<android.util.Size: int getHeight()>();
+
+        $i2 = virtualinvoke r3.<android.util.Size: int getWidth()>();
+
+        $i3 = $i1 * $i2;
+
+        $i4 = virtualinvoke r6.<android.util.Size: int getWidth()>();
+
+        $i5 = virtualinvoke r6.<android.util.Size: int getHeight()>();
+
+        $i6 = $i4 * $i5;
+
+        if $i3 <= $i6 goto label2;
+
+        r6 = r3;
+
+     label2:
+        goto label1;
+
+     label3:
+        return r6;
+    }
+
+    private android.util.Size getTargetResolution(int)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer r0;
+        int i0;
+        android.util.Size $r1, $r2;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer;
+
+        i0 := @parameter0: int;
+
+        lookupswitch(i0)
+        {
+            case 1: goto label1;
+            case 4: goto label1;
+            default: goto label2;
+        };
+
+     label1:
+        $r1 = new android.util.Size;
+
+        specialinvoke $r1.<android.util.Size: void <init>(int,int)>(1280, 720);
+
+        return $r1;
+
+     label2:
+        $r2 = <androidx.camera.mlkit.vision.MlKitAnalyzer: android.util.Size DEFAULT_SIZE>;
+
+        return $r2;
+    }
+
+    public final int getTargetCoordinateSystem()
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer r0;
+        int $i0;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer;
+
+        $i0 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: int mTargetCoordinateSystem>;
+
+        return $i0;
+    }
+
+    public final void updateTransform(android.graphics.Matrix)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer r0;
+        android.graphics.Matrix r1, $r2;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer;
+
+        r1 := @parameter0: android.graphics.Matrix;
+
+        if r1 != null goto label1;
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: android.graphics.Matrix mSensorToTarget> = null;
+
+        goto label2;
+
+     label1:
+        $r2 = new android.graphics.Matrix;
+
+        specialinvoke $r2.<android.graphics.Matrix: void <init>(android.graphics.Matrix)>(r1);
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: android.graphics.Matrix mSensorToTarget> = $r2;
+
+     label2:
+        return;
+    }
+
+    private void lambda$detectRecursively$1(java.util.Map, com.google.mlkit.vision.interfaces.Detector, java.util.Map, androidx.camera.core.ImageProxy, int, android.graphics.Matrix, com.google.android.gms.tasks.Task)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer r0;
+        java.util.Map r1, r3;
+        com.google.mlkit.vision.interfaces.Detector r2;
+        androidx.camera.core.ImageProxy r4;
+        int i0, $i1;
+        android.graphics.Matrix r5;
+        com.google.android.gms.tasks.Task r6;
+        boolean $z0, $z1;
+        java.lang.Exception $r7;
+        java.lang.Object $r9;
+        java.util.concurrent.CancellationException $r11;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer;
+
+        r1 := @parameter0: java.util.Map;
+
+        r2 := @parameter1: com.google.mlkit.vision.interfaces.Detector;
+
+        r3 := @parameter2: java.util.Map;
+
+        r4 := @parameter3: androidx.camera.core.ImageProxy;
+
+        i0 := @parameter4: int;
+
+        r5 := @parameter5: android.graphics.Matrix;
+
+        r6 := @parameter6: com.google.android.gms.tasks.Task;
+
+        $z0 = virtualinvoke r6.<com.google.android.gms.tasks.Task: boolean isCanceled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r11 = new java.util.concurrent.CancellationException;
+
+        specialinvoke $r11.<java.util.concurrent.CancellationException: void <init>(java.lang.String)>("The task is canceled.");
+
+        interfaceinvoke r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, $r11);
+
+        goto label3;
+
+     label1:
+        $z1 = virtualinvoke r6.<com.google.android.gms.tasks.Task: boolean isSuccessful()>();
+
+        if $z1 == 0 goto label2;
+
+        $r9 = virtualinvoke r6.<com.google.android.gms.tasks.Task: java.lang.Object getResult()>();
+
+        interfaceinvoke r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, $r9);
+
+        goto label3;
+
+     label2:
+        $r7 = virtualinvoke r6.<com.google.android.gms.tasks.Task: java.lang.Exception getException()>();
+
+        interfaceinvoke r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, $r7);
+
+     label3:
+        $i1 = i0 + 1;
+
+        specialinvoke r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: void detectRecursively(androidx.camera.core.ImageProxy,int,android.graphics.Matrix,java.util.Map,java.util.Map)>(r4, $i1, r5, r3, r1);
+
+        return;
+    }
+
+    private void lambda$detectRecursively$0(java.util.Map, androidx.camera.core.ImageProxy, java.util.Map)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer r0;
+        java.util.Map r1, r3;
+        androidx.camera.core.ImageProxy r2;
+        androidx.camera.mlkit.vision.MlKitAnalyzer$Result $r4;
+        androidx.core.util.Consumer $r5;
+        androidx.camera.core.ImageInfo $r6;
+        long $l0;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer;
+
+        r1 := @parameter0: java.util.Map;
+
+        r2 := @parameter1: androidx.camera.core.ImageProxy;
+
+        r3 := @parameter2: java.util.Map;
+
+        $r5 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer: androidx.core.util.Consumer mConsumer>;
+
+        $r4 = new androidx.camera.mlkit.vision.MlKitAnalyzer$Result;
+
+        $r6 = interfaceinvoke r2.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageInfo getImageInfo()>();
+
+        $l0 = interfaceinvoke $r6.<androidx.camera.core.ImageInfo: long getTimestamp()>();
+
+        specialinvoke $r4.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: void <init>(java.util.Map,long,java.util.Map)>(r1, $l0, r3);
+
+        interfaceinvoke $r5.<androidx.core.util.Consumer: void accept(java.lang.Object)>($r4);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        android.util.Size $r0;
+
+        $r0 = new android.util.Size;
+
+        specialinvoke $r0.<android.util.Size: void <init>(int,int)>(480, 360);
+
+        <androidx.camera.mlkit.vision.MlKitAnalyzer: android.util.Size DEFAULT_SIZE> = $r0;
+
+        return;
+    }
+
+androidx.camera.mlkit.vision.MlKitAnalyzer$Result
+<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: java.util.Map mValues>
+<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: java.util.Map mThrowables>
+<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: long mTimestamp>
+    public void <init>(java.util.Map, long, java.util.Map)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer$Result r0;
+        java.util.Map r1, r2;
+        long l0;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer$Result;
+
+        r1 := @parameter0: java.util.Map;
+
+        l0 := @parameter1: long;
+
+        r2 := @parameter2: java.util.Map;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: java.util.Map mValues> = r1;
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: java.util.Map mThrowables> = r2;
+
+        r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: long mTimestamp> = l0;
+
+        return;
+    }
+
+    public java.lang.Object getValue(com.google.mlkit.vision.interfaces.Detector)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer$Result r0;
+        com.google.mlkit.vision.interfaces.Detector r1;
+        java.util.Map $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer$Result;
+
+        r1 := @parameter0: com.google.mlkit.vision.interfaces.Detector;
+
+        specialinvoke r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: void checkDetectorExists(com.google.mlkit.vision.interfaces.Detector)>(r1);
+
+        $r2 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: java.util.Map mValues>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        return $r3;
+    }
+
+    public java.lang.Throwable getThrowable(com.google.mlkit.vision.interfaces.Detector)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer$Result r0;
+        com.google.mlkit.vision.interfaces.Detector r1;
+        java.util.Map $r2;
+        java.lang.Object $r3;
+        java.lang.Throwable $r4;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer$Result;
+
+        r1 := @parameter0: com.google.mlkit.vision.interfaces.Detector;
+
+        specialinvoke r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: void checkDetectorExists(com.google.mlkit.vision.interfaces.Detector)>(r1);
+
+        $r2 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: java.util.Map mThrowables>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r4 = (java.lang.Throwable) $r3;
+
+        return $r4;
+    }
+
+    public long getTimestamp()
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer$Result r0;
+        long $l0;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer$Result;
+
+        $l0 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: long mTimestamp>;
+
+        return $l0;
+    }
+
+    private void checkDetectorExists(com.google.mlkit.vision.interfaces.Detector)
+    {
+        androidx.camera.mlkit.vision.MlKitAnalyzer$Result r0;
+        com.google.mlkit.vision.interfaces.Detector r1;
+        java.util.Map $r2, $r3;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: androidx.camera.mlkit.vision.MlKitAnalyzer$Result;
+
+        r1 := @parameter0: com.google.mlkit.vision.interfaces.Detector;
+
+        $r2 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: java.util.Map mValues>;
+
+        $z0 = interfaceinvoke $r2.<java.util.Map: boolean containsKey(java.lang.Object)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        $r3 = r0.<androidx.camera.mlkit.vision.MlKitAnalyzer$Result: java.util.Map mThrowables>;
+
+        $z1 = interfaceinvoke $r3.<java.util.Map: boolean containsKey(java.lang.Object)>(r1);
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        staticinvoke <com.google.android.gms.common.internal.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "The detector does not exist");
+
+        return;
+    }
+

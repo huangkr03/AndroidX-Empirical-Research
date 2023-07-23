@@ -1,0 +1,222 @@
+androidx.security.app.authenticator.AppAuthenticatorUtils
+<androidx.security.app.authenticator.AppAuthenticatorUtils: char[] HEX_CHARACTERS>
+<androidx.security.app.authenticator.AppAuthenticatorUtils: android.content.Context mContext>
+    void <init>(android.content.Context)
+    {
+        androidx.security.app.authenticator.AppAuthenticatorUtils r0;
+        android.content.Context r1;
+
+        r0 := @this: androidx.security.app.authenticator.AppAuthenticatorUtils;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.security.app.authenticator.AppAuthenticatorUtils: android.content.Context mContext> = r1;
+
+        return;
+    }
+
+    int getCallingPid()
+    {
+        androidx.security.app.authenticator.AppAuthenticatorUtils r0;
+        int $i0;
+
+        r0 := @this: androidx.security.app.authenticator.AppAuthenticatorUtils;
+
+        $i0 = staticinvoke <android.os.Binder: int getCallingPid()>();
+
+        return $i0;
+    }
+
+    int getCallingUid()
+    {
+        androidx.security.app.authenticator.AppAuthenticatorUtils r0;
+        int $i0;
+
+        r0 := @this: androidx.security.app.authenticator.AppAuthenticatorUtils;
+
+        $i0 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        return $i0;
+    }
+
+    int getUidForPackage(java.lang.String) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        androidx.security.app.authenticator.AppAuthenticatorUtils r0;
+        java.lang.String r1;
+        android.content.pm.ApplicationInfo r2;
+        android.content.Context $r3;
+        android.content.pm.PackageManager $r4;
+        int $i0;
+
+        r0 := @this: androidx.security.app.authenticator.AppAuthenticatorUtils;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r3 = r0.<androidx.security.app.authenticator.AppAuthenticatorUtils: android.content.Context mContext>;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        r2 = virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>(r1, 0);
+
+        $i0 = r2.<android.content.pm.ApplicationInfo: int uid>;
+
+        return $i0;
+    }
+
+    static int getApiLevel()
+    {
+        int $i0;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        return $i0;
+    }
+
+    static java.lang.String computeDigest(java.lang.String, byte[])
+    {
+        java.lang.String r0, $r5, $r11;
+        byte[] r1, $r4;
+        java.security.MessageDigest r2;
+        java.lang.Throwable r3, $r6, r14;
+        java.lang.StringBuilder $r9, $r10, r12;
+        androidx.security.app.authenticator.AppAuthenticatorUtils$AppAuthenticatorUtilsException r13;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: byte[];
+
+     label1:
+        r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(r0);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r3 = $r6;
+
+        r13 = new androidx.security.app.authenticator.AppAuthenticatorUtils$AppAuthenticatorUtilsException;
+
+        r12 = new java.lang.StringBuilder;
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" not supported on this device");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r13.<androidx.security.app.authenticator.AppAuthenticatorUtils$AppAuthenticatorUtilsException: void <init>(java.lang.String,java.lang.Throwable)>($r11, r3);
+
+        r14 = (java.lang.Throwable) r13;
+
+        throw r14;
+
+     label4:
+        $r4 = virtualinvoke r2.<java.security.MessageDigest: byte[] digest(byte[])>(r1);
+
+        $r5 = staticinvoke <androidx.security.app.authenticator.AppAuthenticatorUtils: java.lang.String toHexString(byte[])>($r4);
+
+        return $r5;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    static java.lang.String toHexString(byte[])
+    {
+        byte[] r0;
+        char[] r1, $r3, $r4;
+        int i0, $i1, $i2, $i3, $i11, i12;
+        java.lang.String $r2;
+        byte $b4, $b5, $b6, $b8, $b9;
+        char $c7, $c10;
+
+        r0 := @parameter0: byte[];
+
+        $i1 = lengthof r0;
+
+        $i2 = $i1 * 2;
+
+        r1 = newarray (char)[$i2];
+
+        i12 = 0;
+
+     label1:
+        $i3 = lengthof r0;
+
+        if i12 >= $i3 goto label2;
+
+        i0 = i12 * 2;
+
+        $r3 = <androidx.security.app.authenticator.AppAuthenticatorUtils: char[] HEX_CHARACTERS>;
+
+        $b4 = r0[i12];
+
+        $b5 = $b4 >> 4;
+
+        $b6 = $b5 & 15;
+
+        $c7 = $r3[$b6];
+
+        r1[i0] = $c7;
+
+        $i11 = i0 + 1;
+
+        $r4 = <androidx.security.app.authenticator.AppAuthenticatorUtils: char[] HEX_CHARACTERS>;
+
+        $b8 = r0[i12];
+
+        $b9 = $b8 & 15;
+
+        $c10 = $r4[$b9];
+
+        r1[$i11] = $c10;
+
+        i12 = i12 + 1;
+
+        goto label1;
+
+     label2:
+        $r2 = new java.lang.String;
+
+        specialinvoke $r2.<java.lang.String: void <init>(char[])>(r1);
+
+        return $r2;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        char[] $r1;
+
+        $r0 = "0123456789abcdef";
+
+        $r1 = virtualinvoke $r0.<java.lang.String: char[] toCharArray()>();
+
+        <androidx.security.app.authenticator.AppAuthenticatorUtils: char[] HEX_CHARACTERS> = $r1;
+
+        return;
+    }
+
+androidx.security.app.authenticator.AppAuthenticatorUtils$AppAuthenticatorUtilsException
+    void <init>(java.lang.String, java.lang.Throwable)
+    {
+        androidx.security.app.authenticator.AppAuthenticatorUtils$AppAuthenticatorUtilsException r0;
+        java.lang.String r1;
+        java.lang.Throwable r2;
+
+        r0 := @this: androidx.security.app.authenticator.AppAuthenticatorUtils$AppAuthenticatorUtilsException;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.Throwable;
+
+        specialinvoke r0.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>(r1, r2);
+
+        return;
+    }
+

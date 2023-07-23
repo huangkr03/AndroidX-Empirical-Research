@@ -1,0 +1,124 @@
+kotlinx.coroutines.CoroutineExceptionHandlerImplKt
+<kotlinx.coroutines.CoroutineExceptionHandlerImplKt: java.util.List handlers>
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.ClassLoader $r1;
+        java.util.ServiceLoader $r2;
+        java.util.Iterator $r3;
+        kotlin.sequences.Sequence $r4;
+        java.util.List $r5;
+
+        $r0 = class "Lkotlinx/coroutines/CoroutineExceptionHandler;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        $r2 = staticinvoke <java.util.ServiceLoader: java.util.ServiceLoader load(java.lang.Class,java.lang.ClassLoader)>(class "Lkotlinx/coroutines/CoroutineExceptionHandler;", $r1);
+
+        $r3 = virtualinvoke $r2.<java.util.ServiceLoader: java.util.Iterator iterator()>();
+
+        $r4 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence asSequence(java.util.Iterator)>($r3);
+
+        $r5 = staticinvoke <kotlin.sequences.SequencesKt: java.util.List toList(kotlin.sequences.Sequence)>($r4);
+
+        <kotlinx.coroutines.CoroutineExceptionHandlerImplKt: java.util.List handlers> = $r5;
+
+        return;
+    }
+
+    public static final void handleCoroutineExceptionImpl(kotlin.coroutines.CoroutineContext, java.lang.Throwable)
+    {
+        java.lang.Throwable $r0, $r6, $r11;
+        kotlin.coroutines.CoroutineContext $r1;
+        java.util.List $r2;
+        java.util.Iterator $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        kotlinx.coroutines.CoroutineExceptionHandler $r5;
+        java.lang.Thread $r7;
+        java.lang.Thread$UncaughtExceptionHandler $r8;
+        kotlin.Result$Companion $r9;
+        kotlin.Unit $r10;
+        kotlinx.coroutines.DiagnosticCoroutineContextException r12;
+
+        $r1 := @parameter0: kotlin.coroutines.CoroutineContext;
+
+        $r0 := @parameter1: java.lang.Throwable;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "context");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r0, "exception");
+
+        $r2 = <kotlinx.coroutines.CoroutineExceptionHandlerImplKt: java.util.List handlers>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (kotlinx.coroutines.CoroutineExceptionHandler) $r4;
+
+     label2:
+        interfaceinvoke $r5.<kotlinx.coroutines.CoroutineExceptionHandler: void handleException(kotlin.coroutines.CoroutineContext,java.lang.Throwable)>($r1, $r0);
+
+     label3:
+        goto label1;
+
+     label4:
+        $r6 := @caughtexception;
+
+        $r7 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.Thread: java.lang.Thread$UncaughtExceptionHandler getUncaughtExceptionHandler()>();
+
+        $r6 = staticinvoke <kotlinx.coroutines.CoroutineExceptionHandlerKt: java.lang.Throwable handlerException(java.lang.Throwable,java.lang.Throwable)>($r0, $r6);
+
+        interfaceinvoke $r8.<java.lang.Thread$UncaughtExceptionHandler: void uncaughtException(java.lang.Thread,java.lang.Throwable)>($r7, $r6);
+
+        goto label1;
+
+     label5:
+        $r7 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        $r9 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        r12 = new kotlinx.coroutines.DiagnosticCoroutineContextException;
+
+     label6:
+        specialinvoke r12.<kotlinx.coroutines.DiagnosticCoroutineContextException: void <init>(kotlin.coroutines.CoroutineContext)>($r1);
+
+     label7:
+        $r6 = (java.lang.Throwable) r12;
+
+        staticinvoke <kotlin.ExceptionsKt: void addSuppressed(java.lang.Throwable,java.lang.Throwable)>($r0, $r6);
+
+        $r10 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r10);
+
+        goto label9;
+
+     label8:
+        $r11 := @caughtexception;
+
+        $r9 = <kotlin.Result: kotlin.Result$Companion Companion>;
+
+        $r4 = staticinvoke <kotlin.ResultKt: java.lang.Object createFailure(java.lang.Throwable)>($r11);
+
+        staticinvoke <kotlin.Result: java.lang.Object constructor-impl(java.lang.Object)>($r4);
+
+     label9:
+        $r8 = virtualinvoke $r7.<java.lang.Thread: java.lang.Thread$UncaughtExceptionHandler getUncaughtExceptionHandler()>();
+
+        interfaceinvoke $r8.<java.lang.Thread$UncaughtExceptionHandler: void uncaughtException(java.lang.Thread,java.lang.Throwable)>($r7, $r0);
+
+        return;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+        catch java.lang.Throwable from label6 to label7 with label8;
+    }
+

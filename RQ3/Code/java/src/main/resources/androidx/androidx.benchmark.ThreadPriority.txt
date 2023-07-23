@@ -1,0 +1,602 @@
+androidx.benchmark.ThreadPriority
+<androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>
+<androidx.benchmark.ThreadPriority: int HIGH_PRIORITY>
+<androidx.benchmark.ThreadPriority: int BENCH_THREAD_PRIORITY>
+<androidx.benchmark.ThreadPriority: int JIT_THREAD_PRIORITY>
+<androidx.benchmark.ThreadPriority: java.lang.String TASK_PATH>
+<androidx.benchmark.ThreadPriority: java.lang.String JIT_THREAD_NAME>
+<androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>
+<androidx.benchmark.ThreadPriority: int JIT_INITIAL_PRIORITY>
+<androidx.benchmark.ThreadPriority: java.lang.Object lock>
+<androidx.benchmark.ThreadPriority: int initialTid>
+<androidx.benchmark.ThreadPriority: int initialPriority>
+    private void <init>()
+    {
+        androidx.benchmark.ThreadPriority r0;
+
+        r0 := @this: androidx.benchmark.ThreadPriority;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public final int getJIT_INITIAL_PRIORITY()
+    {
+        androidx.benchmark.ThreadPriority r0;
+        int $i0;
+
+        r0 := @this: androidx.benchmark.ThreadPriority;
+
+        $i0 = <androidx.benchmark.ThreadPriority: int JIT_INITIAL_PRIORITY>;
+
+        return $i0;
+    }
+
+    private final boolean setThreadPriority(java.lang.String, int, int)
+    {
+        androidx.benchmark.ThreadPriority r0;
+        java.lang.String r1, $r13;
+        int i0, i1, i2, i4;
+        java.lang.StringBuilder $r2, $r3, $r4, $r5, $r6, $r7, $r8, $r9, $r10, $r11, $r12;
+        java.lang.Throwable $r14, r15;
+
+        r0 := @this: androidx.benchmark.ThreadPriority;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        i2 = staticinvoke <android.os.Process: int getThreadPriority(int)>(i0);
+
+     label1:
+        staticinvoke <android.os.Process: void setThreadPriority(int,int)>(i0, i1);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r14 := @caughtexception;
+
+        r15 = $r14;
+
+        return 0;
+
+     label4:
+        i4 = staticinvoke <android.os.Process: int getThreadPriority(int)>(i0);
+
+        if i4 == i2 goto label5;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Set ");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" (");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") to priority ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Was ");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i2);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", now ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i4);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("Benchmark", $r13);
+
+        return 1;
+
+     label5:
+        return 0;
+
+        catch java.lang.SecurityException from label1 to label2 with label3;
+    }
+
+    public final void bumpCurrentThreadPriority()
+    {
+        androidx.benchmark.ThreadPriority r0, $r2, $r3, $r4, $r5, $r8;
+        java.lang.Object r1;
+        int i0, $i1, $i2, $i3, $i4, $i5;
+        java.lang.Integer $r6, $r7;
+        java.lang.Throwable $r9;
+        kotlin.Unit $r10;
+
+        r0 := @this: androidx.benchmark.ThreadPriority;
+
+        r1 = <androidx.benchmark.ThreadPriority: java.lang.Object lock>;
+
+        entermonitor r1;
+
+     label1:
+        i0 = staticinvoke <android.os.Process: int myTid()>();
+
+        $i1 = <androidx.benchmark.ThreadPriority: int initialTid>;
+
+        if $i1 != i0 goto label3;
+
+     label2:
+        exitmonitor r1;
+
+        return;
+
+     label3:
+        $r2 = <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>;
+
+        virtualinvoke $r2.<androidx.benchmark.ThreadPriority: void resetBumpedThread()>();
+
+        $r3 = <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>;
+
+        <androidx.benchmark.ThreadPriority: int initialTid> = i0;
+
+        $r4 = <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>;
+
+        $i2 = <androidx.benchmark.ThreadPriority: int initialTid>;
+
+        $i3 = staticinvoke <android.os.Process: int getThreadPriority(int)>($i2);
+
+        <androidx.benchmark.ThreadPriority: int initialPriority> = $i3;
+
+        $r5 = <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>;
+
+        $i4 = <androidx.benchmark.ThreadPriority: int initialTid>;
+
+        specialinvoke $r5.<androidx.benchmark.ThreadPriority: boolean setThreadPriority(java.lang.String,int,int)>("Bench thread", $i4, -20);
+
+        $r6 = <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>;
+
+        if $r6 == null goto label4;
+
+        $r8 = <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>;
+
+        $r7 = <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>;
+
+        $i5 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        specialinvoke $r8.<androidx.benchmark.ThreadPriority: boolean setThreadPriority(java.lang.String,int,int)>("Jit", $i5, -15);
+
+     label4:
+        $r10 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label5:
+        exitmonitor r1;
+
+        goto label8;
+
+     label6:
+        $r9 := @caughtexception;
+
+     label7:
+        exitmonitor r1;
+
+        throw $r9;
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label3 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+
+    public final void resetBumpedThread()
+    {
+        androidx.benchmark.ThreadPriority r0, $r2, $r4, $r6, $r7;
+        java.lang.Object r1;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.Integer $r3, $r5;
+        java.lang.Throwable $r8;
+        kotlin.Unit $r9;
+
+        r0 := @this: androidx.benchmark.ThreadPriority;
+
+        r1 = <androidx.benchmark.ThreadPriority: java.lang.Object lock>;
+
+        entermonitor r1;
+
+     label1:
+        $i0 = <androidx.benchmark.ThreadPriority: int initialTid>;
+
+        if $i0 <= 0 goto label3;
+
+        $r2 = <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>;
+
+        $i2 = <androidx.benchmark.ThreadPriority: int initialTid>;
+
+        $i1 = <androidx.benchmark.ThreadPriority: int initialPriority>;
+
+        specialinvoke $r2.<androidx.benchmark.ThreadPriority: boolean setThreadPriority(java.lang.String,int,int)>("Bench thread", $i2, $i1);
+
+        $r3 = <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>;
+
+        if $r3 == null goto label2;
+
+        $r6 = <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>;
+
+        $r5 = <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>;
+
+        $i3 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+        $r7 = <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>;
+
+        $i4 = virtualinvoke $r7.<androidx.benchmark.ThreadPriority: int getJIT_INITIAL_PRIORITY()>();
+
+        specialinvoke $r6.<androidx.benchmark.ThreadPriority: boolean setThreadPriority(java.lang.String,int,int)>("Jit", $i3, $i4);
+
+     label2:
+        $r4 = <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE>;
+
+        <androidx.benchmark.ThreadPriority: int initialTid> = -1;
+
+     label3:
+        $r9 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label4:
+        exitmonitor r1;
+
+        goto label7;
+
+     label5:
+        $r8 := @caughtexception;
+
+     label6:
+        exitmonitor r1;
+
+        throw $r8;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public final int getJit()
+    {
+        androidx.benchmark.ThreadPriority r0;
+        java.lang.Integer $r1, $r2;
+        int $i0, $i1;
+        java.lang.IllegalStateException $r3;
+        java.lang.String $r4, $r5;
+
+        r0 := @this: androidx.benchmark.ThreadPriority;
+
+        $r1 = <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>;
+
+        if $r1 != null goto label1;
+
+        $r5 = "Jit thread not found!";
+
+        $r3 = new java.lang.IllegalStateException;
+
+        $r4 = virtualinvoke $r5.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r4);
+
+        throw $r3;
+
+     label1:
+        $r2 = <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>;
+
+        $i0 = virtualinvoke $r2.<java.lang.Integer: int intValue()>();
+
+        $i1 = staticinvoke <android.os.Process: int getThreadPriority(int)>($i0);
+
+        return $i1;
+    }
+
+    public final int get()
+    {
+        androidx.benchmark.ThreadPriority r0;
+        int $i0, $i1;
+
+        r0 := @this: androidx.benchmark.ThreadPriority;
+
+        $i0 = staticinvoke <android.os.Process: int myTid()>();
+
+        $i1 = staticinvoke <android.os.Process: int getThreadPriority(int)>($i0);
+
+        return $i1;
+    }
+
+    static void <clinit>()
+    {
+        java.util.Map r0, $r42, r44, r47, r50, r54;
+        int i0, $i1, $i2, $i3, $i4, $i6, $i9, i10, $i11, $i12;
+        java.io.File r1, $r8, $r37, r46, r49;
+        java.lang.Throwable r2, $r41;
+        java.lang.Integer r3, $r7, $r16, $r17, $r61;
+        java.lang.String r4, $r27, $r30, $r33, r48, $r51, r52;
+        androidx.benchmark.ThreadPriority $r5;
+        java.lang.Object $r6, $r15, $r19, $r22, $r26, $r31, $r32, $r34, $r35, $r39;
+        java.io.File[] $r9, r45;
+        java.util.LinkedHashMap $r10, $r11;
+        java.util.Set $r12, $r13, $r18;
+        java.lang.Iterable $r14;
+        boolean $z0, $z1, $z2, $z7, $z10, z13;
+        java.lang.StringBuilder $r20, $r21, $r24, $r25, $r28, $r29;
+        java.lang.Number $r23;
+        java.util.List $r38;
+        java.util.Iterator r55, $r58;
+        java.util.Map$Entry $r56, r57, r59;
+
+        $r5 = new androidx.benchmark.ThreadPriority;
+
+        specialinvoke $r5.<androidx.benchmark.ThreadPriority: void <init>()>();
+
+        <androidx.benchmark.ThreadPriority: androidx.benchmark.ThreadPriority INSTANCE> = $r5;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 24 goto label18;
+
+        $r8 = new java.io.File;
+
+        specialinvoke $r8.<java.io.File: void <init>(java.lang.String)>("/proc/self/task");
+
+        $r9 = virtualinvoke $r8.<java.io.File: java.io.File[] listFiles()>();
+
+        if $r9 != null goto label01;
+
+        $r42 = null;
+
+        goto label09;
+
+     label01:
+        $i3 = lengthof $r9;
+
+        $i4 = staticinvoke <kotlin.collections.MapsKt: int mapCapacity(int)>($i3);
+
+        i10 = staticinvoke <kotlin.ranges.RangesKt: int coerceAtLeast(int,int)>($i4, 16);
+
+        $r10 = new java.util.LinkedHashMap;
+
+        specialinvoke $r10.<java.util.LinkedHashMap: void <init>(int)>(i10);
+
+        r44 = (java.util.Map) $r10;
+
+        r45 = $r9;
+
+        $i11 = 0;
+
+        i0 = lengthof r45;
+
+     label02:
+        if $i11 >= i0 goto label08;
+
+        r1 = r45[$i11];
+
+        $i11 = $i11 + 1;
+
+        r46 = r1;
+
+        r47 = r44;
+
+        r48 = virtualinvoke r46.<java.io.File: java.lang.String getName()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r48, "it.name");
+
+        $i9 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r48);
+
+        r49 = r1;
+
+        r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i9);
+
+        r50 = r47;
+
+     label03:
+        $r37 = new java.io.File;
+
+        specialinvoke $r37.<java.io.File: void <init>(java.io.File,java.lang.String)>(r49, "comm");
+
+        $r38 = staticinvoke <kotlin.io.FilesKt: java.util.List readLines$default(java.io.File,java.nio.charset.Charset,int,java.lang.Object)>($r37, null, 1, null);
+
+        $r39 = staticinvoke <kotlin.collections.CollectionsKt: java.lang.Object firstOrNull(java.util.List)>($r38);
+
+        $r51 = (java.lang.String) $r39;
+
+        if $r51 != null goto label04;
+
+        $r51 = "";
+
+     label04:
+        r52 = $r51;
+
+     label05:
+        goto label07;
+
+     label06:
+        $r41 := @caughtexception;
+
+        r2 = $r41;
+
+        r52 = "ERROR READING THREAD NAME";
+
+     label07:
+        r4 = r52;
+
+        interfaceinvoke r50.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r3, r4);
+
+        goto label02;
+
+     label08:
+        $r42 = r44;
+
+     label09:
+        r0 = $r42;
+
+        if r0 == null goto label10;
+
+        $z2 = interfaceinvoke r0.<java.util.Map: boolean isEmpty()>();
+
+        if $z2 == 0 goto label11;
+
+     label10:
+        $z7 = 1;
+
+        goto label12;
+
+     label11:
+        $z7 = 0;
+
+     label12:
+        if $z7 == 0 goto label13;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("Benchmark", "NOTE: Couldn\'t find threads in this process for priority pinning.");
+
+        <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID> = null;
+
+        goto label19;
+
+     label13:
+        $r11 = new java.util.LinkedHashMap;
+
+        specialinvoke $r11.<java.util.LinkedHashMap: void <init>()>();
+
+        r54 = (java.util.Map) $r11;
+
+        $r12 = interfaceinvoke r0.<java.util.Map: java.util.Set entrySet()>();
+
+        r55 = interfaceinvoke $r12.<java.util.Set: java.util.Iterator iterator()>();
+
+     label14:
+        $z10 = interfaceinvoke r55.<java.util.Iterator: boolean hasNext()>();
+
+        if $z10 == 0 goto label15;
+
+        $r31 = interfaceinvoke r55.<java.util.Iterator: java.lang.Object next()>();
+
+        $r56 = (java.util.Map$Entry) $r31;
+
+        r57 = $r56;
+
+        $r32 = interfaceinvoke r57.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r33 = (java.lang.String) $r32;
+
+        $z1 = staticinvoke <kotlin.text.StringsKt: boolean startsWith$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)>($r33, "Jit thread pool", 0, 2, null);
+
+        if $z1 == 0 goto label14;
+
+        $r34 = interfaceinvoke $r56.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r35 = interfaceinvoke $r56.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        interfaceinvoke r54.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r34, $r35);
+
+        goto label14;
+
+     label15:
+        $r13 = interfaceinvoke r54.<java.util.Map: java.util.Set keySet()>();
+
+        $r14 = (java.lang.Iterable) $r13;
+
+        $r15 = staticinvoke <kotlin.collections.CollectionsKt: java.lang.Object firstOrNull(java.lang.Iterable)>($r14);
+
+        $r16 = (java.lang.Integer) $r15;
+
+        <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID> = $r16;
+
+        $r17 = <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>;
+
+        if $r17 != null goto label19;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("Benchmark", "NOTE: Couldn\'t JIT thread, threads found:");
+
+        $r18 = interfaceinvoke r0.<java.util.Map: java.util.Set entrySet()>();
+
+        $r58 = interfaceinvoke $r18.<java.util.Set: java.util.Iterator iterator()>();
+
+     label16:
+        $z0 = interfaceinvoke $r58.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label17;
+
+        $r19 = interfaceinvoke $r58.<java.util.Iterator: java.lang.Object next()>();
+
+        r59 = (java.util.Map$Entry) $r19;
+
+        z13 = 0;
+
+        $r20 = new java.lang.StringBuilder;
+
+        specialinvoke $r20.<java.lang.StringBuilder: void <init>()>();
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("    tid: ");
+
+        $r22 = interfaceinvoke r59.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r23 = (java.lang.Number) $r22;
+
+        $i6 = virtualinvoke $r23.<java.lang.Number: int intValue()>();
+
+        $r24 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i6);
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", name:\'");
+
+        $r26 = interfaceinvoke r59.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r27 = (java.lang.String) $r26;
+
+        $r28 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r27);
+
+        $r29 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(39);
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("Benchmark", $r30);
+
+        goto label16;
+
+     label17:
+        goto label19;
+
+     label18:
+        <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID> = null;
+
+     label19:
+        $r61 = <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>;
+
+        if $r61 == null goto label20;
+
+        $r7 = <androidx.benchmark.ThreadPriority: java.lang.Integer JIT_TID>;
+
+        $i2 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        $i12 = staticinvoke <android.os.Process: int getThreadPriority(int)>($i2);
+
+        goto label21;
+
+     label20:
+        $i12 = 0;
+
+     label21:
+        <androidx.benchmark.ThreadPriority: int JIT_INITIAL_PRIORITY> = $i12;
+
+        $r6 = new java.lang.Object;
+
+        specialinvoke $r6.<java.lang.Object: void <init>()>();
+
+        <androidx.benchmark.ThreadPriority: java.lang.Object lock> = $r6;
+
+        <androidx.benchmark.ThreadPriority: int initialTid> = -1;
+
+        <androidx.benchmark.ThreadPriority: int initialPriority> = 2147483647;
+
+        return;
+
+        catch java.io.IOException from label03 to label05 with label06;
+    }
+

@@ -1,0 +1,249 @@
+androidx.test.services.storage.internal.TestStorageUtil
+    private static android.content.ContentProviderClient makeContentProviderClient(android.content.ContentResolver, android.net.Uri)
+    {
+        android.content.ContentResolver r0;
+        android.net.Uri r1;
+        android.content.ContentProviderClient r2;
+        java.lang.Object[] $r5;
+        java.lang.String $r6;
+        androidx.test.services.storage.TestStorageException r7;
+        java.lang.Throwable r8;
+
+        r0 := @parameter0: android.content.ContentResolver;
+
+        r1 := @parameter1: android.net.Uri;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>(r0);
+
+        r2 = virtualinvoke r0.<android.content.ContentResolver: android.content.ContentProviderClient acquireContentProviderClient(android.net.Uri)>(r1);
+
+        if null != r2 goto label1;
+
+        r7 = new androidx.test.services.storage.TestStorageException;
+
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r5[0] = r1;
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("No content provider registered for: %s. Are all test services apks installed?", $r5);
+
+        specialinvoke r7.<androidx.test.services.storage.TestStorageException: void <init>(java.lang.String)>($r6);
+
+        r8 = (java.lang.Throwable) r7;
+
+        throw r8;
+
+     label1:
+        return r2;
+    }
+
+    public static java.io.InputStream getInputStream(android.net.Uri, android.content.ContentResolver) throws java.io.FileNotFoundException
+    {
+        android.net.Uri r0;
+        android.content.ContentResolver r1;
+        java.io.BufferedInputStream r2, r19;
+        java.lang.Throwable r3, $r8, $r9, r17, r22;
+        java.lang.String r4, $r14;
+        java.lang.StringBuilder $r12, $r13, r20;
+        android.content.ContentProviderClient r15;
+        android.os.ParcelFileDescriptor r16;
+        android.os.ParcelFileDescriptor$AutoCloseInputStream r18;
+        androidx.test.services.storage.TestStorageException r21;
+
+        r0 := @parameter0: android.net.Uri;
+
+        r1 := @parameter1: android.content.ContentResolver;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>(r0);
+
+        r15 = null;
+
+     label1:
+        r15 = staticinvoke <androidx.test.services.storage.internal.TestStorageUtil: android.content.ContentProviderClient makeContentProviderClient(android.content.ContentResolver,android.net.Uri)>(r1, r0);
+
+        r16 = virtualinvoke r15.<android.content.ContentProviderClient: android.os.ParcelFileDescriptor openFile(android.net.Uri,java.lang.String)>(r0, "r");
+
+        r19 = new java.io.BufferedInputStream;
+
+        r18 = new android.os.ParcelFileDescriptor$AutoCloseInputStream;
+
+        specialinvoke r18.<android.os.ParcelFileDescriptor$AutoCloseInputStream: void <init>(android.os.ParcelFileDescriptor)>(r16);
+
+        specialinvoke r19.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>(r18);
+
+        r2 = r19;
+
+     label2:
+        if r15 == null goto label3;
+
+        virtualinvoke r15.<android.content.ContentProviderClient: boolean release()>();
+
+     label3:
+        return r2;
+
+     label4:
+        $r9 := @caughtexception;
+
+        r17 = $r9;
+
+        r21 = new androidx.test.services.storage.TestStorageException;
+
+        r4 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>(r0);
+
+        r20 = new java.lang.StringBuilder;
+
+        specialinvoke r20.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to access content provider: ");
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r21.<androidx.test.services.storage.TestStorageException: void <init>(java.lang.String,java.lang.Throwable)>($r14, r17);
+
+        r22 = (java.lang.Throwable) r21;
+
+        throw r22;
+
+     label5:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+     label6:
+        if r15 == null goto label7;
+
+        virtualinvoke r15.<android.content.ContentProviderClient: boolean release()>();
+
+     label7:
+        throw r3;
+
+        catch android.os.RemoteException from label1 to label2 with label4;
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label4 to label6 with label5;
+    }
+
+    public static java.io.OutputStream getOutputStream(android.net.Uri, android.content.ContentResolver) throws java.io.FileNotFoundException
+    {
+        android.net.Uri r0;
+        android.content.ContentResolver r1;
+        java.io.OutputStream $r2;
+
+        r0 := @parameter0: android.net.Uri;
+
+        r1 := @parameter1: android.content.ContentResolver;
+
+        $r2 = staticinvoke <androidx.test.services.storage.internal.TestStorageUtil: java.io.OutputStream getOutputStream(android.net.Uri,android.content.ContentResolver,boolean)>(r0, r1, 0);
+
+        return $r2;
+    }
+
+    public static java.io.OutputStream getOutputStream(android.net.Uri, android.content.ContentResolver, boolean) throws java.io.FileNotFoundException
+    {
+        android.net.Uri r0;
+        android.content.ContentResolver r1;
+        boolean z0;
+        android.os.ParcelFileDescriptor$AutoCloseOutputStream r2, r19;
+        java.lang.Throwable r3, $r8, $r9, r18, r22;
+        java.lang.String r4, $r14, $r16, r17;
+        android.os.ParcelFileDescriptor $r7;
+        java.lang.StringBuilder $r12, $r13, r20;
+        android.content.ContentProviderClient r15;
+        androidx.test.services.storage.TestStorageException r21;
+
+        r0 := @parameter0: android.net.Uri;
+
+        r1 := @parameter1: android.content.ContentResolver;
+
+        z0 := @parameter2: boolean;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>(r0);
+
+        r15 = null;
+
+     label1:
+        r15 = staticinvoke <androidx.test.services.storage.internal.TestStorageUtil: android.content.ContentProviderClient makeContentProviderClient(android.content.ContentResolver,android.net.Uri)>(r1, r0);
+
+        if z0 == 0 goto label2;
+
+        $r16 = "wa";
+
+        goto label3;
+
+     label2:
+        $r16 = "w";
+
+     label3:
+        r17 = $r16;
+
+        r19 = new android.os.ParcelFileDescriptor$AutoCloseOutputStream;
+
+        $r7 = virtualinvoke r15.<android.content.ContentProviderClient: android.os.ParcelFileDescriptor openFile(android.net.Uri,java.lang.String)>(r0, r17);
+
+        specialinvoke r19.<android.os.ParcelFileDescriptor$AutoCloseOutputStream: void <init>(android.os.ParcelFileDescriptor)>($r7);
+
+        r2 = r19;
+
+     label4:
+        if r15 == null goto label5;
+
+        virtualinvoke r15.<android.content.ContentProviderClient: boolean release()>();
+
+     label5:
+        return r2;
+
+     label6:
+        $r9 := @caughtexception;
+
+        r18 = $r9;
+
+        r21 = new androidx.test.services.storage.TestStorageException;
+
+        r4 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>(r0);
+
+        r20 = new java.lang.StringBuilder;
+
+        specialinvoke r20.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to access content provider: ");
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r21.<androidx.test.services.storage.TestStorageException: void <init>(java.lang.String,java.lang.Throwable)>($r14, r18);
+
+        r22 = (java.lang.Throwable) r21;
+
+        throw r22;
+
+     label7:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+     label8:
+        if r15 == null goto label9;
+
+        virtualinvoke r15.<android.content.ContentProviderClient: boolean release()>();
+
+     label9:
+        throw r3;
+
+        catch android.os.RemoteException from label1 to label4 with label6;
+        catch java.lang.Throwable from label1 to label4 with label7;
+        catch java.lang.Throwable from label6 to label8 with label7;
+    }
+
+    private void <init>()
+    {
+        androidx.test.services.storage.internal.TestStorageUtil r0;
+
+        r0 := @this: androidx.test.services.storage.internal.TestStorageUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

@@ -1,0 +1,1680 @@
+androidx.media3.session.MediaSessionService
+<androidx.media3.session.MediaSessionService: java.lang.String SERVICE_INTERFACE>
+<androidx.media3.session.MediaSessionService: java.lang.String TAG>
+<androidx.media3.session.MediaSessionService: java.lang.Object lock>
+<androidx.media3.session.MediaSessionService: android.os.Handler mainHandler>
+<androidx.media3.session.MediaSessionService: java.util.Map sessions>
+<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$MediaSessionServiceStub stub>
+<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager mediaNotificationManager>
+<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotification$Provider mediaNotificationProvider>
+<androidx.media3.session.MediaSessionService: androidx.media3.session.DefaultActionFactory actionFactory>
+<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$Listener listener>
+<androidx.media3.session.MediaSessionService: boolean defaultMethodCalled>
+    public void <init>()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object $r1;
+        android.os.Handler $r2;
+        android.os.Looper $r3;
+        androidx.collection.ArrayMap $r4;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        specialinvoke r0.<android.app.Service: void <init>()>();
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock> = $r1;
+
+        $r2 = new android.os.Handler;
+
+        $r3 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r2.<android.os.Handler: void <init>(android.os.Looper)>($r3);
+
+        r0.<androidx.media3.session.MediaSessionService: android.os.Handler mainHandler> = $r2;
+
+        $r4 = new androidx.collection.ArrayMap;
+
+        specialinvoke $r4.<androidx.collection.ArrayMap: void <init>()>();
+
+        r0.<androidx.media3.session.MediaSessionService: java.util.Map sessions> = $r4;
+
+        r0.<androidx.media3.session.MediaSessionService: boolean defaultMethodCalled> = 0;
+
+        return;
+    }
+
+    public void onCreate()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r5;
+        androidx.media3.session.MediaSessionService$MediaSessionServiceStub $r4;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        specialinvoke r0.<android.app.Service: void onCreate()>();
+
+        $r3 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = new androidx.media3.session.MediaSessionService$MediaSessionServiceStub;
+
+        specialinvoke $r4.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: void <init>(androidx.media3.session.MediaSessionService)>(r0);
+
+        r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$MediaSessionServiceStub stub> = $r4;
+
+        exitmonitor r1;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSession onGetSession(androidx.media3.session.MediaSession$ControllerInfo)>
+    public final void addSession(androidx.media3.session.MediaSession)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaSession r1, r2;
+        java.lang.Throwable r3, $r15;
+        boolean $z0, $z2, $z3;
+        java.lang.Object $r5, $r8, r16;
+        java.util.Map $r6, $r9;
+        java.lang.String $r7, $r10;
+        android.os.Handler $r12;
+        java.lang.Runnable $r13;
+        androidx.media3.session.MediaSessionService$MediaSessionListener $r14;
+        androidx.media3.session.MediaNotificationManager r17;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: androidx.media3.session.MediaSession;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "session must not be null");
+
+        $z0 = virtualinvoke r1.<androidx.media3.session.MediaSession: boolean isReleased()>();
+
+        if $z0 != 0 goto label01;
+
+        $z2 = 1;
+
+        goto label02;
+
+     label01:
+        $z2 = 0;
+
+     label02:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z2, "session is already released");
+
+        $r5 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r16 = $r5;
+
+        entermonitor $r5;
+
+     label03:
+        $r6 = r0.<androidx.media3.session.MediaSessionService: java.util.Map sessions>;
+
+        $r7 = virtualinvoke r1.<androidx.media3.session.MediaSession: java.lang.String getId()>();
+
+        $r8 = interfaceinvoke $r6.<java.util.Map: java.lang.Object get(java.lang.Object)>($r7);
+
+        r2 = (androidx.media3.session.MediaSession) $r8;
+
+        if r2 == null goto label04;
+
+        if r2 != r1 goto label05;
+
+     label04:
+        $z3 = 1;
+
+        goto label06;
+
+     label05:
+        $z3 = 0;
+
+     label06:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z3, "Session ID should be unique");
+
+        $r9 = r0.<androidx.media3.session.MediaSessionService: java.util.Map sessions>;
+
+        $r10 = virtualinvoke r1.<androidx.media3.session.MediaSession: java.lang.String getId()>();
+
+        interfaceinvoke $r9.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r10, r1);
+
+        exitmonitor r16;
+
+     label07:
+        goto label10;
+
+     label08:
+        $r15 := @caughtexception;
+
+        r3 = $r15;
+
+        exitmonitor r16;
+
+     label09:
+        throw r3;
+
+     label10:
+        if r2 != null goto label11;
+
+        r17 = specialinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager getMediaNotificationManager()>();
+
+        $r12 = r0.<androidx.media3.session.MediaSessionService: android.os.Handler mainHandler>;
+
+        $r13 = dynamicinvoke "run" <java.lang.Runnable (androidx.media3.session.MediaNotificationManager,androidx.media3.session.MediaSession)>(r17, r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.media3.session.MediaSessionService: void lambda$addSession$0(androidx.media3.session.MediaNotificationManager,androidx.media3.session.MediaSession)>, methodtype: void __METHODTYPE__());
+
+        staticinvoke <androidx.media3.common.util.Util: boolean postOrRun(android.os.Handler,java.lang.Runnable)>($r12, $r13);
+
+        $r14 = new androidx.media3.session.MediaSessionService$MediaSessionListener;
+
+        specialinvoke $r14.<androidx.media3.session.MediaSessionService$MediaSessionListener: void <init>(androidx.media3.session.MediaSessionService,androidx.media3.session.MediaSessionService$1)>(r0, null);
+
+        virtualinvoke r1.<androidx.media3.session.MediaSession: void setListener(androidx.media3.session.MediaSession$Listener)>($r14);
+
+     label11:
+        return;
+
+        catch java.lang.Throwable from label03 to label07 with label08;
+        catch java.lang.Throwable from label08 to label09 with label08;
+    }
+
+    public final void removeSession(androidx.media3.session.MediaSession)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaSession r1;
+        java.lang.Throwable r2, $r12;
+        java.lang.Object $r4, r13;
+        java.util.Map $r5, $r7;
+        java.lang.String $r6, $r8;
+        boolean $z0;
+        android.os.Handler $r10;
+        java.lang.Runnable $r11;
+        androidx.media3.session.MediaNotificationManager r14;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: androidx.media3.session.MediaSession;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "session must not be null");
+
+        $r4 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r13 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.media3.session.MediaSessionService: java.util.Map sessions>;
+
+        $r6 = virtualinvoke r1.<androidx.media3.session.MediaSession: java.lang.String getId()>();
+
+        $z0 = interfaceinvoke $r5.<java.util.Map: boolean containsKey(java.lang.Object)>($r6);
+
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, "session not found");
+
+        $r7 = r0.<androidx.media3.session.MediaSessionService: java.util.Map sessions>;
+
+        $r8 = virtualinvoke r1.<androidx.media3.session.MediaSession: java.lang.String getId()>();
+
+        interfaceinvoke $r7.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r8);
+
+        exitmonitor r13;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r12 := @caughtexception;
+
+        r2 = $r12;
+
+        exitmonitor r13;
+
+     label4:
+        throw r2;
+
+     label5:
+        r14 = specialinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager getMediaNotificationManager()>();
+
+        $r10 = r0.<androidx.media3.session.MediaSessionService: android.os.Handler mainHandler>;
+
+        $r11 = dynamicinvoke "run" <java.lang.Runnable (androidx.media3.session.MediaNotificationManager,androidx.media3.session.MediaSession)>(r14, r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.media3.session.MediaSessionService: void lambda$removeSession$1(androidx.media3.session.MediaNotificationManager,androidx.media3.session.MediaSession)>, methodtype: void __METHODTYPE__());
+
+        staticinvoke <androidx.media3.common.util.Util: boolean postOrRun(android.os.Handler,java.lang.Runnable)>($r10, $r11);
+
+        virtualinvoke r1.<androidx.media3.session.MediaSession: void clearListener()>();
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public final java.util.List getSessions()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r7;
+        java.util.ArrayList $r4;
+        java.util.Map $r5;
+        java.util.Collection $r6;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        $r3 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = new java.util.ArrayList;
+
+        $r5 = r0.<androidx.media3.session.MediaSessionService: java.util.Map sessions>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.util.Collection values()>();
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(java.util.Collection)>($r6);
+
+        exitmonitor r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r2 = $r7;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public final boolean isSessionAdded(androidx.media3.session.MediaSession)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaSession r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r7;
+        java.util.Map $r5;
+        java.lang.String $r6;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: androidx.media3.session.MediaSession;
+
+        $r4 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.media3.session.MediaSessionService: java.util.Map sessions>;
+
+        $r6 = virtualinvoke r1.<androidx.media3.session.MediaSession: java.lang.String getId()>();
+
+        $z0 = interfaceinvoke $r5.<java.util.Map: boolean containsKey(java.lang.Object)>($r6);
+
+        exitmonitor r2;
+
+     label2:
+        return $z0;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public final void setListener(androidx.media3.session.MediaSessionService$Listener)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaSessionService$Listener r1;
+        java.lang.Object r2, $r3;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: androidx.media3.session.MediaSessionService$Listener;
+
+        $r3 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r2 = $r3;
+
+        entermonitor $r3;
+
+        r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$Listener listener> = r1;
+
+        exitmonitor r2;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public final void clearListener()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object r1, $r2;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        $r2 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$Listener listener> = null;
+
+        exitmonitor r1;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        android.content.Intent r1;
+        java.lang.String r2, r3;
+        androidx.media3.session.MediaSession$ControllerInfo r4;
+        androidx.media3.session.MediaSession r5;
+        int $i0;
+        boolean $z0, $z1;
+        android.os.IBinder $r6, $r7;
+        byte b1;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: android.content.Intent;
+
+        if r1 != null goto label1;
+
+        return null;
+
+     label1:
+        r2 = virtualinvoke r1.<android.content.Intent: java.lang.String getAction()>();
+
+        if r2 != null goto label2;
+
+        return null;
+
+     label2:
+        r3 = r2;
+
+        b1 = -1;
+
+        $i0 = virtualinvoke r3.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i0)
+        {
+            case -1351050159: goto label3;
+            case 1665850838: goto label4;
+            default: goto label5;
+        };
+
+     label3:
+        $z1 = virtualinvoke r3.<java.lang.String: boolean equals(java.lang.Object)>("androidx.media3.session.MediaSessionService");
+
+        if $z1 == 0 goto label5;
+
+        b1 = 0;
+
+        goto label5;
+
+     label4:
+        $z0 = virtualinvoke r3.<java.lang.String: boolean equals(java.lang.Object)>("android.media.browse.MediaBrowserService");
+
+        if $z0 == 0 goto label5;
+
+        b1 = 1;
+
+     label5:
+        lookupswitch(b1)
+        {
+            case 0: goto label6;
+            case 1: goto label7;
+            default: goto label9;
+        };
+
+     label6:
+        $r7 = virtualinvoke r0.<androidx.media3.session.MediaSessionService: android.os.IBinder getServiceBinder()>();
+
+        return $r7;
+
+     label7:
+        r4 = staticinvoke <androidx.media3.session.MediaSession$ControllerInfo: androidx.media3.session.MediaSession$ControllerInfo createLegacyControllerInfo()>();
+
+        r5 = virtualinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSession onGetSession(androidx.media3.session.MediaSession$ControllerInfo)>(r4);
+
+        if r5 != null goto label8;
+
+        return null;
+
+     label8:
+        virtualinvoke r0.<androidx.media3.session.MediaSessionService: void addSession(androidx.media3.session.MediaSession)>(r5);
+
+        $r6 = virtualinvoke r5.<androidx.media3.session.MediaSession: android.os.IBinder getLegacyBrowserServiceBinder()>();
+
+        return $r6;
+
+     label9:
+        return null;
+    }
+
+    public int onStartCommand(android.content.Intent, int, int)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        android.content.Intent r1;
+        int i0, i1;
+        androidx.media3.session.DefaultActionFactory r2;
+        android.net.Uri r3;
+        android.os.Bundle r4;
+        boolean $z0, $z1;
+        androidx.media3.session.MediaNotificationManager $r5;
+        android.support.v4.media.session.MediaSessionCompat $r6;
+        android.support.v4.media.session.MediaControllerCompat $r7;
+        androidx.media3.session.MediaSession $r8, r9;
+        androidx.media3.session.MediaSession$ControllerInfo r10;
+        android.view.KeyEvent r11;
+        java.lang.String r12;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: android.content.Intent;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        if r1 != null goto label1;
+
+        return 1;
+
+     label1:
+        r2 = specialinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.DefaultActionFactory getActionFactory()>();
+
+        r3 = virtualinvoke r1.<android.content.Intent: android.net.Uri getData()>();
+
+        if r3 == null goto label2;
+
+        $r8 = staticinvoke <androidx.media3.session.MediaSession: androidx.media3.session.MediaSession getSession(android.net.Uri)>(r3);
+
+        goto label3;
+
+     label2:
+        $r8 = null;
+
+     label3:
+        r9 = $r8;
+
+        $z0 = virtualinvoke r2.<androidx.media3.session.DefaultActionFactory: boolean isMediaAction(android.content.Intent)>(r1);
+
+        if $z0 == 0 goto label7;
+
+        if r9 != null goto label5;
+
+        r10 = staticinvoke <androidx.media3.session.MediaSession$ControllerInfo: androidx.media3.session.MediaSession$ControllerInfo createLegacyControllerInfo()>();
+
+        r9 = virtualinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSession onGetSession(androidx.media3.session.MediaSession$ControllerInfo)>(r10);
+
+        if r9 != null goto label4;
+
+        return 1;
+
+     label4:
+        virtualinvoke r0.<androidx.media3.session.MediaSessionService: void addSession(androidx.media3.session.MediaSession)>(r9);
+
+     label5:
+        r11 = virtualinvoke r2.<androidx.media3.session.DefaultActionFactory: android.view.KeyEvent getKeyEvent(android.content.Intent)>(r1);
+
+        if r11 == null goto label6;
+
+        $r6 = virtualinvoke r9.<androidx.media3.session.MediaSession: android.support.v4.media.session.MediaSessionCompat getSessionCompat()>();
+
+        $r7 = virtualinvoke $r6.<android.support.v4.media.session.MediaSessionCompat: android.support.v4.media.session.MediaControllerCompat getController()>();
+
+        virtualinvoke $r7.<android.support.v4.media.session.MediaControllerCompat: boolean dispatchMediaButtonEvent(android.view.KeyEvent)>(r11);
+
+     label6:
+        goto label9;
+
+     label7:
+        if r9 == null goto label9;
+
+        $z1 = virtualinvoke r2.<androidx.media3.session.DefaultActionFactory: boolean isCustomAction(android.content.Intent)>(r1);
+
+        if $z1 == 0 goto label9;
+
+        r12 = virtualinvoke r2.<androidx.media3.session.DefaultActionFactory: java.lang.String getCustomAction(android.content.Intent)>(r1);
+
+        if r12 != null goto label8;
+
+        return 1;
+
+     label8:
+        r4 = virtualinvoke r2.<androidx.media3.session.DefaultActionFactory: android.os.Bundle getCustomActionExtras(android.content.Intent)>(r1);
+
+        $r5 = specialinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager getMediaNotificationManager()>();
+
+        virtualinvoke $r5.<androidx.media3.session.MediaNotificationManager: void onCustomAction(androidx.media3.session.MediaSession,java.lang.String,android.os.Bundle)>(r9, r12, r4);
+
+     label9:
+        return 1;
+    }
+
+    public void onDestroy()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r6;
+        androidx.media3.session.MediaSessionService$MediaSessionServiceStub $r4, $r5;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        specialinvoke r0.<android.app.Service: void onDestroy()>();
+
+        $r3 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$MediaSessionServiceStub stub>;
+
+        if $r4 == null goto label2;
+
+        $r5 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$MediaSessionServiceStub stub>;
+
+        virtualinvoke $r5.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: void release()>();
+
+        r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$MediaSessionServiceStub stub> = null;
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void onUpdateNotification(androidx.media3.session.MediaSession)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaSession r1;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: androidx.media3.session.MediaSession;
+
+        specialinvoke r0.<androidx.media3.session.MediaSessionService: void setDefaultMethodCalled(boolean)>(1);
+
+        return;
+    }
+
+    public void onUpdateNotification(androidx.media3.session.MediaSession, boolean)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaSession r1;
+        boolean z0, $z1;
+        androidx.media3.session.MediaNotificationManager $r2;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: androidx.media3.session.MediaSession;
+
+        z0 := @parameter1: boolean;
+
+        virtualinvoke r0.<androidx.media3.session.MediaSessionService: void onUpdateNotification(androidx.media3.session.MediaSession)>(r1);
+
+        $z1 = specialinvoke r0.<androidx.media3.session.MediaSessionService: boolean isDefaultMethodCalled()>();
+
+        if $z1 == 0 goto label1;
+
+        $r2 = specialinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager getMediaNotificationManager()>();
+
+        virtualinvoke $r2.<androidx.media3.session.MediaNotificationManager: void updateNotification(androidx.media3.session.MediaSession,boolean)>(r1, z0);
+
+     label1:
+        return;
+    }
+
+    protected final void setMediaNotificationProvider(androidx.media3.session.MediaNotification$Provider)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaNotification$Provider r1;
+        java.lang.Object r2, $r4;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: androidx.media3.session.MediaNotification$Provider;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r4 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+        r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotification$Provider mediaNotificationProvider> = r1;
+
+        exitmonitor r2;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    android.os.IBinder getServiceBinder()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object r1, $r3, $r5;
+        java.lang.Throwable r2, $r8;
+        androidx.media3.session.MediaSessionService$MediaSessionServiceStub $r4, $r6;
+        android.os.IBinder $r7;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        $r3 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$MediaSessionServiceStub stub>;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r4);
+
+        $r6 = (androidx.media3.session.MediaSessionService$MediaSessionServiceStub) $r5;
+
+        $r7 = virtualinvoke $r6.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: android.os.IBinder asBinder()>();
+
+        exitmonitor r1;
+
+     label2:
+        return $r7;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r2 = $r8;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    boolean onUpdateNotificationInternal(androidx.media3.session.MediaSession, boolean)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaSession r1;
+        boolean z0, $z1, z2;
+        java.lang.Throwable $r2, r3;
+        int $i0;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 := @parameter0: androidx.media3.session.MediaSession;
+
+        z0 := @parameter1: boolean;
+
+     label1:
+        z2 = staticinvoke <androidx.media3.session.MediaSessionService: boolean shouldRunInForeground(androidx.media3.session.MediaSession,boolean)>(r1, z0);
+
+        virtualinvoke r0.<androidx.media3.session.MediaSessionService: void onUpdateNotification(androidx.media3.session.MediaSession,boolean)>(r1, z2);
+
+     label2:
+        goto label5;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r3 = $r2;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 31 goto label4;
+
+        $z1 = staticinvoke <androidx.media3.session.MediaSessionService$Api31: boolean instanceOfForegroundServiceStartNotAllowedException(java.lang.IllegalStateException)>(r3);
+
+        if $z1 == 0 goto label4;
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("MSSImpl", "Failed to start foreground", r3);
+
+        specialinvoke r0.<androidx.media3.session.MediaSessionService: void onForegroundServiceStartNotAllowedException()>();
+
+        return 0;
+
+     label4:
+        throw r3;
+
+     label5:
+        return 1;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+    }
+
+    static boolean shouldRunInForeground(androidx.media3.session.MediaSession, boolean)
+    {
+        androidx.media3.session.MediaSession r0;
+        boolean z0, $z1, $z2;
+        androidx.media3.common.Player r1;
+        int $i0, $i1;
+
+        r0 := @parameter0: androidx.media3.session.MediaSession;
+
+        z0 := @parameter1: boolean;
+
+        r1 = virtualinvoke r0.<androidx.media3.session.MediaSession: androidx.media3.common.Player getPlayer()>();
+
+        $z1 = interfaceinvoke r1.<androidx.media3.common.Player: boolean getPlayWhenReady()>();
+
+        if $z1 != 0 goto label1;
+
+        if z0 == 0 goto label3;
+
+     label1:
+        $i0 = interfaceinvoke r1.<androidx.media3.common.Player: int getPlaybackState()>();
+
+        if $i0 == 3 goto label2;
+
+        $i1 = interfaceinvoke r1.<androidx.media3.common.Player: int getPlaybackState()>();
+
+        if $i1 != 2 goto label3;
+
+     label2:
+        $z2 = 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        return $z2;
+    }
+
+    private androidx.media3.session.MediaNotificationManager getMediaNotificationManager()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r12;
+        androidx.media3.session.MediaNotificationManager $r4, $r6, $r13;
+        androidx.media3.session.MediaNotification$Provider $r5, $r7;
+        androidx.media3.session.DefaultActionFactory $r8;
+        androidx.media3.session.DefaultMediaNotificationProvider$Builder $r9;
+        android.content.Context $r10;
+        androidx.media3.session.DefaultMediaNotificationProvider $r11;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        $r3 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager mediaNotificationManager>;
+
+        if $r4 != null goto label3;
+
+        $r5 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotification$Provider mediaNotificationProvider>;
+
+        if $r5 != null goto label2;
+
+        $r9 = new androidx.media3.session.DefaultMediaNotificationProvider$Builder;
+
+        $r10 = virtualinvoke r0.<androidx.media3.session.MediaSessionService: android.content.Context getApplicationContext()>();
+
+        specialinvoke $r9.<androidx.media3.session.DefaultMediaNotificationProvider$Builder: void <init>(android.content.Context)>($r10);
+
+        $r11 = virtualinvoke $r9.<androidx.media3.session.DefaultMediaNotificationProvider$Builder: androidx.media3.session.DefaultMediaNotificationProvider build()>();
+
+        r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotification$Provider mediaNotificationProvider> = $r11;
+
+     label2:
+        $r6 = new androidx.media3.session.MediaNotificationManager;
+
+        $r7 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotification$Provider mediaNotificationProvider>;
+
+        $r8 = specialinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.DefaultActionFactory getActionFactory()>();
+
+        specialinvoke $r6.<androidx.media3.session.MediaNotificationManager: void <init>(androidx.media3.session.MediaSessionService,androidx.media3.session.MediaNotification$Provider,androidx.media3.session.MediaNotification$ActionFactory)>(r0, $r7, $r8);
+
+        r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager mediaNotificationManager> = $r6;
+
+     label3:
+        $r13 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager mediaNotificationManager>;
+
+        exitmonitor r1;
+
+     label4:
+        return $r13;
+
+     label5:
+        $r12 := @caughtexception;
+
+        r2 = $r12;
+
+        exitmonitor r1;
+
+     label6:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    private androidx.media3.session.DefaultActionFactory getActionFactory()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r7;
+        androidx.media3.session.DefaultActionFactory $r4, $r5, $r6;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        $r3 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.DefaultActionFactory actionFactory>;
+
+        if $r4 != null goto label2;
+
+        $r6 = new androidx.media3.session.DefaultActionFactory;
+
+        specialinvoke $r6.<androidx.media3.session.DefaultActionFactory: void <init>(android.app.Service)>(r0);
+
+        r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.DefaultActionFactory actionFactory> = $r6;
+
+     label2:
+        $r5 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.DefaultActionFactory actionFactory>;
+
+        exitmonitor r1;
+
+     label3:
+        return $r5;
+
+     label4:
+        $r7 := @caughtexception;
+
+        r2 = $r7;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    private androidx.media3.session.MediaSessionService$Listener getListener()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object r1, $r2;
+        androidx.media3.session.MediaSessionService$Listener $r3;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        $r2 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        $r3 = r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$Listener listener>;
+
+        exitmonitor r1;
+
+        return $r3;
+    }
+
+    private boolean isDefaultMethodCalled()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        java.lang.Object r1, $r2;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        $r2 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        $z0 = r0.<androidx.media3.session.MediaSessionService: boolean defaultMethodCalled>;
+
+        exitmonitor r1;
+
+        return $z0;
+    }
+
+    private void setDefaultMethodCalled(boolean)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        boolean z0;
+        java.lang.Object r1, $r2;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        z0 := @parameter0: boolean;
+
+        $r2 = r0.<androidx.media3.session.MediaSessionService: java.lang.Object lock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        r0.<androidx.media3.session.MediaSessionService: boolean defaultMethodCalled> = z0;
+
+        exitmonitor r1;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    private void onForegroundServiceStartNotAllowedException()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        android.os.Handler $r1;
+        java.lang.Runnable $r2;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        $r1 = r0.<androidx.media3.session.MediaSessionService: android.os.Handler mainHandler>;
+
+        $r2 = dynamicinvoke "run" <java.lang.Runnable (androidx.media3.session.MediaSessionService)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.media3.session.MediaSessionService: void lambda$onForegroundServiceStartNotAllowedException$2()>, methodtype: void __METHODTYPE__());
+
+        virtualinvoke $r1.<android.os.Handler: boolean post(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    private void lambda$onForegroundServiceStartNotAllowedException$2()
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaSessionService$Listener r1;
+
+        r0 := @this: androidx.media3.session.MediaSessionService;
+
+        r1 = specialinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSessionService$Listener getListener()>();
+
+        if r1 == null goto label1;
+
+        interfaceinvoke r1.<androidx.media3.session.MediaSessionService$Listener: void onForegroundServiceStartNotAllowedException()>();
+
+     label1:
+        return;
+    }
+
+    private static void lambda$removeSession$1(androidx.media3.session.MediaNotificationManager, androidx.media3.session.MediaSession)
+    {
+        androidx.media3.session.MediaNotificationManager r0;
+        androidx.media3.session.MediaSession r1;
+
+        r0 := @parameter0: androidx.media3.session.MediaNotificationManager;
+
+        r1 := @parameter1: androidx.media3.session.MediaSession;
+
+        virtualinvoke r0.<androidx.media3.session.MediaNotificationManager: void removeSession(androidx.media3.session.MediaSession)>(r1);
+
+        return;
+    }
+
+    private static void lambda$addSession$0(androidx.media3.session.MediaNotificationManager, androidx.media3.session.MediaSession)
+    {
+        androidx.media3.session.MediaNotificationManager r0;
+        androidx.media3.session.MediaSession r1;
+
+        r0 := @parameter0: androidx.media3.session.MediaNotificationManager;
+
+        r1 := @parameter1: androidx.media3.session.MediaSession;
+
+        virtualinvoke r0.<androidx.media3.session.MediaNotificationManager: void addSession(androidx.media3.session.MediaSession)>(r1);
+
+        return;
+    }
+
+    static androidx.media3.session.MediaNotificationManager access$100(androidx.media3.session.MediaSessionService)
+    {
+        androidx.media3.session.MediaSessionService r0;
+        androidx.media3.session.MediaNotificationManager $r1;
+
+        r0 := @parameter0: androidx.media3.session.MediaSessionService;
+
+        $r1 = specialinvoke r0.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager getMediaNotificationManager()>();
+
+        return $r1;
+    }
+
+androidx.media3.session.MediaSessionService$1
+androidx.media3.session.MediaSessionService$Api31
+    private void <init>()
+    {
+        androidx.media3.session.MediaSessionService$Api31 r0;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$Api31;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static boolean instanceOfForegroundServiceStartNotAllowedException(java.lang.IllegalStateException)
+    {
+        java.lang.IllegalStateException r0;
+        boolean $z0;
+
+        r0 := @parameter0: java.lang.IllegalStateException;
+
+        $z0 = r0 instanceof android.app.ForegroundServiceStartNotAllowedException;
+
+        return $z0;
+    }
+
+androidx.media3.session.MediaSessionService$Listener
+    public void onForegroundServiceStartNotAllowedException()
+    {
+        androidx.media3.session.MediaSessionService$Listener r0;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$Listener;
+
+        return;
+    }
+
+androidx.media3.session.MediaSessionService$MediaSessionListener
+<androidx.media3.session.MediaSessionService$MediaSessionListener: androidx.media3.session.MediaSessionService this$0>
+    private void <init>(androidx.media3.session.MediaSessionService)
+    {
+        androidx.media3.session.MediaSessionService$MediaSessionListener r0;
+        androidx.media3.session.MediaSessionService r1;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$MediaSessionListener;
+
+        r1 := @parameter0: androidx.media3.session.MediaSessionService;
+
+        r0.<androidx.media3.session.MediaSessionService$MediaSessionListener: androidx.media3.session.MediaSessionService this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onNotificationRefreshRequired(androidx.media3.session.MediaSession)
+    {
+        androidx.media3.session.MediaSessionService$MediaSessionListener r0;
+        androidx.media3.session.MediaSession r1;
+        androidx.media3.session.MediaSessionService $r2;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$MediaSessionListener;
+
+        r1 := @parameter0: androidx.media3.session.MediaSession;
+
+        $r2 = r0.<androidx.media3.session.MediaSessionService$MediaSessionListener: androidx.media3.session.MediaSessionService this$0>;
+
+        virtualinvoke $r2.<androidx.media3.session.MediaSessionService: boolean onUpdateNotificationInternal(androidx.media3.session.MediaSession,boolean)>(r1, 0);
+
+        return;
+    }
+
+    public boolean onPlayRequested(androidx.media3.session.MediaSession)
+    {
+        androidx.media3.session.MediaSessionService$MediaSessionListener r0;
+        androidx.media3.session.MediaSession r1;
+        int $i0, $i1;
+        androidx.media3.session.MediaSessionService $r2, $r4;
+        androidx.media3.session.MediaNotificationManager $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$MediaSessionListener;
+
+        r1 := @parameter0: androidx.media3.session.MediaSession;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 31 goto label1;
+
+        $i1 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i1 < 33 goto label2;
+
+     label1:
+        return 1;
+
+     label2:
+        $r2 = r0.<androidx.media3.session.MediaSessionService$MediaSessionListener: androidx.media3.session.MediaSessionService this$0>;
+
+        $r3 = staticinvoke <androidx.media3.session.MediaSessionService: androidx.media3.session.MediaNotificationManager access$100(androidx.media3.session.MediaSessionService)>($r2);
+
+        $z0 = virtualinvoke $r3.<androidx.media3.session.MediaNotificationManager: boolean isStartedInForeground()>();
+
+        if $z0 != 0 goto label3;
+
+        $r4 = r0.<androidx.media3.session.MediaSessionService$MediaSessionListener: androidx.media3.session.MediaSessionService this$0>;
+
+        $z1 = virtualinvoke $r4.<androidx.media3.session.MediaSessionService: boolean onUpdateNotificationInternal(androidx.media3.session.MediaSession,boolean)>(r1, 1);
+
+        return $z1;
+
+     label3:
+        return 1;
+    }
+
+    void <init>(androidx.media3.session.MediaSessionService, androidx.media3.session.MediaSessionService$1)
+    {
+        androidx.media3.session.MediaSessionService$MediaSessionListener r0;
+        androidx.media3.session.MediaSessionService r1;
+        androidx.media3.session.MediaSessionService$1 r2;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$MediaSessionListener;
+
+        r1 := @parameter0: androidx.media3.session.MediaSessionService;
+
+        r2 := @parameter1: androidx.media3.session.MediaSessionService$1;
+
+        specialinvoke r0.<androidx.media3.session.MediaSessionService$MediaSessionListener: void <init>(androidx.media3.session.MediaSessionService)>(r1);
+
+        return;
+    }
+
+androidx.media3.session.MediaSessionService$MediaSessionServiceStub
+<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.lang.ref.WeakReference serviceReference>
+<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: android.os.Handler handler>
+<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: androidx.media.MediaSessionManager mediaSessionManager>
+<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.util.Set pendingControllers>
+    public void <init>(androidx.media3.session.MediaSessionService)
+    {
+        androidx.media3.session.MediaSessionService$MediaSessionServiceStub r0;
+        androidx.media3.session.MediaSessionService r1;
+        android.content.Context r2;
+        java.lang.ref.WeakReference $r3;
+        android.os.Handler $r4;
+        android.os.Looper $r5;
+        androidx.media.MediaSessionManager $r6;
+        java.util.HashSet $r7;
+        java.util.Set $r8;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$MediaSessionServiceStub;
+
+        r1 := @parameter0: androidx.media3.session.MediaSessionService;
+
+        specialinvoke r0.<androidx.media3.session.IMediaSessionService$Stub: void <init>()>();
+
+        $r3 = new java.lang.ref.WeakReference;
+
+        specialinvoke $r3.<java.lang.ref.WeakReference: void <init>(java.lang.Object)>(r1);
+
+        r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.lang.ref.WeakReference serviceReference> = $r3;
+
+        r2 = virtualinvoke r1.<androidx.media3.session.MediaSessionService: android.content.Context getApplicationContext()>();
+
+        $r4 = new android.os.Handler;
+
+        $r5 = virtualinvoke r2.<android.content.Context: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r4.<android.os.Handler: void <init>(android.os.Looper)>($r5);
+
+        r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: android.os.Handler handler> = $r4;
+
+        $r6 = staticinvoke <androidx.media.MediaSessionManager: androidx.media.MediaSessionManager getSessionManager(android.content.Context)>(r2);
+
+        r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: androidx.media.MediaSessionManager mediaSessionManager> = $r6;
+
+        $r7 = new java.util.HashSet;
+
+        specialinvoke $r7.<java.util.HashSet: void <init>()>();
+
+        $r8 = staticinvoke <java.util.Collections: java.util.Set synchronizedSet(java.util.Set)>($r7);
+
+        r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.util.Set pendingControllers> = $r8;
+
+        return;
+    }
+
+    public void connect(androidx.media3.session.IMediaController, android.os.Bundle)
+    {
+        androidx.media3.session.MediaSessionService$MediaSessionServiceStub r0;
+        androidx.media3.session.IMediaController r1;
+        android.os.Bundle r2;
+        androidx.media3.session.ConnectionRequest r3;
+        int i0, i2, i3, $i4;
+        long l1;
+        androidx.media.MediaSessionManager$RemoteUserInfo r4, $r10;
+        boolean z0;
+        java.lang.Throwable r5, $r16, $r17, $r18, r19, r20;
+        androidx.media3.common.Bundleable$Creator $r6;
+        androidx.media3.common.Bundleable $r7;
+        java.lang.ref.WeakReference $r8;
+        java.lang.Object $r9;
+        java.lang.String $r11;
+        androidx.media.MediaSessionManager $r12;
+        java.util.Set $r13;
+        android.os.Handler $r14;
+        java.lang.Runnable $r15;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$MediaSessionServiceStub;
+
+        r1 := @parameter0: androidx.media3.session.IMediaController;
+
+        r2 := @parameter1: android.os.Bundle;
+
+        if r1 == null goto label01;
+
+        if r2 != null goto label02;
+
+     label01:
+        return;
+
+     label02:
+        $r6 = <androidx.media3.session.ConnectionRequest: androidx.media3.common.Bundleable$Creator CREATOR>;
+
+        $r7 = interfaceinvoke $r6.<androidx.media3.common.Bundleable$Creator: androidx.media3.common.Bundleable fromBundle(android.os.Bundle)>(r2);
+
+        r3 = (androidx.media3.session.ConnectionRequest) $r7;
+
+     label03:
+        goto label05;
+
+     label04:
+        $r18 := @caughtexception;
+
+        r19 = $r18;
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String,java.lang.Throwable)>("MSSImpl", "Ignoring malformed Bundle for ConnectionRequest", r19);
+
+        return;
+
+     label05:
+        $r8 = r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.lang.ref.WeakReference serviceReference>;
+
+        $r9 = virtualinvoke $r8.<java.lang.ref.WeakReference: java.lang.Object get()>();
+
+        if $r9 != null goto label10;
+
+     label06:
+        interfaceinvoke r1.<androidx.media3.session.IMediaController: void onDisconnected(int)>(0);
+
+     label07:
+        goto label09;
+
+     label08:
+        $r17 := @caughtexception;
+
+        r20 = $r17;
+
+     label09:
+        return;
+
+     label10:
+        i3 = staticinvoke <android.os.Binder: int getCallingPid()>();
+
+        i0 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        l1 = staticinvoke <android.os.Binder: long clearCallingIdentity()>();
+
+        if i3 == 0 goto label11;
+
+        $i4 = i3;
+
+        goto label12;
+
+     label11:
+        $i4 = r3.<androidx.media3.session.ConnectionRequest: int pid>;
+
+     label12:
+        i2 = $i4;
+
+        $r10 = new androidx.media.MediaSessionManager$RemoteUserInfo;
+
+        $r11 = r3.<androidx.media3.session.ConnectionRequest: java.lang.String packageName>;
+
+        specialinvoke $r10.<androidx.media.MediaSessionManager$RemoteUserInfo: void <init>(java.lang.String,int,int)>($r11, i2, i0);
+
+        r4 = $r10;
+
+        $r12 = r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: androidx.media.MediaSessionManager mediaSessionManager>;
+
+        z0 = virtualinvoke $r12.<androidx.media.MediaSessionManager: boolean isTrustedForMediaControl(androidx.media.MediaSessionManager$RemoteUserInfo)>(r4);
+
+        $r13 = r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.util.Set pendingControllers>;
+
+        interfaceinvoke $r13.<java.util.Set: boolean add(java.lang.Object)>(r1);
+
+     label13:
+        $r14 = r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: android.os.Handler handler>;
+
+        $r15 = dynamicinvoke "run" <java.lang.Runnable (androidx.media3.session.MediaSessionService$MediaSessionServiceStub,androidx.media3.session.IMediaController,androidx.media.MediaSessionManager$RemoteUserInfo,androidx.media3.session.ConnectionRequest,boolean,int,int)>(r0, r1, r4, r3, z0, i2, i0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.media3.session.MediaSessionService$MediaSessionServiceStub: void lambda$connect$0(androidx.media3.session.IMediaController,androidx.media.MediaSessionManager$RemoteUserInfo,androidx.media3.session.ConnectionRequest,boolean,int,int)>, methodtype: void __METHODTYPE__());
+
+        virtualinvoke $r14.<android.os.Handler: boolean post(java.lang.Runnable)>($r15);
+
+     label14:
+        staticinvoke <android.os.Binder: void restoreCallingIdentity(long)>(l1);
+
+        goto label17;
+
+     label15:
+        $r16 := @caughtexception;
+
+        r5 = $r16;
+
+     label16:
+        staticinvoke <android.os.Binder: void restoreCallingIdentity(long)>(l1);
+
+        throw r5;
+
+     label17:
+        return;
+
+        catch java.lang.RuntimeException from label02 to label03 with label04;
+        catch android.os.RemoteException from label06 to label07 with label08;
+        catch java.lang.Throwable from label13 to label14 with label15;
+        catch java.lang.Throwable from label15 to label16 with label15;
+    }
+
+    public void release()
+    {
+        androidx.media3.session.MediaSessionService$MediaSessionServiceStub r0;
+        java.util.Iterator r1;
+        androidx.media3.session.IMediaController r2;
+        java.lang.Throwable r3, $r8;
+        java.lang.ref.WeakReference $r4;
+        android.os.Handler $r5;
+        java.util.Set $r6;
+        boolean $z0;
+        java.lang.Object $r7;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$MediaSessionServiceStub;
+
+        $r4 = r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.lang.ref.WeakReference serviceReference>;
+
+        virtualinvoke $r4.<java.lang.ref.WeakReference: void clear()>();
+
+        $r5 = r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: android.os.Handler handler>;
+
+        virtualinvoke $r5.<android.os.Handler: void removeCallbacksAndMessages(java.lang.Object)>(null);
+
+        $r6 = r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.util.Set pendingControllers>;
+
+        r1 = interfaceinvoke $r6.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r7 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (androidx.media3.session.IMediaController) $r7;
+
+     label2:
+        interfaceinvoke r2.<androidx.media3.session.IMediaController: void onDisconnected(int)>(0);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+     label5:
+        goto label1;
+
+     label6:
+        return;
+
+        catch android.os.RemoteException from label2 to label3 with label4;
+    }
+
+    private void lambda$connect$0(androidx.media3.session.IMediaController, androidx.media.MediaSessionManager$RemoteUserInfo, androidx.media3.session.ConnectionRequest, boolean, int, int)
+    {
+        androidx.media3.session.MediaSessionService$MediaSessionServiceStub r0;
+        androidx.media3.session.IMediaController r1;
+        androidx.media.MediaSessionManager$RemoteUserInfo r2;
+        androidx.media3.session.ConnectionRequest r3;
+        boolean z0, z2;
+        int i0, i1, $i2, $i3, $i4, $i5;
+        androidx.media3.session.MediaSession r4;
+        java.lang.Throwable r5, r6, $r14, $r15, $r16, $r17, $r18, $r19, r21, r23, r24, r25;
+        java.util.Set $r7;
+        java.lang.ref.WeakReference $r8;
+        java.lang.Object $r9;
+        androidx.media3.session.MediaSession$ControllerInfo $r10, r22;
+        android.os.Bundle $r11, $r12;
+        java.lang.String $r13;
+        androidx.media3.session.MediaSessionService r20;
+
+        r0 := @this: androidx.media3.session.MediaSessionService$MediaSessionServiceStub;
+
+        r1 := @parameter0: androidx.media3.session.IMediaController;
+
+        r2 := @parameter1: androidx.media.MediaSessionManager$RemoteUserInfo;
+
+        r3 := @parameter2: androidx.media3.session.ConnectionRequest;
+
+        z0 := @parameter3: boolean;
+
+        i0 := @parameter4: int;
+
+        i1 := @parameter5: int;
+
+        $r7 = r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.util.Set pendingControllers>;
+
+        interfaceinvoke $r7.<java.util.Set: boolean remove(java.lang.Object)>(r1);
+
+        z2 = 1;
+
+     label01:
+        $r8 = r0.<androidx.media3.session.MediaSessionService$MediaSessionServiceStub: java.lang.ref.WeakReference serviceReference>;
+
+        $r9 = virtualinvoke $r8.<java.lang.ref.WeakReference: java.lang.Object get()>();
+
+        r20 = (androidx.media3.session.MediaSessionService) $r9;
+
+        if r20 != null goto label07;
+
+     label02:
+        if z2 == 0 goto label06;
+
+     label03:
+        interfaceinvoke r1.<androidx.media3.session.IMediaController: void onDisconnected(int)>(0);
+
+     label04:
+        goto label06;
+
+     label05:
+        $r17 := @caughtexception;
+
+        r21 = $r17;
+
+     label06:
+        return;
+
+     label07:
+        $r10 = new androidx.media3.session.MediaSession$ControllerInfo;
+
+        $i3 = r3.<androidx.media3.session.ConnectionRequest: int libraryVersion>;
+
+        $i2 = r3.<androidx.media3.session.ConnectionRequest: int controllerInterfaceVersion>;
+
+        $r11 = r3.<androidx.media3.session.ConnectionRequest: android.os.Bundle connectionHints>;
+
+        specialinvoke $r10.<androidx.media3.session.MediaSession$ControllerInfo: void <init>(androidx.media.MediaSessionManager$RemoteUserInfo,int,int,boolean,androidx.media3.session.MediaSession$ControllerCb,android.os.Bundle)>(r2, $i3, $i2, z0, null, $r11);
+
+        r22 = $r10;
+
+     label08:
+        r4 = virtualinvoke r20.<androidx.media3.session.MediaSessionService: androidx.media3.session.MediaSession onGetSession(androidx.media3.session.MediaSession$ControllerInfo)>(r22);
+
+        if r4 != null goto label14;
+
+     label09:
+        if z2 == 0 goto label13;
+
+     label10:
+        interfaceinvoke r1.<androidx.media3.session.IMediaController: void onDisconnected(int)>(0);
+
+     label11:
+        goto label13;
+
+     label12:
+        $r16 := @caughtexception;
+
+        r23 = $r16;
+
+     label13:
+        return;
+
+     label14:
+        virtualinvoke r20.<androidx.media3.session.MediaSessionService: void addSession(androidx.media3.session.MediaSession)>(r4);
+
+        z2 = 0;
+
+        $i5 = r3.<androidx.media3.session.ConnectionRequest: int libraryVersion>;
+
+        $i4 = r3.<androidx.media3.session.ConnectionRequest: int controllerInterfaceVersion>;
+
+        $r13 = r3.<androidx.media3.session.ConnectionRequest: java.lang.String packageName>;
+
+        $r12 = r3.<androidx.media3.session.ConnectionRequest: android.os.Bundle connectionHints>;
+
+        virtualinvoke r4.<androidx.media3.session.MediaSession: void handleControllerConnectionFromService(androidx.media3.session.IMediaController,int,int,java.lang.String,int,int,android.os.Bundle)>(r1, $i5, $i4, $r13, i0, i1, $r12);
+
+     label15:
+        goto label17;
+
+     label16:
+        $r19 := @caughtexception;
+
+        r24 = $r19;
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String,java.lang.Throwable)>("MSSImpl", "Failed to add a session to session service", r24);
+
+     label17:
+        if z2 == 0 goto label27;
+
+     label18:
+        interfaceinvoke r1.<androidx.media3.session.IMediaController: void onDisconnected(int)>(0);
+
+     label19:
+        goto label27;
+
+     label20:
+        $r15 := @caughtexception;
+
+        r25 = $r15;
+
+        goto label27;
+
+     label21:
+        $r14 := @caughtexception;
+
+        r5 = $r14;
+
+     label22:
+        if z2 == 0 goto label26;
+
+     label23:
+        interfaceinvoke r1.<androidx.media3.session.IMediaController: void onDisconnected(int)>(0);
+
+     label24:
+        goto label26;
+
+     label25:
+        $r18 := @caughtexception;
+
+        r6 = $r18;
+
+     label26:
+        throw r5;
+
+     label27:
+        return;
+
+        catch android.os.RemoteException from label03 to label04 with label05;
+        catch android.os.RemoteException from label10 to label11 with label12;
+        catch java.lang.Exception from label08 to label09 with label16;
+        catch java.lang.Exception from label14 to label15 with label16;
+        catch android.os.RemoteException from label18 to label19 with label20;
+        catch java.lang.Throwable from label01 to label02 with label21;
+        catch java.lang.Throwable from label07 to label09 with label21;
+        catch java.lang.Throwable from label14 to label17 with label21;
+        catch android.os.RemoteException from label23 to label24 with label25;
+        catch java.lang.Throwable from label21 to label22 with label21;
+    }
+

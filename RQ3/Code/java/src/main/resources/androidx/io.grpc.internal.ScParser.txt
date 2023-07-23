@@ -1,0 +1,118 @@
+io.grpc.internal.ScParser
+<io.grpc.internal.ScParser: io.grpc.internal.AutoConfiguredLoadBalancerFactory autoLoadBalancerFactory>
+<io.grpc.internal.ScParser: int maxHedgedAttemptsLimit>
+<io.grpc.internal.ScParser: int maxRetryAttemptsLimit>
+<io.grpc.internal.ScParser: boolean retryEnabled>
+    public void <init>(boolean, int, int, io.grpc.internal.AutoConfiguredLoadBalancerFactory)
+    {
+        io.grpc.internal.ScParser $r0;
+        int $i0, $i1;
+        io.grpc.internal.AutoConfiguredLoadBalancerFactory $r1;
+        java.lang.Object $r2;
+        boolean $z0;
+
+        $r0 := @this: io.grpc.internal.ScParser;
+
+        $z0 := @parameter0: boolean;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 := @parameter3: io.grpc.internal.AutoConfiguredLoadBalancerFactory;
+
+        specialinvoke $r0.<io.grpc.NameResolver$ServiceConfigParser: void <init>()>();
+
+        $r0.<io.grpc.internal.ScParser: boolean retryEnabled> = $z0;
+
+        $r0.<io.grpc.internal.ScParser: int maxRetryAttemptsLimit> = $i0;
+
+        $r0.<io.grpc.internal.ScParser: int maxHedgedAttemptsLimit> = $i1;
+
+        $r2 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "autoLoadBalancerFactory");
+
+        $r1 = (io.grpc.internal.AutoConfiguredLoadBalancerFactory) $r2;
+
+        $r0.<io.grpc.internal.ScParser: io.grpc.internal.AutoConfiguredLoadBalancerFactory autoLoadBalancerFactory> = $r1;
+
+        return;
+    }
+
+    public io.grpc.NameResolver$ConfigOrError parseServiceConfig(java.util.Map)
+    {
+        io.grpc.internal.ScParser $r0;
+        int $i0, $i1;
+        java.util.Map $r1;
+        io.grpc.internal.AutoConfiguredLoadBalancerFactory $r2;
+        io.grpc.NameResolver$ConfigOrError $r3;
+        java.lang.Object $r4;
+        io.grpc.Status $r5;
+        boolean $z0;
+        io.grpc.internal.ManagedChannelServiceConfig $r6;
+        java.lang.Throwable $r7;
+
+        $r0 := @this: io.grpc.internal.ScParser;
+
+        $r1 := @parameter0: java.util.Map;
+
+        $r2 = $r0.<io.grpc.internal.ScParser: io.grpc.internal.AutoConfiguredLoadBalancerFactory autoLoadBalancerFactory>;
+
+     label1:
+        $r3 = virtualinvoke $r2.<io.grpc.internal.AutoConfiguredLoadBalancerFactory: io.grpc.NameResolver$ConfigOrError parseLoadBalancerPolicy(java.util.Map)>($r1);
+
+     label2:
+        if $r3 != null goto label3;
+
+        $r4 = null;
+
+        goto label8;
+
+     label3:
+        $r5 = virtualinvoke $r3.<io.grpc.NameResolver$ConfigOrError: io.grpc.Status getError()>();
+
+     label4:
+        if $r5 == null goto label7;
+
+     label5:
+        $r5 = virtualinvoke $r3.<io.grpc.NameResolver$ConfigOrError: io.grpc.Status getError()>();
+
+     label6:
+        $r3 = staticinvoke <io.grpc.NameResolver$ConfigOrError: io.grpc.NameResolver$ConfigOrError fromError(io.grpc.Status)>($r5);
+
+        return $r3;
+
+     label7:
+        $r4 = virtualinvoke $r3.<io.grpc.NameResolver$ConfigOrError: java.lang.Object getConfig()>();
+
+     label8:
+        $z0 = $r0.<io.grpc.internal.ScParser: boolean retryEnabled>;
+
+        $i0 = $r0.<io.grpc.internal.ScParser: int maxRetryAttemptsLimit>;
+
+        $i1 = $r0.<io.grpc.internal.ScParser: int maxHedgedAttemptsLimit>;
+
+        $r6 = staticinvoke <io.grpc.internal.ManagedChannelServiceConfig: io.grpc.internal.ManagedChannelServiceConfig fromServiceConfig(java.util.Map,boolean,int,int,java.lang.Object)>($r1, $z0, $i0, $i1, $r4);
+
+        $r3 = staticinvoke <io.grpc.NameResolver$ConfigOrError: io.grpc.NameResolver$ConfigOrError fromConfig(java.lang.Object)>($r6);
+
+        return $r3;
+
+     label9:
+        $r7 := @caughtexception;
+
+        $r5 = <io.grpc.Status: io.grpc.Status UNKNOWN>;
+
+        $r5 = virtualinvoke $r5.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("failed to parse service config");
+
+        $r5 = virtualinvoke $r5.<io.grpc.Status: io.grpc.Status withCause(java.lang.Throwable)>($r7);
+
+        $r3 = staticinvoke <io.grpc.NameResolver$ConfigOrError: io.grpc.NameResolver$ConfigOrError fromError(io.grpc.Status)>($r5);
+
+        return $r3;
+
+        catch java.lang.RuntimeException from label1 to label2 with label9;
+        catch java.lang.RuntimeException from label3 to label4 with label9;
+        catch java.lang.RuntimeException from label5 to label6 with label9;
+        catch java.lang.RuntimeException from label7 to label8 with label9;
+    }
+

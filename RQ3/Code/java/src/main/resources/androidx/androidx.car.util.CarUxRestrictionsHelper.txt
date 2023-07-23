@@ -1,0 +1,256 @@
+androidx.car.util.CarUxRestrictionsHelper
+<androidx.car.util.CarUxRestrictionsHelper: java.lang.String TAG>
+<androidx.car.util.CarUxRestrictionsHelper: android.car.Car mCar>
+<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager mCarUxRestrictionsManager>
+<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener mListener>
+<androidx.car.util.CarUxRestrictionsHelper: android.content.ServiceConnection mServiceConnection>
+    public void <init>(android.content.Context, android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener)
+    {
+        androidx.car.util.CarUxRestrictionsHelper r0;
+        android.content.Context r1;
+        android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener r2;
+        androidx.car.util.CarUxRestrictionsHelper$1 $r3;
+        android.content.ServiceConnection $r4;
+        android.car.Car $r5;
+        java.lang.IllegalArgumentException $r6;
+
+        r0 := @this: androidx.car.util.CarUxRestrictionsHelper;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new androidx.car.util.CarUxRestrictionsHelper$1;
+
+        specialinvoke $r3.<androidx.car.util.CarUxRestrictionsHelper$1: void <init>(androidx.car.util.CarUxRestrictionsHelper)>(r0);
+
+        r0.<androidx.car.util.CarUxRestrictionsHelper: android.content.ServiceConnection mServiceConnection> = $r3;
+
+        if r2 != null goto label1;
+
+        $r6 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Listener cannot be null.");
+
+        throw $r6;
+
+     label1:
+        r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener mListener> = r2;
+
+        $r4 = r0.<androidx.car.util.CarUxRestrictionsHelper: android.content.ServiceConnection mServiceConnection>;
+
+        $r5 = staticinvoke <android.car.Car: android.car.Car createCar(android.content.Context,android.content.ServiceConnection)>(r1, $r4);
+
+        r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.Car mCar> = $r5;
+
+        return;
+    }
+
+    public void start()
+    {
+        androidx.car.util.CarUxRestrictionsHelper r0;
+        java.lang.Throwable r1, $r5;
+        android.car.Car $r2, $r3, $r4;
+        boolean $z0;
+
+        r0 := @this: androidx.car.util.CarUxRestrictionsHelper;
+
+     label1:
+        $r2 = r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.Car mCar>;
+
+        if $r2 == null goto label2;
+
+        $r3 = r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.Car mCar>;
+
+        $z0 = virtualinvoke $r3.<android.car.Car: boolean isConnected()>();
+
+        if $z0 != 0 goto label2;
+
+        $r4 = r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.Car mCar>;
+
+        virtualinvoke $r4.<android.car.Car: void connect()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r1 = $r5;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("CarUxRestrictionsHelper", "start(); cannot connect to Car");
+
+     label4:
+        return;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+    }
+
+    public void stop()
+    {
+        androidx.car.util.CarUxRestrictionsHelper r0;
+        android.car.drivingstate.CarUxRestrictionsManager $r1, $r4;
+        android.car.Car $r2, $r3, $r8;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, r7, r9;
+
+        r0 := @this: androidx.car.util.CarUxRestrictionsHelper;
+
+        $r1 = r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager mCarUxRestrictionsManager>;
+
+        if $r1 == null goto label4;
+
+     label1:
+        $r4 = r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager mCarUxRestrictionsManager>;
+
+        virtualinvoke $r4.<android.car.drivingstate.CarUxRestrictionsManager: void unregisterListener()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r7 = $r5;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("CarUxRestrictionsHelper", "stop(); cannot unregister listener.");
+
+     label4:
+        $r8 = r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.Car mCar>;
+
+        if $r8 == null goto label5;
+
+        $r2 = r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.Car mCar>;
+
+        $z0 = virtualinvoke $r2.<android.car.Car: boolean isConnected()>();
+
+        if $z0 == 0 goto label5;
+
+        $r3 = r0.<androidx.car.util.CarUxRestrictionsHelper: android.car.Car mCar>;
+
+        virtualinvoke $r3.<android.car.Car: void disconnect()>();
+
+     label5:
+        goto label7;
+
+     label6:
+        $r6 := @caughtexception;
+
+        r9 = $r6;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("CarUxRestrictionsHelper", "stop(); cannot disconnect from Car.");
+
+     label7:
+        return;
+
+        catch android.car.CarNotConnectedException from label1 to label2 with label3;
+        catch java.lang.IllegalStateException from label4 to label5 with label6;
+    }
+
+androidx.car.util.CarUxRestrictionsHelper$1
+<androidx.car.util.CarUxRestrictionsHelper$1: androidx.car.util.CarUxRestrictionsHelper this$0>
+    void <init>(androidx.car.util.CarUxRestrictionsHelper)
+    {
+        androidx.car.util.CarUxRestrictionsHelper$1 r0;
+        androidx.car.util.CarUxRestrictionsHelper r1;
+
+        r0 := @this: androidx.car.util.CarUxRestrictionsHelper$1;
+
+        r1 := @parameter0: androidx.car.util.CarUxRestrictionsHelper;
+
+        r0.<androidx.car.util.CarUxRestrictionsHelper$1: androidx.car.util.CarUxRestrictionsHelper this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onServiceConnected(android.content.ComponentName, android.os.IBinder)
+    {
+        androidx.car.util.CarUxRestrictionsHelper$1 r0;
+        android.content.ComponentName r1;
+        android.os.IBinder r2;
+        java.lang.Throwable r3, $r18;
+        androidx.car.util.CarUxRestrictionsHelper $r4, $r6, $r9, $r10, $r13, $r14;
+        android.car.Car $r5;
+        java.lang.Object $r7;
+        android.car.drivingstate.CarUxRestrictionsManager $r8, $r12, $r15;
+        android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener $r11, $r16;
+        android.car.drivingstate.CarUxRestrictions $r17;
+
+        r0 := @this: androidx.car.util.CarUxRestrictionsHelper$1;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        r2 := @parameter1: android.os.IBinder;
+
+     label1:
+        $r6 = r0.<androidx.car.util.CarUxRestrictionsHelper$1: androidx.car.util.CarUxRestrictionsHelper this$0>;
+
+        $r4 = r0.<androidx.car.util.CarUxRestrictionsHelper$1: androidx.car.util.CarUxRestrictionsHelper this$0>;
+
+        $r5 = $r4.<androidx.car.util.CarUxRestrictionsHelper: android.car.Car mCar>;
+
+        $r7 = virtualinvoke $r5.<android.car.Car: java.lang.Object getCarManager(java.lang.String)>("uxrestriction");
+
+        $r8 = (android.car.drivingstate.CarUxRestrictionsManager) $r7;
+
+        $r6.<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager mCarUxRestrictionsManager> = $r8;
+
+        $r9 = r0.<androidx.car.util.CarUxRestrictionsHelper$1: androidx.car.util.CarUxRestrictionsHelper this$0>;
+
+        $r12 = $r9.<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager mCarUxRestrictionsManager>;
+
+        $r10 = r0.<androidx.car.util.CarUxRestrictionsHelper$1: androidx.car.util.CarUxRestrictionsHelper this$0>;
+
+        $r11 = $r10.<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener mListener>;
+
+        virtualinvoke $r12.<android.car.drivingstate.CarUxRestrictionsManager: void registerListener(android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener)>($r11);
+
+        $r13 = r0.<androidx.car.util.CarUxRestrictionsHelper$1: androidx.car.util.CarUxRestrictionsHelper this$0>;
+
+        $r16 = $r13.<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener mListener>;
+
+        $r14 = r0.<androidx.car.util.CarUxRestrictionsHelper$1: androidx.car.util.CarUxRestrictionsHelper this$0>;
+
+        $r15 = $r14.<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager mCarUxRestrictionsManager>;
+
+        $r17 = virtualinvoke $r15.<android.car.drivingstate.CarUxRestrictionsManager: android.car.drivingstate.CarUxRestrictions getCurrentCarUxRestrictions()>();
+
+        interfaceinvoke $r16.<android.car.drivingstate.CarUxRestrictionsManager$OnUxRestrictionsChangedListener: void onUxRestrictionsChanged(android.car.drivingstate.CarUxRestrictions)>($r17);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r18 := @caughtexception;
+
+        r3 = $r18;
+
+        virtualinvoke r3.<android.car.CarNotConnectedException: void printStackTrace()>();
+
+     label4:
+        return;
+
+        catch android.car.CarNotConnectedException from label1 to label2 with label3;
+    }
+
+    public void onServiceDisconnected(android.content.ComponentName)
+    {
+        androidx.car.util.CarUxRestrictionsHelper$1 r0;
+        android.content.ComponentName r1;
+        androidx.car.util.CarUxRestrictionsHelper $r2;
+
+        r0 := @this: androidx.car.util.CarUxRestrictionsHelper$1;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        $r2 = r0.<androidx.car.util.CarUxRestrictionsHelper$1: androidx.car.util.CarUxRestrictionsHelper this$0>;
+
+        $r2.<androidx.car.util.CarUxRestrictionsHelper: android.car.drivingstate.CarUxRestrictionsManager mCarUxRestrictionsManager> = null;
+
+        return;
+    }
+

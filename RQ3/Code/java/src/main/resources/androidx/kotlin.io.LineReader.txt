@@ -1,0 +1,548 @@
+kotlin.io.LineReader
+<kotlin.io.LineReader: int BUFFER_SIZE>
+<kotlin.io.LineReader: kotlin.io.LineReader INSTANCE>
+<kotlin.io.LineReader: java.nio.ByteBuffer byteBuf>
+<kotlin.io.LineReader: byte[] bytes>
+<kotlin.io.LineReader: java.nio.CharBuffer charBuf>
+<kotlin.io.LineReader: char[] chars>
+<kotlin.io.LineReader: java.nio.charset.CharsetDecoder decoder>
+<kotlin.io.LineReader: boolean directEOL>
+<kotlin.io.LineReader: java.lang.StringBuilder sb>
+    static void <clinit>()
+    {
+        kotlin.io.LineReader $r0;
+        byte[] $r1;
+        char[] $r2;
+        java.nio.ByteBuffer $r3;
+        java.nio.CharBuffer $r4;
+        java.lang.StringBuilder $r5;
+
+        $r0 = new kotlin.io.LineReader;
+
+        specialinvoke $r0.<kotlin.io.LineReader: void <init>()>();
+
+        <kotlin.io.LineReader: kotlin.io.LineReader INSTANCE> = $r0;
+
+        $r1 = newarray (byte)[32];
+
+        <kotlin.io.LineReader: byte[] bytes> = $r1;
+
+        $r2 = newarray (char)[32];
+
+        <kotlin.io.LineReader: char[] chars> = $r2;
+
+        $r3 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>($r1);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r3, "wrap(bytes)");
+
+        <kotlin.io.LineReader: java.nio.ByteBuffer byteBuf> = $r3;
+
+        $r4 = staticinvoke <java.nio.CharBuffer: java.nio.CharBuffer wrap(char[])>($r2);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r4, "wrap(chars)");
+
+        <kotlin.io.LineReader: java.nio.CharBuffer charBuf> = $r4;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        <kotlin.io.LineReader: java.lang.StringBuilder sb> = $r5;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        kotlin.io.LineReader $r0;
+
+        $r0 := @this: kotlin.io.LineReader;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private final int compactBytes()
+    {
+        kotlin.io.LineReader $r0;
+        java.nio.ByteBuffer $r1;
+        int $i0;
+
+        $r0 := @this: kotlin.io.LineReader;
+
+        $r1 = <kotlin.io.LineReader: java.nio.ByteBuffer byteBuf>;
+
+        virtualinvoke $r1.<java.nio.ByteBuffer: java.nio.ByteBuffer compact()>();
+
+        $i0 = virtualinvoke $r1.<java.nio.ByteBuffer: int position()>();
+
+        virtualinvoke $r1.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        return $i0;
+    }
+
+    private final int decode(boolean)
+    {
+        kotlin.io.LineReader $r0;
+        boolean $z0, $z1;
+        java.nio.CharBuffer $r1;
+        char[] $r2;
+        java.nio.charset.CharsetDecoder $r3;
+        java.nio.ByteBuffer $r4;
+        java.nio.charset.CoderResult $r5;
+        int $i0;
+        java.lang.StringBuilder $r6;
+        char $c1;
+
+        $r0 := @this: kotlin.io.LineReader;
+
+        $z0 := @parameter0: boolean;
+
+     label1:
+        $r3 = <kotlin.io.LineReader: java.nio.charset.CharsetDecoder decoder>;
+
+        if $r3 != null goto label2;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void throwUninitializedPropertyAccessException(java.lang.String)>("decoder");
+
+        $r3 = null;
+
+     label2:
+        $r4 = <kotlin.io.LineReader: java.nio.ByteBuffer byteBuf>;
+
+        $r1 = <kotlin.io.LineReader: java.nio.CharBuffer charBuf>;
+
+        $r5 = virtualinvoke $r3.<java.nio.charset.CharsetDecoder: java.nio.charset.CoderResult decode(java.nio.ByteBuffer,java.nio.CharBuffer,boolean)>($r4, $r1, $z0);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r5, "decoder.decode(byteBuf, charBuf, endOfInput)");
+
+        $z1 = virtualinvoke $r5.<java.nio.charset.CoderResult: boolean isError()>();
+
+        if $z1 == 0 goto label3;
+
+        specialinvoke $r0.<kotlin.io.LineReader: void resetAll()>();
+
+        virtualinvoke $r5.<java.nio.charset.CoderResult: void throwException()>();
+
+     label3:
+        $i0 = virtualinvoke $r1.<java.nio.CharBuffer: int position()>();
+
+        $z1 = virtualinvoke $r5.<java.nio.charset.CoderResult: boolean isOverflow()>();
+
+        if $z1 != 0 goto label4;
+
+        return $i0;
+
+     label4:
+        $r6 = <kotlin.io.LineReader: java.lang.StringBuilder sb>;
+
+        $r2 = <kotlin.io.LineReader: char[] chars>;
+
+        $i0 = $i0 + -1;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(char[],int,int)>($r2, 0, $i0);
+
+        virtualinvoke $r1.<java.nio.CharBuffer: java.nio.Buffer position(int)>(0);
+
+        virtualinvoke $r1.<java.nio.CharBuffer: java.nio.Buffer limit(int)>(32);
+
+        $c1 = $r2[$i0];
+
+        virtualinvoke $r1.<java.nio.CharBuffer: java.nio.CharBuffer put(char)>($c1);
+
+        goto label1;
+    }
+
+    private final int decodeEndOfInput(int, int)
+    {
+        kotlin.io.LineReader $r0;
+        java.nio.ByteBuffer $r1;
+        int $i0, $i1;
+        java.nio.CharBuffer $r2;
+        java.nio.charset.CharsetDecoder $r3;
+
+        $r0 := @this: kotlin.io.LineReader;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r1 = <kotlin.io.LineReader: java.nio.ByteBuffer byteBuf>;
+
+        virtualinvoke $r1.<java.nio.ByteBuffer: java.nio.Buffer limit(int)>($i0);
+
+        $r2 = <kotlin.io.LineReader: java.nio.CharBuffer charBuf>;
+
+        virtualinvoke $r2.<java.nio.CharBuffer: java.nio.Buffer position(int)>($i1);
+
+        $i0 = specialinvoke $r0.<kotlin.io.LineReader: int decode(boolean)>(1);
+
+        $r3 = <kotlin.io.LineReader: java.nio.charset.CharsetDecoder decoder>;
+
+        if $r3 != null goto label1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void throwUninitializedPropertyAccessException(java.lang.String)>("decoder");
+
+        $r3 = null;
+
+     label1:
+        virtualinvoke $r3.<java.nio.charset.CharsetDecoder: java.nio.charset.CharsetDecoder reset()>();
+
+        virtualinvoke $r1.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        return $i0;
+    }
+
+    private final void resetAll()
+    {
+        kotlin.io.LineReader $r0;
+        java.nio.charset.CharsetDecoder $r1;
+        java.nio.ByteBuffer $r2;
+        java.lang.StringBuilder $r3;
+
+        $r0 := @this: kotlin.io.LineReader;
+
+        $r1 = <kotlin.io.LineReader: java.nio.charset.CharsetDecoder decoder>;
+
+        if $r1 != null goto label1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void throwUninitializedPropertyAccessException(java.lang.String)>("decoder");
+
+        $r1 = null;
+
+     label1:
+        virtualinvoke $r1.<java.nio.charset.CharsetDecoder: java.nio.charset.CharsetDecoder reset()>();
+
+        $r2 = <kotlin.io.LineReader: java.nio.ByteBuffer byteBuf>;
+
+        virtualinvoke $r2.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        $r3 = <kotlin.io.LineReader: java.lang.StringBuilder sb>;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: void setLength(int)>(0);
+
+        return;
+    }
+
+    private final void trimStringBuilder()
+    {
+        kotlin.io.LineReader $r0;
+        java.lang.StringBuilder $r1;
+
+        $r0 := @this: kotlin.io.LineReader;
+
+        $r1 = <kotlin.io.LineReader: java.lang.StringBuilder sb>;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: void setLength(int)>(32);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: void trimToSize()>();
+
+        return;
+    }
+
+    private final void updateCharset(java.nio.charset.Charset)
+    {
+        kotlin.io.LineReader $r0;
+        java.nio.charset.Charset $r1;
+        java.nio.charset.CharsetDecoder $r2;
+        java.nio.ByteBuffer $r3;
+        java.nio.CharBuffer $r4;
+        boolean $z0;
+        int $i0;
+        char $c1;
+
+        $r0 := @this: kotlin.io.LineReader;
+
+        $r1 := @parameter0: java.nio.charset.Charset;
+
+        $r2 = virtualinvoke $r1.<java.nio.charset.Charset: java.nio.charset.CharsetDecoder newDecoder()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r2, "charset.newDecoder()");
+
+        <kotlin.io.LineReader: java.nio.charset.CharsetDecoder decoder> = $r2;
+
+        $r3 = <kotlin.io.LineReader: java.nio.ByteBuffer byteBuf>;
+
+        virtualinvoke $r3.<java.nio.ByteBuffer: java.nio.Buffer clear()>();
+
+        $r4 = <kotlin.io.LineReader: java.nio.CharBuffer charBuf>;
+
+        virtualinvoke $r4.<java.nio.CharBuffer: java.nio.Buffer clear()>();
+
+        virtualinvoke $r3.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte)>(10);
+
+        virtualinvoke $r3.<java.nio.ByteBuffer: java.nio.Buffer flip()>();
+
+        $r2 = <kotlin.io.LineReader: java.nio.charset.CharsetDecoder decoder>;
+
+        if $r2 != null goto label1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void throwUninitializedPropertyAccessException(java.lang.String)>("decoder");
+
+        $r2 = null;
+
+     label1:
+        $z0 = 0;
+
+        virtualinvoke $r2.<java.nio.charset.CharsetDecoder: java.nio.charset.CoderResult decode(java.nio.ByteBuffer,java.nio.CharBuffer,boolean)>($r3, $r4, 0);
+
+        $i0 = virtualinvoke $r4.<java.nio.CharBuffer: int position()>();
+
+        if $i0 != 1 goto label2;
+
+        $c1 = virtualinvoke $r4.<java.nio.CharBuffer: char get(int)>(0);
+
+        if $c1 != 10 goto label2;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label2:
+        <kotlin.io.LineReader: boolean directEOL> = $z0;
+
+        specialinvoke $r0.<kotlin.io.LineReader: void resetAll()>();
+
+        return;
+    }
+
+    public final java.lang.String readLine(java.io.InputStream, java.nio.charset.Charset)
+    {
+        kotlin.io.LineReader $r0;
+        byte[] $r1;
+        byte $b0;
+        java.io.InputStream $r2;
+        java.nio.charset.Charset $r3, $r5;
+        java.nio.charset.CharsetDecoder $r4;
+        boolean $z0, $z1;
+        int $i1, $i2, $i3, $i4;
+        java.lang.StringBuilder $r6;
+        java.nio.ByteBuffer $r7;
+        java.nio.CharBuffer $r8;
+        char[] $r9;
+        char $c5;
+        java.lang.String $r10;
+        java.lang.Throwable $r11;
+
+        $r0 := @this: kotlin.io.LineReader;
+
+        $r2 := @parameter0: java.io.InputStream;
+
+        $r3 := @parameter1: java.nio.charset.Charset;
+
+        entermonitor $r0;
+
+     label01:
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "inputStream");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r3, "charset");
+
+        $r4 = <kotlin.io.LineReader: java.nio.charset.CharsetDecoder decoder>;
+
+        if $r4 == null goto label03;
+
+        if $r4 != null goto label02;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void throwUninitializedPropertyAccessException(java.lang.String)>("decoder");
+
+        $r4 = null;
+
+     label02:
+        $r5 = virtualinvoke $r4.<java.nio.charset.CharsetDecoder: java.nio.charset.Charset charset()>();
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r5, $r3);
+
+        if $z0 != 0 goto label04;
+
+     label03:
+        specialinvoke $r0.<kotlin.io.LineReader: void updateCharset(java.nio.charset.Charset)>($r3);
+
+     label04:
+        $i1 = 0;
+
+        $i2 = 0;
+
+     label05:
+        $i3 = virtualinvoke $r2.<java.io.InputStream: int read()>();
+
+        $z0 = 1;
+
+        if $i3 != -1 goto label10;
+
+        $r6 = <kotlin.io.LineReader: java.lang.StringBuilder sb>;
+
+        $i3 = interfaceinvoke $r6.<java.lang.CharSequence: int length()>();
+
+     label06:
+        if $i3 != 0 goto label07;
+
+        $z1 = 1;
+
+        goto label08;
+
+     label07:
+        $z1 = 0;
+
+     label08:
+        if $z1 == 0 goto label09;
+
+        if $i1 != 0 goto label09;
+
+        if $i2 != 0 goto label09;
+
+        exitmonitor $r0;
+
+        return null;
+
+     label09:
+        $i2 = specialinvoke $r0.<kotlin.io.LineReader: int decodeEndOfInput(int,int)>($i1, $i2);
+
+        goto label13;
+
+     label10:
+        $i4 = $i1 + 1;
+
+        $r1 = <kotlin.io.LineReader: byte[] bytes>;
+
+        $b0 = (byte) $i3;
+
+        $r1[$i1] = $b0;
+
+        if $i3 == 10 goto label12;
+
+        if $i4 == 32 goto label12;
+
+        $z1 = <kotlin.io.LineReader: boolean directEOL>;
+
+        if $z1 != 0 goto label11;
+
+        goto label12;
+
+     label11:
+        $i1 = $i4;
+
+        goto label05;
+
+     label12:
+        $r7 = <kotlin.io.LineReader: java.nio.ByteBuffer byteBuf>;
+
+        virtualinvoke $r7.<java.nio.ByteBuffer: java.nio.Buffer limit(int)>($i4);
+
+        $r8 = <kotlin.io.LineReader: java.nio.CharBuffer charBuf>;
+
+        virtualinvoke $r8.<java.nio.CharBuffer: java.nio.Buffer position(int)>($i2);
+
+        $i1 = specialinvoke $r0.<kotlin.io.LineReader: int decode(boolean)>(0);
+
+        $i2 = $i1;
+
+        if $i1 <= 0 goto label22;
+
+        $r9 = <kotlin.io.LineReader: char[] chars>;
+
+        $i3 = $i1 + -1;
+
+        $c5 = $r9[$i3];
+
+        if $c5 != 10 goto label22;
+
+        virtualinvoke $r7.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        $i2 = $i1;
+
+     label13:
+        if $i2 <= 0 goto label15;
+
+        $r9 = <kotlin.io.LineReader: char[] chars>;
+
+        $i1 = $i2 + -1;
+
+        $c5 = $r9[$i1];
+
+        if $c5 != 10 goto label15;
+
+        if $i1 <= 0 goto label14;
+
+        $i2 = $i1 + -1;
+
+        $c5 = $r9[$i2];
+
+        if $c5 != 13 goto label14;
+
+        goto label15;
+
+     label14:
+        $i2 = $i1;
+
+     label15:
+        $r6 = <kotlin.io.LineReader: java.lang.StringBuilder sb>;
+
+        $i1 = interfaceinvoke $r6.<java.lang.CharSequence: int length()>();
+
+        if $i1 != 0 goto label16;
+
+        goto label17;
+
+     label16:
+        $z0 = 0;
+
+     label17:
+        if $z0 == 0 goto label19;
+
+        $r10 = new java.lang.String;
+
+        $r9 = <kotlin.io.LineReader: char[] chars>;
+
+        specialinvoke $r10.<java.lang.String: void <init>(char[],int,int)>($r9, 0, $i2);
+
+     label18:
+        exitmonitor $r0;
+
+        return $r10;
+
+     label19:
+        $r9 = <kotlin.io.LineReader: char[] chars>;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(char[],int,int)>($r9, 0, $i2);
+
+        $r10 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r10, "sb.toString()");
+
+        $i2 = virtualinvoke $r6.<java.lang.StringBuilder: int length()>();
+
+        if $i2 <= 32 goto label20;
+
+        specialinvoke $r0.<kotlin.io.LineReader: void trimStringBuilder()>();
+
+     label20:
+        virtualinvoke $r6.<java.lang.StringBuilder: void setLength(int)>(0);
+
+     label21:
+        exitmonitor $r0;
+
+        return $r10;
+
+     label22:
+        $i1 = specialinvoke $r0.<kotlin.io.LineReader: int compactBytes()>();
+
+     label23:
+        goto label05;
+
+     label24:
+        $r11 := @caughtexception;
+
+        exitmonitor $r0;
+
+        goto label25;
+
+     label25:
+        throw $r11;
+
+        catch java.lang.Throwable from label01 to label06 with label24;
+        catch java.lang.Throwable from label09 to label18 with label24;
+        catch java.lang.Throwable from label19 to label21 with label24;
+        catch java.lang.Throwable from label22 to label23 with label24;
+    }
+

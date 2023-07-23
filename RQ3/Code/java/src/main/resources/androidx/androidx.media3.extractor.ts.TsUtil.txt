@@ -1,0 +1,254 @@
+androidx.media3.extractor.ts.TsUtil
+    public static boolean isStartOfTsPacket(byte[], int, int, int)
+    {
+        byte[] r0;
+        int i0, i1, i2, i3, $i4, i6, i7;
+        byte $b5;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        i2 := @parameter3: int;
+
+        i6 = 0;
+
+        i7 = -4;
+
+     label1:
+        if i7 > 4 goto label5;
+
+        $i4 = i7 * 188;
+
+        i3 = i2 + $i4;
+
+        if i3 < i0 goto label2;
+
+        if i3 >= i1 goto label2;
+
+        $b5 = r0[i3];
+
+        if $b5 == 71 goto label3;
+
+     label2:
+        i6 = 0;
+
+        goto label4;
+
+     label3:
+        i6 = i6 + 1;
+
+        if i6 != 5 goto label4;
+
+        return 1;
+
+     label4:
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label5:
+        return 0;
+    }
+
+    public static int findSyncBytePosition(byte[], int, int)
+    {
+        byte[] r0;
+        int i0, i1, i3;
+        byte $b2;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        i3 = i0;
+
+     label1:
+        if i3 >= i1 goto label2;
+
+        $b2 = r0[i3];
+
+        if $b2 == 71 goto label2;
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return i3;
+    }
+
+    public static long readPcrFromPacket(androidx.media3.common.util.ParsableByteArray, int, int)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0, i1, i2, i3, i4, i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12;
+        boolean z0, z1, $z2, $z3;
+        byte[] r1;
+        long $l13;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i0);
+
+        $i6 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i6 >= 5 goto label1;
+
+        return -9223372036854775807L;
+
+     label1:
+        i2 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        $i7 = i2 & 8388608;
+
+        if $i7 == 0 goto label2;
+
+        return -9223372036854775807L;
+
+     label2:
+        $i8 = i2 & 2096896;
+
+        i3 = $i8 >> 8;
+
+        if i3 == i1 goto label3;
+
+        return -9223372036854775807L;
+
+     label3:
+        $i9 = i2 & 32;
+
+        if $i9 == 0 goto label4;
+
+        $z2 = 1;
+
+        goto label5;
+
+     label4:
+        $z2 = 0;
+
+     label5:
+        z0 = $z2;
+
+        if z0 != 0 goto label6;
+
+        return -9223372036854775807L;
+
+     label6:
+        i4 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        if i4 < 7 goto label9;
+
+        $i10 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i10 < 7 goto label9;
+
+        i5 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i11 = i5 & 16;
+
+        if $i11 != 16 goto label7;
+
+        $z3 = 1;
+
+        goto label8;
+
+     label7:
+        $z3 = 0;
+
+     label8:
+        z1 = $z3;
+
+        if z1 == 0 goto label9;
+
+        r1 = newarray (byte)[6];
+
+        $i12 = lengthof r1;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void readBytes(byte[],int,int)>(r1, 0, $i12);
+
+        $l13 = staticinvoke <androidx.media3.extractor.ts.TsUtil: long readPcrValueFromPcrBytes(byte[])>(r1);
+
+        return $l13;
+
+     label9:
+        return -9223372036854775807L;
+    }
+
+    private static long readPcrValueFromPcrBytes(byte[])
+    {
+        byte[] r0;
+        byte $b0, $b3, $b8, $b13, $b18;
+        long $l1, $l2, $l4, $l5, $l6, $l7, $l9, $l10, $l11, $l12, $l14, $l15, $l16, $l17, $l19, $l20, $l21, $l22, $l23;
+
+        r0 := @parameter0: byte[];
+
+        $b0 = r0[0];
+
+        $l1 = (long) $b0;
+
+        $l2 = $l1 & 255L;
+
+        $l7 = $l2 << 25;
+
+        $b3 = r0[1];
+
+        $l4 = (long) $b3;
+
+        $l5 = $l4 & 255L;
+
+        $l6 = $l5 << 17;
+
+        $l12 = $l7 | $l6;
+
+        $b8 = r0[2];
+
+        $l9 = (long) $b8;
+
+        $l10 = $l9 & 255L;
+
+        $l11 = $l10 << 9;
+
+        $l17 = $l12 | $l11;
+
+        $b13 = r0[3];
+
+        $l14 = (long) $b13;
+
+        $l15 = $l14 & 255L;
+
+        $l16 = $l15 << 1;
+
+        $l22 = $l17 | $l16;
+
+        $b18 = r0[4];
+
+        $l19 = (long) $b18;
+
+        $l20 = $l19 & 255L;
+
+        $l21 = $l20 >> 7;
+
+        $l23 = $l22 | $l21;
+
+        return $l23;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.extractor.ts.TsUtil r0;
+
+        r0 := @this: androidx.media3.extractor.ts.TsUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

@@ -1,0 +1,88 @@
+androidx.work.impl.utils.PruneWorkRunnable
+<androidx.work.impl.utils.PruneWorkRunnable: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>
+<androidx.work.impl.utils.PruneWorkRunnable: androidx.work.impl.OperationImpl mOperation>
+    public void <init>(androidx.work.impl.WorkManagerImpl)
+    {
+        androidx.work.impl.utils.PruneWorkRunnable r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        androidx.work.impl.OperationImpl $r2;
+
+        r0 := @this: androidx.work.impl.utils.PruneWorkRunnable;
+
+        r1 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.work.impl.utils.PruneWorkRunnable: androidx.work.impl.WorkManagerImpl mWorkManagerImpl> = r1;
+
+        $r2 = new androidx.work.impl.OperationImpl;
+
+        specialinvoke $r2.<androidx.work.impl.OperationImpl: void <init>()>();
+
+        r0.<androidx.work.impl.utils.PruneWorkRunnable: androidx.work.impl.OperationImpl mOperation> = $r2;
+
+        return;
+    }
+
+    public androidx.work.Operation getOperation()
+    {
+        androidx.work.impl.utils.PruneWorkRunnable r0;
+        androidx.work.impl.OperationImpl $r1;
+
+        r0 := @this: androidx.work.impl.utils.PruneWorkRunnable;
+
+        $r1 = r0.<androidx.work.impl.utils.PruneWorkRunnable: androidx.work.impl.OperationImpl mOperation>;
+
+        return $r1;
+    }
+
+    public void run()
+    {
+        androidx.work.impl.utils.PruneWorkRunnable r0;
+        androidx.work.impl.model.WorkSpecDao r1;
+        androidx.work.impl.WorkManagerImpl $r2;
+        androidx.work.Operation$State$SUCCESS $r3;
+        androidx.work.impl.OperationImpl $r4, $r7;
+        java.lang.Throwable $r5, r9;
+        androidx.work.Operation$State$FAILURE $r6;
+        androidx.work.impl.WorkDatabase r8;
+
+        r0 := @this: androidx.work.impl.utils.PruneWorkRunnable;
+
+     label1:
+        $r2 = r0.<androidx.work.impl.utils.PruneWorkRunnable: androidx.work.impl.WorkManagerImpl mWorkManagerImpl>;
+
+        r8 = virtualinvoke $r2.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        r1 = virtualinvoke r8.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        interfaceinvoke r1.<androidx.work.impl.model.WorkSpecDao: void pruneFinishedWorkWithZeroDependentsIgnoringKeepForAtLeast()>();
+
+        $r4 = r0.<androidx.work.impl.utils.PruneWorkRunnable: androidx.work.impl.OperationImpl mOperation>;
+
+        $r3 = <androidx.work.Operation: androidx.work.Operation$State$SUCCESS SUCCESS>;
+
+        virtualinvoke $r4.<androidx.work.impl.OperationImpl: void markState(androidx.work.Operation$State)>($r3);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r9 = $r5;
+
+        $r7 = r0.<androidx.work.impl.utils.PruneWorkRunnable: androidx.work.impl.OperationImpl mOperation>;
+
+        $r6 = new androidx.work.Operation$State$FAILURE;
+
+        specialinvoke $r6.<androidx.work.Operation$State$FAILURE: void <init>(java.lang.Throwable)>(r9);
+
+        virtualinvoke $r7.<androidx.work.impl.OperationImpl: void markState(androidx.work.Operation$State)>($r6);
+
+     label4:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+

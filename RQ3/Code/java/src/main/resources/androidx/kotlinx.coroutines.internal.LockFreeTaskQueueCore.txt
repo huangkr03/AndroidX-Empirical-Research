@@ -1,0 +1,915 @@
+kotlinx.coroutines.internal.LockFreeTaskQueueCore
+<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion Companion>
+<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.Symbol REMOVE_FROZEN>
+<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicRef _next>
+<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>
+<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>
+<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int capacity>
+<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask>
+<kotlinx.coroutines.internal.LockFreeTaskQueueCore: boolean singleConsumer>
+    static void <clinit>()
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r0;
+        kotlinx.coroutines.internal.Symbol $r1;
+
+        $r0 = new kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion;
+
+        specialinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion: void <init>(kotlin.jvm.internal.DefaultConstructorMarker)>(null);
+
+        <kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion Companion> = $r0;
+
+        $r1 = new kotlinx.coroutines.internal.Symbol;
+
+        specialinvoke $r1.<kotlinx.coroutines.internal.Symbol: void <init>(java.lang.String)>("REMOVE_FROZEN");
+
+        <kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.Symbol REMOVE_FROZEN> = $r1;
+
+        return;
+    }
+
+    public void <init>(int, boolean)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0;
+        java.lang.String $r1;
+        int $i0, $i1;
+        boolean $z0, $z1;
+        kotlinx.atomicfu.AtomicRef $r2;
+        kotlinx.atomicfu.AtomicLong $r3;
+        kotlinx.atomicfu.AtomicArray $r4;
+        java.lang.IllegalStateException $r5;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $i0 := @parameter0: int;
+
+        $z0 := @parameter1: boolean;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int capacity> = $i0;
+
+        $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: boolean singleConsumer> = $z0;
+
+        $i1 = $i0 + -1;
+
+        $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask> = $i1;
+
+        $r2 = staticinvoke <kotlinx.atomicfu.AtomicFU: kotlinx.atomicfu.AtomicRef atomic(java.lang.Object)>(null);
+
+        $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicRef _next> = $r2;
+
+        $r3 = staticinvoke <kotlinx.atomicfu.AtomicFU: kotlinx.atomicfu.AtomicLong atomic(long)>(0L);
+
+        $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state> = $r3;
+
+        $r4 = staticinvoke <kotlinx.atomicfu.AtomicFU_commonKt: kotlinx.atomicfu.AtomicArray atomicArrayOfNulls(int)>($i0);
+
+        $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array> = $r4;
+
+        $z0 = 1;
+
+        if $i1 > 1073741823 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        $r1 = "Check failed.";
+
+        if $z1 == 0 goto label6;
+
+        $i0 = $i0 & $i1;
+
+        if $i0 != 0 goto label3;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        if $z0 == 0 goto label5;
+
+        return;
+
+     label5:
+        $r5 = new java.lang.IllegalStateException;
+
+        $r1 = virtualinvoke $r1.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r1);
+
+        throw $r5;
+
+     label6:
+        $r5 = new java.lang.IllegalStateException;
+
+        $r1 = virtualinvoke $r1.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r1);
+
+        throw $r5;
+    }
+
+    private final kotlinx.coroutines.internal.LockFreeTaskQueueCore allocateNextCopy(long)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0, $r1, r8;
+        long $l0, $l2;
+        int $i1, $i3, $i4, $i5, $i6;
+        boolean $z0;
+        kotlinx.atomicfu.AtomicArray $r2;
+        kotlinx.atomicfu.AtomicRef $r3;
+        java.lang.Object $r4, $r5;
+        kotlinx.atomicfu.AtomicLong $r6;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r7;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder r9;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $l0 := @parameter0: long;
+
+        r8 = new kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $r1 = r8;
+
+        $i1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int capacity>;
+
+        $i1 = $i1 + $i1;
+
+        $z0 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: boolean singleConsumer>;
+
+        specialinvoke r8.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: void <init>(int,boolean)>($i1, $z0);
+
+        $l2 = 1073741823L & $l0;
+
+        $i1 = (int) $l2;
+
+        $l2 = 1152921503533105152L & $l0;
+
+        $l2 = $l2 >> 30;
+
+        $i3 = (int) $l2;
+
+     label1:
+        $i4 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask>;
+
+        $i5 = $i1 & $i4;
+
+        $i6 = $i3 & $i4;
+
+        if $i5 == $i6 goto label3;
+
+        $r2 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>;
+
+        $i4 = $i4 & $i1;
+
+        $r3 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicArray: kotlinx.atomicfu.AtomicRef get(int)>($i4);
+
+        $r4 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $r5 = $r4;
+
+        if $r4 != null goto label2;
+
+        r9 = new kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder;
+
+        $r5 = r9;
+
+        specialinvoke r9.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder: void <init>(int)>($i1);
+
+     label2:
+        $r2 = $r1.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>;
+
+        $i4 = $r1.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask>;
+
+        $i4 = $i4 & $i1;
+
+        $r3 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicArray: kotlinx.atomicfu.AtomicRef get(int)>($i4);
+
+        virtualinvoke $r3.<kotlinx.atomicfu.AtomicRef: void setValue(java.lang.Object)>($r5);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $r6 = $r1.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+        $r7 = <kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion Companion>;
+
+        $l0 = virtualinvoke $r7.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion: long wo(long,long)>($l0, 1152921504606846976L);
+
+        virtualinvoke $r6.<kotlinx.atomicfu.AtomicLong: void setValue(long)>($l0);
+
+        return $r1;
+    }
+
+    private final kotlinx.coroutines.internal.LockFreeTaskQueueCore allocateOrGetNextCopy(long)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0, $r3;
+        long $l0;
+        kotlinx.atomicfu.AtomicRef $r1, $r4;
+        java.lang.Object $r2;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $l0 := @parameter0: long;
+
+        $r1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicRef _next>;
+
+     label1:
+        $r2 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $r3 = (kotlinx.coroutines.internal.LockFreeTaskQueueCore) $r2;
+
+        if $r3 == null goto label2;
+
+        return $r3;
+
+     label2:
+        $r4 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicRef _next>;
+
+        $r3 = specialinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore allocateNextCopy(long)>($l0);
+
+        virtualinvoke $r4.<kotlinx.atomicfu.AtomicRef: boolean compareAndSet(java.lang.Object,java.lang.Object)>(null, $r3);
+
+        goto label1;
+    }
+
+    private final kotlinx.coroutines.internal.LockFreeTaskQueueCore fillPlaceholder(int, java.lang.Object)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0;
+        java.lang.Object $r1, $r4;
+        int $i0, $i1;
+        kotlinx.atomicfu.AtomicArray $r2;
+        kotlinx.atomicfu.AtomicRef $r3;
+        boolean $z0;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder $r5;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        $r2 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>;
+
+        $i1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask>;
+
+        $i1 = $i1 & $i0;
+
+        $r3 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicArray: kotlinx.atomicfu.AtomicRef get(int)>($i1);
+
+        $r4 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        $z0 = $r4 instanceof kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder;
+
+        if $z0 == 0 goto label1;
+
+        $r5 = (kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder) $r4;
+
+        $i1 = $r5.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder: int index>;
+
+        if $i1 != $i0 goto label1;
+
+        $r2 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>;
+
+        $i1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask>;
+
+        $i0 = $i0 & $i1;
+
+        $r3 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicArray: kotlinx.atomicfu.AtomicRef get(int)>($i0);
+
+        virtualinvoke $r3.<kotlinx.atomicfu.AtomicRef: void setValue(java.lang.Object)>($r1);
+
+        return $r0;
+
+     label1:
+        return null;
+    }
+
+    private final long markFrozen()
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0;
+        kotlinx.atomicfu.AtomicLong $r1;
+        long $l0, $l2;
+        byte $b1;
+        boolean $z0;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $r1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+     label1:
+        $l2 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicLong: long getValue()>();
+
+        $l0 = $l2 & 1152921504606846976L;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 == 0 goto label2;
+
+        return $l2;
+
+     label2:
+        $l0 = 1152921504606846976L | $l2;
+
+        $z0 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicLong: boolean compareAndSet(long,long)>($l2, $l0);
+
+        if $z0 == 0 goto label1;
+
+        return $l0;
+    }
+
+    private final kotlinx.coroutines.internal.LockFreeTaskQueueCore removeSlowPath(int, int)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0;
+        kotlinx.atomicfu.AtomicLong $r1, $r4;
+        int $i0, $i2, $i3;
+        byte $b1;
+        long $l4, $l5;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r2;
+        boolean $z0;
+        java.lang.AssertionError $r3;
+        kotlinx.atomicfu.AtomicArray $r5;
+        kotlinx.atomicfu.AtomicRef $r6;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $i2 := @parameter0: int;
+
+        $i3 := @parameter1: int;
+
+        $r1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+     label1:
+        $l4 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicLong: long getValue()>();
+
+        $l5 = 1073741823L & $l4;
+
+        $i0 = (int) $l5;
+
+        $r2 = <kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion Companion>;
+
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label5;
+
+        if $i0 != $i2 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        goto label5;
+
+     label4:
+        $r3 = new java.lang.AssertionError;
+
+        specialinvoke $r3.<java.lang.AssertionError: void <init>()>();
+
+        throw $r3;
+
+     label5:
+        $l5 = 1152921504606846976L & $l4;
+
+        $b1 = $l5 cmp 0L;
+
+        if $b1 == 0 goto label6;
+
+        $r0 = virtualinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore next()>();
+
+        return $r0;
+
+     label6:
+        $r4 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+        $l5 = virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion: long updateHead(long,int)>($l4, $i3);
+
+        $z0 = virtualinvoke $r4.<kotlinx.atomicfu.AtomicLong: boolean compareAndSet(long,long)>($l4, $l5);
+
+        if $z0 == 0 goto label1;
+
+        $r5 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>;
+
+        $i2 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask>;
+
+        $i2 = $i2 & $i0;
+
+        $r6 = virtualinvoke $r5.<kotlinx.atomicfu.AtomicArray: kotlinx.atomicfu.AtomicRef get(int)>($i2);
+
+        virtualinvoke $r6.<kotlinx.atomicfu.AtomicRef: void setValue(java.lang.Object)>(null);
+
+        return null;
+    }
+
+    public final int addLast(java.lang.Object)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0, $r8;
+        int $i0, $i1, $i5, $i6, $i7;
+        java.lang.Object $r1, $r6;
+        kotlinx.atomicfu.AtomicLong $r2, $r7;
+        long $l2, $l3;
+        byte $b4;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r3;
+        boolean $z0;
+        kotlinx.atomicfu.AtomicArray $r4;
+        kotlinx.atomicfu.AtomicRef $r5;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "element");
+
+        $r2 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+     label1:
+        $l2 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicLong: long getValue()>();
+
+        $l3 = 3458764513820540928L & $l2;
+
+        $b4 = $l3 cmp 0L;
+
+        if $b4 == 0 goto label2;
+
+        $r3 = <kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion Companion>;
+
+        $i5 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion: int addFailReason(long)>($l2);
+
+        return $i5;
+
+     label2:
+        $l3 = 1073741823L & $l2;
+
+        $i6 = (int) $l3;
+
+        $l3 = 1152921503533105152L & $l2;
+
+        $l3 = $l3 >> 30;
+
+        $i5 = (int) $l3;
+
+        $r3 = <kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion Companion>;
+
+        $i0 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask>;
+
+        $i1 = $i5 + 2;
+
+        $i1 = $i1 & $i0;
+
+        $i7 = $i6 & $i0;
+
+        if $i1 != $i7 goto label3;
+
+        return 1;
+
+     label3:
+        $z0 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: boolean singleConsumer>;
+
+        if $z0 != 0 goto label4;
+
+        $r4 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>;
+
+        $i1 = $i5 & $i0;
+
+        $r5 = virtualinvoke $r4.<kotlinx.atomicfu.AtomicArray: kotlinx.atomicfu.AtomicRef get(int)>($i1);
+
+        $r6 = virtualinvoke $r5.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        if $r6 == null goto label4;
+
+        $i0 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int capacity>;
+
+        if $i0 < 1024 goto label7;
+
+        $i5 = $i5 - $i6;
+
+        $i5 = $i5 & 1073741823;
+
+        $i0 = $i0 >> 1;
+
+        if $i5 <= $i0 goto label1;
+
+        return 1;
+
+     label4:
+        $r7 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+        $i6 = $i5 + 1;
+
+        $i6 = $i6 & 1073741823;
+
+        $l3 = virtualinvoke $r3.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion: long updateTail(long,int)>($l2, $i6);
+
+        $z0 = virtualinvoke $r7.<kotlinx.atomicfu.AtomicLong: boolean compareAndSet(long,long)>($l2, $l3);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>;
+
+        $i0 = $i5 & $i0;
+
+        $r5 = virtualinvoke $r4.<kotlinx.atomicfu.AtomicArray: kotlinx.atomicfu.AtomicRef get(int)>($i0);
+
+        virtualinvoke $r5.<kotlinx.atomicfu.AtomicRef: void setValue(java.lang.Object)>($r1);
+
+     label5:
+        $r2 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+        $l2 = virtualinvoke $r2.<kotlinx.atomicfu.AtomicLong: long getValue()>();
+
+        $l2 = $l2 & 1152921504606846976L;
+
+        $b4 = $l2 cmp 0L;
+
+        if $b4 == 0 goto label6;
+
+        $r0 = virtualinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore next()>();
+
+        $r8 = specialinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore fillPlaceholder(int,java.lang.Object)>($i5, $r1);
+
+        $r0 = $r8;
+
+        if $r8 != null goto label5;
+
+     label6:
+        return 0;
+
+     label7:
+        return 1;
+    }
+
+    public final boolean close()
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0;
+        kotlinx.atomicfu.AtomicLong $r1;
+        long $l0, $l1;
+        byte $b2;
+        boolean $z0;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $r1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+     label1:
+        $l0 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicLong: long getValue()>();
+
+        $l1 = $l0 & 2305843009213693952L;
+
+        $b2 = $l1 cmp 0L;
+
+        if $b2 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        $l1 = 1152921504606846976L & $l0;
+
+        $b2 = $l1 cmp 0L;
+
+        if $b2 == 0 goto label3;
+
+        return 0;
+
+     label3:
+        $l1 = 2305843009213693952L | $l0;
+
+        $z0 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicLong: boolean compareAndSet(long,long)>($l0, $l1);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+    }
+
+    public final int getSize()
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0;
+        int $i0, $i3;
+        long $l1, $l2;
+        kotlinx.atomicfu.AtomicLong $r1;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $r1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+        $l1 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicLong: long getValue()>();
+
+        $l2 = 1152921503533105152L & $l1;
+
+        $l2 = $l2 >> 30;
+
+        $i3 = (int) $l2;
+
+        $l1 = $l1 & 1073741823L;
+
+        $i0 = (int) $l1;
+
+        $i0 = $i3 - $i0;
+
+        $i0 = 1073741823 & $i0;
+
+        return $i0;
+    }
+
+    public final boolean isEmpty()
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0;
+        int $i0, $i1;
+        long $l2, $l3;
+        kotlinx.atomicfu.AtomicLong $r1;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $r1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+        $l2 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicLong: long getValue()>();
+
+        $l3 = 1073741823L & $l2;
+
+        $i1 = (int) $l3;
+
+        $l2 = $l2 & 1152921503533105152L;
+
+        $l2 = $l2 >> 30;
+
+        $i0 = (int) $l2;
+
+        if $i1 != $i0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public final kotlinx.coroutines.internal.LockFreeTaskQueueCore next()
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0;
+        long $l0;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $l0 = specialinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: long markFrozen()>();
+
+        $r0 = specialinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore allocateOrGetNextCopy(long)>($l0);
+
+        return $r0;
+    }
+
+    public final java.lang.Object removeFirstOrNull()
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore $r0, $r7;
+        int $i0, $i4, $i5, $i6;
+        kotlinx.atomicfu.AtomicLong $r1, $r6;
+        long $l1, $l2;
+        byte $b3;
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r2;
+        kotlinx.atomicfu.AtomicArray $r3;
+        kotlinx.atomicfu.AtomicRef $r4;
+        java.lang.Object $r5;
+        boolean $z0;
+        kotlinx.coroutines.internal.Symbol r8;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore;
+
+        $r1 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+     label1:
+        $l1 = virtualinvoke $r1.<kotlinx.atomicfu.AtomicLong: long getValue()>();
+
+        $l2 = 1152921504606846976L & $l1;
+
+        $b3 = $l2 cmp 0L;
+
+        if $b3 == 0 goto label2;
+
+        r8 = <kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.Symbol REMOVE_FROZEN>;
+
+        return r8;
+
+     label2:
+        $l2 = 1073741823L & $l1;
+
+        $i0 = (int) $l2;
+
+        $r2 = <kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion Companion>;
+
+        $l2 = 1152921503533105152L & $l1;
+
+        $l2 = $l2 >> 30;
+
+        $i4 = (int) $l2;
+
+        $i5 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask>;
+
+        $i4 = $i4 & $i5;
+
+        $i6 = $i0 & $i5;
+
+        if $i4 != $i6 goto label3;
+
+        return null;
+
+     label3:
+        $r3 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>;
+
+        $i5 = $i5 & $i0;
+
+        $r4 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicArray: kotlinx.atomicfu.AtomicRef get(int)>($i5);
+
+        $r5 = virtualinvoke $r4.<kotlinx.atomicfu.AtomicRef: java.lang.Object getValue()>();
+
+        if $r5 != null goto label4;
+
+        $z0 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: boolean singleConsumer>;
+
+        if $z0 == 0 goto label1;
+
+        return null;
+
+     label4:
+        $z0 = $r5 instanceof kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder;
+
+        if $z0 == 0 goto label5;
+
+        return null;
+
+     label5:
+        $i5 = $i0 + 1;
+
+        $i5 = $i5 & 1073741823;
+
+        $r6 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicLong _state>;
+
+        $l2 = virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion: long updateHead(long,int)>($l1, $i5);
+
+        $z0 = virtualinvoke $r6.<kotlinx.atomicfu.AtomicLong: boolean compareAndSet(long,long)>($l1, $l2);
+
+        if $z0 == 0 goto label6;
+
+        $r3 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.atomicfu.AtomicArray array>;
+
+        $i5 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: int mask>;
+
+        $i0 = $i5 & $i0;
+
+        $r4 = virtualinvoke $r3.<kotlinx.atomicfu.AtomicArray: kotlinx.atomicfu.AtomicRef get(int)>($i0);
+
+        virtualinvoke $r4.<kotlinx.atomicfu.AtomicRef: void setValue(java.lang.Object)>(null);
+
+        return $r5;
+
+     label6:
+        $z0 = $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: boolean singleConsumer>;
+
+        if $z0 == 0 goto label1;
+
+     label7:
+        $r7 = specialinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore: kotlinx.coroutines.internal.LockFreeTaskQueueCore removeSlowPath(int,int)>($i0, $i5);
+
+        $r0 = $r7;
+
+        if $r7 != null goto label7;
+
+        return $r5;
+    }
+
+kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion
+    private void <init>()
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r0;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r0;
+        kotlin.jvm.internal.DefaultConstructorMarker $r1;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion;
+
+        $r1 := @parameter0: kotlin.jvm.internal.DefaultConstructorMarker;
+
+        specialinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion: void <init>()>();
+
+        return;
+    }
+
+    public final int addFailReason(long)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r0;
+        byte $b0;
+        long $l1;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion;
+
+        $l1 := @parameter0: long;
+
+        $l1 = $l1 & 2305843009213693952L;
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 == 0 goto label1;
+
+        return 2;
+
+     label1:
+        return 1;
+    }
+
+    public final long updateHead(long, int)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r0;
+        int $i0;
+        long $l1, $l2;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion;
+
+        $l1 := @parameter0: long;
+
+        $i0 := @parameter1: int;
+
+        $l1 = virtualinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion: long wo(long,long)>($l1, 1073741823L);
+
+        $l2 = (long) $i0;
+
+        $l1 = $l1 | $l2;
+
+        return $l1;
+    }
+
+    public final long updateTail(long, int)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r0;
+        long $l0, $l2;
+        int $i1;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion;
+
+        $l0 := @parameter0: long;
+
+        $i1 := @parameter1: int;
+
+        $l0 = virtualinvoke $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion: long wo(long,long)>($l0, 1152921503533105152L);
+
+        $l2 = (long) $i1;
+
+        $l2 = $l2 << 30;
+
+        $l0 = $l0 | $l2;
+
+        return $l0;
+    }
+
+    public final long wo(long, long)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion $r0;
+        long $l0, $l1;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Companion;
+
+        $l0 := @parameter0: long;
+
+        $l1 := @parameter1: long;
+
+        $l1 = $l1 ^ -1L;
+
+        $l0 = $l0 & $l1;
+
+        return $l0;
+    }
+
+kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder
+<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder: int index>
+    public void <init>(int)
+    {
+        kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder $r0;
+        int $i0;
+
+        $r0 := @this: kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder;
+
+        $i0 := @parameter0: int;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<kotlinx.coroutines.internal.LockFreeTaskQueueCore$Placeholder: int index> = $i0;
+
+        return;
+    }
+

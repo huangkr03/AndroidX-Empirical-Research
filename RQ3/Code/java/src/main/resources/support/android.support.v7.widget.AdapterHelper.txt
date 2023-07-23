@@ -1,0 +1,2196 @@
+android.support.v7.widget.AdapterHelper
+<android.support.v7.widget.AdapterHelper: int POSITION_TYPE_INVISIBLE>
+<android.support.v7.widget.AdapterHelper: int POSITION_TYPE_NEW_OR_LAID_OUT>
+<android.support.v7.widget.AdapterHelper: boolean DEBUG>
+<android.support.v7.widget.AdapterHelper: java.lang.String TAG>
+<android.support.v7.widget.AdapterHelper: android.support.v4.util.Pools$Pool mUpdateOpPool>
+<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>
+<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>
+<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>
+<android.support.v7.widget.AdapterHelper: java.lang.Runnable mOnItemProcessedCallback>
+<android.support.v7.widget.AdapterHelper: boolean mDisableRecycler>
+<android.support.v7.widget.AdapterHelper: android.support.v7.widget.OpReorderer mOpReorderer>
+<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes>
+    void <init>(android.support.v7.widget.AdapterHelper$Callback)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        android.support.v7.widget.AdapterHelper$Callback r1;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: android.support.v7.widget.AdapterHelper$Callback;
+
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void <init>(android.support.v7.widget.AdapterHelper$Callback,boolean)>(r1, 0);
+
+        return;
+    }
+
+    void <init>(android.support.v7.widget.AdapterHelper$Callback, boolean)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        android.support.v7.widget.AdapterHelper$Callback r1;
+        boolean z0;
+        android.support.v4.util.Pools$SimplePool $r2;
+        java.util.ArrayList $r3, $r4;
+        android.support.v7.widget.OpReorderer $r5;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: android.support.v7.widget.AdapterHelper$Callback;
+
+        z0 := @parameter1: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new android.support.v4.util.Pools$SimplePool;
+
+        specialinvoke $r2.<android.support.v4.util.Pools$SimplePool: void <init>(int)>(30);
+
+        r0.<android.support.v7.widget.AdapterHelper: android.support.v4.util.Pools$Pool mUpdateOpPool> = $r2;
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates> = $r3;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList> = $r4;
+
+        r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes> = 0;
+
+        r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback> = r1;
+
+        r0.<android.support.v7.widget.AdapterHelper: boolean mDisableRecycler> = z0;
+
+        $r5 = new android.support.v7.widget.OpReorderer;
+
+        specialinvoke $r5.<android.support.v7.widget.OpReorderer: void <init>(android.support.v7.widget.OpReorderer$Callback)>(r0);
+
+        r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.OpReorderer mOpReorderer> = $r5;
+
+        return;
+    }
+
+    transient android.support.v7.widget.AdapterHelper addUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp[])
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        android.support.v7.widget.AdapterHelper$UpdateOp[] r1;
+        java.util.ArrayList $r2;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: android.support.v7.widget.AdapterHelper$UpdateOp[];
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        staticinvoke <java.util.Collections: boolean addAll(java.util.Collection,java.lang.Object[])>($r2, r1);
+
+        return r0;
+    }
+
+    void reset()
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        java.util.ArrayList $r1, $r2;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        $r1 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOpsAndClearList(java.util.List)>($r1);
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOpsAndClearList(java.util.List)>($r2);
+
+        r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes> = 0;
+
+        return;
+    }
+
+    void preProcess()
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, $i1, i2;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+        java.util.ArrayList $r2, $r4, $r5, $r6;
+        android.support.v7.widget.OpReorderer $r3;
+        java.lang.Object $r7;
+        java.lang.Runnable $r8, $r9;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.OpReorderer mOpReorderer>;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        virtualinvoke $r3.<android.support.v7.widget.OpReorderer: void reorderOps(java.util.List)>($r2);
+
+        $r4 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        i0 = virtualinvoke $r4.<java.util.ArrayList: int size()>();
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label8;
+
+        $r6 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $r7 = virtualinvoke $r6.<java.util.ArrayList: java.lang.Object get(int)>(i2);
+
+        r1 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r7;
+
+        $i1 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        tableswitch($i1)
+        {
+            case 1: goto label2;
+            case 2: goto label3;
+            case 3: goto label6;
+            case 4: goto label4;
+            case 5: goto label6;
+            case 6: goto label6;
+            case 7: goto label6;
+            case 8: goto label5;
+            default: goto label6;
+        };
+
+     label2:
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void applyAdd(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        goto label6;
+
+     label3:
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void applyRemove(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        goto label6;
+
+     label4:
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void applyUpdate(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        goto label6;
+
+     label5:
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void applyMove(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+     label6:
+        $r9 = r0.<android.support.v7.widget.AdapterHelper: java.lang.Runnable mOnItemProcessedCallback>;
+
+        if $r9 == null goto label7;
+
+        $r8 = r0.<android.support.v7.widget.AdapterHelper: java.lang.Runnable mOnItemProcessedCallback>;
+
+        interfaceinvoke $r8.<java.lang.Runnable: void run()>();
+
+     label7:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label8:
+        $r5 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        virtualinvoke $r5.<java.util.ArrayList: void clear()>();
+
+        return;
+    }
+
+    void consumePostponedUpdates()
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1;
+        java.util.ArrayList $r1, $r2, $r3;
+        android.support.v7.widget.AdapterHelper$Callback $r4;
+        java.lang.Object $r5;
+        android.support.v7.widget.AdapterHelper$UpdateOp $r6;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        $r1 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        i0 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        $r4 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        $r5 = virtualinvoke $r3.<java.util.ArrayList: java.lang.Object get(int)>(i1);
+
+        $r6 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r5;
+
+        interfaceinvoke $r4.<android.support.v7.widget.AdapterHelper$Callback: void onDispatchSecondPass(android.support.v7.widget.AdapterHelper$UpdateOp)>($r6);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOpsAndClearList(java.util.List)>($r2);
+
+        r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes> = 0;
+
+        return;
+    }
+
+    private void applyMove(android.support.v7.widget.AdapterHelper$UpdateOp)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void postponeAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        return;
+    }
+
+    private void applyRemove(android.support.v7.widget.AdapterHelper$UpdateOp)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, $i1, $i2, $i3, i4, i5, i7;
+        android.support.v7.widget.RecyclerView$ViewHolder r1;
+        android.support.v7.widget.AdapterHelper$Callback $r2;
+        boolean $z0, z1;
+        android.support.v7.widget.AdapterHelper$UpdateOp r3, r4, r5;
+        byte b6;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r3 := @parameter0: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        i0 = r3.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        i4 = 0;
+
+        $i2 = r3.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i1 = r3.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i5 = $i2 + $i1;
+
+        b6 = -1;
+
+        i7 = r3.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+     label01:
+        if i7 >= i5 goto label09;
+
+        z1 = 0;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        r1 = interfaceinvoke $r2.<android.support.v7.widget.AdapterHelper$Callback: android.support.v7.widget.RecyclerView$ViewHolder findViewHolder(int)>(i7);
+
+        if r1 != null goto label02;
+
+        $z0 = specialinvoke r0.<android.support.v7.widget.AdapterHelper: boolean canFindInPreLayout(int)>(i7);
+
+        if $z0 == 0 goto label04;
+
+     label02:
+        if b6 != 0 goto label03;
+
+        r4 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(2, i0, i4, null);
+
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void dispatchAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r4);
+
+        z1 = 1;
+
+     label03:
+        b6 = 1;
+
+        goto label06;
+
+     label04:
+        if b6 != 1 goto label05;
+
+        r5 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(2, i0, i4, null);
+
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void postponeAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r5);
+
+        z1 = 1;
+
+     label05:
+        b6 = 0;
+
+     label06:
+        if z1 == 0 goto label07;
+
+        i7 = i7 - i4;
+
+        i5 = i5 - i4;
+
+        i4 = 1;
+
+        goto label08;
+
+     label07:
+        i4 = i4 + 1;
+
+     label08:
+        i7 = i7 + 1;
+
+        goto label01;
+
+     label09:
+        $i3 = r3.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if i4 == $i3 goto label10;
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp)>(r3);
+
+        r3 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(2, i0, i4, null);
+
+     label10:
+        if b6 != 0 goto label11;
+
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void dispatchAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r3);
+
+        goto label12;
+
+     label11:
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void postponeAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r3);
+
+     label12:
+        return;
+    }
+
+    private void applyUpdate(android.support.v7.widget.AdapterHelper$UpdateOp)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, $i1, $i2, $i3, i4, i5, i7;
+        android.support.v7.widget.RecyclerView$ViewHolder r1;
+        android.support.v7.widget.AdapterHelper$Callback $r2;
+        java.lang.Object $r3, $r4, r8;
+        boolean $z0;
+        android.support.v7.widget.AdapterHelper$UpdateOp r5, r6, r7;
+        byte b6;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r5 := @parameter0: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        i4 = r5.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        i5 = 0;
+
+        $i2 = r5.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i1 = r5.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i0 = $i2 + $i1;
+
+        b6 = -1;
+
+        i7 = r5.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+     label01:
+        if i7 >= i0 goto label07;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        r1 = interfaceinvoke $r2.<android.support.v7.widget.AdapterHelper$Callback: android.support.v7.widget.RecyclerView$ViewHolder findViewHolder(int)>(i7);
+
+        if r1 != null goto label02;
+
+        $z0 = specialinvoke r0.<android.support.v7.widget.AdapterHelper: boolean canFindInPreLayout(int)>(i7);
+
+        if $z0 == 0 goto label04;
+
+     label02:
+        if b6 != 0 goto label03;
+
+        $r3 = r5.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        r6 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(4, i4, i5, $r3);
+
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void dispatchAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r6);
+
+        i5 = 0;
+
+        i4 = i7;
+
+     label03:
+        b6 = 1;
+
+        goto label06;
+
+     label04:
+        if b6 != 1 goto label05;
+
+        $r4 = r5.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        r7 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(4, i4, i5, $r4);
+
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void postponeAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r7);
+
+        i5 = 0;
+
+        i4 = i7;
+
+     label05:
+        b6 = 0;
+
+     label06:
+        i5 = i5 + 1;
+
+        i7 = i7 + 1;
+
+        goto label01;
+
+     label07:
+        $i3 = r5.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if i5 == $i3 goto label08;
+
+        r8 = r5.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp)>(r5);
+
+        r5 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(4, i4, i5, r8);
+
+     label08:
+        if b6 != 0 goto label09;
+
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void dispatchAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r5);
+
+        goto label10;
+
+     label09:
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void postponeAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r5);
+
+     label10:
+        return;
+    }
+
+    private void dispatchAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1, r2, r11;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, i14, i15, i16, i18, $i19, i20;
+        java.lang.IllegalArgumentException $r3, $r5;
+        java.lang.Object $r4, r10;
+        java.lang.StringBuilder $r6, $r7, $r8;
+        java.lang.String $r9;
+        byte b17;
+        boolean z0, $z1, $z2;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        $i1 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i1 == 1 goto label01;
+
+        $i2 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i2 != 8 goto label02;
+
+     label01:
+        $r3 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("should not dispatch add or move for pre layout");
+
+        throw $r3;
+
+     label02:
+        $i4 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i3 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        i14 = specialinvoke r0.<android.support.v7.widget.AdapterHelper: int updatePositionWithPostponed(int,int)>($i4, $i3);
+
+        i15 = 1;
+
+        i16 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i5 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        lookupswitch($i5)
+        {
+            case 2: goto label04;
+            case 4: goto label03;
+            default: goto label05;
+        };
+
+     label03:
+        b17 = 1;
+
+        goto label06;
+
+     label04:
+        b17 = 0;
+
+        goto label06;
+
+     label05:
+        $r5 = new java.lang.IllegalArgumentException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("op should be remove or update.");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r9);
+
+        throw $r5;
+
+     label06:
+        i18 = 1;
+
+     label07:
+        $i19 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if i18 >= $i19 goto label18;
+
+        $i8 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i7 = b17 * i18;
+
+        i20 = $i8 + $i7;
+
+        $i9 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        i0 = specialinvoke r0.<android.support.v7.widget.AdapterHelper: int updatePositionWithPostponed(int,int)>(i20, $i9);
+
+        z0 = 0;
+
+        $i10 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        lookupswitch($i10)
+        {
+            case 2: goto label11;
+            case 4: goto label08;
+            default: goto label14;
+        };
+
+     label08:
+        $i11 = i14 + 1;
+
+        if i0 != $i11 goto label09;
+
+        $z1 = 1;
+
+        goto label10;
+
+     label09:
+        $z1 = 0;
+
+     label10:
+        z0 = $z1;
+
+        goto label14;
+
+     label11:
+        if i0 != i14 goto label12;
+
+        $z2 = 1;
+
+        goto label13;
+
+     label12:
+        $z2 = 0;
+
+     label13:
+        z0 = $z2;
+
+     label14:
+        if z0 == 0 goto label15;
+
+        i15 = i15 + 1;
+
+        goto label17;
+
+     label15:
+        $i12 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        $r4 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        r2 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>($i12, i14, i15, $r4);
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void dispatchFirstPassAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp,int)>(r2, i16);
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp)>(r2);
+
+        $i13 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i13 != 4 goto label16;
+
+        i16 = i16 + i15;
+
+     label16:
+        i14 = i0;
+
+        i15 = 1;
+
+     label17:
+        i18 = i18 + 1;
+
+        goto label07;
+
+     label18:
+        r10 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        if i15 <= 0 goto label19;
+
+        $i6 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        r11 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>($i6, i14, i15, r10);
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void dispatchFirstPassAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp,int)>(r11, i16);
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp)>(r11);
+
+     label19:
+        return;
+    }
+
+    void dispatchFirstPassAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp, int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+        int i0, $i1, $i2, $i3;
+        android.support.v7.widget.AdapterHelper$Callback $r2, $r4, $r5;
+        java.lang.Object $r3;
+        java.lang.IllegalArgumentException $r6;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        i0 := @parameter1: int;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        interfaceinvoke $r2.<android.support.v7.widget.AdapterHelper$Callback: void onDispatchFirstPass(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        $i1 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        lookupswitch($i1)
+        {
+            case 2: goto label1;
+            case 4: goto label2;
+            default: goto label3;
+        };
+
+     label1:
+        $r5 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i3 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        interfaceinvoke $r5.<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForRemovingInvisible(int,int)>(i0, $i3);
+
+        goto label4;
+
+     label2:
+        $r4 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i2 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $r3 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        interfaceinvoke $r4.<android.support.v7.widget.AdapterHelper$Callback: void markViewHoldersUpdated(int,int,java.lang.Object)>(i0, $i2, $r3);
+
+        goto label4;
+
+     label3:
+        $r6 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("only remove and update ops can be dispatched in first pass");
+
+        throw $r6;
+
+     label4:
+        return;
+    }
+
+    private int updatePositionWithPostponed(int, int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19, $i20, $i21, $i22, $i23, $i24, $i25, $i26, $i27, $i28, $i29, $i30, $i31, $i32, $i33, $i34, $i35, $i36, $i37, i38, i39, i40, i41, i42;
+        java.util.ArrayList $r1, $r2, $r3, $r5, $r7, $r9;
+        java.lang.Object $r4, $r10;
+        android.support.v7.widget.AdapterHelper$UpdateOp r11, r12;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i38 := @parameter0: int;
+
+        i0 := @parameter1: int;
+
+        $r1 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        i1 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        i39 = i1 - 1;
+
+     label01:
+        if i39 < 0 goto label17;
+
+        $r9 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        $r10 = virtualinvoke $r9.<java.util.ArrayList: java.lang.Object get(int)>(i39);
+
+        r11 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r10;
+
+        $i8 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i8 != 8 goto label12;
+
+        $i19 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i18 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if $i19 >= $i18 goto label02;
+
+        i40 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        i41 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        goto label03;
+
+     label02:
+        i40 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i41 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+     label03:
+        if i38 < i40 goto label09;
+
+        if i38 > i41 goto label09;
+
+        $i29 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if i40 != $i29 goto label06;
+
+        if i0 != 1 goto label04;
+
+        $i36 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i37 = $i36 + 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount> = $i37;
+
+        goto label05;
+
+     label04:
+        if i0 != 2 goto label05;
+
+        $i34 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i35 = $i34 - 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount> = $i35;
+
+     label05:
+        i38 = i38 + 1;
+
+        goto label11;
+
+     label06:
+        if i0 != 1 goto label07;
+
+        $i32 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i33 = $i32 + 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart> = $i33;
+
+        goto label08;
+
+     label07:
+        if i0 != 2 goto label08;
+
+        $i30 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i31 = $i30 - 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart> = $i31;
+
+     label08:
+        i38 = i38 + -1;
+
+        goto label11;
+
+     label09:
+        $i20 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if i38 >= $i20 goto label11;
+
+        if i0 != 1 goto label10;
+
+        $i25 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i26 = $i25 + 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart> = $i26;
+
+        $i27 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i28 = $i27 + 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount> = $i28;
+
+        goto label11;
+
+     label10:
+        if i0 != 2 goto label11;
+
+        $i21 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i22 = $i21 - 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart> = $i22;
+
+        $i23 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i24 = $i23 - 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount> = $i24;
+
+     label11:
+        goto label16;
+
+     label12:
+        $i9 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i9 > i38 goto label14;
+
+        $i14 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i14 != 1 goto label13;
+
+        $i17 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i38 = i38 - $i17;
+
+        goto label16;
+
+     label13:
+        $i15 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i15 != 2 goto label16;
+
+        $i16 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i38 = i38 + $i16;
+
+        goto label16;
+
+     label14:
+        if i0 != 1 goto label15;
+
+        $i12 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i13 = $i12 + 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart> = $i13;
+
+        goto label16;
+
+     label15:
+        if i0 != 2 goto label16;
+
+        $i10 = r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i11 = $i10 - 1;
+
+        r11.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart> = $i11;
+
+     label16:
+        i39 = i39 + -1;
+
+        goto label01;
+
+     label17:
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        $i2 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        i42 = $i2 - 1;
+
+     label18:
+        if i42 < 0 goto label22;
+
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        $r4 = virtualinvoke $r3.<java.util.ArrayList: java.lang.Object get(int)>(i42);
+
+        r12 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r4;
+
+        $i3 = r12.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i3 != 8 goto label20;
+
+        $i6 = r12.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i5 = r12.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i6 == $i5 goto label19;
+
+        $i7 = r12.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if $i7 >= 0 goto label21;
+
+     label19:
+        $r7 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        virtualinvoke $r7.<java.util.ArrayList: java.lang.Object remove(int)>(i42);
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp)>(r12);
+
+        goto label21;
+
+     label20:
+        $i4 = r12.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if $i4 > 0 goto label21;
+
+        $r5 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        virtualinvoke $r5.<java.util.ArrayList: java.lang.Object remove(int)>(i42);
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp)>(r12);
+
+     label21:
+        i42 = i42 + -1;
+
+        goto label18;
+
+     label22:
+        return i38;
+    }
+
+    private boolean canFindInPreLayout(int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, i12, i13;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+        java.util.ArrayList $r2, $r3;
+        java.lang.Object $r4;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i0 := @parameter0: int;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        i1 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        i12 = 0;
+
+     label1:
+        if i12 >= i1 goto label6;
+
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        $r4 = virtualinvoke $r3.<java.util.ArrayList: java.lang.Object get(int)>(i12);
+
+        r1 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r4;
+
+        $i3 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i3 != 8 goto label2;
+
+        $i10 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i9 = i12 + 1;
+
+        $i11 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: int findPositionOffset(int,int)>($i10, $i9);
+
+        if $i11 != i0 goto label5;
+
+        return 1;
+
+     label2:
+        $i4 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i4 != 1 goto label5;
+
+        $i6 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i5 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i2 = $i6 + $i5;
+
+        i13 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+     label3:
+        if i13 >= i2 goto label5;
+
+        $i7 = i12 + 1;
+
+        $i8 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: int findPositionOffset(int,int)>(i13, $i7);
+
+        if $i8 != i0 goto label4;
+
+        return 1;
+
+     label4:
+        i13 = i13 + 1;
+
+        goto label3;
+
+     label5:
+        i12 = i12 + 1;
+
+        goto label1;
+
+     label6:
+        return 0;
+    }
+
+    private void applyAdd(android.support.v7.widget.AdapterHelper$UpdateOp)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        specialinvoke r0.<android.support.v7.widget.AdapterHelper: void postponeAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        return;
+    }
+
+    private void postponeAndUpdateViewHolders(android.support.v7.widget.AdapterHelper$UpdateOp)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+        java.util.ArrayList $r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+        android.support.v7.widget.AdapterHelper$Callback $r3, $r5, $r6, $r7;
+        java.lang.Object $r4;
+        java.lang.IllegalArgumentException $r8;
+        java.lang.StringBuilder $r9, $r10, $r11;
+        java.lang.String $r12;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>(r1);
+
+        $i0 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        tableswitch($i0)
+        {
+            case 1: goto label1;
+            case 2: goto label3;
+            case 3: goto label5;
+            case 4: goto label4;
+            case 5: goto label5;
+            case 6: goto label5;
+            case 7: goto label5;
+            case 8: goto label2;
+            default: goto label5;
+        };
+
+     label1:
+        $r7 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i8 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i7 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        interfaceinvoke $r7.<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForAdd(int,int)>($i8, $i7);
+
+        goto label6;
+
+     label2:
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i2 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i1 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        interfaceinvoke $r3.<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForMove(int,int)>($i2, $i1);
+
+        goto label6;
+
+     label3:
+        $r6 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i6 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i5 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        interfaceinvoke $r6.<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForRemovingLaidOutOrNewView(int,int)>($i6, $i5);
+
+        goto label6;
+
+     label4:
+        $r5 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i4 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i3 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $r4 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        interfaceinvoke $r5.<android.support.v7.widget.AdapterHelper$Callback: void markViewHoldersUpdated(int,int,java.lang.Object)>($i4, $i3, $r4);
+
+        goto label6;
+
+     label5:
+        $r8 = new java.lang.IllegalArgumentException;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unknown update op type for ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r12);
+
+        throw $r8;
+
+     label6:
+        return;
+    }
+
+    boolean hasPendingUpdates()
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        java.util.ArrayList $r1;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        $r1 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $i0 = virtualinvoke $r1.<java.util.ArrayList: int size()>();
+
+        if $i0 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    boolean hasAnyUpdateTypes(int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, $i1, $i2;
+        boolean $z0;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i0 := @parameter0: int;
+
+        $i1 = r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes>;
+
+        $i2 = $i1 & i0;
+
+        if $i2 == 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    int findPositionOffset(int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, $i1;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i0 := @parameter0: int;
+
+        $i1 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: int findPositionOffset(int,int)>(i0, 0);
+
+        return $i1;
+    }
+
+    int findPositionOffset(int, int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, i14, i15;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+        java.util.ArrayList $r2, $r3;
+        java.lang.Object $r4;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i14 := @parameter0: int;
+
+        i0 := @parameter1: int;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        i1 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        i15 = i0;
+
+     label1:
+        if i15 >= i1 goto label8;
+
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        $r4 = virtualinvoke $r3.<java.util.ArrayList: java.lang.Object get(int)>(i15);
+
+        r1 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r4;
+
+        $i2 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i2 != 8 goto label4;
+
+        $i11 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i11 != i14 goto label2;
+
+        i14 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        goto label7;
+
+     label2:
+        $i12 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i12 >= i14 goto label3;
+
+        i14 = i14 + -1;
+
+     label3:
+        $i13 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if $i13 > i14 goto label7;
+
+        i14 = i14 + 1;
+
+        goto label7;
+
+     label4:
+        $i3 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i3 > i14 goto label7;
+
+        $i4 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i4 != 2 goto label6;
+
+        $i8 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i7 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i9 = $i8 + $i7;
+
+        if i14 >= $i9 goto label5;
+
+        return -1;
+
+     label5:
+        $i10 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i14 = i14 - $i10;
+
+        goto label7;
+
+     label6:
+        $i5 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i5 != 1 goto label7;
+
+        $i6 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i14 = i14 + $i6;
+
+     label7:
+        i15 = i15 + 1;
+
+        goto label1;
+
+     label8:
+        return i14;
+    }
+
+    boolean onItemRangeChanged(int, int, java.lang.Object)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1, $i2, $i3, $i4;
+        java.lang.Object r1;
+        java.util.ArrayList $r2, $r4;
+        android.support.v7.widget.AdapterHelper$UpdateOp $r3;
+        boolean $z1;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: java.lang.Object;
+
+        if i1 >= 1 goto label1;
+
+        return 0;
+
+     label1:
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $r3 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(4, i0, i1, r1);
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r3);
+
+        $i2 = r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes>;
+
+        $i3 = $i2 | 4;
+
+        r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes> = $i3;
+
+        $r4 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $i4 = virtualinvoke $r4.<java.util.ArrayList: int size()>();
+
+        if $i4 != 1 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    boolean onItemRangeInserted(int, int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1, $i2, $i3, $i4;
+        java.util.ArrayList $r1, $r3;
+        android.support.v7.widget.AdapterHelper$UpdateOp $r2;
+        boolean $z1;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        if i1 >= 1 goto label1;
+
+        return 0;
+
+     label1:
+        $r1 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $r2 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(1, i0, i1, null);
+
+        virtualinvoke $r1.<java.util.ArrayList: boolean add(java.lang.Object)>($r2);
+
+        $i2 = r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes>;
+
+        $i3 = $i2 | 1;
+
+        r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes> = $i3;
+
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $i4 = virtualinvoke $r3.<java.util.ArrayList: int size()>();
+
+        if $i4 != 1 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    boolean onItemRangeRemoved(int, int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1, $i2, $i3, $i4;
+        java.util.ArrayList $r1, $r3;
+        android.support.v7.widget.AdapterHelper$UpdateOp $r2;
+        boolean $z1;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        if i1 >= 1 goto label1;
+
+        return 0;
+
+     label1:
+        $r1 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $r2 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(2, i0, i1, null);
+
+        virtualinvoke $r1.<java.util.ArrayList: boolean add(java.lang.Object)>($r2);
+
+        $i2 = r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes>;
+
+        $i3 = $i2 | 2;
+
+        r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes> = $i3;
+
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $i4 = virtualinvoke $r3.<java.util.ArrayList: int size()>();
+
+        if $i4 != 1 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    boolean onItemRangeMoved(int, int, int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1, i2, $i3, $i4, $i5;
+        java.util.ArrayList $r1, $r3;
+        android.support.v7.widget.AdapterHelper$UpdateOp $r2;
+        java.lang.IllegalArgumentException $r4;
+        boolean $z1;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        if i0 != i1 goto label1;
+
+        return 0;
+
+     label1:
+        if i2 == 1 goto label2;
+
+        $r4 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Moving more than 1 item is not supported yet");
+
+        throw $r4;
+
+     label2:
+        $r1 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $r2 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int,int,int,java.lang.Object)>(8, i0, i1, null);
+
+        virtualinvoke $r1.<java.util.ArrayList: boolean add(java.lang.Object)>($r2);
+
+        $i3 = r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes>;
+
+        $i4 = $i3 | 8;
+
+        r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes> = $i4;
+
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $i5 = virtualinvoke $r3.<java.util.ArrayList: int size()>();
+
+        if $i5 != 1 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        return $z1;
+    }
+
+    void consumeUpdatesInOnePass()
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, i10;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+        java.util.ArrayList $r2, $r3, $r4;
+        java.lang.Object $r5, $r10;
+        android.support.v7.widget.AdapterHelper$Callback $r6, $r7, $r9, $r11, $r12, $r13, $r14, $r15;
+        java.lang.Runnable $r8, $r16;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void consumePostponedUpdates()>();
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        i0 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        i10 = 0;
+
+     label1:
+        if i10 >= i0 goto label8;
+
+        $r4 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $r5 = virtualinvoke $r4.<java.util.ArrayList: java.lang.Object get(int)>(i10);
+
+        r1 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r5;
+
+        $i1 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        tableswitch($i1)
+        {
+            case 1: goto label2;
+            case 2: goto label3;
+            case 3: goto label6;
+            case 4: goto label4;
+            case 5: goto label6;
+            case 6: goto label6;
+            case 7: goto label6;
+            case 8: goto label5;
+            default: goto label6;
+        };
+
+     label2:
+        $r14 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        interfaceinvoke $r14.<android.support.v7.widget.AdapterHelper$Callback: void onDispatchSecondPass(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        $r15 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i9 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i8 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        interfaceinvoke $r15.<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForAdd(int,int)>($i9, $i8);
+
+        goto label6;
+
+     label3:
+        $r12 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        interfaceinvoke $r12.<android.support.v7.widget.AdapterHelper$Callback: void onDispatchSecondPass(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        $r13 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i7 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i6 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        interfaceinvoke $r13.<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForRemovingInvisible(int,int)>($i7, $i6);
+
+        goto label6;
+
+     label4:
+        $r9 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        interfaceinvoke $r9.<android.support.v7.widget.AdapterHelper$Callback: void onDispatchSecondPass(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        $r11 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i5 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i4 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $r10 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        interfaceinvoke $r11.<android.support.v7.widget.AdapterHelper$Callback: void markViewHoldersUpdated(int,int,java.lang.Object)>($i5, $i4, $r10);
+
+        goto label6;
+
+     label5:
+        $r6 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        interfaceinvoke $r6.<android.support.v7.widget.AdapterHelper$Callback: void onDispatchSecondPass(android.support.v7.widget.AdapterHelper$UpdateOp)>(r1);
+
+        $r7 = r0.<android.support.v7.widget.AdapterHelper: android.support.v7.widget.AdapterHelper$Callback mCallback>;
+
+        $i3 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i2 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        interfaceinvoke $r7.<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForMove(int,int)>($i3, $i2);
+
+     label6:
+        $r16 = r0.<android.support.v7.widget.AdapterHelper: java.lang.Runnable mOnItemProcessedCallback>;
+
+        if $r16 == null goto label7;
+
+        $r8 = r0.<android.support.v7.widget.AdapterHelper: java.lang.Runnable mOnItemProcessedCallback>;
+
+        interfaceinvoke $r8.<java.lang.Runnable: void run()>();
+
+     label7:
+        i10 = i10 + 1;
+
+        goto label1;
+
+     label8:
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOpsAndClearList(java.util.List)>($r3);
+
+        r0.<android.support.v7.widget.AdapterHelper: int mExistingUpdateTypes> = 0;
+
+        return;
+    }
+
+    public int applyPendingUpdatesToPosition(int)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, i12, i13;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+        java.util.ArrayList $r2, $r3;
+        java.lang.Object $r4;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i12 := @parameter0: int;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        i0 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        i13 = 0;
+
+     label1:
+        if i13 >= i0 goto label9;
+
+        $r3 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $r4 = virtualinvoke $r3.<java.util.ArrayList: java.lang.Object get(int)>(i13);
+
+        r1 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r4;
+
+        $i2 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        lookupswitch($i2)
+        {
+            case 1: goto label2;
+            case 2: goto label3;
+            case 8: goto label5;
+            default: goto label8;
+        };
+
+     label2:
+        $i10 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i10 > i12 goto label8;
+
+        $i11 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i12 = i12 + $i11;
+
+        goto label8;
+
+     label3:
+        $i6 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i6 > i12 goto label8;
+
+        $i8 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i7 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i1 = $i8 + $i7;
+
+        if i1 <= i12 goto label4;
+
+        return -1;
+
+     label4:
+        $i9 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i12 = i12 - $i9;
+
+        goto label8;
+
+     label5:
+        $i3 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i3 != i12 goto label6;
+
+        i12 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        goto label8;
+
+     label6:
+        $i4 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i4 >= i12 goto label7;
+
+        i12 = i12 + -1;
+
+     label7:
+        $i5 = r1.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if $i5 > i12 goto label8;
+
+        i12 = i12 + 1;
+
+     label8:
+        i13 = i13 + 1;
+
+        goto label1;
+
+     label9:
+        return i12;
+    }
+
+    boolean hasUpdates()
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        java.util.ArrayList $r1, $r2;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        $r1 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPostponedList>;
+
+        $z0 = virtualinvoke $r1.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: java.util.ArrayList mPendingUpdates>;
+
+        $z1 = virtualinvoke $r2.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z1 != 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+
+    public android.support.v7.widget.AdapterHelper$UpdateOp obtainUpdateOp(int, int, int, java.lang.Object)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        int i0, i1, i2;
+        java.lang.Object r1, $r3;
+        android.support.v4.util.Pools$Pool $r2;
+        android.support.v7.widget.AdapterHelper$UpdateOp $r4, r5;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        r1 := @parameter3: java.lang.Object;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: android.support.v4.util.Pools$Pool mUpdateOpPool>;
+
+        $r3 = interfaceinvoke $r2.<android.support.v4.util.Pools$Pool: java.lang.Object acquire()>();
+
+        r5 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r3;
+
+        if r5 != null goto label1;
+
+        $r4 = new android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        specialinvoke $r4.<android.support.v7.widget.AdapterHelper$UpdateOp: void <init>(int,int,int,java.lang.Object)>(i0, i1, i2, r1);
+
+        r5 = $r4;
+
+        goto label2;
+
+     label1:
+        r5.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd> = i0;
+
+        r5.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart> = i1;
+
+        r5.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount> = i2;
+
+        r5.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload> = r1;
+
+     label2:
+        return r5;
+    }
+
+    public void recycleUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        android.support.v7.widget.AdapterHelper$UpdateOp r1;
+        boolean $z0;
+        android.support.v4.util.Pools$Pool $r2;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        $z0 = r0.<android.support.v7.widget.AdapterHelper: boolean mDisableRecycler>;
+
+        if $z0 != 0 goto label1;
+
+        r1.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload> = null;
+
+        $r2 = r0.<android.support.v7.widget.AdapterHelper: android.support.v4.util.Pools$Pool mUpdateOpPool>;
+
+        interfaceinvoke $r2.<android.support.v4.util.Pools$Pool: boolean release(java.lang.Object)>(r1);
+
+     label1:
+        return;
+    }
+
+    void recycleUpdateOpsAndClearList(java.util.List)
+    {
+        android.support.v7.widget.AdapterHelper r0;
+        java.util.List r1;
+        int i0, i1;
+        java.lang.Object $r2;
+        android.support.v7.widget.AdapterHelper$UpdateOp $r3;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper;
+
+        r1 := @parameter0: java.util.List;
+
+        i0 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        $r2 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i1);
+
+        $r3 = (android.support.v7.widget.AdapterHelper$UpdateOp) $r2;
+
+        virtualinvoke r0.<android.support.v7.widget.AdapterHelper: void recycleUpdateOp(android.support.v7.widget.AdapterHelper$UpdateOp)>($r3);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        interfaceinvoke r1.<java.util.List: void clear()>();
+
+        return;
+    }
+
+android.support.v7.widget.AdapterHelper$Callback
+<android.support.v7.widget.AdapterHelper$Callback: android.support.v7.widget.RecyclerView$ViewHolder findViewHolder(int)>
+<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForRemovingInvisible(int,int)>
+<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForRemovingLaidOutOrNewView(int,int)>
+<android.support.v7.widget.AdapterHelper$Callback: void markViewHoldersUpdated(int,int,java.lang.Object)>
+<android.support.v7.widget.AdapterHelper$Callback: void onDispatchFirstPass(android.support.v7.widget.AdapterHelper$UpdateOp)>
+<android.support.v7.widget.AdapterHelper$Callback: void onDispatchSecondPass(android.support.v7.widget.AdapterHelper$UpdateOp)>
+<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForAdd(int,int)>
+<android.support.v7.widget.AdapterHelper$Callback: void offsetPositionsForMove(int,int)>
+android.support.v7.widget.AdapterHelper$UpdateOp
+<android.support.v7.widget.AdapterHelper$UpdateOp: int ADD>
+<android.support.v7.widget.AdapterHelper$UpdateOp: int REMOVE>
+<android.support.v7.widget.AdapterHelper$UpdateOp: int UPDATE>
+<android.support.v7.widget.AdapterHelper$UpdateOp: int MOVE>
+<android.support.v7.widget.AdapterHelper$UpdateOp: int POOL_SIZE>
+<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>
+<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>
+<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>
+<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>
+    void <init>(int, int, int, java.lang.Object)
+    {
+        android.support.v7.widget.AdapterHelper$UpdateOp r0;
+        int i0, i1, i2;
+        java.lang.Object r1;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        r1 := @parameter3: java.lang.Object;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd> = i0;
+
+        r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart> = i1;
+
+        r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount> = i2;
+
+        r0.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload> = r1;
+
+        return;
+    }
+
+    java.lang.String cmdToString()
+    {
+        android.support.v7.widget.AdapterHelper$UpdateOp r0;
+        int $i0;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        $i0 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        tableswitch($i0)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label5;
+            case 4: goto label3;
+            case 5: goto label5;
+            case 6: goto label5;
+            case 7: goto label5;
+            case 8: goto label4;
+            default: goto label5;
+        };
+
+     label1:
+        return "add";
+
+     label2:
+        return "rm";
+
+     label3:
+        return "up";
+
+     label4:
+        return "mv";
+
+     label5:
+        return "??";
+    }
+
+    public java.lang.String toString()
+    {
+        android.support.v7.widget.AdapterHelper$UpdateOp r0;
+        java.lang.StringBuilder $r1, $r3, $r4, $r6, $r7, $r8, $r9, $r10, $r11, $r13, $r14;
+        int $i0, $i1, $i2;
+        java.lang.String $r2, $r5, $r15;
+        java.lang.Object $r12;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = staticinvoke <java.lang.System: int identityHashCode(java.lang.Object)>(r0);
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($i0);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("[");
+
+        $r5 = virtualinvoke r0.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.String cmdToString()>();
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",s:");
+
+        $i1 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("c:");
+
+        $i2 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",p:");
+
+        $r12 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        $r13 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r12);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r15;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        android.support.v7.widget.AdapterHelper$UpdateOp r0, r2;
+        java.lang.Object r1, $r5, $r6, $r7, $r8;
+        java.lang.Class $r3, $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14;
+        boolean $z0;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r0 != r1 goto label1;
+
+        return 1;
+
+     label1:
+        if r1 == null goto label2;
+
+        $r3 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r4 = virtualinvoke r1.<java.lang.Object: java.lang.Class getClass()>();
+
+        if $r3 == $r4 goto label3;
+
+     label2:
+        return 0;
+
+     label3:
+        r2 = (android.support.v7.widget.AdapterHelper$UpdateOp) r1;
+
+        $i1 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        $i0 = r2.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i1 == $i0 goto label4;
+
+        return 0;
+
+     label4:
+        $i2 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        if $i2 != 8 goto label5;
+
+        $i6 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i5 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i7 = $i6 - $i5;
+
+        $i8 = staticinvoke <java.lang.Math: int abs(int)>($i7);
+
+        if $i8 != 1 goto label5;
+
+        $i10 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i9 = r2.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i10 != $i9 goto label5;
+
+        $i12 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i11 = r2.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if $i12 != $i11 goto label5;
+
+        return 1;
+
+     label5:
+        $i13 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        $i14 = r2.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        if $i13 == $i14 goto label6;
+
+        return 0;
+
+     label6:
+        $i4 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        $i3 = r2.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        if $i4 == $i3 goto label7;
+
+        return 0;
+
+     label7:
+        $r5 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        if $r5 == null goto label8;
+
+        $r8 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        $r7 = r2.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        $z0 = virtualinvoke $r8.<java.lang.Object: boolean equals(java.lang.Object)>($r7);
+
+        if $z0 != 0 goto label9;
+
+        return 0;
+
+     label8:
+        $r6 = r2.<android.support.v7.widget.AdapterHelper$UpdateOp: java.lang.Object payload>;
+
+        if $r6 == null goto label9;
+
+        return 0;
+
+     label9:
+        return 1;
+    }
+
+    public int hashCode()
+    {
+        android.support.v7.widget.AdapterHelper$UpdateOp r0;
+        int $i0, $i1, $i2, $i3, i4, i5, i6;
+
+        r0 := @this: android.support.v7.widget.AdapterHelper$UpdateOp;
+
+        i4 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int cmd>;
+
+        $i1 = 31 * i4;
+
+        $i0 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int positionStart>;
+
+        i5 = $i1 + $i0;
+
+        $i3 = 31 * i5;
+
+        $i2 = r0.<android.support.v7.widget.AdapterHelper$UpdateOp: int itemCount>;
+
+        i6 = $i3 + $i2;
+
+        return i6;
+    }
+

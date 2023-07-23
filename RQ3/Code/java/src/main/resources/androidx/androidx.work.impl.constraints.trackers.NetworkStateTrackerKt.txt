@@ -1,0 +1,196 @@
+androidx.work.impl.constraints.trackers.NetworkStateTrackerKt
+<androidx.work.impl.constraints.trackers.NetworkStateTrackerKt: java.lang.String TAG>
+    public static final androidx.work.impl.constraints.trackers.ConstraintTracker NetworkStateTracker(android.content.Context, androidx.work.impl.utils.taskexecutor.TaskExecutor)
+    {
+        android.content.Context r0;
+        androidx.work.impl.utils.taskexecutor.TaskExecutor r1;
+        int $i0;
+        androidx.work.impl.constraints.trackers.NetworkStateTrackerPre24 $r2;
+        androidx.work.impl.constraints.trackers.NetworkStateTracker24 $r3;
+        androidx.work.impl.constraints.trackers.ConstraintTracker $r4;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.utils.taskexecutor.TaskExecutor;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "context");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "taskExecutor");
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 24 goto label1;
+
+        $r3 = new androidx.work.impl.constraints.trackers.NetworkStateTracker24;
+
+        specialinvoke $r3.<androidx.work.impl.constraints.trackers.NetworkStateTracker24: void <init>(android.content.Context,androidx.work.impl.utils.taskexecutor.TaskExecutor)>(r0, r1);
+
+        $r4 = (androidx.work.impl.constraints.trackers.ConstraintTracker) $r3;
+
+        goto label2;
+
+     label1:
+        $r2 = new androidx.work.impl.constraints.trackers.NetworkStateTrackerPre24;
+
+        specialinvoke $r2.<androidx.work.impl.constraints.trackers.NetworkStateTrackerPre24: void <init>(android.content.Context,androidx.work.impl.utils.taskexecutor.TaskExecutor)>(r0, r1);
+
+        $r4 = (androidx.work.impl.constraints.trackers.ConstraintTracker) $r2;
+
+     label2:
+        return $r4;
+    }
+
+    public static final boolean isActiveNetworkValidated(android.net.ConnectivityManager)
+    {
+        android.net.ConnectivityManager $r0;
+        int $i0;
+        java.lang.Throwable $r1, $r3, r7;
+        androidx.work.Logger $r2;
+        java.lang.String $r4;
+        boolean $z0, $z1, z2;
+        android.net.Network r5;
+        android.net.NetworkCapabilities r6;
+
+        $r0 := @parameter0: android.net.ConnectivityManager;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r0, "<this>");
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 23 goto label1;
+
+        $z0 = 0;
+
+        goto label7;
+
+     label1:
+        r5 = staticinvoke <androidx.work.impl.utils.NetworkApi23: android.net.Network getActiveNetworkCompat(android.net.ConnectivityManager)>($r0);
+
+        r6 = staticinvoke <androidx.work.impl.utils.NetworkApi21: android.net.NetworkCapabilities getNetworkCapabilitiesCompat(android.net.ConnectivityManager,android.net.Network)>($r0, r5);
+
+        if r6 == null goto label2;
+
+        $z1 = staticinvoke <androidx.work.impl.utils.NetworkApi21: boolean hasCapabilityCompat(android.net.NetworkCapabilities,int)>(r6, 16);
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        z2 = $z1;
+
+     label4:
+        goto label6;
+
+     label5:
+        $r1 := @caughtexception;
+
+        r7 = $r1;
+
+        $r2 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r4 = <androidx.work.impl.constraints.trackers.NetworkStateTrackerKt: java.lang.String TAG>;
+
+        $r3 = (java.lang.Throwable) r7;
+
+        virtualinvoke $r2.<androidx.work.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>($r4, "Unable to validate active network", $r3);
+
+        z2 = 0;
+
+     label6:
+        $z0 = z2;
+
+     label7:
+        return $z0;
+
+        catch java.lang.SecurityException from label1 to label4 with label5;
+    }
+
+    public static final androidx.work.impl.constraints.NetworkState getActiveNetworkState(android.net.ConnectivityManager)
+    {
+        android.net.ConnectivityManager $r0;
+        android.net.NetworkInfo r1;
+        boolean z0, z1, z2, z3, $z4, $z5, $z6, $z7;
+        androidx.work.impl.constraints.NetworkState $r2;
+
+        $r0 := @parameter0: android.net.ConnectivityManager;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r0, "<this>");
+
+        r1 = virtualinvoke $r0.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if r1 == null goto label1;
+
+        $z5 = virtualinvoke r1.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z5 == 0 goto label1;
+
+        $z6 = 1;
+
+        goto label2;
+
+     label1:
+        $z6 = 0;
+
+     label2:
+        z0 = $z6;
+
+        z1 = staticinvoke <androidx.work.impl.constraints.trackers.NetworkStateTrackerKt: boolean isActiveNetworkValidated(android.net.ConnectivityManager)>($r0);
+
+        z2 = staticinvoke <androidx.core.net.ConnectivityManagerCompat: boolean isActiveNetworkMetered(android.net.ConnectivityManager)>($r0);
+
+        if r1 == null goto label3;
+
+        $z4 = virtualinvoke r1.<android.net.NetworkInfo: boolean isRoaming()>();
+
+        if $z4 != 0 goto label3;
+
+        $z7 = 1;
+
+        goto label4;
+
+     label3:
+        $z7 = 0;
+
+     label4:
+        z3 = $z7;
+
+        $r2 = new androidx.work.impl.constraints.NetworkState;
+
+        specialinvoke $r2.<androidx.work.impl.constraints.NetworkState: void <init>(boolean,boolean,boolean,boolean)>(z0, z1, z2, z3);
+
+        return $r2;
+    }
+
+    public static void getActiveNetworkState$annotations(android.net.ConnectivityManager)
+    {
+        android.net.ConnectivityManager r0;
+
+        r0 := @parameter0: android.net.ConnectivityManager;
+
+        return;
+    }
+
+    public static final java.lang.String access$getTAG$p()
+    {
+        java.lang.String $r0;
+
+        $r0 = <androidx.work.impl.constraints.trackers.NetworkStateTrackerKt: java.lang.String TAG>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("NetworkStateTracker");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r0, "tagWithPrefix(\"NetworkStateTracker\")");
+
+        <androidx.work.impl.constraints.trackers.NetworkStateTrackerKt: java.lang.String TAG> = $r0;
+
+        return;
+    }
+

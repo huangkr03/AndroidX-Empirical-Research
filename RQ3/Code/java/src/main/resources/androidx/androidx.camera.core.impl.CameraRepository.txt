@@ -1,0 +1,489 @@
+androidx.camera.core.impl.CameraRepository
+<androidx.camera.core.impl.CameraRepository: java.lang.String TAG>
+<androidx.camera.core.impl.CameraRepository: java.lang.Object mCamerasLock>
+<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras>
+<androidx.camera.core.impl.CameraRepository: java.util.Set mReleasingCameras>
+<androidx.camera.core.impl.CameraRepository: com.google.common.util.concurrent.ListenableFuture mDeinitFuture>
+<androidx.camera.core.impl.CameraRepository: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mDeinitCompleter>
+    public void <init>()
+    {
+        androidx.camera.core.impl.CameraRepository r0;
+        java.lang.Object $r1;
+        java.util.LinkedHashMap $r2;
+        java.util.HashSet $r3;
+
+        r0 := @this: androidx.camera.core.impl.CameraRepository;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.core.impl.CameraRepository: java.lang.Object mCamerasLock> = $r1;
+
+        $r2 = new java.util.LinkedHashMap;
+
+        specialinvoke $r2.<java.util.LinkedHashMap: void <init>()>();
+
+        r0.<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras> = $r2;
+
+        $r3 = new java.util.HashSet;
+
+        specialinvoke $r3.<java.util.HashSet: void <init>()>();
+
+        r0.<androidx.camera.core.impl.CameraRepository: java.util.Set mReleasingCameras> = $r3;
+
+        return;
+    }
+
+    public void init(androidx.camera.core.impl.CameraFactory) throws androidx.camera.core.InitializationException
+    {
+        androidx.camera.core.impl.CameraRepository r0;
+        androidx.camera.core.impl.CameraFactory r1;
+        java.lang.Object r2, $r7, $r8;
+        java.util.Set r3;
+        java.util.Iterator r4;
+        java.lang.String r5, $r12;
+        java.lang.Throwable r6, $r16;
+        boolean $z0;
+        java.lang.StringBuilder $r9, $r10, $r11;
+        java.util.Map $r13;
+        androidx.camera.core.impl.CameraInternal $r14;
+
+        r0 := @this: androidx.camera.core.impl.CameraRepository;
+
+        r1 := @parameter0: androidx.camera.core.impl.CameraFactory;
+
+        $r7 = r0.<androidx.camera.core.impl.CameraRepository: java.lang.Object mCamerasLock>;
+
+        r2 = $r7;
+
+        entermonitor $r7;
+
+     label1:
+        r3 = interfaceinvoke r1.<androidx.camera.core.impl.CameraFactory: java.util.Set getAvailableCameraIds()>();
+
+        r4 = interfaceinvoke r3.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r8 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (java.lang.String) $r8;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Added camera: ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r5);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("CameraRepository", $r12);
+
+        $r13 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras>;
+
+        $r14 = interfaceinvoke r1.<androidx.camera.core.impl.CameraFactory: androidx.camera.core.impl.CameraInternal getCamera(java.lang.String)>(r5);
+
+        interfaceinvoke $r13.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r5, $r14);
+
+        goto label2;
+
+     label3:
+        goto label4;
+
+     label4:
+        exitmonitor r2;
+
+     label5:
+        goto label8;
+
+     label6:
+        $r16 := @caughtexception;
+
+        r6 = $r16;
+
+        exitmonitor r2;
+
+     label7:
+        throw r6;
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label1 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+
+    public com.google.common.util.concurrent.ListenableFuture deinit()
+    {
+        androidx.camera.core.impl.CameraRepository r0;
+        java.lang.Object r1, $r5, $r13;
+        java.util.Iterator r2;
+        androidx.camera.core.impl.CameraInternal r3;
+        java.lang.Throwable r4, $r19;
+        java.util.Map $r6, $r7, $r10, $r12;
+        boolean $z0, $z2;
+        java.util.Set $r8;
+        java.util.Collection $r9, $r11;
+        com.google.common.util.concurrent.ListenableFuture $r14, $r18, $r20, r21;
+        java.lang.Runnable $r15;
+        java.util.concurrent.Executor $r16;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Resolver $r17;
+
+        r0 := @this: androidx.camera.core.impl.CameraRepository;
+
+        $r5 = r0.<androidx.camera.core.impl.CameraRepository: java.lang.Object mCamerasLock>;
+
+        r1 = $r5;
+
+        entermonitor $r5;
+
+     label01:
+        $r6 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras>;
+
+        $z0 = interfaceinvoke $r6.<java.util.Map: boolean isEmpty()>();
+
+        if $z0 == 0 goto label05;
+
+        $r18 = r0.<androidx.camera.core.impl.CameraRepository: com.google.common.util.concurrent.ListenableFuture mDeinitFuture>;
+
+        if $r18 != null goto label02;
+
+        $r20 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture immediateFuture(java.lang.Object)>(null);
+
+        goto label03;
+
+     label02:
+        $r20 = r0.<androidx.camera.core.impl.CameraRepository: com.google.common.util.concurrent.ListenableFuture mDeinitFuture>;
+
+     label03:
+        exitmonitor r1;
+
+     label04:
+        return $r20;
+
+     label05:
+        r21 = r0.<androidx.camera.core.impl.CameraRepository: com.google.common.util.concurrent.ListenableFuture mDeinitFuture>;
+
+        if r21 != null goto label06;
+
+        $r17 = dynamicinvoke "attachCompleter" <androidx.concurrent.futures.CallbackToFutureAdapter$Resolver (androidx.camera.core.impl.CameraRepository)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.core.impl.CameraRepository: java.lang.Object lambda$deinit$0(androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer));
+
+        r21 = staticinvoke <androidx.concurrent.futures.CallbackToFutureAdapter: com.google.common.util.concurrent.ListenableFuture getFuture(androidx.concurrent.futures.CallbackToFutureAdapter$Resolver)>($r17);
+
+        r0.<androidx.camera.core.impl.CameraRepository: com.google.common.util.concurrent.ListenableFuture mDeinitFuture> = r21;
+
+     label06:
+        $r8 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Set mReleasingCameras>;
+
+        $r7 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras>;
+
+        $r9 = interfaceinvoke $r7.<java.util.Map: java.util.Collection values()>();
+
+        interfaceinvoke $r8.<java.util.Set: boolean addAll(java.util.Collection)>($r9);
+
+        $r10 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras>;
+
+        $r11 = interfaceinvoke $r10.<java.util.Map: java.util.Collection values()>();
+
+        r2 = interfaceinvoke $r11.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label07:
+        $z2 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label08;
+
+        $r13 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.camera.core.impl.CameraInternal) $r13;
+
+        $r14 = interfaceinvoke r3.<androidx.camera.core.impl.CameraInternal: com.google.common.util.concurrent.ListenableFuture release()>();
+
+        $r15 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.core.impl.CameraRepository,androidx.camera.core.impl.CameraInternal)>(r0, r3) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.core.impl.CameraRepository: void lambda$deinit$1(androidx.camera.core.impl.CameraInternal)>, methodtype: void __METHODTYPE__());
+
+        $r16 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.Executor directExecutor()>();
+
+        interfaceinvoke $r14.<com.google.common.util.concurrent.ListenableFuture: void addListener(java.lang.Runnable,java.util.concurrent.Executor)>($r15, $r16);
+
+        goto label07;
+
+     label08:
+        $r12 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras>;
+
+        interfaceinvoke $r12.<java.util.Map: void clear()>();
+
+        exitmonitor r1;
+
+     label09:
+        return r21;
+
+     label10:
+        $r19 := @caughtexception;
+
+        r4 = $r19;
+
+        exitmonitor r1;
+
+     label11:
+        throw r4;
+
+        catch java.lang.Throwable from label01 to label04 with label10;
+        catch java.lang.Throwable from label05 to label09 with label10;
+        catch java.lang.Throwable from label10 to label11 with label10;
+    }
+
+    public androidx.camera.core.impl.CameraInternal getCamera(java.lang.String)
+    {
+        androidx.camera.core.impl.CameraRepository r0;
+        java.lang.String r1, $r12;
+        java.lang.Object r2, $r5, $r7;
+        androidx.camera.core.impl.CameraInternal r3;
+        java.lang.Throwable r4, $r13;
+        java.util.Map $r6;
+        java.lang.IllegalArgumentException $r8;
+        java.lang.StringBuilder $r9, $r10, $r11;
+
+        r0 := @this: androidx.camera.core.impl.CameraRepository;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r5 = r0.<androidx.camera.core.impl.CameraRepository: java.lang.Object mCamerasLock>;
+
+        r2 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        r3 = (androidx.camera.core.impl.CameraInternal) $r7;
+
+        if r3 != null goto label2;
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid camera: ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r12);
+
+        throw $r8;
+
+     label2:
+        exitmonitor r2;
+
+     label3:
+        return r3;
+
+     label4:
+        $r13 := @caughtexception;
+
+        r4 = $r13;
+
+        exitmonitor r2;
+
+     label5:
+        throw r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public java.util.LinkedHashSet getCameras()
+    {
+        androidx.camera.core.impl.CameraRepository r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r7;
+        java.util.LinkedHashSet $r4;
+        java.util.Map $r5;
+        java.util.Collection $r6;
+
+        r0 := @this: androidx.camera.core.impl.CameraRepository;
+
+        $r3 = r0.<androidx.camera.core.impl.CameraRepository: java.lang.Object mCamerasLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = new java.util.LinkedHashSet;
+
+        $r5 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.util.Collection values()>();
+
+        specialinvoke $r4.<java.util.LinkedHashSet: void <init>(java.util.Collection)>($r6);
+
+        exitmonitor r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r2 = $r7;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    java.util.Set getCameraIds()
+    {
+        androidx.camera.core.impl.CameraRepository r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r7;
+        java.util.LinkedHashSet $r4;
+        java.util.Map $r5;
+        java.util.Set $r6;
+
+        r0 := @this: androidx.camera.core.impl.CameraRepository;
+
+        $r3 = r0.<androidx.camera.core.impl.CameraRepository: java.lang.Object mCamerasLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = new java.util.LinkedHashSet;
+
+        $r5 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Map mCameras>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.util.Set keySet()>();
+
+        specialinvoke $r4.<java.util.LinkedHashSet: void <init>(java.util.Collection)>($r6);
+
+        exitmonitor r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r2 = $r7;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private void lambda$deinit$1(androidx.camera.core.impl.CameraInternal)
+    {
+        androidx.camera.core.impl.CameraRepository r0;
+        androidx.camera.core.impl.CameraInternal r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r10;
+        java.util.Set $r5, $r6;
+        boolean $z1;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer $r7, $r9;
+
+        r0 := @this: androidx.camera.core.impl.CameraRepository;
+
+        r1 := @parameter0: androidx.camera.core.impl.CameraInternal;
+
+        $r4 = r0.<androidx.camera.core.impl.CameraRepository: java.lang.Object mCamerasLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Set mReleasingCameras>;
+
+        interfaceinvoke $r5.<java.util.Set: boolean remove(java.lang.Object)>(r1);
+
+        $r6 = r0.<androidx.camera.core.impl.CameraRepository: java.util.Set mReleasingCameras>;
+
+        $z1 = interfaceinvoke $r6.<java.util.Set: boolean isEmpty()>();
+
+        if $z1 == 0 goto label2;
+
+        $r7 = r0.<androidx.camera.core.impl.CameraRepository: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mDeinitCompleter>;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r7);
+
+        $r9 = r0.<androidx.camera.core.impl.CameraRepository: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mDeinitCompleter>;
+
+        virtualinvoke $r9.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+        r0.<androidx.camera.core.impl.CameraRepository: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mDeinitCompleter> = null;
+
+        r0.<androidx.camera.core.impl.CameraRepository: com.google.common.util.concurrent.ListenableFuture mDeinitFuture> = null;
+
+     label2:
+        exitmonitor r2;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r10 := @caughtexception;
+
+        r3 = $r10;
+
+        exitmonitor r2;
+
+     label5:
+        throw r3;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    private java.lang.Object lambda$deinit$0(androidx.concurrent.futures.CallbackToFutureAdapter$Completer) throws java.lang.Exception
+    {
+        androidx.camera.core.impl.CameraRepository r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r1;
+        java.lang.Object r2, $r3;
+
+        r0 := @this: androidx.camera.core.impl.CameraRepository;
+
+        r1 := @parameter0: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        $r3 = r0.<androidx.camera.core.impl.CameraRepository: java.lang.Object mCamerasLock>;
+
+        r2 = $r3;
+
+        entermonitor $r3;
+
+        r0.<androidx.camera.core.impl.CameraRepository: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mDeinitCompleter> = r1;
+
+        exitmonitor r2;
+
+        goto label1;
+
+     label1:
+        return "CameraRepository-deinit";
+    }
+

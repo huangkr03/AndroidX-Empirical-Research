@@ -1,0 +1,153 @@
+com.google.android.wearable.intent.RemoteIntent
+<com.google.android.wearable.intent.RemoteIntent: java.lang.String ACTION_REMOTE_INTENT>
+<com.google.android.wearable.intent.RemoteIntent: java.lang.String EXTRA_INTENT>
+<com.google.android.wearable.intent.RemoteIntent: java.lang.String EXTRA_NODE_ID>
+<com.google.android.wearable.intent.RemoteIntent: java.lang.String EXTRA_RESULT_RECEIVER>
+<com.google.android.wearable.intent.RemoteIntent: int RESULT_OK>
+<com.google.android.wearable.intent.RemoteIntent: int RESULT_FAILED>
+    public void <init>()
+    {
+        com.google.android.wearable.intent.RemoteIntent r0;
+
+        r0 := @this: com.google.android.wearable.intent.RemoteIntent;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void startRemoteActivity(android.content.Context, android.content.Intent, android.os.ResultReceiver)
+    {
+        android.content.Context r0;
+        android.content.Intent r1;
+        android.os.ResultReceiver r2;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.Intent;
+
+        r2 := @parameter2: android.os.ResultReceiver;
+
+        staticinvoke <com.google.android.wearable.intent.RemoteIntent: void startRemoteActivity(android.content.Context,android.content.Intent,android.os.ResultReceiver,java.lang.String)>(r0, r1, r2, null);
+
+        return;
+    }
+
+    public static void startRemoteActivity(android.content.Context, android.content.Intent, android.os.ResultReceiver, java.lang.String)
+    {
+        android.content.Context r0;
+        android.content.Intent r1, $r11, $r12, $r13, $r15, r21;
+        android.os.ResultReceiver r2, $r14;
+        java.lang.String r3, $r4, $r5;
+        boolean $z0, $z1;
+        android.net.Uri $r6;
+        java.util.Set $r7, $r9;
+        java.lang.IllegalArgumentException r18, r19, r20;
+        android.os.Parcelable r22, r23;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.Intent;
+
+        r2 := @parameter2: android.os.ResultReceiver;
+
+        r3 := @parameter3: java.lang.String;
+
+        $r4 = "android.intent.action.VIEW";
+
+        $r5 = virtualinvoke r1.<android.content.Intent: java.lang.String getAction()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 != 0 goto label1;
+
+        r18 = new java.lang.IllegalArgumentException;
+
+        specialinvoke r18.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Only android.intent.action.VIEW action is currently supported for starting a remote activity");
+
+        throw r18;
+
+     label1:
+        $r6 = virtualinvoke r1.<android.content.Intent: android.net.Uri getData()>();
+
+        if $r6 != null goto label2;
+
+        r19 = new java.lang.IllegalArgumentException;
+
+        specialinvoke r19.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Data Uri is required when starting a remote activity");
+
+        throw r19;
+
+     label2:
+        $r7 = virtualinvoke r1.<android.content.Intent: java.util.Set getCategories()>();
+
+        if $r7 == null goto label3;
+
+        $r9 = virtualinvoke r1.<android.content.Intent: java.util.Set getCategories()>();
+
+        $z1 = interfaceinvoke $r9.<java.util.Set: boolean contains(java.lang.Object)>("android.intent.category.BROWSABLE");
+
+        if $z1 != 0 goto label4;
+
+     label3:
+        r20 = new java.lang.IllegalArgumentException;
+
+        specialinvoke r20.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("The category android.intent.category.BROWSABLE must be present on the intent");
+
+        throw r20;
+
+     label4:
+        r21 = new android.content.Intent;
+
+        specialinvoke r21.<android.content.Intent: void <init>(java.lang.String)>("com.google.android.wearable.intent.action.REMOTE_INTENT");
+
+        $r11 = virtualinvoke r21.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>("com.google.android.wearable.app");
+
+        r22 = (android.os.Parcelable) r1;
+
+        $r12 = virtualinvoke $r11.<android.content.Intent: android.content.Intent putExtra(java.lang.String,android.os.Parcelable)>("com.google.android.wearable.intent.extra.INTENT", r22);
+
+        $r13 = virtualinvoke $r12.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("com.google.android.wearable.intent.extra.NODE_ID", r3);
+
+        $r14 = staticinvoke <com.google.android.wearable.intent.RemoteIntent: android.os.ResultReceiver getResultReceiverForSending(android.os.ResultReceiver)>(r2);
+
+        r23 = (android.os.Parcelable) $r14;
+
+        $r15 = virtualinvoke $r13.<android.content.Intent: android.content.Intent putExtra(java.lang.String,android.os.Parcelable)>("com.google.android.wearable.intent.extra.RESULT_RECEIVER", r23);
+
+        virtualinvoke r0.<android.content.Context: void sendBroadcast(android.content.Intent)>($r15);
+
+        return;
+    }
+
+    private static android.os.ResultReceiver getResultReceiverForSending(android.os.ResultReceiver)
+    {
+        android.os.ResultReceiver r0, r2;
+        android.os.Parcel r1;
+        android.os.Parcelable$Creator $r3;
+        java.lang.Object $r4;
+
+        r0 := @parameter0: android.os.ResultReceiver;
+
+        if r0 != null goto label1;
+
+        return null;
+
+     label1:
+        r1 = staticinvoke <android.os.Parcel: android.os.Parcel obtain()>();
+
+        virtualinvoke r0.<android.os.ResultReceiver: void writeToParcel(android.os.Parcel,int)>(r1, 0);
+
+        virtualinvoke r1.<android.os.Parcel: void setDataPosition(int)>(0);
+
+        $r3 = <android.os.ResultReceiver: android.os.Parcelable$Creator CREATOR>;
+
+        $r4 = interfaceinvoke $r3.<android.os.Parcelable$Creator: java.lang.Object createFromParcel(android.os.Parcel)>(r1);
+
+        r2 = (android.os.ResultReceiver) $r4;
+
+        virtualinvoke r1.<android.os.Parcel: void recycle()>();
+
+        return r2;
+    }
+

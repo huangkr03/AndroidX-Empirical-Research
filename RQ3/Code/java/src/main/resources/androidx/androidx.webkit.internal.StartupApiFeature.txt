@@ -1,0 +1,302 @@
+androidx.webkit.internal.StartupApiFeature
+<androidx.webkit.internal.StartupApiFeature: java.util.Set sValues>
+<androidx.webkit.internal.StartupApiFeature: java.lang.String METADATA_HOLDER_SERVICE_NAME>
+<androidx.webkit.internal.StartupApiFeature: java.lang.String mPublicFeatureValue>
+<androidx.webkit.internal.StartupApiFeature: java.lang.String mInternalFeatureValue>
+<androidx.webkit.internal.StartupApiFeature: boolean $assertionsDisabled>
+    void <init>(java.lang.String, java.lang.String)
+    {
+        androidx.webkit.internal.StartupApiFeature r0;
+        java.lang.String r1, r2;
+        java.util.Set $r3;
+
+        r0 := @this: androidx.webkit.internal.StartupApiFeature;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.webkit.internal.StartupApiFeature: java.lang.String mPublicFeatureValue> = r1;
+
+        r0.<androidx.webkit.internal.StartupApiFeature: java.lang.String mInternalFeatureValue> = r2;
+
+        $r3 = <androidx.webkit.internal.StartupApiFeature: java.util.Set sValues>;
+
+        interfaceinvoke $r3.<java.util.Set: boolean add(java.lang.Object)>(r0);
+
+        return;
+    }
+
+    public java.lang.String getPublicFeatureName()
+    {
+        androidx.webkit.internal.StartupApiFeature r0;
+        java.lang.String $r1;
+
+        r0 := @this: androidx.webkit.internal.StartupApiFeature;
+
+        $r1 = r0.<androidx.webkit.internal.StartupApiFeature: java.lang.String mPublicFeatureValue>;
+
+        return $r1;
+    }
+
+    public boolean isSupported(android.content.Context)
+    {
+        androidx.webkit.internal.StartupApiFeature r0;
+        android.content.Context r1;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: androidx.webkit.internal.StartupApiFeature;
+
+        r1 := @parameter0: android.content.Context;
+
+        $z0 = virtualinvoke r0.<androidx.webkit.internal.StartupApiFeature: boolean isSupportedByFramework()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = virtualinvoke r0.<androidx.webkit.internal.StartupApiFeature: boolean isSupportedByWebView(android.content.Context)>(r1);
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        return $z2;
+    }
+
+<androidx.webkit.internal.StartupApiFeature: boolean isSupportedByFramework()>
+    public boolean isSupportedByWebView(android.content.Context)
+    {
+        androidx.webkit.internal.StartupApiFeature r0;
+        android.content.Context r1;
+        android.os.Bundle r2;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: androidx.webkit.internal.StartupApiFeature;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 = staticinvoke <androidx.webkit.internal.StartupApiFeature: android.os.Bundle getMetaDataFromWebViewManifestOrNull(android.content.Context)>(r1);
+
+        if r2 != null goto label1;
+
+        return 0;
+
+     label1:
+        $r3 = r0.<androidx.webkit.internal.StartupApiFeature: java.lang.String mInternalFeatureValue>;
+
+        $z0 = virtualinvoke r2.<android.os.Bundle: boolean containsKey(java.lang.String)>($r3);
+
+        return $z0;
+    }
+
+    public static java.util.Set values()
+    {
+        java.util.Set $r0, $r1;
+
+        $r0 = <androidx.webkit.internal.StartupApiFeature: java.util.Set sValues>;
+
+        $r1 = staticinvoke <java.util.Collections: java.util.Set unmodifiableSet(java.util.Set)>($r0);
+
+        return $r1;
+    }
+
+    private static android.os.Bundle getMetaDataFromWebViewManifestOrNull(android.content.Context)
+    {
+        android.content.Context r0;
+        android.content.pm.PackageInfo r1;
+        android.content.ComponentName r2, $r3;
+        java.lang.String $r4;
+        int $i0, $i1;
+        android.content.pm.ServiceInfo $r5, $r8;
+        android.os.Bundle $r6, $r9;
+        android.content.pm.PackageManager $r7;
+        java.lang.Throwable $r10, $r11, r13, r14;
+        android.content.pm.PackageManager$ComponentInfoFlags r12;
+        short s2;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 = staticinvoke <androidx.webkit.WebViewCompat: android.content.pm.PackageInfo getCurrentWebViewPackage(android.content.Context)>(r0);
+
+        if r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r3 = new android.content.ComponentName;
+
+        $r4 = r1.<android.content.pm.PackageInfo: java.lang.String packageName>;
+
+        specialinvoke $r3.<android.content.ComponentName: void <init>(java.lang.String,java.lang.String)>($r4, "org.chromium.android_webview.services.StartupFeatureMetadataHolder");
+
+        r2 = $r3;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 33 goto label5;
+
+        r12 = staticinvoke <androidx.webkit.internal.ApiHelperForTiramisu: android.content.pm.PackageManager$ComponentInfoFlags of(long)>(640L);
+
+     label2:
+        $r7 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r8 = staticinvoke <androidx.webkit.internal.ApiHelperForTiramisu: android.content.pm.ServiceInfo getServiceInfo(android.content.pm.PackageManager,android.content.ComponentName,android.content.pm.PackageManager$ComponentInfoFlags)>($r7, r2, r12);
+
+        $r9 = $r8.<android.content.pm.ServiceInfo: android.os.Bundle metaData>;
+
+     label3:
+        return $r9;
+
+     label4:
+        $r11 := @caughtexception;
+
+        r13 = $r11;
+
+        return null;
+
+     label5:
+        s2 = 128;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 24 goto label6;
+
+        s2 = s2 | 512;
+
+     label6:
+        $r5 = staticinvoke <androidx.webkit.internal.StartupApiFeature: android.content.pm.ServiceInfo getServiceInfo(android.content.Context,android.content.ComponentName,int)>(r0, r2, s2);
+
+        $r6 = $r5.<android.content.pm.ServiceInfo: android.os.Bundle metaData>;
+
+     label7:
+        return $r6;
+
+     label8:
+        $r10 := @caughtexception;
+
+        r14 = $r10;
+
+        return null;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label2 to label3 with label4;
+        catch android.content.pm.PackageManager$NameNotFoundException from label6 to label7 with label8;
+    }
+
+    private static android.content.pm.ServiceInfo getServiceInfo(android.content.Context, android.content.ComponentName, int) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        android.content.Context r0;
+        android.content.ComponentName r1;
+        int i0, $i1;
+        boolean $z0;
+        android.content.pm.PackageManager $r2;
+        android.content.pm.ServiceInfo $r3;
+        java.lang.AssertionError $r4;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.ComponentName;
+
+        i0 := @parameter2: int;
+
+        $z0 = <androidx.webkit.internal.StartupApiFeature: boolean $assertionsDisabled>;
+
+        if $z0 != 0 goto label1;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 33 goto label1;
+
+        $r4 = new java.lang.AssertionError;
+
+        specialinvoke $r4.<java.lang.AssertionError: void <init>()>();
+
+        throw $r4;
+
+     label1:
+        $r2 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r3 = virtualinvoke $r2.<android.content.pm.PackageManager: android.content.pm.ServiceInfo getServiceInfo(android.content.ComponentName,int)>(r1, i0);
+
+        return $r3;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        boolean $z0, $z1;
+        java.util.HashSet $r1;
+
+        $r0 = class "Landroidx/webkit/internal/StartupApiFeature;";
+
+        $z0 = virtualinvoke $r0.<java.lang.Class: boolean desiredAssertionStatus()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        <androidx.webkit.internal.StartupApiFeature: boolean $assertionsDisabled> = $z1;
+
+        $r1 = new java.util.HashSet;
+
+        specialinvoke $r1.<java.util.HashSet: void <init>()>();
+
+        <androidx.webkit.internal.StartupApiFeature: java.util.Set sValues> = $r1;
+
+        return;
+    }
+
+androidx.webkit.internal.StartupApiFeature$P
+    void <init>(java.lang.String, java.lang.String)
+    {
+        androidx.webkit.internal.StartupApiFeature$P r0;
+        java.lang.String r1, r2;
+
+        r0 := @this: androidx.webkit.internal.StartupApiFeature$P;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        specialinvoke r0.<androidx.webkit.internal.StartupApiFeature: void <init>(java.lang.String,java.lang.String)>(r1, r2);
+
+        return;
+    }
+
+    public final boolean isSupportedByFramework()
+    {
+        androidx.webkit.internal.StartupApiFeature$P r0;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: androidx.webkit.internal.StartupApiFeature$P;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+

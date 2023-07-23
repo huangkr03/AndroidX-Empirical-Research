@@ -1,0 +1,981 @@
+androidx.car.app.validation.HostValidator
+<androidx.car.app.validation.HostValidator: java.lang.String TEMPLATE_RENDERER_PERMISSION>
+<androidx.car.app.validation.HostValidator: java.util.Map mAllowedHosts>
+<androidx.car.app.validation.HostValidator: boolean mAllowAllHosts>
+<androidx.car.app.validation.HostValidator: java.util.Map mCallerChecked>
+<androidx.car.app.validation.HostValidator: android.content.pm.PackageManager mPackageManager>
+<androidx.car.app.validation.HostValidator: androidx.car.app.validation.HostValidator ALLOW_ALL_HOSTS_VALIDATOR>
+    void <init>(android.content.pm.PackageManager, java.util.Map, boolean)
+    {
+        androidx.car.app.validation.HostValidator r0;
+        android.content.pm.PackageManager r1;
+        java.util.Map r2;
+        boolean z0;
+        java.util.HashMap $r3;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        r1 := @parameter0: android.content.pm.PackageManager;
+
+        r2 := @parameter1: java.util.Map;
+
+        z0 := @parameter2: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new java.util.HashMap;
+
+        specialinvoke $r3.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.car.app.validation.HostValidator: java.util.Map mCallerChecked> = $r3;
+
+        r0.<androidx.car.app.validation.HostValidator: android.content.pm.PackageManager mPackageManager> = r1;
+
+        r0.<androidx.car.app.validation.HostValidator: java.util.Map mAllowedHosts> = r2;
+
+        r0.<androidx.car.app.validation.HostValidator: boolean mAllowAllHosts> = z0;
+
+        return;
+    }
+
+    public boolean isValidHost(androidx.car.app.HostInfo)
+    {
+        androidx.car.app.validation.HostValidator r0;
+        androidx.car.app.HostInfo r1;
+        java.lang.Boolean r2;
+        boolean z0, $z1, $z2, $z3, $z4;
+        java.lang.StringBuilder $r4, $r5, $r6;
+        java.lang.String $r7;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        r1 := @parameter0: androidx.car.app.HostInfo;
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>(r1);
+
+        $z1 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("CarApp.Val", 3);
+
+        if $z1 == 0 goto label1;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Evaluating ");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("CarApp.Val", $r7);
+
+     label1:
+        $z2 = r0.<androidx.car.app.validation.HostValidator: boolean mAllowAllHosts>;
+
+        if $z2 == 0 goto label3;
+
+        $z4 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("CarApp.Val", 3);
+
+        if $z4 == 0 goto label2;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("CarApp.Val", "Accepted - Validator disabled, all hosts allowed");
+
+     label2:
+        return 1;
+
+     label3:
+        r2 = specialinvoke r0.<androidx.car.app.validation.HostValidator: java.lang.Boolean checkCache(androidx.car.app.HostInfo)>(r1);
+
+        if r2 == null goto label4;
+
+        $z3 = virtualinvoke r2.<java.lang.Boolean: boolean booleanValue()>();
+
+        return $z3;
+
+     label4:
+        z0 = specialinvoke r0.<androidx.car.app.validation.HostValidator: boolean validateHost(androidx.car.app.HostInfo)>(r1);
+
+        specialinvoke r0.<androidx.car.app.validation.HostValidator: void updateCache(androidx.car.app.HostInfo,boolean)>(r1, z0);
+
+        return z0;
+    }
+
+    public java.util.Map getAllowedHosts()
+    {
+        androidx.car.app.validation.HostValidator r0;
+        java.util.Map $r1, $r2;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        $r1 = r0.<androidx.car.app.validation.HostValidator: java.util.Map mAllowedHosts>;
+
+        $r2 = staticinvoke <java.util.Collections: java.util.Map unmodifiableMap(java.util.Map)>($r1);
+
+        return $r2;
+    }
+
+    private android.content.pm.PackageInfo getPackageInfo(java.lang.String)
+    {
+        androidx.car.app.validation.HostValidator r0;
+        java.lang.String r1, $r11, $r17;
+        java.lang.Throwable r2, $r12;
+        android.content.pm.PackageManager $r3, $r4, $r6;
+        int $i0;
+        android.content.pm.PackageInfo $r5, $r7;
+        java.lang.StringBuilder $r8, $r9, $r10, $r13, $r14, $r15, $r16;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        r1 := @parameter0: java.lang.String;
+
+     label1:
+        $r3 = r0.<androidx.car.app.validation.HostValidator: android.content.pm.PackageManager mPackageManager>;
+
+        if $r3 != null goto label3;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("PackageManager is null. Package info cannot be found for package ");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("CarApp.Val", $r11);
+
+     label2:
+        return null;
+
+     label3:
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label5;
+
+        $r6 = r0.<androidx.car.app.validation.HostValidator: android.content.pm.PackageManager mPackageManager>;
+
+        $r7 = staticinvoke <androidx.car.app.validation.HostValidator$Api28Impl: android.content.pm.PackageInfo getPackageInfo(android.content.pm.PackageManager,java.lang.String)>($r6, r1);
+
+     label4:
+        return $r7;
+
+     label5:
+        $r4 = r0.<androidx.car.app.validation.HostValidator: android.content.pm.PackageManager mPackageManager>;
+
+        $r5 = virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>(r1, 4160);
+
+     label6:
+        return $r5;
+
+     label7:
+        $r12 := @caughtexception;
+
+        r2 = $r12;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Package ");
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" not found");
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("CarApp.Val", $r17, r2);
+
+        return null;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label7;
+        catch android.content.pm.PackageManager$NameNotFoundException from label3 to label4 with label7;
+        catch android.content.pm.PackageManager$NameNotFoundException from label5 to label6 with label7;
+    }
+
+    private boolean validateHost(androidx.car.app.HostInfo)
+    {
+        androidx.car.app.validation.HostValidator r0;
+        androidx.car.app.HostInfo r1;
+        java.lang.String r2, $r9, $r13, $r14, $r21, $r26;
+        android.content.pm.PackageInfo r3;
+        android.content.pm.Signature[] r4;
+        int i0, $i2, $i3, $i4;
+        boolean z0, z1, $z2, $z3, $z4, $z5;
+        java.lang.StringBuilder $r5, $r6, $r7, $r8, $r16, $r17, $r18, $r19, $r20, $r22, $r23, $r24, $r25;
+        android.content.pm.ApplicationInfo $r10;
+        java.lang.Object[] $r11;
+        android.content.pm.Signature $r12;
+        java.lang.IllegalStateException $r15;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        r1 := @parameter0: androidx.car.app.HostInfo;
+
+        r2 = virtualinvoke r1.<androidx.car.app.HostInfo: java.lang.String getPackageName()>();
+
+        r3 = specialinvoke r0.<androidx.car.app.validation.HostValidator: android.content.pm.PackageInfo getPackageInfo(java.lang.String)>(r2);
+
+        if r3 != null goto label01;
+
+        $r22 = new java.lang.StringBuilder;
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>()>();
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Rejected - package name ");
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" not found");
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("CarApp.Val", $r26);
+
+        return 0;
+
+     label01:
+        r4 = specialinvoke r0.<androidx.car.app.validation.HostValidator: android.content.pm.Signature[] getSignatures(android.content.pm.PackageInfo)>(r3);
+
+        if r4 == null goto label02;
+
+        $i2 = lengthof r4;
+
+        if $i2 != 0 goto label03;
+
+     label02:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Package ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is not signed or it has more than one signature");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("CarApp.Val", $r9);
+
+        return 0;
+
+     label03:
+        $r10 = r3.<android.content.pm.PackageInfo: android.content.pm.ApplicationInfo applicationInfo>;
+
+        i0 = $r10.<android.content.pm.ApplicationInfo: int uid>;
+
+        $i3 = virtualinvoke r1.<androidx.car.app.HostInfo: int getUid()>();
+
+        if i0 == $i3 goto label04;
+
+        $r15 = new java.lang.IllegalStateException;
+
+        $r16 = new java.lang.StringBuilder;
+
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Host ");
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" doesn\'t match caller\'s actual UID ");
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r15.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r21);
+
+        throw $r15;
+
+     label04:
+        z0 = staticinvoke <androidx.car.app.validation.HostValidator: boolean hasPermissionGranted(android.content.pm.PackageInfo,java.lang.String)>(r3, "android.car.permission.TEMPLATE_RENDERER");
+
+        z1 = specialinvoke r0.<androidx.car.app.validation.HostValidator: boolean isAllowListed(java.lang.String,android.content.pm.Signature[])>(r2, r4);
+
+        $i4 = staticinvoke <android.os.Process: int myUid()>();
+
+        if i0 != $i4 goto label06;
+
+        $z5 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("CarApp.Val", 3);
+
+        if $z5 == 0 goto label05;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("CarApp.Val", "Accepted - Local service call");
+
+     label05:
+        return 1;
+
+     label06:
+        if z1 == 0 goto label08;
+
+        $z4 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("CarApp.Val", 3);
+
+        if $z4 == 0 goto label07;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("CarApp.Val", "Accepted - Host in allow-list");
+
+     label07:
+        return 1;
+
+     label08:
+        if i0 != 1000 goto label10;
+
+        $z3 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("CarApp.Val", 3);
+
+        if $z3 == 0 goto label09;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("CarApp.Val", "Accepted - System binding");
+
+     label09:
+        return 1;
+
+     label10:
+        if z0 == 0 goto label12;
+
+        $z2 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("CarApp.Val", 3);
+
+        if $z2 == 0 goto label11;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("CarApp.Val", "Accepted - Host has android.car.permission.TEMPLATE_RENDERER");
+
+     label11:
+        return 1;
+
+     label12:
+        $r11 = newarray (java.lang.Object)[2];
+
+        $r11[0] = r2;
+
+        $r12 = r4[0];
+
+        $r13 = specialinvoke r0.<androidx.car.app.validation.HostValidator: java.lang.String getDigest(android.content.pm.Signature)>($r12);
+
+        $r11[1] = $r13;
+
+        $r14 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Unrecognized host.\nIf this is a valid caller, please add the following to your CarAppService#createHostValidator() implementation:\nreturn new HostValidator.Builder(context)\n\t.addAllowedHost(\"%s\", \"%s\");\n\t.build()", $r11);
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("CarApp.Val", $r14);
+
+        return 0;
+    }
+
+    private boolean isAllowListed(java.lang.String, android.content.pm.Signature[])
+    {
+        androidx.car.app.validation.HostValidator r0;
+        java.lang.String r1, r6;
+        android.content.pm.Signature[] r2, r4;
+        java.util.List r3;
+        int i0, i1;
+        android.content.pm.Signature r5;
+        java.util.Map $r7;
+        java.lang.Object $r8;
+        boolean $z0;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: android.content.pm.Signature[];
+
+        $r7 = r0.<androidx.car.app.validation.HostValidator: java.util.Map mAllowedHosts>;
+
+        $r8 = interfaceinvoke $r7.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        r3 = (java.util.List) $r8;
+
+        if r3 != null goto label1;
+
+        return 0;
+
+     label1:
+        r4 = r2;
+
+        i0 = lengthof r4;
+
+        i1 = 0;
+
+     label2:
+        if i1 >= i0 goto label4;
+
+        r5 = r4[i1];
+
+        r6 = specialinvoke r0.<androidx.car.app.validation.HostValidator: java.lang.String getDigest(android.content.pm.Signature)>(r5);
+
+        $z0 = interfaceinvoke r3.<java.util.List: boolean contains(java.lang.Object)>(r6);
+
+        if $z0 == 0 goto label3;
+
+        return 1;
+
+     label3:
+        i1 = i1 + 1;
+
+        goto label2;
+
+     label4:
+        return 0;
+    }
+
+    private java.lang.Boolean checkCache(androidx.car.app.HostInfo)
+    {
+        androidx.car.app.validation.HostValidator r0;
+        androidx.car.app.HostInfo r1;
+        android.util.Pair r2;
+        java.util.Map $r3;
+        java.lang.String $r4;
+        java.lang.Object $r5, $r6, $r8;
+        java.lang.Integer $r7;
+        int $i0, $i1;
+        java.lang.Boolean $r9;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        r1 := @parameter0: androidx.car.app.HostInfo;
+
+        $r3 = r0.<androidx.car.app.validation.HostValidator: java.util.Map mCallerChecked>;
+
+        $r4 = virtualinvoke r1.<androidx.car.app.HostInfo: java.lang.String getPackageName()>();
+
+        $r5 = interfaceinvoke $r3.<java.util.Map: java.lang.Object get(java.lang.Object)>($r4);
+
+        r2 = (android.util.Pair) $r5;
+
+        if r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r6 = r2.<android.util.Pair: java.lang.Object first>;
+
+        $r7 = (java.lang.Integer) $r6;
+
+        $i0 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        $i1 = virtualinvoke r1.<androidx.car.app.HostInfo: int getUid()>();
+
+        if $i0 == $i1 goto label2;
+
+        return null;
+
+     label2:
+        $r8 = r2.<android.util.Pair: java.lang.Object second>;
+
+        $r9 = (java.lang.Boolean) $r8;
+
+        return $r9;
+    }
+
+    private void updateCache(androidx.car.app.HostInfo, boolean)
+    {
+        androidx.car.app.validation.HostValidator r0;
+        androidx.car.app.HostInfo r1;
+        boolean z0;
+        java.util.Map $r2;
+        java.lang.String $r3;
+        int $i0;
+        java.lang.Integer $r4;
+        java.lang.Boolean $r5;
+        android.util.Pair $r6;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        r1 := @parameter0: androidx.car.app.HostInfo;
+
+        z0 := @parameter1: boolean;
+
+        $r2 = r0.<androidx.car.app.validation.HostValidator: java.util.Map mCallerChecked>;
+
+        $r3 = virtualinvoke r1.<androidx.car.app.HostInfo: java.lang.String getPackageName()>();
+
+        $i0 = virtualinvoke r1.<androidx.car.app.HostInfo: int getUid()>();
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r5 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(z0);
+
+        $r6 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r4, $r5);
+
+        interfaceinvoke $r2.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r3, $r6);
+
+        return;
+    }
+
+    private static java.security.MessageDigest getMessageDigest()
+    {
+        java.lang.Throwable r0, $r2;
+        java.security.MessageDigest $r1;
+
+     label1:
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA256");
+
+     label2:
+        return $r1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r0 = $r2;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("CarApp.Val", "Could not find SHA256 hash algorithm", r0);
+
+        return null;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    private android.content.pm.Signature[] getSignatures(android.content.pm.PackageInfo)
+    {
+        androidx.car.app.validation.HostValidator r0;
+        android.content.pm.PackageInfo r1;
+        int $i0, $i1;
+        android.content.pm.Signature[] $r2, $r3, $r4, $r5;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        r1 := @parameter0: android.content.pm.PackageInfo;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label1;
+
+        $r5 = staticinvoke <androidx.car.app.validation.HostValidator$Api28Impl: android.content.pm.Signature[] getSignatures(android.content.pm.PackageInfo)>(r1);
+
+        return $r5;
+
+     label1:
+        $r2 = r1.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        if $r2 == null goto label2;
+
+        $r3 = r1.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i1 = lengthof $r3;
+
+        if $i1 == 1 goto label3;
+
+     label2:
+        return null;
+
+     label3:
+        $r4 = r1.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        return $r4;
+    }
+
+    private java.lang.String getDigest(android.content.pm.Signature)
+    {
+        androidx.car.app.validation.HostValidator r0;
+        android.content.pm.Signature r1;
+        byte[] r2, r4, r6;
+        java.security.MessageDigest r3;
+        java.lang.StringBuilder r5, $r7;
+        int i0, $i2, $i3, $i4, i5;
+        byte b1;
+        java.lang.String $r8, $r11;
+        java.lang.Object[] $r9;
+        java.lang.Byte $r10;
+
+        r0 := @this: androidx.car.app.validation.HostValidator;
+
+        r1 := @parameter0: android.content.pm.Signature;
+
+        r2 = virtualinvoke r1.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        r3 = staticinvoke <androidx.car.app.validation.HostValidator: java.security.MessageDigest getMessageDigest()>();
+
+        if r3 != null goto label1;
+
+        return null;
+
+     label1:
+        virtualinvoke r3.<java.security.MessageDigest: void update(byte[])>(r2);
+
+        r4 = virtualinvoke r3.<java.security.MessageDigest: byte[] digest()>();
+
+        $r7 = new java.lang.StringBuilder;
+
+        $i2 = lengthof r4;
+
+        $i3 = $i2 * 3;
+
+        $i4 = $i3 - 1;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(int)>($i4);
+
+        r5 = $r7;
+
+        r6 = r4;
+
+        i0 = lengthof r6;
+
+        i5 = 0;
+
+     label2:
+        if i5 >= i0 goto label3;
+
+        b1 = r6[i5];
+
+        $r9 = newarray (java.lang.Object)[1];
+
+        $r10 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>(b1);
+
+        $r9[0] = $r10;
+
+        $r11 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%02x", $r9);
+
+        virtualinvoke r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        i5 = i5 + 1;
+
+        goto label2;
+
+     label3:
+        $r8 = virtualinvoke r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r8;
+    }
+
+    private static boolean hasPermissionGranted(android.content.pm.PackageInfo, java.lang.String)
+    {
+        android.content.pm.PackageInfo r0;
+        java.lang.String r1, $r8;
+        int[] $r2, $r4, $r5;
+        java.lang.String[] $r3, $r6, $r7;
+        int $i0, $i1, $i2, $i3, i4;
+        boolean $z0;
+
+        r0 := @parameter0: android.content.pm.PackageInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = r0.<android.content.pm.PackageInfo: int[] requestedPermissionsFlags>;
+
+        if $r2 == null goto label1;
+
+        $r3 = r0.<android.content.pm.PackageInfo: java.lang.String[] requestedPermissions>;
+
+        if $r3 != null goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        i4 = 0;
+
+     label3:
+        $r4 = r0.<android.content.pm.PackageInfo: int[] requestedPermissionsFlags>;
+
+        $i0 = lengthof $r4;
+
+        if i4 >= $i0 goto label5;
+
+        $r5 = r0.<android.content.pm.PackageInfo: int[] requestedPermissionsFlags>;
+
+        $i1 = $r5[i4];
+
+        $i2 = $i1 & 2;
+
+        if $i2 == 0 goto label4;
+
+        $r6 = r0.<android.content.pm.PackageInfo: java.lang.String[] requestedPermissions>;
+
+        $i3 = lengthof $r6;
+
+        if i4 >= $i3 goto label4;
+
+        $r7 = r0.<android.content.pm.PackageInfo: java.lang.String[] requestedPermissions>;
+
+        $r8 = $r7[i4];
+
+        $z0 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>($r8);
+
+        if $z0 == 0 goto label4;
+
+        return 1;
+
+     label4:
+        i4 = i4 + 1;
+
+        goto label3;
+
+     label5:
+        return 0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.car.app.validation.HostValidator $r0;
+        java.util.HashMap $r1;
+
+        $r0 = new androidx.car.app.validation.HostValidator;
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        specialinvoke $r0.<androidx.car.app.validation.HostValidator: void <init>(android.content.pm.PackageManager,java.util.Map,boolean)>(null, $r1, 1);
+
+        <androidx.car.app.validation.HostValidator: androidx.car.app.validation.HostValidator ALLOW_ALL_HOSTS_VALIDATOR> = $r0;
+
+        return;
+    }
+
+androidx.car.app.validation.HostValidator$Api28Impl
+    private void <init>()
+    {
+        androidx.car.app.validation.HostValidator$Api28Impl r0;
+
+        r0 := @this: androidx.car.app.validation.HostValidator$Api28Impl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static android.content.pm.Signature[] getSignatures(android.content.pm.PackageInfo)
+    {
+        android.content.pm.PackageInfo r0;
+        android.content.pm.SigningInfo $r1, $r2;
+        android.content.pm.Signature[] $r3;
+
+        r0 := @parameter0: android.content.pm.PackageInfo;
+
+        $r1 = r0.<android.content.pm.PackageInfo: android.content.pm.SigningInfo signingInfo>;
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r2 = r0.<android.content.pm.PackageInfo: android.content.pm.SigningInfo signingInfo>;
+
+        $r3 = virtualinvoke $r2.<android.content.pm.SigningInfo: android.content.pm.Signature[] getSigningCertificateHistory()>();
+
+        return $r3;
+    }
+
+    static android.content.pm.PackageInfo getPackageInfo(android.content.pm.PackageManager, java.lang.String) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        android.content.pm.PackageManager r0;
+        java.lang.String r1;
+        android.content.pm.PackageInfo $r2;
+
+        r0 := @parameter0: android.content.pm.PackageManager;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = virtualinvoke r0.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>(r1, 134221824);
+
+        return $r2;
+    }
+
+androidx.car.app.validation.HostValidator$Builder
+<androidx.car.app.validation.HostValidator$Builder: java.util.Map mAllowedHosts>
+<androidx.car.app.validation.HostValidator$Builder: android.content.Context mContext>
+    public void <init>(android.content.Context)
+    {
+        androidx.car.app.validation.HostValidator$Builder r0;
+        android.content.Context r1;
+        java.util.HashMap $r2;
+
+        r0 := @this: androidx.car.app.validation.HostValidator$Builder;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.car.app.validation.HostValidator$Builder: java.util.Map mAllowedHosts> = $r2;
+
+        r0.<androidx.car.app.validation.HostValidator$Builder: android.content.Context mContext> = r1;
+
+        return;
+    }
+
+    public androidx.car.app.validation.HostValidator$Builder addAllowedHost(java.lang.String, java.lang.String)
+    {
+        androidx.car.app.validation.HostValidator$Builder r0;
+        java.lang.String r1, r2;
+        java.util.Map $r5, $r8;
+        java.lang.Object $r6, r10;
+        java.util.ArrayList r11;
+        java.util.List r12;
+
+        r0 := @this: androidx.car.app.validation.HostValidator$Builder;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>(r1);
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>(r2);
+
+        $r5 = r0.<androidx.car.app.validation.HostValidator$Builder: java.util.Map mAllowedHosts>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        r10 = (java.util.List) $r6;
+
+        if r10 != null goto label1;
+
+        r11 = new java.util.ArrayList;
+
+        specialinvoke r11.<java.util.ArrayList: void <init>()>();
+
+        r10 = r11;
+
+        $r8 = r0.<androidx.car.app.validation.HostValidator$Builder: java.util.Map mAllowedHosts>;
+
+        interfaceinvoke $r8.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r10);
+
+     label1:
+        r12 = (java.util.List) r10;
+
+        interfaceinvoke r12.<java.util.List: boolean add(java.lang.Object)>(r2);
+
+        return r0;
+    }
+
+    public androidx.car.app.validation.HostValidator$Builder addAllowedHosts(int)
+    {
+        androidx.car.app.validation.HostValidator$Builder r0;
+        int i0, i1, $i2, i3;
+        android.content.res.Resources r1;
+        java.lang.String[] r2, r3, r5;
+        java.lang.String r4, $r7, $r8, $r9, $r10, $r17, $r22;
+        android.content.Context $r6;
+        java.lang.IllegalArgumentException $r12, $r18;
+        java.lang.StringBuilder $r13, $r14, $r15, $r16, $r19, $r20, $r21;
+
+        r0 := @this: androidx.car.app.validation.HostValidator$Builder;
+
+        i0 := @parameter0: int;
+
+        $r6 = r0.<androidx.car.app.validation.HostValidator$Builder: android.content.Context mContext>;
+
+        r1 = virtualinvoke $r6.<android.content.Context: android.content.res.Resources getResources()>();
+
+        r2 = virtualinvoke r1.<android.content.res.Resources: java.lang.String[] getStringArray(int)>(i0);
+
+        if r2 != null goto label1;
+
+        $r18 = new java.lang.IllegalArgumentException;
+
+        $r19 = new java.lang.StringBuilder;
+
+        specialinvoke $r19.<java.lang.StringBuilder: void <init>()>();
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid allowlist res id: ");
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r18.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r22);
+
+        throw $r18;
+
+     label1:
+        r3 = r2;
+
+        i1 = lengthof r3;
+
+        i3 = 0;
+
+     label2:
+        if i3 >= i1 goto label4;
+
+        r4 = r3[i3];
+
+        r5 = virtualinvoke r4.<java.lang.String: java.lang.String[] split(java.lang.String,int)>(",", -1);
+
+        $i2 = lengthof r5;
+
+        if $i2 == 2 goto label3;
+
+        $r12 = new java.lang.IllegalArgumentException;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid allowed host entry: \'");
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\'");
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r12.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r17);
+
+        throw $r12;
+
+     label3:
+        $r7 = r5[1];
+
+        $r8 = specialinvoke r0.<androidx.car.app.validation.HostValidator$Builder: java.lang.String cleanUp(java.lang.String)>($r7);
+
+        $r9 = r5[0];
+
+        $r10 = specialinvoke r0.<androidx.car.app.validation.HostValidator$Builder: java.lang.String cleanUp(java.lang.String)>($r9);
+
+        virtualinvoke r0.<androidx.car.app.validation.HostValidator$Builder: androidx.car.app.validation.HostValidator$Builder addAllowedHost(java.lang.String,java.lang.String)>($r8, $r10);
+
+        i3 = i3 + 1;
+
+        goto label2;
+
+     label4:
+        return r0;
+    }
+
+    public androidx.car.app.validation.HostValidator build()
+    {
+        androidx.car.app.validation.HostValidator$Builder r0;
+        androidx.car.app.validation.HostValidator $r1;
+        android.content.Context $r2;
+        android.content.pm.PackageManager $r3;
+        java.util.Map $r4;
+
+        r0 := @this: androidx.car.app.validation.HostValidator$Builder;
+
+        $r1 = new androidx.car.app.validation.HostValidator;
+
+        $r2 = r0.<androidx.car.app.validation.HostValidator$Builder: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r4 = r0.<androidx.car.app.validation.HostValidator$Builder: java.util.Map mAllowedHosts>;
+
+        specialinvoke $r1.<androidx.car.app.validation.HostValidator: void <init>(android.content.pm.PackageManager,java.util.Map,boolean)>($r3, $r4, 0);
+
+        return $r1;
+    }
+
+    private java.lang.String cleanUp(java.lang.String)
+    {
+        androidx.car.app.validation.HostValidator$Builder r0;
+        java.lang.String r1, $r3, $r4;
+        java.util.Locale $r2;
+
+        r0 := @this: androidx.car.app.validation.HostValidator$Builder;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = <java.util.Locale: java.util.Locale US>;
+
+        $r3 = virtualinvoke r1.<java.lang.String: java.lang.String toLowerCase(java.util.Locale)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(" ", "");
+
+        return $r4;
+    }
+

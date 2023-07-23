@@ -1,0 +1,1098 @@
+androidx.media3.extractor.ts.PsExtractor
+<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ExtractorsFactory FACTORY>
+<androidx.media3.extractor.ts.PsExtractor: int PACK_START_CODE>
+<androidx.media3.extractor.ts.PsExtractor: int SYSTEM_HEADER_START_CODE>
+<androidx.media3.extractor.ts.PsExtractor: int PACKET_START_CODE_PREFIX>
+<androidx.media3.extractor.ts.PsExtractor: int MPEG_PROGRAM_END_CODE>
+<androidx.media3.extractor.ts.PsExtractor: int MAX_STREAM_ID_PLUS_ONE>
+<androidx.media3.extractor.ts.PsExtractor: long MAX_SEARCH_LENGTH>
+<androidx.media3.extractor.ts.PsExtractor: long MAX_SEARCH_LENGTH_AFTER_AUDIO_AND_VIDEO_FOUND>
+<androidx.media3.extractor.ts.PsExtractor: int PRIVATE_STREAM_1>
+<androidx.media3.extractor.ts.PsExtractor: int AUDIO_STREAM>
+<androidx.media3.extractor.ts.PsExtractor: int AUDIO_STREAM_MASK>
+<androidx.media3.extractor.ts.PsExtractor: int VIDEO_STREAM>
+<androidx.media3.extractor.ts.PsExtractor: int VIDEO_STREAM_MASK>
+<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.TimestampAdjuster timestampAdjuster>
+<androidx.media3.extractor.ts.PsExtractor: android.util.SparseArray psPayloadReaders>
+<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>
+<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsDurationReader durationReader>
+<androidx.media3.extractor.ts.PsExtractor: boolean foundAllTracks>
+<androidx.media3.extractor.ts.PsExtractor: boolean foundAudioTrack>
+<androidx.media3.extractor.ts.PsExtractor: boolean foundVideoTrack>
+<androidx.media3.extractor.ts.PsExtractor: long lastTrackPosition>
+<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsBinarySearchSeeker psBinarySearchSeeker>
+<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ExtractorOutput output>
+<androidx.media3.extractor.ts.PsExtractor: boolean hasOutputSeekMap>
+    public void <init>()
+    {
+        androidx.media3.extractor.ts.PsExtractor r0;
+        androidx.media3.common.util.TimestampAdjuster $r1;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor;
+
+        $r1 = new androidx.media3.common.util.TimestampAdjuster;
+
+        specialinvoke $r1.<androidx.media3.common.util.TimestampAdjuster: void <init>(long)>(0L);
+
+        specialinvoke r0.<androidx.media3.extractor.ts.PsExtractor: void <init>(androidx.media3.common.util.TimestampAdjuster)>($r1);
+
+        return;
+    }
+
+    public void <init>(androidx.media3.common.util.TimestampAdjuster)
+    {
+        androidx.media3.extractor.ts.PsExtractor r0;
+        androidx.media3.common.util.TimestampAdjuster r1;
+        androidx.media3.common.util.ParsableByteArray $r2;
+        android.util.SparseArray $r3;
+        androidx.media3.extractor.ts.PsDurationReader $r4;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor;
+
+        r1 := @parameter0: androidx.media3.common.util.TimestampAdjuster;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.TimestampAdjuster timestampAdjuster> = r1;
+
+        $r2 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(4096);
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer> = $r2;
+
+        $r3 = new android.util.SparseArray;
+
+        specialinvoke $r3.<android.util.SparseArray: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: android.util.SparseArray psPayloadReaders> = $r3;
+
+        $r4 = new androidx.media3.extractor.ts.PsDurationReader;
+
+        specialinvoke $r4.<androidx.media3.extractor.ts.PsDurationReader: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsDurationReader durationReader> = $r4;
+
+        return;
+    }
+
+    public boolean sniff(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ts.PsExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        byte[] r2;
+        byte b0, $b1, $b3, $b7, $b11, $b15, $b17, $b18, $b19, $b20, $b21, $b22, $b23, $b24, $b25, $b26, $b28, $b32;
+        short $s2, $s4, $s8, $s12, $s16, $s27, $s29, $s33;
+        int $i5, $i6, $i9, $i10, $i13, $i14, $i30, $i31, $i34, $i35;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 = newarray (byte)[14];
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>(r2, 0, 14);
+
+        $b1 = r2[0];
+
+        $s2 = $b1 & 255;
+
+        $i6 = $s2 << 24;
+
+        $b3 = r2[1];
+
+        $s4 = $b3 & 255;
+
+        $i5 = $s4 << 16;
+
+        $i10 = $i6 | $i5;
+
+        $b7 = r2[2];
+
+        $s8 = $b7 & 255;
+
+        $i9 = $s8 << 8;
+
+        $i13 = $i10 | $i9;
+
+        $b11 = r2[3];
+
+        $s12 = $b11 & 255;
+
+        $i14 = $i13 | $s12;
+
+        if 442 == $i14 goto label1;
+
+        return 0;
+
+     label1:
+        $b15 = r2[4];
+
+        $s16 = $b15 & 196;
+
+        if $s16 == 68 goto label2;
+
+        return 0;
+
+     label2:
+        $b17 = r2[6];
+
+        $b18 = $b17 & 4;
+
+        if $b18 == 4 goto label3;
+
+        return 0;
+
+     label3:
+        $b19 = r2[8];
+
+        $b20 = $b19 & 4;
+
+        if $b20 == 4 goto label4;
+
+        return 0;
+
+     label4:
+        $b21 = r2[9];
+
+        $b22 = $b21 & 1;
+
+        if $b22 == 1 goto label5;
+
+        return 0;
+
+     label5:
+        $b23 = r2[12];
+
+        $b24 = $b23 & 3;
+
+        if $b24 == 3 goto label6;
+
+        return 0;
+
+     label6:
+        $b25 = r2[13];
+
+        b0 = $b25 & 7;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(b0);
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>(r2, 0, 3);
+
+        $b26 = r2[0];
+
+        $s27 = $b26 & 255;
+
+        $i31 = $s27 << 16;
+
+        $b28 = r2[1];
+
+        $s29 = $b28 & 255;
+
+        $i30 = $s29 << 8;
+
+        $i34 = $i31 | $i30;
+
+        $b32 = r2[2];
+
+        $s33 = $b32 & 255;
+
+        $i35 = $i34 | $s33;
+
+        if 1 != $i35 goto label7;
+
+        $z0 = 1;
+
+        goto label8;
+
+     label7:
+        $z0 = 0;
+
+     label8:
+        return $z0;
+    }
+
+    public void init(androidx.media3.extractor.ExtractorOutput)
+    {
+        androidx.media3.extractor.ts.PsExtractor r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ExtractorOutput output> = r1;
+
+        return;
+    }
+
+    public void seek(long, long)
+    {
+        androidx.media3.extractor.ts.PsExtractor r0;
+        long l0, l1, $l2, l7;
+        androidx.media3.common.util.TimestampAdjuster $r1, $r7, $r8;
+        byte $b3, $b4, $b5, $b6;
+        androidx.media3.extractor.ts.PsBinarySearchSeeker $r2, $r6;
+        android.util.SparseArray $r3, $r9;
+        java.lang.Object $r4;
+        androidx.media3.extractor.ts.PsExtractor$PesReader $r5;
+        boolean $z0, z1, $z2;
+        int i8, $i9;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.TimestampAdjuster timestampAdjuster>;
+
+        $l2 = virtualinvoke $r1.<androidx.media3.common.util.TimestampAdjuster: long getTimestampOffsetUs()>();
+
+        $b3 = $l2 cmp -9223372036854775807L;
+
+        if $b3 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        z1 = $z0;
+
+        if z1 != 0 goto label5;
+
+        $r8 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.TimestampAdjuster timestampAdjuster>;
+
+        l7 = virtualinvoke $r8.<androidx.media3.common.util.TimestampAdjuster: long getFirstSampleTimestampUs()>();
+
+        $b4 = l7 cmp -9223372036854775807L;
+
+        if $b4 == 0 goto label3;
+
+        $b5 = l7 cmp 0L;
+
+        if $b5 == 0 goto label3;
+
+        $b6 = l7 cmp l1;
+
+        if $b6 == 0 goto label3;
+
+        $z2 = 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        z1 = $z2;
+
+     label5:
+        if z1 == 0 goto label6;
+
+        $r7 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.TimestampAdjuster timestampAdjuster>;
+
+        virtualinvoke $r7.<androidx.media3.common.util.TimestampAdjuster: void reset(long)>(l1);
+
+     label6:
+        $r2 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsBinarySearchSeeker psBinarySearchSeeker>;
+
+        if $r2 == null goto label7;
+
+        $r6 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsBinarySearchSeeker psBinarySearchSeeker>;
+
+        virtualinvoke $r6.<androidx.media3.extractor.ts.PsBinarySearchSeeker: void setSeekTargetUs(long)>(l1);
+
+     label7:
+        i8 = 0;
+
+     label8:
+        $r9 = r0.<androidx.media3.extractor.ts.PsExtractor: android.util.SparseArray psPayloadReaders>;
+
+        $i9 = virtualinvoke $r9.<android.util.SparseArray: int size()>();
+
+        if i8 >= $i9 goto label9;
+
+        $r3 = r0.<androidx.media3.extractor.ts.PsExtractor: android.util.SparseArray psPayloadReaders>;
+
+        $r4 = virtualinvoke $r3.<android.util.SparseArray: java.lang.Object valueAt(int)>(i8);
+
+        $r5 = (androidx.media3.extractor.ts.PsExtractor$PesReader) $r4;
+
+        virtualinvoke $r5.<androidx.media3.extractor.ts.PsExtractor$PesReader: void seek()>();
+
+        i8 = i8 + 1;
+
+        goto label8;
+
+     label9:
+        return;
+    }
+
+    public void release()
+    {
+        androidx.media3.extractor.ts.PsExtractor r0;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor;
+
+        return;
+    }
+
+    public int read(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.PositionHolder) throws java.io.IOException
+    {
+        androidx.media3.extractor.ts.PsExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.PositionHolder r2;
+        long l0, l1, $l9, $l12, $l13, $l14, $l19, $l22, $l26, l27, $l28;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7;
+        int i2, $i6, $i7, $i8, $i10, $i11, $i15, $i16, $i17, $i20, $i21, i23, i24, i25, i30, i31;
+        androidx.media3.extractor.ExtractorOutput $r3, $r19, $r21;
+        byte $b3, $b4, $b5, $b18, $b29;
+        androidx.media3.extractor.ts.PsBinarySearchSeeker $r5, $r36, $r37;
+        androidx.media3.common.util.ParsableByteArray $r6, $r8, $r9, $r12, $r13, $r15, $r16, $r17, $r18, $r28, $r30, $r31, $r32, $r34, $r35, $r43, $r45, $r46;
+        byte[] $r7, $r14, $r29, $r33, $r44;
+        android.util.SparseArray $r10, $r24;
+        java.lang.Object $r11;
+        androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator $r20, r42;
+        androidx.media3.extractor.ts.PsExtractor$PesReader $r22, r40;
+        androidx.media3.common.util.TimestampAdjuster $r23;
+        androidx.media3.extractor.ts.H262Reader $r25;
+        androidx.media3.extractor.ts.MpegAudioReader $r26;
+        androidx.media3.extractor.ts.Ac3Reader $r27;
+        androidx.media3.extractor.ts.PsDurationReader $r38, $r39;
+        androidx.media3.extractor.ts.ElementaryStreamReader r41;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: androidx.media3.extractor.PositionHolder;
+
+        $r3 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ExtractorOutput output>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r3);
+
+        l0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        $b3 = l0 cmp -1L;
+
+        if $b3 == 0 goto label01;
+
+        $z6 = 1;
+
+        goto label02;
+
+     label01:
+        $z6 = 0;
+
+     label02:
+        z0 = $z6;
+
+        if z0 == 0 goto label03;
+
+        $r38 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsDurationReader durationReader>;
+
+        $z5 = virtualinvoke $r38.<androidx.media3.extractor.ts.PsDurationReader: boolean isDurationReadFinished()>();
+
+        if $z5 != 0 goto label03;
+
+        $r39 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsDurationReader durationReader>;
+
+        $i21 = virtualinvoke $r39.<androidx.media3.extractor.ts.PsDurationReader: int readDuration(androidx.media3.extractor.ExtractorInput,androidx.media3.extractor.PositionHolder)>(r1, r2);
+
+        return $i21;
+
+     label03:
+        specialinvoke r0.<androidx.media3.extractor.ts.PsExtractor: void maybeOutputSeekMap(long)>(l0);
+
+        $r5 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsBinarySearchSeeker psBinarySearchSeeker>;
+
+        if $r5 == null goto label04;
+
+        $r36 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsBinarySearchSeeker psBinarySearchSeeker>;
+
+        $z4 = virtualinvoke $r36.<androidx.media3.extractor.ts.PsBinarySearchSeeker: boolean isSeeking()>();
+
+        if $z4 == 0 goto label04;
+
+        $r37 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsBinarySearchSeeker psBinarySearchSeeker>;
+
+        $i20 = virtualinvoke $r37.<androidx.media3.extractor.ts.PsBinarySearchSeeker: int handlePendingSeek(androidx.media3.extractor.ExtractorInput,androidx.media3.extractor.PositionHolder)>(r1, r2);
+
+        return $i20;
+
+     label04:
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $b4 = l0 cmp -1L;
+
+        if $b4 == 0 goto label05;
+
+        $l19 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPeekPosition()>();
+
+        $l22 = l0 - $l19;
+
+        goto label06;
+
+     label05:
+        $l22 = -1L;
+
+     label06:
+        l1 = $l22;
+
+        $b5 = l1 cmp -1L;
+
+        if $b5 == 0 goto label07;
+
+        $b18 = l1 cmp 4L;
+
+        if $b18 >= 0 goto label07;
+
+        return -1;
+
+     label07:
+        $r6 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        $r7 = virtualinvoke $r6.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $z1 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: boolean peekFully(byte[],int,int,boolean)>($r7, 0, 4, 1);
+
+        if $z1 != 0 goto label08;
+
+        return -1;
+
+     label08:
+        $r8 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        virtualinvoke $r8.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r9 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        i2 = virtualinvoke $r9.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        if i2 != 441 goto label09;
+
+        return -1;
+
+     label09:
+        if i2 != 442 goto label10;
+
+        $r32 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        $r33 = virtualinvoke $r32.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r33, 0, 10);
+
+        $r34 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        virtualinvoke $r34.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(9);
+
+        $r35 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        $i16 = virtualinvoke $r35.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        i23 = $i16 & 7;
+
+        $i17 = i23 + 14;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i17);
+
+        return 0;
+
+     label10:
+        if i2 != 443 goto label11;
+
+        $r28 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        $r29 = virtualinvoke $r28.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r29, 0, 2);
+
+        $r30 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        virtualinvoke $r30.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r31 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        i24 = virtualinvoke $r31.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        $i15 = i24 + 6;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i15);
+
+        return 0;
+
+     label11:
+        $i6 = i2 & -256;
+
+        $i7 = $i6 >> 8;
+
+        if $i7 == 1 goto label12;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>(1);
+
+        return 0;
+
+     label12:
+        i25 = i2 & 255;
+
+        $r10 = r0.<androidx.media3.extractor.ts.PsExtractor: android.util.SparseArray psPayloadReaders>;
+
+        $r11 = virtualinvoke $r10.<android.util.SparseArray: java.lang.Object get(int)>(i25);
+
+        r40 = (androidx.media3.extractor.ts.PsExtractor$PesReader) $r11;
+
+        $z2 = r0.<androidx.media3.extractor.ts.PsExtractor: boolean foundAllTracks>;
+
+        if $z2 != 0 goto label19;
+
+        if r40 != null goto label16;
+
+        r41 = null;
+
+        if i25 != 189 goto label13;
+
+        $r27 = new androidx.media3.extractor.ts.Ac3Reader;
+
+        specialinvoke $r27.<androidx.media3.extractor.ts.Ac3Reader: void <init>()>();
+
+        r41 = $r27;
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: boolean foundAudioTrack> = 1;
+
+        $l14 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: long lastTrackPosition> = $l14;
+
+        goto label15;
+
+     label13:
+        $i10 = i25 & 224;
+
+        if $i10 != 192 goto label14;
+
+        $r26 = new androidx.media3.extractor.ts.MpegAudioReader;
+
+        specialinvoke $r26.<androidx.media3.extractor.ts.MpegAudioReader: void <init>()>();
+
+        r41 = $r26;
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: boolean foundAudioTrack> = 1;
+
+        $l13 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: long lastTrackPosition> = $l13;
+
+        goto label15;
+
+     label14:
+        $i11 = i25 & 240;
+
+        if $i11 != 224 goto label15;
+
+        $r25 = new androidx.media3.extractor.ts.H262Reader;
+
+        specialinvoke $r25.<androidx.media3.extractor.ts.H262Reader: void <init>()>();
+
+        r41 = $r25;
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: boolean foundVideoTrack> = 1;
+
+        $l12 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: long lastTrackPosition> = $l12;
+
+     label15:
+        if r41 == null goto label16;
+
+        $r20 = new androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator;
+
+        specialinvoke $r20.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: void <init>(int,int)>(i25, 256);
+
+        r42 = $r20;
+
+        $r21 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ExtractorOutput output>;
+
+        interfaceinvoke r41.<androidx.media3.extractor.ts.ElementaryStreamReader: void createTracks(androidx.media3.extractor.ExtractorOutput,androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator)>($r21, r42);
+
+        $r22 = new androidx.media3.extractor.ts.PsExtractor$PesReader;
+
+        $r23 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.TimestampAdjuster timestampAdjuster>;
+
+        specialinvoke $r22.<androidx.media3.extractor.ts.PsExtractor$PesReader: void <init>(androidx.media3.extractor.ts.ElementaryStreamReader,androidx.media3.common.util.TimestampAdjuster)>(r41, $r23);
+
+        r40 = $r22;
+
+        $r24 = r0.<androidx.media3.extractor.ts.PsExtractor: android.util.SparseArray psPayloadReaders>;
+
+        virtualinvoke $r24.<android.util.SparseArray: void put(int,java.lang.Object)>(i25, r40);
+
+     label16:
+        $z7 = r0.<androidx.media3.extractor.ts.PsExtractor: boolean foundAudioTrack>;
+
+        if $z7 == 0 goto label17;
+
+        $z3 = r0.<androidx.media3.extractor.ts.PsExtractor: boolean foundVideoTrack>;
+
+        if $z3 == 0 goto label17;
+
+        $l9 = r0.<androidx.media3.extractor.ts.PsExtractor: long lastTrackPosition>;
+
+        $l26 = $l9 + 8192L;
+
+        goto label18;
+
+     label17:
+        $l26 = 1048576L;
+
+     label18:
+        l27 = $l26;
+
+        $l28 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $b29 = $l28 cmp l27;
+
+        if $b29 <= 0 goto label19;
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: boolean foundAllTracks> = 1;
+
+        $r19 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ExtractorOutput output>;
+
+        interfaceinvoke $r19.<androidx.media3.extractor.ExtractorOutput: void endTracks()>();
+
+     label19:
+        $r43 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        $r44 = virtualinvoke $r43.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r44, 0, 2);
+
+        $r45 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        virtualinvoke $r45.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r46 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        i30 = virtualinvoke $r46.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        i31 = i30 + 6;
+
+        if r40 != null goto label20;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>(i31);
+
+        goto label21;
+
+     label20:
+        $r12 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        virtualinvoke $r12.<androidx.media3.common.util.ParsableByteArray: void reset(int)>(i31);
+
+        $r13 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        $r14 = virtualinvoke $r13.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r14, 0, i31);
+
+        $r15 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        virtualinvoke $r15.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(6);
+
+        $r16 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        virtualinvoke r40.<androidx.media3.extractor.ts.PsExtractor$PesReader: void consume(androidx.media3.common.util.ParsableByteArray)>($r16);
+
+        $r18 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        $r17 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.common.util.ParsableByteArray psPacketBuffer>;
+
+        $i8 = virtualinvoke $r17.<androidx.media3.common.util.ParsableByteArray: int capacity()>();
+
+        virtualinvoke $r18.<androidx.media3.common.util.ParsableByteArray: void setLimit(int)>($i8);
+
+     label21:
+        return 0;
+    }
+
+    private void maybeOutputSeekMap(long)
+    {
+        androidx.media3.extractor.ts.PsExtractor r0;
+        long l0, $l1, $l3, $l4;
+        boolean $z0;
+        androidx.media3.extractor.ts.PsDurationReader $r1, $r3, $r6, $r8;
+        byte $b2;
+        androidx.media3.extractor.SeekMap$Unseekable $r2;
+        androidx.media3.extractor.ExtractorOutput $r4, $r10;
+        androidx.media3.extractor.ts.PsBinarySearchSeeker $r5, $r9;
+        androidx.media3.common.util.TimestampAdjuster $r7;
+        androidx.media3.extractor.SeekMap $r11;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor;
+
+        l0 := @parameter0: long;
+
+        $z0 = r0.<androidx.media3.extractor.ts.PsExtractor: boolean hasOutputSeekMap>;
+
+        if $z0 != 0 goto label2;
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: boolean hasOutputSeekMap> = 1;
+
+        $r1 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsDurationReader durationReader>;
+
+        $l1 = virtualinvoke $r1.<androidx.media3.extractor.ts.PsDurationReader: long getDurationUs()>();
+
+        $b2 = $l1 cmp -9223372036854775807L;
+
+        if $b2 == 0 goto label1;
+
+        $r5 = new androidx.media3.extractor.ts.PsBinarySearchSeeker;
+
+        $r6 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsDurationReader durationReader>;
+
+        $r7 = virtualinvoke $r6.<androidx.media3.extractor.ts.PsDurationReader: androidx.media3.common.util.TimestampAdjuster getScrTimestampAdjuster()>();
+
+        $r8 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsDurationReader durationReader>;
+
+        $l4 = virtualinvoke $r8.<androidx.media3.extractor.ts.PsDurationReader: long getDurationUs()>();
+
+        specialinvoke $r5.<androidx.media3.extractor.ts.PsBinarySearchSeeker: void <init>(androidx.media3.common.util.TimestampAdjuster,long,long)>($r7, $l4, l0);
+
+        r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsBinarySearchSeeker psBinarySearchSeeker> = $r5;
+
+        $r10 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ExtractorOutput output>;
+
+        $r9 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsBinarySearchSeeker psBinarySearchSeeker>;
+
+        $r11 = virtualinvoke $r9.<androidx.media3.extractor.ts.PsBinarySearchSeeker: androidx.media3.extractor.SeekMap getSeekMap()>();
+
+        interfaceinvoke $r10.<androidx.media3.extractor.ExtractorOutput: void seekMap(androidx.media3.extractor.SeekMap)>($r11);
+
+        goto label2;
+
+     label1:
+        $r4 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ExtractorOutput output>;
+
+        $r2 = new androidx.media3.extractor.SeekMap$Unseekable;
+
+        $r3 = r0.<androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ts.PsDurationReader durationReader>;
+
+        $l3 = virtualinvoke $r3.<androidx.media3.extractor.ts.PsDurationReader: long getDurationUs()>();
+
+        specialinvoke $r2.<androidx.media3.extractor.SeekMap$Unseekable: void <init>(long)>($l3);
+
+        interfaceinvoke $r4.<androidx.media3.extractor.ExtractorOutput: void seekMap(androidx.media3.extractor.SeekMap)>($r2);
+
+     label2:
+        return;
+    }
+
+    private static androidx.media3.extractor.Extractor[] lambda$static$0()
+    {
+        androidx.media3.extractor.Extractor[] $r0;
+        androidx.media3.extractor.ts.PsExtractor $r1;
+
+        $r0 = newarray (androidx.media3.extractor.Extractor)[1];
+
+        $r1 = new androidx.media3.extractor.ts.PsExtractor;
+
+        specialinvoke $r1.<androidx.media3.extractor.ts.PsExtractor: void <init>()>();
+
+        $r0[0] = $r1;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.media3.extractor.ExtractorsFactory $r0;
+
+        $r0 = dynamicinvoke "createExtractors" <androidx.media3.extractor.ExtractorsFactory ()>() <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: androidx.media3.extractor.Extractor[] __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.Extractor[] lambda$static$0()>, methodtype: androidx.media3.extractor.Extractor[] __METHODTYPE__());
+
+        <androidx.media3.extractor.ts.PsExtractor: androidx.media3.extractor.ExtractorsFactory FACTORY> = $r0;
+
+        return;
+    }
+
+androidx.media3.extractor.ts.PsExtractor$PesReader
+<androidx.media3.extractor.ts.PsExtractor$PesReader: int PES_SCRATCH_SIZE>
+<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.extractor.ts.ElementaryStreamReader pesPayloadReader>
+<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.TimestampAdjuster timestampAdjuster>
+<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>
+<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean ptsFlag>
+<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean dtsFlag>
+<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean seenFirstDts>
+<androidx.media3.extractor.ts.PsExtractor$PesReader: int extendedHeaderLength>
+<androidx.media3.extractor.ts.PsExtractor$PesReader: long timeUs>
+    public void <init>(androidx.media3.extractor.ts.ElementaryStreamReader, androidx.media3.common.util.TimestampAdjuster)
+    {
+        androidx.media3.extractor.ts.PsExtractor$PesReader r0;
+        androidx.media3.extractor.ts.ElementaryStreamReader r1;
+        androidx.media3.common.util.TimestampAdjuster r2;
+        androidx.media3.common.util.ParsableBitArray $r3;
+        byte[] $r4;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor$PesReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ts.ElementaryStreamReader;
+
+        r2 := @parameter1: androidx.media3.common.util.TimestampAdjuster;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.extractor.ts.ElementaryStreamReader pesPayloadReader> = r1;
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.TimestampAdjuster timestampAdjuster> = r2;
+
+        $r3 = new androidx.media3.common.util.ParsableBitArray;
+
+        $r4 = newarray (byte)[64];
+
+        specialinvoke $r3.<androidx.media3.common.util.ParsableBitArray: void <init>(byte[])>($r4);
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch> = $r3;
+
+        return;
+    }
+
+    public void seek()
+    {
+        androidx.media3.extractor.ts.PsExtractor$PesReader r0;
+        androidx.media3.extractor.ts.ElementaryStreamReader $r1;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor$PesReader;
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean seenFirstDts> = 0;
+
+        $r1 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.extractor.ts.ElementaryStreamReader pesPayloadReader>;
+
+        interfaceinvoke $r1.<androidx.media3.extractor.ts.ElementaryStreamReader: void seek()>();
+
+        return;
+    }
+
+    public void consume(androidx.media3.common.util.ParsableByteArray) throws androidx.media3.common.ParserException
+    {
+        androidx.media3.extractor.ts.PsExtractor$PesReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        androidx.media3.common.util.ParsableBitArray $r2, $r4, $r5, $r7;
+        byte[] $r3, $r6;
+        int $i0;
+        long $l1;
+        androidx.media3.extractor.ts.ElementaryStreamReader $r8, $r9, $r10;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor$PesReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        $r2 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $r3 = $r2.<androidx.media3.common.util.ParsableBitArray: byte[] data>;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void readBytes(byte[],int,int)>($r3, 0, 3);
+
+        $r4 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r4.<androidx.media3.common.util.ParsableBitArray: void setPosition(int)>(0);
+
+        specialinvoke r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: void parseHeader()>();
+
+        $r5 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $r6 = $r5.<androidx.media3.common.util.ParsableBitArray: byte[] data>;
+
+        $i0 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: int extendedHeaderLength>;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void readBytes(byte[],int,int)>($r6, 0, $i0);
+
+        $r7 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r7.<androidx.media3.common.util.ParsableBitArray: void setPosition(int)>(0);
+
+        specialinvoke r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: void parseHeaderExtension()>();
+
+        $r8 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.extractor.ts.ElementaryStreamReader pesPayloadReader>;
+
+        $l1 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: long timeUs>;
+
+        interfaceinvoke $r8.<androidx.media3.extractor.ts.ElementaryStreamReader: void packetStarted(long,int)>($l1, 4);
+
+        $r9 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.extractor.ts.ElementaryStreamReader pesPayloadReader>;
+
+        interfaceinvoke $r9.<androidx.media3.extractor.ts.ElementaryStreamReader: void consume(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        $r10 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.extractor.ts.ElementaryStreamReader pesPayloadReader>;
+
+        interfaceinvoke $r10.<androidx.media3.extractor.ts.ElementaryStreamReader: void packetFinished()>();
+
+        return;
+    }
+
+    private void parseHeader()
+    {
+        androidx.media3.extractor.ts.PsExtractor$PesReader r0;
+        androidx.media3.common.util.ParsableBitArray $r1, $r2, $r3, $r4, $r5;
+        boolean $z0, $z1;
+        int $i0;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor$PesReader;
+
+        $r1 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(8);
+
+        $r2 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $z0 = virtualinvoke $r2.<androidx.media3.common.util.ParsableBitArray: boolean readBit()>();
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean ptsFlag> = $z0;
+
+        $r3 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $z1 = virtualinvoke $r3.<androidx.media3.common.util.ParsableBitArray: boolean readBit()>();
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean dtsFlag> = $z1;
+
+        $r4 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r4.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(6);
+
+        $r5 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $i0 = virtualinvoke $r5.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(8);
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: int extendedHeaderLength> = $i0;
+
+        return;
+    }
+
+    private void parseHeaderExtension()
+    {
+        androidx.media3.extractor.ts.PsExtractor$PesReader r0;
+        boolean $z0, $z1, $z2;
+        androidx.media3.common.util.ParsableBitArray $r1, $r2, $r3, $r4, $r5, $r6, $r7, $r8, $r9, $r10, $r11, $r12, $r13, $r14;
+        int $i0, $i2, $i3, $i5, $i7, $i9, $i10, $i12;
+        long $l1, $l4, $l6, $l8, $l11, $l13, l15, l16, l17, l18, l19, l20, $l21;
+        androidx.media3.common.util.TimestampAdjuster $r15, $r16;
+
+        r0 := @this: androidx.media3.extractor.ts.PsExtractor$PesReader;
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: long timeUs> = 0L;
+
+        $z0 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean ptsFlag>;
+
+        if $z0 == 0 goto label2;
+
+        $r1 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r1.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(4);
+
+        $r2 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $i0 = virtualinvoke $r2.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(3);
+
+        $l1 = (long) $i0;
+
+        l15 = $l1 << 30;
+
+        $r3 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r3.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r4 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $i2 = virtualinvoke $r4.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(15);
+
+        $i3 = $i2 << 15;
+
+        $l4 = (long) $i3;
+
+        l16 = l15 | $l4;
+
+        $r5 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r5.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r6 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $i5 = virtualinvoke $r6.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(15);
+
+        $l6 = (long) $i5;
+
+        l17 = l16 | $l6;
+
+        $r7 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r7.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $z1 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean seenFirstDts>;
+
+        if $z1 != 0 goto label1;
+
+        $z2 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean dtsFlag>;
+
+        if $z2 == 0 goto label1;
+
+        $r8 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r8.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(4);
+
+        $r9 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $i7 = virtualinvoke $r9.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(3);
+
+        $l8 = (long) $i7;
+
+        l18 = $l8 << 30;
+
+        $r10 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r10.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r11 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $i9 = virtualinvoke $r11.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(15);
+
+        $i10 = $i9 << 15;
+
+        $l11 = (long) $i10;
+
+        l19 = l18 | $l11;
+
+        $r12 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r12.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r13 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        $i12 = virtualinvoke $r13.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(15);
+
+        $l13 = (long) $i12;
+
+        l20 = l19 | $l13;
+
+        $r14 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.ParsableBitArray pesScratch>;
+
+        virtualinvoke $r14.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(1);
+
+        $r15 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.TimestampAdjuster timestampAdjuster>;
+
+        virtualinvoke $r15.<androidx.media3.common.util.TimestampAdjuster: long adjustTsTimestamp(long)>(l20);
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: boolean seenFirstDts> = 1;
+
+     label1:
+        $r16 = r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: androidx.media3.common.util.TimestampAdjuster timestampAdjuster>;
+
+        $l21 = virtualinvoke $r16.<androidx.media3.common.util.TimestampAdjuster: long adjustTsTimestamp(long)>(l17);
+
+        r0.<androidx.media3.extractor.ts.PsExtractor$PesReader: long timeUs> = $l21;
+
+     label2:
+        return;
+    }
+

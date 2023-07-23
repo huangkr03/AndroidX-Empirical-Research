@@ -1,0 +1,634 @@
+androidx.tracing.perfetto.security.SafeLibLoader
+<androidx.tracing.perfetto.security.SafeLibLoader: java.util.List approvedLocations>
+    public void <init>(android.content.Context)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader r0;
+        android.content.Context r1;
+        java.io.File[] r2;
+        java.io.File $r3, $r4;
+        java.util.List $r5;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader;
+
+        r1 := @parameter0: android.content.Context;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "context");
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r2 = newarray (java.io.File)[2];
+
+        $r3 = virtualinvoke r1.<android.content.Context: java.io.File getCacheDir()>();
+
+        r2[0] = $r3;
+
+        $r4 = specialinvoke r0.<androidx.tracing.perfetto.security.SafeLibLoader: java.io.File getCodeCacheDir(android.content.Context)>(r1);
+
+        r2[1] = $r4;
+
+        $r5 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List listOfNotNull(java.lang.Object[])>(r2);
+
+        r0.<androidx.tracing.perfetto.security.SafeLibLoader: java.util.List approvedLocations> = $r5;
+
+        return;
+    }
+
+    public final void loadLib(java.io.File, java.util.Map)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader r0;
+        java.io.File r1, r5;
+        java.util.Map r2;
+        java.util.Iterator r3;
+        java.lang.Object r4;
+        boolean $z1, $z2, $z3, $z4, $z5, $z7, $z8;
+        java.util.List $r6, $r17;
+        java.lang.String $r7, $r13, $r20, $r26, $r28, $r29;
+        java.lang.StringBuilder $r10, $r11, $r12, $r16, $r18, $r19, $r24, $r25, r30, r32, r34;
+        java.util.Collection $r21;
+        java.lang.Iterable $r27;
+        java.io.FileNotFoundException r31;
+        androidx.tracing.perfetto.security.UnapprovedLocationException r33;
+        androidx.tracing.perfetto.security.IncorrectChecksumException r35;
+        java.lang.Throwable r36, r37;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader;
+
+        r1 := @parameter0: java.io.File;
+
+        r2 := @parameter1: java.util.Map;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "file");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r2, "abiToSha256Map");
+
+        $z1 = virtualinvoke r1.<java.io.File: boolean exists()>();
+
+        if $z1 != 0 goto label1;
+
+        r31 = new java.io.FileNotFoundException;
+
+        r30 = new java.lang.StringBuilder;
+
+        specialinvoke r30.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cannot locate library file: ");
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r31.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r26);
+
+        throw r31;
+
+     label1:
+        $r6 = r0.<androidx.tracing.perfetto.security.SafeLibLoader: java.util.List approvedLocations>;
+
+        $r27 = (java.lang.Iterable) $r6;
+
+        $z2 = $r27 instanceof java.util.Collection;
+
+        if $z2 == 0 goto label2;
+
+        $r21 = (java.util.Collection) $r27;
+
+        $z5 = interfaceinvoke $r21.<java.util.Collection: boolean isEmpty()>();
+
+        if $z5 == 0 goto label2;
+
+        $z7 = 1;
+
+        goto label5;
+
+     label2:
+        r3 = interfaceinvoke $r27.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z8 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z8 == 0 goto label4;
+
+        r4 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (java.io.File) r4;
+
+        $z4 = specialinvoke r0.<androidx.tracing.perfetto.security.SafeLibLoader: boolean isChildOf(java.io.File,java.io.File)>(r1, r5);
+
+        if $z4 == 0 goto label3;
+
+        $z7 = 0;
+
+        goto label5;
+
+     label4:
+        $z7 = 1;
+
+     label5:
+        if $z7 == 0 goto label6;
+
+        r33 = new androidx.tracing.perfetto.security.UnapprovedLocationException;
+
+        r32 = new java.lang.StringBuilder;
+
+        specialinvoke r32.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("File is located in a path that is not on the approved list of locations. Approved list: ");
+
+        $r17 = r0.<androidx.tracing.perfetto.security.SafeLibLoader: java.util.List approvedLocations>;
+
+        $r18 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r17);
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(46);
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r33.<androidx.tracing.perfetto.security.UnapprovedLocationException: void <init>(java.lang.String)>($r20);
+
+        r36 = (java.lang.Throwable) r33;
+
+        throw r36;
+
+     label6:
+        $r28 = specialinvoke r0.<androidx.tracing.perfetto.security.SafeLibLoader: java.lang.String findAbiAwareSha(java.util.Map)>(r2);
+
+        $r29 = specialinvoke r0.<androidx.tracing.perfetto.security.SafeLibLoader: java.lang.String calcSha256Digest(java.io.File)>(r1);
+
+        $z3 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r29, $r28);
+
+        if $z3 != 0 goto label7;
+
+        r35 = new androidx.tracing.perfetto.security.IncorrectChecksumException;
+
+        r34 = new java.lang.StringBuilder;
+
+        specialinvoke r34.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke r34.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid checksum for file: ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Ensure you are using correct version of the library and clear local caches.");
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r35.<androidx.tracing.perfetto.security.IncorrectChecksumException: void <init>(java.lang.String)>($r13);
+
+        r37 = (java.lang.Throwable) r35;
+
+        throw r37;
+
+     label7:
+        $r7 = virtualinvoke r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        staticinvoke <java.lang.System: void load(java.lang.String)>($r7);
+
+        return;
+    }
+
+    private final java.lang.String findAbiAwareSha(java.util.Map)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader r0;
+        java.util.Map r1, r3;
+        java.lang.String r2, $r5, $r12, $r16;
+        int $i0;
+        java.lang.Object $r4, $r15;
+        java.lang.StringBuilder $r8, $r9, $r10, $r11, r17;
+        java.lang.String[] $r13;
+        java.lang.Object[] $r14;
+        androidx.tracing.perfetto.security.MissingChecksumException r18;
+        java.lang.Throwable r19;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader;
+
+        r1 := @parameter0: java.util.Map;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 21 goto label1;
+
+        $r13 = <android.os.Build: java.lang.String[] SUPPORTED_ABIS>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r13, "SUPPORTED_ABIS");
+
+        $r14 = (java.lang.Object[]) $r13;
+
+        $r15 = staticinvoke <kotlin.collections.ArraysKt: java.lang.Object first(java.lang.Object[])>($r14);
+
+        $r16 = (java.lang.String) $r15;
+
+        goto label2;
+
+     label1:
+        $r16 = <android.os.Build: java.lang.String CPU_ABI>;
+
+     label2:
+        r2 = $r16;
+
+        r3 = r1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r2, "abi");
+
+        $r4 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>(r2);
+
+        if $r4 != null goto label3;
+
+        r18 = new androidx.tracing.perfetto.security.MissingChecksumException;
+
+        r17 = new java.lang.StringBuilder;
+
+        specialinvoke r17.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cannot locate checksum for ABI: ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" in ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r18.<androidx.tracing.perfetto.security.MissingChecksumException: void <init>(java.lang.String)>($r12);
+
+        r19 = (java.lang.Throwable) r18;
+
+        throw r19;
+
+     label3:
+        $r5 = (java.lang.String) $r4;
+
+        return $r5;
+    }
+
+    private final java.lang.String calcSha256Digest(java.io.File)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader r0;
+        java.io.File r1;
+        java.security.MessageDigest r2;
+        byte[] r3, $r5;
+        int i0;
+        java.io.FileInputStream $r4;
+        boolean $z0;
+        androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2 $r6;
+        kotlin.jvm.functions.Function1 $r7;
+        java.lang.CharSequence $r8;
+        java.lang.String $r9;
+        java.lang.Throwable $r10, $r11, r17, r18, r19;
+        java.io.InputStream r12;
+        java.io.BufferedInputStream $r13, r15;
+        java.io.Closeable r14;
+        kotlin.Unit r16;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader;
+
+        r1 := @parameter0: java.io.File;
+
+        r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA-256");
+
+        r3 = newarray (byte)[1024];
+
+        $r4 = new java.io.FileInputStream;
+
+        specialinvoke $r4.<java.io.FileInputStream: void <init>(java.io.File)>(r1);
+
+        r12 = (java.io.InputStream) $r4;
+
+        $z0 = r12 instanceof java.io.BufferedInputStream;
+
+        if $z0 == 0 goto label01;
+
+        $r13 = (java.io.BufferedInputStream) r12;
+
+        goto label02;
+
+     label01:
+        $r13 = new java.io.BufferedInputStream;
+
+        specialinvoke $r13.<java.io.BufferedInputStream: void <init>(java.io.InputStream,int)>(r12, 8192);
+
+     label02:
+        r14 = (java.io.Closeable) $r13;
+
+     label03:
+        r15 = (java.io.BufferedInputStream) r14;
+
+     label04:
+        i0 = virtualinvoke r15.<java.io.BufferedInputStream: int read(byte[])>(r3);
+
+        if i0 <= 0 goto label05;
+
+        virtualinvoke r2.<java.security.MessageDigest: void update(byte[],int,int)>(r3, 0, i0);
+
+        goto label04;
+
+     label05:
+        r16 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label06:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r14, null);
+
+        goto label10;
+
+     label07:
+        $r11 := @caughtexception;
+
+        r17 = $r11;
+
+        r18 = r17;
+
+        throw r17;
+
+     label08:
+        $r10 := @caughtexception;
+
+        r19 = $r10;
+
+     label09:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r14, r18);
+
+        throw r19;
+
+     label10:
+        $r5 = virtualinvoke r2.<java.security.MessageDigest: byte[] digest()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r5, "digest.digest()");
+
+        $r8 = (java.lang.CharSequence) "";
+
+        $r6 = <androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2: androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2 INSTANCE>;
+
+        $r7 = (kotlin.jvm.functions.Function1) $r6;
+
+        $r9 = staticinvoke <kotlin.collections.ArraysKt: java.lang.String joinToString$default(byte[],java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,int,java.lang.CharSequence,kotlin.jvm.functions.Function1,int,java.lang.Object)>($r5, $r8, null, null, 0, null, $r7, 30, null);
+
+        return $r9;
+
+        catch java.lang.Throwable from label03 to label06 with label07;
+        catch java.lang.Throwable from label07 to label08 with label08;
+        catch java.lang.Throwable from label08 to label09 with label08;
+    }
+
+    private final boolean isChildOf(java.io.File, java.io.File)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader r0;
+        java.io.File $r1, r2, r6;
+        kotlin.sequences.Sequence $r3;
+        java.util.Iterator r4;
+        java.lang.Object r5;
+        androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1 $r7;
+        kotlin.jvm.functions.Function1 $r8;
+        boolean $z2, $z3, $z4;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader;
+
+        $r1 := @parameter0: java.io.File;
+
+        r2 := @parameter1: java.io.File;
+
+        $r7 = <androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1: androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1 INSTANCE>;
+
+        $r8 = (kotlin.jvm.functions.Function1) $r7;
+
+        $r3 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence generateSequence(java.lang.Object,kotlin.jvm.functions.Function1)>($r1, $r8);
+
+        r4 = interfaceinvoke $r3.<kotlin.sequences.Sequence: java.util.Iterator iterator()>();
+
+     label1:
+        $z2 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label2;
+
+        r5 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (java.io.File) r5;
+
+        $z3 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>(r6, r2);
+
+        if $z3 == 0 goto label1;
+
+        $z4 = 1;
+
+        goto label3;
+
+     label2:
+        $z4 = 0;
+
+     label3:
+        return $z4;
+    }
+
+    private final java.io.File getCodeCacheDir(android.content.Context)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader r0;
+        android.content.Context r1;
+        int $i0;
+        androidx.tracing.perfetto.security.SafeLibLoader$Impl21 $r2;
+        java.io.File $r3;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader;
+
+        r1 := @parameter0: android.content.Context;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 21 goto label1;
+
+        $r2 = <androidx.tracing.perfetto.security.SafeLibLoader$Impl21: androidx.tracing.perfetto.security.SafeLibLoader$Impl21 INSTANCE>;
+
+        $r3 = virtualinvoke $r2.<androidx.tracing.perfetto.security.SafeLibLoader$Impl21: java.io.File getCodeCacheDir(android.content.Context)>(r1);
+
+        goto label2;
+
+     label1:
+        $r3 = null;
+
+     label2:
+        return $r3;
+    }
+
+androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2
+<androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2: androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2 INSTANCE>
+    void <init>()
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2 r0;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2;
+
+        specialinvoke r0.<kotlin.jvm.internal.Lambda: void <init>(int)>(1);
+
+        return;
+    }
+
+    public final java.lang.CharSequence invoke(byte)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2 r0;
+        byte b0;
+        java.lang.String r1, $r4;
+        java.lang.Byte $r2;
+        int $i1;
+        java.lang.Object[] $r3, r6, r7;
+        java.lang.CharSequence $r5;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2;
+
+        b0 := @parameter0: byte;
+
+        r1 = "%02x";
+
+        r6 = newarray (java.lang.Object)[1];
+
+        $r2 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>(b0);
+
+        r6[0] = $r2;
+
+        r7 = r6;
+
+        $i1 = lengthof r7;
+
+        $r3 = staticinvoke <java.util.Arrays: java.lang.Object[] copyOf(java.lang.Object[],int)>(r7, $i1);
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(r1, $r3);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r4, "format(this, *args)");
+
+        $r5 = (java.lang.CharSequence) $r4;
+
+        return $r5;
+    }
+
+    public volatile java.lang.Object invoke(java.lang.Object)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2 r0;
+        java.lang.Object r1;
+        java.lang.Number $r2;
+        byte $b0;
+        java.lang.CharSequence $r3;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Number) r1;
+
+        $b0 = virtualinvoke $r2.<java.lang.Number: byte byteValue()>();
+
+        $r3 = virtualinvoke r0.<androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2: java.lang.CharSequence invoke(byte)>($b0);
+
+        return $r3;
+    }
+
+    static void <clinit>()
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2 $r0;
+
+        $r0 = new androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2;
+
+        specialinvoke $r0.<androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2: void <init>()>();
+
+        <androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2: androidx.tracing.perfetto.security.SafeLibLoader$calcSha256Digest$2 INSTANCE> = $r0;
+
+        return;
+    }
+
+androidx.tracing.perfetto.security.SafeLibLoader$Impl21
+<androidx.tracing.perfetto.security.SafeLibLoader$Impl21: androidx.tracing.perfetto.security.SafeLibLoader$Impl21 INSTANCE>
+    private void <init>()
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$Impl21 r0;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader$Impl21;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public final java.io.File getCodeCacheDir(android.content.Context)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$Impl21 r0;
+        android.content.Context r1;
+        java.io.File $r2;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader$Impl21;
+
+        r1 := @parameter0: android.content.Context;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "context");
+
+        $r2 = virtualinvoke r1.<android.content.Context: java.io.File getCodeCacheDir()>();
+
+        return $r2;
+    }
+
+    static void <clinit>()
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$Impl21 $r0;
+
+        $r0 = new androidx.tracing.perfetto.security.SafeLibLoader$Impl21;
+
+        specialinvoke $r0.<androidx.tracing.perfetto.security.SafeLibLoader$Impl21: void <init>()>();
+
+        <androidx.tracing.perfetto.security.SafeLibLoader$Impl21: androidx.tracing.perfetto.security.SafeLibLoader$Impl21 INSTANCE> = $r0;
+
+        return;
+    }
+
+androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1
+<androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1: androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1 INSTANCE>
+    void <init>()
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1 r0;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1;
+
+        specialinvoke r0.<kotlin.jvm.internal.Lambda: void <init>(int)>(1);
+
+        return;
+    }
+
+    public final java.io.File invoke(java.io.File)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1 r0;
+        java.io.File r1, $r2;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1;
+
+        r1 := @parameter0: java.io.File;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "it");
+
+        $r2 = virtualinvoke r1.<java.io.File: java.io.File getParentFile()>();
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object invoke(java.lang.Object)
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1 r0;
+        java.lang.Object r1;
+        java.io.File $r2, $r3;
+
+        r0 := @this: androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.io.File) r1;
+
+        $r3 = virtualinvoke r0.<androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1: java.io.File invoke(java.io.File)>($r2);
+
+        return $r3;
+    }
+
+    static void <clinit>()
+    {
+        androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1 $r0;
+
+        $r0 = new androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1;
+
+        specialinvoke $r0.<androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1: void <init>()>();
+
+        <androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1: androidx.tracing.perfetto.security.SafeLibLoader$isChildOf$1 INSTANCE> = $r0;
+
+        return;
+    }
+

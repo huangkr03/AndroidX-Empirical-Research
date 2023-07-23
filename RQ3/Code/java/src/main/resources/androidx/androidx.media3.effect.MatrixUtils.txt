@@ -1,0 +1,678 @@
+androidx.media3.effect.MatrixUtils
+<androidx.media3.effect.MatrixUtils: float[][] NDC_CUBE>
+    public static float[] getGlMatrixArray(android.graphics.Matrix)
+    {
+        android.graphics.Matrix r0;
+        float[] r1, r2, r3;
+
+        r0 := @parameter0: android.graphics.Matrix;
+
+        r1 = newarray (float)[9];
+
+        virtualinvoke r0.<android.graphics.Matrix: void getValues(float[])>(r1);
+
+        r2 = staticinvoke <androidx.media3.effect.MatrixUtils: float[] getMatrix4x4Array(float[])>(r1);
+
+        r3 = newarray (float)[16];
+
+        staticinvoke <android.opengl.Matrix: void transposeM(float[],int,float[],int)>(r3, 0, r2, 0);
+
+        return r3;
+    }
+
+    private static float[] getMatrix4x4Array(float[])
+    {
+        float[] r0, r1;
+        int i0, i1, $i2, $i3, $i4, $i5, i6, i7, $i8, $i9;
+        float $f0;
+
+        r0 := @parameter0: float[];
+
+        r1 = newarray (float)[16];
+
+        r1[10] = 1.0F;
+
+        i6 = 0;
+
+     label1:
+        if i6 >= 3 goto label8;
+
+        i7 = 0;
+
+     label2:
+        if i7 >= 3 goto label7;
+
+        if i6 != 2 goto label3;
+
+        $i8 = 3;
+
+        goto label4;
+
+     label3:
+        $i8 = i6;
+
+     label4:
+        i0 = $i8;
+
+        if i7 != 2 goto label5;
+
+        $i9 = 3;
+
+        goto label6;
+
+     label5:
+        $i9 = i7;
+
+     label6:
+        i1 = $i9;
+
+        $i2 = i0 * 4;
+
+        $i5 = $i2 + i1;
+
+        $i3 = i6 * 3;
+
+        $i4 = $i3 + i7;
+
+        $f0 = r0[$i4];
+
+        r1[$i5] = $f0;
+
+        i7 = i7 + 1;
+
+        goto label2;
+
+     label7:
+        i6 = i6 + 1;
+
+        goto label1;
+
+     label8:
+        return r1;
+    }
+
+    public static com.google.common.collect.ImmutableList clipConvexPolygonToNdcRange(com.google.common.collect.ImmutableList)
+    {
+        com.google.common.collect.ImmutableList r0, r3, $r7;
+        float[][] r1;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8, i9;
+        float[] r2, r4, r5, r15, r16;
+        com.google.common.collect.ImmutableList$Builder $r6, $r8, r14;
+        java.lang.Object $r9, $r10;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+
+        r0 := @parameter0: com.google.common.collect.ImmutableList;
+
+        $i1 = virtualinvoke r0.<com.google.common.collect.ImmutableList: int size()>();
+
+        if $i1 < 3 goto label1;
+
+        $z5 = 1;
+
+        goto label2;
+
+     label1:
+        $z5 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z5, "A polygon must have at least 3 vertices.");
+
+        $r6 = new com.google.common.collect.ImmutableList$Builder;
+
+        specialinvoke $r6.<com.google.common.collect.ImmutableList$Builder: void <init>()>();
+
+        r14 = virtualinvoke $r6.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList$Builder addAll(java.lang.Iterable)>(r0);
+
+        r1 = <androidx.media3.effect.MatrixUtils: float[][] NDC_CUBE>;
+
+        i0 = lengthof r1;
+
+        i8 = 0;
+
+     label3:
+        if i8 >= i0 goto label9;
+
+        r2 = r1[i8];
+
+        r3 = virtualinvoke r14.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList build()>();
+
+        $r8 = new com.google.common.collect.ImmutableList$Builder;
+
+        specialinvoke $r8.<com.google.common.collect.ImmutableList$Builder: void <init>()>();
+
+        r14 = $r8;
+
+        i9 = 0;
+
+     label4:
+        $i2 = virtualinvoke r3.<com.google.common.collect.ImmutableList: int size()>();
+
+        if i9 >= $i2 goto label8;
+
+        $r9 = virtualinvoke r3.<com.google.common.collect.ImmutableList: java.lang.Object get(int)>(i9);
+
+        r4 = (float[]) $r9;
+
+        $i3 = virtualinvoke r3.<com.google.common.collect.ImmutableList: int size()>();
+
+        $i4 = $i3 + i9;
+
+        $i5 = $i4 - 1;
+
+        $i6 = virtualinvoke r3.<com.google.common.collect.ImmutableList: int size()>();
+
+        $i7 = $i5 % $i6;
+
+        $r10 = virtualinvoke r3.<com.google.common.collect.ImmutableList: java.lang.Object get(int)>($i7);
+
+        r5 = (float[]) $r10;
+
+        $z0 = staticinvoke <androidx.media3.effect.MatrixUtils: boolean isInsideClippingHalfSpace(float[],float[])>(r4, r2);
+
+        if $z0 == 0 goto label6;
+
+        $z3 = staticinvoke <androidx.media3.effect.MatrixUtils: boolean isInsideClippingHalfSpace(float[],float[])>(r5, r2);
+
+        if $z3 != 0 goto label5;
+
+        r15 = staticinvoke <androidx.media3.effect.MatrixUtils: float[] computeIntersectionPoint(float[],float[],float[],float[])>(r2, r2, r5, r4);
+
+        $z4 = staticinvoke <java.util.Arrays: boolean equals(float[],float[])>(r4, r15);
+
+        if $z4 != 0 goto label5;
+
+        virtualinvoke r14.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList$Builder add(java.lang.Object)>(r15);
+
+     label5:
+        virtualinvoke r14.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList$Builder add(java.lang.Object)>(r4);
+
+        goto label7;
+
+     label6:
+        $z1 = staticinvoke <androidx.media3.effect.MatrixUtils: boolean isInsideClippingHalfSpace(float[],float[])>(r5, r2);
+
+        if $z1 == 0 goto label7;
+
+        r16 = staticinvoke <androidx.media3.effect.MatrixUtils: float[] computeIntersectionPoint(float[],float[],float[],float[])>(r2, r2, r5, r4);
+
+        $z2 = staticinvoke <java.util.Arrays: boolean equals(float[],float[])>(r5, r16);
+
+        if $z2 != 0 goto label7;
+
+        virtualinvoke r14.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList$Builder add(java.lang.Object)>(r16);
+
+     label7:
+        i9 = i9 + 1;
+
+        goto label4;
+
+     label8:
+        i8 = i8 + 1;
+
+        goto label3;
+
+     label9:
+        $r7 = virtualinvoke r14.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList build()>();
+
+        return $r7;
+    }
+
+    private static boolean isInsideClippingHalfSpace(float[], float[])
+    {
+        float[] r0, r1;
+        int $i0;
+        float $f0, $f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8, $f9, $f10, $f11;
+        byte $b1;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: float[];
+
+        r1 := @parameter1: float[];
+
+        $i0 = lengthof r1;
+
+        if $i0 != 4 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, "Expecting 4 plane parameters");
+
+        $f1 = r1[0];
+
+        $f0 = r0[0];
+
+        $f5 = $f1 * $f0;
+
+        $f3 = r1[1];
+
+        $f2 = r0[1];
+
+        $f4 = $f3 * $f2;
+
+        $f9 = $f5 + $f4;
+
+        $f7 = r1[2];
+
+        $f6 = r0[2];
+
+        $f8 = $f7 * $f6;
+
+        $f11 = $f9 + $f8;
+
+        $f10 = r1[3];
+
+        $b1 = $f11 cmpg $f10;
+
+        if $b1 > 0 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        return $z1;
+    }
+
+    private static float[] computeIntersectionPoint(float[], float[], float[], float[])
+    {
+        float[] r0, r1, r2, r3, $r4;
+        float f0, f1, f2, f3, $f4, $f5, $f6, $f7, $f8, $f9, $f10, $f11, $f12, $f13, $f14, $f15, $f16, $f17, $f18, $f19, $f20, $f21, $f22, $f23, $f24, $f25, $f26, $f27, $f28, $f29, $f30, $f31, $f32, $f33, $f34, $f35, $f36, $f37, $f38, $f39, $f40, $f41, $f42, $f43, $f44, $f45, $f46, $f47, $f48, $f49, $f50, $f51, $f52;
+        int $i0;
+        boolean $z0;
+
+        r0 := @parameter0: float[];
+
+        r1 := @parameter1: float[];
+
+        r2 := @parameter2: float[];
+
+        r3 := @parameter3: float[];
+
+        $i0 = lengthof r1;
+
+        if $i0 != 4 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, "Expecting 4 plane parameters");
+
+        $f5 = r0[0];
+
+        $f4 = r2[0];
+
+        $f7 = $f5 - $f4;
+
+        $f6 = r1[0];
+
+        $f13 = $f7 * $f6;
+
+        $f9 = r0[1];
+
+        $f8 = r2[1];
+
+        $f11 = $f9 - $f8;
+
+        $f10 = r1[1];
+
+        $f12 = $f11 * $f10;
+
+        $f19 = $f13 + $f12;
+
+        $f15 = r0[2];
+
+        $f14 = r2[2];
+
+        $f17 = $f15 - $f14;
+
+        $f16 = r1[2];
+
+        $f18 = $f17 * $f16;
+
+        $f37 = $f19 + $f18;
+
+        $f21 = r3[0];
+
+        $f20 = r2[0];
+
+        $f23 = $f21 - $f20;
+
+        $f22 = r1[0];
+
+        $f29 = $f23 * $f22;
+
+        $f25 = r3[1];
+
+        $f24 = r2[1];
+
+        $f27 = $f25 - $f24;
+
+        $f26 = r1[1];
+
+        $f28 = $f27 * $f26;
+
+        $f35 = $f29 + $f28;
+
+        $f31 = r3[2];
+
+        $f30 = r2[2];
+
+        $f33 = $f31 - $f30;
+
+        $f32 = r1[2];
+
+        $f34 = $f33 * $f32;
+
+        $f36 = $f35 + $f34;
+
+        f0 = $f37 / $f36;
+
+        $f42 = r2[0];
+
+        $f39 = r3[0];
+
+        $f38 = r2[0];
+
+        $f40 = $f39 - $f38;
+
+        $f41 = $f40 * f0;
+
+        f1 = $f42 + $f41;
+
+        $f47 = r2[1];
+
+        $f44 = r3[1];
+
+        $f43 = r2[1];
+
+        $f45 = $f44 - $f43;
+
+        $f46 = $f45 * f0;
+
+        f2 = $f47 + $f46;
+
+        $f52 = r2[2];
+
+        $f49 = r3[2];
+
+        $f48 = r2[2];
+
+        $f50 = $f49 - $f48;
+
+        $f51 = $f50 * f0;
+
+        f3 = $f52 + $f51;
+
+        $r4 = newarray (float)[4];
+
+        $r4[0] = f1;
+
+        $r4[1] = f2;
+
+        $r4[2] = f3;
+
+        $r4[3] = 1.0F;
+
+        return $r4;
+    }
+
+    public static com.google.common.collect.ImmutableList transformPoints(float[], com.google.common.collect.ImmutableList)
+    {
+        float[] r0, r3, $r7;
+        com.google.common.collect.ImmutableList r1, $r5;
+        com.google.common.collect.ImmutableList$Builder r2, $r4;
+        int $i0, i1;
+        java.lang.Object $r6;
+        float $f0, $f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8;
+
+        r0 := @parameter0: float[];
+
+        r1 := @parameter1: com.google.common.collect.ImmutableList;
+
+        $r4 = new com.google.common.collect.ImmutableList$Builder;
+
+        specialinvoke $r4.<com.google.common.collect.ImmutableList$Builder: void <init>()>();
+
+        r2 = $r4;
+
+        i1 = 0;
+
+     label1:
+        $i0 = virtualinvoke r1.<com.google.common.collect.ImmutableList: int size()>();
+
+        if i1 >= $i0 goto label2;
+
+        r3 = newarray (float)[4];
+
+        $r6 = virtualinvoke r1.<com.google.common.collect.ImmutableList: java.lang.Object get(int)>(i1);
+
+        $r7 = (float[]) $r6;
+
+        staticinvoke <android.opengl.Matrix: void multiplyMV(float[],int,float[],int,float[],int)>(r3, 0, r0, 0, $r7, 0);
+
+        $f1 = r3[0];
+
+        $f0 = r3[3];
+
+        $f2 = $f1 / $f0;
+
+        r3[0] = $f2;
+
+        $f4 = r3[1];
+
+        $f3 = r3[3];
+
+        $f5 = $f4 / $f3;
+
+        r3[1] = $f5;
+
+        $f7 = r3[2];
+
+        $f6 = r3[3];
+
+        $f8 = $f7 / $f6;
+
+        r3[2] = $f8;
+
+        r3[3] = 1.0F;
+
+        virtualinvoke r2.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList$Builder add(java.lang.Object)>(r3);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = virtualinvoke r2.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList build()>();
+
+        return $r5;
+    }
+
+    public static android.util.Pair configureAndGetOutputSize(int, int, com.google.common.collect.ImmutableList)
+    {
+        int i0, i1, $i2, $i3, i4, $i5;
+        com.google.common.collect.ImmutableList r0;
+        java.lang.Integer $r1, $r2, $r5, $r8;
+        java.lang.Object $r3, $r4, $r7;
+        androidx.media3.effect.GlMatrixTransformation $r6;
+        boolean $z0, $z1;
+        android.util.Pair r9;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r0 := @parameter2: com.google.common.collect.ImmutableList;
+
+        if i0 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, "inputWidth must be positive");
+
+        if i1 <= 0 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "inputHeight must be positive");
+
+        $r1 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        r9 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r1, $r2);
+
+        i4 = 0;
+
+     label5:
+        $i5 = virtualinvoke r0.<com.google.common.collect.ImmutableList: int size()>();
+
+        if i4 >= $i5 goto label6;
+
+        $r3 = virtualinvoke r0.<com.google.common.collect.ImmutableList: java.lang.Object get(int)>(i4);
+
+        $r6 = (androidx.media3.effect.GlMatrixTransformation) $r3;
+
+        $r4 = r9.<android.util.Pair: java.lang.Object first>;
+
+        $r5 = (java.lang.Integer) $r4;
+
+        $i2 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+        $r7 = r9.<android.util.Pair: java.lang.Object second>;
+
+        $r8 = (java.lang.Integer) $r7;
+
+        $i3 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        r9 = interfaceinvoke $r6.<androidx.media3.effect.GlMatrixTransformation: android.util.Pair configure(int,int)>($i2, $i3);
+
+        i4 = i4 + 1;
+
+        goto label5;
+
+     label6:
+        return r9;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.effect.MatrixUtils r0;
+
+        r0 := @this: androidx.media3.effect.MatrixUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        float[][] $r0;
+        float[] $r1, $r2, $r3, $r4, $r5, $r6;
+
+        $r0 = newarray (float[])[6];
+
+        $r1 = newarray (float)[4];
+
+        $r1[0] = 1.0F;
+
+        $r1[1] = 0.0F;
+
+        $r1[2] = 0.0F;
+
+        $r1[3] = 1.0F;
+
+        $r0[0] = $r1;
+
+        $r2 = newarray (float)[4];
+
+        $r2[0] = -1.0F;
+
+        $r2[1] = 0.0F;
+
+        $r2[2] = 0.0F;
+
+        $r2[3] = 1.0F;
+
+        $r0[1] = $r2;
+
+        $r3 = newarray (float)[4];
+
+        $r3[0] = 0.0F;
+
+        $r3[1] = 1.0F;
+
+        $r3[2] = 0.0F;
+
+        $r3[3] = 1.0F;
+
+        $r0[2] = $r3;
+
+        $r4 = newarray (float)[4];
+
+        $r4[0] = 0.0F;
+
+        $r4[1] = -1.0F;
+
+        $r4[2] = 0.0F;
+
+        $r4[3] = 1.0F;
+
+        $r0[3] = $r4;
+
+        $r5 = newarray (float)[4];
+
+        $r5[0] = 0.0F;
+
+        $r5[1] = 0.0F;
+
+        $r5[2] = 1.0F;
+
+        $r5[3] = 1.0F;
+
+        $r0[4] = $r5;
+
+        $r6 = newarray (float)[4];
+
+        $r6[0] = 0.0F;
+
+        $r6[1] = 0.0F;
+
+        $r6[2] = -1.0F;
+
+        $r6[3] = 1.0F;
+
+        $r0[5] = $r6;
+
+        <androidx.media3.effect.MatrixUtils: float[][] NDC_CUBE> = $r0;
+
+        return;
+    }
+

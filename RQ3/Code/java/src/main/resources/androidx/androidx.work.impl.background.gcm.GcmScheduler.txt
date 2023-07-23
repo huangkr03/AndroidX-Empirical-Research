@@ -1,0 +1,178 @@
+androidx.work.impl.background.gcm.GcmScheduler
+<androidx.work.impl.background.gcm.GcmScheduler: java.lang.String TAG>
+<androidx.work.impl.background.gcm.GcmScheduler: com.google.android.gms.gcm.GcmNetworkManager mNetworkManager>
+<androidx.work.impl.background.gcm.GcmScheduler: androidx.work.impl.background.gcm.GcmTaskConverter mTaskConverter>
+    public void <init>(android.content.Context)
+    {
+        androidx.work.impl.background.gcm.GcmScheduler r0;
+        android.content.Context r1;
+        boolean z0, $z1;
+        com.google.android.gms.common.GoogleApiAvailability $r2;
+        int $i0;
+        com.google.android.gms.gcm.GcmNetworkManager $r3;
+        androidx.work.impl.background.gcm.GcmTaskConverter $r4;
+        java.lang.IllegalStateException $r5;
+
+        r0 := @this: androidx.work.impl.background.gcm.GcmScheduler;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = staticinvoke <com.google.android.gms.common.GoogleApiAvailability: com.google.android.gms.common.GoogleApiAvailability getInstance()>();
+
+        $i0 = virtualinvoke $r2.<com.google.android.gms.common.GoogleApiAvailability: int isGooglePlayServicesAvailable(android.content.Context)>(r1);
+
+        if $i0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        z0 = $z1;
+
+        if z0 != 0 goto label3;
+
+        $r5 = new java.lang.IllegalStateException;
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Google Play Services not available");
+
+        throw $r5;
+
+     label3:
+        $r3 = staticinvoke <com.google.android.gms.gcm.GcmNetworkManager: com.google.android.gms.gcm.GcmNetworkManager getInstance(android.content.Context)>(r1);
+
+        r0.<androidx.work.impl.background.gcm.GcmScheduler: com.google.android.gms.gcm.GcmNetworkManager mNetworkManager> = $r3;
+
+        $r4 = new androidx.work.impl.background.gcm.GcmTaskConverter;
+
+        specialinvoke $r4.<androidx.work.impl.background.gcm.GcmTaskConverter: void <init>()>();
+
+        r0.<androidx.work.impl.background.gcm.GcmScheduler: androidx.work.impl.background.gcm.GcmTaskConverter mTaskConverter> = $r4;
+
+        return;
+    }
+
+    public transient void schedule(androidx.work.impl.model.WorkSpec[])
+    {
+        androidx.work.impl.background.gcm.GcmScheduler r0;
+        androidx.work.impl.model.WorkSpec[] r1, r2;
+        int i0, i1;
+        androidx.work.impl.model.WorkSpec r3;
+        com.google.android.gms.gcm.OneoffTask r4;
+        androidx.work.impl.background.gcm.GcmTaskConverter $r5;
+        androidx.work.Logger $r6;
+        java.lang.StringBuilder $r7, $r9, $r10, $r11, $r12;
+        java.lang.String $r8, $r13;
+        com.google.android.gms.gcm.GcmNetworkManager $r14;
+
+        r0 := @this: androidx.work.impl.background.gcm.GcmScheduler;
+
+        r1 := @parameter0: androidx.work.impl.model.WorkSpec[];
+
+        r2 = r1;
+
+        i0 = lengthof r2;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        r3 = r2[i1];
+
+        $r5 = r0.<androidx.work.impl.background.gcm.GcmScheduler: androidx.work.impl.background.gcm.GcmTaskConverter mTaskConverter>;
+
+        r4 = virtualinvoke $r5.<androidx.work.impl.background.gcm.GcmTaskConverter: com.google.android.gms.gcm.OneoffTask convert(androidx.work.impl.model.WorkSpec)>(r3);
+
+        $r6 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r8 = <androidx.work.impl.background.gcm.GcmScheduler: java.lang.String TAG>;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Scheduling ");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("with ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r4);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r6.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r8, $r13);
+
+        $r14 = r0.<androidx.work.impl.background.gcm.GcmScheduler: com.google.android.gms.gcm.GcmNetworkManager mNetworkManager>;
+
+        virtualinvoke $r14.<com.google.android.gms.gcm.GcmNetworkManager: void schedule(com.google.android.gms.gcm.Task)>(r4);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void cancel(java.lang.String)
+    {
+        androidx.work.impl.background.gcm.GcmScheduler r0;
+        java.lang.String r1, $r4, $r7;
+        androidx.work.Logger $r2;
+        java.lang.StringBuilder $r3, $r5, $r6;
+        com.google.android.gms.gcm.GcmNetworkManager $r8;
+
+        r0 := @this: androidx.work.impl.background.gcm.GcmScheduler;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r4 = <androidx.work.impl.background.gcm.GcmScheduler: java.lang.String TAG>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cancelling ");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r2.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r4, $r7);
+
+        $r8 = r0.<androidx.work.impl.background.gcm.GcmScheduler: com.google.android.gms.gcm.GcmNetworkManager mNetworkManager>;
+
+        virtualinvoke $r8.<com.google.android.gms.gcm.GcmNetworkManager: void cancelTask(java.lang.String,java.lang.Class)>(r1, class "Landroidx/work/impl/background/gcm/WorkManagerGcmService;");
+
+        return;
+    }
+
+    public boolean hasLimitedSchedulingSlots()
+    {
+        androidx.work.impl.background.gcm.GcmScheduler r0;
+
+        r0 := @this: androidx.work.impl.background.gcm.GcmScheduler;
+
+        return 1;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("GcmScheduler");
+
+        <androidx.work.impl.background.gcm.GcmScheduler: java.lang.String TAG> = $r0;
+
+        return;
+    }
+

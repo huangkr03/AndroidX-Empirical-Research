@@ -1,0 +1,530 @@
+android.support.v4.util.CircularIntArray
+<android.support.v4.util.CircularIntArray: int[] mElements>
+<android.support.v4.util.CircularIntArray: int mHead>
+<android.support.v4.util.CircularIntArray: int mTail>
+<android.support.v4.util.CircularIntArray: int mCapacityBitmask>
+    private void doubleCapacity()
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int i0, i1, i2, $i3, $i4, $i5, $i6;
+        int[] r1, $r2, $r3, $r4;
+        java.lang.RuntimeException $r5;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        $r2 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        i0 = lengthof $r2;
+
+        $i3 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        i1 = i0 - $i3;
+
+        i2 = i0 << 1;
+
+        if i2 >= 0 goto label1;
+
+        $r5 = new java.lang.RuntimeException;
+
+        specialinvoke $r5.<java.lang.RuntimeException: void <init>(java.lang.String)>("Max array capacity exceeded");
+
+        throw $r5;
+
+     label1:
+        r1 = newarray (int)[i2];
+
+        $r3 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        $i4 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r3, $i4, r1, 0, i1);
+
+        $r4 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        $i5 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, 0, r1, i1, $i5);
+
+        r0.<android.support.v4.util.CircularIntArray: int[] mElements> = r1;
+
+        r0.<android.support.v4.util.CircularIntArray: int mHead> = 0;
+
+        r0.<android.support.v4.util.CircularIntArray: int mTail> = i0;
+
+        $i6 = i2 - 1;
+
+        r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask> = $i6;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        android.support.v4.util.CircularIntArray r0;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        specialinvoke r0.<android.support.v4.util.CircularIntArray: void <init>(int)>(8);
+
+        return;
+    }
+
+    public void <init>(int)
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int i0, $i1, $i2, $i3, $i4, i5;
+        int[] $r1;
+        java.lang.IllegalArgumentException $r2, $r3;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        if i0 >= 1 goto label1;
+
+        $r3 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("capacity must be >= 1");
+
+        throw $r3;
+
+     label1:
+        if i0 <= 1073741824 goto label2;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("capacity must be <= 2^30");
+
+        throw $r2;
+
+     label2:
+        $i1 = staticinvoke <java.lang.Integer: int bitCount(int)>(i0);
+
+        if $i1 == 1 goto label3;
+
+        $i3 = i0 - 1;
+
+        $i4 = staticinvoke <java.lang.Integer: int highestOneBit(int)>($i3);
+
+        i5 = $i4 << 1;
+
+        goto label4;
+
+     label3:
+        i5 = i0;
+
+     label4:
+        $i2 = i5 - 1;
+
+        r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask> = $i2;
+
+        $r1 = newarray (int)[i5];
+
+        r0.<android.support.v4.util.CircularIntArray: int[] mElements> = $r1;
+
+        return;
+    }
+
+    public void addFirst(int)
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        int[] $r1;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        i0 := @parameter0: int;
+
+        $i1 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i3 = $i1 - 1;
+
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask>;
+
+        $i4 = $i3 & $i2;
+
+        r0.<android.support.v4.util.CircularIntArray: int mHead> = $i4;
+
+        $r1 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        $i5 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $r1[$i5] = i0;
+
+        $i7 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i6 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        if $i7 != $i6 goto label1;
+
+        specialinvoke r0.<android.support.v4.util.CircularIntArray: void doubleCapacity()>();
+
+     label1:
+        return;
+    }
+
+    public void addLast(int)
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        int[] $r1;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        $i1 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        $r1[$i1] = i0;
+
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        $i4 = $i2 + 1;
+
+        $i3 = r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask>;
+
+        $i5 = $i4 & $i3;
+
+        r0.<android.support.v4.util.CircularIntArray: int mTail> = $i5;
+
+        $i7 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        $i6 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        if $i7 != $i6 goto label1;
+
+        specialinvoke r0.<android.support.v4.util.CircularIntArray: void doubleCapacity()>();
+
+     label1:
+        return;
+    }
+
+    public int popFirst()
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        int[] $r1;
+        java.lang.ArrayIndexOutOfBoundsException $r2;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i1 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        if $i2 != $i1 goto label1;
+
+        $r2 = new java.lang.ArrayIndexOutOfBoundsException;
+
+        specialinvoke $r2.<java.lang.ArrayIndexOutOfBoundsException: void <init>()>();
+
+        throw $r2;
+
+     label1:
+        $r1 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        $i3 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        i0 = $r1[$i3];
+
+        $i4 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i6 = $i4 + 1;
+
+        $i5 = r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask>;
+
+        $i7 = $i6 & $i5;
+
+        r0.<android.support.v4.util.CircularIntArray: int mHead> = $i7;
+
+        return i0;
+    }
+
+    public int popLast()
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6;
+        int[] $r1;
+        java.lang.ArrayIndexOutOfBoundsException $r2;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        $i3 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        if $i3 != $i2 goto label1;
+
+        $r2 = new java.lang.ArrayIndexOutOfBoundsException;
+
+        specialinvoke $r2.<java.lang.ArrayIndexOutOfBoundsException: void <init>()>();
+
+        throw $r2;
+
+     label1:
+        $i4 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        $i6 = $i4 - 1;
+
+        $i5 = r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask>;
+
+        i0 = $i6 & $i5;
+
+        $r1 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        i1 = $r1[i0];
+
+        r0.<android.support.v4.util.CircularIntArray: int mTail> = i0;
+
+        return i1;
+    }
+
+    public void clear()
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int $i0;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        $i0 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        r0.<android.support.v4.util.CircularIntArray: int mTail> = $i0;
+
+        return;
+    }
+
+    public void removeFromStart(int)
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int i0, $i1, $i2, $i3, $i4, $i5;
+        java.lang.ArrayIndexOutOfBoundsException $r1;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        i0 := @parameter0: int;
+
+        if i0 > 0 goto label1;
+
+        return;
+
+     label1:
+        $i1 = virtualinvoke r0.<android.support.v4.util.CircularIntArray: int size()>();
+
+        if i0 <= $i1 goto label2;
+
+        $r1 = new java.lang.ArrayIndexOutOfBoundsException;
+
+        specialinvoke $r1.<java.lang.ArrayIndexOutOfBoundsException: void <init>()>();
+
+        throw $r1;
+
+     label2:
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i4 = $i2 + i0;
+
+        $i3 = r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask>;
+
+        $i5 = $i4 & $i3;
+
+        r0.<android.support.v4.util.CircularIntArray: int mHead> = $i5;
+
+        return;
+    }
+
+    public void removeFromEnd(int)
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int i0, $i1, $i2, $i3, $i4, $i5;
+        java.lang.ArrayIndexOutOfBoundsException $r1;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        i0 := @parameter0: int;
+
+        if i0 > 0 goto label1;
+
+        return;
+
+     label1:
+        $i1 = virtualinvoke r0.<android.support.v4.util.CircularIntArray: int size()>();
+
+        if i0 <= $i1 goto label2;
+
+        $r1 = new java.lang.ArrayIndexOutOfBoundsException;
+
+        specialinvoke $r1.<java.lang.ArrayIndexOutOfBoundsException: void <init>()>();
+
+        throw $r1;
+
+     label2:
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        $i4 = $i2 - i0;
+
+        $i3 = r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask>;
+
+        $i5 = $i4 & $i3;
+
+        r0.<android.support.v4.util.CircularIntArray: int mTail> = $i5;
+
+        return;
+    }
+
+    public int getFirst()
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int $i0, $i1, $i2, $i3;
+        int[] $r1;
+        java.lang.ArrayIndexOutOfBoundsException $r2;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        $i1 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i0 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        if $i1 != $i0 goto label1;
+
+        $r2 = new java.lang.ArrayIndexOutOfBoundsException;
+
+        specialinvoke $r2.<java.lang.ArrayIndexOutOfBoundsException: void <init>()>();
+
+        throw $r2;
+
+     label1:
+        $r1 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i3 = $r1[$i2];
+
+        return $i3;
+    }
+
+    public int getLast()
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        int[] $r1;
+        java.lang.ArrayIndexOutOfBoundsException $r2;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        $i1 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i0 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        if $i1 != $i0 goto label1;
+
+        $r2 = new java.lang.ArrayIndexOutOfBoundsException;
+
+        specialinvoke $r2.<java.lang.ArrayIndexOutOfBoundsException: void <init>()>();
+
+        throw $r2;
+
+     label1:
+        $r1 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        $i4 = $i2 - 1;
+
+        $i3 = r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask>;
+
+        $i5 = $i4 & $i3;
+
+        $i6 = $r1[$i5];
+
+        return $i6;
+    }
+
+    public int get(int)
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        java.lang.ArrayIndexOutOfBoundsException $r1;
+        int[] $r2;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        i0 := @parameter0: int;
+
+        if i0 < 0 goto label1;
+
+        $i1 = virtualinvoke r0.<android.support.v4.util.CircularIntArray: int size()>();
+
+        if i0 < $i1 goto label2;
+
+     label1:
+        $r1 = new java.lang.ArrayIndexOutOfBoundsException;
+
+        specialinvoke $r1.<java.lang.ArrayIndexOutOfBoundsException: void <init>()>();
+
+        throw $r1;
+
+     label2:
+        $r2 = r0.<android.support.v4.util.CircularIntArray: int[] mElements>;
+
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i4 = $i2 + i0;
+
+        $i3 = r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask>;
+
+        $i5 = $i4 & $i3;
+
+        $i6 = $r2[$i5];
+
+        return $i6;
+    }
+
+    public int size()
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int $i0, $i1, $i2, $i3, $i4;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        $i1 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        $i0 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i3 = $i1 - $i0;
+
+        $i2 = r0.<android.support.v4.util.CircularIntArray: int mCapacityBitmask>;
+
+        $i4 = $i3 & $i2;
+
+        return $i4;
+    }
+
+    public boolean isEmpty()
+    {
+        android.support.v4.util.CircularIntArray r0;
+        int $i0, $i1;
+        boolean $z0;
+
+        r0 := @this: android.support.v4.util.CircularIntArray;
+
+        $i1 = r0.<android.support.v4.util.CircularIntArray: int mHead>;
+
+        $i0 = r0.<android.support.v4.util.CircularIntArray: int mTail>;
+
+        if $i1 != $i0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+

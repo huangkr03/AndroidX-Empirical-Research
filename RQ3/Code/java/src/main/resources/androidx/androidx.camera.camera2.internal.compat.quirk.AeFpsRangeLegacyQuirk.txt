@@ -1,0 +1,226 @@
+androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk
+<androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk: android.util.Range mAeFpsRange>
+    public void <init>(androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat)
+    {
+        androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk r0;
+        androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat r1;
+        android.util.Range[] r2;
+        android.hardware.camera2.CameraCharacteristics$Key $r3;
+        java.lang.Object $r4;
+        android.util.Range $r5;
+
+        r0 := @this: androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk;
+
+        r1 := @parameter0: androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = <android.hardware.camera2.CameraCharacteristics: android.hardware.camera2.CameraCharacteristics$Key CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES>;
+
+        $r4 = virtualinvoke r1.<androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat: java.lang.Object get(android.hardware.camera2.CameraCharacteristics$Key)>($r3);
+
+        r2 = (android.util.Range[]) $r4;
+
+        $r5 = specialinvoke r0.<androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk: android.util.Range pickSuitableFpsRange(android.util.Range[])>(r2);
+
+        r0.<androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk: android.util.Range mAeFpsRange> = $r5;
+
+        return;
+    }
+
+    static boolean load(androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat)
+    {
+        androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat r0;
+        java.lang.Integer r1;
+        android.hardware.camera2.CameraCharacteristics$Key $r2;
+        java.lang.Object $r3;
+        int $i0;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat;
+
+        $r2 = <android.hardware.camera2.CameraCharacteristics: android.hardware.camera2.CameraCharacteristics$Key INFO_SUPPORTED_HARDWARE_LEVEL>;
+
+        $r3 = virtualinvoke r0.<androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat: java.lang.Object get(android.hardware.camera2.CameraCharacteristics$Key)>($r2);
+
+        r1 = (java.lang.Integer) $r3;
+
+        if r1 == null goto label1;
+
+        $i0 = virtualinvoke r1.<java.lang.Integer: int intValue()>();
+
+        if $i0 != 2 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public android.util.Range getRange()
+    {
+        androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk r0;
+        android.util.Range $r1;
+
+        r0 := @this: androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk;
+
+        $r1 = r0.<androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk: android.util.Range mAeFpsRange>;
+
+        return $r1;
+    }
+
+    private android.util.Range pickSuitableFpsRange(android.util.Range[])
+    {
+        androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk r0;
+        android.util.Range[] r1, r2;
+        int i0, $i1, $i2, $i3, $i4, i5;
+        java.lang.Comparable $r3, $r5, $r7;
+        java.lang.Integer $r4, $r6, $r8;
+        android.util.Range r9, r10, r11;
+
+        r0 := @this: androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk;
+
+        r1 := @parameter0: android.util.Range[];
+
+        if r1 == null goto label1;
+
+        $i1 = lengthof r1;
+
+        if $i1 != 0 goto label2;
+
+     label1:
+        return null;
+
+     label2:
+        r9 = null;
+
+        r2 = r1;
+
+        i0 = lengthof r2;
+
+        i5 = 0;
+
+     label3:
+        if i5 >= i0 goto label7;
+
+        r10 = r2[i5];
+
+        r11 = specialinvoke r0.<androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk: android.util.Range getCorrectedFpsRange(android.util.Range)>(r10);
+
+        $r3 = virtualinvoke r11.<android.util.Range: java.lang.Comparable getUpper()>();
+
+        $r4 = (java.lang.Integer) $r3;
+
+        $i2 = virtualinvoke $r4.<java.lang.Integer: int intValue()>();
+
+        if $i2 == 30 goto label4;
+
+        goto label6;
+
+     label4:
+        if r9 != null goto label5;
+
+        r9 = r11;
+
+        goto label6;
+
+     label5:
+        $r5 = virtualinvoke r11.<android.util.Range: java.lang.Comparable getLower()>();
+
+        $r6 = (java.lang.Integer) $r5;
+
+        $i3 = virtualinvoke $r6.<java.lang.Integer: int intValue()>();
+
+        $r7 = virtualinvoke r9.<android.util.Range: java.lang.Comparable getLower()>();
+
+        $r8 = (java.lang.Integer) $r7;
+
+        $i4 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        if $i3 >= $i4 goto label6;
+
+        r9 = r11;
+
+     label6:
+        i5 = i5 + 1;
+
+        goto label3;
+
+     label7:
+        return r9;
+    }
+
+    private android.util.Range getCorrectedFpsRange(android.util.Range)
+    {
+        androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk r0;
+        android.util.Range r1, $r10;
+        java.lang.Comparable $r2, $r4, $r6, $r8, $r13, $r15;
+        java.lang.Integer $r3, $r5, $r7, $r9, $r11, $r12, $r14, $r16;
+        int $i0, $i1, $i2, $i3, i4, i5;
+
+        r0 := @this: androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk;
+
+        r1 := @parameter0: android.util.Range;
+
+        $r2 = virtualinvoke r1.<android.util.Range: java.lang.Comparable getUpper()>();
+
+        $r3 = (java.lang.Integer) $r2;
+
+        i4 = virtualinvoke $r3.<java.lang.Integer: int intValue()>();
+
+        $r4 = virtualinvoke r1.<android.util.Range: java.lang.Comparable getLower()>();
+
+        $r5 = (java.lang.Integer) $r4;
+
+        i5 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+        $r6 = virtualinvoke r1.<android.util.Range: java.lang.Comparable getUpper()>();
+
+        $r7 = (java.lang.Integer) $r6;
+
+        $i0 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        if $i0 < 1000 goto label1;
+
+        $r15 = virtualinvoke r1.<android.util.Range: java.lang.Comparable getUpper()>();
+
+        $r16 = (java.lang.Integer) $r15;
+
+        $i3 = virtualinvoke $r16.<java.lang.Integer: int intValue()>();
+
+        i4 = $i3 / 1000;
+
+     label1:
+        $r8 = virtualinvoke r1.<android.util.Range: java.lang.Comparable getLower()>();
+
+        $r9 = (java.lang.Integer) $r8;
+
+        $i1 = virtualinvoke $r9.<java.lang.Integer: int intValue()>();
+
+        if $i1 < 1000 goto label2;
+
+        $r13 = virtualinvoke r1.<android.util.Range: java.lang.Comparable getLower()>();
+
+        $r14 = (java.lang.Integer) $r13;
+
+        $i2 = virtualinvoke $r14.<java.lang.Integer: int intValue()>();
+
+        i5 = $i2 / 1000;
+
+     label2:
+        $r10 = new android.util.Range;
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i5);
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i4);
+
+        specialinvoke $r10.<android.util.Range: void <init>(java.lang.Comparable,java.lang.Comparable)>($r11, $r12);
+
+        return $r10;
+    }
+

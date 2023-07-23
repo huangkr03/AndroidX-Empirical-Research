@@ -1,0 +1,701 @@
+androidx.media3.extractor.mp4.SefReader
+<androidx.media3.extractor.mp4.SefReader: int STATE_SHOULD_CHECK_FOR_SEF>
+<androidx.media3.extractor.mp4.SefReader: int STATE_CHECKING_FOR_SEF>
+<androidx.media3.extractor.mp4.SefReader: int STATE_READING_SDRS>
+<androidx.media3.extractor.mp4.SefReader: int STATE_READING_SEF_DATA>
+<androidx.media3.extractor.mp4.SefReader: int TYPE_SLOW_MOTION_DATA>
+<androidx.media3.extractor.mp4.SefReader: int TYPE_SUPER_SLOW_MOTION_DATA>
+<androidx.media3.extractor.mp4.SefReader: int TYPE_SUPER_SLOW_MOTION_BGM>
+<androidx.media3.extractor.mp4.SefReader: int TYPE_SUPER_SLOW_MOTION_EDIT_DATA>
+<androidx.media3.extractor.mp4.SefReader: int TYPE_SUPER_SLOW_DEFLICKERING_ON>
+<androidx.media3.extractor.mp4.SefReader: java.lang.String TAG>
+<androidx.media3.extractor.mp4.SefReader: int SAMSUNG_TAIL_SIGNATURE>
+<androidx.media3.extractor.mp4.SefReader: int TAIL_HEADER_LENGTH>
+<androidx.media3.extractor.mp4.SefReader: int TAIL_FOOTER_LENGTH>
+<androidx.media3.extractor.mp4.SefReader: int LENGTH_OF_ONE_SDR>
+<androidx.media3.extractor.mp4.SefReader: com.google.common.base.Splitter COLON_SPLITTER>
+<androidx.media3.extractor.mp4.SefReader: com.google.common.base.Splitter ASTERISK_SPLITTER>
+<androidx.media3.extractor.mp4.SefReader: java.util.List dataReferences>
+<androidx.media3.extractor.mp4.SefReader: int readerState>
+<androidx.media3.extractor.mp4.SefReader: int tailLength>
+    public void <init>()
+    {
+        androidx.media3.extractor.mp4.SefReader r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: androidx.media3.extractor.mp4.SefReader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        r0.<androidx.media3.extractor.mp4.SefReader: java.util.List dataReferences> = $r1;
+
+        r0.<androidx.media3.extractor.mp4.SefReader: int readerState> = 0;
+
+        return;
+    }
+
+    public void reset()
+    {
+        androidx.media3.extractor.mp4.SefReader r0;
+        java.util.List $r1;
+
+        r0 := @this: androidx.media3.extractor.mp4.SefReader;
+
+        $r1 = r0.<androidx.media3.extractor.mp4.SefReader: java.util.List dataReferences>;
+
+        interfaceinvoke $r1.<java.util.List: void clear()>();
+
+        r0.<androidx.media3.extractor.mp4.SefReader: int readerState> = 0;
+
+        return;
+    }
+
+    public int read(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.PositionHolder, java.util.List) throws java.io.IOException
+    {
+        androidx.media3.extractor.mp4.SefReader r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.PositionHolder r2;
+        java.util.List r3;
+        long l0, $l4;
+        int $i1;
+        byte $b2, $b3;
+        java.lang.IllegalStateException $r5;
+
+        r0 := @this: androidx.media3.extractor.mp4.SefReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: androidx.media3.extractor.PositionHolder;
+
+        r3 := @parameter2: java.util.List;
+
+        $i1 = r0.<androidx.media3.extractor.mp4.SefReader: int readerState>;
+
+        tableswitch($i1)
+        {
+            case 0: goto label1;
+            case 1: goto label5;
+            case 2: goto label6;
+            case 3: goto label7;
+            default: goto label8;
+        };
+
+     label1:
+        l0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        $b2 = l0 cmp -1L;
+
+        if $b2 == 0 goto label2;
+
+        $b3 = l0 cmp 8L;
+
+        if $b3 >= 0 goto label3;
+
+     label2:
+        $l4 = 0L;
+
+        goto label4;
+
+     label3:
+        $l4 = l0 - 8L;
+
+     label4:
+        r2.<androidx.media3.extractor.PositionHolder: long position> = $l4;
+
+        r0.<androidx.media3.extractor.mp4.SefReader: int readerState> = 1;
+
+        goto label9;
+
+     label5:
+        specialinvoke r0.<androidx.media3.extractor.mp4.SefReader: void checkForSefData(androidx.media3.extractor.ExtractorInput,androidx.media3.extractor.PositionHolder)>(r1, r2);
+
+        goto label9;
+
+     label6:
+        specialinvoke r0.<androidx.media3.extractor.mp4.SefReader: void readSdrs(androidx.media3.extractor.ExtractorInput,androidx.media3.extractor.PositionHolder)>(r1, r2);
+
+        goto label9;
+
+     label7:
+        specialinvoke r0.<androidx.media3.extractor.mp4.SefReader: void readSefData(androidx.media3.extractor.ExtractorInput,java.util.List)>(r1, r3);
+
+        r2.<androidx.media3.extractor.PositionHolder: long position> = 0L;
+
+        goto label9;
+
+     label8:
+        $r5 = new java.lang.IllegalStateException;
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r5;
+
+     label9:
+        return 1;
+    }
+
+    private void checkForSefData(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.PositionHolder) throws java.io.IOException
+    {
+        androidx.media3.extractor.mp4.SefReader r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.PositionHolder r2;
+        androidx.media3.common.util.ParsableByteArray r3, $r4;
+        byte[] $r5;
+        int $i0, $i1, $i2, $i4, $i5;
+        long $l3, $l6, $l7;
+
+        r0 := @this: androidx.media3.extractor.mp4.SefReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: androidx.media3.extractor.PositionHolder;
+
+        $r4 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r4.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(8);
+
+        r3 = $r4;
+
+        $r5 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r5, 0, 8);
+
+        $i0 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianInt()>();
+
+        $i1 = $i0 + 8;
+
+        r0.<androidx.media3.extractor.mp4.SefReader: int tailLength> = $i1;
+
+        $i2 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        if $i2 == 1397048916 goto label1;
+
+        r2.<androidx.media3.extractor.PositionHolder: long position> = 0L;
+
+        return;
+
+     label1:
+        $l3 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $i4 = r0.<androidx.media3.extractor.mp4.SefReader: int tailLength>;
+
+        $i5 = $i4 - 12;
+
+        $l6 = (long) $i5;
+
+        $l7 = $l3 - $l6;
+
+        r2.<androidx.media3.extractor.PositionHolder: long position> = $l7;
+
+        r0.<androidx.media3.extractor.mp4.SefReader: int readerState> = 2;
+
+        return;
+    }
+
+    private void readSdrs(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.PositionHolder) throws java.io.IOException
+    {
+        androidx.media3.extractor.mp4.SefReader r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.PositionHolder r2;
+        long l0, l3, $l8, $l10, $l11, $l13;
+        int i1, i4, $i5, $i6, $i7, $i9, $i12, i14;
+        androidx.media3.common.util.ParsableByteArray r3, $r4;
+        short s2;
+        byte[] $r5;
+        java.util.List $r6, $r7, $r11;
+        boolean $z0;
+        java.lang.Object $r8;
+        androidx.media3.extractor.mp4.SefReader$DataReference $r9, $r10;
+
+        r0 := @this: androidx.media3.extractor.mp4.SefReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: androidx.media3.extractor.PositionHolder;
+
+        l0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        $i5 = r0.<androidx.media3.extractor.mp4.SefReader: int tailLength>;
+
+        $i6 = $i5 - 12;
+
+        i1 = $i6 - 8;
+
+        $r4 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r4.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(i1);
+
+        r3 = $r4;
+
+        $r5 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r5, 0, i1);
+
+        i14 = 0;
+
+     label1:
+        $i7 = i1 / 12;
+
+        if i14 >= $i7 goto label5;
+
+        virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(2);
+
+        s2 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: short readLittleEndianShort()>();
+
+        lookupswitch(s2)
+        {
+            case 2192: goto label2;
+            case 2816: goto label2;
+            case 2817: goto label2;
+            case 2819: goto label2;
+            case 2820: goto label2;
+            default: goto label3;
+        };
+
+     label2:
+        $i9 = r0.<androidx.media3.extractor.mp4.SefReader: int tailLength>;
+
+        $l10 = (long) $i9;
+
+        $l11 = l0 - $l10;
+
+        $i12 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianInt()>();
+
+        $l13 = (long) $i12;
+
+        l3 = $l11 - $l13;
+
+        i4 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianInt()>();
+
+        $r11 = r0.<androidx.media3.extractor.mp4.SefReader: java.util.List dataReferences>;
+
+        $r10 = new androidx.media3.extractor.mp4.SefReader$DataReference;
+
+        specialinvoke $r10.<androidx.media3.extractor.mp4.SefReader$DataReference: void <init>(int,long,int)>(s2, l3, i4);
+
+        interfaceinvoke $r11.<java.util.List: boolean add(java.lang.Object)>($r10);
+
+        goto label4;
+
+     label3:
+        virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(8);
+
+     label4:
+        i14 = i14 + 1;
+
+        goto label1;
+
+     label5:
+        $r6 = r0.<androidx.media3.extractor.mp4.SefReader: java.util.List dataReferences>;
+
+        $z0 = interfaceinvoke $r6.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label6;
+
+        r2.<androidx.media3.extractor.PositionHolder: long position> = 0L;
+
+        return;
+
+     label6:
+        r0.<androidx.media3.extractor.mp4.SefReader: int readerState> = 3;
+
+        $r7 = r0.<androidx.media3.extractor.mp4.SefReader: java.util.List dataReferences>;
+
+        $r8 = interfaceinvoke $r7.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r9 = (androidx.media3.extractor.mp4.SefReader$DataReference) $r8;
+
+        $l8 = $r9.<androidx.media3.extractor.mp4.SefReader$DataReference: long startOffset>;
+
+        r2.<androidx.media3.extractor.PositionHolder: long position> = $l8;
+
+        return;
+    }
+
+    private void readSefData(androidx.media3.extractor.ExtractorInput, java.util.List) throws java.io.IOException
+    {
+        androidx.media3.extractor.mp4.SefReader r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        java.util.List r2, $r8, $r9;
+        long l0, $l6, $l7, $l9, $l10, $l11, $l13, $l14;
+        int i1, i2, i3, i4, i5, $i8, $i12, $i15, $i16, i17;
+        androidx.media3.common.util.ParsableByteArray r3, $r6;
+        androidx.media3.extractor.mp4.SefReader$DataReference r4;
+        java.lang.String r5;
+        byte[] $r7;
+        java.lang.Object $r10;
+        androidx.media3.extractor.metadata.mp4.SlowMotionData $r11;
+        java.lang.IllegalStateException $r12;
+
+        r0 := @this: androidx.media3.extractor.mp4.SefReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: java.util.List;
+
+        l0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l6 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        $l7 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l10 = $l6 - $l7;
+
+        $i8 = r0.<androidx.media3.extractor.mp4.SefReader: int tailLength>;
+
+        $l9 = (long) $i8;
+
+        $l11 = $l10 - $l9;
+
+        i1 = (int) $l11;
+
+        $r6 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r6.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(i1);
+
+        r3 = $r6;
+
+        $r7 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r7, 0, i1);
+
+        i17 = 0;
+
+     label1:
+        $r8 = r0.<androidx.media3.extractor.mp4.SefReader: java.util.List dataReferences>;
+
+        $i12 = interfaceinvoke $r8.<java.util.List: int size()>();
+
+        if i17 >= $i12 goto label6;
+
+        $r9 = r0.<androidx.media3.extractor.mp4.SefReader: java.util.List dataReferences>;
+
+        $r10 = interfaceinvoke $r9.<java.util.List: java.lang.Object get(int)>(i17);
+
+        r4 = (androidx.media3.extractor.mp4.SefReader$DataReference) $r10;
+
+        $l13 = r4.<androidx.media3.extractor.mp4.SefReader$DataReference: long startOffset>;
+
+        $l14 = $l13 - l0;
+
+        i2 = (int) $l14;
+
+        virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i2);
+
+        virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        i3 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianInt()>();
+
+        r5 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: java.lang.String readString(int)>(i3);
+
+        i4 = staticinvoke <androidx.media3.extractor.mp4.SefReader: int nameToDataType(java.lang.String)>(r5);
+
+        $i16 = r4.<androidx.media3.extractor.mp4.SefReader$DataReference: int size>;
+
+        $i15 = 8 + i3;
+
+        i5 = $i16 - $i15;
+
+        lookupswitch(i4)
+        {
+            case 2192: goto label2;
+            case 2816: goto label3;
+            case 2817: goto label3;
+            case 2819: goto label3;
+            case 2820: goto label3;
+            default: goto label4;
+        };
+
+     label2:
+        $r11 = staticinvoke <androidx.media3.extractor.mp4.SefReader: androidx.media3.extractor.metadata.mp4.SlowMotionData readSlowMotionData(androidx.media3.common.util.ParsableByteArray,int)>(r3, i5);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r11);
+
+        goto label5;
+
+     label3:
+        goto label5;
+
+     label4:
+        $r12 = new java.lang.IllegalStateException;
+
+        specialinvoke $r12.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r12;
+
+     label5:
+        i17 = i17 + 1;
+
+        goto label1;
+
+     label6:
+        return;
+    }
+
+    private static androidx.media3.extractor.metadata.mp4.SlowMotionData readSlowMotionData(androidx.media3.common.util.ParsableByteArray, int) throws androidx.media3.common.ParserException
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0, i2, i3, $i4, $i5, $i6, i7;
+        java.util.ArrayList r1, r22;
+        java.lang.String r2, $r12, $r14, $r16;
+        java.util.List r3, r4;
+        long l1, l8;
+        com.google.common.base.Splitter $r6, $r8;
+        java.lang.Object $r9, $r11, $r13, $r15;
+        java.lang.CharSequence $r10;
+        androidx.media3.common.ParserException $r18, $r20;
+        java.lang.Throwable $r19, r21, r25, r26;
+        androidx.media3.extractor.metadata.mp4.SlowMotionData$Segment r23;
+        androidx.media3.extractor.metadata.mp4.SlowMotionData r24;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i0 := @parameter1: int;
+
+        r22 = new java.util.ArrayList;
+
+        specialinvoke r22.<java.util.ArrayList: void <init>()>();
+
+        r1 = r22;
+
+        r2 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: java.lang.String readString(int)>(i0);
+
+        $r6 = <androidx.media3.extractor.mp4.SefReader: com.google.common.base.Splitter ASTERISK_SPLITTER>;
+
+        r3 = virtualinvoke $r6.<com.google.common.base.Splitter: java.util.List splitToList(java.lang.CharSequence)>(r2);
+
+        i7 = 0;
+
+     label1:
+        $i4 = interfaceinvoke r3.<java.util.List: int size()>();
+
+        if i7 >= $i4 goto label6;
+
+        $r8 = <androidx.media3.extractor.mp4.SefReader: com.google.common.base.Splitter COLON_SPLITTER>;
+
+        $r9 = interfaceinvoke r3.<java.util.List: java.lang.Object get(int)>(i7);
+
+        $r10 = (java.lang.CharSequence) $r9;
+
+        r4 = virtualinvoke $r8.<com.google.common.base.Splitter: java.util.List splitToList(java.lang.CharSequence)>($r10);
+
+        $i5 = interfaceinvoke r4.<java.util.List: int size()>();
+
+        if $i5 == 3 goto label2;
+
+        $r18 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>(null, null);
+
+        r25 = (java.lang.Throwable) $r18;
+
+        throw r25;
+
+     label2:
+        $r11 = interfaceinvoke r4.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r12 = (java.lang.String) $r11;
+
+        l8 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r12);
+
+        $r13 = interfaceinvoke r4.<java.util.List: java.lang.Object get(int)>(1);
+
+        $r14 = (java.lang.String) $r13;
+
+        l1 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r14);
+
+        $r15 = interfaceinvoke r4.<java.util.List: java.lang.Object get(int)>(2);
+
+        $r16 = (java.lang.String) $r15;
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r16);
+
+        $i6 = i2 - 1;
+
+        i3 = 1 << $i6;
+
+        r23 = new androidx.media3.extractor.metadata.mp4.SlowMotionData$Segment;
+
+        specialinvoke r23.<androidx.media3.extractor.metadata.mp4.SlowMotionData$Segment: void <init>(long,long,int)>(l8, l1, i3);
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>(r23);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r19 := @caughtexception;
+
+        r21 = $r19;
+
+        $r20 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>(null, r21);
+
+        r26 = (java.lang.Throwable) $r20;
+
+        throw r26;
+
+     label5:
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label6:
+        r24 = new androidx.media3.extractor.metadata.mp4.SlowMotionData;
+
+        specialinvoke r24.<androidx.media3.extractor.metadata.mp4.SlowMotionData: void <init>(java.util.List)>(r1);
+
+        return r24;
+
+        catch java.lang.NumberFormatException from label2 to label3 with label4;
+    }
+
+    private static int nameToDataType(java.lang.String) throws androidx.media3.common.ParserException
+    {
+        java.lang.String r0, r1;
+        int $i0;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        androidx.media3.common.ParserException $r2;
+        byte b1;
+        java.lang.Throwable r3;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 = r0;
+
+        b1 = -1;
+
+        $i0 = virtualinvoke r1.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i0)
+        {
+            case -1711564334: goto label01;
+            case -1332107749: goto label04;
+            case -1251387154: goto label02;
+            case -830665521: goto label05;
+            case 1760745220: goto label03;
+            default: goto label06;
+        };
+
+     label01:
+        $z4 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("SlowMotion_Data");
+
+        if $z4 == 0 goto label06;
+
+        b1 = 0;
+
+        goto label06;
+
+     label02:
+        $z2 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("Super_SlowMotion_Data");
+
+        if $z2 == 0 goto label06;
+
+        b1 = 1;
+
+        goto label06;
+
+     label03:
+        $z0 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("Super_SlowMotion_BGM");
+
+        if $z0 == 0 goto label06;
+
+        b1 = 2;
+
+        goto label06;
+
+     label04:
+        $z3 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("Super_SlowMotion_Edit_Data");
+
+        if $z3 == 0 goto label06;
+
+        b1 = 3;
+
+        goto label06;
+
+     label05:
+        $z1 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("Super_SlowMotion_Deflickering_On");
+
+        if $z1 == 0 goto label06;
+
+        b1 = 4;
+
+     label06:
+        tableswitch(b1)
+        {
+            case 0: goto label07;
+            case 1: goto label08;
+            case 2: goto label09;
+            case 3: goto label10;
+            case 4: goto label11;
+            default: goto label12;
+        };
+
+     label07:
+        return 2192;
+
+     label08:
+        return 2816;
+
+     label09:
+        return 2817;
+
+     label10:
+        return 2819;
+
+     label11:
+        return 2820;
+
+     label12:
+        $r2 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>("Invalid SEF name", null);
+
+        r3 = (java.lang.Throwable) $r2;
+
+        throw r3;
+    }
+
+    static void <clinit>()
+    {
+        com.google.common.base.Splitter $r0, $r1;
+
+        $r0 = staticinvoke <com.google.common.base.Splitter: com.google.common.base.Splitter on(char)>(58);
+
+        <androidx.media3.extractor.mp4.SefReader: com.google.common.base.Splitter COLON_SPLITTER> = $r0;
+
+        $r1 = staticinvoke <com.google.common.base.Splitter: com.google.common.base.Splitter on(char)>(42);
+
+        <androidx.media3.extractor.mp4.SefReader: com.google.common.base.Splitter ASTERISK_SPLITTER> = $r1;
+
+        return;
+    }
+
+androidx.media3.extractor.mp4.SefReader$DataReference
+<androidx.media3.extractor.mp4.SefReader$DataReference: int dataType>
+<androidx.media3.extractor.mp4.SefReader$DataReference: long startOffset>
+<androidx.media3.extractor.mp4.SefReader$DataReference: int size>
+    public void <init>(int, long, int)
+    {
+        androidx.media3.extractor.mp4.SefReader$DataReference r0;
+        int i0, i2;
+        long l1;
+
+        r0 := @this: androidx.media3.extractor.mp4.SefReader$DataReference;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        i2 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.mp4.SefReader$DataReference: int dataType> = i0;
+
+        r0.<androidx.media3.extractor.mp4.SefReader$DataReference: long startOffset> = l1;
+
+        r0.<androidx.media3.extractor.mp4.SefReader$DataReference: int size> = i2;
+
+        return;
+    }
+

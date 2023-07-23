@@ -1,0 +1,985 @@
+androidx.test.services.events.internal.Throwables
+<androidx.test.services.events.internal.Throwables: java.lang.String[] TEST_FRAMEWORK_METHOD_NAME_PREFIXES>
+<androidx.test.services.events.internal.Throwables: java.lang.String[] TEST_FRAMEWORK_TEST_METHOD_NAME_PREFIXES>
+<androidx.test.services.events.internal.Throwables: java.lang.String[] REFLECTION_METHOD_NAME_PREFIXES>
+    private static java.lang.String getFullStackTrace(java.lang.Throwable)
+    {
+        java.lang.Throwable r0;
+        java.io.StringWriter r1, $r3;
+        java.io.PrintWriter r2, $r4;
+        java.lang.String $r5;
+
+        r0 := @parameter0: java.lang.Throwable;
+
+        $r3 = new java.io.StringWriter;
+
+        specialinvoke $r3.<java.io.StringWriter: void <init>()>();
+
+        r1 = $r3;
+
+        $r4 = new java.io.PrintWriter;
+
+        specialinvoke $r4.<java.io.PrintWriter: void <init>(java.io.Writer)>(r1);
+
+        r2 = $r4;
+
+        virtualinvoke r0.<java.lang.Throwable: void printStackTrace(java.io.PrintWriter)>(r2);
+
+        $r5 = virtualinvoke r1.<java.io.StringWriter: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    public static java.lang.String getTrimmedStackTrace(java.lang.Throwable)
+    {
+        java.lang.Throwable r0;
+        java.util.List r1, $r5;
+        java.lang.StringBuilder r2, $r3;
+        boolean $z0;
+        java.lang.String $r4, $r6, $r7;
+
+        r0 := @parameter0: java.lang.Throwable;
+
+        r1 = staticinvoke <androidx.test.services.events.internal.Throwables: java.util.List getTrimmedStackTraceLines(java.lang.Throwable)>(r0);
+
+        $z0 = interfaceinvoke r1.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r7 = staticinvoke <androidx.test.services.events.internal.Throwables: java.lang.String getFullStackTrace(java.lang.Throwable)>(r0);
+
+        return $r7;
+
+     label1:
+        $r3 = new java.lang.StringBuilder;
+
+        $r4 = virtualinvoke r0.<java.lang.Throwable: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>($r4);
+
+        r2 = $r3;
+
+        staticinvoke <androidx.test.services.events.internal.Throwables: void appendStackTraceLines(java.util.List,java.lang.StringBuilder)>(r1, r2);
+
+        $r5 = staticinvoke <androidx.test.services.events.internal.Throwables: java.util.List getCauseStackTraceLines(java.lang.Throwable)>(r0);
+
+        staticinvoke <androidx.test.services.events.internal.Throwables: void appendStackTraceLines(java.util.List,java.lang.StringBuilder)>($r5, r2);
+
+        $r6 = virtualinvoke r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+
+    private static java.util.List asReversedList(java.util.List)
+    {
+        java.util.List r0, r3;
+        androidx.test.services.events.internal.Throwables$1 r2;
+
+        r0 := @parameter0: java.util.List;
+
+        r2 = new androidx.test.services.events.internal.Throwables$1;
+
+        specialinvoke r2.<androidx.test.services.events.internal.Throwables$1: void <init>(java.util.List)>(r0);
+
+        r3 = (java.util.List) r2;
+
+        return r3;
+    }
+
+    private static java.util.List getCauseStackTraceLines(java.lang.Throwable)
+    {
+        java.lang.Throwable r0, $r4, $r12, r15;
+        java.lang.String r1, $r7, $r8, $r10, $r11, r13, r14;
+        java.io.BufferedReader r2, $r5;
+        java.util.ArrayList r3, $r9;
+        java.io.StringReader $r6;
+        int $i0;
+        boolean $z0;
+        java.util.List $r16;
+
+        r0 := @parameter0: java.lang.Throwable;
+
+        $r4 = virtualinvoke r0.<java.lang.Throwable: java.lang.Throwable getCause()>();
+
+        if $r4 == null goto label6;
+
+        r1 = staticinvoke <androidx.test.services.events.internal.Throwables: java.lang.String getFullStackTrace(java.lang.Throwable)>(r0);
+
+        $r5 = new java.io.BufferedReader;
+
+        $r6 = new java.io.StringReader;
+
+        $r7 = virtualinvoke r0.<java.lang.Throwable: java.lang.String toString()>();
+
+        $i0 = virtualinvoke $r7.<java.lang.String: int length()>();
+
+        $r8 = virtualinvoke r1.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        specialinvoke $r6.<java.io.StringReader: void <init>(java.lang.String)>($r8);
+
+        specialinvoke $r5.<java.io.BufferedReader: void <init>(java.io.Reader)>($r6);
+
+        r2 = $r5;
+
+        $r9 = new java.util.ArrayList;
+
+        specialinvoke $r9.<java.util.ArrayList: void <init>()>();
+
+        r3 = $r9;
+
+     label1:
+        $r10 = virtualinvoke r2.<java.io.BufferedReader: java.lang.String readLine()>();
+
+        r13 = $r10;
+
+        if $r10 == null goto label4;
+
+        $z0 = virtualinvoke r13.<java.lang.String: boolean startsWith(java.lang.String)>("Caused by: ");
+
+        if $z0 == 0 goto label1;
+
+        interfaceinvoke r3.<java.util.List: boolean add(java.lang.Object)>(r13);
+
+     label2:
+        $r11 = virtualinvoke r2.<java.io.BufferedReader: java.lang.String readLine()>();
+
+        r14 = $r11;
+
+        if $r11 == null goto label3;
+
+        interfaceinvoke r3.<java.util.List: boolean add(java.lang.Object)>(r14);
+
+        goto label2;
+
+     label3:
+        return r3;
+
+     label4:
+        goto label6;
+
+     label5:
+        $r12 := @caughtexception;
+
+        r15 = $r12;
+
+     label6:
+        $r16 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r16;
+
+        catch java.io.IOException from label1 to label3 with label5;
+    }
+
+    private static java.util.List getTrimmedStackTraceLines(java.lang.Throwable)
+    {
+        java.lang.Throwable r0, $r14;
+        java.util.List r1, $r8, $r9, $r13;
+        java.util.Iterator r2, r5;
+        java.lang.StackTraceElement r3, r6;
+        java.util.ArrayList r4, $r12;
+        java.lang.StackTraceElement[] $r7;
+        boolean $z0, $z2;
+        java.lang.Object $r10, $r20;
+        androidx.test.services.events.internal.Throwables$State $r11, r25;
+        int $i0, $i1, $i2, i3, i4;
+        java.lang.StringBuilder $r15, $r16, $r17, $r18, $r21, $r22, $r23;
+        java.lang.String $r19, $r24, r26;
+
+        r0 := @parameter0: java.lang.Throwable;
+
+        $r7 = virtualinvoke r0.<java.lang.Throwable: java.lang.StackTraceElement[] getStackTrace()>();
+
+        r1 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r7);
+
+        i3 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        r25 = <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_OTHER_CODE>;
+
+        $r8 = staticinvoke <androidx.test.services.events.internal.Throwables: java.util.List asReversedList(java.util.List)>(r1);
+
+        r2 = interfaceinvoke $r8.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r10 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.StackTraceElement) $r10;
+
+        r25 = virtualinvoke r25.<androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State processStackTraceElement(java.lang.StackTraceElement)>(r3);
+
+        $r11 = <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State DONE>;
+
+        if r25 != $r11 goto label5;
+
+        $r12 = new java.util.ArrayList;
+
+        $i0 = i3 + 2;
+
+        specialinvoke $r12.<java.util.ArrayList: void <init>(int)>($i0);
+
+        r4 = $r12;
+
+        interfaceinvoke r4.<java.util.List: boolean add(java.lang.Object)>("");
+
+        $r13 = interfaceinvoke r1.<java.util.List: java.util.List subList(int,int)>(0, i3);
+
+        r5 = interfaceinvoke $r13.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z2 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label3;
+
+        $r20 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (java.lang.StackTraceElement) $r20;
+
+        r26 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>(r6);
+
+        $r21 = new java.lang.StringBuilder;
+
+        specialinvoke $r21.<java.lang.StringBuilder: void <init>()>();
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\tat ");
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r26);
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        interfaceinvoke r4.<java.util.List: boolean add(java.lang.Object)>($r24);
+
+        goto label2;
+
+     label3:
+        $r14 = virtualinvoke r0.<java.lang.Throwable: java.lang.Throwable getCause()>();
+
+        if $r14 == null goto label4;
+
+        $i1 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $i2 = interfaceinvoke r4.<java.util.List: int size()>();
+
+        i4 = $i1 - $i2;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\t... ");
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i4);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" trimmed");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        interfaceinvoke r4.<java.util.List: boolean add(java.lang.Object)>($r19);
+
+     label4:
+        return r4;
+
+     label5:
+        i3 = i3 + -1;
+
+        goto label1;
+
+     label6:
+        $r9 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r9;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String[] $r0, $r1, $r2;
+
+        $r0 = newarray (java.lang.String)[5];
+
+        $r0[0] = "org.junit.runner.";
+
+        $r0[1] = "org.junit.runners.";
+
+        $r0[2] = "org.junit.experimental.runners.";
+
+        $r0[3] = "org.junit.internal.";
+
+        $r0[4] = "junit.";
+
+        <androidx.test.services.events.internal.Throwables: java.lang.String[] TEST_FRAMEWORK_METHOD_NAME_PREFIXES> = $r0;
+
+        $r1 = newarray (java.lang.String)[1];
+
+        $r1[0] = "org.junit.internal.StackTracesTest";
+
+        <androidx.test.services.events.internal.Throwables: java.lang.String[] TEST_FRAMEWORK_TEST_METHOD_NAME_PREFIXES> = $r1;
+
+        $r2 = newarray (java.lang.String)[7];
+
+        $r2[0] = "sun.reflect.";
+
+        $r2[1] = "java.lang.reflect.";
+
+        $r2[2] = "jdk.internal.reflect.";
+
+        $r2[3] = "org.junit.rules.RunRules.<init>(";
+
+        $r2[4] = "org.junit.rules.RunRules.applyAll(";
+
+        $r2[5] = "org.junit.runners.BlockJUnit4ClassRunner.withMethodRules(";
+
+        $r2[6] = "junit.framework.TestCase.runBare(";
+
+        <androidx.test.services.events.internal.Throwables: java.lang.String[] REFLECTION_METHOD_NAME_PREFIXES> = $r2;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        androidx.test.services.events.internal.Throwables r0;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static void appendStackTraceLines(java.util.List, java.lang.StringBuilder)
+    {
+        java.util.List r0;
+        java.lang.StringBuilder r1;
+        java.util.Iterator r2;
+        java.lang.String r3, $r6;
+        boolean $z0;
+        java.lang.Object $r4;
+        java.lang.Object[] $r5;
+
+        r0 := @parameter0: java.util.List;
+
+        r1 := @parameter1: java.lang.StringBuilder;
+
+        r2 = interfaceinvoke r0.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r4;
+
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r5[0] = r3;
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%s%n", $r5);
+
+        virtualinvoke r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    static volatile boolean '-$$Nest$smisReflectionMethod'(java.lang.String)
+    {
+        java.lang.String r0;
+        boolean $z0;
+
+        r0 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean isReflectionMethod(java.lang.String)>(r0);
+
+        return $z0;
+    }
+
+    static volatile boolean '-$$Nest$smisTestFrameworkMethod'(java.lang.String)
+    {
+        java.lang.String r0;
+        boolean $z0;
+
+        r0 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean isTestFrameworkMethod(java.lang.String)>(r0);
+
+        return $z0;
+    }
+
+    private static boolean isMatchingMethod(java.lang.String, java.lang.String[])
+    {
+        java.lang.String r0, r3;
+        java.lang.String[] r1, r2;
+        int i0, i1;
+        boolean $z0;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.String[];
+
+        r2 = r1;
+
+        i0 = lengthof r2;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label3;
+
+        r3 = r2[i1];
+
+        $z0 = virtualinvoke r0.<java.lang.String: boolean startsWith(java.lang.String)>(r3);
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+    private static boolean isReflectionMethod(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.String[] $r1;
+        boolean $z0;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = <androidx.test.services.events.internal.Throwables: java.lang.String[] REFLECTION_METHOD_NAME_PREFIXES>;
+
+        $z0 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean isMatchingMethod(java.lang.String,java.lang.String[])>(r0, $r1);
+
+        return $z0;
+    }
+
+    private static boolean isTestFrameworkMethod(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.String[] $r1, $r2;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = <androidx.test.services.events.internal.Throwables: java.lang.String[] TEST_FRAMEWORK_METHOD_NAME_PREFIXES>;
+
+        $z0 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean isMatchingMethod(java.lang.String,java.lang.String[])>(r0, $r1);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = <androidx.test.services.events.internal.Throwables: java.lang.String[] TEST_FRAMEWORK_TEST_METHOD_NAME_PREFIXES>;
+
+        $z1 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean isMatchingMethod(java.lang.String,java.lang.String[])>(r0, $r2);
+
+        if $z1 != 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+
+androidx.test.services.events.internal.Throwables$1
+<androidx.test.services.events.internal.Throwables$1: java.util.List val$list>
+    public int size()
+    {
+        androidx.test.services.events.internal.Throwables$1 r0;
+        java.util.List $r1;
+        int $i0;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$1;
+
+        $r1 = r0.<androidx.test.services.events.internal.Throwables$1: java.util.List val$list>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        return $i0;
+    }
+
+    public java.lang.Object get(int)
+    {
+        androidx.test.services.events.internal.Throwables$1 r0;
+        int i0, $i1, $i2, $i3;
+        java.util.List $r1, $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$1;
+
+        i0 := @parameter0: int;
+
+        $r2 = r0.<androidx.test.services.events.internal.Throwables$1: java.util.List val$list>;
+
+        $r1 = r0.<androidx.test.services.events.internal.Throwables$1: java.util.List val$list>;
+
+        $i1 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        $i2 = $i1 - i0;
+
+        $i3 = $i2 - 1;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i3);
+
+        return $r3;
+    }
+
+    void <init>(java.util.List)
+    {
+        androidx.test.services.events.internal.Throwables$1 r0;
+        java.util.List r1;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$1;
+
+        r1 := @parameter0: java.util.List;
+
+        r0.<androidx.test.services.events.internal.Throwables$1: java.util.List val$list> = r1;
+
+        specialinvoke r0.<java.util.AbstractList: void <init>()>();
+
+        return;
+    }
+
+androidx.test.services.events.internal.Throwables$State$1-IA
+androidx.test.services.events.internal.Throwables$State$1
+    public androidx.test.services.events.internal.Throwables$State processLine(java.lang.String)
+    {
+        androidx.test.services.events.internal.Throwables$State$1 r0;
+        java.lang.String r1;
+        boolean $z0;
+        androidx.test.services.events.internal.Throwables$State $r2;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$1;
+
+        r1 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean '-$$Nest$smisTestFrameworkMethod'(java.lang.String)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = <androidx.test.services.events.internal.Throwables$State$1: androidx.test.services.events.internal.Throwables$State PROCESSING_TEST_FRAMEWORK_CODE>;
+
+        return $r2;
+
+     label1:
+        return r0;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.test.services.events.internal.Throwables$State$1 r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$1;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<androidx.test.services.events.internal.Throwables$State: void <init>(java.lang.String,int,androidx.test.services.events.internal.Throwables$State-IA)>(r1, i0, null);
+
+        return;
+    }
+
+    void <init>(java.lang.String, int, androidx.test.services.events.internal.Throwables$State$1-IA)
+    {
+        androidx.test.services.events.internal.Throwables$State$1 r0;
+        java.lang.String r1;
+        int i0;
+        androidx.test.services.events.internal.Throwables$State$1-IA r2;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$1;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.test.services.events.internal.Throwables$State$1-IA;
+
+        specialinvoke r0.<androidx.test.services.events.internal.Throwables$State$1: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+androidx.test.services.events.internal.Throwables$State$2-IA
+androidx.test.services.events.internal.Throwables$State$2
+    public androidx.test.services.events.internal.Throwables$State processLine(java.lang.String)
+    {
+        androidx.test.services.events.internal.Throwables$State$2 r0;
+        java.lang.String r1;
+        boolean $z0, $z1;
+        androidx.test.services.events.internal.Throwables$State $r2, $r3;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$2;
+
+        r1 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean '-$$Nest$smisReflectionMethod'(java.lang.String)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        $r3 = <androidx.test.services.events.internal.Throwables$State$2: androidx.test.services.events.internal.Throwables$State PROCESSING_REFLECTION_CODE>;
+
+        return $r3;
+
+     label1:
+        $z1 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean '-$$Nest$smisTestFrameworkMethod'(java.lang.String)>(r1);
+
+        if $z1 == 0 goto label2;
+
+        return r0;
+
+     label2:
+        $r2 = <androidx.test.services.events.internal.Throwables$State$2: androidx.test.services.events.internal.Throwables$State PROCESSING_OTHER_CODE>;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.test.services.events.internal.Throwables$State$2 r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$2;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<androidx.test.services.events.internal.Throwables$State: void <init>(java.lang.String,int,androidx.test.services.events.internal.Throwables$State-IA)>(r1, i0, null);
+
+        return;
+    }
+
+    void <init>(java.lang.String, int, androidx.test.services.events.internal.Throwables$State$2-IA)
+    {
+        androidx.test.services.events.internal.Throwables$State$2 r0;
+        java.lang.String r1;
+        int i0;
+        androidx.test.services.events.internal.Throwables$State$2-IA r2;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$2;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.test.services.events.internal.Throwables$State$2-IA;
+
+        specialinvoke r0.<androidx.test.services.events.internal.Throwables$State$2: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+androidx.test.services.events.internal.Throwables$State$3-IA
+androidx.test.services.events.internal.Throwables$State$3
+    public androidx.test.services.events.internal.Throwables$State processLine(java.lang.String)
+    {
+        androidx.test.services.events.internal.Throwables$State$3 r0;
+        java.lang.String r1;
+        boolean $z0, $z1;
+        androidx.test.services.events.internal.Throwables$State $r2, $r3;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$3;
+
+        r1 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean '-$$Nest$smisReflectionMethod'(java.lang.String)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        return r0;
+
+     label1:
+        $z1 = staticinvoke <androidx.test.services.events.internal.Throwables: boolean '-$$Nest$smisTestFrameworkMethod'(java.lang.String)>(r1);
+
+        if $z1 == 0 goto label2;
+
+        $r3 = <androidx.test.services.events.internal.Throwables$State$3: androidx.test.services.events.internal.Throwables$State PROCESSING_TEST_FRAMEWORK_CODE>;
+
+        return $r3;
+
+     label2:
+        $r2 = <androidx.test.services.events.internal.Throwables$State$3: androidx.test.services.events.internal.Throwables$State DONE>;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.test.services.events.internal.Throwables$State$3 r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$3;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<androidx.test.services.events.internal.Throwables$State: void <init>(java.lang.String,int,androidx.test.services.events.internal.Throwables$State-IA)>(r1, i0, null);
+
+        return;
+    }
+
+    void <init>(java.lang.String, int, androidx.test.services.events.internal.Throwables$State$3-IA)
+    {
+        androidx.test.services.events.internal.Throwables$State$3 r0;
+        java.lang.String r1;
+        int i0;
+        androidx.test.services.events.internal.Throwables$State$3-IA r2;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$3;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.test.services.events.internal.Throwables$State$3-IA;
+
+        specialinvoke r0.<androidx.test.services.events.internal.Throwables$State$3: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+androidx.test.services.events.internal.Throwables$State$4-IA
+androidx.test.services.events.internal.Throwables$State$4
+    public androidx.test.services.events.internal.Throwables$State processLine(java.lang.String)
+    {
+        androidx.test.services.events.internal.Throwables$State$4 r0;
+        java.lang.String r1;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$4;
+
+        r1 := @parameter0: java.lang.String;
+
+        return r0;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.test.services.events.internal.Throwables$State$4 r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$4;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<androidx.test.services.events.internal.Throwables$State: void <init>(java.lang.String,int,androidx.test.services.events.internal.Throwables$State-IA)>(r1, i0, null);
+
+        return;
+    }
+
+    void <init>(java.lang.String, int, androidx.test.services.events.internal.Throwables$State$4-IA)
+    {
+        androidx.test.services.events.internal.Throwables$State$4 r0;
+        java.lang.String r1;
+        int i0;
+        androidx.test.services.events.internal.Throwables$State$4-IA r2;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State$4;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.test.services.events.internal.Throwables$State$4-IA;
+
+        specialinvoke r0.<androidx.test.services.events.internal.Throwables$State$4: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+androidx.test.services.events.internal.Throwables$State-IA
+androidx.test.services.events.internal.Throwables$State
+<androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_OTHER_CODE>
+<androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_TEST_FRAMEWORK_CODE>
+<androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_REFLECTION_CODE>
+<androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State DONE>
+<androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State[] $VALUES>
+<androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State processLine(java.lang.String)>
+    public final androidx.test.services.events.internal.Throwables$State processStackTraceElement(java.lang.StackTraceElement)
+    {
+        androidx.test.services.events.internal.Throwables$State r0, $r11;
+        java.lang.StackTraceElement r1;
+        java.lang.String r2, r3, $r4, $r10;
+        java.lang.StringBuilder $r5, $r6, $r7, $r8, $r9;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State;
+
+        r1 := @parameter0: java.lang.StackTraceElement;
+
+        $r4 = virtualinvoke r1.<java.lang.StackTraceElement: java.lang.String getClassName()>();
+
+        r3 = virtualinvoke r1.<java.lang.StackTraceElement: java.lang.String getMethodName()>();
+
+        r2 = $r4;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("()");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r11 = virtualinvoke r0.<androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State processLine(java.lang.String)>($r10);
+
+        return $r11;
+    }
+
+    public static androidx.test.services.events.internal.Throwables$State valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        androidx.test.services.events.internal.Throwables$State $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "Landroidx/test/services/events/internal/Throwables$State;", r0);
+
+        $r2 = (androidx.test.services.events.internal.Throwables$State) $r1;
+
+        return $r2;
+    }
+
+    static void <clinit>()
+    {
+        androidx.test.services.events.internal.Throwables$State$1 $r0;
+        androidx.test.services.events.internal.Throwables$State$2 $r1;
+        androidx.test.services.events.internal.Throwables$State$3 $r2;
+        androidx.test.services.events.internal.Throwables$State$4 $r3;
+        androidx.test.services.events.internal.Throwables$State[] $r4;
+
+        $r0 = new androidx.test.services.events.internal.Throwables$State$1;
+
+        specialinvoke $r0.<androidx.test.services.events.internal.Throwables$State$1: void <init>(java.lang.String,int,androidx.test.services.events.internal.Throwables$State$1-IA)>("PROCESSING_OTHER_CODE", 0, null);
+
+        <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_OTHER_CODE> = $r0;
+
+        $r1 = new androidx.test.services.events.internal.Throwables$State$2;
+
+        specialinvoke $r1.<androidx.test.services.events.internal.Throwables$State$2: void <init>(java.lang.String,int,androidx.test.services.events.internal.Throwables$State$2-IA)>("PROCESSING_TEST_FRAMEWORK_CODE", 1, null);
+
+        <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_TEST_FRAMEWORK_CODE> = $r1;
+
+        $r2 = new androidx.test.services.events.internal.Throwables$State$3;
+
+        specialinvoke $r2.<androidx.test.services.events.internal.Throwables$State$3: void <init>(java.lang.String,int,androidx.test.services.events.internal.Throwables$State$3-IA)>("PROCESSING_REFLECTION_CODE", 2, null);
+
+        <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_REFLECTION_CODE> = $r2;
+
+        $r3 = new androidx.test.services.events.internal.Throwables$State$4;
+
+        specialinvoke $r3.<androidx.test.services.events.internal.Throwables$State$4: void <init>(java.lang.String,int,androidx.test.services.events.internal.Throwables$State$4-IA)>("DONE", 3, null);
+
+        <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State DONE> = $r3;
+
+        $r4 = staticinvoke <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State[] $values()>();
+
+        <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State[] $VALUES> = $r4;
+
+        return;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.test.services.events.internal.Throwables$State r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+    void <init>(java.lang.String, int, androidx.test.services.events.internal.Throwables$State-IA)
+    {
+        androidx.test.services.events.internal.Throwables$State r0;
+        java.lang.String r1;
+        int i0;
+        androidx.test.services.events.internal.Throwables$State-IA r2;
+
+        r0 := @this: androidx.test.services.events.internal.Throwables$State;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.test.services.events.internal.Throwables$State-IA;
+
+        specialinvoke r0.<androidx.test.services.events.internal.Throwables$State: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+    private static androidx.test.services.events.internal.Throwables$State[] $values()
+    {
+        androidx.test.services.events.internal.Throwables$State[] $r0;
+        androidx.test.services.events.internal.Throwables$State $r1, $r2, $r3, $r4;
+
+        $r0 = newarray (androidx.test.services.events.internal.Throwables$State)[4];
+
+        $r1 = <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_OTHER_CODE>;
+
+        $r0[0] = $r1;
+
+        $r2 = <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_TEST_FRAMEWORK_CODE>;
+
+        $r0[1] = $r2;
+
+        $r3 = <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State PROCESSING_REFLECTION_CODE>;
+
+        $r0[2] = $r3;
+
+        $r4 = <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State DONE>;
+
+        $r0[3] = $r4;
+
+        return $r0;
+    }
+
+    public static androidx.test.services.events.internal.Throwables$State[] values()
+    {
+        androidx.test.services.events.internal.Throwables$State[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <androidx.test.services.events.internal.Throwables$State: androidx.test.services.events.internal.Throwables$State[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (androidx.test.services.events.internal.Throwables$State[]) $r1;
+
+        return $r2;
+    }
+

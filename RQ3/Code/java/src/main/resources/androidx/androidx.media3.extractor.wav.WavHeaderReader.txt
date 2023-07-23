@@ -1,0 +1,382 @@
+androidx.media3.extractor.wav.WavHeaderReader
+<androidx.media3.extractor.wav.WavHeaderReader: java.lang.String TAG>
+    public static boolean checkFileType(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.common.util.ParsableByteArray r1, $r3;
+        androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader r2;
+        int i0, $i1, $i2;
+        byte[] $r4;
+        java.lang.StringBuilder $r5, $r6, $r7;
+        java.lang.String $r8;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r3 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r3.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(8);
+
+        r1 = $r3;
+
+        r2 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader peek(androidx.media3.extractor.ExtractorInput,androidx.media3.common.util.ParsableByteArray)>(r0, r1);
+
+        $i1 = r2.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: int id>;
+
+        if $i1 == 1380533830 goto label1;
+
+        $i2 = r2.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: int id>;
+
+        if $i2 == 1380333108 goto label1;
+
+        return 0;
+
+     label1:
+        $r4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, 4);
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        i0 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        if i0 == 1463899717 goto label2;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unsupported form type: ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String)>("WavHeaderReader", $r8);
+
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    public static long readRf64SampleDataSize(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.common.util.ParsableByteArray r1, $r3;
+        androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader r2;
+        long l0, $l2;
+        int $i1, $i3, $i4;
+        byte[] $r4;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r3 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r3.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(8);
+
+        r1 = $r3;
+
+        r2 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader peek(androidx.media3.extractor.ExtractorInput,androidx.media3.common.util.ParsableByteArray)>(r0, r1);
+
+        $i1 = r2.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: int id>;
+
+        if $i1 == 1685272116 goto label1;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        return -1L;
+
+     label1:
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(8);
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, 8);
+
+        l0 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: long readLittleEndianLong()>();
+
+        $l2 = r2.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: long size>;
+
+        $i3 = (int) $l2;
+
+        $i4 = 8 + $i3;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i4);
+
+        return l0;
+    }
+
+    public static androidx.media3.extractor.wav.WavFormat readFormat(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.common.util.ParsableByteArray r1, $r3;
+        androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader r2;
+        int i0, i1, i2, i3, i4, i5, i6, $i10, $i14;
+        long $l7, $l9, $l11, $l12, $l13;
+        byte $b8;
+        byte[] $r4, r6;
+        androidx.media3.extractor.wav.WavFormat $r5;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r3 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r3.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(16);
+
+        r1 = $r3;
+
+        r2 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader: androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader skipToChunk(int,androidx.media3.extractor.ExtractorInput,androidx.media3.common.util.ParsableByteArray)>(1718449184, r0, r1);
+
+        $l7 = r2.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: long size>;
+
+        $b8 = $l7 cmp 16L;
+
+        if $b8 < 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z0);
+
+        $r4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, 16);
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        i0 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianUnsignedShort()>();
+
+        i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianUnsignedShort()>();
+
+        i2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianUnsignedIntToInt()>();
+
+        i3 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianUnsignedIntToInt()>();
+
+        i4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianUnsignedShort()>();
+
+        i5 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readLittleEndianUnsignedShort()>();
+
+        $l9 = r2.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: long size>;
+
+        $i10 = (int) $l9;
+
+        i6 = $i10 - 16;
+
+        if i6 <= 0 goto label3;
+
+        r6 = newarray (byte)[i6];
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>(r6, 0, i6);
+
+        goto label4;
+
+     label3:
+        r6 = <androidx.media3.common.util.Util: byte[] EMPTY_BYTE_ARRAY>;
+
+     label4:
+        $l11 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getPeekPosition()>();
+
+        $l12 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l13 = $l11 - $l12;
+
+        $i14 = (int) $l13;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i14);
+
+        $r5 = new androidx.media3.extractor.wav.WavFormat;
+
+        specialinvoke $r5.<androidx.media3.extractor.wav.WavFormat: void <init>(int,int,int,int,int,int,byte[])>(i0, i1, i2, i3, i4, i5, r6);
+
+        return $r5;
+    }
+
+    public static android.util.Pair skipToSampleData(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.common.util.ParsableByteArray r1, $r3;
+        androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader r2;
+        long l0, $l1;
+        java.lang.Long $r4, $r5;
+        android.util.Pair $r6;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $r3 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r3.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(8);
+
+        r1 = $r3;
+
+        r2 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader: androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader skipToChunk(int,androidx.media3.extractor.ExtractorInput,androidx.media3.common.util.ParsableByteArray)>(1684108385, r0, r1);
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>(8);
+
+        l0 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $r4 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l0);
+
+        $l1 = r2.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: long size>;
+
+        $r5 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        $r6 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r4, $r5);
+
+        return $r6;
+    }
+
+    private static androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader skipToChunk(int, androidx.media3.extractor.ExtractorInput, androidx.media3.common.util.ParsableByteArray) throws java.io.IOException
+    {
+        int i0, $i2, $i3, $i6, $i7;
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        long l1, $l4;
+        java.lang.StringBuilder $r3, $r4, $r7, $r8, r12, r13;
+        java.lang.String $r5, $r9;
+        byte $b5;
+        androidx.media3.common.ParserException $r10;
+        androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader r11;
+        java.lang.Throwable r14;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: androidx.media3.extractor.ExtractorInput;
+
+        r1 := @parameter2: androidx.media3.common.util.ParsableByteArray;
+
+        r11 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader peek(androidx.media3.extractor.ExtractorInput,androidx.media3.common.util.ParsableByteArray)>(r0, r1);
+
+     label1:
+        $i2 = r11.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: int id>;
+
+        if $i2 == i0 goto label3;
+
+        r12 = new java.lang.StringBuilder;
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring unknown WAV chunk: ");
+
+        $i3 = r11.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: int id>;
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("WavHeaderReader", $r5);
+
+        $l4 = r11.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: long size>;
+
+        l1 = 8L + $l4;
+
+        $b5 = l1 cmp 2147483647L;
+
+        if $b5 <= 0 goto label2;
+
+        r13 = new java.lang.StringBuilder;
+
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Chunk is too large (~2GB+) to skip; id: ");
+
+        $i7 = r11.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: int id>;
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i7);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r10 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForUnsupportedContainerFeature(java.lang.String)>($r9);
+
+        r14 = (java.lang.Throwable) $r10;
+
+        throw r14;
+
+     label2:
+        $i6 = (int) l1;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i6);
+
+        r11 = staticinvoke <androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader peek(androidx.media3.extractor.ExtractorInput,androidx.media3.common.util.ParsableByteArray)>(r0, r1);
+
+        goto label1;
+
+     label3:
+        return r11;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.extractor.wav.WavHeaderReader r0;
+
+        r0 := @this: androidx.media3.extractor.wav.WavHeaderReader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader
+<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: int SIZE_IN_BYTES>
+<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: int id>
+<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: long size>
+    private void <init>(int, long)
+    {
+        androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader r0;
+        int i0;
+        long l1;
+
+        r0 := @this: androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: int id> = i0;
+
+        r0.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: long size> = l1;
+
+        return;
+    }
+
+    public static androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader peek(androidx.media3.extractor.ExtractorInput, androidx.media3.common.util.ParsableByteArray) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        int i0;
+        long l1;
+        byte[] $r2;
+        androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader $r3;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r1 := @parameter1: androidx.media3.common.util.ParsableByteArray;
+
+        $r2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r2, 0, 8);
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        i0 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        l1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: long readLittleEndianUnsignedInt()>();
+
+        $r3 = new androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader;
+
+        specialinvoke $r3.<androidx.media3.extractor.wav.WavHeaderReader$ChunkHeader: void <init>(int,long)>(i0, l1);
+
+        return $r3;
+    }
+

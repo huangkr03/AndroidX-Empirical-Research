@@ -1,0 +1,490 @@
+androidx.car.moderator.ContentRateLimiter
+<androidx.car.moderator.ContentRateLimiter: java.lang.String TAG>
+<androidx.car.moderator.ContentRateLimiter: double mMaxStoredPermits>
+<androidx.car.moderator.ContentRateLimiter: long mStableIntervalMs>
+<androidx.car.moderator.ContentRateLimiter: long mFillDelayMs>
+<androidx.car.moderator.ContentRateLimiter: boolean mUnlimitedModeEnabled>
+<androidx.car.moderator.ContentRateLimiter: double mLastCalculatedPermitCount>
+<androidx.car.moderator.ContentRateLimiter: long mResumeIncrementingMs>
+<androidx.car.moderator.ContentRateLimiter: boolean mSecondaryFillDelayPermitAvailable>
+<androidx.car.moderator.ContentRateLimiter: androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider mElapsedTimeProvider>
+    public void <init>(double, double, long)
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        double d0, d1;
+        long l0;
+        androidx.car.moderator.SystemClockTimeProvider $r1;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        l0 := @parameter2: long;
+
+        $r1 = new androidx.car.moderator.SystemClockTimeProvider;
+
+        specialinvoke $r1.<androidx.car.moderator.SystemClockTimeProvider: void <init>()>();
+
+        specialinvoke r0.<androidx.car.moderator.ContentRateLimiter: void <init>(double,double,long,androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider)>(d0, d1, l0, $r1);
+
+        return;
+    }
+
+    void <init>(double, double, long, androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider)
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        double d0, d1;
+        long l0, $l1;
+        androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider r1, $r2;
+        boolean $z0;
+        java.lang.Object[] $r3;
+        java.lang.Double $r4, $r5;
+        java.lang.Long $r6;
+        java.lang.String $r7;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        l0 := @parameter2: long;
+
+        r1 := @parameter3: androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.car.moderator.ContentRateLimiter: boolean mSecondaryFillDelayPermitAvailable> = 1;
+
+        r0.<androidx.car.moderator.ContentRateLimiter: androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider mElapsedTimeProvider> = r1;
+
+        $r2 = r0.<androidx.car.moderator.ContentRateLimiter: androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider mElapsedTimeProvider>;
+
+        $l1 = interfaceinvoke $r2.<androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider: long getElapsedRealtime()>();
+
+        r0.<androidx.car.moderator.ContentRateLimiter: long mResumeIncrementingMs> = $l1;
+
+        virtualinvoke r0.<androidx.car.moderator.ContentRateLimiter: void setAcquiredPermitsRate(double)>(d0);
+
+        virtualinvoke r0.<androidx.car.moderator.ContentRateLimiter: void setMaxStoredPermits(double)>(d1);
+
+        virtualinvoke r0.<androidx.car.moderator.ContentRateLimiter: void setPermitFillDelay(long)>(l0);
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("ContentRateLimiter", 2);
+
+        if $z0 == 0 goto label1;
+
+        $r3 = newarray (java.lang.Object)[3];
+
+        $r4 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d0);
+
+        $r3[0] = $r4;
+
+        $r5 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d1);
+
+        $r3[1] = $r5;
+
+        $r6 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l0);
+
+        $r3[2] = $r6;
+
+        $r7 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("permitsPerSecond: %f maxStoredPermits: %f, fillDelayMs %d", $r3);
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>("ContentRateLimiter", $r7);
+
+     label1:
+        return;
+    }
+
+    public void setAcquiredPermitsRate(double)
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        double d0, $d1, $d2;
+        byte $b0;
+        java.util.concurrent.TimeUnit $r1;
+        long $l1, $l2;
+        boolean $z0;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        d0 := @parameter0: double;
+
+        $b0 = d0 cmpl 0.0;
+
+        if $b0 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <android.support.v4.util.Preconditions: void checkArgument(boolean)>($z0);
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $l1 = virtualinvoke $r1.<java.util.concurrent.TimeUnit: long toMillis(long)>(1L);
+
+        $d1 = (double) $l1;
+
+        $d2 = $d1 / d0;
+
+        $l2 = (long) $d2;
+
+        r0.<androidx.car.moderator.ContentRateLimiter: long mStableIntervalMs> = $l2;
+
+        return;
+    }
+
+    public void setMaxStoredPermits(double)
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        double d0;
+        byte $b0;
+        boolean $z0;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        d0 := @parameter0: double;
+
+        $b0 = d0 cmpl 0.0;
+
+        if $b0 < 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <android.support.v4.util.Preconditions: void checkArgument(boolean)>($z0);
+
+        r0.<androidx.car.moderator.ContentRateLimiter: double mMaxStoredPermits> = d0;
+
+        r0.<androidx.car.moderator.ContentRateLimiter: double mLastCalculatedPermitCount> = d0;
+
+        return;
+    }
+
+    public void setPermitFillDelay(long)
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        long l0;
+        byte $b1;
+        boolean $z0;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        l0 := @parameter0: long;
+
+        $b1 = l0 cmp 0L;
+
+        if $b1 < 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <android.support.v4.util.Preconditions: void checkArgument(boolean)>($z0);
+
+        r0.<androidx.car.moderator.ContentRateLimiter: long mFillDelayMs> = l0;
+
+        return;
+    }
+
+    public double getAvailablePermits()
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        double $d0;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        $d0 = specialinvoke r0.<androidx.car.moderator.ContentRateLimiter: double getLastCalculatedPermitCount()>();
+
+        return $d0;
+    }
+
+    public void setAvailablePermits(double)
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        double d0;
+        androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider $r1;
+        long $l0;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        d0 := @parameter0: double;
+
+        $r1 = r0.<androidx.car.moderator.ContentRateLimiter: androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider mElapsedTimeProvider>;
+
+        $l0 = interfaceinvoke $r1.<androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider: long getElapsedRealtime()>();
+
+        specialinvoke r0.<androidx.car.moderator.ContentRateLimiter: void setLastCalculatedPermitCount(double,long)>(d0, $l0);
+
+        return;
+    }
+
+    public double getMaxStoredPermits()
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        double $d0;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        $d0 = r0.<androidx.car.moderator.ContentRateLimiter: double mMaxStoredPermits>;
+
+        return $d0;
+    }
+
+    public boolean tryAcquire()
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        boolean $z0;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        $z0 = virtualinvoke r0.<androidx.car.moderator.ContentRateLimiter: boolean tryAcquire(int)>(1);
+
+        return $z0;
+    }
+
+    public boolean tryAcquire(int)
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        int i0;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6;
+        long l1, $l3, $l5, $l6, $l8, $l9, $l11, $l12;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6;
+        androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider $r1;
+        byte $b2, $b4;
+        java.lang.Object[] $r2, $r6;
+        java.lang.Double $r3, $r8, $r9;
+        java.lang.Boolean $r4;
+        java.lang.String $r5, $r10;
+        java.lang.Integer $r7;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        i0 := @parameter0: int;
+
+        $z0 = r0.<androidx.car.moderator.ContentRateLimiter: boolean mUnlimitedModeEnabled>;
+
+        if $z0 == 0 goto label2;
+
+        $z6 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("ContentRateLimiter", 3);
+
+        if $z6 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("ContentRateLimiter", "Unlimited mode is enabled.");
+
+     label1:
+        return 1;
+
+     label2:
+        d0 = specialinvoke r0.<androidx.car.moderator.ContentRateLimiter: double getLastCalculatedPermitCount()>();
+
+        $r1 = r0.<androidx.car.moderator.ContentRateLimiter: androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider mElapsedTimeProvider>;
+
+        l1 = interfaceinvoke $r1.<androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider: long getElapsedRealtime()>();
+
+        $z1 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("ContentRateLimiter", 2);
+
+        if $z1 == 0 goto label3;
+
+        $r6 = newarray (java.lang.Object)[3];
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r6[0] = $r7;
+
+        $d5 = r0.<androidx.car.moderator.ContentRateLimiter: double mLastCalculatedPermitCount>;
+
+        $r8 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d5);
+
+        $r6[1] = $r8;
+
+        $d6 = r0.<androidx.car.moderator.ContentRateLimiter: double mMaxStoredPermits>;
+
+        $r9 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d6);
+
+        $r6[2] = $r9;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Requesting: %d, Stored: %f/%f", $r6);
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>("ContentRateLimiter", $r10);
+
+     label3:
+        $d1 = (double) i0;
+
+        $b2 = d0 cmpg $d1;
+
+        if $b2 > 0 goto label4;
+
+        $l11 = r0.<androidx.car.moderator.ContentRateLimiter: long mFillDelayMs>;
+
+        $l12 = l1 + $l11;
+
+        specialinvoke r0.<androidx.car.moderator.ContentRateLimiter: void setLastCalculatedPermitCount(double,long)>(0.0, $l12);
+
+        return 0;
+
+     label4:
+        $l3 = r0.<androidx.car.moderator.ContentRateLimiter: long mResumeIncrementingMs>;
+
+        $b4 = l1 cmp $l3;
+
+        if $b4 >= 0 goto label6;
+
+        $z4 = r0.<androidx.car.moderator.ContentRateLimiter: boolean mSecondaryFillDelayPermitAvailable>;
+
+        if $z4 == 0 goto label6;
+
+        $l8 = r0.<androidx.car.moderator.ContentRateLimiter: long mFillDelayMs>;
+
+        $l9 = l1 + $l8;
+
+        specialinvoke r0.<androidx.car.moderator.ContentRateLimiter: void setLastCalculatedPermitCount(double,long)>(d0, $l9);
+
+        r0.<androidx.car.moderator.ContentRateLimiter: boolean mSecondaryFillDelayPermitAvailable> = 0;
+
+        $z5 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("ContentRateLimiter", 3);
+
+        if $z5 == 0 goto label5;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("ContentRateLimiter", "Used up free secondary permit");
+
+     label5:
+        return 1;
+
+     label6:
+        $d2 = (double) i0;
+
+        $d3 = d0 - $d2;
+
+        $l5 = r0.<androidx.car.moderator.ContentRateLimiter: long mFillDelayMs>;
+
+        $l6 = l1 + $l5;
+
+        specialinvoke r0.<androidx.car.moderator.ContentRateLimiter: void setLastCalculatedPermitCount(double,long)>($d3, $l6);
+
+        $z2 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("ContentRateLimiter", 2);
+
+        if $z2 == 0 goto label7;
+
+        $r2 = newarray (java.lang.Object)[2];
+
+        $d4 = r0.<androidx.car.moderator.ContentRateLimiter: double mLastCalculatedPermitCount>;
+
+        $r3 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d4);
+
+        $r2[0] = $r3;
+
+        $z3 = r0.<androidx.car.moderator.ContentRateLimiter: boolean mSecondaryFillDelayPermitAvailable>;
+
+        $r4 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z3);
+
+        $r2[1] = $r4;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("permits remaining %s, secondary permit available %s", $r2);
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>("ContentRateLimiter", $r5);
+
+     label7:
+        r0.<androidx.car.moderator.ContentRateLimiter: boolean mSecondaryFillDelayPermitAvailable> = 1;
+
+        return 1;
+    }
+
+    public void setUnlimitedMode(boolean)
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        boolean z0;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        z0 := @parameter0: boolean;
+
+        r0.<androidx.car.moderator.ContentRateLimiter: boolean mUnlimitedModeEnabled> = z0;
+
+        return;
+    }
+
+    private double getLastCalculatedPermitCount()
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        long l0, l1, $l2, $l4, $l5;
+        double d0, $d1, $d2, $d3, $d4, $d5;
+        androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider $r1;
+        byte $b3;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        $r1 = r0.<androidx.car.moderator.ContentRateLimiter: androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider mElapsedTimeProvider>;
+
+        l0 = interfaceinvoke $r1.<androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider: long getElapsedRealtime()>();
+
+        $l2 = r0.<androidx.car.moderator.ContentRateLimiter: long mResumeIncrementingMs>;
+
+        $b3 = l0 cmp $l2;
+
+        if $b3 <= 0 goto label1;
+
+        $l4 = r0.<androidx.car.moderator.ContentRateLimiter: long mResumeIncrementingMs>;
+
+        l1 = l0 - $l4;
+
+        $d3 = (double) l1;
+
+        $l5 = r0.<androidx.car.moderator.ContentRateLimiter: long mStableIntervalMs>;
+
+        $d2 = (double) $l5;
+
+        d0 = $d3 / $d2;
+
+        $d4 = r0.<androidx.car.moderator.ContentRateLimiter: double mLastCalculatedPermitCount>;
+
+        $d5 = $d4 + d0;
+
+        specialinvoke r0.<androidx.car.moderator.ContentRateLimiter: void setLastCalculatedPermitCount(double,long)>($d5, l0);
+
+     label1:
+        $d1 = r0.<androidx.car.moderator.ContentRateLimiter: double mLastCalculatedPermitCount>;
+
+        return $d1;
+    }
+
+    private void setLastCalculatedPermitCount(double, long)
+    {
+        androidx.car.moderator.ContentRateLimiter r0;
+        double d0, $d1, $d2;
+        long l0;
+
+        r0 := @this: androidx.car.moderator.ContentRateLimiter;
+
+        d0 := @parameter0: double;
+
+        l0 := @parameter1: long;
+
+        $d1 = r0.<androidx.car.moderator.ContentRateLimiter: double mMaxStoredPermits>;
+
+        $d2 = staticinvoke <java.lang.Math: double min(double,double)>($d1, d0);
+
+        r0.<androidx.car.moderator.ContentRateLimiter: double mLastCalculatedPermitCount> = $d2;
+
+        r0.<androidx.car.moderator.ContentRateLimiter: long mResumeIncrementingMs> = l0;
+
+        return;
+    }
+
+androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider
+<androidx.car.moderator.ContentRateLimiter$ElapsedTimeProvider: long getElapsedRealtime()>

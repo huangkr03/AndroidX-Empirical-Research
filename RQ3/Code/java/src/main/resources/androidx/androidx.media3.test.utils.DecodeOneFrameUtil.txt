@@ -1,0 +1,352 @@
+androidx.media3.test.utils.DecodeOneFrameUtil
+<androidx.media3.test.utils.DecodeOneFrameUtil: int DEQUEUE_TIMEOUT_US>
+    public static void decodeOneCacheFileFrame(java.lang.String, androidx.media3.test.utils.DecodeOneFrameUtil$Listener, android.view.Surface) throws java.lang.Exception
+    {
+        java.lang.String r0;
+        androidx.media3.test.utils.DecodeOneFrameUtil$Listener r1;
+        android.view.Surface r2;
+        android.media.MediaExtractor r3, $r5;
+        java.lang.Throwable r4, $r6;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: androidx.media3.test.utils.DecodeOneFrameUtil$Listener;
+
+        r2 := @parameter2: android.view.Surface;
+
+        $r5 = new android.media.MediaExtractor;
+
+        specialinvoke $r5.<android.media.MediaExtractor: void <init>()>();
+
+        r3 = $r5;
+
+     label1:
+        virtualinvoke r3.<android.media.MediaExtractor: void setDataSource(java.lang.String)>(r0);
+
+        staticinvoke <androidx.media3.test.utils.DecodeOneFrameUtil: void decodeOneFrame(android.media.MediaExtractor,androidx.media3.test.utils.DecodeOneFrameUtil$Listener,android.view.Surface)>(r3, r1, r2);
+
+     label2:
+        virtualinvoke r3.<android.media.MediaExtractor: void release()>();
+
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r4 = $r6;
+
+     label4:
+        virtualinvoke r3.<android.media.MediaExtractor: void release()>();
+
+        throw r4;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public static void decodeOneAssetFileFrame(java.lang.String, androidx.media3.test.utils.DecodeOneFrameUtil$Listener, android.view.Surface) throws java.lang.Exception
+    {
+        java.lang.String r0;
+        androidx.media3.test.utils.DecodeOneFrameUtil$Listener r1;
+        android.view.Surface r2;
+        android.media.MediaExtractor r3, $r9;
+        android.content.Context r4;
+        android.content.res.AssetFileDescriptor r5;
+        java.lang.Throwable r6, r7, r8, $r12, $r13, $r14;
+        android.content.res.AssetManager $r10;
+        java.io.FileDescriptor $r11;
+        long $l0, $l1;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: androidx.media3.test.utils.DecodeOneFrameUtil$Listener;
+
+        r2 := @parameter2: android.view.Surface;
+
+        $r9 = new android.media.MediaExtractor;
+
+        specialinvoke $r9.<android.media.MediaExtractor: void <init>()>();
+
+        r3 = $r9;
+
+        r4 = staticinvoke <androidx.test.core.app.ApplicationProvider: android.content.Context getApplicationContext()>();
+
+     label01:
+        $r10 = virtualinvoke r4.<android.content.Context: android.content.res.AssetManager getAssets()>();
+
+        r5 = virtualinvoke $r10.<android.content.res.AssetManager: android.content.res.AssetFileDescriptor openFd(java.lang.String)>(r0);
+
+     label02:
+        $r11 = virtualinvoke r5.<android.content.res.AssetFileDescriptor: java.io.FileDescriptor getFileDescriptor()>();
+
+        $l0 = virtualinvoke r5.<android.content.res.AssetFileDescriptor: long getStartOffset()>();
+
+        $l1 = virtualinvoke r5.<android.content.res.AssetFileDescriptor: long getLength()>();
+
+        virtualinvoke r3.<android.media.MediaExtractor: void setDataSource(java.io.FileDescriptor,long,long)>($r11, $l0, $l1);
+
+        staticinvoke <androidx.media3.test.utils.DecodeOneFrameUtil: void decodeOneFrame(android.media.MediaExtractor,androidx.media3.test.utils.DecodeOneFrameUtil$Listener,android.view.Surface)>(r3, r1, r2);
+
+     label03:
+        if r5 == null goto label09;
+
+        virtualinvoke r5.<android.content.res.AssetFileDescriptor: void close()>();
+
+        goto label09;
+
+     label04:
+        $r13 := @caughtexception;
+
+        r6 = $r13;
+
+        if r5 == null goto label08;
+
+     label05:
+        virtualinvoke r5.<android.content.res.AssetFileDescriptor: void close()>();
+
+     label06:
+        goto label08;
+
+     label07:
+        $r14 := @caughtexception;
+
+        r7 = $r14;
+
+        virtualinvoke r6.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r7);
+
+     label08:
+        throw r6;
+
+     label09:
+        virtualinvoke r3.<android.media.MediaExtractor: void release()>();
+
+        goto label12;
+
+     label10:
+        $r12 := @caughtexception;
+
+        r8 = $r12;
+
+     label11:
+        virtualinvoke r3.<android.media.MediaExtractor: void release()>();
+
+        throw r8;
+
+     label12:
+        return;
+
+        catch java.lang.Throwable from label02 to label03 with label04;
+        catch java.lang.Throwable from label05 to label06 with label07;
+        catch java.lang.Throwable from label01 to label09 with label10;
+        catch java.lang.Throwable from label10 to label11 with label10;
+    }
+
+    private static void decodeOneFrame(android.media.MediaExtractor, androidx.media3.test.utils.DecodeOneFrameUtil$Listener, android.view.Surface) throws java.lang.Exception
+    {
+        android.media.MediaExtractor r0;
+        androidx.media3.test.utils.DecodeOneFrameUtil$Listener r1;
+        java.nio.ByteBuffer r2, $r12;
+        int i0, i1, $i3, i4, $i5, i6, i7;
+        android.media.MediaCodec$BufferInfo r3, $r17;
+        java.lang.Throwable r4, $r25;
+        java.lang.String $r6, $r20, r29;
+        java.lang.Object $r7, $r13, $r21;
+        java.lang.Integer $r8, $r10, $r14, $r16, $r30, $r32;
+        com.google.common.truth.IntegerSubject $r9, $r15, $r31;
+        java.nio.ByteBuffer[] $r11;
+        long $l2;
+        android.media.MediaFormat $r18, $r19, $r22, r28;
+        boolean $z0, z1;
+        android.view.Surface $r23, r26;
+        android.graphics.SurfaceTexture $r24;
+        android.media.MediaCodec r27;
+
+        r0 := @parameter0: android.media.MediaExtractor;
+
+        r1 := @parameter1: androidx.media3.test.utils.DecodeOneFrameUtil$Listener;
+
+        r26 := @parameter2: android.view.Surface;
+
+        if r26 != null goto label01;
+
+        $r23 = new android.view.Surface;
+
+        $r24 = new android.graphics.SurfaceTexture;
+
+        specialinvoke $r24.<android.graphics.SurfaceTexture: void <init>(int)>(0);
+
+        specialinvoke $r23.<android.view.Surface: void <init>(android.graphics.SurfaceTexture)>($r24);
+
+        r26 = $r23;
+
+     label01:
+        r27 = null;
+
+        r28 = null;
+
+     label02:
+        i4 = 0;
+
+     label03:
+        $i5 = virtualinvoke r0.<android.media.MediaExtractor: int getTrackCount()>();
+
+        if i4 >= $i5 goto label05;
+
+        $r19 = virtualinvoke r0.<android.media.MediaExtractor: android.media.MediaFormat getTrackFormat(int)>(i4);
+
+        $r20 = virtualinvoke $r19.<android.media.MediaFormat: java.lang.String getString(java.lang.String)>("mime");
+
+        $z0 = staticinvoke <androidx.media3.common.MimeTypes: boolean isVideo(java.lang.String)>($r20);
+
+        if $z0 == 0 goto label04;
+
+        r28 = virtualinvoke r0.<android.media.MediaExtractor: android.media.MediaFormat getTrackFormat(int)>(i4);
+
+        $r21 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r28);
+
+        $r22 = (android.media.MediaFormat) $r21;
+
+        interfaceinvoke r1.<androidx.media3.test.utils.DecodeOneFrameUtil$Listener: void onContainerExtracted(android.media.MediaFormat)>($r22);
+
+        virtualinvoke r0.<android.media.MediaExtractor: void selectTrack(int)>(i4);
+
+        goto label05;
+
+     label04:
+        i4 = i4 + 1;
+
+        goto label03;
+
+     label05:
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>(r28);
+
+        $r6 = virtualinvoke r28.<android.media.MediaFormat: java.lang.String getString(java.lang.String)>("mime");
+
+        $r7 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r6);
+
+        r29 = (java.lang.String) $r7;
+
+        r27 = staticinvoke <android.media.MediaCodec: android.media.MediaCodec createDecoderByType(java.lang.String)>(r29);
+
+        virtualinvoke r27.<android.media.MediaCodec: void configure(android.media.MediaFormat,android.view.Surface,android.media.MediaCrypto,int)>(r28, r26, null, 0);
+
+        virtualinvoke r27.<android.media.MediaCodec: void start()>();
+
+        i6 = virtualinvoke r27.<android.media.MediaCodec: int dequeueInputBuffer(long)>(5000000L);
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i6);
+
+        $r9 = staticinvoke <com.google.common.truth.Truth: com.google.common.truth.IntegerSubject assertThat(java.lang.Integer)>($r8);
+
+        $r10 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(-1);
+
+        virtualinvoke $r9.<com.google.common.truth.IntegerSubject: void isNotEqualTo(java.lang.Object)>($r10);
+
+        $r11 = virtualinvoke r27.<android.media.MediaCodec: java.nio.ByteBuffer[] getInputBuffers()>();
+
+        $r12 = $r11[i6];
+
+        $r13 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r12);
+
+        r2 = (java.nio.ByteBuffer) $r13;
+
+        i0 = virtualinvoke r0.<android.media.MediaExtractor: int readSampleData(java.nio.ByteBuffer,int)>(r2, 0);
+
+        $l2 = virtualinvoke r0.<android.media.MediaExtractor: long getSampleTime()>();
+
+        $i3 = virtualinvoke r0.<android.media.MediaExtractor: int getSampleFlags()>();
+
+        virtualinvoke r27.<android.media.MediaCodec: void queueInputBuffer(int,int,int,long,int)>(i6, 0, i0, $l2, $i3);
+
+        i7 = virtualinvoke r27.<android.media.MediaCodec: int dequeueInputBuffer(long)>(5000000L);
+
+        $r14 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i7);
+
+        $r15 = staticinvoke <com.google.common.truth.Truth: com.google.common.truth.IntegerSubject assertThat(java.lang.Integer)>($r14);
+
+        $r16 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(-1);
+
+        virtualinvoke $r15.<com.google.common.truth.IntegerSubject: void isNotEqualTo(java.lang.Object)>($r16);
+
+        virtualinvoke r27.<android.media.MediaCodec: void queueInputBuffer(int,int,int,long,int)>(i7, 0, 0, 0L, 4);
+
+        $r17 = new android.media.MediaCodec$BufferInfo;
+
+        specialinvoke $r17.<android.media.MediaCodec$BufferInfo: void <init>()>();
+
+        r3 = $r17;
+
+        z1 = 0;
+
+     label06:
+        i1 = virtualinvoke r27.<android.media.MediaCodec: int dequeueOutputBuffer(android.media.MediaCodec$BufferInfo,long)>(r3, 5000000L);
+
+        if z1 != 0 goto label07;
+
+        if i1 != -2 goto label07;
+
+        $r18 = virtualinvoke r27.<android.media.MediaCodec: android.media.MediaFormat getOutputFormat()>();
+
+        interfaceinvoke r1.<androidx.media3.test.utils.DecodeOneFrameUtil$Listener: void onFrameDecoded(android.media.MediaFormat)>($r18);
+
+        z1 = 1;
+
+     label07:
+        $r30 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r31 = staticinvoke <com.google.common.truth.Truth: com.google.common.truth.IntegerSubject assertThat(java.lang.Integer)>($r30);
+
+        $r32 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(-1);
+
+        virtualinvoke $r31.<com.google.common.truth.IntegerSubject: void isNotEqualTo(java.lang.Object)>($r32);
+
+        if i1 == -3 goto label06;
+
+        if i1 == -2 goto label06;
+
+        virtualinvoke r27.<android.media.MediaCodec: void releaseOutputBuffer(int,boolean)>(i1, 1);
+
+     label08:
+        if r27 == null goto label12;
+
+        virtualinvoke r27.<android.media.MediaCodec: void release()>();
+
+        goto label12;
+
+     label09:
+        $r25 := @caughtexception;
+
+        r4 = $r25;
+
+     label10:
+        if r27 == null goto label11;
+
+        virtualinvoke r27.<android.media.MediaCodec: void release()>();
+
+     label11:
+        throw r4;
+
+     label12:
+        return;
+
+        catch java.lang.Throwable from label02 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label09;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.test.utils.DecodeOneFrameUtil r0;
+
+        r0 := @this: androidx.media3.test.utils.DecodeOneFrameUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+androidx.media3.test.utils.DecodeOneFrameUtil$Listener
+<androidx.media3.test.utils.DecodeOneFrameUtil$Listener: void onContainerExtracted(android.media.MediaFormat)>
+<androidx.media3.test.utils.DecodeOneFrameUtil$Listener: void onFrameDecoded(android.media.MediaFormat)>

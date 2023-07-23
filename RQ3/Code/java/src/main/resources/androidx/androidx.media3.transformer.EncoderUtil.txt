@@ -1,0 +1,1183 @@
+androidx.media3.transformer.EncoderUtil
+<androidx.media3.transformer.EncoderUtil: int LEVEL_UNSET>
+<androidx.media3.transformer.EncoderUtil: com.google.common.base.Supplier MIME_TYPE_TO_ENCODERS>
+    public static com.google.common.collect.ImmutableList getSupportedEncoders(java.lang.String)
+    {
+        java.lang.String r0, $r6;
+        com.google.common.base.Supplier $r1;
+        java.lang.Object $r2, $r4;
+        com.google.common.collect.ImmutableListMultimap $r3, $r5;
+        com.google.common.collect.ImmutableList $r7;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = <androidx.media3.transformer.EncoderUtil: com.google.common.base.Supplier MIME_TYPE_TO_ENCODERS>;
+
+        $r2 = interfaceinvoke $r1.<com.google.common.base.Supplier: java.lang.Object get()>();
+
+        $r3 = (com.google.common.collect.ImmutableListMultimap) $r2;
+
+        $r4 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        $r5 = (com.google.common.collect.ImmutableListMultimap) $r4;
+
+        $r6 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r0);
+
+        $r7 = virtualinvoke $r5.<com.google.common.collect.ImmutableListMultimap: com.google.common.collect.ImmutableList get(java.lang.Object)>($r6);
+
+        return $r7;
+    }
+
+    public static com.google.common.collect.ImmutableSet getSupportedVideoMimeTypes()
+    {
+        com.google.common.base.Supplier $r0;
+        java.lang.Object $r1, $r3;
+        com.google.common.collect.ImmutableListMultimap $r2, $r4;
+        com.google.common.collect.ImmutableSet $r5;
+
+        $r0 = <androidx.media3.transformer.EncoderUtil: com.google.common.base.Supplier MIME_TYPE_TO_ENCODERS>;
+
+        $r1 = interfaceinvoke $r0.<com.google.common.base.Supplier: java.lang.Object get()>();
+
+        $r2 = (com.google.common.collect.ImmutableListMultimap) $r1;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r4 = (com.google.common.collect.ImmutableListMultimap) $r3;
+
+        $r5 = virtualinvoke $r4.<com.google.common.collect.ImmutableListMultimap: com.google.common.collect.ImmutableSet keySet()>();
+
+        return $r5;
+    }
+
+    public static com.google.common.collect.ImmutableList getSupportedEncoderNamesForHdrEditing(java.lang.String, androidx.media3.common.ColorInfo)
+    {
+        java.lang.String r0, $r14;
+        androidx.media3.common.ColorInfo r1;
+        int i0, i1, $i2, $i3, $i4, i5, i6;
+        com.google.common.collect.ImmutableList r2, r4, $r8, $r10;
+        com.google.common.collect.ImmutableList$Builder r3;
+        android.media.MediaCodecInfo r5;
+        android.media.MediaCodecInfo$CodecProfileLevel[] r6;
+        android.media.MediaCodecInfo$CodecProfileLevel r7;
+        androidx.media3.transformer.EncoderSelector $r9;
+        java.lang.Object $r11;
+        boolean $z0, $z1, $z2;
+        android.media.MediaCodecInfo$CodecCapabilities $r12;
+        java.lang.Integer $r13;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: androidx.media3.common.ColorInfo;
+
+        $i2 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i2 < 31 goto label1;
+
+        if r1 != null goto label2;
+
+     label1:
+        $r8 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of()>();
+
+        return $r8;
+
+     label2:
+        i0 = r1.<androidx.media3.common.ColorInfo: int colorTransfer>;
+
+        r2 = staticinvoke <androidx.media3.transformer.EncoderUtil: com.google.common.collect.ImmutableList getCodecProfilesForHdrFormat(java.lang.String,int)>(r0, i0);
+
+        r3 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList$Builder builder()>();
+
+        $r9 = <androidx.media3.transformer.EncoderSelector: androidx.media3.transformer.EncoderSelector DEFAULT>;
+
+        r4 = interfaceinvoke $r9.<androidx.media3.transformer.EncoderSelector: com.google.common.collect.ImmutableList selectEncoderInfos(java.lang.String)>(r0);
+
+        i5 = 0;
+
+     label3:
+        $i3 = virtualinvoke r4.<com.google.common.collect.ImmutableList: int size()>();
+
+        if i5 >= $i3 goto label8;
+
+        $r11 = virtualinvoke r4.<com.google.common.collect.ImmutableList: java.lang.Object get(int)>(i5);
+
+        r5 = (android.media.MediaCodecInfo) $r11;
+
+        $z0 = virtualinvoke r5.<android.media.MediaCodecInfo: boolean isAlias()>();
+
+        if $z0 != 0 goto label7;
+
+        $z1 = staticinvoke <androidx.media3.transformer.EncoderUtil: boolean isFeatureSupported(android.media.MediaCodecInfo,java.lang.String,java.lang.String)>(r5, r0, "hdr-editing");
+
+        if $z1 != 0 goto label4;
+
+        goto label7;
+
+     label4:
+        $r12 = virtualinvoke r5.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r0);
+
+        r6 = $r12.<android.media.MediaCodecInfo$CodecCapabilities: android.media.MediaCodecInfo$CodecProfileLevel[] profileLevels>;
+
+        i1 = lengthof r6;
+
+        i6 = 0;
+
+     label5:
+        if i6 >= i1 goto label7;
+
+        r7 = r6[i6];
+
+        $i4 = r7.<android.media.MediaCodecInfo$CodecProfileLevel: int profile>;
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i4);
+
+        $z2 = virtualinvoke r2.<com.google.common.collect.ImmutableList: boolean contains(java.lang.Object)>($r13);
+
+        if $z2 == 0 goto label6;
+
+        $r14 = virtualinvoke r5.<android.media.MediaCodecInfo: java.lang.String getName()>();
+
+        virtualinvoke r3.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList$Builder add(java.lang.Object)>($r14);
+
+     label6:
+        i6 = i6 + 1;
+
+        goto label5;
+
+     label7:
+        i5 = i5 + 1;
+
+        goto label3;
+
+     label8:
+        $r10 = virtualinvoke r3.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList build()>();
+
+        return $r10;
+    }
+
+    public static com.google.common.collect.ImmutableList getCodecProfilesForHdrFormat(java.lang.String, int)
+    {
+        java.lang.String r0, r1;
+        int i0, $i1;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Integer $r2, $r4, $r6, $r8, $r10, $r12, $r13;
+        com.google.common.collect.ImmutableList $r3, $r5, $r7, $r9, $r11, $r14, $r15;
+        byte b2;
+
+        r0 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r1 = r0;
+
+        b2 = -1;
+
+        $i1 = virtualinvoke r1.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i1)
+        {
+            case -1662735862: goto label04;
+            case -1662541442: goto label03;
+            case 1331836730: goto label02;
+            case 1599127257: goto label01;
+            default: goto label05;
+        };
+
+     label01:
+        $z0 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("video/x-vnd.on2.vp9");
+
+        if $z0 == 0 goto label05;
+
+        b2 = 0;
+
+        goto label05;
+
+     label02:
+        $z1 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("video/avc");
+
+        if $z1 == 0 goto label05;
+
+        b2 = 1;
+
+        goto label05;
+
+     label03:
+        $z2 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("video/hevc");
+
+        if $z2 == 0 goto label05;
+
+        b2 = 2;
+
+        goto label05;
+
+     label04:
+        $z3 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("video/av01");
+
+        if $z3 == 0 goto label05;
+
+        b2 = 3;
+
+     label05:
+        tableswitch(b2)
+        {
+            case 0: goto label06;
+            case 1: goto label08;
+            case 2: goto label09;
+            case 3: goto label11;
+            default: goto label13;
+        };
+
+     label06:
+        if i0 == 7 goto label07;
+
+        if i0 != 6 goto label13;
+
+     label07:
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(4096);
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(8192);
+
+        $r14 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object,java.lang.Object)>($r12, $r13);
+
+        return $r14;
+
+     label08:
+        if i0 != 7 goto label13;
+
+        $r10 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(16);
+
+        $r11 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object)>($r10);
+
+        return $r11;
+
+     label09:
+        if i0 != 7 goto label10;
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(2);
+
+        $r9 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object)>($r8);
+
+        return $r9;
+
+     label10:
+        if i0 != 6 goto label13;
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(4096);
+
+        $r7 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object)>($r6);
+
+        return $r7;
+
+     label11:
+        if i0 != 7 goto label12;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(2);
+
+        $r5 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object)>($r4);
+
+        return $r5;
+
+     label12:
+        if i0 != 6 goto label13;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(4096);
+
+        $r3 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object)>($r2);
+
+        return $r3;
+
+     label13:
+        $r15 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of()>();
+
+        return $r15;
+    }
+
+    public static boolean isSizeSupported(android.media.MediaCodecInfo, java.lang.String, int, int)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        int i0, i1;
+        android.media.MediaCodecInfo$CodecCapabilities $r2;
+        android.media.MediaCodecInfo$VideoCapabilities $r3;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        $r2 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        $r3 = virtualinvoke $r2.<android.media.MediaCodecInfo$CodecCapabilities: android.media.MediaCodecInfo$VideoCapabilities getVideoCapabilities()>();
+
+        $z0 = virtualinvoke $r3.<android.media.MediaCodecInfo$VideoCapabilities: boolean isSizeSupported(int,int)>(i0, i1);
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        if i0 != 1920 goto label2;
+
+        if i1 != 1080 goto label2;
+
+        $z2 = staticinvoke <android.media.CamcorderProfile: boolean hasProfile(int)>(6);
+
+        return $z2;
+
+     label2:
+        if i0 != 3840 goto label3;
+
+        if i1 != 2160 goto label3;
+
+        $z1 = staticinvoke <android.media.CamcorderProfile: boolean hasProfile(int)>(8);
+
+        return $z1;
+
+     label3:
+        return 0;
+    }
+
+    public static android.util.Range getSupportedHeights(android.media.MediaCodecInfo, java.lang.String, int)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        int i0;
+        android.media.MediaCodecInfo$CodecCapabilities $r2;
+        android.media.MediaCodecInfo$VideoCapabilities $r3;
+        android.util.Range $r4;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        i0 := @parameter2: int;
+
+        $r2 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        $r3 = virtualinvoke $r2.<android.media.MediaCodecInfo$CodecCapabilities: android.media.MediaCodecInfo$VideoCapabilities getVideoCapabilities()>();
+
+        $r4 = virtualinvoke $r3.<android.media.MediaCodecInfo$VideoCapabilities: android.util.Range getSupportedHeightsFor(int)>(i0);
+
+        return $r4;
+    }
+
+    public static android.util.Pair getSupportedResolutionRanges(android.media.MediaCodecInfo, java.lang.String)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        android.media.MediaCodecInfo$VideoCapabilities r2;
+        android.media.MediaCodecInfo$CodecCapabilities $r3;
+        android.util.Range $r4, $r5;
+        android.util.Pair $r6;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r3 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        r2 = virtualinvoke $r3.<android.media.MediaCodecInfo$CodecCapabilities: android.media.MediaCodecInfo$VideoCapabilities getVideoCapabilities()>();
+
+        $r4 = virtualinvoke r2.<android.media.MediaCodecInfo$VideoCapabilities: android.util.Range getSupportedWidths()>();
+
+        $r5 = virtualinvoke r2.<android.media.MediaCodecInfo$VideoCapabilities: android.util.Range getSupportedHeights()>();
+
+        $r6 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r4, $r5);
+
+        return $r6;
+    }
+
+    public static android.util.Size getSupportedResolution(android.media.MediaCodecInfo, java.lang.String, int, int)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        android.media.MediaCodecInfo$VideoCapabilities r2;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i16, i17, i18, i19, i20, i21, i22, i23, i24, i25, i26, i27, i28, i29;
+        android.media.MediaCodecInfo$CodecCapabilities $r3;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        android.util.Range $r4, $r8;
+        java.lang.Integer $r5, $r7, $r9, $r11;
+        java.lang.Comparable $r6, $r10;
+        double $d0, $d1, $d2, $d3, $d4;
+        long $l15;
+        android.util.Size $r12, $r13, $r14, $r15, $r16, $r17;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        i17 := @parameter2: int;
+
+        i18 := @parameter3: int;
+
+        $r3 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        r2 = virtualinvoke $r3.<android.media.MediaCodecInfo$CodecCapabilities: android.media.MediaCodecInfo$VideoCapabilities getVideoCapabilities()>();
+
+        i0 = virtualinvoke r2.<android.media.MediaCodecInfo$VideoCapabilities: int getWidthAlignment()>();
+
+        i1 = virtualinvoke r2.<android.media.MediaCodecInfo$VideoCapabilities: int getHeightAlignment()>();
+
+        i19 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>(i17, i0);
+
+        i20 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>(i18, i1);
+
+        $z0 = staticinvoke <androidx.media3.transformer.EncoderUtil: boolean isSizeSupported(android.media.MediaCodecInfo,java.lang.String,int,int)>(r0, r1, i19, i20);
+
+        if $z0 == 0 goto label1;
+
+        $r16 = new android.util.Size;
+
+        specialinvoke $r16.<android.util.Size: void <init>(int,int)>(i19, i20);
+
+        return $r16;
+
+     label1:
+        $i3 = i19 * 3;
+
+        $i4 = $i3 / 4;
+
+        i21 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>($i4, i0);
+
+        $i5 = i20 * 3;
+
+        $i6 = $i5 / 4;
+
+        i22 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>($i6, i1);
+
+        $z1 = staticinvoke <androidx.media3.transformer.EncoderUtil: boolean isSizeSupported(android.media.MediaCodecInfo,java.lang.String,int,int)>(r0, r1, i21, i22);
+
+        if $z1 == 0 goto label2;
+
+        $r15 = new android.util.Size;
+
+        specialinvoke $r15.<android.util.Size: void <init>(int,int)>(i21, i22);
+
+        return $r15;
+
+     label2:
+        $i7 = i19 * 2;
+
+        $i8 = $i7 / 3;
+
+        i23 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>($i8, i0);
+
+        $i9 = i20 * 2;
+
+        $i10 = $i9 / 3;
+
+        i24 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>($i10, i1);
+
+        $z2 = staticinvoke <androidx.media3.transformer.EncoderUtil: boolean isSizeSupported(android.media.MediaCodecInfo,java.lang.String,int,int)>(r0, r1, i19, i20);
+
+        if $z2 == 0 goto label3;
+
+        $r14 = new android.util.Size;
+
+        specialinvoke $r14.<android.util.Size: void <init>(int,int)>(i23, i24);
+
+        return $r14;
+
+     label3:
+        $i11 = i19 / 2;
+
+        i25 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>($i11, i0);
+
+        $i12 = i20 / 2;
+
+        i26 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>($i12, i1);
+
+        $z3 = staticinvoke <androidx.media3.transformer.EncoderUtil: boolean isSizeSupported(android.media.MediaCodecInfo,java.lang.String,int,int)>(r0, r1, i25, i26);
+
+        if $z3 == 0 goto label4;
+
+        $r13 = new android.util.Size;
+
+        specialinvoke $r13.<android.util.Size: void <init>(int,int)>(i25, i26);
+
+        return $r13;
+
+     label4:
+        $i13 = i19 / 3;
+
+        i27 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>($i13, i0);
+
+        $i14 = i20 / 3;
+
+        i28 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>($i14, i1);
+
+        $z4 = staticinvoke <androidx.media3.transformer.EncoderUtil: boolean isSizeSupported(android.media.MediaCodecInfo,java.lang.String,int,int)>(r0, r1, i27, i28);
+
+        if $z4 == 0 goto label5;
+
+        $r12 = new android.util.Size;
+
+        specialinvoke $r12.<android.util.Size: void <init>(int,int)>(i27, i28);
+
+        return $r12;
+
+     label5:
+        $r4 = virtualinvoke r2.<android.media.MediaCodecInfo$VideoCapabilities: android.util.Range getSupportedWidths()>();
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i19);
+
+        $r6 = virtualinvoke $r4.<android.util.Range: java.lang.Comparable clamp(java.lang.Comparable)>($r5);
+
+        $r7 = (java.lang.Integer) $r6;
+
+        i29 = virtualinvoke $r7.<java.lang.Integer: int intValue()>();
+
+        $r8 = virtualinvoke r2.<android.media.MediaCodecInfo$VideoCapabilities: android.util.Range getSupportedHeightsFor(int)>(i29);
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i20);
+
+        $r10 = virtualinvoke $r8.<android.util.Range: java.lang.Comparable clamp(java.lang.Comparable)>($r9);
+
+        $r11 = (java.lang.Integer) $r10;
+
+        i2 = virtualinvoke $r11.<java.lang.Integer: int intValue()>();
+
+        if i2 == i20 goto label6;
+
+        $d1 = (double) i29;
+
+        $d0 = (double) i2;
+
+        $d3 = $d1 * $d0;
+
+        $d2 = (double) i20;
+
+        $d4 = $d3 / $d2;
+
+        $l15 = staticinvoke <java.lang.Math: long round(double)>($d4);
+
+        $i16 = (int) $l15;
+
+        i29 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>($i16, i0);
+
+        i20 = staticinvoke <androidx.media3.transformer.EncoderUtil: int alignResolution(int,int)>(i2, i1);
+
+     label6:
+        $z5 = staticinvoke <androidx.media3.transformer.EncoderUtil: boolean isSizeSupported(android.media.MediaCodecInfo,java.lang.String,int,int)>(r0, r1, i29, i20);
+
+        if $z5 == 0 goto label7;
+
+        $r17 = new android.util.Size;
+
+        specialinvoke $r17.<android.util.Size: void <init>(int,int)>(i29, i20);
+
+        goto label8;
+
+     label7:
+        $r17 = null;
+
+     label8:
+        return $r17;
+    }
+
+    public static com.google.common.collect.ImmutableSet findSupportedEncodingProfiles(android.media.MediaCodecInfo, java.lang.String)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        android.media.MediaCodecInfo$CodecProfileLevel[] r2, r4;
+        com.google.common.collect.ImmutableSet$Builder r3, $r7;
+        int i0, $i1, i2;
+        android.media.MediaCodecInfo$CodecProfileLevel r5;
+        android.media.MediaCodecInfo$CodecCapabilities $r6;
+        com.google.common.collect.ImmutableSet $r8;
+        java.lang.Integer $r9;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r6 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        r2 = $r6.<android.media.MediaCodecInfo$CodecCapabilities: android.media.MediaCodecInfo$CodecProfileLevel[] profileLevels>;
+
+        $r7 = new com.google.common.collect.ImmutableSet$Builder;
+
+        specialinvoke $r7.<com.google.common.collect.ImmutableSet$Builder: void <init>()>();
+
+        r3 = $r7;
+
+        r4 = r2;
+
+        i0 = lengthof r4;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        r5 = r4[i2];
+
+        $i1 = r5.<android.media.MediaCodecInfo$CodecProfileLevel: int profile>;
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        virtualinvoke r3.<com.google.common.collect.ImmutableSet$Builder: com.google.common.collect.ImmutableSet$Builder add(java.lang.Object)>($r9);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r8 = virtualinvoke r3.<com.google.common.collect.ImmutableSet$Builder: com.google.common.collect.ImmutableSet build()>();
+
+        return $r8;
+    }
+
+    public static int findHighestSupportedEncodingLevel(android.media.MediaCodecInfo, java.lang.String, int)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        int i0, i1, $i2, $i3, i4, i5;
+        android.media.MediaCodecInfo$CodecProfileLevel[] r2, r3;
+        android.media.MediaCodecInfo$CodecProfileLevel r4;
+        android.media.MediaCodecInfo$CodecCapabilities $r5;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        i0 := @parameter2: int;
+
+        $r5 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        r2 = $r5.<android.media.MediaCodecInfo$CodecCapabilities: android.media.MediaCodecInfo$CodecProfileLevel[] profileLevels>;
+
+        i4 = -1;
+
+        r3 = r2;
+
+        i1 = lengthof r3;
+
+        i5 = 0;
+
+     label1:
+        if i5 >= i1 goto label3;
+
+        r4 = r3[i5];
+
+        $i2 = r4.<android.media.MediaCodecInfo$CodecProfileLevel: int profile>;
+
+        if $i2 != i0 goto label2;
+
+        $i3 = r4.<android.media.MediaCodecInfo$CodecProfileLevel: int level>;
+
+        i4 = staticinvoke <java.lang.Math: int max(int,int)>(i4, $i3);
+
+     label2:
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label3:
+        return i4;
+    }
+
+    public static java.lang.String findCodecForFormat(android.media.MediaFormat, boolean)
+    {
+        android.media.MediaFormat r0;
+        boolean z0, $z1;
+        android.media.MediaCodecList r1, $r2;
+        int $i0, $i1, $i2, $i3;
+        java.lang.Throwable $r3, r4;
+        float f0;
+        java.lang.String $r5, r6;
+
+        r0 := @parameter0: android.media.MediaFormat;
+
+        z0 := @parameter1: boolean;
+
+        $r2 = new android.media.MediaCodecList;
+
+        specialinvoke $r2.<android.media.MediaCodecList: void <init>(int)>(0);
+
+        r1 = $r2;
+
+        f0 = -1.0F;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 != 21 goto label5;
+
+        $z1 = virtualinvoke r0.<android.media.MediaFormat: boolean containsKey(java.lang.String)>("frame-rate");
+
+        if $z1 == 0 goto label5;
+
+     label1:
+        f0 = virtualinvoke r0.<android.media.MediaFormat: float getFloat(java.lang.String)>("frame-rate");
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+        r4 = $r3;
+
+        $i3 = virtualinvoke r0.<android.media.MediaFormat: int getInteger(java.lang.String)>("frame-rate");
+
+        f0 = (float) $i3;
+
+     label4:
+        virtualinvoke r0.<android.media.MediaFormat: void setString(java.lang.String,java.lang.String)>("frame-rate", null);
+
+     label5:
+        if z0 == 0 goto label6;
+
+        $r5 = virtualinvoke r1.<android.media.MediaCodecList: java.lang.String findDecoderForFormat(android.media.MediaFormat)>(r0);
+
+        goto label7;
+
+     label6:
+        $r5 = virtualinvoke r1.<android.media.MediaCodecList: java.lang.String findEncoderForFormat(android.media.MediaFormat)>(r0);
+
+     label7:
+        r6 = $r5;
+
+        $i1 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i1 != 21 goto label8;
+
+        $i2 = staticinvoke <java.lang.Math: int round(float)>(f0);
+
+        staticinvoke <androidx.media3.common.util.MediaFormatUtil: void maybeSetInteger(android.media.MediaFormat,java.lang.String,int)>(r0, "frame-rate", $i2);
+
+     label8:
+        return r6;
+
+        catch java.lang.ClassCastException from label1 to label2 with label3;
+    }
+
+    public static android.util.Range getSupportedBitrateRange(android.media.MediaCodecInfo, java.lang.String)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        android.media.MediaCodecInfo$CodecCapabilities $r2;
+        android.media.MediaCodecInfo$VideoCapabilities $r3;
+        android.util.Range $r4;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        $r3 = virtualinvoke $r2.<android.media.MediaCodecInfo$CodecCapabilities: android.media.MediaCodecInfo$VideoCapabilities getVideoCapabilities()>();
+
+        $r4 = virtualinvoke $r3.<android.media.MediaCodecInfo$VideoCapabilities: android.util.Range getBitrateRange()>();
+
+        return $r4;
+    }
+
+    public static boolean isBitrateModeSupported(android.media.MediaCodecInfo, java.lang.String, int)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        int i0;
+        android.media.MediaCodecInfo$CodecCapabilities $r2;
+        android.media.MediaCodecInfo$EncoderCapabilities $r3;
+        boolean $z0;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        i0 := @parameter2: int;
+
+        $r2 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        $r3 = virtualinvoke $r2.<android.media.MediaCodecInfo$CodecCapabilities: android.media.MediaCodecInfo$EncoderCapabilities getEncoderCapabilities()>();
+
+        $z0 = virtualinvoke $r3.<android.media.MediaCodecInfo$EncoderCapabilities: boolean isBitrateModeSupported(int)>(i0);
+
+        return $z0;
+    }
+
+    public static com.google.common.collect.ImmutableList getSupportedColorFormats(android.media.MediaCodecInfo, java.lang.String)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        android.media.MediaCodecInfo$CodecCapabilities $r2;
+        int[] $r3;
+        java.util.List $r4;
+        com.google.common.collect.ImmutableList $r5;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        $r3 = $r2.<android.media.MediaCodecInfo$CodecCapabilities: int[] colorFormats>;
+
+        $r4 = staticinvoke <com.google.common.primitives.Ints: java.util.List asList(int[])>($r3);
+
+        $r5 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>($r4);
+
+        return $r5;
+    }
+
+    public static boolean isHardwareAccelerated(android.media.MediaCodecInfo, java.lang.String)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        int $i0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 29 goto label1;
+
+        $z1 = staticinvoke <androidx.media3.transformer.EncoderUtil$Api29: boolean isHardwareAccelerated(android.media.MediaCodecInfo)>(r0);
+
+        return $z1;
+
+     label1:
+        $z0 = staticinvoke <androidx.media3.transformer.EncoderUtil: boolean isSoftwareOnly(android.media.MediaCodecInfo,java.lang.String)>(r0, r1);
+
+        if $z0 != 0 goto label2;
+
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        return $z2;
+    }
+
+    public static boolean isFeatureSupported(android.media.MediaCodecInfo, java.lang.String, java.lang.String)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1, r2;
+        android.media.MediaCodecInfo$CodecCapabilities $r3;
+        boolean $z0;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.lang.String;
+
+        $r3 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        $z0 = virtualinvoke $r3.<android.media.MediaCodecInfo$CodecCapabilities: boolean isFeatureSupported(java.lang.String)>(r2);
+
+        return $z0;
+    }
+
+    public static int getMaxSupportedInstances(android.media.MediaCodecInfo, java.lang.String)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1;
+        android.media.MediaCodecInfo$CodecCapabilities $r2;
+        int $i0;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = virtualinvoke r0.<android.media.MediaCodecInfo: android.media.MediaCodecInfo$CodecCapabilities getCapabilitiesForType(java.lang.String)>(r1);
+
+        $i0 = virtualinvoke $r2.<android.media.MediaCodecInfo$CodecCapabilities: int getMaxSupportedInstances()>();
+
+        return $i0;
+    }
+
+    private static boolean isSoftwareOnly(android.media.MediaCodecInfo, java.lang.String)
+    {
+        android.media.MediaCodecInfo r0;
+        java.lang.String r1, r2, $r3;
+        int $i0;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, $z11, $z12;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        r1 := @parameter1: java.lang.String;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 29 goto label1;
+
+        $z11 = staticinvoke <androidx.media3.transformer.EncoderUtil$Api29: boolean isSoftwareOnly(android.media.MediaCodecInfo)>(r0);
+
+        return $z11;
+
+     label1:
+        $z0 = staticinvoke <androidx.media3.common.MimeTypes: boolean isAudio(java.lang.String)>(r1);
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        $r3 = virtualinvoke r0.<android.media.MediaCodecInfo: java.lang.String getName()>();
+
+        r2 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>($r3);
+
+        $z1 = virtualinvoke r2.<java.lang.String: boolean startsWith(java.lang.String)>("arc.");
+
+        if $z1 == 0 goto label3;
+
+        return 0;
+
+     label3:
+        $z2 = virtualinvoke r2.<java.lang.String: boolean startsWith(java.lang.String)>("omx.google.");
+
+        if $z2 != 0 goto label5;
+
+        $z3 = virtualinvoke r2.<java.lang.String: boolean startsWith(java.lang.String)>("omx.ffmpeg.");
+
+        if $z3 != 0 goto label5;
+
+        $z4 = virtualinvoke r2.<java.lang.String: boolean startsWith(java.lang.String)>("omx.sec.");
+
+        if $z4 == 0 goto label4;
+
+        $z10 = virtualinvoke r2.<java.lang.String: boolean contains(java.lang.CharSequence)>(".sw.");
+
+        if $z10 != 0 goto label5;
+
+     label4:
+        $z5 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("omx.qcom.video.decoder.hevcswvdec");
+
+        if $z5 != 0 goto label5;
+
+        $z6 = virtualinvoke r2.<java.lang.String: boolean startsWith(java.lang.String)>("c2.android.");
+
+        if $z6 != 0 goto label5;
+
+        $z7 = virtualinvoke r2.<java.lang.String: boolean startsWith(java.lang.String)>("c2.google.");
+
+        if $z7 != 0 goto label5;
+
+        $z8 = virtualinvoke r2.<java.lang.String: boolean startsWith(java.lang.String)>("omx.");
+
+        if $z8 != 0 goto label6;
+
+        $z9 = virtualinvoke r2.<java.lang.String: boolean startsWith(java.lang.String)>("c2.");
+
+        if $z9 != 0 goto label6;
+
+     label5:
+        $z12 = 1;
+
+        goto label7;
+
+     label6:
+        $z12 = 0;
+
+     label7:
+        return $z12;
+    }
+
+    private static int alignResolution(int, int)
+    {
+        int i0, i1, $i2, $i3, $i4;
+        float $f0, $f1, $f2, $f3, $f4, $f5;
+        double $d0, $d1, $d2, $d3;
+        boolean z0;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        z0 = 0;
+
+        $i2 = i0 % 10;
+
+        if $i2 != 1 goto label1;
+
+        z0 = 1;
+
+     label1:
+        if z0 == 0 goto label2;
+
+        $d1 = (double) i1;
+
+        $f4 = (float) i0;
+
+        $f3 = (float) i1;
+
+        $f5 = $f4 / $f3;
+
+        $d0 = (double) $f5;
+
+        $d2 = staticinvoke <java.lang.Math: double floor(double)>($d0);
+
+        $d3 = $d1 * $d2;
+
+        $i4 = (int) $d3;
+
+        goto label3;
+
+     label2:
+        $f1 = (float) i0;
+
+        $f0 = (float) i1;
+
+        $f2 = $f1 / $f0;
+
+        $i3 = staticinvoke <java.lang.Math: int round(float)>($f2);
+
+        $i4 = i1 * $i3;
+
+     label3:
+        return $i4;
+    }
+
+    private static com.google.common.collect.ImmutableListMultimap populateEncoderInfos()
+    {
+        com.google.common.collect.ImmutableListMultimap$Builder r0, $r8;
+        android.media.MediaCodecList r1, $r9;
+        android.media.MediaCodecInfo[] r2, r3;
+        int i0, i1, i2, i3;
+        android.media.MediaCodecInfo r4;
+        java.lang.String[] r5, r6;
+        java.lang.String r7, $r11;
+        com.google.common.collect.ImmutableListMultimap $r10;
+        boolean $z0, $z1;
+
+        $r8 = new com.google.common.collect.ImmutableListMultimap$Builder;
+
+        specialinvoke $r8.<com.google.common.collect.ImmutableListMultimap$Builder: void <init>()>();
+
+        r0 = $r8;
+
+        $r9 = new android.media.MediaCodecList;
+
+        specialinvoke $r9.<android.media.MediaCodecList: void <init>(int)>(0);
+
+        r1 = $r9;
+
+        r2 = virtualinvoke r1.<android.media.MediaCodecList: android.media.MediaCodecInfo[] getCodecInfos()>();
+
+        r3 = r2;
+
+        i0 = lengthof r3;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label6;
+
+        r4 = r3[i2];
+
+        $z0 = virtualinvoke r4.<android.media.MediaCodecInfo: boolean isEncoder()>();
+
+        if $z0 != 0 goto label2;
+
+        goto label5;
+
+     label2:
+        r5 = virtualinvoke r4.<android.media.MediaCodecInfo: java.lang.String[] getSupportedTypes()>();
+
+        r6 = r5;
+
+        i1 = lengthof r6;
+
+        i3 = 0;
+
+     label3:
+        if i3 >= i1 goto label5;
+
+        r7 = r6[i3];
+
+        $z1 = staticinvoke <androidx.media3.common.MimeTypes: boolean isVideo(java.lang.String)>(r7);
+
+        if $z1 == 0 goto label4;
+
+        $r11 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r7);
+
+        virtualinvoke r0.<com.google.common.collect.ImmutableListMultimap$Builder: com.google.common.collect.ImmutableListMultimap$Builder put(java.lang.Object,java.lang.Object)>($r11, r4);
+
+     label4:
+        i3 = i3 + 1;
+
+        goto label3;
+
+     label5:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label6:
+        $r10 = virtualinvoke r0.<com.google.common.collect.ImmutableListMultimap$Builder: com.google.common.collect.ImmutableListMultimap build()>();
+
+        return $r10;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.transformer.EncoderUtil r0;
+
+        r0 := @this: androidx.media3.transformer.EncoderUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        com.google.common.base.Supplier $r0, $r1;
+
+        $r0 = dynamicinvoke "get" <com.google.common.base.Supplier ()>() <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.media3.transformer.EncoderUtil: com.google.common.collect.ImmutableListMultimap populateEncoderInfos()>, methodtype: com.google.common.collect.ImmutableListMultimap __METHODTYPE__());
+
+        $r1 = staticinvoke <com.google.common.base.Suppliers: com.google.common.base.Supplier memoize(com.google.common.base.Supplier)>($r0);
+
+        <androidx.media3.transformer.EncoderUtil: com.google.common.base.Supplier MIME_TYPE_TO_ENCODERS> = $r1;
+
+        return;
+    }
+
+androidx.media3.transformer.EncoderUtil$Api29
+    private void <init>()
+    {
+        androidx.media3.transformer.EncoderUtil$Api29 r0;
+
+        r0 := @this: androidx.media3.transformer.EncoderUtil$Api29;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static boolean isHardwareAccelerated(android.media.MediaCodecInfo)
+    {
+        android.media.MediaCodecInfo r0;
+        boolean $z0;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        $z0 = virtualinvoke r0.<android.media.MediaCodecInfo: boolean isHardwareAccelerated()>();
+
+        return $z0;
+    }
+
+    public static boolean isSoftwareOnly(android.media.MediaCodecInfo)
+    {
+        android.media.MediaCodecInfo r0;
+        boolean $z0;
+
+        r0 := @parameter0: android.media.MediaCodecInfo;
+
+        $z0 = virtualinvoke r0.<android.media.MediaCodecInfo: boolean isSoftwareOnly()>();
+
+        return $z0;
+    }
+

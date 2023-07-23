@@ -1,0 +1,1449 @@
+androidx.slice.SliceXml
+<androidx.slice.SliceXml: java.lang.String NAMESPACE>
+<androidx.slice.SliceXml: java.lang.String TAG_SLICE>
+<androidx.slice.SliceXml: java.lang.String TAG_ACTION>
+<androidx.slice.SliceXml: java.lang.String TAG_ITEM>
+<androidx.slice.SliceXml: java.lang.String ATTR_URI>
+<androidx.slice.SliceXml: java.lang.String ATTR_FORMAT>
+<androidx.slice.SliceXml: java.lang.String ATTR_SUBTYPE>
+<androidx.slice.SliceXml: java.lang.String ATTR_HINTS>
+<androidx.slice.SliceXml: java.lang.String ATTR_ICON_TYPE>
+<androidx.slice.SliceXml: java.lang.String ATTR_ICON_PACKAGE>
+<androidx.slice.SliceXml: java.lang.String ATTR_ICON_RES_TYPE>
+<androidx.slice.SliceXml: java.lang.String ICON_TYPE_RES>
+<androidx.slice.SliceXml: java.lang.String ICON_TYPE_URI>
+<androidx.slice.SliceXml: java.lang.String ICON_TYPE_DEFAULT>
+    public static androidx.slice.Slice parseSlice(android.content.Context, java.io.InputStream, java.lang.String, androidx.slice.SliceUtils$SliceActionListener) throws java.io.IOException, androidx.slice.SliceUtils$SliceParseException
+    {
+        android.content.Context r0;
+        java.io.InputStream r1;
+        java.lang.String r2;
+        androidx.slice.SliceUtils$SliceActionListener r3;
+        int i0, i1, $i2, $i3;
+        org.xmlpull.v1.XmlPullParserFactory $r4;
+        java.lang.Throwable $r6, r10;
+        java.io.IOException $r7;
+        org.xmlpull.v1.XmlPullParser r8;
+        androidx.slice.Slice r9;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.io.InputStream;
+
+        r2 := @parameter2: java.lang.String;
+
+        r3 := @parameter3: androidx.slice.SliceUtils$SliceActionListener;
+
+     label1:
+        $r4 = staticinvoke <org.xmlpull.v1.XmlPullParserFactory: org.xmlpull.v1.XmlPullParserFactory newInstance()>();
+
+        r8 = virtualinvoke $r4.<org.xmlpull.v1.XmlPullParserFactory: org.xmlpull.v1.XmlPullParser newPullParser()>();
+
+        interfaceinvoke r8.<org.xmlpull.v1.XmlPullParser: void setInput(java.io.InputStream,java.lang.String)>(r1, r2);
+
+        i0 = interfaceinvoke r8.<org.xmlpull.v1.XmlPullParser: int getDepth()>();
+
+        r9 = null;
+
+     label2:
+        $i3 = interfaceinvoke r8.<org.xmlpull.v1.XmlPullParser: int next()>();
+
+        i1 = $i3;
+
+        if $i3 == 1 goto label5;
+
+        if i1 != 3 goto label3;
+
+        $i2 = interfaceinvoke r8.<org.xmlpull.v1.XmlPullParser: int getDepth()>();
+
+        if $i2 <= i0 goto label5;
+
+     label3:
+        if i1 == 2 goto label4;
+
+        goto label2;
+
+     label4:
+        r9 = staticinvoke <androidx.slice.SliceXml: androidx.slice.Slice parseSlice(android.content.Context,org.xmlpull.v1.XmlPullParser,androidx.slice.SliceUtils$SliceActionListener)>(r0, r8, r3);
+
+        goto label2;
+
+     label5:
+        return r9;
+
+     label6:
+        $r6 := @caughtexception;
+
+        r10 = $r6;
+
+        $r7 = new java.io.IOException;
+
+        specialinvoke $r7.<java.io.IOException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to init XML Serialization", r10);
+
+        throw $r7;
+
+        catch org.xmlpull.v1.XmlPullParserException from label1 to label5 with label6;
+    }
+
+    private static androidx.slice.Slice parseSlice(android.content.Context, org.xmlpull.v1.XmlPullParser, androidx.slice.SliceUtils$SliceActionListener) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException, androidx.slice.SliceUtils$SliceParseException
+    {
+        android.content.Context r0;
+        org.xmlpull.v1.XmlPullParser r1;
+        androidx.slice.SliceUtils$SliceActionListener r2;
+        int i0, i1, $i2, $i3;
+        java.lang.String r3, $r6, $r7, $r8, $r11, $r12, $r15, $r16, $r17, $r18, $r22, $r24;
+        androidx.slice.Slice$Builder r4, $r9;
+        java.lang.String[] r5;
+        boolean $z0, $z1, $z2;
+        android.net.Uri $r10;
+        androidx.slice.Slice $r14;
+        java.io.IOException $r19;
+        java.lang.StringBuilder $r20, $r21, $r23;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: org.xmlpull.v1.XmlPullParser;
+
+        r2 := @parameter2: androidx.slice.SliceUtils$SliceActionListener;
+
+        $r6 = "slice";
+
+        $r7 = interfaceinvoke r1.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>($r7);
+
+        if $z0 != 0 goto label1;
+
+        $r17 = "action";
+
+        $r18 = interfaceinvoke r1.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $z2 = virtualinvoke $r17.<java.lang.String: boolean equals(java.lang.Object)>($r18);
+
+        if $z2 != 0 goto label1;
+
+        $r19 = new java.io.IOException;
+
+        $r20 = new java.lang.StringBuilder;
+
+        specialinvoke $r20.<java.lang.StringBuilder: void <init>()>();
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unexpected tag ");
+
+        $r22 = interfaceinvoke r1.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $r23 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r22);
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r19.<java.io.IOException: void <init>(java.lang.String)>($r24);
+
+        throw $r19;
+
+     label1:
+        i0 = interfaceinvoke r1.<org.xmlpull.v1.XmlPullParser: int getDepth()>();
+
+        $r8 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        r3 = interfaceinvoke r1.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>($r8, "uri");
+
+        $r9 = new androidx.slice.Slice$Builder;
+
+        $r10 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>(r3);
+
+        specialinvoke $r9.<androidx.slice.Slice$Builder: void <init>(android.net.Uri)>($r10);
+
+        r4 = $r9;
+
+        $r11 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        $r12 = interfaceinvoke r1.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>($r11, "hints");
+
+        r5 = staticinvoke <androidx.slice.SliceXml: java.lang.String[] hints(java.lang.String)>($r12);
+
+        virtualinvoke r4.<androidx.slice.Slice$Builder: androidx.slice.Slice$Builder addHints(java.lang.String[])>(r5);
+
+     label2:
+        $i3 = interfaceinvoke r1.<org.xmlpull.v1.XmlPullParser: int next()>();
+
+        i1 = $i3;
+
+        if $i3 == 1 goto label4;
+
+        if i1 != 3 goto label3;
+
+        $i2 = interfaceinvoke r1.<org.xmlpull.v1.XmlPullParser: int getDepth()>();
+
+        if $i2 <= i0 goto label4;
+
+     label3:
+        if i1 != 2 goto label2;
+
+        $r15 = "item";
+
+        $r16 = interfaceinvoke r1.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $z1 = virtualinvoke $r15.<java.lang.String: boolean equals(java.lang.Object)>($r16);
+
+        if $z1 == 0 goto label2;
+
+        staticinvoke <androidx.slice.SliceXml: void parseItem(android.content.Context,androidx.slice.Slice$Builder,org.xmlpull.v1.XmlPullParser,androidx.slice.SliceUtils$SliceActionListener)>(r0, r4, r1, r2);
+
+        goto label2;
+
+     label4:
+        $r14 = virtualinvoke r4.<androidx.slice.Slice$Builder: androidx.slice.Slice build()>();
+
+        return $r14;
+    }
+
+    private static void parseItem(android.content.Context, androidx.slice.Slice$Builder, org.xmlpull.v1.XmlPullParser, androidx.slice.SliceUtils$SliceActionListener) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException, androidx.slice.SliceUtils$SliceParseException
+    {
+        android.content.Context r0, $r47;
+        androidx.slice.Slice$Builder r1;
+        org.xmlpull.v1.XmlPullParser r2;
+        androidx.slice.SliceUtils$SliceActionListener r3;
+        int i0, i1, $i2, $i4, $i5, $i6, $i7, $i8, $i9, i12;
+        java.lang.String r4, r5, r6, r7, r8, r9, r11, r12, r13, $r14, $r15, $r16, $r17, $r18, $r19, $r20, $r21, $r25, $r26, $r46, $r56, $r62, r65, r66, r69, r70, r71, r76;
+        java.lang.String[] r10;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8;
+        androidx.slice.Slice $r23, $r27;
+        long $l3;
+        android.text.Spanned $r30;
+        byte[] $r33, r67;
+        android.support.v4.graphics.drawable.IconCompat $r35, $r48, $r50;
+        android.content.pm.PackageManager $r37;
+        java.lang.StringBuilder $r40, $r41, $r42, $r43, $r44, $r45, $r54, $r55, $r60, $r61, r72, r74, r77;
+        java.lang.Throwable $r57, r64, r80, r81;
+        byte b10, b11;
+        android.content.res.Resources r63;
+        android.graphics.Bitmap r68;
+        androidx.slice.SliceUtils$SliceParseException r73, r75;
+        java.lang.IllegalArgumentException r78;
+        androidx.slice.SliceXml$1 r79;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.slice.Slice$Builder;
+
+        r2 := @parameter2: org.xmlpull.v1.XmlPullParser;
+
+        r3 := @parameter3: androidx.slice.SliceUtils$SliceActionListener;
+
+        i1 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: int getDepth()>();
+
+        $r14 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        r4 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>($r14, "format");
+
+        $r15 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        r5 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>($r15, "subtype");
+
+        $r16 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        r6 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>($r16, "hints");
+
+        $r17 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        r7 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>($r17, "iconType");
+
+        $r18 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        r8 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>($r18, "pkg");
+
+        $r19 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        r9 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>($r19, "resType");
+
+        r10 = staticinvoke <androidx.slice.SliceXml: java.lang.String[] hints(java.lang.String)>(r6);
+
+     label01:
+        $i9 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: int next()>();
+
+        i0 = $i9;
+
+        if $i9 == 1 goto label30;
+
+        if i0 != 3 goto label02;
+
+        $i8 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: int getDepth()>();
+
+        if $i8 <= i1 goto label30;
+
+     label02:
+        if i0 != 4 goto label28;
+
+        r11 = r4;
+
+        b10 = -1;
+
+        $i2 = virtualinvoke r11.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i2)
+        {
+            case 104431: goto label05;
+            case 3327612: goto label07;
+            case 3556653: goto label06;
+            case 100313435: goto label04;
+            case 100358090: goto label03;
+            default: goto label08;
+        };
+
+     label03:
+        $z2 = virtualinvoke r11.<java.lang.String: boolean equals(java.lang.Object)>("input");
+
+        if $z2 == 0 goto label08;
+
+        b10 = 0;
+
+        goto label08;
+
+     label04:
+        $z5 = virtualinvoke r11.<java.lang.String: boolean equals(java.lang.Object)>("image");
+
+        if $z5 == 0 goto label08;
+
+        b10 = 1;
+
+        goto label08;
+
+     label05:
+        $z8 = virtualinvoke r11.<java.lang.String: boolean equals(java.lang.Object)>("int");
+
+        if $z8 == 0 goto label08;
+
+        b10 = 2;
+
+        goto label08;
+
+     label06:
+        $z6 = virtualinvoke r11.<java.lang.String: boolean equals(java.lang.Object)>("text");
+
+        if $z6 == 0 goto label08;
+
+        b10 = 3;
+
+        goto label08;
+
+     label07:
+        $z7 = virtualinvoke r11.<java.lang.String: boolean equals(java.lang.Object)>("long");
+
+        if $z7 == 0 goto label08;
+
+        b10 = 4;
+
+     label08:
+        tableswitch(b10)
+        {
+            case 0: goto label09;
+            case 1: goto label10;
+            case 2: goto label22;
+            case 3: goto label23;
+            case 4: goto label25;
+            default: goto label26;
+        };
+
+     label09:
+        goto label27;
+
+     label10:
+        r12 = r7;
+
+        b11 = -1;
+
+        $i6 = virtualinvoke r12.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i6)
+        {
+            case 112800: goto label11;
+            case 116076: goto label12;
+            default: goto label13;
+        };
+
+     label11:
+        $z4 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("res");
+
+        if $z4 == 0 goto label13;
+
+        b11 = 0;
+
+        goto label13;
+
+     label12:
+        $z3 = virtualinvoke r12.<java.lang.String: boolean equals(java.lang.Object)>("uri");
+
+        if $z3 == 0 goto label13;
+
+        b11 = 1;
+
+     label13:
+        lookupswitch(b11)
+        {
+            case 0: goto label14;
+            case 1: goto label19;
+            default: goto label20;
+        };
+
+     label14:
+        r13 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getText()>();
+
+     label15:
+        $r37 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        r63 = virtualinvoke $r37.<android.content.pm.PackageManager: android.content.res.Resources getResourcesForApplication(java.lang.String)>(r8);
+
+        i12 = virtualinvoke r63.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>(r13, r9, r8);
+
+        if i12 == 0 goto label16;
+
+        $r47 = virtualinvoke r0.<android.content.Context: android.content.Context createPackageContext(java.lang.String,int)>(r8, 0);
+
+        $r48 = staticinvoke <android.support.v4.graphics.drawable.IconCompat: android.support.v4.graphics.drawable.IconCompat createWithResource(android.content.Context,int)>($r47, i12);
+
+        virtualinvoke r1.<androidx.slice.Slice$Builder: androidx.slice.Slice$Builder addIcon(android.support.v4.graphics.drawable.IconCompat,java.lang.String,java.lang.String[])>($r48, r5, r10);
+
+        goto label17;
+
+     label16:
+        r73 = new androidx.slice.SliceUtils$SliceParseException;
+
+        r72 = new java.lang.StringBuilder;
+
+        specialinvoke r72.<java.lang.StringBuilder: void <init>()>();
+
+        $r40 = virtualinvoke r72.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cannot find resource ");
+
+        $r41 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r8);
+
+        $r42 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(":");
+
+        $r43 = virtualinvoke $r42.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r9);
+
+        $r44 = virtualinvoke $r43.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/");
+
+        $r45 = virtualinvoke $r44.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r13);
+
+        $r46 = virtualinvoke $r45.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r73.<androidx.slice.SliceUtils$SliceParseException: void <init>(java.lang.String)>($r46);
+
+        r80 = (java.lang.Throwable) r73;
+
+        throw r80;
+
+     label17:
+        goto label21;
+
+     label18:
+        $r57 := @caughtexception;
+
+        r64 = $r57;
+
+        r75 = new androidx.slice.SliceUtils$SliceParseException;
+
+        r74 = new java.lang.StringBuilder;
+
+        specialinvoke r74.<java.lang.StringBuilder: void <init>()>();
+
+        $r60 = virtualinvoke r74.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid icon package ");
+
+        $r61 = virtualinvoke $r60.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r8);
+
+        $r62 = virtualinvoke $r61.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r75.<androidx.slice.SliceUtils$SliceParseException: void <init>(java.lang.String,java.lang.Throwable)>($r62, r64);
+
+        r81 = (java.lang.Throwable) r75;
+
+        throw r81;
+
+     label19:
+        r65 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getText()>();
+
+        $r35 = staticinvoke <android.support.v4.graphics.drawable.IconCompat: android.support.v4.graphics.drawable.IconCompat createWithContentUri(java.lang.String)>(r65);
+
+        virtualinvoke r1.<androidx.slice.Slice$Builder: androidx.slice.Slice$Builder addIcon(android.support.v4.graphics.drawable.IconCompat,java.lang.String,java.lang.String[])>($r35, r5, r10);
+
+        goto label21;
+
+     label20:
+        r66 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getText()>();
+
+        r67 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>(r66, 2);
+
+        $i7 = lengthof r67;
+
+        r68 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeByteArray(byte[],int,int)>(r67, 0, $i7);
+
+        $r50 = staticinvoke <android.support.v4.graphics.drawable.IconCompat: android.support.v4.graphics.drawable.IconCompat createWithBitmap(android.graphics.Bitmap)>(r68);
+
+        virtualinvoke r1.<androidx.slice.Slice$Builder: androidx.slice.Slice$Builder addIcon(android.support.v4.graphics.drawable.IconCompat,java.lang.String,java.lang.String[])>($r50, r5, r10);
+
+     label21:
+        goto label27;
+
+     label22:
+        r69 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getText()>();
+
+        $i5 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r69);
+
+        virtualinvoke r1.<androidx.slice.Slice$Builder: androidx.slice.Slice$Builder addInt(int,java.lang.String,java.lang.String[])>($i5, r5, r10);
+
+        goto label27;
+
+     label23:
+        r70 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getText()>();
+
+        $i4 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i4 >= 22 goto label24;
+
+        r76 = new java.lang.String;
+
+        $r33 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>(r70, 2);
+
+        specialinvoke r76.<java.lang.String: void <init>(byte[])>($r33);
+
+        r70 = r76;
+
+     label24:
+        $r30 = staticinvoke <android.text.Html: android.text.Spanned fromHtml(java.lang.String)>(r70);
+
+        virtualinvoke r1.<androidx.slice.Slice$Builder: androidx.slice.Slice$Builder addText(java.lang.CharSequence,java.lang.String,java.lang.String[])>($r30, r5, r10);
+
+        goto label27;
+
+     label25:
+        r71 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getText()>();
+
+        $l3 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r71);
+
+        virtualinvoke r1.<androidx.slice.Slice$Builder: androidx.slice.Slice$Builder addLong(long,java.lang.String,java.lang.String[])>($l3, r5, r10);
+
+        goto label27;
+
+     label26:
+        r78 = new java.lang.IllegalArgumentException;
+
+        r77 = new java.lang.StringBuilder;
+
+        specialinvoke r77.<java.lang.StringBuilder: void <init>()>();
+
+        $r54 = virtualinvoke r77.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unrecognized format ");
+
+        $r55 = virtualinvoke $r54.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r56 = virtualinvoke $r55.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r78.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r56);
+
+        throw r78;
+
+     label27:
+        goto label01;
+
+     label28:
+        if i0 != 2 goto label29;
+
+        $r25 = "slice";
+
+        $r26 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $z1 = virtualinvoke $r25.<java.lang.String: boolean equals(java.lang.Object)>($r26);
+
+        if $z1 == 0 goto label29;
+
+        $r27 = staticinvoke <androidx.slice.SliceXml: androidx.slice.Slice parseSlice(android.content.Context,org.xmlpull.v1.XmlPullParser,androidx.slice.SliceUtils$SliceActionListener)>(r0, r2, r3);
+
+        virtualinvoke r1.<androidx.slice.Slice$Builder: androidx.slice.Slice$Builder addSubSlice(androidx.slice.Slice,java.lang.String)>($r27, r5);
+
+        goto label01;
+
+     label29:
+        if i0 != 2 goto label01;
+
+        $r20 = "action";
+
+        $r21 = interfaceinvoke r2.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r20.<java.lang.String: boolean equals(java.lang.Object)>($r21);
+
+        if $z0 == 0 goto label01;
+
+        r79 = new androidx.slice.SliceXml$1;
+
+        specialinvoke r79.<androidx.slice.SliceXml$1: void <init>(androidx.slice.SliceUtils$SliceActionListener)>(r3);
+
+        $r23 = staticinvoke <androidx.slice.SliceXml: androidx.slice.Slice parseSlice(android.content.Context,org.xmlpull.v1.XmlPullParser,androidx.slice.SliceUtils$SliceActionListener)>(r0, r2, r3);
+
+        virtualinvoke r1.<androidx.slice.Slice$Builder: androidx.slice.Slice$Builder addAction(androidx.slice.SliceItem$ActionHandler,androidx.slice.Slice,java.lang.String)>(r79, $r23, r5);
+
+        goto label01;
+
+     label30:
+        return;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label15 to label17 with label18;
+    }
+
+    private static java.lang.String[] hints(java.lang.String)
+    {
+        java.lang.String r0;
+        boolean $z0;
+        java.lang.String[] $r1;
+
+        r0 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>(r0);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = newarray (java.lang.String)[0];
+
+        goto label2;
+
+     label1:
+        $r1 = virtualinvoke r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(",");
+
+     label2:
+        return $r1;
+    }
+
+    public static void serializeSlice(androidx.slice.Slice, android.content.Context, java.io.OutputStream, java.lang.String, androidx.slice.SliceUtils$SerializeOptions) throws java.io.IOException
+    {
+        androidx.slice.Slice r0;
+        android.content.Context r1;
+        java.io.OutputStream r2;
+        java.lang.String r3;
+        androidx.slice.SliceUtils$SerializeOptions r4;
+        org.xmlpull.v1.XmlPullParserFactory $r5;
+        java.lang.Throwable $r6, r9;
+        java.io.IOException $r7;
+        org.xmlpull.v1.XmlSerializer r8;
+
+        r0 := @parameter0: androidx.slice.Slice;
+
+        r1 := @parameter1: android.content.Context;
+
+        r2 := @parameter2: java.io.OutputStream;
+
+        r3 := @parameter3: java.lang.String;
+
+        r4 := @parameter4: androidx.slice.SliceUtils$SerializeOptions;
+
+     label1:
+        $r5 = staticinvoke <org.xmlpull.v1.XmlPullParserFactory: org.xmlpull.v1.XmlPullParserFactory newInstance()>();
+
+        r8 = virtualinvoke $r5.<org.xmlpull.v1.XmlPullParserFactory: org.xmlpull.v1.XmlSerializer newSerializer()>();
+
+        interfaceinvoke r8.<org.xmlpull.v1.XmlSerializer: void setOutput(java.io.OutputStream,java.lang.String)>(r2, r3);
+
+        interfaceinvoke r8.<org.xmlpull.v1.XmlSerializer: void startDocument(java.lang.String,java.lang.Boolean)>(r3, null);
+
+        staticinvoke <androidx.slice.SliceXml: void serialize(androidx.slice.Slice,android.content.Context,androidx.slice.SliceUtils$SerializeOptions,org.xmlpull.v1.XmlSerializer,boolean,java.lang.String)>(r0, r1, r4, r8, 0, null);
+
+        interfaceinvoke r8.<org.xmlpull.v1.XmlSerializer: void endDocument()>();
+
+        interfaceinvoke r8.<org.xmlpull.v1.XmlSerializer: void flush()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r9 = $r6;
+
+        $r7 = new java.io.IOException;
+
+        specialinvoke $r7.<java.io.IOException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to init XML Serialization", r9);
+
+        throw $r7;
+
+     label4:
+        return;
+
+        catch org.xmlpull.v1.XmlPullParserException from label1 to label2 with label3;
+    }
+
+    private static void serialize(androidx.slice.Slice, android.content.Context, androidx.slice.SliceUtils$SerializeOptions, org.xmlpull.v1.XmlSerializer, boolean, java.lang.String) throws java.io.IOException
+    {
+        androidx.slice.Slice r0;
+        android.content.Context r1;
+        androidx.slice.SliceUtils$SerializeOptions r2;
+        org.xmlpull.v1.XmlSerializer r3;
+        boolean z0, $z1, $z2;
+        java.lang.String r4, $r7, $r9, $r11, $r15, $r19, $r21, $r23, $r26, $r27;
+        java.util.Iterator r5;
+        androidx.slice.SliceItem r6;
+        android.net.Uri $r10;
+        java.util.List $r13, $r14, $r20;
+        java.lang.Object $r18;
+
+        r0 := @parameter0: androidx.slice.Slice;
+
+        r1 := @parameter1: android.content.Context;
+
+        r2 := @parameter2: androidx.slice.SliceUtils$SerializeOptions;
+
+        r3 := @parameter3: org.xmlpull.v1.XmlSerializer;
+
+        z0 := @parameter4: boolean;
+
+        r4 := @parameter5: java.lang.String;
+
+        $r7 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        if z0 == 0 goto label1;
+
+        $r26 = "action";
+
+        goto label2;
+
+     label1:
+        $r26 = "slice";
+
+     label2:
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer startTag(java.lang.String,java.lang.String)>($r7, $r26);
+
+        $r9 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        $r10 = virtualinvoke r0.<androidx.slice.Slice: android.net.Uri getUri()>();
+
+        $r11 = virtualinvoke $r10.<android.net.Uri: java.lang.String toString()>();
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r9, "uri", $r11);
+
+        if r4 == null goto label3;
+
+        $r23 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r23, "subtype", r4);
+
+     label3:
+        $r13 = virtualinvoke r0.<androidx.slice.Slice: java.util.List getHints()>();
+
+        $z1 = interfaceinvoke $r13.<java.util.List: boolean isEmpty()>();
+
+        if $z1 != 0 goto label4;
+
+        $r19 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        $r20 = virtualinvoke r0.<androidx.slice.Slice: java.util.List getHints()>();
+
+        $r21 = staticinvoke <androidx.slice.SliceXml: java.lang.String hintStr(java.util.List)>($r20);
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r19, "hints", $r21);
+
+     label4:
+        $r14 = virtualinvoke r0.<androidx.slice.Slice: java.util.List getItems()>();
+
+        r5 = interfaceinvoke $r14.<java.util.List: java.util.Iterator iterator()>();
+
+     label5:
+        $z2 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label6;
+
+        $r18 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (androidx.slice.SliceItem) $r18;
+
+        staticinvoke <androidx.slice.SliceXml: void serialize(androidx.slice.SliceItem,android.content.Context,androidx.slice.SliceUtils$SerializeOptions,org.xmlpull.v1.XmlSerializer)>(r6, r1, r2, r3);
+
+        goto label5;
+
+     label6:
+        $r15 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        if z0 == 0 goto label7;
+
+        $r27 = "action";
+
+        goto label8;
+
+     label7:
+        $r27 = "slice";
+
+     label8:
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer endTag(java.lang.String,java.lang.String)>($r15, $r27);
+
+        return;
+    }
+
+    private static void serialize(androidx.slice.SliceItem, android.content.Context, androidx.slice.SliceUtils$SerializeOptions, org.xmlpull.v1.XmlSerializer) throws java.io.IOException
+    {
+        androidx.slice.SliceItem r0;
+        android.content.Context r1;
+        androidx.slice.SliceUtils$SerializeOptions r2;
+        org.xmlpull.v1.XmlSerializer r3;
+        java.lang.String r4, r5, $r7, $r9, $r11, $r13, $r27, $r28, $r34, $r35, $r36, $r41, $r43, $r48, $r49, $r51, $r53, $r54, r57, r58, $r59;
+        android.net.Uri r6;
+        java.util.List $r12, $r50;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9;
+        int $i0, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9;
+        long $l1;
+        java.lang.CharSequence $r16, $r17, $r21;
+        java.nio.charset.Charset $r19, $r24;
+        byte[] $r20, $r25;
+        android.text.Spanned $r22;
+        androidx.slice.Slice $r26, $r42;
+        java.lang.IllegalArgumentException $r30, $r37, $r44;
+        java.lang.StringBuilder $r31, $r32, $r33, $r38, $r39, $r40, $r45, $r46, $r47;
+        byte b10;
+        android.support.v4.graphics.drawable.IconCompat r56;
+
+        r0 := @parameter0: androidx.slice.SliceItem;
+
+        r1 := @parameter1: android.content.Context;
+
+        r2 := @parameter2: androidx.slice.SliceUtils$SerializeOptions;
+
+        r3 := @parameter3: org.xmlpull.v1.XmlSerializer;
+
+        r4 = virtualinvoke r0.<androidx.slice.SliceItem: java.lang.String getFormat()>();
+
+        virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: void checkThrow(java.lang.String)>(r4);
+
+        $r7 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer startTag(java.lang.String,java.lang.String)>($r7, "item");
+
+        $r9 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r9, "format", r4);
+
+        $r11 = virtualinvoke r0.<androidx.slice.SliceItem: java.lang.String getSubType()>();
+
+        if $r11 == null goto label01;
+
+        $r53 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        $r54 = virtualinvoke r0.<androidx.slice.SliceItem: java.lang.String getSubType()>();
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r53, "subtype", $r54);
+
+     label01:
+        $r12 = virtualinvoke r0.<androidx.slice.SliceItem: java.util.List getHints()>();
+
+        $z0 = interfaceinvoke $r12.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label02;
+
+        $r49 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        $r50 = virtualinvoke r0.<androidx.slice.SliceItem: java.util.List getHints()>();
+
+        $r51 = staticinvoke <androidx.slice.SliceXml: java.lang.String hintStr(java.util.List)>($r50);
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r49, "hints", $r51);
+
+     label02:
+        r5 = r4;
+
+        b10 = -1;
+
+        $i0 = virtualinvoke r5.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i0)
+        {
+            case -1422950858: goto label03;
+            case 104431: goto label06;
+            case 3327612: goto label09;
+            case 3556653: goto label08;
+            case 100313435: goto label05;
+            case 100358090: goto label04;
+            case 109526418: goto label07;
+            default: goto label10;
+        };
+
+     label03:
+        $z9 = virtualinvoke r5.<java.lang.String: boolean equals(java.lang.Object)>("action");
+
+        if $z9 == 0 goto label10;
+
+        b10 = 0;
+
+        goto label10;
+
+     label04:
+        $z4 = virtualinvoke r5.<java.lang.String: boolean equals(java.lang.Object)>("input");
+
+        if $z4 == 0 goto label10;
+
+        b10 = 1;
+
+        goto label10;
+
+     label05:
+        $z5 = virtualinvoke r5.<java.lang.String: boolean equals(java.lang.Object)>("image");
+
+        if $z5 == 0 goto label10;
+
+        b10 = 2;
+
+        goto label10;
+
+     label06:
+        $z8 = virtualinvoke r5.<java.lang.String: boolean equals(java.lang.Object)>("int");
+
+        if $z8 == 0 goto label10;
+
+        b10 = 3;
+
+        goto label10;
+
+     label07:
+        $z1 = virtualinvoke r5.<java.lang.String: boolean equals(java.lang.Object)>("slice");
+
+        if $z1 == 0 goto label10;
+
+        b10 = 4;
+
+        goto label10;
+
+     label08:
+        $z6 = virtualinvoke r5.<java.lang.String: boolean equals(java.lang.Object)>("text");
+
+        if $z6 == 0 goto label10;
+
+        b10 = 5;
+
+        goto label10;
+
+     label09:
+        $z7 = virtualinvoke r5.<java.lang.String: boolean equals(java.lang.Object)>("long");
+
+        if $z7 == 0 goto label10;
+
+        b10 = 6;
+
+     label10:
+        tableswitch(b10)
+        {
+            case 0: goto label11;
+            case 1: goto label13;
+            case 2: goto label14;
+            case 3: goto label21;
+            case 4: goto label22;
+            case 5: goto label23;
+            case 6: goto label27;
+            default: goto label28;
+        };
+
+     label11:
+        $i8 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getActionMode()>();
+
+        if $i8 != 2 goto label12;
+
+        $r42 = virtualinvoke r0.<androidx.slice.SliceItem: androidx.slice.Slice getSlice()>();
+
+        $r43 = virtualinvoke r0.<androidx.slice.SliceItem: java.lang.String getSubType()>();
+
+        staticinvoke <androidx.slice.SliceXml: void serialize(androidx.slice.Slice,android.content.Context,androidx.slice.SliceUtils$SerializeOptions,org.xmlpull.v1.XmlSerializer,boolean,java.lang.String)>($r42, r1, r2, r3, 1, $r43);
+
+        goto label29;
+
+     label12:
+        $i9 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getActionMode()>();
+
+        if $i9 != 0 goto label29;
+
+        $r37 = new java.lang.IllegalArgumentException;
+
+        $r38 = new java.lang.StringBuilder;
+
+        specialinvoke $r38.<java.lang.StringBuilder: void <init>()>();
+
+        $r39 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Slice contains an action ");
+
+        $r40 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r41 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r37.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r41);
+
+        throw $r37;
+
+     label13:
+        goto label29;
+
+     label14:
+        $i5 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getImageMode()>();
+
+        if $i5 != 2 goto label20;
+
+        r56 = virtualinvoke r0.<androidx.slice.SliceItem: android.support.v4.graphics.drawable.IconCompat getIcon()>();
+
+        $i7 = virtualinvoke r56.<android.support.v4.graphics.drawable.IconCompat: int getType()>();
+
+        lookupswitch($i7)
+        {
+            case 2: goto label15;
+            case 4: goto label16;
+            default: goto label18;
+        };
+
+     label15:
+        staticinvoke <androidx.slice.SliceXml: void serializeResIcon(org.xmlpull.v1.XmlSerializer,android.support.v4.graphics.drawable.IconCompat,android.content.Context)>(r3, r56, r1);
+
+        goto label19;
+
+     label16:
+        r6 = virtualinvoke r56.<android.support.v4.graphics.drawable.IconCompat: android.net.Uri getUri()>();
+
+        $r35 = "file";
+
+        $r36 = virtualinvoke r6.<android.net.Uri: java.lang.String getScheme()>();
+
+        $z3 = virtualinvoke $r35.<java.lang.String: boolean equals(java.lang.Object)>($r36);
+
+        if $z3 == 0 goto label17;
+
+        staticinvoke <androidx.slice.SliceXml: void serializeFileIcon(org.xmlpull.v1.XmlSerializer,android.support.v4.graphics.drawable.IconCompat,android.content.Context)>(r3, r56, r1);
+
+        goto label19;
+
+     label17:
+        staticinvoke <androidx.slice.SliceXml: void serializeIcon(org.xmlpull.v1.XmlSerializer,android.support.v4.graphics.drawable.IconCompat,android.content.Context,androidx.slice.SliceUtils$SerializeOptions)>(r3, r56, r1, r2);
+
+        goto label19;
+
+     label18:
+        staticinvoke <androidx.slice.SliceXml: void serializeIcon(org.xmlpull.v1.XmlSerializer,android.support.v4.graphics.drawable.IconCompat,android.content.Context,androidx.slice.SliceUtils$SerializeOptions)>(r3, r56, r1, r2);
+
+     label19:
+        goto label29;
+
+     label20:
+        $i6 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getImageMode()>();
+
+        if $i6 != 0 goto label29;
+
+        $r30 = new java.lang.IllegalArgumentException;
+
+        $r31 = new java.lang.StringBuilder;
+
+        specialinvoke $r31.<java.lang.StringBuilder: void <init>()>();
+
+        $r32 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Slice contains an image ");
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r34 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r30.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r34);
+
+        throw $r30;
+
+     label21:
+        $i4 = virtualinvoke r0.<androidx.slice.SliceItem: int getInt()>();
+
+        $r28 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i4);
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer text(java.lang.String)>($r28);
+
+        goto label29;
+
+     label22:
+        $r26 = virtualinvoke r0.<androidx.slice.SliceItem: androidx.slice.Slice getSlice()>();
+
+        $r27 = virtualinvoke r0.<androidx.slice.SliceItem: java.lang.String getSubType()>();
+
+        staticinvoke <androidx.slice.SliceXml: void serialize(androidx.slice.Slice,android.content.Context,androidx.slice.SliceUtils$SerializeOptions,org.xmlpull.v1.XmlSerializer,boolean,java.lang.String)>($r26, r1, r2, r3, 0, $r27);
+
+        goto label29;
+
+     label23:
+        $r16 = virtualinvoke r0.<androidx.slice.SliceItem: java.lang.CharSequence getText()>();
+
+        $z2 = $r16 instanceof android.text.Spanned;
+
+        if $z2 == 0 goto label25;
+
+        $r21 = virtualinvoke r0.<androidx.slice.SliceItem: java.lang.CharSequence getText()>();
+
+        $r22 = (android.text.Spanned) $r21;
+
+        r57 = staticinvoke <android.text.Html: java.lang.String toHtml(android.text.Spanned)>($r22);
+
+        $i3 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i3 >= 22 goto label24;
+
+        $r24 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        $r25 = virtualinvoke r57.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r24);
+
+        r57 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r25, 2);
+
+     label24:
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer text(java.lang.String)>(r57);
+
+        goto label29;
+
+     label25:
+        $r17 = virtualinvoke r0.<androidx.slice.SliceItem: java.lang.CharSequence getText()>();
+
+        r58 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r17);
+
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 >= 22 goto label26;
+
+        $r19 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        $r20 = virtualinvoke r58.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r19);
+
+        r58 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r20, 2);
+
+     label26:
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer text(java.lang.String)>(r58);
+
+        goto label29;
+
+     label27:
+        $l1 = virtualinvoke r0.<androidx.slice.SliceItem: long getLong()>();
+
+        $r13 = staticinvoke <java.lang.String: java.lang.String valueOf(long)>($l1);
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer text(java.lang.String)>($r13);
+
+        goto label29;
+
+     label28:
+        $r44 = new java.lang.IllegalArgumentException;
+
+        $r45 = new java.lang.StringBuilder;
+
+        specialinvoke $r45.<java.lang.StringBuilder: void <init>()>();
+
+        $r46 = virtualinvoke $r45.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unrecognized format ");
+
+        $r47 = virtualinvoke $r46.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r48 = virtualinvoke $r47.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r44.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r48);
+
+        throw $r44;
+
+     label29:
+        $r59 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        interfaceinvoke r3.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer endTag(java.lang.String,java.lang.String)>($r59, "item");
+
+        return;
+    }
+
+    private static void serializeResIcon(org.xmlpull.v1.XmlSerializer, android.support.v4.graphics.drawable.IconCompat, android.content.Context) throws java.io.IOException
+    {
+        org.xmlpull.v1.XmlSerializer r0;
+        android.support.v4.graphics.drawable.IconCompat r1;
+        android.content.Context r2;
+        int i0;
+        android.content.pm.PackageManager $r3;
+        java.lang.String $r4, $r5, $r7, $r8, $r10, $r11, $r13;
+        java.lang.Throwable $r15, r18;
+        java.lang.IllegalArgumentException $r16;
+        android.content.res.Resources r17;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlSerializer;
+
+        r1 := @parameter1: android.support.v4.graphics.drawable.IconCompat;
+
+        r2 := @parameter2: android.content.Context;
+
+     label1:
+        $r3 = virtualinvoke r2.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r4 = virtualinvoke r1.<android.support.v4.graphics.drawable.IconCompat: java.lang.String getResPackage()>();
+
+        r17 = virtualinvoke $r3.<android.content.pm.PackageManager: android.content.res.Resources getResourcesForApplication(java.lang.String)>($r4);
+
+        i0 = virtualinvoke r1.<android.support.v4.graphics.drawable.IconCompat: int getResId()>();
+
+        $r5 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        interfaceinvoke r0.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r5, "iconType", "res");
+
+        $r7 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        $r8 = virtualinvoke r17.<android.content.res.Resources: java.lang.String getResourcePackageName(int)>(i0);
+
+        interfaceinvoke r0.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r7, "pkg", $r8);
+
+        $r10 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        $r11 = virtualinvoke r17.<android.content.res.Resources: java.lang.String getResourceTypeName(int)>(i0);
+
+        interfaceinvoke r0.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r10, "resType", $r11);
+
+        $r13 = virtualinvoke r17.<android.content.res.Resources: java.lang.String getResourceEntryName(int)>(i0);
+
+        interfaceinvoke r0.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer text(java.lang.String)>($r13);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r15 := @caughtexception;
+
+        r18 = $r15;
+
+        $r16 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r16.<java.lang.IllegalArgumentException: void <init>(java.lang.String,java.lang.Throwable)>("Slice contains invalid icon", r18);
+
+        throw $r16;
+
+     label4:
+        return;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    private static void serializeFileIcon(org.xmlpull.v1.XmlSerializer, android.support.v4.graphics.drawable.IconCompat, android.content.Context) throws java.io.IOException
+    {
+        org.xmlpull.v1.XmlSerializer r0;
+        android.support.v4.graphics.drawable.IconCompat r1;
+        android.content.Context r2;
+        java.lang.String $r3, $r6;
+        android.net.Uri $r5;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlSerializer;
+
+        r1 := @parameter1: android.support.v4.graphics.drawable.IconCompat;
+
+        r2 := @parameter2: android.content.Context;
+
+        $r3 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        interfaceinvoke r0.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r3, "iconType", "uri");
+
+        $r5 = virtualinvoke r1.<android.support.v4.graphics.drawable.IconCompat: android.net.Uri getUri()>();
+
+        $r6 = virtualinvoke $r5.<android.net.Uri: java.lang.String toString()>();
+
+        interfaceinvoke r0.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer text(java.lang.String)>($r6);
+
+        return;
+    }
+
+    private static void serializeIcon(org.xmlpull.v1.XmlSerializer, android.support.v4.graphics.drawable.IconCompat, android.content.Context, androidx.slice.SliceUtils$SerializeOptions) throws java.io.IOException
+    {
+        org.xmlpull.v1.XmlSerializer r0;
+        android.support.v4.graphics.drawable.IconCompat r1;
+        android.content.Context r2;
+        androidx.slice.SliceUtils$SerializeOptions r3;
+        byte[] r4, $r8;
+        java.lang.String $r5, $r7;
+        java.nio.charset.Charset $r9;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlSerializer;
+
+        r1 := @parameter1: android.support.v4.graphics.drawable.IconCompat;
+
+        r2 := @parameter2: android.content.Context;
+
+        r3 := @parameter3: androidx.slice.SliceUtils$SerializeOptions;
+
+        r4 = staticinvoke <androidx.slice.SliceXml: byte[] convertToBytes(android.support.v4.graphics.drawable.IconCompat,android.content.Context,androidx.slice.SliceUtils$SerializeOptions)>(r1, r2, r3);
+
+        $r5 = <androidx.slice.SliceXml: java.lang.String NAMESPACE>;
+
+        interfaceinvoke r0.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer attribute(java.lang.String,java.lang.String,java.lang.String)>($r5, "iconType", "def");
+
+        $r7 = new java.lang.String;
+
+        $r8 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>(r4, 2);
+
+        $r9 = <java.nio.charset.StandardCharsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r7.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>($r8, $r9);
+
+        interfaceinvoke r0.<org.xmlpull.v1.XmlSerializer: org.xmlpull.v1.XmlSerializer text(java.lang.String)>($r7);
+
+        return;
+    }
+
+    public static byte[] convertToBytes(android.support.v4.graphics.drawable.IconCompat, android.content.Context, androidx.slice.SliceUtils$SerializeOptions)
+    {
+        android.support.v4.graphics.drawable.IconCompat r0;
+        android.content.Context r1;
+        androidx.slice.SliceUtils$SerializeOptions r2;
+        android.graphics.drawable.Drawable r3;
+        android.graphics.Bitmap r4;
+        android.graphics.Canvas r5, $r8;
+        java.io.ByteArrayOutputStream r6, $r9;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, i9, i10;
+        android.graphics.Bitmap$Config $r7;
+        android.graphics.Bitmap$CompressFormat $r10;
+        byte[] $r11;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+
+        r0 := @parameter0: android.support.v4.graphics.drawable.IconCompat;
+
+        r1 := @parameter1: android.content.Context;
+
+        r2 := @parameter2: androidx.slice.SliceUtils$SerializeOptions;
+
+        r3 = virtualinvoke r0.<android.support.v4.graphics.drawable.IconCompat: android.graphics.drawable.Drawable loadDrawable(android.content.Context)>(r1);
+
+        i9 = virtualinvoke r3.<android.graphics.drawable.Drawable: int getIntrinsicWidth()>();
+
+        i10 = virtualinvoke r3.<android.graphics.drawable.Drawable: int getIntrinsicHeight()>();
+
+        $i0 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getMaxWidth()>();
+
+        if i9 <= $i0 goto label1;
+
+        $i7 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getMaxWidth()>();
+
+        $i8 = $i7 * i10;
+
+        $d4 = (double) $i8;
+
+        $d3 = (double) i9;
+
+        $d5 = $d4 / $d3;
+
+        i10 = (int) $d5;
+
+        i9 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getMaxWidth()>();
+
+     label1:
+        $i1 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getMaxHeight()>();
+
+        if i10 <= $i1 goto label2;
+
+        $i5 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getMaxHeight()>();
+
+        $i6 = $i5 * i9;
+
+        $d1 = (double) $i6;
+
+        $d0 = (double) i10;
+
+        $d2 = $d1 / $d0;
+
+        i9 = (int) $d2;
+
+        i10 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getMaxHeight()>();
+
+     label2:
+        $r7 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config ARGB_8888>;
+
+        r4 = staticinvoke <android.graphics.Bitmap: android.graphics.Bitmap createBitmap(int,int,android.graphics.Bitmap$Config)>(i9, i10, $r7);
+
+        $r8 = new android.graphics.Canvas;
+
+        specialinvoke $r8.<android.graphics.Canvas: void <init>(android.graphics.Bitmap)>(r4);
+
+        r5 = $r8;
+
+        $i2 = virtualinvoke r5.<android.graphics.Canvas: int getWidth()>();
+
+        $i3 = virtualinvoke r5.<android.graphics.Canvas: int getHeight()>();
+
+        virtualinvoke r3.<android.graphics.drawable.Drawable: void setBounds(int,int,int,int)>(0, 0, $i2, $i3);
+
+        virtualinvoke r3.<android.graphics.drawable.Drawable: void draw(android.graphics.Canvas)>(r5);
+
+        $r9 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r9.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        r6 = $r9;
+
+        $r10 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: android.graphics.Bitmap$CompressFormat getFormat()>();
+
+        $i4 = virtualinvoke r2.<androidx.slice.SliceUtils$SerializeOptions: int getQuality()>();
+
+        virtualinvoke r4.<android.graphics.Bitmap: boolean compress(android.graphics.Bitmap$CompressFormat,int,java.io.OutputStream)>($r10, $i4, r6);
+
+        virtualinvoke r4.<android.graphics.Bitmap: void recycle()>();
+
+        $r11 = virtualinvoke r6.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        return $r11;
+    }
+
+    private static java.lang.String hintStr(java.util.List)
+    {
+        java.util.List r0;
+        java.lang.String $r1;
+
+        r0 := @parameter0: java.util.List;
+
+        $r1 = staticinvoke <android.text.TextUtils: java.lang.String join(java.lang.CharSequence,java.lang.Iterable)>(",", r0);
+
+        return $r1;
+    }
+
+    private void <init>()
+    {
+        androidx.slice.SliceXml r0;
+
+        r0 := @this: androidx.slice.SliceXml;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        <androidx.slice.SliceXml: java.lang.String NAMESPACE> = null;
+
+        return;
+    }
+
+androidx.slice.SliceXml$1
+<androidx.slice.SliceXml$1: androidx.slice.SliceUtils$SliceActionListener val$listener>
+    void <init>(androidx.slice.SliceUtils$SliceActionListener)
+    {
+        androidx.slice.SliceXml$1 r0;
+        androidx.slice.SliceUtils$SliceActionListener r1;
+
+        r0 := @this: androidx.slice.SliceXml$1;
+
+        r1 := @parameter0: androidx.slice.SliceUtils$SliceActionListener;
+
+        r0.<androidx.slice.SliceXml$1: androidx.slice.SliceUtils$SliceActionListener val$listener> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onAction(androidx.slice.SliceItem, android.content.Context, android.content.Intent)
+    {
+        androidx.slice.SliceXml$1 r0;
+        androidx.slice.SliceItem r1;
+        android.content.Context r2;
+        android.content.Intent r3;
+        androidx.slice.SliceUtils$SliceActionListener $r4;
+        androidx.slice.Slice $r5;
+        android.net.Uri $r6;
+
+        r0 := @this: androidx.slice.SliceXml$1;
+
+        r1 := @parameter0: androidx.slice.SliceItem;
+
+        r2 := @parameter1: android.content.Context;
+
+        r3 := @parameter2: android.content.Intent;
+
+        $r4 = r0.<androidx.slice.SliceXml$1: androidx.slice.SliceUtils$SliceActionListener val$listener>;
+
+        $r5 = virtualinvoke r1.<androidx.slice.SliceItem: androidx.slice.Slice getSlice()>();
+
+        $r6 = virtualinvoke $r5.<androidx.slice.Slice: android.net.Uri getUri()>();
+
+        interfaceinvoke $r4.<androidx.slice.SliceUtils$SliceActionListener: void onSliceAction(android.net.Uri,android.content.Context,android.content.Intent)>($r6, r2, r3);
+
+        return;
+    }
+

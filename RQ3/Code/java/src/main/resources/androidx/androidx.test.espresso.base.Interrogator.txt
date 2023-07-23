@@ -1,0 +1,734 @@
+androidx.test.espresso.base.Interrogator
+<androidx.test.espresso.base.Interrogator: java.lang.String TAG>
+<androidx.test.espresso.base.Interrogator: java.lang.reflect.Method messageQueueNextMethod>
+<androidx.test.espresso.base.Interrogator: java.lang.reflect.Field messageQueueHeadField>
+<androidx.test.espresso.base.Interrogator: java.lang.reflect.Method recycleUncheckedMethod>
+<androidx.test.espresso.base.Interrogator: int LOOKAHEAD_MILLIS>
+<androidx.test.espresso.base.Interrogator: java.lang.ThreadLocal interrogating>
+    private static android.os.Message getNextMessage()
+    {
+        java.lang.RuntimeException r0, r8;
+        java.lang.reflect.Method $r1;
+        android.os.MessageQueue $r2;
+        java.lang.Object[] $r3;
+        java.lang.Object $r4;
+        java.lang.Throwable $r5, r7, r9;
+        android.os.Message r6;
+
+     label1:
+        $r1 = <androidx.test.espresso.base.Interrogator: java.lang.reflect.Method messageQueueNextMethod>;
+
+        $r2 = staticinvoke <android.os.Looper: android.os.MessageQueue myQueue()>();
+
+        $r3 = newarray (java.lang.Object)[0];
+
+        $r4 = virtualinvoke $r1.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r2, $r3);
+
+        r6 = (android.os.Message) $r4;
+
+        goto label3;
+
+     label2:
+        $r5 := @caughtexception;
+
+        r7 = $r5;
+
+        staticinvoke <androidx.test.espresso.core.internal.deps.guava.base.Throwables: void throwIfUnchecked(java.lang.Throwable)>(r7);
+
+        r8 = new java.lang.RuntimeException;
+
+        r0 = r8;
+
+        specialinvoke r8.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r7);
+
+        r9 = (java.lang.Throwable) r0;
+
+        throw r9;
+
+     label3:
+        return r6;
+
+        catch java.lang.IllegalAccessException from label1 to label2 with label2;
+        catch java.lang.IllegalArgumentException from label1 to label2 with label2;
+        catch java.lang.reflect.InvocationTargetException from label1 to label2 with label2;
+        catch java.lang.SecurityException from label1 to label2 with label2;
+    }
+
+    static java.lang.Object loopAndInterrogate(androidx.test.espresso.base.Interrogator$InterrogationHandler)
+    {
+        android.os.MessageQueue r0;
+        long l0, l1, l2;
+        boolean z0, z1;
+        java.lang.String r1, r2, $r20, r31, r33;
+        int i3;
+        java.lang.StringBuilder r3, $r10, $r11, $r12, $r13, $r14, $r15, $r16, $r17, $r18, $r19;
+        java.lang.Boolean $r4, $r6, $r21, $r24;
+        java.lang.ThreadLocal $r5, $r7, $r22, $r25;
+        java.lang.Object $r8, r28;
+        android.os.Handler $r9, r29;
+        byte $b4;
+        java.lang.Throwable $r23, r34;
+        androidx.test.espresso.base.Interrogator$InterrogationHandler r26;
+        android.os.Message r27;
+        java.lang.Class r30;
+        java.lang.Runnable r32;
+
+        r26 := @parameter0: androidx.test.espresso.base.Interrogator$InterrogationHandler;
+
+        staticinvoke <androidx.test.espresso.base.Interrogator: void checkSanity()>();
+
+        $r5 = <androidx.test.espresso.base.Interrogator: java.lang.ThreadLocal interrogating>;
+
+        $r4 = <java.lang.Boolean: java.lang.Boolean TRUE>;
+
+        virtualinvoke $r5.<java.lang.ThreadLocal: void set(java.lang.Object)>($r4);
+
+        r0 = staticinvoke <android.os.Looper: android.os.MessageQueue myQueue()>();
+
+        l0 = staticinvoke <android.os.Binder: long clearCallingIdentity()>();
+
+     label01:
+        l1 = staticinvoke <android.os.Binder: long clearCallingIdentity()>();
+
+     label02:
+        z1 = 1;
+
+     label03:
+        if z1 == 0 goto label15;
+
+     label04:
+        z1 = staticinvoke <androidx.test.espresso.base.Interrogator: boolean interrogateQueueState(android.os.MessageQueue,androidx.test.espresso.base.Interrogator$QueueInterrogationHandler)>(r0, r26);
+
+     label05:
+        if z1 == 0 goto label03;
+
+     label06:
+        r27 = staticinvoke <androidx.test.espresso.base.Interrogator: android.os.Message getNextMessage()>();
+
+     label07:
+        if r27 != null goto label10;
+
+     label08:
+        interfaceinvoke r26.<androidx.test.espresso.base.Interrogator$InterrogationHandler: void quitting()>();
+
+        r28 = interfaceinvoke r26.<androidx.test.espresso.base.Interrogator$InterrogationHandler: java.lang.Object get()>();
+
+     label09:
+        staticinvoke <android.os.Binder: void restoreCallingIdentity(long)>(l0);
+
+        $r22 = <androidx.test.espresso.base.Interrogator: java.lang.ThreadLocal interrogating>;
+
+        $r21 = <java.lang.Boolean: java.lang.Boolean FALSE>;
+
+        virtualinvoke $r22.<java.lang.ThreadLocal: void set(java.lang.Object)>($r21);
+
+        return r28;
+
+     label10:
+        z0 = interfaceinvoke r26.<androidx.test.espresso.base.Interrogator$InterrogationHandler: boolean beforeTaskDispatch()>();
+
+        interfaceinvoke r26.<androidx.test.espresso.base.Interrogator$InterrogationHandler: void setMessage(android.os.Message)>(r27);
+
+        $r9 = virtualinvoke r27.<android.os.Message: android.os.Handler getTarget()>();
+
+        virtualinvoke $r9.<android.os.Handler: void dispatchMessage(android.os.Message)>(r27);
+
+        l2 = staticinvoke <android.os.Binder: long clearCallingIdentity()>();
+
+     label11:
+        $b4 = l2 cmp l1;
+
+        if $b4 == 0 goto label13;
+
+     label12:
+        r1 = staticinvoke <java.lang.Long: java.lang.String toHexString(long)>(l1);
+
+        r2 = staticinvoke <java.lang.Long: java.lang.String toHexString(long)>(l2);
+
+        r29 = virtualinvoke r27.<android.os.Message: android.os.Handler getTarget()>();
+
+        r30 = virtualinvoke r29.<java.lang.Object: java.lang.Class getClass()>();
+
+        r31 = virtualinvoke r30.<java.lang.Class: java.lang.String getName()>();
+
+        r32 = virtualinvoke r27.<android.os.Message: java.lang.Runnable getCallback()>();
+
+        r33 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>(r32);
+
+        i3 = r27.<android.os.Message: int what>;
+
+        r3 = new java.lang.StringBuilder;
+
+        specialinvoke r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Thread identity changed from 0x");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" to 0x");
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" while dispatching to ");
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r31);
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r33);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" what=");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i3);
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int wtf(java.lang.String,java.lang.String)>("Interrogator", $r20);
+
+     label13:
+        staticinvoke <androidx.test.espresso.base.Interrogator: void recycle(android.os.Message)>(r27);
+
+        z1 = z0;
+
+        goto label03;
+
+     label14:
+        $r23 := @caughtexception;
+
+        r34 = $r23;
+
+        staticinvoke <android.os.Binder: void restoreCallingIdentity(long)>(l0);
+
+        $r25 = <androidx.test.espresso.base.Interrogator: java.lang.ThreadLocal interrogating>;
+
+        $r24 = <java.lang.Boolean: java.lang.Boolean FALSE>;
+
+        virtualinvoke $r25.<java.lang.ThreadLocal: void set(java.lang.Object)>($r24);
+
+        throw r34;
+
+     label15:
+        staticinvoke <android.os.Binder: void restoreCallingIdentity(long)>(l0);
+
+        $r7 = <androidx.test.espresso.base.Interrogator: java.lang.ThreadLocal interrogating>;
+
+        $r6 = <java.lang.Boolean: java.lang.Boolean FALSE>;
+
+        virtualinvoke $r7.<java.lang.ThreadLocal: void set(java.lang.Object)>($r6);
+
+        $r8 = interfaceinvoke r26.<androidx.test.espresso.base.Interrogator$InterrogationHandler: java.lang.Object get()>();
+
+        return $r8;
+
+        catch java.lang.Throwable from label01 to label02 with label14;
+        catch java.lang.Throwable from label04 to label05 with label14;
+        catch java.lang.Throwable from label06 to label07 with label14;
+        catch java.lang.Throwable from label08 to label09 with label14;
+        catch java.lang.Throwable from label10 to label11 with label14;
+        catch java.lang.Throwable from label12 to label14 with label14;
+    }
+
+    static java.lang.Object peekAtQueueState(android.os.MessageQueue, androidx.test.espresso.base.Interrogator$QueueInterrogationHandler)
+    {
+        androidx.test.espresso.base.Interrogator$QueueInterrogationHandler r0;
+        boolean $z0, z1;
+        java.lang.Object $r3;
+        android.os.MessageQueue r4;
+
+        r4 := @parameter0: android.os.MessageQueue;
+
+        r0 := @parameter1: androidx.test.espresso.base.Interrogator$QueueInterrogationHandler;
+
+        staticinvoke <androidx.test.espresso.core.internal.deps.guava.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r4);
+
+        staticinvoke <androidx.test.espresso.core.internal.deps.guava.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r0);
+
+        $z0 = staticinvoke <androidx.test.espresso.base.Interrogator: boolean interrogateQueueState(android.os.MessageQueue,androidx.test.espresso.base.Interrogator$QueueInterrogationHandler)>(r4, r0);
+
+        if $z0 != 0 goto label2;
+
+        z1 = 1;
+
+     label1:
+        staticinvoke <androidx.test.espresso.core.internal.deps.guava.base.Preconditions: void checkState(boolean,java.lang.String,java.lang.Object)>(z1, "It is expected that %s would stop interrogation after a single peak at the queue.", r0);
+
+        $r3 = interfaceinvoke r0.<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: java.lang.Object get()>();
+
+        return $r3;
+
+     label2:
+        z1 = 0;
+
+        goto label1;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.RuntimeException r0, r17;
+        java.lang.Class[] $r1, $r8;
+        java.lang.Class $r2, $r5, $r9;
+        java.lang.reflect.Method $r3, $r4, r14;
+        java.lang.reflect.Field $r6, $r7;
+        java.lang.Throwable $r10, $r11, $r12, r15, r18;
+        androidx.test.espresso.base.Interrogator$1 r13, r16;
+
+        r16 = new androidx.test.espresso.base.Interrogator$1;
+
+        r13 = r16;
+
+        specialinvoke r16.<androidx.test.espresso.base.Interrogator$1: void <init>()>();
+
+        <androidx.test.espresso.base.Interrogator: java.lang.ThreadLocal interrogating> = r13;
+
+     label1:
+        $r2 = class "Landroid/os/MessageQueue;";
+
+        $r1 = newarray (java.lang.Class)[0];
+
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Method getDeclaredMethod(java.lang.String,java.lang.Class[])>("next", $r1);
+
+        <androidx.test.espresso.base.Interrogator: java.lang.reflect.Method messageQueueNextMethod> = $r3;
+
+        $r4 = <androidx.test.espresso.base.Interrogator: java.lang.reflect.Method messageQueueNextMethod>;
+
+        virtualinvoke $r4.<java.lang.reflect.Method: void setAccessible(boolean)>(1);
+
+        $r5 = class "Landroid/os/MessageQueue;";
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("mMessages");
+
+        <androidx.test.espresso.base.Interrogator: java.lang.reflect.Field messageQueueHeadField> = $r6;
+
+        $r7 = <androidx.test.espresso.base.Interrogator: java.lang.reflect.Field messageQueueHeadField>;
+
+        virtualinvoke $r7.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+     label2:
+        $r9 = class "Landroid/os/Message;";
+
+        $r8 = newarray (java.lang.Class)[0];
+
+        r14 = virtualinvoke $r9.<java.lang.Class: java.lang.reflect.Method getDeclaredMethod(java.lang.String,java.lang.Class[])>("recycleUnchecked", $r8);
+
+     label3:
+        virtualinvoke r14.<java.lang.reflect.Method: void setAccessible(boolean)>(1);
+
+     label4:
+        <androidx.test.espresso.base.Interrogator: java.lang.reflect.Method recycleUncheckedMethod> = r14;
+
+        return;
+
+     label5:
+        $r11 := @caughtexception;
+
+        r15 = $r11;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("Interrogator", "Could not initialize interrogator!", r15);
+
+        r17 = new java.lang.RuntimeException;
+
+        r0 = r17;
+
+        specialinvoke r17.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>("Could not initialize interrogator!", r15);
+
+        r18 = (java.lang.Throwable) r0;
+
+        throw r18;
+
+     label6:
+        $r10 := @caughtexception;
+
+        r14 = null;
+
+        goto label4;
+
+     label7:
+        $r12 := @caughtexception;
+
+        goto label4;
+
+        catch java.lang.IllegalArgumentException from label1 to label2 with label5;
+        catch java.lang.NoSuchFieldException from label1 to label2 with label5;
+        catch java.lang.SecurityException from label1 to label2 with label5;
+        catch java.lang.NoSuchMethodException from label1 to label2 with label5;
+        catch java.lang.NoSuchMethodException from label2 to label3 with label6;
+        catch java.lang.NoSuchMethodException from label3 to label4 with label7;
+    }
+
+    void <init>()
+    {
+        androidx.test.espresso.base.Interrogator r0;
+
+        r0 := @this: androidx.test.espresso.base.Interrogator;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static void checkSanity()
+    {
+        android.os.Looper $r0;
+        java.lang.ThreadLocal $r1;
+        java.lang.Boolean $r2;
+        java.lang.Object $r3;
+        boolean $z0, z1;
+
+        $r0 = staticinvoke <android.os.Looper: android.os.Looper myLooper()>();
+
+        if $r0 == null goto label2;
+
+        z1 = 1;
+
+     label1:
+        staticinvoke <androidx.test.espresso.core.internal.deps.guava.base.Preconditions: void checkState(boolean,java.lang.Object)>(z1, "Calling non-looper thread!");
+
+        $r2 = <java.lang.Boolean: java.lang.Boolean FALSE>;
+
+        $r1 = <androidx.test.espresso.base.Interrogator: java.lang.ThreadLocal interrogating>;
+
+        $r3 = virtualinvoke $r1.<java.lang.ThreadLocal: java.lang.Object get()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.Boolean: boolean equals(java.lang.Object)>($r3);
+
+        staticinvoke <androidx.test.espresso.core.internal.deps.guava.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "Already interrogating!");
+
+        return;
+
+     label2:
+        z1 = 0;
+
+        goto label1;
+    }
+
+    private static void recycle(android.os.Message)
+    {
+        java.lang.reflect.Method $r0, $r2;
+        java.lang.Object[] $r1;
+        java.lang.Throwable $r4, $r5, $r6, $r7, $r8, r10, r14, r18, r19, r22;
+        android.os.Message r9;
+        java.lang.RuntimeException r11, r12, r13, r15, r16, r17;
+        java.lang.reflect.InvocationTargetException r20, r21, r23;
+
+        r9 := @parameter0: android.os.Message;
+
+        $r0 = <androidx.test.espresso.base.Interrogator: java.lang.reflect.Method recycleUncheckedMethod>;
+
+        if $r0 == null goto label3;
+
+     label1:
+        $r2 = <androidx.test.espresso.base.Interrogator: java.lang.reflect.Method recycleUncheckedMethod>;
+
+        $r1 = newarray (java.lang.Object)[0];
+
+        virtualinvoke $r2.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>(r9, $r1);
+
+     label2:
+        return;
+
+     label3:
+        virtualinvoke r9.<android.os.Message: void recycle()>();
+
+        return;
+
+     label4:
+        $r4 := @caughtexception;
+
+        r10 = $r4;
+
+        staticinvoke <androidx.test.espresso.core.internal.deps.guava.base.Throwables: void throwIfUnchecked(java.lang.Throwable)>(r10);
+
+        r15 = new java.lang.RuntimeException;
+
+        r11 = r15;
+
+        specialinvoke r15.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r10);
+
+        r18 = (java.lang.Throwable) r11;
+
+        throw r18;
+
+     label5:
+        r16 = new java.lang.RuntimeException;
+
+        r12 = r16;
+
+        specialinvoke r16.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r14);
+
+        r19 = (java.lang.Throwable) r12;
+
+        throw r19;
+
+     label6:
+        r20 = (java.lang.reflect.InvocationTargetException) r14;
+
+        $r7 = virtualinvoke r20.<java.lang.reflect.InvocationTargetException: java.lang.Throwable getCause()>();
+
+        staticinvoke <androidx.test.espresso.core.internal.deps.guava.base.Throwables: void throwIfUnchecked(java.lang.Throwable)>($r7);
+
+        r17 = new java.lang.RuntimeException;
+
+        r13 = r17;
+
+        r21 = (java.lang.reflect.InvocationTargetException) r14;
+
+        $r8 = virtualinvoke r21.<java.lang.reflect.InvocationTargetException: java.lang.Throwable getCause()>();
+
+        specialinvoke r17.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r8);
+
+        r22 = (java.lang.Throwable) r13;
+
+        throw r22;
+
+     label7:
+        $r5 := @caughtexception;
+
+        r14 = $r5;
+
+        r23 = (java.lang.reflect.InvocationTargetException) r14;
+
+        $r6 = virtualinvoke r23.<java.lang.reflect.InvocationTargetException: java.lang.Throwable getCause()>();
+
+        if $r6 == null goto label5;
+
+        goto label6;
+
+        catch java.lang.IllegalAccessException from label1 to label2 with label4;
+        catch java.lang.IllegalArgumentException from label1 to label2 with label4;
+        catch java.lang.SecurityException from label1 to label2 with label4;
+        catch java.lang.reflect.InvocationTargetException from label1 to label2 with label7;
+    }
+
+    private static boolean interrogateQueueState(android.os.MessageQueue, androidx.test.espresso.base.Interrogator$QueueInterrogationHandler)
+    {
+        android.os.MessageQueue r0;
+        long l0, l1, l2;
+        java.lang.StringBuilder r1, $r4, $r5, $r6, $r7, $r8, $r9, r20;
+        java.lang.reflect.Field $r2;
+        java.lang.Object $r3;
+        byte $b3, $b6;
+        java.lang.String $r10, r16;
+        java.lang.Throwable $r11, $r12, r17, r19, r22;
+        androidx.test.espresso.base.Interrogator$QueueInterrogationHandler r13;
+        android.os.Message r14;
+        boolean z0, z1, z2, z3, z4, z5, z6;
+        android.os.Handler r15;
+        java.lang.RuntimeException r18, r21;
+
+        r0 := @parameter0: android.os.MessageQueue;
+
+        r13 := @parameter1: androidx.test.espresso.base.Interrogator$QueueInterrogationHandler;
+
+        entermonitor r0;
+
+     label01:
+        $r2 = <androidx.test.espresso.base.Interrogator: java.lang.reflect.Field messageQueueHeadField>;
+
+        $r3 = virtualinvoke $r2.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r0);
+
+        r14 = (android.os.Message) $r3;
+
+     label02:
+        if r14 != null goto label05;
+
+     label03:
+        z0 = interfaceinvoke r13.<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: boolean queueEmpty()>();
+
+        exitmonitor r0;
+
+     label04:
+        return z0;
+
+     label05:
+        r15 = virtualinvoke r14.<android.os.Message: android.os.Handler getTarget()>();
+
+     label06:
+        if r15 != null goto label12;
+
+     label07:
+        z1 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("Interrogator", 3);
+
+     label08:
+        if z1 == 0 goto label10;
+
+     label09:
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("Interrogator", "barrier is up");
+
+     label10:
+        z2 = interfaceinvoke r13.<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: boolean barrierUp()>();
+
+        exitmonitor r0;
+
+     label11:
+        return z2;
+
+     label12:
+        l0 = virtualinvoke r14.<android.os.Message: long getWhen()>();
+
+        l1 = staticinvoke <android.os.SystemClock: long uptimeMillis()>();
+
+     label13:
+        l2 = l1 + 15L;
+
+     label14:
+        z3 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("Interrogator", 3);
+
+     label15:
+        if z3 == 0 goto label19;
+
+     label16:
+        r16 = "Interrogator";
+
+     label17:
+        $b3 = l2 cmp l0;
+
+        if $b3 >= 0 goto label24;
+
+        z4 = 1;
+
+     label18:
+        r20 = new java.lang.StringBuilder;
+
+        r1 = r20;
+
+        specialinvoke r20.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("headWhen: ");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" nowFuz: ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l2);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" due long: ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>(z4);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(r16, $r10);
+
+     label19:
+        $b6 = l2 cmp l0;
+
+        if $b6 <= 0 goto label22;
+
+     label20:
+        z5 = interfaceinvoke r13.<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: boolean taskDueSoon()>();
+
+        exitmonitor r0;
+
+     label21:
+        return z5;
+
+     label22:
+        z6 = interfaceinvoke r13.<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: boolean taskDueLong()>();
+
+        exitmonitor r0;
+
+     label23:
+        return z6;
+
+     label24:
+        z4 = 0;
+
+        goto label18;
+
+     label25:
+        $r11 := @caughtexception;
+
+        r17 = $r11;
+
+     label26:
+        r21 = new java.lang.RuntimeException;
+
+        r18 = r21;
+
+        specialinvoke r21.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r17);
+
+        r22 = (java.lang.Throwable) r18;
+
+        throw r22;
+
+     label27:
+        $r12 := @caughtexception;
+
+        r19 = $r12;
+
+        goto label29;
+
+     label28:
+        throw r19;
+
+     label29:
+        exitmonitor r0;
+
+        goto label28;
+
+     label30:
+        nop;
+
+        catch java.lang.IllegalAccessException from label01 to label02 with label25;
+        catch java.lang.Throwable from label01 to label02 with label27;
+        catch java.lang.Throwable from label03 to label04 with label27;
+        catch java.lang.Throwable from label05 to label06 with label27;
+        catch java.lang.Throwable from label07 to label08 with label27;
+        catch java.lang.Throwable from label09 to label11 with label27;
+        catch java.lang.Throwable from label12 to label13 with label27;
+        catch java.lang.Throwable from label14 to label15 with label27;
+        catch java.lang.Throwable from label16 to label17 with label27;
+        catch java.lang.Throwable from label18 to label19 with label27;
+        catch java.lang.Throwable from label20 to label21 with label27;
+        catch java.lang.Throwable from label22 to label23 with label27;
+        catch java.lang.Throwable from label26 to label27 with label27;
+        catch java.lang.Throwable from label29 to label30 with label27;
+    }
+
+androidx.test.espresso.base.Interrogator$1
+    public java.lang.Boolean initialValue()
+    {
+        androidx.test.espresso.base.Interrogator$1 r0;
+        java.lang.Boolean $r1;
+
+        r0 := @this: androidx.test.espresso.base.Interrogator$1;
+
+        $r1 = <java.lang.Boolean: java.lang.Boolean FALSE>;
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object initialValue()
+    {
+        androidx.test.espresso.base.Interrogator$1 r0;
+        java.lang.Boolean $r1;
+
+        r0 := @this: androidx.test.espresso.base.Interrogator$1;
+
+        $r1 = virtualinvoke r0.<androidx.test.espresso.base.Interrogator$1: java.lang.Boolean initialValue()>();
+
+        return $r1;
+    }
+
+    void <init>()
+    {
+        androidx.test.espresso.base.Interrogator$1 r0;
+
+        r0 := @this: androidx.test.espresso.base.Interrogator$1;
+
+        specialinvoke r0.<java.lang.ThreadLocal: void <init>()>();
+
+        return;
+    }
+
+androidx.test.espresso.base.Interrogator$InterrogationHandler
+<androidx.test.espresso.base.Interrogator$InterrogationHandler: java.lang.String getMessage()>
+<androidx.test.espresso.base.Interrogator$InterrogationHandler: void quitting()>
+<androidx.test.espresso.base.Interrogator$InterrogationHandler: void setMessage(android.os.Message)>
+<androidx.test.espresso.base.Interrogator$InterrogationHandler: boolean beforeTaskDispatch()>
+androidx.test.espresso.base.Interrogator$QueueInterrogationHandler
+<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: java.lang.Object get()>
+<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: boolean barrierUp()>
+<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: boolean queueEmpty()>
+<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: boolean taskDueLong()>
+<androidx.test.espresso.base.Interrogator$QueueInterrogationHandler: boolean taskDueSoon()>

@@ -1,0 +1,343 @@
+androidx.media3.common.PriorityTaskManager
+<androidx.media3.common.PriorityTaskManager: java.lang.Object lock>
+<androidx.media3.common.PriorityTaskManager: java.util.PriorityQueue queue>
+<androidx.media3.common.PriorityTaskManager: int highestPriority>
+    public void <init>()
+    {
+        androidx.media3.common.PriorityTaskManager r0;
+        java.lang.Object $r1;
+        java.util.PriorityQueue $r2;
+        java.util.Comparator $r3;
+
+        r0 := @this: androidx.media3.common.PriorityTaskManager;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.common.PriorityTaskManager: java.lang.Object lock> = $r1;
+
+        $r2 = new java.util.PriorityQueue;
+
+        $r3 = staticinvoke <java.util.Collections: java.util.Comparator reverseOrder()>();
+
+        specialinvoke $r2.<java.util.PriorityQueue: void <init>(int,java.util.Comparator)>(10, $r3);
+
+        r0.<androidx.media3.common.PriorityTaskManager: java.util.PriorityQueue queue> = $r2;
+
+        r0.<androidx.media3.common.PriorityTaskManager: int highestPriority> = -2147483648;
+
+        return;
+    }
+
+    public void add(int)
+    {
+        androidx.media3.common.PriorityTaskManager r0;
+        int i0, $i1, $i2;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r6;
+        java.util.PriorityQueue $r4;
+        java.lang.Integer $r5;
+
+        r0 := @this: androidx.media3.common.PriorityTaskManager;
+
+        i0 := @parameter0: int;
+
+        $r3 = r0.<androidx.media3.common.PriorityTaskManager: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.media3.common.PriorityTaskManager: java.util.PriorityQueue queue>;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        virtualinvoke $r4.<java.util.PriorityQueue: boolean add(java.lang.Object)>($r5);
+
+        $i1 = r0.<androidx.media3.common.PriorityTaskManager: int highestPriority>;
+
+        $i2 = staticinvoke <java.lang.Math: int max(int,int)>($i1, i0);
+
+        r0.<androidx.media3.common.PriorityTaskManager: int highestPriority> = $i2;
+
+        exitmonitor r1;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void proceed(int) throws java.lang.InterruptedException
+    {
+        androidx.media3.common.PriorityTaskManager r0;
+        int i0, $i1;
+        java.lang.Object r1, $r3, $r4;
+        java.lang.Throwable r2, $r5;
+
+        r0 := @this: androidx.media3.common.PriorityTaskManager;
+
+        i0 := @parameter0: int;
+
+        $r3 = r0.<androidx.media3.common.PriorityTaskManager: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $i1 = r0.<androidx.media3.common.PriorityTaskManager: int highestPriority>;
+
+        if $i1 == i0 goto label2;
+
+        $r4 = r0.<androidx.media3.common.PriorityTaskManager: java.lang.Object lock>;
+
+        virtualinvoke $r4.<java.lang.Object: void wait()>();
+
+        goto label1;
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public boolean proceedNonBlocking(int)
+    {
+        androidx.media3.common.PriorityTaskManager r0;
+        int i0, $i1;
+        java.lang.Object r1, $r2;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.common.PriorityTaskManager;
+
+        i0 := @parameter0: int;
+
+        $r2 = r0.<androidx.media3.common.PriorityTaskManager: java.lang.Object lock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        $i1 = r0.<androidx.media3.common.PriorityTaskManager: int highestPriority>;
+
+        if $i1 != i0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        exitmonitor r1;
+
+        return $z0;
+    }
+
+    public void proceedOrThrow(int) throws androidx.media3.common.PriorityTaskManager$PriorityTooLowException
+    {
+        androidx.media3.common.PriorityTaskManager r0;
+        int i0, $i1, $i2;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r5, r7;
+        androidx.media3.common.PriorityTaskManager$PriorityTooLowException r6;
+
+        r0 := @this: androidx.media3.common.PriorityTaskManager;
+
+        i0 := @parameter0: int;
+
+        $r3 = r0.<androidx.media3.common.PriorityTaskManager: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $i1 = r0.<androidx.media3.common.PriorityTaskManager: int highestPriority>;
+
+        if $i1 == i0 goto label2;
+
+        r6 = new androidx.media3.common.PriorityTaskManager$PriorityTooLowException;
+
+        $i2 = r0.<androidx.media3.common.PriorityTaskManager: int highestPriority>;
+
+        specialinvoke r6.<androidx.media3.common.PriorityTaskManager$PriorityTooLowException: void <init>(int,int)>(i0, $i2);
+
+        r7 = (java.lang.Throwable) r6;
+
+        throw r7;
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void remove(int)
+    {
+        androidx.media3.common.PriorityTaskManager r0;
+        int i0, $i1;
+        java.lang.Object r1, $r3, $r8, $r10, $r12;
+        java.lang.Throwable r2, $r14;
+        java.util.PriorityQueue $r4, $r6, $r7;
+        java.lang.Integer $r5, $r9, $r11;
+        boolean $z1;
+
+        r0 := @this: androidx.media3.common.PriorityTaskManager;
+
+        i0 := @parameter0: int;
+
+        $r3 = r0.<androidx.media3.common.PriorityTaskManager: java.lang.Object lock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.media3.common.PriorityTaskManager: java.util.PriorityQueue queue>;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        virtualinvoke $r4.<java.util.PriorityQueue: boolean remove(java.lang.Object)>($r5);
+
+        $r6 = r0.<androidx.media3.common.PriorityTaskManager: java.util.PriorityQueue queue>;
+
+        $z1 = virtualinvoke $r6.<java.util.PriorityQueue: boolean isEmpty()>();
+
+        if $z1 == 0 goto label2;
+
+        $i1 = -2147483648;
+
+        goto label3;
+
+     label2:
+        $r7 = r0.<androidx.media3.common.PriorityTaskManager: java.util.PriorityQueue queue>;
+
+        $r8 = virtualinvoke $r7.<java.util.PriorityQueue: java.lang.Object peek()>();
+
+        $r9 = (java.lang.Integer) $r8;
+
+        $r10 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r9);
+
+        $r11 = (java.lang.Integer) $r10;
+
+        $i1 = virtualinvoke $r11.<java.lang.Integer: int intValue()>();
+
+     label3:
+        r0.<androidx.media3.common.PriorityTaskManager: int highestPriority> = $i1;
+
+        $r12 = r0.<androidx.media3.common.PriorityTaskManager: java.lang.Object lock>;
+
+        virtualinvoke $r12.<java.lang.Object: void notifyAll()>();
+
+        exitmonitor r1;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r14 := @caughtexception;
+
+        r2 = $r14;
+
+        exitmonitor r1;
+
+     label6:
+        throw r2;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+androidx.media3.common.PriorityTaskManager$PriorityTooLowException
+    public void <init>(int, int)
+    {
+        androidx.media3.common.PriorityTaskManager$PriorityTooLowException r0;
+        int i0, i1;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r5, $r6;
+        java.lang.String $r7;
+
+        r0 := @this: androidx.media3.common.PriorityTaskManager$PriorityTooLowException;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Priority too low [priority=");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", highest=");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<java.io.IOException: void <init>(java.lang.String)>($r7);
+
+        return;
+    }
+

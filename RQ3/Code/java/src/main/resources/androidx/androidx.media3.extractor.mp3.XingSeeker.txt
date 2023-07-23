@@ -1,0 +1,523 @@
+androidx.media3.extractor.mp3.XingSeeker
+<androidx.media3.extractor.mp3.XingSeeker: java.lang.String TAG>
+<androidx.media3.extractor.mp3.XingSeeker: long dataStartPosition>
+<androidx.media3.extractor.mp3.XingSeeker: int xingFrameSize>
+<androidx.media3.extractor.mp3.XingSeeker: long durationUs>
+<androidx.media3.extractor.mp3.XingSeeker: long dataSize>
+<androidx.media3.extractor.mp3.XingSeeker: long dataEndPosition>
+<androidx.media3.extractor.mp3.XingSeeker: long[] tableOfContents>
+    public static androidx.media3.extractor.mp3.XingSeeker create(long, long, androidx.media3.extractor.MpegAudioUtil$Header, androidx.media3.common.util.ParsableByteArray)
+    {
+        long l0, l1, l6, l7, $l10, $l11, $l12, $l13, $l16, $l18, $l20;
+        androidx.media3.extractor.MpegAudioUtil$Header r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        int i2, i3, i4, i5, $i8, $i9, $i14, $i19, $i21, i22, $i23;
+        long[] r2;
+        byte $b15, $b17;
+        java.lang.StringBuilder $r3, $r4, $r5, $r6, $r7;
+        java.lang.String $r8;
+        androidx.media3.extractor.mp3.XingSeeker $r9, $r10;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r0 := @parameter2: androidx.media3.extractor.MpegAudioUtil$Header;
+
+        r1 := @parameter3: androidx.media3.common.util.ParsableByteArray;
+
+        i2 = r0.<androidx.media3.extractor.MpegAudioUtil$Header: int samplesPerFrame>;
+
+        i3 = r0.<androidx.media3.extractor.MpegAudioUtil$Header: int sampleRate>;
+
+        i4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        $i8 = i4 & 1;
+
+        if $i8 != 1 goto label1;
+
+        $i9 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedIntToInt()>();
+
+        i5 = $i9;
+
+        if $i9 != 0 goto label2;
+
+     label1:
+        return null;
+
+     label2:
+        $l13 = (long) i5;
+
+        $l10 = (long) i2;
+
+        $l12 = $l10 * 1000000L;
+
+        $l11 = (long) i3;
+
+        l6 = staticinvoke <androidx.media3.common.util.Util: long scaleLargeTimestamp(long,long,long)>($l13, $l12, $l11);
+
+        $i14 = i4 & 6;
+
+        if $i14 == 6 goto label3;
+
+        $r9 = new androidx.media3.extractor.mp3.XingSeeker;
+
+        $i21 = r0.<androidx.media3.extractor.MpegAudioUtil$Header: int frameSize>;
+
+        specialinvoke $r9.<androidx.media3.extractor.mp3.XingSeeker: void <init>(long,int,long)>(l1, $i21, l6);
+
+        return $r9;
+
+     label3:
+        l7 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: long readUnsignedInt()>();
+
+        r2 = newarray (long)[100];
+
+        i22 = 0;
+
+     label4:
+        if i22 >= 100 goto label5;
+
+        $i19 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $l20 = (long) $i19;
+
+        r2[i22] = $l20;
+
+        i22 = i22 + 1;
+
+        goto label4;
+
+     label5:
+        $b15 = l0 cmp -1L;
+
+        if $b15 == 0 goto label6;
+
+        $l16 = l1 + l7;
+
+        $b17 = l0 cmp $l16;
+
+        if $b17 == 0 goto label6;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("XING data size mismatch: ");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $l18 = l1 + l7;
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l18);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("XingSeeker", $r8);
+
+     label6:
+        $r10 = new androidx.media3.extractor.mp3.XingSeeker;
+
+        $i23 = r0.<androidx.media3.extractor.MpegAudioUtil$Header: int frameSize>;
+
+        specialinvoke $r10.<androidx.media3.extractor.mp3.XingSeeker: void <init>(long,int,long,long,long[])>(l1, $i23, l6, l7, r2);
+
+        return $r10;
+    }
+
+    private void <init>(long, int, long)
+    {
+        androidx.media3.extractor.mp3.XingSeeker r0;
+        long l0, l2;
+        int i1;
+
+        r0 := @this: androidx.media3.extractor.mp3.XingSeeker;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        l2 := @parameter2: long;
+
+        specialinvoke r0.<androidx.media3.extractor.mp3.XingSeeker: void <init>(long,int,long,long,long[])>(l0, i1, l2, -1L, null);
+
+        return;
+    }
+
+    private void <init>(long, int, long, long, long[])
+    {
+        androidx.media3.extractor.mp3.XingSeeker r0;
+        long l0, l2, l3, $l5;
+        int i1;
+        long[] r1;
+        byte $b4;
+
+        r0 := @this: androidx.media3.extractor.mp3.XingSeeker;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        l2 := @parameter2: long;
+
+        l3 := @parameter3: long;
+
+        r1 := @parameter4: long[];
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.mp3.XingSeeker: long dataStartPosition> = l0;
+
+        r0.<androidx.media3.extractor.mp3.XingSeeker: int xingFrameSize> = i1;
+
+        r0.<androidx.media3.extractor.mp3.XingSeeker: long durationUs> = l2;
+
+        r0.<androidx.media3.extractor.mp3.XingSeeker: long[] tableOfContents> = r1;
+
+        r0.<androidx.media3.extractor.mp3.XingSeeker: long dataSize> = l3;
+
+        $b4 = l3 cmp -1L;
+
+        if $b4 != 0 goto label1;
+
+        $l5 = -1L;
+
+        goto label2;
+
+     label1:
+        $l5 = l0 + l3;
+
+     label2:
+        r0.<androidx.media3.extractor.mp3.XingSeeker: long dataEndPosition> = $l5;
+
+        return;
+    }
+
+    public boolean isSeekable()
+    {
+        androidx.media3.extractor.mp3.XingSeeker r0;
+        long[] $r1;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.mp3.XingSeeker;
+
+        $r1 = r0.<androidx.media3.extractor.mp3.XingSeeker: long[] tableOfContents>;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public androidx.media3.extractor.SeekMap$SeekPoints getSeekPoints(long)
+    {
+        androidx.media3.extractor.mp3.XingSeeker r0;
+        double d0, d1, d2, d3, $d4, $d5, $d6, $d7, $d8, $d9, d10, $d11, $d12, $d13, $d14;
+        long[] r1, $r2;
+        boolean $z0;
+        long $l0, $l1, $l4, $l6, $l8, $l9, $l10, l11, l12, $l14, l15, $l17, $l18, $l19, l20, $l21, $l22;
+        byte $b2, $b3;
+        java.lang.Object $r3;
+        int $i5, $i7, i13, $i16;
+        androidx.media3.extractor.SeekMap$SeekPoints $r4, $r6;
+        androidx.media3.extractor.SeekPoint $r5, $r7;
+
+        r0 := @this: androidx.media3.extractor.mp3.XingSeeker;
+
+        l11 := @parameter0: long;
+
+        $z0 = virtualinvoke r0.<androidx.media3.extractor.mp3.XingSeeker: boolean isSeekable()>();
+
+        if $z0 != 0 goto label1;
+
+        $r4 = new androidx.media3.extractor.SeekMap$SeekPoints;
+
+        $r5 = new androidx.media3.extractor.SeekPoint;
+
+        $l9 = r0.<androidx.media3.extractor.mp3.XingSeeker: long dataStartPosition>;
+
+        $i7 = r0.<androidx.media3.extractor.mp3.XingSeeker: int xingFrameSize>;
+
+        $l8 = (long) $i7;
+
+        $l10 = $l9 + $l8;
+
+        specialinvoke $r5.<androidx.media3.extractor.SeekPoint: void <init>(long,long)>(0L, $l10);
+
+        specialinvoke $r4.<androidx.media3.extractor.SeekMap$SeekPoints: void <init>(androidx.media3.extractor.SeekPoint)>($r5);
+
+        return $r4;
+
+     label1:
+        $l0 = r0.<androidx.media3.extractor.mp3.XingSeeker: long durationUs>;
+
+        l12 = staticinvoke <androidx.media3.common.util.Util: long constrainValue(long,long,long)>(l11, 0L, $l0);
+
+        $d4 = (double) l12;
+
+        $d6 = $d4 * 100.0;
+
+        $l1 = r0.<androidx.media3.extractor.mp3.XingSeeker: long durationUs>;
+
+        $d5 = (double) $l1;
+
+        d0 = $d6 / $d5;
+
+        $b2 = d0 cmpg 0.0;
+
+        if $b2 > 0 goto label2;
+
+        d10 = 0.0;
+
+        goto label6;
+
+     label2:
+        $b3 = d0 cmpl 100.0;
+
+        if $b3 < 0 goto label3;
+
+        d10 = 256.0;
+
+        goto label6;
+
+     label3:
+        i13 = (int) d0;
+
+        $r2 = r0.<androidx.media3.extractor.mp3.XingSeeker: long[] tableOfContents>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r2);
+
+        r1 = (long[]) $r3;
+
+        $l4 = r1[i13];
+
+        d1 = (double) $l4;
+
+        if i13 != 99 goto label4;
+
+        $d11 = 256.0;
+
+        goto label5;
+
+     label4:
+        $i5 = i13 + 1;
+
+        $l6 = r1[$i5];
+
+        $d11 = (double) $l6;
+
+     label5:
+        d2 = $d11;
+
+        $d7 = (double) i13;
+
+        d3 = d0 - $d7;
+
+        $d8 = d2 - d1;
+
+        $d9 = d3 * $d8;
+
+        d10 = d1 + $d9;
+
+     label6:
+        $d12 = d10 / 256.0;
+
+        $l14 = r0.<androidx.media3.extractor.mp3.XingSeeker: long dataSize>;
+
+        $d13 = (double) $l14;
+
+        $d14 = $d12 * $d13;
+
+        l15 = staticinvoke <java.lang.Math: long round(double)>($d14);
+
+        $i16 = r0.<androidx.media3.extractor.mp3.XingSeeker: int xingFrameSize>;
+
+        $l17 = (long) $i16;
+
+        $l18 = r0.<androidx.media3.extractor.mp3.XingSeeker: long dataSize>;
+
+        $l19 = $l18 - 1L;
+
+        l20 = staticinvoke <androidx.media3.common.util.Util: long constrainValue(long,long,long)>(l15, $l17, $l19);
+
+        $r6 = new androidx.media3.extractor.SeekMap$SeekPoints;
+
+        $r7 = new androidx.media3.extractor.SeekPoint;
+
+        $l21 = r0.<androidx.media3.extractor.mp3.XingSeeker: long dataStartPosition>;
+
+        $l22 = $l21 + l20;
+
+        specialinvoke $r7.<androidx.media3.extractor.SeekPoint: void <init>(long,long)>(l12, $l22);
+
+        specialinvoke $r6.<androidx.media3.extractor.SeekMap$SeekPoints: void <init>(androidx.media3.extractor.SeekPoint)>($r7);
+
+        return $r6;
+    }
+
+    public long getTimeUs(long)
+    {
+        androidx.media3.extractor.mp3.XingSeeker r0;
+        long l0, l1, l3, l4, l5, l6, $l7, $l9, $l11, $l12, $l16, $l17, $l18, $l19, $l20;
+        long[] r1, $r2;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10;
+        int i2, $i8, $i13, $i14;
+        boolean $z0;
+        byte $b10, $b15;
+        java.lang.Object $r3;
+
+        r0 := @this: androidx.media3.extractor.mp3.XingSeeker;
+
+        l0 := @parameter0: long;
+
+        $l7 = r0.<androidx.media3.extractor.mp3.XingSeeker: long dataStartPosition>;
+
+        l1 = l0 - $l7;
+
+        $z0 = virtualinvoke r0.<androidx.media3.extractor.mp3.XingSeeker: boolean isSeekable()>();
+
+        if $z0 == 0 goto label1;
+
+        $i8 = r0.<androidx.media3.extractor.mp3.XingSeeker: int xingFrameSize>;
+
+        $l9 = (long) $i8;
+
+        $b10 = l1 cmp $l9;
+
+        if $b10 > 0 goto label2;
+
+     label1:
+        return 0L;
+
+     label2:
+        $r2 = r0.<androidx.media3.extractor.mp3.XingSeeker: long[] tableOfContents>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r2);
+
+        r1 = (long[]) $r3;
+
+        $d2 = (double) l1;
+
+        $d4 = $d2 * 256.0;
+
+        $l11 = r0.<androidx.media3.extractor.mp3.XingSeeker: long dataSize>;
+
+        $d3 = (double) $l11;
+
+        d0 = $d4 / $d3;
+
+        $l12 = (long) d0;
+
+        i2 = staticinvoke <androidx.media3.common.util.Util: int binarySearchFloor(long[],long,boolean,boolean)>(r1, $l12, 1, 1);
+
+        l3 = specialinvoke r0.<androidx.media3.extractor.mp3.XingSeeker: long getTimeUsForTableIndex(int)>(i2);
+
+        l4 = r1[i2];
+
+        $i13 = i2 + 1;
+
+        l5 = specialinvoke r0.<androidx.media3.extractor.mp3.XingSeeker: long getTimeUsForTableIndex(int)>($i13);
+
+        if i2 != 99 goto label3;
+
+        $l20 = 256L;
+
+        goto label4;
+
+     label3:
+        $i14 = i2 + 1;
+
+        $l20 = r1[$i14];
+
+     label4:
+        l6 = $l20;
+
+        $b15 = l4 cmp l6;
+
+        if $b15 != 0 goto label5;
+
+        $d10 = 0.0;
+
+        goto label6;
+
+     label5:
+        $d5 = (double) l4;
+
+        $d7 = d0 - $d5;
+
+        $l16 = l6 - l4;
+
+        $d6 = (double) $l16;
+
+        $d10 = $d7 / $d6;
+
+     label6:
+        d1 = $d10;
+
+        $l17 = l5 - l3;
+
+        $d8 = (double) $l17;
+
+        $d9 = d1 * $d8;
+
+        $l18 = staticinvoke <java.lang.Math: long round(double)>($d9);
+
+        $l19 = l3 + $l18;
+
+        return $l19;
+    }
+
+    public long getDurationUs()
+    {
+        androidx.media3.extractor.mp3.XingSeeker r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.extractor.mp3.XingSeeker;
+
+        $l0 = r0.<androidx.media3.extractor.mp3.XingSeeker: long durationUs>;
+
+        return $l0;
+    }
+
+    public long getDataEndPosition()
+    {
+        androidx.media3.extractor.mp3.XingSeeker r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.extractor.mp3.XingSeeker;
+
+        $l0 = r0.<androidx.media3.extractor.mp3.XingSeeker: long dataEndPosition>;
+
+        return $l0;
+    }
+
+    private long getTimeUsForTableIndex(int)
+    {
+        androidx.media3.extractor.mp3.XingSeeker r0;
+        int i0;
+        long $l1, $l2, $l3, $l4;
+
+        r0 := @this: androidx.media3.extractor.mp3.XingSeeker;
+
+        i0 := @parameter0: int;
+
+        $l2 = r0.<androidx.media3.extractor.mp3.XingSeeker: long durationUs>;
+
+        $l1 = (long) i0;
+
+        $l3 = $l2 * $l1;
+
+        $l4 = $l3 / 100L;
+
+        return $l4;
+    }
+

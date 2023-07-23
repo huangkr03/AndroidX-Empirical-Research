@@ -1,0 +1,128 @@
+okio.SocketAsyncTimeout
+<okio.SocketAsyncTimeout: java.net.Socket socket>
+    public void <init>(java.net.Socket)
+    {
+        okio.SocketAsyncTimeout $r0;
+        java.net.Socket $r1;
+
+        $r0 := @this: okio.SocketAsyncTimeout;
+
+        $r1 := @parameter0: java.net.Socket;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "socket");
+
+        specialinvoke $r0.<okio.AsyncTimeout: void <init>()>();
+
+        $r0.<okio.SocketAsyncTimeout: java.net.Socket socket> = $r1;
+
+        return;
+    }
+
+    protected java.io.IOException newTimeoutException(java.io.IOException)
+    {
+        okio.SocketAsyncTimeout $r0;
+        java.io.IOException $r1;
+        java.net.SocketTimeoutException $r2, r3;
+        java.lang.Throwable r4;
+
+        $r0 := @this: okio.SocketAsyncTimeout;
+
+        $r1 := @parameter0: java.io.IOException;
+
+        r3 = new java.net.SocketTimeoutException;
+
+        $r2 = r3;
+
+        specialinvoke r3.<java.net.SocketTimeoutException: void <init>(java.lang.String)>("timeout");
+
+        if $r1 == null goto label1;
+
+        r4 = (java.lang.Throwable) $r1;
+
+        virtualinvoke $r2.<java.net.SocketTimeoutException: java.lang.Throwable initCause(java.lang.Throwable)>(r4);
+
+     label1:
+        return $r2;
+    }
+
+    protected void timedOut()
+    {
+        okio.SocketAsyncTimeout $r0;
+        java.net.Socket $r1;
+        java.lang.Throwable $r2, $r7;
+        boolean $z0;
+        java.util.logging.Logger $r3;
+        java.util.logging.Level $r4;
+        java.lang.StringBuilder $r5, r8;
+        java.lang.String $r6;
+        java.lang.AssertionError r9;
+
+        $r0 := @this: okio.SocketAsyncTimeout;
+
+        $r1 = $r0.<okio.SocketAsyncTimeout: java.net.Socket socket>;
+
+     label1:
+        virtualinvoke $r1.<java.net.Socket: void close()>();
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r9 = (java.lang.AssertionError) $r2;
+
+        $z0 = staticinvoke <okio.Okio: boolean isAndroidGetsocknameError(java.lang.AssertionError)>(r9);
+
+        if $z0 == 0 goto label4;
+
+        $r3 = staticinvoke <okio.Okio__JvmOkioKt: java.util.logging.Logger access$getLogger$p()>();
+
+        $r4 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        $r1 = $r0.<okio.SocketAsyncTimeout: java.net.Socket socket>;
+
+        r8 = new java.lang.StringBuilder;
+
+        specialinvoke r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to close timed out socket ");
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String,java.lang.Throwable)>($r4, $r6, $r2);
+
+        return;
+
+     label4:
+        throw $r2;
+
+     label5:
+        $r7 := @caughtexception;
+
+        $r3 = staticinvoke <okio.Okio__JvmOkioKt: java.util.logging.Logger access$getLogger$p()>();
+
+        $r4 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        $r1 = $r0.<okio.SocketAsyncTimeout: java.net.Socket socket>;
+
+        r8 = new java.lang.StringBuilder;
+
+        specialinvoke r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to close timed out socket ");
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<java.util.logging.Logger: void log(java.util.logging.Level,java.lang.String,java.lang.Throwable)>($r4, $r6, $r7);
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.AssertionError from label1 to label2 with label3;
+    }
+

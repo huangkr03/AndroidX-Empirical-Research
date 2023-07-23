@@ -1,0 +1,399 @@
+androidx.arch.core.executor.testing.CountingTaskExecutorRule
+<androidx.arch.core.executor.testing.CountingTaskExecutorRule: java.lang.Object mCountLock>
+<androidx.arch.core.executor.testing.CountingTaskExecutorRule: int mTaskCount>
+    public void <init>()
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r0;
+        java.lang.Object $r1;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        specialinvoke r0.<org.junit.rules.TestWatcher: void <init>()>();
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: java.lang.Object mCountLock> = $r1;
+
+        r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: int mTaskCount> = 0;
+
+        return;
+    }
+
+    protected void starting(org.junit.runner.Description)
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r0;
+        org.junit.runner.Description r1;
+        androidx.arch.core.executor.ArchTaskExecutor $r2;
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule$1 $r3;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        specialinvoke r0.<org.junit.rules.TestWatcher: void starting(org.junit.runner.Description)>(r1);
+
+        $r2 = staticinvoke <androidx.arch.core.executor.ArchTaskExecutor: androidx.arch.core.executor.ArchTaskExecutor getInstance()>();
+
+        $r3 = new androidx.arch.core.executor.testing.CountingTaskExecutorRule$1;
+
+        specialinvoke $r3.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$1: void <init>(androidx.arch.core.executor.testing.CountingTaskExecutorRule)>(r0);
+
+        virtualinvoke $r2.<androidx.arch.core.executor.ArchTaskExecutor: void setDelegate(androidx.arch.core.executor.TaskExecutor)>($r3);
+
+        return;
+    }
+
+    protected void finished(org.junit.runner.Description)
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r0;
+        org.junit.runner.Description r1;
+        androidx.arch.core.executor.ArchTaskExecutor $r2;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        specialinvoke r0.<org.junit.rules.TestWatcher: void finished(org.junit.runner.Description)>(r1);
+
+        $r2 = staticinvoke <androidx.arch.core.executor.ArchTaskExecutor: androidx.arch.core.executor.ArchTaskExecutor getInstance()>();
+
+        virtualinvoke $r2.<androidx.arch.core.executor.ArchTaskExecutor: void setDelegate(androidx.arch.core.executor.TaskExecutor)>(null);
+
+        return;
+    }
+
+    void increment()
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r0;
+        java.lang.Object r1, $r2;
+        int $i0, $i1;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        $r2 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: java.lang.Object mCountLock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        $i0 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: int mTaskCount>;
+
+        $i1 = $i0 + 1;
+
+        r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: int mTaskCount> = $i1;
+
+        exitmonitor r1;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    void decrement()
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r0;
+        java.lang.Object r1, $r3, $r4;
+        java.lang.Throwable r2, $r5;
+        int $i0, $i1, $i2;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        $r3 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: java.lang.Object mCountLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $i0 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: int mTaskCount>;
+
+        $i1 = $i0 - 1;
+
+        r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: int mTaskCount> = $i1;
+
+        $i2 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: int mTaskCount>;
+
+        if $i2 != 0 goto label2;
+
+        virtualinvoke r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: void onIdle()>();
+
+        $r4 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: java.lang.Object mCountLock>;
+
+        virtualinvoke $r4.<java.lang.Object: void notifyAll()>();
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    protected void onIdle()
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r0;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        return;
+    }
+
+    public boolean isIdle()
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r0;
+        java.lang.Object r1, $r2;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        $r2 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: java.lang.Object mCountLock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        $i0 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: int mTaskCount>;
+
+        if $i0 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        exitmonitor r1;
+
+        return $z0;
+    }
+
+    public void drainTasks(int, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException, java.util.concurrent.TimeoutException
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r0;
+        int i0, $i7;
+        java.util.concurrent.TimeUnit r1;
+        long l1, l2, l3, $l4, $l5, $l6;
+        java.lang.Object r2, $r4, $r6;
+        java.lang.Throwable r3, $r7;
+        byte $b8;
+        java.util.concurrent.TimeoutException $r5;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: java.util.concurrent.TimeUnit;
+
+        $l4 = staticinvoke <android.os.SystemClock: long uptimeMillis()>();
+
+        $l5 = (long) i0;
+
+        $l6 = virtualinvoke r1.<java.util.concurrent.TimeUnit: long toMillis(long)>($l5);
+
+        l1 = $l4 + $l6;
+
+        $r4 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: java.lang.Object mCountLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $i7 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: int mTaskCount>;
+
+        if $i7 == 0 goto label4;
+
+        l2 = staticinvoke <android.os.SystemClock: long uptimeMillis()>();
+
+        l3 = l1 - l2;
+
+        $b8 = l3 cmp 0L;
+
+        if $b8 <= 0 goto label2;
+
+        $r6 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: java.lang.Object mCountLock>;
+
+        virtualinvoke $r6.<java.lang.Object: void wait(long)>(l3);
+
+        goto label3;
+
+     label2:
+        $r5 = new java.util.concurrent.TimeoutException;
+
+        specialinvoke $r5.<java.util.concurrent.TimeoutException: void <init>(java.lang.String)>("could not drain tasks");
+
+        throw $r5;
+
+     label3:
+        goto label1;
+
+     label4:
+        exitmonitor r2;
+
+     label5:
+        goto label8;
+
+     label6:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r2;
+
+     label7:
+        throw r3;
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label1 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+
+androidx.arch.core.executor.testing.CountingTaskExecutorRule$1
+<androidx.arch.core.executor.testing.CountingTaskExecutorRule$1: androidx.arch.core.executor.testing.CountingTaskExecutorRule this$0>
+    void <init>(androidx.arch.core.executor.testing.CountingTaskExecutorRule)
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule$1 r0;
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r1;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule$1;
+
+        r1 := @parameter0: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$1: androidx.arch.core.executor.testing.CountingTaskExecutorRule this$0> = r1;
+
+        specialinvoke r0.<androidx.arch.core.executor.DefaultTaskExecutor: void <init>()>();
+
+        return;
+    }
+
+    public void executeOnDiskIO(java.lang.Runnable)
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule$1 r0;
+        java.lang.Runnable r1;
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable $r2;
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule $r3;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule$1;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = new androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable;
+
+        $r3 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$1: androidx.arch.core.executor.testing.CountingTaskExecutorRule this$0>;
+
+        specialinvoke $r2.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable: void <init>(androidx.arch.core.executor.testing.CountingTaskExecutorRule,java.lang.Runnable)>($r3, r1);
+
+        specialinvoke r0.<androidx.arch.core.executor.DefaultTaskExecutor: void executeOnDiskIO(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    public void postToMainThread(java.lang.Runnable)
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule$1 r0;
+        java.lang.Runnable r1;
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable $r2;
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule $r3;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule$1;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = new androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable;
+
+        $r3 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$1: androidx.arch.core.executor.testing.CountingTaskExecutorRule this$0>;
+
+        specialinvoke $r2.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable: void <init>(androidx.arch.core.executor.testing.CountingTaskExecutorRule,java.lang.Runnable)>($r3, r1);
+
+        specialinvoke r0.<androidx.arch.core.executor.DefaultTaskExecutor: void postToMainThread(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable
+<androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable: java.lang.Runnable mWrapped>
+<androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable: androidx.arch.core.executor.testing.CountingTaskExecutorRule this$0>
+    void <init>(androidx.arch.core.executor.testing.CountingTaskExecutorRule, java.lang.Runnable)
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable r0;
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule r1;
+        java.lang.Runnable r2;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable;
+
+        r1 := @parameter0: androidx.arch.core.executor.testing.CountingTaskExecutorRule;
+
+        r2 := @parameter1: java.lang.Runnable;
+
+        r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable: androidx.arch.core.executor.testing.CountingTaskExecutorRule this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable: java.lang.Runnable mWrapped> = r2;
+
+        virtualinvoke r1.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: void increment()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable r0;
+        java.lang.Throwable r1, $r4;
+        java.lang.Runnable $r2;
+        androidx.arch.core.executor.testing.CountingTaskExecutorRule $r3, $r5;
+
+        r0 := @this: androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable;
+
+     label1:
+        $r2 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable: java.lang.Runnable mWrapped>;
+
+        interfaceinvoke $r2.<java.lang.Runnable: void run()>();
+
+     label2:
+        $r3 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable: androidx.arch.core.executor.testing.CountingTaskExecutorRule this$0>;
+
+        virtualinvoke $r3.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: void decrement()>();
+
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+        $r5 = r0.<androidx.arch.core.executor.testing.CountingTaskExecutorRule$CountingRunnable: androidx.arch.core.executor.testing.CountingTaskExecutorRule this$0>;
+
+        virtualinvoke $r5.<androidx.arch.core.executor.testing.CountingTaskExecutorRule: void decrement()>();
+
+        throw r1;
+
+     label4:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+

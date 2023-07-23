@@ -1,0 +1,179 @@
+androidx.appsearch.util.SchemaMigrationUtil
+    private void <init>()
+    {
+        androidx.appsearch.util.SchemaMigrationUtil r0;
+
+        r0 := @this: androidx.appsearch.util.SchemaMigrationUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.util.Map getActiveMigrators(java.util.Set, java.util.Map, int, int)
+    {
+        java.util.Set r0, $r8;
+        java.util.Map r1, $r15;
+        int i0, i1, $i2;
+        androidx.collection.ArraySet r2, $r6;
+        java.util.Map$Entry r3;
+        java.lang.String r4, $r14;
+        androidx.appsearch.app.Migrator r5;
+        boolean $z0, $z1, $z2, $z3;
+        androidx.collection.ArrayMap $r7, r18;
+        java.lang.Object $r9, $r10, $r11, $r13;
+        java.util.Iterator r16, r19;
+        androidx.appsearch.app.AppSearchSchema r17;
+
+        r0 := @parameter0: java.util.Set;
+
+        r1 := @parameter1: java.util.Map;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        if i0 != i1 goto label1;
+
+        $r15 = staticinvoke <java.util.Collections: java.util.Map emptyMap()>();
+
+        return $r15;
+
+     label1:
+        $r6 = new androidx.collection.ArraySet;
+
+        $i2 = interfaceinvoke r0.<java.util.Set: int size()>();
+
+        specialinvoke $r6.<androidx.collection.ArraySet: void <init>(int)>($i2);
+
+        r2 = $r6;
+
+        r16 = interfaceinvoke r0.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r16.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r13 = interfaceinvoke r16.<java.util.Iterator: java.lang.Object next()>();
+
+        r17 = (androidx.appsearch.app.AppSearchSchema) $r13;
+
+        $r14 = virtualinvoke r17.<androidx.appsearch.app.AppSearchSchema: java.lang.String getSchemaType()>();
+
+        interfaceinvoke r2.<java.util.Set: boolean add(java.lang.Object)>($r14);
+
+        goto label2;
+
+     label3:
+        $r7 = new androidx.collection.ArrayMap;
+
+        specialinvoke $r7.<androidx.collection.ArrayMap: void <init>()>();
+
+        r18 = $r7;
+
+        $r8 = interfaceinvoke r1.<java.util.Map: java.util.Set entrySet()>();
+
+        r19 = interfaceinvoke $r8.<java.util.Set: java.util.Iterator iterator()>();
+
+     label4:
+        $z1 = interfaceinvoke r19.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label6;
+
+        $r9 = interfaceinvoke r19.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.util.Map$Entry) $r9;
+
+        $r10 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        r4 = (java.lang.String) $r10;
+
+        $r11 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        r5 = (androidx.appsearch.app.Migrator) $r11;
+
+        $z2 = interfaceinvoke r2.<java.util.Set: boolean contains(java.lang.Object)>(r4);
+
+        if $z2 == 0 goto label5;
+
+        $z3 = virtualinvoke r5.<androidx.appsearch.app.Migrator: boolean shouldMigrate(int,int)>(i0, i1);
+
+        if $z3 == 0 goto label5;
+
+        interfaceinvoke r18.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r4, r5);
+
+     label5:
+        goto label4;
+
+     label6:
+        return r18;
+    }
+
+    public static void checkDeletedAndIncompatibleAfterMigration(androidx.appsearch.app.InternalSetSchemaResponse, java.util.Set) throws androidx.appsearch.exceptions.AppSearchException
+    {
+        androidx.appsearch.app.InternalSetSchemaResponse r0;
+        java.util.Set r1, $r6, $r8;
+        androidx.appsearch.app.SetSchemaResponse r2;
+        androidx.collection.ArraySet r3, r4, r11, r12;
+        boolean $z0, $z3, $z4;
+        java.lang.String $r10;
+        androidx.appsearch.exceptions.AppSearchException r13;
+        java.lang.Throwable r14;
+
+        r0 := @parameter0: androidx.appsearch.app.InternalSetSchemaResponse;
+
+        r1 := @parameter1: java.util.Set;
+
+        $z0 = virtualinvoke r0.<androidx.appsearch.app.InternalSetSchemaResponse: boolean isSuccess()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r2 = virtualinvoke r0.<androidx.appsearch.app.InternalSetSchemaResponse: androidx.appsearch.app.SetSchemaResponse getSetSchemaResponse()>();
+
+        r11 = new androidx.collection.ArraySet;
+
+        $r6 = virtualinvoke r2.<androidx.appsearch.app.SetSchemaResponse: java.util.Set getIncompatibleTypes()>();
+
+        specialinvoke r11.<androidx.collection.ArraySet: void <init>(java.util.Collection)>($r6);
+
+        r3 = r11;
+
+        interfaceinvoke r3.<java.util.Set: boolean removeAll(java.util.Collection)>(r1);
+
+        r12 = new androidx.collection.ArraySet;
+
+        $r8 = virtualinvoke r2.<androidx.appsearch.app.SetSchemaResponse: java.util.Set getDeletedTypes()>();
+
+        specialinvoke r12.<androidx.collection.ArraySet: void <init>(java.util.Collection)>($r8);
+
+        r4 = r12;
+
+        interfaceinvoke r4.<java.util.Set: boolean removeAll(java.util.Collection)>(r1);
+
+        $z3 = interfaceinvoke r3.<java.util.Set: boolean isEmpty()>();
+
+        if $z3 == 0 goto label2;
+
+        $z4 = interfaceinvoke r4.<java.util.Set: boolean isEmpty()>();
+
+        if $z4 != 0 goto label3;
+
+     label2:
+        r13 = new androidx.appsearch.exceptions.AppSearchException;
+
+        $r10 = virtualinvoke r0.<androidx.appsearch.app.InternalSetSchemaResponse: java.lang.String getErrorMessage()>();
+
+        specialinvoke r13.<androidx.appsearch.exceptions.AppSearchException: void <init>(int,java.lang.String)>(7, $r10);
+
+        r14 = (java.lang.Throwable) r13;
+
+        throw r14;
+
+     label3:
+        return;
+    }
+

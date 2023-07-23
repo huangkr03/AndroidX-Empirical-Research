@@ -1,0 +1,661 @@
+androidx.work.impl.utils.CancelWorkRunnable
+<androidx.work.impl.utils.CancelWorkRunnable: androidx.work.impl.OperationImpl mOperation>
+    public void <init>()
+    {
+        androidx.work.impl.utils.CancelWorkRunnable r0;
+        androidx.work.impl.OperationImpl $r1;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new androidx.work.impl.OperationImpl;
+
+        specialinvoke $r1.<androidx.work.impl.OperationImpl: void <init>()>();
+
+        r0.<androidx.work.impl.utils.CancelWorkRunnable: androidx.work.impl.OperationImpl mOperation> = $r1;
+
+        return;
+    }
+
+    public androidx.work.Operation getOperation()
+    {
+        androidx.work.impl.utils.CancelWorkRunnable r0;
+        androidx.work.impl.OperationImpl $r1;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable;
+
+        $r1 = r0.<androidx.work.impl.utils.CancelWorkRunnable: androidx.work.impl.OperationImpl mOperation>;
+
+        return $r1;
+    }
+
+    public void run()
+    {
+        androidx.work.impl.utils.CancelWorkRunnable r0;
+        java.lang.Throwable r1, $r4;
+        androidx.work.Operation$State$SUCCESS $r2;
+        androidx.work.impl.OperationImpl $r3, $r6;
+        androidx.work.Operation$State$FAILURE $r5;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable;
+
+     label1:
+        virtualinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable: void runInternal()>();
+
+        $r3 = r0.<androidx.work.impl.utils.CancelWorkRunnable: androidx.work.impl.OperationImpl mOperation>;
+
+        $r2 = <androidx.work.Operation: androidx.work.Operation$State$SUCCESS SUCCESS>;
+
+        virtualinvoke $r3.<androidx.work.impl.OperationImpl: void markState(androidx.work.Operation$State)>($r2);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+        $r6 = r0.<androidx.work.impl.utils.CancelWorkRunnable: androidx.work.impl.OperationImpl mOperation>;
+
+        $r5 = new androidx.work.Operation$State$FAILURE;
+
+        specialinvoke $r5.<androidx.work.Operation$State$FAILURE: void <init>(java.lang.Throwable)>(r1);
+
+        virtualinvoke $r6.<androidx.work.impl.OperationImpl: void markState(androidx.work.Operation$State)>($r5);
+
+     label4:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+<androidx.work.impl.utils.CancelWorkRunnable: void runInternal()>
+    void cancel(androidx.work.impl.WorkManagerImpl, java.lang.String)
+    {
+        androidx.work.impl.utils.CancelWorkRunnable r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        java.lang.String r2;
+        androidx.work.impl.Processor r3;
+        java.util.Iterator r4;
+        androidx.work.impl.Scheduler r5;
+        androidx.work.impl.WorkDatabase $r6;
+        java.util.List $r7;
+        boolean $z1;
+        java.lang.Object $r8;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable;
+
+        r1 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        r2 := @parameter1: java.lang.String;
+
+        $r6 = virtualinvoke r1.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        specialinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable: void iterativelyCancelWorkAndDependents(androidx.work.impl.WorkDatabase,java.lang.String)>($r6, r2);
+
+        r3 = virtualinvoke r1.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.Processor getProcessor()>();
+
+        virtualinvoke r3.<androidx.work.impl.Processor: boolean stopAndCancelWork(java.lang.String)>(r2);
+
+        $r7 = virtualinvoke r1.<androidx.work.impl.WorkManagerImpl: java.util.List getSchedulers()>();
+
+        r4 = interfaceinvoke $r7.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label2;
+
+        $r8 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (androidx.work.impl.Scheduler) $r8;
+
+        interfaceinvoke r5.<androidx.work.impl.Scheduler: void cancel(java.lang.String)>(r2);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    void reschedulePendingWorkers(androidx.work.impl.WorkManagerImpl)
+    {
+        androidx.work.impl.utils.CancelWorkRunnable r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        androidx.work.Configuration $r2;
+        androidx.work.impl.WorkDatabase $r3;
+        java.util.List $r4;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable;
+
+        r1 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        $r2 = virtualinvoke r1.<androidx.work.impl.WorkManagerImpl: androidx.work.Configuration getConfiguration()>();
+
+        $r3 = virtualinvoke r1.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        $r4 = virtualinvoke r1.<androidx.work.impl.WorkManagerImpl: java.util.List getSchedulers()>();
+
+        staticinvoke <androidx.work.impl.Schedulers: void schedule(androidx.work.Configuration,androidx.work.impl.WorkDatabase,java.util.List)>($r2, $r3, $r4);
+
+        return;
+    }
+
+    private void iterativelyCancelWorkAndDependents(androidx.work.impl.WorkDatabase, java.lang.String)
+    {
+        androidx.work.impl.utils.CancelWorkRunnable r0;
+        androidx.work.impl.WorkDatabase r1;
+        java.lang.String r2, r6;
+        androidx.work.impl.model.WorkSpecDao r3;
+        androidx.work.impl.model.DependencyDao r4;
+        java.util.LinkedList r5, $r8;
+        androidx.work.WorkInfo$State r7, $r10, $r11, $r12;
+        boolean $z1;
+        java.lang.Object $r9;
+        java.util.List $r13;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable;
+
+        r1 := @parameter0: androidx.work.impl.WorkDatabase;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 = virtualinvoke r1.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        r4 = virtualinvoke r1.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.DependencyDao dependencyDao()>();
+
+        $r8 = new java.util.LinkedList;
+
+        specialinvoke $r8.<java.util.LinkedList: void <init>()>();
+
+        r5 = $r8;
+
+        virtualinvoke r5.<java.util.LinkedList: boolean add(java.lang.Object)>(r2);
+
+     label1:
+        $z1 = virtualinvoke r5.<java.util.LinkedList: boolean isEmpty()>();
+
+        if $z1 != 0 goto label3;
+
+        $r9 = virtualinvoke r5.<java.util.LinkedList: java.lang.Object remove()>();
+
+        r6 = (java.lang.String) $r9;
+
+        r7 = interfaceinvoke r3.<androidx.work.impl.model.WorkSpecDao: androidx.work.WorkInfo$State getState(java.lang.String)>(r6);
+
+        $r10 = <androidx.work.WorkInfo$State: androidx.work.WorkInfo$State SUCCEEDED>;
+
+        if r7 == $r10 goto label2;
+
+        $r11 = <androidx.work.WorkInfo$State: androidx.work.WorkInfo$State FAILED>;
+
+        if r7 == $r11 goto label2;
+
+        $r12 = <androidx.work.WorkInfo$State: androidx.work.WorkInfo$State CANCELLED>;
+
+        interfaceinvoke r3.<androidx.work.impl.model.WorkSpecDao: int setState(androidx.work.WorkInfo$State,java.lang.String)>($r12, r6);
+
+     label2:
+        $r13 = interfaceinvoke r4.<androidx.work.impl.model.DependencyDao: java.util.List getDependentWorkIds(java.lang.String)>(r6);
+
+        virtualinvoke r5.<java.util.LinkedList: boolean addAll(java.util.Collection)>($r13);
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public static androidx.work.impl.utils.CancelWorkRunnable forId(java.util.UUID, androidx.work.impl.WorkManagerImpl)
+    {
+        java.util.UUID r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        androidx.work.impl.utils.CancelWorkRunnable$1 $r2;
+
+        r0 := @parameter0: java.util.UUID;
+
+        r1 := @parameter1: androidx.work.impl.WorkManagerImpl;
+
+        $r2 = new androidx.work.impl.utils.CancelWorkRunnable$1;
+
+        specialinvoke $r2.<androidx.work.impl.utils.CancelWorkRunnable$1: void <init>(androidx.work.impl.WorkManagerImpl,java.util.UUID)>(r1, r0);
+
+        return $r2;
+    }
+
+    public static androidx.work.impl.utils.CancelWorkRunnable forTag(java.lang.String, androidx.work.impl.WorkManagerImpl)
+    {
+        java.lang.String r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        androidx.work.impl.utils.CancelWorkRunnable$2 $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: androidx.work.impl.WorkManagerImpl;
+
+        $r2 = new androidx.work.impl.utils.CancelWorkRunnable$2;
+
+        specialinvoke $r2.<androidx.work.impl.utils.CancelWorkRunnable$2: void <init>(androidx.work.impl.WorkManagerImpl,java.lang.String)>(r1, r0);
+
+        return $r2;
+    }
+
+    public static androidx.work.impl.utils.CancelWorkRunnable forName(java.lang.String, androidx.work.impl.WorkManagerImpl, boolean)
+    {
+        java.lang.String r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        boolean z0;
+        androidx.work.impl.utils.CancelWorkRunnable$3 $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: androidx.work.impl.WorkManagerImpl;
+
+        z0 := @parameter2: boolean;
+
+        $r2 = new androidx.work.impl.utils.CancelWorkRunnable$3;
+
+        specialinvoke $r2.<androidx.work.impl.utils.CancelWorkRunnable$3: void <init>(androidx.work.impl.WorkManagerImpl,java.lang.String,boolean)>(r1, r0, z0);
+
+        return $r2;
+    }
+
+    public static androidx.work.impl.utils.CancelWorkRunnable forAll(androidx.work.impl.WorkManagerImpl)
+    {
+        androidx.work.impl.WorkManagerImpl r0;
+        androidx.work.impl.utils.CancelWorkRunnable$4 $r1;
+
+        r0 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        $r1 = new androidx.work.impl.utils.CancelWorkRunnable$4;
+
+        specialinvoke $r1.<androidx.work.impl.utils.CancelWorkRunnable$4: void <init>(androidx.work.impl.WorkManagerImpl)>(r0);
+
+        return $r1;
+    }
+
+androidx.work.impl.utils.CancelWorkRunnable$1
+<androidx.work.impl.utils.CancelWorkRunnable$1: androidx.work.impl.WorkManagerImpl val$workManagerImpl>
+<androidx.work.impl.utils.CancelWorkRunnable$1: java.util.UUID val$id>
+    void <init>(androidx.work.impl.WorkManagerImpl, java.util.UUID)
+    {
+        androidx.work.impl.utils.CancelWorkRunnable$1 r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        java.util.UUID r2;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable$1;
+
+        r1 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        r2 := @parameter1: java.util.UUID;
+
+        r0.<androidx.work.impl.utils.CancelWorkRunnable$1: androidx.work.impl.WorkManagerImpl val$workManagerImpl> = r1;
+
+        r0.<androidx.work.impl.utils.CancelWorkRunnable$1: java.util.UUID val$id> = r2;
+
+        specialinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable: void <init>()>();
+
+        return;
+    }
+
+    void runInternal()
+    {
+        androidx.work.impl.utils.CancelWorkRunnable$1 r0;
+        androidx.work.impl.WorkDatabase r1;
+        java.lang.Throwable r2, $r8;
+        androidx.work.impl.WorkManagerImpl $r3, $r5, $r7;
+        java.util.UUID $r4;
+        java.lang.String $r6;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable$1;
+
+        $r3 = r0.<androidx.work.impl.utils.CancelWorkRunnable$1: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        r1 = virtualinvoke $r3.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void beginTransaction()>();
+
+     label1:
+        $r5 = r0.<androidx.work.impl.utils.CancelWorkRunnable$1: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        $r4 = r0.<androidx.work.impl.utils.CancelWorkRunnable$1: java.util.UUID val$id>;
+
+        $r6 = virtualinvoke $r4.<java.util.UUID: java.lang.String toString()>();
+
+        virtualinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable$1: void cancel(androidx.work.impl.WorkManagerImpl,java.lang.String)>($r5, $r6);
+
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label2:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label4;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r2 = $r8;
+
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        throw r2;
+
+     label4:
+        $r7 = r0.<androidx.work.impl.utils.CancelWorkRunnable$1: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        virtualinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable$1: void reschedulePendingWorkers(androidx.work.impl.WorkManagerImpl)>($r7);
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+androidx.work.impl.utils.CancelWorkRunnable$2
+<androidx.work.impl.utils.CancelWorkRunnable$2: androidx.work.impl.WorkManagerImpl val$workManagerImpl>
+<androidx.work.impl.utils.CancelWorkRunnable$2: java.lang.String val$tag>
+    void <init>(androidx.work.impl.WorkManagerImpl, java.lang.String)
+    {
+        androidx.work.impl.utils.CancelWorkRunnable$2 r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        java.lang.String r2;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable$2;
+
+        r1 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        r2 := @parameter1: java.lang.String;
+
+        r0.<androidx.work.impl.utils.CancelWorkRunnable$2: androidx.work.impl.WorkManagerImpl val$workManagerImpl> = r1;
+
+        r0.<androidx.work.impl.utils.CancelWorkRunnable$2: java.lang.String val$tag> = r2;
+
+        specialinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable: void <init>()>();
+
+        return;
+    }
+
+    void runInternal()
+    {
+        androidx.work.impl.utils.CancelWorkRunnable$2 r0;
+        androidx.work.impl.WorkDatabase r1;
+        androidx.work.impl.model.WorkSpecDao r2;
+        java.util.List r3;
+        java.util.Iterator r4;
+        java.lang.String r5, $r8;
+        java.lang.Throwable r6, $r12;
+        androidx.work.impl.WorkManagerImpl $r7, $r9, $r11;
+        boolean $z0;
+        java.lang.Object $r10;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable$2;
+
+        $r7 = r0.<androidx.work.impl.utils.CancelWorkRunnable$2: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        r1 = virtualinvoke $r7.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void beginTransaction()>();
+
+     label1:
+        r2 = virtualinvoke r1.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        $r8 = r0.<androidx.work.impl.utils.CancelWorkRunnable$2: java.lang.String val$tag>;
+
+        r3 = interfaceinvoke r2.<androidx.work.impl.model.WorkSpecDao: java.util.List getUnfinishedWorkWithTag(java.lang.String)>($r8);
+
+        r4 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r10 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (java.lang.String) $r10;
+
+        $r11 = r0.<androidx.work.impl.utils.CancelWorkRunnable$2: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        virtualinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable$2: void cancel(androidx.work.impl.WorkManagerImpl,java.lang.String)>($r11, r5);
+
+        goto label2;
+
+     label3:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label4:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label7;
+
+     label5:
+        $r12 := @caughtexception;
+
+        r6 = $r12;
+
+     label6:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        throw r6;
+
+     label7:
+        $r9 = r0.<androidx.work.impl.utils.CancelWorkRunnable$2: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        virtualinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable$2: void reschedulePendingWorkers(androidx.work.impl.WorkManagerImpl)>($r9);
+
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+androidx.work.impl.utils.CancelWorkRunnable$3
+<androidx.work.impl.utils.CancelWorkRunnable$3: androidx.work.impl.WorkManagerImpl val$workManagerImpl>
+<androidx.work.impl.utils.CancelWorkRunnable$3: java.lang.String val$name>
+<androidx.work.impl.utils.CancelWorkRunnable$3: boolean val$allowReschedule>
+    void <init>(androidx.work.impl.WorkManagerImpl, java.lang.String, boolean)
+    {
+        androidx.work.impl.utils.CancelWorkRunnable$3 r0;
+        androidx.work.impl.WorkManagerImpl r1;
+        java.lang.String r2;
+        boolean z0;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable$3;
+
+        r1 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        r2 := @parameter1: java.lang.String;
+
+        z0 := @parameter2: boolean;
+
+        r0.<androidx.work.impl.utils.CancelWorkRunnable$3: androidx.work.impl.WorkManagerImpl val$workManagerImpl> = r1;
+
+        r0.<androidx.work.impl.utils.CancelWorkRunnable$3: java.lang.String val$name> = r2;
+
+        r0.<androidx.work.impl.utils.CancelWorkRunnable$3: boolean val$allowReschedule> = z0;
+
+        specialinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable: void <init>()>();
+
+        return;
+    }
+
+    void runInternal()
+    {
+        androidx.work.impl.utils.CancelWorkRunnable$3 r0;
+        androidx.work.impl.WorkDatabase r1;
+        androidx.work.impl.model.WorkSpecDao r2;
+        java.util.List r3;
+        java.util.Iterator r4;
+        java.lang.String r5, $r8;
+        java.lang.Throwable r6, $r12;
+        androidx.work.impl.WorkManagerImpl $r7, $r9, $r11;
+        boolean $z0, $z1;
+        java.lang.Object $r10;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable$3;
+
+        $r7 = r0.<androidx.work.impl.utils.CancelWorkRunnable$3: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        r1 = virtualinvoke $r7.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void beginTransaction()>();
+
+     label1:
+        r2 = virtualinvoke r1.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        $r8 = r0.<androidx.work.impl.utils.CancelWorkRunnable$3: java.lang.String val$name>;
+
+        r3 = interfaceinvoke r2.<androidx.work.impl.model.WorkSpecDao: java.util.List getUnfinishedWorkWithName(java.lang.String)>($r8);
+
+        r4 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r10 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (java.lang.String) $r10;
+
+        $r11 = r0.<androidx.work.impl.utils.CancelWorkRunnable$3: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        virtualinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable$3: void cancel(androidx.work.impl.WorkManagerImpl,java.lang.String)>($r11, r5);
+
+        goto label2;
+
+     label3:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label4:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label7;
+
+     label5:
+        $r12 := @caughtexception;
+
+        r6 = $r12;
+
+     label6:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        throw r6;
+
+     label7:
+        $z1 = r0.<androidx.work.impl.utils.CancelWorkRunnable$3: boolean val$allowReschedule>;
+
+        if $z1 == 0 goto label8;
+
+        $r9 = r0.<androidx.work.impl.utils.CancelWorkRunnable$3: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        virtualinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable$3: void reschedulePendingWorkers(androidx.work.impl.WorkManagerImpl)>($r9);
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+androidx.work.impl.utils.CancelWorkRunnable$4
+<androidx.work.impl.utils.CancelWorkRunnable$4: androidx.work.impl.WorkManagerImpl val$workManagerImpl>
+    void <init>(androidx.work.impl.WorkManagerImpl)
+    {
+        androidx.work.impl.utils.CancelWorkRunnable$4 r0;
+        androidx.work.impl.WorkManagerImpl r1;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable$4;
+
+        r1 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        r0.<androidx.work.impl.utils.CancelWorkRunnable$4: androidx.work.impl.WorkManagerImpl val$workManagerImpl> = r1;
+
+        specialinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable: void <init>()>();
+
+        return;
+    }
+
+    void runInternal()
+    {
+        androidx.work.impl.utils.CancelWorkRunnable$4 r0;
+        androidx.work.impl.WorkDatabase r1, $r10;
+        androidx.work.impl.model.WorkSpecDao r2;
+        java.util.List r3;
+        java.util.Iterator r4;
+        java.lang.String r5;
+        java.lang.Throwable r6, $r13;
+        androidx.work.impl.WorkManagerImpl $r7, $r9, $r12;
+        boolean $z0;
+        androidx.work.impl.utils.PreferenceUtils $r8;
+        long $l0;
+        java.lang.Object $r11;
+
+        r0 := @this: androidx.work.impl.utils.CancelWorkRunnable$4;
+
+        $r7 = r0.<androidx.work.impl.utils.CancelWorkRunnable$4: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        r1 = virtualinvoke $r7.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void beginTransaction()>();
+
+     label1:
+        r2 = virtualinvoke r1.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        r3 = interfaceinvoke r2.<androidx.work.impl.model.WorkSpecDao: java.util.List getAllUnfinishedWork()>();
+
+        r4 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r11 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (java.lang.String) $r11;
+
+        $r12 = r0.<androidx.work.impl.utils.CancelWorkRunnable$4: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        virtualinvoke r0.<androidx.work.impl.utils.CancelWorkRunnable$4: void cancel(androidx.work.impl.WorkManagerImpl,java.lang.String)>($r12, r5);
+
+        goto label2;
+
+     label3:
+        $r8 = new androidx.work.impl.utils.PreferenceUtils;
+
+        $r9 = r0.<androidx.work.impl.utils.CancelWorkRunnable$4: androidx.work.impl.WorkManagerImpl val$workManagerImpl>;
+
+        $r10 = virtualinvoke $r9.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        specialinvoke $r8.<androidx.work.impl.utils.PreferenceUtils: void <init>(androidx.work.impl.WorkDatabase)>($r10);
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        virtualinvoke $r8.<androidx.work.impl.utils.PreferenceUtils: void setLastCancelAllTimeMillis(long)>($l0);
+
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label4:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label7;
+
+     label5:
+        $r13 := @caughtexception;
+
+        r6 = $r13;
+
+     label6:
+        virtualinvoke r1.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        throw r6;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+

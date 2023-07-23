@@ -1,0 +1,750 @@
+androidx.media3.transformer.FrameworkMuxer
+<androidx.media3.transformer.FrameworkMuxer: com.google.common.collect.ImmutableList SUPPORTED_VIDEO_SAMPLE_MIME_TYPES>
+<androidx.media3.transformer.FrameworkMuxer: com.google.common.collect.ImmutableList SUPPORTED_AUDIO_SAMPLE_MIME_TYPES>
+<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>
+<androidx.media3.transformer.FrameworkMuxer: long maxDelayBetweenSamplesMs>
+<androidx.media3.transformer.FrameworkMuxer: android.media.MediaCodec$BufferInfo bufferInfo>
+<androidx.media3.transformer.FrameworkMuxer: android.util.SparseLongArray trackIndexToLastPresentationTimeUs>
+<androidx.media3.transformer.FrameworkMuxer: boolean isStarted>
+    private void <init>(android.media.MediaMuxer, long)
+    {
+        androidx.media3.transformer.FrameworkMuxer r0;
+        android.media.MediaMuxer r1;
+        long l0;
+        android.media.MediaCodec$BufferInfo $r2;
+        android.util.SparseLongArray $r3;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer;
+
+        r1 := @parameter0: android.media.MediaMuxer;
+
+        l0 := @parameter1: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer> = r1;
+
+        r0.<androidx.media3.transformer.FrameworkMuxer: long maxDelayBetweenSamplesMs> = l0;
+
+        $r2 = new android.media.MediaCodec$BufferInfo;
+
+        specialinvoke $r2.<android.media.MediaCodec$BufferInfo: void <init>()>();
+
+        r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaCodec$BufferInfo bufferInfo> = $r2;
+
+        $r3 = new android.util.SparseLongArray;
+
+        specialinvoke $r3.<android.util.SparseLongArray: void <init>()>();
+
+        r0.<androidx.media3.transformer.FrameworkMuxer: android.util.SparseLongArray trackIndexToLastPresentationTimeUs> = $r3;
+
+        return;
+    }
+
+    public int addTrack(androidx.media3.common.Format) throws androidx.media3.transformer.Muxer$MuxerException
+    {
+        androidx.media3.transformer.FrameworkMuxer r0;
+        androidx.media3.common.Format r1;
+        java.lang.String r2, $r4, $r7, $r13, $r19, $r25;
+        java.lang.Throwable r3, $r14, $r20, r27, r32, r33;
+        java.lang.Object $r5, $r6, $r12;
+        boolean $z0;
+        int $i0, $i1, $i2, $i3, $i4, $i5, i6;
+        androidx.media3.common.ColorInfo $r8;
+        android.media.MediaMuxer $r9, $r11;
+        java.util.List $r10;
+        java.lang.StringBuilder $r17, $r18, $r23, $r24, r28, r30;
+        android.media.MediaFormat r26;
+        androidx.media3.transformer.Muxer$MuxerException r29, r31;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer;
+
+        r1 := @parameter0: androidx.media3.common.Format;
+
+        $r4 = r1.<androidx.media3.common.Format: java.lang.String sampleMimeType>;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        r2 = (java.lang.String) $r5;
+
+        $z0 = staticinvoke <androidx.media3.common.MimeTypes: boolean isAudio(java.lang.String)>(r2);
+
+        if $z0 == 0 goto label1;
+
+        $r12 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>(r2);
+
+        $r13 = (java.lang.String) $r12;
+
+        $i4 = r1.<androidx.media3.common.Format: int sampleRate>;
+
+        $i3 = r1.<androidx.media3.common.Format: int channelCount>;
+
+        r26 = staticinvoke <android.media.MediaFormat: android.media.MediaFormat createAudioFormat(java.lang.String,int,int)>($r13, $i4, $i3);
+
+        goto label5;
+
+     label1:
+        $r6 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>(r2);
+
+        $r7 = (java.lang.String) $r6;
+
+        $i1 = r1.<androidx.media3.common.Format: int width>;
+
+        $i0 = r1.<androidx.media3.common.Format: int height>;
+
+        r26 = staticinvoke <android.media.MediaFormat: android.media.MediaFormat createVideoFormat(java.lang.String,int,int)>($r7, $i1, $i0);
+
+        $r8 = r1.<androidx.media3.common.Format: androidx.media3.common.ColorInfo colorInfo>;
+
+        staticinvoke <androidx.media3.common.util.MediaFormatUtil: void maybeSetColorInfo(android.media.MediaFormat,androidx.media3.common.ColorInfo)>(r26, $r8);
+
+     label2:
+        $r9 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>;
+
+        $i2 = r1.<androidx.media3.common.Format: int rotationDegrees>;
+
+        virtualinvoke $r9.<android.media.MediaMuxer: void setOrientationHint(int)>($i2);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r20 := @caughtexception;
+
+        r27 = $r20;
+
+        r29 = new androidx.media3.transformer.Muxer$MuxerException;
+
+        r28 = new java.lang.StringBuilder;
+
+        specialinvoke r28.<java.lang.StringBuilder: void <init>()>();
+
+        $r23 = virtualinvoke r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to set orientation hint with rotationDegrees=");
+
+        $i5 = r1.<androidx.media3.common.Format: int rotationDegrees>;
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i5);
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r29.<androidx.media3.transformer.Muxer$MuxerException: void <init>(java.lang.String,java.lang.Throwable)>($r25, r27);
+
+        r32 = (java.lang.Throwable) r29;
+
+        throw r32;
+
+     label5:
+        $r10 = r1.<androidx.media3.common.Format: java.util.List initializationData>;
+
+        staticinvoke <androidx.media3.common.util.MediaFormatUtil: void setCsdBuffers(android.media.MediaFormat,java.util.List)>(r26, $r10);
+
+     label6:
+        $r11 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>;
+
+        i6 = virtualinvoke $r11.<android.media.MediaMuxer: int addTrack(android.media.MediaFormat)>(r26);
+
+     label7:
+        goto label9;
+
+     label8:
+        $r14 := @caughtexception;
+
+        r3 = $r14;
+
+        r31 = new androidx.media3.transformer.Muxer$MuxerException;
+
+        r30 = new java.lang.StringBuilder;
+
+        specialinvoke r30.<java.lang.StringBuilder: void <init>()>();
+
+        $r17 = virtualinvoke r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to add track with format=");
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r31.<androidx.media3.transformer.Muxer$MuxerException: void <init>(java.lang.String,java.lang.Throwable)>($r19, r3);
+
+        r33 = (java.lang.Throwable) r31;
+
+        throw r33;
+
+     label9:
+        return i6;
+
+        catch java.lang.RuntimeException from label2 to label3 with label4;
+        catch java.lang.RuntimeException from label6 to label7 with label8;
+    }
+
+    public void writeSampleData(int, java.nio.ByteBuffer, boolean, long) throws androidx.media3.transformer.Muxer$MuxerException
+    {
+        androidx.media3.transformer.FrameworkMuxer r0;
+        int i0, i2, $i5, $i6, i8;
+        java.nio.ByteBuffer r1;
+        boolean z0, $z1, $z2;
+        long l1, l4;
+        byte b3, $b7, $b9;
+        java.lang.Throwable r2, $r16, $r26, r28, r33, r34;
+        android.media.MediaCodec$BufferInfo $r3, $r13;
+        android.util.SparseLongArray $r4, $r12;
+        java.lang.StringBuilder $r6, $r7, $r8, $r9, $r10, $r19, $r20, $r21, $r22, $r23, $r24, r30, r31;
+        java.lang.String $r11, $r25;
+        android.media.MediaMuxer $r14, $r15;
+        androidx.media3.transformer.Muxer$MuxerException r29, r32;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: java.nio.ByteBuffer;
+
+        z0 := @parameter2: boolean;
+
+        l1 := @parameter3: long;
+
+        $z1 = r0.<androidx.media3.transformer.FrameworkMuxer: boolean isStarted>;
+
+        if $z1 != 0 goto label04;
+
+        r0.<androidx.media3.transformer.FrameworkMuxer: boolean isStarted> = 1;
+
+     label01:
+        $r15 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>;
+
+        virtualinvoke $r15.<android.media.MediaMuxer: void start()>();
+
+     label02:
+        goto label04;
+
+     label03:
+        $r26 := @caughtexception;
+
+        r28 = $r26;
+
+        r29 = new androidx.media3.transformer.Muxer$MuxerException;
+
+        specialinvoke r29.<androidx.media3.transformer.Muxer$MuxerException: void <init>(java.lang.String,java.lang.Throwable)>("Failed to start the muxer", r28);
+
+        r33 = (java.lang.Throwable) r29;
+
+        throw r33;
+
+     label04:
+        i8 = virtualinvoke r1.<java.nio.ByteBuffer: int position()>();
+
+        $i5 = virtualinvoke r1.<java.nio.ByteBuffer: int limit()>();
+
+        i2 = $i5 - i8;
+
+        if z0 == 0 goto label05;
+
+        $b9 = 1;
+
+        goto label06;
+
+     label05:
+        $b9 = 0;
+
+     label06:
+        b3 = $b9;
+
+        $r3 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaCodec$BufferInfo bufferInfo>;
+
+        virtualinvoke $r3.<android.media.MediaCodec$BufferInfo: void set(int,int,long,int)>(i8, i2, l1, b3);
+
+        $r4 = r0.<androidx.media3.transformer.FrameworkMuxer: android.util.SparseLongArray trackIndexToLastPresentationTimeUs>;
+
+        l4 = virtualinvoke $r4.<android.util.SparseLongArray: long get(int)>(i0);
+
+     label07:
+        $i6 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i6 > 24 goto label08;
+
+        $b7 = l1 cmp l4;
+
+        if $b7 < 0 goto label09;
+
+     label08:
+        $z2 = 1;
+
+        goto label10;
+
+     label09:
+        $z2 = 0;
+
+     label10:
+        r30 = new java.lang.StringBuilder;
+
+        specialinvoke r30.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Samples not in presentation order (");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l1);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" < ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l4);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") unsupported on this API version");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean,java.lang.Object)>($z2, $r11);
+
+        $r12 = r0.<androidx.media3.transformer.FrameworkMuxer: android.util.SparseLongArray trackIndexToLastPresentationTimeUs>;
+
+        virtualinvoke $r12.<android.util.SparseLongArray: void put(int,long)>(i0, l1);
+
+        $r14 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>;
+
+        $r13 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaCodec$BufferInfo bufferInfo>;
+
+        virtualinvoke $r14.<android.media.MediaMuxer: void writeSampleData(int,java.nio.ByteBuffer,android.media.MediaCodec$BufferInfo)>(i0, r1, $r13);
+
+     label11:
+        goto label13;
+
+     label12:
+        $r16 := @caughtexception;
+
+        r2 = $r16;
+
+        r32 = new androidx.media3.transformer.Muxer$MuxerException;
+
+        r31 = new java.lang.StringBuilder;
+
+        specialinvoke r31.<java.lang.StringBuilder: void <init>()>();
+
+        $r19 = virtualinvoke r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to write sample for trackIndex=");
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", presentationTimeUs=");
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l1);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", size=");
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i2);
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r32.<androidx.media3.transformer.Muxer$MuxerException: void <init>(java.lang.String,java.lang.Throwable)>($r25, r2);
+
+        r34 = (java.lang.Throwable) r32;
+
+        throw r34;
+
+     label13:
+        return;
+
+        catch java.lang.RuntimeException from label01 to label02 with label03;
+        catch java.lang.RuntimeException from label07 to label11 with label12;
+    }
+
+    public void release(boolean) throws androidx.media3.transformer.Muxer$MuxerException
+    {
+        androidx.media3.transformer.FrameworkMuxer r0;
+        boolean z0, $z1;
+        java.lang.Throwable r1, r2, $r6, $r9, r12;
+        android.media.MediaMuxer $r3, $r4, $r5, $r7, $r10;
+        androidx.media3.transformer.Muxer$MuxerException r11;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer;
+
+        z0 := @parameter0: boolean;
+
+        $z1 = r0.<androidx.media3.transformer.FrameworkMuxer: boolean isStarted>;
+
+        if $z1 != 0 goto label1;
+
+        $r5 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>;
+
+        virtualinvoke $r5.<android.media.MediaMuxer: void release()>();
+
+        return;
+
+     label1:
+        r0.<androidx.media3.transformer.FrameworkMuxer: boolean isStarted> = 0;
+
+     label2:
+        $r3 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>;
+
+        staticinvoke <androidx.media3.transformer.FrameworkMuxer: void stopMuxer(android.media.MediaMuxer)>($r3);
+
+     label3:
+        $r4 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>;
+
+        virtualinvoke $r4.<android.media.MediaMuxer: void release()>();
+
+        goto label7;
+
+     label4:
+        $r6 := @caughtexception;
+
+        r1 = $r6;
+
+        if z0 != 0 goto label5;
+
+        r11 = new androidx.media3.transformer.Muxer$MuxerException;
+
+        specialinvoke r11.<androidx.media3.transformer.Muxer$MuxerException: void <init>(java.lang.String,java.lang.Throwable)>("Failed to stop the muxer", r1);
+
+        r12 = (java.lang.Throwable) r11;
+
+        throw r12;
+
+     label5:
+        $r7 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>;
+
+        virtualinvoke $r7.<android.media.MediaMuxer: void release()>();
+
+        goto label7;
+
+     label6:
+        $r9 := @caughtexception;
+
+        r2 = $r9;
+
+        $r10 = r0.<androidx.media3.transformer.FrameworkMuxer: android.media.MediaMuxer mediaMuxer>;
+
+        virtualinvoke $r10.<android.media.MediaMuxer: void release()>();
+
+        throw r2;
+
+     label7:
+        return;
+
+        catch java.lang.RuntimeException from label2 to label3 with label4;
+        catch java.lang.Throwable from label2 to label3 with label6;
+        catch java.lang.Throwable from label4 to label5 with label6;
+    }
+
+    public long getMaxDelayBetweenSamplesMs()
+    {
+        androidx.media3.transformer.FrameworkMuxer r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer;
+
+        $l0 = r0.<androidx.media3.transformer.FrameworkMuxer: long maxDelayBetweenSamplesMs>;
+
+        return $l0;
+    }
+
+    private static void stopMuxer(android.media.MediaMuxer)
+    {
+        android.media.MediaMuxer r0;
+        java.lang.Throwable r1, $r3, $r4, r13;
+        int i0, $i1;
+        java.lang.reflect.Field r2, r12;
+        java.lang.Class $r5, $r10;
+        java.lang.Object $r6, $r8;
+        java.lang.Integer $r7, $r9, $r11;
+
+        r0 := @parameter0: android.media.MediaMuxer;
+
+     label1:
+        virtualinvoke r0.<android.media.MediaMuxer: void stop()>();
+
+     label2:
+        goto label8;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+        $i1 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i1 >= 30 goto label7;
+
+     label4:
+        $r5 = class "Landroid/media/MediaMuxer;";
+
+        r12 = virtualinvoke $r5.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("MUXER_STATE_STOPPED");
+
+        virtualinvoke r12.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        $r6 = virtualinvoke r12.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r0);
+
+        $r7 = (java.lang.Integer) $r6;
+
+        $r8 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r7);
+
+        $r9 = (java.lang.Integer) $r8;
+
+        i0 = virtualinvoke $r9.<java.lang.Integer: int intValue()>();
+
+        $r10 = class "Landroid/media/MediaMuxer;";
+
+        r2 = virtualinvoke $r10.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("mState");
+
+        virtualinvoke r2.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        virtualinvoke r2.<java.lang.reflect.Field: void set(java.lang.Object,java.lang.Object)>(r0, $r11);
+
+     label5:
+        goto label7;
+
+     label6:
+        $r3 := @caughtexception;
+
+        r13 = $r3;
+
+     label7:
+        throw r1;
+
+     label8:
+        return;
+
+        catch java.lang.RuntimeException from label1 to label2 with label3;
+        catch java.lang.Exception from label4 to label5 with label6;
+    }
+
+    void <init>(android.media.MediaMuxer, long, androidx.media3.transformer.FrameworkMuxer$1)
+    {
+        androidx.media3.transformer.FrameworkMuxer r0;
+        android.media.MediaMuxer r1;
+        long l0;
+        androidx.media3.transformer.FrameworkMuxer$1 r2;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer;
+
+        r1 := @parameter0: android.media.MediaMuxer;
+
+        l0 := @parameter1: long;
+
+        r2 := @parameter2: androidx.media3.transformer.FrameworkMuxer$1;
+
+        specialinvoke r0.<androidx.media3.transformer.FrameworkMuxer: void <init>(android.media.MediaMuxer,long)>(r1, l0);
+
+        return;
+    }
+
+    static com.google.common.collect.ImmutableList access$100()
+    {
+        com.google.common.collect.ImmutableList $r0;
+
+        $r0 = <androidx.media3.transformer.FrameworkMuxer: com.google.common.collect.ImmutableList SUPPORTED_VIDEO_SAMPLE_MIME_TYPES>;
+
+        return $r0;
+    }
+
+    static com.google.common.collect.ImmutableList access$200()
+    {
+        com.google.common.collect.ImmutableList $r0;
+
+        $r0 = <androidx.media3.transformer.FrameworkMuxer: com.google.common.collect.ImmutableList SUPPORTED_AUDIO_SAMPLE_MIME_TYPES>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        int $i0;
+        com.google.common.collect.ImmutableList $r0, $r1;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 24 goto label1;
+
+        $r1 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)>("video/3gpp", "video/avc", "video/mp4v-es", "video/hevc");
+
+        goto label2;
+
+     label1:
+        $r1 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object,java.lang.Object,java.lang.Object)>("video/3gpp", "video/avc", "video/mp4v-es");
+
+     label2:
+        <androidx.media3.transformer.FrameworkMuxer: com.google.common.collect.ImmutableList SUPPORTED_VIDEO_SAMPLE_MIME_TYPES> = $r1;
+
+        $r0 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object,java.lang.Object,java.lang.Object)>("audio/mp4a-latm", "audio/3gpp", "audio/amr-wb");
+
+        <androidx.media3.transformer.FrameworkMuxer: com.google.common.collect.ImmutableList SUPPORTED_AUDIO_SAMPLE_MIME_TYPES> = $r0;
+
+        return;
+    }
+
+androidx.media3.transformer.FrameworkMuxer$1
+androidx.media3.transformer.FrameworkMuxer$Factory
+<androidx.media3.transformer.FrameworkMuxer$Factory: long maxDelayBetweenSamplesMs>
+    public void <init>(long)
+    {
+        androidx.media3.transformer.FrameworkMuxer$Factory r0;
+        long l0;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer$Factory;
+
+        l0 := @parameter0: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.transformer.FrameworkMuxer$Factory: long maxDelayBetweenSamplesMs> = l0;
+
+        return;
+    }
+
+    public androidx.media3.transformer.FrameworkMuxer create(java.lang.String) throws androidx.media3.transformer.Muxer$MuxerException
+    {
+        androidx.media3.transformer.FrameworkMuxer$Factory r0;
+        java.lang.String r1;
+        android.media.MediaMuxer r2, r8;
+        java.lang.Throwable r3, $r6, r11;
+        long $l0;
+        androidx.media3.transformer.Muxer$MuxerException r9;
+        androidx.media3.transformer.FrameworkMuxer r10;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer$Factory;
+
+        r1 := @parameter0: java.lang.String;
+
+     label1:
+        r8 = new android.media.MediaMuxer;
+
+        specialinvoke r8.<android.media.MediaMuxer: void <init>(java.lang.String,int)>(r1, 0);
+
+        r2 = r8;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r3 = $r6;
+
+        r9 = new androidx.media3.transformer.Muxer$MuxerException;
+
+        specialinvoke r9.<androidx.media3.transformer.Muxer$MuxerException: void <init>(java.lang.String,java.lang.Throwable)>("Error creating muxer", r3);
+
+        r11 = (java.lang.Throwable) r9;
+
+        throw r11;
+
+     label4:
+        r10 = new androidx.media3.transformer.FrameworkMuxer;
+
+        $l0 = r0.<androidx.media3.transformer.FrameworkMuxer$Factory: long maxDelayBetweenSamplesMs>;
+
+        specialinvoke r10.<androidx.media3.transformer.FrameworkMuxer: void <init>(android.media.MediaMuxer,long,androidx.media3.transformer.FrameworkMuxer$1)>(r2, $l0, null);
+
+        return r10;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public androidx.media3.transformer.FrameworkMuxer create(android.os.ParcelFileDescriptor) throws androidx.media3.transformer.Muxer$MuxerException
+    {
+        androidx.media3.transformer.FrameworkMuxer$Factory r0;
+        android.os.ParcelFileDescriptor r1;
+        android.media.MediaMuxer r2, r9;
+        java.lang.Throwable r3, $r7, r12;
+        java.io.FileDescriptor $r5;
+        long $l0;
+        androidx.media3.transformer.Muxer$MuxerException r10;
+        androidx.media3.transformer.FrameworkMuxer r11;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer$Factory;
+
+        r1 := @parameter0: android.os.ParcelFileDescriptor;
+
+     label1:
+        r9 = new android.media.MediaMuxer;
+
+        $r5 = virtualinvoke r1.<android.os.ParcelFileDescriptor: java.io.FileDescriptor getFileDescriptor()>();
+
+        specialinvoke r9.<android.media.MediaMuxer: void <init>(java.io.FileDescriptor,int)>($r5, 0);
+
+        r2 = r9;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        r10 = new androidx.media3.transformer.Muxer$MuxerException;
+
+        specialinvoke r10.<androidx.media3.transformer.Muxer$MuxerException: void <init>(java.lang.String,java.lang.Throwable)>("Error creating muxer", r3);
+
+        r12 = (java.lang.Throwable) r10;
+
+        throw r12;
+
+     label4:
+        r11 = new androidx.media3.transformer.FrameworkMuxer;
+
+        $l0 = r0.<androidx.media3.transformer.FrameworkMuxer$Factory: long maxDelayBetweenSamplesMs>;
+
+        specialinvoke r11.<androidx.media3.transformer.FrameworkMuxer: void <init>(android.media.MediaMuxer,long,androidx.media3.transformer.FrameworkMuxer$1)>(r2, $l0, null);
+
+        return r11;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public com.google.common.collect.ImmutableList getSupportedSampleMimeTypes(int)
+    {
+        androidx.media3.transformer.FrameworkMuxer$Factory r0;
+        int i0;
+        com.google.common.collect.ImmutableList $r1, $r2, $r3;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer$Factory;
+
+        i0 := @parameter0: int;
+
+        if i0 != 2 goto label1;
+
+        $r3 = staticinvoke <androidx.media3.transformer.FrameworkMuxer: com.google.common.collect.ImmutableList access$100()>();
+
+        return $r3;
+
+     label1:
+        if i0 != 1 goto label2;
+
+        $r2 = staticinvoke <androidx.media3.transformer.FrameworkMuxer: com.google.common.collect.ImmutableList access$200()>();
+
+        return $r2;
+
+     label2:
+        $r1 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of()>();
+
+        return $r1;
+    }
+
+    public volatile androidx.media3.transformer.Muxer create(android.os.ParcelFileDescriptor) throws androidx.media3.transformer.Muxer$MuxerException
+    {
+        androidx.media3.transformer.FrameworkMuxer$Factory r0;
+        android.os.ParcelFileDescriptor r1;
+        androidx.media3.transformer.FrameworkMuxer $r2;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer$Factory;
+
+        r1 := @parameter0: android.os.ParcelFileDescriptor;
+
+        $r2 = virtualinvoke r0.<androidx.media3.transformer.FrameworkMuxer$Factory: androidx.media3.transformer.FrameworkMuxer create(android.os.ParcelFileDescriptor)>(r1);
+
+        return $r2;
+    }
+
+    public volatile androidx.media3.transformer.Muxer create(java.lang.String) throws androidx.media3.transformer.Muxer$MuxerException
+    {
+        androidx.media3.transformer.FrameworkMuxer$Factory r0;
+        java.lang.String r1;
+        androidx.media3.transformer.FrameworkMuxer $r2;
+
+        r0 := @this: androidx.media3.transformer.FrameworkMuxer$Factory;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<androidx.media3.transformer.FrameworkMuxer$Factory: androidx.media3.transformer.FrameworkMuxer create(java.lang.String)>(r1);
+
+        return $r2;
+    }
+

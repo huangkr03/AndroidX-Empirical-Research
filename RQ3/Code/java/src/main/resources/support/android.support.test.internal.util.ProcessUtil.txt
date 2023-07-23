@@ -1,0 +1,387 @@
+android.support.test.internal.util.ProcessUtil
+<android.support.test.internal.util.ProcessUtil: java.lang.String TAG>
+<android.support.test.internal.util.ProcessUtil: java.util.List RETRY_WAIT_INTERVALS>
+<android.support.test.internal.util.ProcessUtil: java.lang.String processName>
+    public void <init>()
+    {
+        android.support.test.internal.util.ProcessUtil r0;
+
+        r0 := @this: android.support.test.internal.util.ProcessUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String getCurrentProcessName(android.content.Context)
+    {
+        android.content.Context r0;
+        java.lang.Throwable r1, $r8;
+        java.lang.String $r2, $r3, $r4, $r5, $r6, $r7, $r9;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r2 = <android.support.test.internal.util.ProcessUtil: java.lang.String processName>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label1;
+
+        $r7 = <android.support.test.internal.util.ProcessUtil: java.lang.String processName>;
+
+        return $r7;
+
+     label1:
+        $r3 = staticinvoke <android.support.test.internal.util.ProcessUtil: java.lang.String getCurrentProcessNameUsingActivityManager(android.content.Context)>(r0);
+
+        <android.support.test.internal.util.ProcessUtil: java.lang.String processName> = $r3;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r1 = $r8;
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("ProcessUtil", "Could not read process name from ActivityManager (isolatedProcess?)");
+
+        return "";
+
+     label4:
+        $r4 = <android.support.test.internal.util.ProcessUtil: java.lang.String processName>;
+
+        $z1 = virtualinvoke $r4.<java.lang.String: boolean isEmpty()>();
+
+        if $z1 == 0 goto label5;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("ProcessUtil", "Could not figure out process name using ActivityManager, falling back to use /proc. Note that processName fetched from /proc may be truncated!");
+
+        $r5 = staticinvoke <android.support.test.internal.util.ProcessUtil: java.lang.String getCurrentProcessNameUsingProc()>();
+
+        <android.support.test.internal.util.ProcessUtil: java.lang.String processName> = $r5;
+
+        $r6 = <android.support.test.internal.util.ProcessUtil: java.lang.String processName>;
+
+        $z2 = virtualinvoke $r6.<java.lang.String: boolean isEmpty()>();
+
+        if $z2 == 0 goto label5;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("ProcessUtil", "Could not figure out process name /proc either");
+
+     label5:
+        $r9 = <android.support.test.internal.util.ProcessUtil: java.lang.String processName>;
+
+        return $r9;
+
+        catch java.lang.SecurityException from label1 to label2 with label3;
+    }
+
+    static java.lang.String getCurrentProcessNameUsingActivityManager(android.content.Context)
+    {
+        android.content.Context r0;
+        int i0, $i3, $i4, $i6, $i7, i10;
+        android.app.ActivityManager r1;
+        java.lang.Object $r2, $r7, $r11;
+        java.lang.StringBuilder $r3, $r4, $r5;
+        java.lang.String $r6, $r8;
+        java.util.List $r9, $r10, r14;
+        java.lang.Integer $r12;
+        long $l8;
+        java.lang.Throwable $r13, r15;
+        java.lang.Iterable $r16;
+        java.util.Iterator r17;
+        boolean $z0;
+        android.app.ActivityManager$RunningAppProcessInfo r18;
+
+        r0 := @parameter0: android.content.Context;
+
+        i0 = staticinvoke <android.os.Process: int myPid()>();
+
+        $r2 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+        r1 = (android.app.ActivityManager) $r2;
+
+        if r1 == null goto label09;
+
+        r14 = virtualinvoke r1.<android.app.ActivityManager: java.util.List getRunningAppProcesses()>();
+
+        if null != r14 goto label05;
+
+        i10 = 0;
+
+     label01:
+        if null != r14 goto label05;
+
+        $r9 = <android.support.test.internal.util.ProcessUtil: java.util.List RETRY_WAIT_INTERVALS>;
+
+        $i4 = interfaceinvoke $r9.<java.util.List: int size()>();
+
+        if i10 >= $i4 goto label05;
+
+     label02:
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("ProcessUtil", "Waiting for running app processes...");
+
+        $r10 = <android.support.test.internal.util.ProcessUtil: java.util.List RETRY_WAIT_INTERVALS>;
+
+        $i6 = i10;
+
+        i10 = i10 + 1;
+
+        $r11 = interfaceinvoke $r10.<java.util.List: java.lang.Object get(int)>($i6);
+
+        $r12 = (java.lang.Integer) $r11;
+
+        $i7 = virtualinvoke $r12.<java.lang.Integer: int intValue()>();
+
+        $l8 = (long) $i7;
+
+        staticinvoke <java.lang.Thread: void sleep(long)>($l8);
+
+        r14 = virtualinvoke r1.<android.app.ActivityManager: java.util.List getRunningAppProcesses()>();
+
+     label03:
+        goto label01;
+
+     label04:
+        $r13 := @caughtexception;
+
+        r15 = $r13;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ProcessUtil", "Interrupted while waiting for running app processes", r15);
+
+        return "";
+
+     label05:
+        $r16 = staticinvoke <android.support.test.internal.util.ProcessUtil: java.lang.Iterable emptyIfNull(java.lang.Iterable)>(r14);
+
+        r17 = interfaceinvoke $r16.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label06:
+        $z0 = interfaceinvoke r17.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label08;
+
+        $r7 = interfaceinvoke r17.<java.util.Iterator: java.lang.Object next()>();
+
+        r18 = (android.app.ActivityManager$RunningAppProcessInfo) $r7;
+
+        $i3 = r18.<android.app.ActivityManager$RunningAppProcessInfo: int pid>;
+
+        if $i3 != i0 goto label07;
+
+        $r8 = r18.<android.app.ActivityManager$RunningAppProcessInfo: java.lang.String processName>;
+
+        return $r8;
+
+     label07:
+        goto label06;
+
+     label08:
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("ProcessUtil", "Couldn\'t get running processes from ActivityManager!");
+
+        goto label10;
+
+     label09:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(int)>(89);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ActivityManager#getRunningAppProcesses did not return an entry matching pid = ");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("ProcessUtil", $r6);
+
+     label10:
+        return "";
+
+        catch java.lang.InterruptedException from label02 to label03 with label04;
+    }
+
+    private static java.lang.Iterable emptyIfNull(java.lang.Iterable)
+    {
+        java.lang.Iterable r0, r2;
+        java.lang.Object $r1;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        if null != r0 goto label1;
+
+        $r1 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        goto label2;
+
+     label1:
+        $r1 = r0;
+
+     label2:
+        r2 = (java.lang.Iterable) $r1;
+
+        return r2;
+    }
+
+    static java.lang.String getCurrentProcessNameUsingProc()
+    {
+        java.lang.Throwable r0, r1, $r5, $r7, $r9, $r11, $r13, r16, r17, r18;
+        java.io.BufferedReader $r2, r14;
+        java.io.FileReader $r3;
+        java.lang.String $r4, $r6, $r8, $r10, $r12, r15;
+
+        r14 = null;
+
+        r15 = "";
+
+     label01:
+        $r2 = new java.io.BufferedReader;
+
+        $r3 = new java.io.FileReader;
+
+        specialinvoke $r3.<java.io.FileReader: void <init>(java.lang.String)>("/proc/self/cmdline");
+
+        specialinvoke $r2.<java.io.BufferedReader: void <init>(java.io.Reader)>($r3);
+
+        r14 = $r2;
+
+        $r4 = virtualinvoke r14.<java.io.BufferedReader: java.lang.String readLine()>();
+
+        r15 = virtualinvoke $r4.<java.lang.String: java.lang.String trim()>();
+
+     label02:
+        if r14 == null goto label03;
+
+        virtualinvoke r14.<java.io.BufferedReader: void close()>();
+
+     label03:
+        goto label14;
+
+     label04:
+        $r5 := @caughtexception;
+
+        r16 = $r5;
+
+        $r6 = virtualinvoke r16.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ProcessUtil", $r6, r16);
+
+        goto label14;
+
+     label05:
+        $r9 := @caughtexception;
+
+        r17 = $r9;
+
+        $r10 = virtualinvoke r17.<java.io.IOException: java.lang.String getMessage()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("ProcessUtil", $r10, r17);
+
+     label06:
+        if r14 == null goto label07;
+
+        virtualinvoke r14.<java.io.BufferedReader: void close()>();
+
+     label07:
+        goto label14;
+
+     label08:
+        $r11 := @caughtexception;
+
+        r18 = $r11;
+
+        $r12 = virtualinvoke r18.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ProcessUtil", $r12, r18);
+
+        goto label14;
+
+     label09:
+        $r13 := @caughtexception;
+
+        r0 = $r13;
+
+     label10:
+        if r14 == null goto label11;
+
+        virtualinvoke r14.<java.io.BufferedReader: void close()>();
+
+     label11:
+        goto label13;
+
+     label12:
+        $r7 := @caughtexception;
+
+        r1 = $r7;
+
+        $r8 = virtualinvoke r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ProcessUtil", $r8, r1);
+
+     label13:
+        throw r0;
+
+     label14:
+        return r15;
+
+        catch java.lang.Exception from label02 to label03 with label04;
+        catch java.io.IOException from label01 to label02 with label05;
+        catch java.lang.Exception from label06 to label07 with label08;
+        catch java.lang.Throwable from label01 to label02 with label09;
+        catch java.lang.Throwable from label05 to label06 with label09;
+        catch java.lang.Exception from label10 to label11 with label12;
+    }
+
+    static void resetProcessName()
+    {
+        <android.support.test.internal.util.ProcessUtil: java.lang.String processName> = "";
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Integer[] $r0;
+        java.lang.Integer $r1, $r2, $r3, $r4, $r5, $r6, $r7;
+        java.util.List $r8, $r9;
+
+        $r0 = newarray (java.lang.Integer)[7];
+
+        $r1 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(8);
+
+        $r0[0] = $r1;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(8);
+
+        $r0[1] = $r2;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(16);
+
+        $r0[2] = $r3;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(32);
+
+        $r0[3] = $r4;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(64);
+
+        $r0[4] = $r5;
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(128);
+
+        $r0[5] = $r6;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(256);
+
+        $r0[6] = $r7;
+
+        $r8 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r0);
+
+        $r9 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r8);
+
+        <android.support.test.internal.util.ProcessUtil: java.util.List RETRY_WAIT_INTERVALS> = $r9;
+
+        return;
+    }
+

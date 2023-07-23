@@ -1,0 +1,1164 @@
+androidx.work.impl.background.systemalarm.CommandHandler
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String ACTION_SCHEDULE_WORK>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String ACTION_DELAY_MET>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String ACTION_STOP_WORK>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String ACTION_CONSTRAINTS_CHANGED>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String ACTION_RESCHEDULE>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String ACTION_EXECUTION_COMPLETED>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String KEY_WORKSPEC_ID>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String KEY_WORKSPEC_GENERATION>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String KEY_NEEDS_RESCHEDULE>
+<androidx.work.impl.background.systemalarm.CommandHandler: long WORK_PROCESSING_TIME_IN_MS>
+<androidx.work.impl.background.systemalarm.CommandHandler: android.content.Context mContext>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.util.Map mPendingDelayMet>
+<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.Object mLock>
+<androidx.work.impl.background.systemalarm.CommandHandler: androidx.work.impl.StartStopTokens mStartStopTokens>
+    static android.content.Intent createScheduleWorkIntent(android.content.Context, androidx.work.impl.model.WorkGenerationalId)
+    {
+        android.content.Context r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        android.content.Intent r2, $r3, $r5;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.model.WorkGenerationalId;
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>(r0, class "Landroidx/work/impl/background/systemalarm/SystemAlarmService;");
+
+        r2 = $r3;
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("ACTION_SCHEDULE_WORK");
+
+        $r5 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: android.content.Intent writeWorkGenerationalId(android.content.Intent,androidx.work.impl.model.WorkGenerationalId)>(r2, r1);
+
+        return $r5;
+    }
+
+    private static android.content.Intent writeWorkGenerationalId(android.content.Intent, androidx.work.impl.model.WorkGenerationalId)
+    {
+        android.content.Intent r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        java.lang.String $r2;
+        int $i0;
+
+        r0 := @parameter0: android.content.Intent;
+
+        r1 := @parameter1: androidx.work.impl.model.WorkGenerationalId;
+
+        $r2 = virtualinvoke r1.<androidx.work.impl.model.WorkGenerationalId: java.lang.String getWorkSpecId()>();
+
+        virtualinvoke r0.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("KEY_WORKSPEC_ID", $r2);
+
+        $i0 = virtualinvoke r1.<androidx.work.impl.model.WorkGenerationalId: int getGeneration()>();
+
+        virtualinvoke r0.<android.content.Intent: android.content.Intent putExtra(java.lang.String,int)>("KEY_WORKSPEC_GENERATION", $i0);
+
+        return r0;
+    }
+
+    static androidx.work.impl.model.WorkGenerationalId readWorkGenerationalId(android.content.Intent)
+    {
+        android.content.Intent r0;
+        androidx.work.impl.model.WorkGenerationalId $r1;
+        java.lang.String $r2;
+        int $i0;
+
+        r0 := @parameter0: android.content.Intent;
+
+        $r1 = new androidx.work.impl.model.WorkGenerationalId;
+
+        $r2 = virtualinvoke r0.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>("KEY_WORKSPEC_ID");
+
+        $i0 = virtualinvoke r0.<android.content.Intent: int getIntExtra(java.lang.String,int)>("KEY_WORKSPEC_GENERATION", 0);
+
+        specialinvoke $r1.<androidx.work.impl.model.WorkGenerationalId: void <init>(java.lang.String,int)>($r2, $i0);
+
+        return $r1;
+    }
+
+    static android.content.Intent createDelayMetIntent(android.content.Context, androidx.work.impl.model.WorkGenerationalId)
+    {
+        android.content.Context r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        android.content.Intent r2, $r3, $r5;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.model.WorkGenerationalId;
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>(r0, class "Landroidx/work/impl/background/systemalarm/SystemAlarmService;");
+
+        r2 = $r3;
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("ACTION_DELAY_MET");
+
+        $r5 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: android.content.Intent writeWorkGenerationalId(android.content.Intent,androidx.work.impl.model.WorkGenerationalId)>(r2, r1);
+
+        return $r5;
+    }
+
+    static android.content.Intent createStopWorkIntent(android.content.Context, java.lang.String)
+    {
+        android.content.Context r0;
+        java.lang.String r1;
+        android.content.Intent r2, $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>(r0, class "Landroidx/work/impl/background/systemalarm/SystemAlarmService;");
+
+        r2 = $r3;
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("ACTION_STOP_WORK");
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>("KEY_WORKSPEC_ID", r1);
+
+        return r2;
+    }
+
+    static android.content.Intent createStopWorkIntent(android.content.Context, androidx.work.impl.model.WorkGenerationalId)
+    {
+        android.content.Context r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        android.content.Intent r2, $r3, $r5;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.model.WorkGenerationalId;
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>(r0, class "Landroidx/work/impl/background/systemalarm/SystemAlarmService;");
+
+        r2 = $r3;
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("ACTION_STOP_WORK");
+
+        $r5 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: android.content.Intent writeWorkGenerationalId(android.content.Intent,androidx.work.impl.model.WorkGenerationalId)>(r2, r1);
+
+        return $r5;
+    }
+
+    static android.content.Intent createConstraintsChangedIntent(android.content.Context)
+    {
+        android.content.Context r0;
+        android.content.Intent r1, $r2;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r2 = new android.content.Intent;
+
+        specialinvoke $r2.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>(r0, class "Landroidx/work/impl/background/systemalarm/SystemAlarmService;");
+
+        r1 = $r2;
+
+        virtualinvoke r1.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("ACTION_CONSTRAINTS_CHANGED");
+
+        return r1;
+    }
+
+    static android.content.Intent createRescheduleIntent(android.content.Context)
+    {
+        android.content.Context r0;
+        android.content.Intent r1, $r2;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r2 = new android.content.Intent;
+
+        specialinvoke $r2.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>(r0, class "Landroidx/work/impl/background/systemalarm/SystemAlarmService;");
+
+        r1 = $r2;
+
+        virtualinvoke r1.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("ACTION_RESCHEDULE");
+
+        return r1;
+    }
+
+    static android.content.Intent createExecutionCompletedIntent(android.content.Context, androidx.work.impl.model.WorkGenerationalId, boolean)
+    {
+        android.content.Context r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        boolean z0;
+        android.content.Intent r2, $r3, $r6;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.model.WorkGenerationalId;
+
+        z0 := @parameter2: boolean;
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>(r0, class "Landroidx/work/impl/background/systemalarm/SystemAlarmService;");
+
+        r2 = $r3;
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent setAction(java.lang.String)>("ACTION_EXECUTION_COMPLETED");
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent putExtra(java.lang.String,boolean)>("KEY_NEEDS_RESCHEDULE", z0);
+
+        $r6 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: android.content.Intent writeWorkGenerationalId(android.content.Intent,androidx.work.impl.model.WorkGenerationalId)>(r2, r1);
+
+        return $r6;
+    }
+
+    void <init>(android.content.Context, androidx.work.impl.StartStopTokens)
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        android.content.Context r1;
+        androidx.work.impl.StartStopTokens r2;
+        java.util.HashMap $r3;
+        java.lang.Object $r4;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.work.impl.StartStopTokens;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.work.impl.background.systemalarm.CommandHandler: android.content.Context mContext> = r1;
+
+        r0.<androidx.work.impl.background.systemalarm.CommandHandler: androidx.work.impl.StartStopTokens mStartStopTokens> = r2;
+
+        $r3 = new java.util.HashMap;
+
+        specialinvoke $r3.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.work.impl.background.systemalarm.CommandHandler: java.util.Map mPendingDelayMet> = $r3;
+
+        $r4 = new java.lang.Object;
+
+        specialinvoke $r4.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.Object mLock> = $r4;
+
+        return;
+    }
+
+    public void onExecuted(androidx.work.impl.model.WorkGenerationalId, boolean)
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        boolean z0;
+        java.lang.Object r2, $r5, $r7;
+        androidx.work.impl.background.systemalarm.DelayMetCommandHandler r3;
+        java.lang.Throwable r4, $r10;
+        java.util.Map $r6;
+        androidx.work.impl.StartStopTokens $r8;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        r1 := @parameter0: androidx.work.impl.model.WorkGenerationalId;
+
+        z0 := @parameter1: boolean;
+
+        $r5 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.Object mLock>;
+
+        r2 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: java.util.Map mPendingDelayMet>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r1);
+
+        r3 = (androidx.work.impl.background.systemalarm.DelayMetCommandHandler) $r7;
+
+        $r8 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: androidx.work.impl.StartStopTokens mStartStopTokens>;
+
+        virtualinvoke $r8.<androidx.work.impl.StartStopTokens: androidx.work.impl.StartStopToken remove(androidx.work.impl.model.WorkGenerationalId)>(r1);
+
+        if r3 == null goto label2;
+
+        virtualinvoke r3.<androidx.work.impl.background.systemalarm.DelayMetCommandHandler: void onExecuted(boolean)>(z0);
+
+     label2:
+        exitmonitor r2;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r10 := @caughtexception;
+
+        r4 = $r10;
+
+        exitmonitor r2;
+
+     label5:
+        throw r4;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    boolean hasPendingCommands()
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r5;
+        java.util.Map $r4;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        $r3 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.Object mLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: java.util.Map mPendingDelayMet>;
+
+        $z0 = interfaceinvoke $r4.<java.util.Map: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        exitmonitor r1;
+
+     label4:
+        return $z1;
+
+     label5:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        exitmonitor r1;
+
+     label6:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    void onHandleIntent(android.content.Intent, int, androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        android.content.Intent r1;
+        int i0;
+        androidx.work.impl.background.systemalarm.SystemAlarmDispatcher r2;
+        java.lang.String r3, $r5, $r6, $r8, $r9, $r10, $r11, $r14, $r17, $r20, $r26;
+        android.os.Bundle r4;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6;
+        java.lang.String[] $r7;
+        androidx.work.Logger $r12, $r18;
+        java.lang.StringBuilder $r13, $r15, $r16, $r19, $r21, $r22, $r23, $r24, $r25;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        r1 := @parameter0: android.content.Intent;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.work.impl.background.systemalarm.SystemAlarmDispatcher;
+
+        r3 = virtualinvoke r1.<android.content.Intent: java.lang.String getAction()>();
+
+        $r5 = "ACTION_CONSTRAINTS_CHANGED";
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<androidx.work.impl.background.systemalarm.CommandHandler: void handleConstraintsChanged(android.content.Intent,int,androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)>(r1, i0, r2);
+
+        goto label8;
+
+     label1:
+        $r6 = "ACTION_RESCHEDULE";
+
+        $z1 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z1 == 0 goto label2;
+
+        specialinvoke r0.<androidx.work.impl.background.systemalarm.CommandHandler: void handleReschedule(android.content.Intent,int,androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)>(r1, i0, r2);
+
+        goto label8;
+
+     label2:
+        r4 = virtualinvoke r1.<android.content.Intent: android.os.Bundle getExtras()>();
+
+        $r7 = newarray (java.lang.String)[1];
+
+        $r7[0] = "KEY_WORKSPEC_ID";
+
+        $z2 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: boolean hasKeys(android.os.Bundle,java.lang.String[])>(r4, $r7);
+
+        if $z2 != 0 goto label3;
+
+        $r18 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r20 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r19 = new java.lang.StringBuilder;
+
+        specialinvoke $r19.<java.lang.StringBuilder: void <init>()>();
+
+        $r21 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid request for ");
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" , requires ");
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("KEY_WORKSPEC_ID");
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" .");
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r18.<androidx.work.Logger: void error(java.lang.String,java.lang.String)>($r20, $r26);
+
+        goto label8;
+
+     label3:
+        $r8 = "ACTION_SCHEDULE_WORK";
+
+        $z3 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z3 == 0 goto label4;
+
+        specialinvoke r0.<androidx.work.impl.background.systemalarm.CommandHandler: void handleScheduleWorkIntent(android.content.Intent,int,androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)>(r1, i0, r2);
+
+        goto label8;
+
+     label4:
+        $r9 = "ACTION_DELAY_MET";
+
+        $z4 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z4 == 0 goto label5;
+
+        specialinvoke r0.<androidx.work.impl.background.systemalarm.CommandHandler: void handleDelayMet(android.content.Intent,int,androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)>(r1, i0, r2);
+
+        goto label8;
+
+     label5:
+        $r10 = "ACTION_STOP_WORK";
+
+        $z5 = virtualinvoke $r10.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z5 == 0 goto label6;
+
+        specialinvoke r0.<androidx.work.impl.background.systemalarm.CommandHandler: void handleStopWork(android.content.Intent,androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)>(r1, r2);
+
+        goto label8;
+
+     label6:
+        $r11 = "ACTION_EXECUTION_COMPLETED";
+
+        $z6 = virtualinvoke $r11.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z6 == 0 goto label7;
+
+        specialinvoke r0.<androidx.work.impl.background.systemalarm.CommandHandler: void handleExecutionCompleted(android.content.Intent,int)>(r1, i0);
+
+        goto label8;
+
+     label7:
+        $r12 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r14 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r15 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring intent ");
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r12.<androidx.work.Logger: void warning(java.lang.String,java.lang.String)>($r14, $r17);
+
+     label8:
+        return;
+    }
+
+    private void handleScheduleWorkIntent(android.content.Intent, int, androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        android.content.Intent r1, r8;
+        int i0;
+        androidx.work.impl.background.systemalarm.SystemAlarmDispatcher r2;
+        androidx.work.impl.model.WorkGenerationalId r3;
+        androidx.work.impl.WorkManagerImpl r4;
+        androidx.work.impl.WorkDatabase r5;
+        androidx.work.impl.model.WorkSpecDao r6;
+        androidx.work.impl.model.WorkSpec r7;
+        long l1;
+        java.lang.Throwable r9, $r54;
+        androidx.work.Logger $r10, $r18, $r31, $r40, $r47;
+        java.lang.StringBuilder $r11, $r13, $r14, $r19, $r21, $r22, $r23, $r24, $r32, $r34, $r35, $r36, $r37, $r41, $r43, $r44, $r45, $r48, $r50, $r51, $r52;
+        java.lang.String $r12, $r15, $r16, $r20, $r25, $r33, $r38, $r42, $r46, $r49, $r53;
+        androidx.work.WorkInfo$State $r17;
+        boolean $z0, $z1;
+        android.content.Context $r26, $r27, $r39;
+        androidx.work.impl.utils.taskexecutor.TaskExecutor $r28;
+        java.util.concurrent.Executor $r29;
+        androidx.work.impl.background.systemalarm.SystemAlarmDispatcher$AddRunnable $r30;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        r1 := @parameter0: android.content.Intent;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.work.impl.background.systemalarm.SystemAlarmDispatcher;
+
+        r3 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: androidx.work.impl.model.WorkGenerationalId readWorkGenerationalId(android.content.Intent)>(r1);
+
+        $r10 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r12 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Handling schedule work for ");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r10.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r12, $r15);
+
+        r4 = virtualinvoke r2.<androidx.work.impl.background.systemalarm.SystemAlarmDispatcher: androidx.work.impl.WorkManagerImpl getWorkManager()>();
+
+        r5 = virtualinvoke r4.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        virtualinvoke r5.<androidx.work.impl.WorkDatabase: void beginTransaction()>();
+
+     label01:
+        r6 = virtualinvoke r5.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        $r16 = virtualinvoke r3.<androidx.work.impl.model.WorkGenerationalId: java.lang.String getWorkSpecId()>();
+
+        r7 = interfaceinvoke r6.<androidx.work.impl.model.WorkSpecDao: androidx.work.impl.model.WorkSpec getWorkSpec(java.lang.String)>($r16);
+
+        if r7 != null goto label03;
+
+        $r47 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r49 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r48 = new java.lang.StringBuilder;
+
+        specialinvoke $r48.<java.lang.StringBuilder: void <init>()>();
+
+        $r50 = virtualinvoke $r48.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Skipping scheduling ");
+
+        $r51 = virtualinvoke $r50.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        $r52 = virtualinvoke $r51.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" because it\'s no longer in the DB");
+
+        $r53 = virtualinvoke $r52.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r47.<androidx.work.Logger: void warning(java.lang.String,java.lang.String)>($r49, $r53);
+
+     label02:
+        virtualinvoke r5.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        return;
+
+     label03:
+        $r17 = r7.<androidx.work.impl.model.WorkSpec: androidx.work.WorkInfo$State state>;
+
+        $z0 = virtualinvoke $r17.<androidx.work.WorkInfo$State: boolean isFinished()>();
+
+        if $z0 == 0 goto label05;
+
+        $r40 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r42 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r41 = new java.lang.StringBuilder;
+
+        specialinvoke $r41.<java.lang.StringBuilder: void <init>()>();
+
+        $r43 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Skipping scheduling ");
+
+        $r44 = virtualinvoke $r43.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        $r45 = virtualinvoke $r44.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("because it is finished.");
+
+        $r46 = virtualinvoke $r45.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r40.<androidx.work.Logger: void warning(java.lang.String,java.lang.String)>($r42, $r46);
+
+     label04:
+        virtualinvoke r5.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        return;
+
+     label05:
+        l1 = virtualinvoke r7.<androidx.work.impl.model.WorkSpec: long calculateNextRunTime()>();
+
+        $z1 = virtualinvoke r7.<androidx.work.impl.model.WorkSpec: boolean hasConstraints()>();
+
+        if $z1 != 0 goto label06;
+
+        $r31 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r33 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r32 = new java.lang.StringBuilder;
+
+        specialinvoke $r32.<java.lang.StringBuilder: void <init>()>();
+
+        $r34 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Setting up Alarms for ");
+
+        $r35 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        $r36 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("at ");
+
+        $r37 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l1);
+
+        $r38 = virtualinvoke $r37.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r31.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r33, $r38);
+
+        $r39 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: android.content.Context mContext>;
+
+        staticinvoke <androidx.work.impl.background.systemalarm.Alarms: void setAlarm(android.content.Context,androidx.work.impl.WorkDatabase,androidx.work.impl.model.WorkGenerationalId,long)>($r39, r5, r3, l1);
+
+        goto label07;
+
+     label06:
+        $r18 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r20 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r19 = new java.lang.StringBuilder;
+
+        specialinvoke $r19.<java.lang.StringBuilder: void <init>()>();
+
+        $r21 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Opportunistically setting an alarm for ");
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("at ");
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l1);
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r18.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r20, $r25);
+
+        $r26 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: android.content.Context mContext>;
+
+        staticinvoke <androidx.work.impl.background.systemalarm.Alarms: void setAlarm(android.content.Context,androidx.work.impl.WorkDatabase,androidx.work.impl.model.WorkGenerationalId,long)>($r26, r5, r3, l1);
+
+        $r27 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: android.content.Context mContext>;
+
+        r8 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: android.content.Intent createConstraintsChangedIntent(android.content.Context)>($r27);
+
+        $r28 = virtualinvoke r2.<androidx.work.impl.background.systemalarm.SystemAlarmDispatcher: androidx.work.impl.utils.taskexecutor.TaskExecutor getTaskExecutor()>();
+
+        $r29 = interfaceinvoke $r28.<androidx.work.impl.utils.taskexecutor.TaskExecutor: java.util.concurrent.Executor getMainThreadExecutor()>();
+
+        $r30 = new androidx.work.impl.background.systemalarm.SystemAlarmDispatcher$AddRunnable;
+
+        specialinvoke $r30.<androidx.work.impl.background.systemalarm.SystemAlarmDispatcher$AddRunnable: void <init>(androidx.work.impl.background.systemalarm.SystemAlarmDispatcher,android.content.Intent,int)>(r2, r8, i0);
+
+        interfaceinvoke $r29.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r30);
+
+     label07:
+        virtualinvoke r5.<androidx.work.impl.WorkDatabase: void setTransactionSuccessful()>();
+
+     label08:
+        virtualinvoke r5.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        goto label11;
+
+     label09:
+        $r54 := @caughtexception;
+
+        r9 = $r54;
+
+     label10:
+        virtualinvoke r5.<androidx.work.impl.WorkDatabase: void endTransaction()>();
+
+        throw r9;
+
+     label11:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label09;
+        catch java.lang.Throwable from label03 to label04 with label09;
+        catch java.lang.Throwable from label05 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label09;
+    }
+
+    private void handleDelayMet(android.content.Intent, int, androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        android.content.Intent r1;
+        int i0;
+        androidx.work.impl.background.systemalarm.SystemAlarmDispatcher r2;
+        java.lang.Object r3, $r7;
+        androidx.work.impl.model.WorkGenerationalId r4;
+        androidx.work.impl.background.systemalarm.DelayMetCommandHandler r5, $r22;
+        java.lang.Throwable r6, $r28;
+        androidx.work.Logger $r8, $r15;
+        java.lang.StringBuilder $r9, $r11, $r12, $r16, $r18, $r19, $r20;
+        java.lang.String $r10, $r13, $r17, $r21;
+        java.util.Map $r14, $r26;
+        boolean $z0;
+        androidx.work.impl.StartStopTokens $r23;
+        android.content.Context $r24;
+        androidx.work.impl.StartStopToken $r25;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        r1 := @parameter0: android.content.Intent;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.work.impl.background.systemalarm.SystemAlarmDispatcher;
+
+        $r7 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: java.lang.Object mLock>;
+
+        r3 = $r7;
+
+        entermonitor $r7;
+
+     label1:
+        r4 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: androidx.work.impl.model.WorkGenerationalId readWorkGenerationalId(android.content.Intent)>(r1);
+
+        $r8 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r10 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Handing delay met for ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r4);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r8.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r10, $r13);
+
+        $r14 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: java.util.Map mPendingDelayMet>;
+
+        $z0 = interfaceinvoke $r14.<java.util.Map: boolean containsKey(java.lang.Object)>(r4);
+
+        if $z0 != 0 goto label2;
+
+        $r22 = new androidx.work.impl.background.systemalarm.DelayMetCommandHandler;
+
+        $r24 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: android.content.Context mContext>;
+
+        $r23 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: androidx.work.impl.StartStopTokens mStartStopTokens>;
+
+        $r25 = virtualinvoke $r23.<androidx.work.impl.StartStopTokens: androidx.work.impl.StartStopToken tokenFor(androidx.work.impl.model.WorkGenerationalId)>(r4);
+
+        specialinvoke $r22.<androidx.work.impl.background.systemalarm.DelayMetCommandHandler: void <init>(android.content.Context,int,androidx.work.impl.background.systemalarm.SystemAlarmDispatcher,androidx.work.impl.StartStopToken)>($r24, i0, r2, $r25);
+
+        r5 = $r22;
+
+        $r26 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: java.util.Map mPendingDelayMet>;
+
+        interfaceinvoke $r26.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r4, r5);
+
+        virtualinvoke r5.<androidx.work.impl.background.systemalarm.DelayMetCommandHandler: void handleProcessWork()>();
+
+        goto label3;
+
+     label2:
+        $r15 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r17 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r16 = new java.lang.StringBuilder;
+
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("WorkSpec ");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r4);
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is is already being handled for ACTION_DELAY_MET");
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r15.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r17, $r21);
+
+     label3:
+        exitmonitor r3;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r28 := @caughtexception;
+
+        r6 = $r28;
+
+        exitmonitor r3;
+
+     label6:
+        throw r6;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    private void handleStopWork(android.content.Intent, androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        android.content.Intent r1;
+        androidx.work.impl.background.systemalarm.SystemAlarmDispatcher r2;
+        android.os.Bundle r3;
+        java.lang.String r4, $r9, $r12;
+        boolean $z0, $z2;
+        androidx.work.impl.StartStopTokens $r5, $r21;
+        java.lang.Object $r6, r22;
+        androidx.work.Logger $r7;
+        java.lang.StringBuilder $r10, $r11, r28;
+        androidx.work.impl.WorkManagerImpl $r13, $r15;
+        android.content.Context $r14;
+        androidx.work.impl.WorkDatabase $r16;
+        androidx.work.impl.model.WorkGenerationalId $r17, $r18, r27;
+        int i0;
+        androidx.work.impl.StartStopToken r23, r25;
+        java.util.Iterator r24;
+        java.util.ArrayList r26;
+        java.util.List r29, r30;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        r1 := @parameter0: android.content.Intent;
+
+        r2 := @parameter1: androidx.work.impl.background.systemalarm.SystemAlarmDispatcher;
+
+        r3 = virtualinvoke r1.<android.content.Intent: android.os.Bundle getExtras()>();
+
+        r4 = virtualinvoke r3.<android.os.Bundle: java.lang.String getString(java.lang.String)>("KEY_WORKSPEC_ID");
+
+        $z0 = virtualinvoke r3.<android.os.Bundle: boolean containsKey(java.lang.String)>("KEY_WORKSPEC_GENERATION");
+
+        if $z0 == 0 goto label2;
+
+        i0 = virtualinvoke r3.<android.os.Bundle: int getInt(java.lang.String)>("KEY_WORKSPEC_GENERATION");
+
+        r26 = new java.util.ArrayList;
+
+        specialinvoke r26.<java.util.ArrayList: void <init>(int)>(1);
+
+        r22 = r26;
+
+        $r21 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: androidx.work.impl.StartStopTokens mStartStopTokens>;
+
+        r27 = new androidx.work.impl.model.WorkGenerationalId;
+
+        specialinvoke r27.<androidx.work.impl.model.WorkGenerationalId: void <init>(java.lang.String,int)>(r4, i0);
+
+        r23 = virtualinvoke $r21.<androidx.work.impl.StartStopTokens: androidx.work.impl.StartStopToken remove(androidx.work.impl.model.WorkGenerationalId)>(r27);
+
+        if r23 == null goto label1;
+
+        r29 = (java.util.List) r22;
+
+        interfaceinvoke r29.<java.util.List: boolean add(java.lang.Object)>(r23);
+
+     label1:
+        goto label3;
+
+     label2:
+        $r5 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: androidx.work.impl.StartStopTokens mStartStopTokens>;
+
+        r22 = virtualinvoke $r5.<androidx.work.impl.StartStopTokens: java.util.List remove(java.lang.String)>(r4);
+
+     label3:
+        r30 = (java.util.List) r22;
+
+        r24 = interfaceinvoke r30.<java.util.List: java.util.Iterator iterator()>();
+
+     label4:
+        $z2 = interfaceinvoke r24.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label5;
+
+        $r6 = interfaceinvoke r24.<java.util.Iterator: java.lang.Object next()>();
+
+        r25 = (androidx.work.impl.StartStopToken) $r6;
+
+        $r7 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r9 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        r28 = new java.lang.StringBuilder;
+
+        specialinvoke r28.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Handing stopWork work for ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r7.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r9, $r12);
+
+        $r13 = virtualinvoke r2.<androidx.work.impl.background.systemalarm.SystemAlarmDispatcher: androidx.work.impl.WorkManagerImpl getWorkManager()>();
+
+        virtualinvoke $r13.<androidx.work.impl.WorkManagerImpl: void stopWork(androidx.work.impl.StartStopToken)>(r25);
+
+        $r14 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: android.content.Context mContext>;
+
+        $r15 = virtualinvoke r2.<androidx.work.impl.background.systemalarm.SystemAlarmDispatcher: androidx.work.impl.WorkManagerImpl getWorkManager()>();
+
+        $r16 = virtualinvoke $r15.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        $r17 = virtualinvoke r25.<androidx.work.impl.StartStopToken: androidx.work.impl.model.WorkGenerationalId getId()>();
+
+        staticinvoke <androidx.work.impl.background.systemalarm.Alarms: void cancelAlarm(android.content.Context,androidx.work.impl.WorkDatabase,androidx.work.impl.model.WorkGenerationalId)>($r14, $r16, $r17);
+
+        $r18 = virtualinvoke r25.<androidx.work.impl.StartStopToken: androidx.work.impl.model.WorkGenerationalId getId()>();
+
+        virtualinvoke r2.<androidx.work.impl.background.systemalarm.SystemAlarmDispatcher: void onExecuted(androidx.work.impl.model.WorkGenerationalId,boolean)>($r18, 0);
+
+        goto label4;
+
+     label5:
+        return;
+    }
+
+    private void handleConstraintsChanged(android.content.Intent, int, androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        android.content.Intent r1;
+        int i0;
+        androidx.work.impl.background.systemalarm.SystemAlarmDispatcher r2;
+        androidx.work.impl.background.systemalarm.ConstraintsCommandHandler r3, $r10;
+        androidx.work.Logger $r4;
+        java.lang.StringBuilder $r5, $r7, $r8;
+        java.lang.String $r6, $r9;
+        android.content.Context $r11;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        r1 := @parameter0: android.content.Intent;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.work.impl.background.systemalarm.SystemAlarmDispatcher;
+
+        $r4 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r6 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Handling constraints changed ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r6, $r9);
+
+        $r10 = new androidx.work.impl.background.systemalarm.ConstraintsCommandHandler;
+
+        $r11 = r0.<androidx.work.impl.background.systemalarm.CommandHandler: android.content.Context mContext>;
+
+        specialinvoke $r10.<androidx.work.impl.background.systemalarm.ConstraintsCommandHandler: void <init>(android.content.Context,int,androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)>($r11, i0, r2);
+
+        r3 = $r10;
+
+        virtualinvoke r3.<androidx.work.impl.background.systemalarm.ConstraintsCommandHandler: void handleConstraintsChanged()>();
+
+        return;
+    }
+
+    private void handleReschedule(android.content.Intent, int, androidx.work.impl.background.systemalarm.SystemAlarmDispatcher)
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        android.content.Intent r1;
+        int i0;
+        androidx.work.impl.background.systemalarm.SystemAlarmDispatcher r2;
+        androidx.work.Logger $r3;
+        java.lang.StringBuilder $r4, $r6, $r7, $r8, $r9;
+        java.lang.String $r5, $r10;
+        androidx.work.impl.WorkManagerImpl $r11;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        r1 := @parameter0: android.content.Intent;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: androidx.work.impl.background.systemalarm.SystemAlarmDispatcher;
+
+        $r3 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r5 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Handling reschedule ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r5, $r10);
+
+        $r11 = virtualinvoke r2.<androidx.work.impl.background.systemalarm.SystemAlarmDispatcher: androidx.work.impl.WorkManagerImpl getWorkManager()>();
+
+        virtualinvoke $r11.<androidx.work.impl.WorkManagerImpl: void rescheduleEligibleWork()>();
+
+        return;
+    }
+
+    private void handleExecutionCompleted(android.content.Intent, int)
+    {
+        androidx.work.impl.background.systemalarm.CommandHandler r0;
+        android.content.Intent r1;
+        int i0;
+        androidx.work.impl.model.WorkGenerationalId r2;
+        boolean z0;
+        android.os.Bundle $r3;
+        androidx.work.Logger $r4;
+        java.lang.StringBuilder $r5, $r7, $r8, $r9, $r10;
+        java.lang.String $r6, $r11;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.CommandHandler;
+
+        r1 := @parameter0: android.content.Intent;
+
+        i0 := @parameter1: int;
+
+        r2 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: androidx.work.impl.model.WorkGenerationalId readWorkGenerationalId(android.content.Intent)>(r1);
+
+        $r3 = virtualinvoke r1.<android.content.Intent: android.os.Bundle getExtras()>();
+
+        z0 = virtualinvoke $r3.<android.os.Bundle: boolean getBoolean(java.lang.String)>("KEY_NEEDS_RESCHEDULE");
+
+        $r4 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r6 = <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG>;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Handling onExecutionCompleted ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r6, $r11);
+
+        virtualinvoke r0.<androidx.work.impl.background.systemalarm.CommandHandler: void onExecuted(androidx.work.impl.model.WorkGenerationalId,boolean)>(r2, z0);
+
+        return;
+    }
+
+    private static transient boolean hasKeys(android.os.Bundle, java.lang.String[])
+    {
+        android.os.Bundle r0;
+        java.lang.String[] r1, r2;
+        int i0, i1;
+        java.lang.String r3;
+        boolean $z0;
+        java.lang.Object $r4;
+
+        r0 := @parameter0: android.os.Bundle;
+
+        r1 := @parameter1: java.lang.String[];
+
+        if r0 == null goto label1;
+
+        $z0 = virtualinvoke r0.<android.os.Bundle: boolean isEmpty()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        r2 = r1;
+
+        i0 = lengthof r2;
+
+        i1 = 0;
+
+     label3:
+        if i1 >= i0 goto label5;
+
+        r3 = r2[i1];
+
+        $r4 = virtualinvoke r0.<android.os.Bundle: java.lang.Object get(java.lang.String)>(r3);
+
+        if $r4 != null goto label4;
+
+        return 0;
+
+     label4:
+        i1 = i1 + 1;
+
+        goto label3;
+
+     label5:
+        return 1;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("CommandHandler");
+
+        <androidx.work.impl.background.systemalarm.CommandHandler: java.lang.String TAG> = $r0;
+
+        return;
+    }
+

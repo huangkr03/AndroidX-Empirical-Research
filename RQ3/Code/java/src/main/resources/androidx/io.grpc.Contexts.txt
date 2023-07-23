@@ -1,0 +1,75 @@
+io.grpc.Contexts
+    public static io.grpc.Status statusFromCancelled(io.grpc.Context)
+    {
+        io.grpc.Context $r0;
+        boolean $z0;
+        java.lang.Throwable $r1, $r6;
+        io.grpc.Status $r2;
+        java.lang.String $r3;
+        io.grpc.Status$Code $r4, $r5;
+
+        $r0 := @parameter0: io.grpc.Context;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r0, "context must not be null");
+
+        $z0 = virtualinvoke $r0.<io.grpc.Context: boolean isCancelled()>();
+
+        if $z0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        $r1 = virtualinvoke $r0.<io.grpc.Context: java.lang.Throwable cancellationCause()>();
+
+        if $r1 != null goto label2;
+
+        $r2 = <io.grpc.Status: io.grpc.Status CANCELLED>;
+
+        $r2 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("io.grpc.Context was cancelled without error");
+
+        return $r2;
+
+     label2:
+        $z0 = $r1 instanceof java.util.concurrent.TimeoutException;
+
+        if $z0 == 0 goto label3;
+
+        $r2 = <io.grpc.Status: io.grpc.Status DEADLINE_EXCEEDED>;
+
+        $r3 = virtualinvoke $r1.<java.lang.Throwable: java.lang.String getMessage()>();
+
+        $r2 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>($r3);
+
+        $r2 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status withCause(java.lang.Throwable)>($r1);
+
+        return $r2;
+
+     label3:
+        $r2 = staticinvoke <io.grpc.Status: io.grpc.Status fromThrowable(java.lang.Throwable)>($r1);
+
+        $r4 = <io.grpc.Status$Code: io.grpc.Status$Code UNKNOWN>;
+
+        $r5 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status$Code getCode()>();
+
+        $z0 = virtualinvoke $r4.<io.grpc.Status$Code: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label4;
+
+        $r6 = virtualinvoke $r2.<io.grpc.Status: java.lang.Throwable getCause()>();
+
+        if $r6 != $r1 goto label4;
+
+        $r2 = <io.grpc.Status: io.grpc.Status CANCELLED>;
+
+        $r2 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Context cancelled");
+
+        $r2 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status withCause(java.lang.Throwable)>($r1);
+
+        return $r2;
+
+     label4:
+        $r2 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status withCause(java.lang.Throwable)>($r1);
+
+        return $r2;
+    }
+

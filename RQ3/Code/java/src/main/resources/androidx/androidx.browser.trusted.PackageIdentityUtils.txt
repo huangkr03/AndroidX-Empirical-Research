@@ -1,0 +1,381 @@
+androidx.browser.trusted.PackageIdentityUtils
+<androidx.browser.trusted.PackageIdentityUtils: java.lang.String TAG>
+    private void <init>()
+    {
+        androidx.browser.trusted.PackageIdentityUtils r0;
+
+        r0 := @this: androidx.browser.trusted.PackageIdentityUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static java.util.List getFingerprintsForPackage(java.lang.String, android.content.pm.PackageManager)
+    {
+        java.lang.String r0;
+        android.content.pm.PackageManager r1;
+        java.lang.Throwable r2, $r5;
+        androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat $r3;
+        java.util.List $r4;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: android.content.pm.PackageManager;
+
+     label1:
+        $r3 = staticinvoke <androidx.browser.trusted.PackageIdentityUtils: androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat getImpl()>();
+
+        $r4 = interfaceinvoke $r3.<androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat: java.util.List getFingerprintsForPackage(java.lang.String,android.content.pm.PackageManager)>(r0, r1);
+
+     label2:
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("PackageIdentity", "Could not get fingerprint for package.", r2);
+
+        return null;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    static boolean packageMatchesToken(java.lang.String, android.content.pm.PackageManager, androidx.browser.trusted.TokenContents)
+    {
+        java.lang.String r0;
+        android.content.pm.PackageManager r1;
+        androidx.browser.trusted.TokenContents r2;
+        java.lang.Throwable r3, $r5;
+        androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat $r4;
+        boolean $z0;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: android.content.pm.PackageManager;
+
+        r2 := @parameter2: androidx.browser.trusted.TokenContents;
+
+     label1:
+        $r4 = staticinvoke <androidx.browser.trusted.PackageIdentityUtils: androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat getImpl()>();
+
+        $z0 = interfaceinvoke $r4.<androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat: boolean packageMatchesToken(java.lang.String,android.content.pm.PackageManager,androidx.browser.trusted.TokenContents)>(r0, r1, r2);
+
+     label2:
+        return $z0;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r3 = $r5;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("PackageIdentity", "Could not check if package matches token.", r3);
+
+        return 0;
+
+        catch java.io.IOException from label1 to label2 with label3;
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    private static androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat getImpl()
+    {
+        int $i0;
+        androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation $r0;
+        androidx.browser.trusted.PackageIdentityUtils$Api28Implementation $r1;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label1;
+
+        $r1 = new androidx.browser.trusted.PackageIdentityUtils$Api28Implementation;
+
+        specialinvoke $r1.<androidx.browser.trusted.PackageIdentityUtils$Api28Implementation: void <init>()>();
+
+        return $r1;
+
+     label1:
+        $r0 = new androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation;
+
+        specialinvoke $r0.<androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation: void <init>()>();
+
+        return $r0;
+    }
+
+    static byte[] getCertificateSHA256Fingerprint(android.content.pm.Signature)
+    {
+        android.content.pm.Signature r0;
+        java.lang.Throwable r1, $r5;
+        java.security.MessageDigest $r2;
+        byte[] $r3, $r4;
+
+        r0 := @parameter0: android.content.pm.Signature;
+
+     label1:
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA256");
+
+        $r3 = virtualinvoke r0.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        $r4 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3);
+
+     label2:
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r1 = $r5;
+
+        return null;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+androidx.browser.trusted.PackageIdentityUtils$Api28Implementation
+    void <init>()
+    {
+        androidx.browser.trusted.PackageIdentityUtils$Api28Implementation r0;
+
+        r0 := @this: androidx.browser.trusted.PackageIdentityUtils$Api28Implementation;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.util.List getFingerprintsForPackage(java.lang.String, android.content.pm.PackageManager) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        androidx.browser.trusted.PackageIdentityUtils$Api28Implementation r0;
+        java.lang.String r1;
+        android.content.pm.PackageManager r2;
+        android.content.pm.PackageInfo r3;
+        java.util.ArrayList r4, $r8;
+        android.content.pm.SigningInfo r5;
+        android.content.pm.Signature[] r6, $r9;
+        int i0, i1;
+        android.content.pm.Signature r7, $r10;
+        boolean $z0;
+        byte[] $r11, $r12;
+
+        r0 := @this: androidx.browser.trusted.PackageIdentityUtils$Api28Implementation;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: android.content.pm.PackageManager;
+
+        r3 = virtualinvoke r2.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>(r1, 134217728);
+
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        r4 = $r8;
+
+        r5 = r3.<android.content.pm.PackageInfo: android.content.pm.SigningInfo signingInfo>;
+
+        $z0 = virtualinvoke r5.<android.content.pm.SigningInfo: boolean hasMultipleSigners()>();
+
+        if $z0 == 0 goto label3;
+
+        r6 = virtualinvoke r5.<android.content.pm.SigningInfo: android.content.pm.Signature[] getApkContentsSigners()>();
+
+        i0 = lengthof r6;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        r7 = r6[i1];
+
+        $r12 = staticinvoke <androidx.browser.trusted.PackageIdentityUtils: byte[] getCertificateSHA256Fingerprint(android.content.pm.Signature)>(r7);
+
+        interfaceinvoke r4.<java.util.List: boolean add(java.lang.Object)>($r12);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r9 = virtualinvoke r5.<android.content.pm.SigningInfo: android.content.pm.Signature[] getSigningCertificateHistory()>();
+
+        $r10 = $r9[0];
+
+        $r11 = staticinvoke <androidx.browser.trusted.PackageIdentityUtils: byte[] getCertificateSHA256Fingerprint(android.content.pm.Signature)>($r10);
+
+        interfaceinvoke r4.<java.util.List: boolean add(java.lang.Object)>($r11);
+
+     label4:
+        return r4;
+    }
+
+    public boolean packageMatchesToken(java.lang.String, android.content.pm.PackageManager, androidx.browser.trusted.TokenContents) throws android.content.pm.PackageManager$NameNotFoundException, java.io.IOException
+    {
+        androidx.browser.trusted.PackageIdentityUtils$Api28Implementation r0;
+        java.lang.String r1, $r6;
+        android.content.pm.PackageManager r2;
+        androidx.browser.trusted.TokenContents r3, r5;
+        java.util.List r4;
+        boolean $z0, $z1, $z2;
+        int $i0;
+        byte[] $r7;
+
+        r0 := @this: androidx.browser.trusted.PackageIdentityUtils$Api28Implementation;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: android.content.pm.PackageManager;
+
+        r3 := @parameter2: androidx.browser.trusted.TokenContents;
+
+        $r6 = virtualinvoke r3.<androidx.browser.trusted.TokenContents: java.lang.String getPackageName()>();
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        r4 = virtualinvoke r0.<androidx.browser.trusted.PackageIdentityUtils$Api28Implementation: java.util.List getFingerprintsForPackage(java.lang.String,android.content.pm.PackageManager)>(r1, r2);
+
+        if r4 != null goto label2;
+
+        return 0;
+
+     label2:
+        $i0 = interfaceinvoke r4.<java.util.List: int size()>();
+
+        if $i0 != 1 goto label3;
+
+        $r7 = virtualinvoke r3.<androidx.browser.trusted.TokenContents: byte[] getFingerprint(int)>(0);
+
+        $z2 = virtualinvoke r2.<android.content.pm.PackageManager: boolean hasSigningCertificate(java.lang.String,byte[],int)>(r1, $r7, 1);
+
+        return $z2;
+
+     label3:
+        r5 = staticinvoke <androidx.browser.trusted.TokenContents: androidx.browser.trusted.TokenContents create(java.lang.String,java.util.List)>(r1, r4);
+
+        $z1 = virtualinvoke r3.<androidx.browser.trusted.TokenContents: boolean equals(java.lang.Object)>(r5);
+
+        return $z1;
+    }
+
+androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation
+    void <init>()
+    {
+        androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation r0;
+
+        r0 := @this: androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.util.List getFingerprintsForPackage(java.lang.String, android.content.pm.PackageManager) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation r0;
+        java.lang.String r1;
+        android.content.pm.PackageManager r2;
+        android.content.pm.PackageInfo r3;
+        java.util.ArrayList r4, $r8;
+        android.content.pm.Signature[] r5, $r9;
+        int i0, $i1, i2;
+        android.content.pm.Signature r6;
+        byte[] r7;
+
+        r0 := @this: androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: android.content.pm.PackageManager;
+
+        r3 = virtualinvoke r2.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>(r1, 64);
+
+        $r8 = new java.util.ArrayList;
+
+        $r9 = r3.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i1 = lengthof $r9;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>(int)>($i1);
+
+        r4 = $r8;
+
+        r5 = r3.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        i0 = lengthof r5;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label3;
+
+        r6 = r5[i2];
+
+        r7 = staticinvoke <androidx.browser.trusted.PackageIdentityUtils: byte[] getCertificateSHA256Fingerprint(android.content.pm.Signature)>(r6);
+
+        if r7 != null goto label2;
+
+        return null;
+
+     label2:
+        interfaceinvoke r4.<java.util.List: boolean add(java.lang.Object)>(r7);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label3:
+        return r4;
+    }
+
+    public boolean packageMatchesToken(java.lang.String, android.content.pm.PackageManager, androidx.browser.trusted.TokenContents) throws java.io.IOException, android.content.pm.PackageManager$NameNotFoundException
+    {
+        androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation r0;
+        java.lang.String r1, $r6;
+        android.content.pm.PackageManager r2;
+        androidx.browser.trusted.TokenContents r3, r5;
+        java.util.List r4;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: android.content.pm.PackageManager;
+
+        r3 := @parameter2: androidx.browser.trusted.TokenContents;
+
+        $r6 = virtualinvoke r3.<androidx.browser.trusted.TokenContents: java.lang.String getPackageName()>();
+
+        $z0 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        r4 = virtualinvoke r0.<androidx.browser.trusted.PackageIdentityUtils$Pre28Implementation: java.util.List getFingerprintsForPackage(java.lang.String,android.content.pm.PackageManager)>(r1, r2);
+
+        if r4 != null goto label2;
+
+        return 0;
+
+     label2:
+        r5 = staticinvoke <androidx.browser.trusted.TokenContents: androidx.browser.trusted.TokenContents create(java.lang.String,java.util.List)>(r1, r4);
+
+        $z1 = virtualinvoke r3.<androidx.browser.trusted.TokenContents: boolean equals(java.lang.Object)>(r5);
+
+        return $z1;
+    }
+
+androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat
+<androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat: java.util.List getFingerprintsForPackage(java.lang.String,android.content.pm.PackageManager)>
+<androidx.browser.trusted.PackageIdentityUtils$SignaturesCompat: boolean packageMatchesToken(java.lang.String,android.content.pm.PackageManager,androidx.browser.trusted.TokenContents)>

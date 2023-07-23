@@ -1,0 +1,204 @@
+androidx.work.impl.utils.IdGeneratorKt
+<androidx.work.impl.utils.IdGeneratorKt: int INITIAL_ID>
+<androidx.work.impl.utils.IdGeneratorKt: java.lang.String NEXT_JOB_SCHEDULER_ID_KEY>
+<androidx.work.impl.utils.IdGeneratorKt: java.lang.String NEXT_ALARM_MANAGER_ID_KEY>
+<androidx.work.impl.utils.IdGeneratorKt: java.lang.String PREFERENCE_FILE_KEY>
+    private static final int nextId(androidx.work.impl.WorkDatabase, java.lang.String)
+    {
+        androidx.work.impl.WorkDatabase $r0;
+        java.lang.String r1;
+        java.lang.Long r2;
+        int i0, i1, $i3, $i4;
+        androidx.work.impl.model.PreferenceDao $r3;
+        long $l2;
+
+        $r0 := @parameter0: androidx.work.impl.WorkDatabase;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r3 = virtualinvoke $r0.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.PreferenceDao preferenceDao()>();
+
+        r2 = interfaceinvoke $r3.<androidx.work.impl.model.PreferenceDao: java.lang.Long getLongValue(java.lang.String)>(r1);
+
+        if r2 == null goto label1;
+
+        $l2 = virtualinvoke r2.<java.lang.Long: long longValue()>();
+
+        $i3 = (int) $l2;
+
+        goto label2;
+
+     label1:
+        $i3 = 0;
+
+     label2:
+        i0 = $i3;
+
+        if i0 != 2147483647 goto label3;
+
+        $i4 = 0;
+
+        goto label4;
+
+     label3:
+        $i4 = i0 + 1;
+
+     label4:
+        i1 = $i4;
+
+        staticinvoke <androidx.work.impl.utils.IdGeneratorKt: void updatePreference(androidx.work.impl.WorkDatabase,java.lang.String,int)>($r0, r1, i1);
+
+        return i0;
+    }
+
+    private static final void updatePreference(androidx.work.impl.WorkDatabase, java.lang.String, int)
+    {
+        androidx.work.impl.WorkDatabase $r0;
+        java.lang.String r1;
+        int i0;
+        androidx.work.impl.model.PreferenceDao $r2;
+        androidx.work.impl.model.Preference $r3;
+        long $l1;
+        java.lang.Long $r4;
+
+        $r0 := @parameter0: androidx.work.impl.WorkDatabase;
+
+        r1 := @parameter1: java.lang.String;
+
+        i0 := @parameter2: int;
+
+        $r2 = virtualinvoke $r0.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.PreferenceDao preferenceDao()>();
+
+        $r3 = new androidx.work.impl.model.Preference;
+
+        $l1 = (long) i0;
+
+        $r4 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        specialinvoke $r3.<androidx.work.impl.model.Preference: void <init>(java.lang.String,java.lang.Long)>(r1, $r4);
+
+        interfaceinvoke $r2.<androidx.work.impl.model.PreferenceDao: void insertPreference(androidx.work.impl.model.Preference)>($r3);
+
+        return;
+    }
+
+    public static final void migrateLegacyIdGenerator(android.content.Context, androidx.sqlite.db.SupportSQLiteDatabase)
+    {
+        android.content.Context r0;
+        androidx.sqlite.db.SupportSQLiteDatabase r1;
+        android.content.SharedPreferences r2;
+        int i0, i1;
+        boolean $z0, $z1;
+        java.lang.Integer $r3, $r4;
+        android.content.SharedPreferences$Editor $r5, $r6;
+        java.lang.Throwable $r7, r10;
+        java.lang.Object[] r8, r9;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.sqlite.db.SupportSQLiteDatabase;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "context");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "sqLiteDatabase");
+
+        r2 = virtualinvoke r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>("androidx.work.util.id", 0);
+
+        $z0 = interfaceinvoke r2.<android.content.SharedPreferences: boolean contains(java.lang.String)>("next_job_scheduler_id");
+
+        if $z0 != 0 goto label1;
+
+        $z1 = interfaceinvoke r2.<android.content.SharedPreferences: boolean contains(java.lang.String)>("next_job_scheduler_id");
+
+        if $z1 == 0 goto label6;
+
+     label1:
+        i0 = interfaceinvoke r2.<android.content.SharedPreferences: int getInt(java.lang.String,int)>("next_job_scheduler_id", 0);
+
+        i1 = interfaceinvoke r2.<android.content.SharedPreferences: int getInt(java.lang.String,int)>("next_alarm_manager_id", 0);
+
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void beginTransaction()>();
+
+     label2:
+        r8 = newarray (java.lang.Object)[2];
+
+        r8[0] = "next_job_scheduler_id";
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        r8[1] = $r3;
+
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void execSQL(java.lang.String,java.lang.Object[])>("INSERT OR REPLACE INTO `Preference` (`key`, `long_value`) VALUES (@key, @long_value)", r8);
+
+        r9 = newarray (java.lang.Object)[2];
+
+        r9[0] = "next_alarm_manager_id";
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        r9[1] = $r4;
+
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void execSQL(java.lang.String,java.lang.Object[])>("INSERT OR REPLACE INTO `Preference` (`key`, `long_value`) VALUES (@key, @long_value)", r9);
+
+        $r5 = interfaceinvoke r2.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        $r6 = interfaceinvoke $r5.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor clear()>();
+
+        interfaceinvoke $r6.<android.content.SharedPreferences$Editor: void apply()>();
+
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void setTransactionSuccessful()>();
+
+     label3:
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void endTransaction()>();
+
+        goto label6;
+
+     label4:
+        $r7 := @caughtexception;
+
+        r10 = $r7;
+
+     label5:
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void endTransaction()>();
+
+        throw r10;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public static final int access$nextId(androidx.work.impl.WorkDatabase, java.lang.String)
+    {
+        androidx.work.impl.WorkDatabase $r0;
+        java.lang.String r1;
+        int $i0;
+
+        $r0 := @parameter0: androidx.work.impl.WorkDatabase;
+
+        r1 := @parameter1: java.lang.String;
+
+        $i0 = staticinvoke <androidx.work.impl.utils.IdGeneratorKt: int nextId(androidx.work.impl.WorkDatabase,java.lang.String)>($r0, r1);
+
+        return $i0;
+    }
+
+    public static final void access$updatePreference(androidx.work.impl.WorkDatabase, java.lang.String, int)
+    {
+        androidx.work.impl.WorkDatabase $r0;
+        java.lang.String r1;
+        int i0;
+
+        $r0 := @parameter0: androidx.work.impl.WorkDatabase;
+
+        r1 := @parameter1: java.lang.String;
+
+        i0 := @parameter2: int;
+
+        staticinvoke <androidx.work.impl.utils.IdGeneratorKt: void updatePreference(androidx.work.impl.WorkDatabase,java.lang.String,int)>($r0, r1, i0);
+
+        return;
+    }
+

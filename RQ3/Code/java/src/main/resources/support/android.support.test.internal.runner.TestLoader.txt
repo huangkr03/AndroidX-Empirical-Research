@@ -1,0 +1,651 @@
+android.support.test.internal.runner.TestLoader
+<android.support.test.internal.runner.TestLoader: java.lang.String LOG_TAG>
+<android.support.test.internal.runner.TestLoader: java.util.Map mLoadedClassesMap>
+<android.support.test.internal.runner.TestLoader: java.util.Map mLoadFailuresMap>
+<android.support.test.internal.runner.TestLoader: java.io.PrintStream mWriter>
+    public void <init>(java.io.PrintStream)
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.io.PrintStream r1;
+        java.util.LinkedHashMap $r2, $r3;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        r1 := @parameter0: java.io.PrintStream;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.LinkedHashMap;
+
+        specialinvoke $r2.<java.util.LinkedHashMap: void <init>()>();
+
+        r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadedClassesMap> = $r2;
+
+        $r3 = new java.util.LinkedHashMap;
+
+        specialinvoke $r3.<java.util.LinkedHashMap: void <init>()>();
+
+        r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadFailuresMap> = $r3;
+
+        r0.<android.support.test.internal.runner.TestLoader: java.io.PrintStream mWriter> = r1;
+
+        return;
+    }
+
+    public java.lang.Class loadClass(java.lang.String)
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.lang.String r1;
+        java.lang.Class r2;
+        java.util.Map $r3;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 = specialinvoke r0.<android.support.test.internal.runner.TestLoader: java.lang.Class doLoadClass(java.lang.String)>(r1);
+
+        if r2 == null goto label1;
+
+        $r3 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadedClassesMap>;
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r2);
+
+     label1:
+        return r2;
+    }
+
+    private java.lang.Class doLoadClass(java.lang.String)
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.lang.String r1, r2;
+        org.junit.runner.Description r3;
+        org.junit.runner.notification.Failure r4, $r16;
+        java.util.Map $r5, $r6, $r9, $r17;
+        boolean $z0, $z1;
+        java.lang.Class $r7, $r8, $r11;
+        java.lang.Object $r10;
+        java.lang.Throwable $r12, r20;
+        java.lang.Object[] $r13;
+        java.io.PrintStream $r14;
+        java.lang.'annotation'.Annotation[] $r15;
+        java.lang.ClassLoader r19;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r5 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadFailuresMap>;
+
+        $z0 = interfaceinvoke $r5.<java.util.Map: boolean containsKey(java.lang.Object)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        return null;
+
+     label1:
+        $r6 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadedClassesMap>;
+
+        $z1 = interfaceinvoke $r6.<java.util.Map: boolean containsKey(java.lang.Object)>(r1);
+
+        if $z1 == 0 goto label2;
+
+        $r9 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadedClassesMap>;
+
+        $r10 = interfaceinvoke $r9.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r11 = (java.lang.Class) $r10;
+
+        return $r11;
+
+     label2:
+        $r7 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        r19 = virtualinvoke $r7.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        $r8 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String,boolean,java.lang.ClassLoader)>(r1, 0, r19);
+
+     label3:
+        return $r8;
+
+     label4:
+        $r12 := @caughtexception;
+
+        r20 = $r12;
+
+        $r13 = newarray (java.lang.Object)[1];
+
+        $r13[0] = r1;
+
+        r2 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Could not find class: %s", $r13);
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("TestLoader", r2);
+
+        $r14 = r0.<android.support.test.internal.runner.TestLoader: java.io.PrintStream mWriter>;
+
+        virtualinvoke $r14.<java.io.PrintStream: void println(java.lang.String)>(r2);
+
+        $r15 = newarray (java.lang.'annotation'.Annotation)[0];
+
+        r3 = staticinvoke <org.junit.runner.Description: org.junit.runner.Description createSuiteDescription(java.lang.String,java.lang.'annotation'.Annotation[])>(r1, $r15);
+
+        $r16 = new org.junit.runner.notification.Failure;
+
+        specialinvoke $r16.<org.junit.runner.notification.Failure: void <init>(org.junit.runner.Description,java.lang.Throwable)>(r3, r20);
+
+        r4 = $r16;
+
+        $r17 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadFailuresMap>;
+
+        interfaceinvoke $r17.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r4);
+
+        return null;
+
+        catch java.lang.ClassNotFoundException from label2 to label3 with label4;
+    }
+
+    public java.lang.Class loadIfTest(java.lang.String)
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.lang.String r1;
+        java.lang.Class r2;
+        boolean $z0;
+        java.util.Map $r3;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 = specialinvoke r0.<android.support.test.internal.runner.TestLoader: java.lang.Class doLoadClass(java.lang.String)>(r1);
+
+        if r2 == null goto label1;
+
+        $z0 = specialinvoke r0.<android.support.test.internal.runner.TestLoader: boolean isTestClass(java.lang.Class)>(r2);
+
+        if $z0 == 0 goto label1;
+
+        $r3 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadedClassesMap>;
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        return r2;
+
+     label1:
+        return null;
+    }
+
+    public boolean isEmpty()
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.util.Map $r1, $r2;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        $r1 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadedClassesMap>;
+
+        $z0 = interfaceinvoke $r1.<java.util.Map: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadFailuresMap>;
+
+        $z1 = interfaceinvoke $r2.<java.util.Map: boolean isEmpty()>();
+
+        if $z1 == 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+
+    public java.util.Collection getLoadedClasses()
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.util.Map $r1;
+        java.util.Collection $r2;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        $r1 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadedClassesMap>;
+
+        $r2 = interfaceinvoke $r1.<java.util.Map: java.util.Collection values()>();
+
+        return $r2;
+    }
+
+    public java.util.Collection getLoadFailures()
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.util.Map $r1;
+        java.util.Collection $r2;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        $r1 = r0.<android.support.test.internal.runner.TestLoader: java.util.Map mLoadFailuresMap>;
+
+        $r2 = interfaceinvoke $r1.<java.util.Map: java.util.Collection values()>();
+
+        return $r2;
+    }
+
+    private boolean isTestClass(java.lang.Class)
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.lang.Class r1, $r3, $r7;
+        int i0, $i1, i4;
+        java.lang.reflect.Method r2;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        java.lang.Object[] $r4, $r8, $r12, $r17;
+        java.lang.String $r5, $r6, $r9, $r10, $r13, $r14, $r15, $r18, $r19, $r20;
+        java.lang.Throwable $r11, $r16, r22, r23;
+        java.lang.reflect.Method[] r21;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        r1 := @parameter0: java.lang.Class;
+
+     label01:
+        $i1 = virtualinvoke r1.<java.lang.Class: int getModifiers()>();
+
+        $z0 = staticinvoke <java.lang.reflect.Modifier: boolean isAbstract(int)>($i1);
+
+        if $z0 == 0 goto label03;
+
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r9 = virtualinvoke r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r8[0] = $r9;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Skipping abstract class %s: not a test", $r8);
+
+        specialinvoke r0.<android.support.test.internal.runner.TestLoader: void logDebug(java.lang.String)>($r10);
+
+     label02:
+        return 0;
+
+     label03:
+        $r3 = class "Ljunit/framework/Test;";
+
+        $z1 = virtualinvoke $r3.<java.lang.Class: boolean isAssignableFrom(java.lang.Class)>(r1);
+
+        if $z1 == 0 goto label06;
+
+        $r7 = class "Ljunit/framework/TestCase;";
+
+        $z4 = virtualinvoke $r7.<java.lang.Class: boolean isAssignableFrom(java.lang.Class)>(r1);
+
+        if $z4 == 0 goto label05;
+
+        $z5 = specialinvoke r0.<android.support.test.internal.runner.TestLoader: boolean hasJUnit3TestMethod(java.lang.Class)>(r1);
+
+     label04:
+        return $z5;
+
+     label05:
+        return 1;
+
+     label06:
+        $z2 = virtualinvoke r1.<java.lang.Class: boolean isAnnotationPresent(java.lang.Class)>(class "Lorg/junit/runner/RunWith;");
+
+        if $z2 == 0 goto label08;
+
+     label07:
+        return 1;
+
+     label08:
+        r21 = virtualinvoke r1.<java.lang.Class: java.lang.reflect.Method[] getMethods()>();
+
+        i0 = lengthof r21;
+
+        i4 = 0;
+
+     label09:
+        if i4 >= i0 goto label12;
+
+        r2 = r21[i4];
+
+        $z3 = virtualinvoke r2.<java.lang.reflect.Method: boolean isAnnotationPresent(java.lang.Class)>(class "Lorg/junit/Test;");
+
+        if $z3 == 0 goto label11;
+
+     label10:
+        return 1;
+
+     label11:
+        i4 = i4 + 1;
+
+        goto label09;
+
+     label12:
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r5 = virtualinvoke r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r4[0] = $r5;
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Skipping class %s: not a test", $r4);
+
+        specialinvoke r0.<android.support.test.internal.runner.TestLoader: void logDebug(java.lang.String)>($r6);
+
+     label13:
+        return 0;
+
+     label14:
+        $r16 := @caughtexception;
+
+        r22 = $r16;
+
+        $r17 = newarray (java.lang.Object)[2];
+
+        $r18 = virtualinvoke r22.<java.lang.Exception: java.lang.String toString()>();
+
+        $r17[0] = $r18;
+
+        $r19 = virtualinvoke r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r17[1] = $r19;
+
+        $r20 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%s in isTestClass for %s", $r17);
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("TestLoader", $r20);
+
+        return 0;
+
+     label15:
+        $r11 := @caughtexception;
+
+        r23 = $r11;
+
+        $r12 = newarray (java.lang.Object)[2];
+
+        $r13 = virtualinvoke r23.<java.lang.Error: java.lang.String toString()>();
+
+        $r12[0] = $r13;
+
+        $r14 = virtualinvoke r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r12[1] = $r14;
+
+        $r15 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%s in isTestClass for %s", $r12);
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("TestLoader", $r15);
+
+        return 0;
+
+        catch java.lang.Exception from label01 to label02 with label14;
+        catch java.lang.Exception from label03 to label04 with label14;
+        catch java.lang.Exception from label06 to label07 with label14;
+        catch java.lang.Exception from label08 to label10 with label14;
+        catch java.lang.Exception from label11 to label13 with label14;
+        catch java.lang.Error from label01 to label02 with label15;
+        catch java.lang.Error from label03 to label04 with label15;
+        catch java.lang.Error from label06 to label07 with label15;
+        catch java.lang.Error from label08 to label10 with label15;
+        catch java.lang.Error from label11 to label13 with label15;
+    }
+
+    private boolean hasJUnit3TestMethod(java.lang.Class)
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.lang.Class r1;
+        java.lang.reflect.Method[] r2;
+        int i0, i1;
+        java.lang.reflect.Method r3;
+        boolean $z0;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        r1 := @parameter0: java.lang.Class;
+
+        r2 = virtualinvoke r1.<java.lang.Class: java.lang.reflect.Method[] getMethods()>();
+
+        i0 = lengthof r2;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label3;
+
+        r3 = r2[i1];
+
+        $z0 = specialinvoke r0.<android.support.test.internal.runner.TestLoader: boolean isPublicTestMethod(java.lang.reflect.Method)>(r3);
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+    private boolean isPublicTestMethod(java.lang.reflect.Method)
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.lang.reflect.Method r1;
+        boolean $z0, $z1, $z2;
+        int $i0;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        r1 := @parameter0: java.lang.reflect.Method;
+
+        $z0 = specialinvoke r0.<android.support.test.internal.runner.TestLoader: boolean isTestMethod(java.lang.reflect.Method)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        $i0 = virtualinvoke r1.<java.lang.reflect.Method: int getModifiers()>();
+
+        $z1 = staticinvoke <java.lang.reflect.Modifier: boolean isPublic(int)>($i0);
+
+        if $z1 == 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+
+    private boolean isTestMethod(java.lang.reflect.Method)
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.lang.reflect.Method r1;
+        java.lang.Class[] $r2;
+        int $i0;
+        java.lang.String $r3;
+        boolean $z0, $z1, $z2;
+        java.lang.Class $r4, $r5;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        r1 := @parameter0: java.lang.reflect.Method;
+
+        $r2 = virtualinvoke r1.<java.lang.reflect.Method: java.lang.Class[] getParameterTypes()>();
+
+        $i0 = lengthof $r2;
+
+        if $i0 != 0 goto label1;
+
+        $r3 = virtualinvoke r1.<java.lang.reflect.Method: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean startsWith(java.lang.String)>("test");
+
+        if $z0 == 0 goto label1;
+
+        $r4 = virtualinvoke r1.<java.lang.reflect.Method: java.lang.Class getReturnType()>();
+
+        $r5 = <java.lang.Void: java.lang.Class TYPE>;
+
+        $z1 = virtualinvoke $r4.<java.lang.Object: boolean equals(java.lang.Object)>($r5);
+
+        if $z1 == 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+
+    private void logDebug(java.lang.String)
+    {
+        android.support.test.internal.runner.TestLoader r0;
+        java.lang.String r1;
+        boolean $z0;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader;
+
+        r1 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("TestLoader", 3);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TestLoader", r1);
+
+     label1:
+        return;
+    }
+
+android.support.test.internal.runner.TestLoader$ScanningRunnerBuilder
+<android.support.test.internal.runner.TestLoader$ScanningRunnerBuilder: org.junit.runners.model.RunnerBuilder runnerBuilder>
+    void <init>(org.junit.runners.model.RunnerBuilder)
+    {
+        android.support.test.internal.runner.TestLoader$ScanningRunnerBuilder r0;
+        org.junit.runners.model.RunnerBuilder r1;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader$ScanningRunnerBuilder;
+
+        r1 := @parameter0: org.junit.runners.model.RunnerBuilder;
+
+        specialinvoke r0.<org.junit.runners.model.RunnerBuilder: void <init>()>();
+
+        r0.<android.support.test.internal.runner.TestLoader$ScanningRunnerBuilder: org.junit.runners.model.RunnerBuilder runnerBuilder> = r1;
+
+        return;
+    }
+
+    public org.junit.runner.Runner runnerForClass(java.lang.Class) throws java.lang.Throwable
+    {
+        android.support.test.internal.runner.TestLoader$ScanningRunnerBuilder r0;
+        java.lang.Class r1;
+        int $i0;
+        boolean $z0;
+        org.junit.runners.model.RunnerBuilder $r2;
+        org.junit.runner.Runner $r3;
+        java.lang.Object[] $r4;
+        java.lang.String $r5, $r6;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader$ScanningRunnerBuilder;
+
+        r1 := @parameter0: java.lang.Class;
+
+        $i0 = virtualinvoke r1.<java.lang.Class: int getModifiers()>();
+
+        $z0 = staticinvoke <java.lang.reflect.Modifier: boolean isAbstract(int)>($i0);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r5 = virtualinvoke r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r4[0] = $r5;
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Skipping abstract class %s: not a test", $r4);
+
+        staticinvoke <android.support.test.internal.runner.TestLoader: void access$000(java.lang.String)>($r6);
+
+        return null;
+
+     label1:
+        $r2 = r0.<android.support.test.internal.runner.TestLoader$ScanningRunnerBuilder: org.junit.runners.model.RunnerBuilder runnerBuilder>;
+
+        $r3 = virtualinvoke $r2.<org.junit.runners.model.RunnerBuilder: org.junit.runner.Runner runnerForClass(java.lang.Class)>(r1);
+
+        return $r3;
+    }
+
+android.support.test.internal.runner.TestLoader$UnloadableClassRunner
+<android.support.test.internal.runner.TestLoader$UnloadableClassRunner: org.junit.runner.Description description>
+<android.support.test.internal.runner.TestLoader$UnloadableClassRunner: org.junit.runner.notification.Failure failure>
+    void <init>(org.junit.runner.Description, org.junit.runner.notification.Failure)
+    {
+        android.support.test.internal.runner.TestLoader$UnloadableClassRunner r0;
+        org.junit.runner.Description r1;
+        org.junit.runner.notification.Failure r2;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader$UnloadableClassRunner;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        r2 := @parameter1: org.junit.runner.notification.Failure;
+
+        specialinvoke r0.<org.junit.runner.Runner: void <init>()>();
+
+        r0.<android.support.test.internal.runner.TestLoader$UnloadableClassRunner: org.junit.runner.Description description> = r1;
+
+        r0.<android.support.test.internal.runner.TestLoader$UnloadableClassRunner: org.junit.runner.notification.Failure failure> = r2;
+
+        return;
+    }
+
+    public org.junit.runner.Description getDescription()
+    {
+        android.support.test.internal.runner.TestLoader$UnloadableClassRunner r0;
+        org.junit.runner.Description $r1;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader$UnloadableClassRunner;
+
+        $r1 = r0.<android.support.test.internal.runner.TestLoader$UnloadableClassRunner: org.junit.runner.Description description>;
+
+        return $r1;
+    }
+
+    public void run(org.junit.runner.notification.RunNotifier)
+    {
+        android.support.test.internal.runner.TestLoader$UnloadableClassRunner r0;
+        org.junit.runner.notification.RunNotifier r1;
+        org.junit.runner.Description $r2, $r4;
+        org.junit.runner.notification.Failure $r3;
+
+        r0 := @this: android.support.test.internal.runner.TestLoader$UnloadableClassRunner;
+
+        r1 := @parameter0: org.junit.runner.notification.RunNotifier;
+
+        $r2 = r0.<android.support.test.internal.runner.TestLoader$UnloadableClassRunner: org.junit.runner.Description description>;
+
+        virtualinvoke r1.<org.junit.runner.notification.RunNotifier: void fireTestStarted(org.junit.runner.Description)>($r2);
+
+        $r3 = r0.<android.support.test.internal.runner.TestLoader$UnloadableClassRunner: org.junit.runner.notification.Failure failure>;
+
+        virtualinvoke r1.<org.junit.runner.notification.RunNotifier: void fireTestFailure(org.junit.runner.notification.Failure)>($r3);
+
+        $r4 = r0.<android.support.test.internal.runner.TestLoader$UnloadableClassRunner: org.junit.runner.Description description>;
+
+        virtualinvoke r1.<org.junit.runner.notification.RunNotifier: void fireTestFinished(org.junit.runner.Description)>($r4);
+
+        return;
+    }
+

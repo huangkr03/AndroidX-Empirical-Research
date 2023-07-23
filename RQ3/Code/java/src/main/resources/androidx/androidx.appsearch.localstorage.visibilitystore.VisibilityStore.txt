@@ -1,0 +1,477 @@
+androidx.appsearch.localstorage.visibilitystore.VisibilityStore
+<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.lang.String TAG>
+<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.lang.String VISIBILITY_PACKAGE_NAME>
+<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.lang.String VISIBILITY_DATABASE_NAME>
+<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.util.Map mVisibilityDocumentMap>
+<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>
+    public void <init>(androidx.appsearch.localstorage.AppSearchImpl) throws androidx.appsearch.exceptions.AppSearchException
+    {
+        androidx.appsearch.localstorage.visibilitystore.VisibilityStore r0;
+        androidx.appsearch.localstorage.AppSearchImpl r1, $r8, $r10, $r15, $r21, $r22;
+        androidx.appsearch.app.GetSchemaResponse r2;
+        java.util.List r3, $r16, $r17, $r20, r28;
+        java.util.Set r4;
+        androidx.appsearch.app.InternalSetSchemaResponse r5;
+        androidx.collection.ArrayMap $r6;
+        java.lang.Object $r7;
+        androidx.appsearch.localstorage.visibilitystore.CallerAccess $r9;
+        int $i0, $i1;
+        androidx.appsearch.app.AppSearchSchema $r11, $r13, $r14, $r19;
+        boolean $z0, $z1, $z2;
+        androidx.appsearch.app.AppSearchSchema[] $r12;
+        androidx.appsearch.exceptions.AppSearchException $r18, $r23;
+        java.lang.StringBuilder $r24, $r25, $r26;
+        java.lang.String $r27;
+
+        r0 := @this: androidx.appsearch.localstorage.visibilitystore.VisibilityStore;
+
+        r1 := @parameter0: androidx.appsearch.localstorage.AppSearchImpl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r6 = new androidx.collection.ArrayMap;
+
+        specialinvoke $r6.<androidx.collection.ArrayMap: void <init>()>();
+
+        r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.util.Map mVisibilityDocumentMap> = $r6;
+
+        $r7 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r8 = (androidx.appsearch.localstorage.AppSearchImpl) $r7;
+
+        r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl> = $r8;
+
+        $r10 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        $r9 = new androidx.appsearch.localstorage.visibilitystore.CallerAccess;
+
+        specialinvoke $r9.<androidx.appsearch.localstorage.visibilitystore.CallerAccess: void <init>(java.lang.String)>("VS#Pkg");
+
+        r2 = virtualinvoke $r10.<androidx.appsearch.localstorage.AppSearchImpl: androidx.appsearch.app.GetSchemaResponse getSchema(java.lang.String,java.lang.String,androidx.appsearch.localstorage.visibilitystore.CallerAccess)>("VS#Pkg", "VS#Db", $r9);
+
+        r28 = null;
+
+        $i0 = virtualinvoke r2.<androidx.appsearch.app.GetSchemaResponse: int getVersion()>();
+
+        tableswitch($i0)
+        {
+            case 0: goto label1;
+            case 1: goto label2;
+            case 2: goto label4;
+            default: goto label7;
+        };
+
+     label1:
+        $r22 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        r3 = staticinvoke <androidx.appsearch.localstorage.visibilitystore.VisibilityStoreMigrationHelperFromV0: java.util.List getVisibilityDocumentsInVersion0(androidx.appsearch.app.GetSchemaResponse,androidx.appsearch.localstorage.AppSearchImpl)>(r2, $r22);
+
+        r28 = staticinvoke <androidx.appsearch.localstorage.visibilitystore.VisibilityStoreMigrationHelperFromV0: java.util.List toVisibilityDocumentV1(java.util.List)>(r3);
+
+     label2:
+        if r28 != null goto label3;
+
+        $r21 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        r28 = staticinvoke <androidx.appsearch.localstorage.visibilitystore.VisibilityStoreMigrationHelperFromV1: java.util.List getVisibilityDocumentsInVersion1(androidx.appsearch.localstorage.AppSearchImpl)>($r21);
+
+     label3:
+        $r20 = staticinvoke <androidx.appsearch.localstorage.visibilitystore.VisibilityStoreMigrationHelperFromV1: java.util.List toVisibilityDocumentsV2(java.util.List)>(r28);
+
+        specialinvoke r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: void setLatestSchemaAndDocuments(java.util.List)>($r20);
+
+        goto label8;
+
+     label4:
+        r4 = virtualinvoke r2.<androidx.appsearch.app.GetSchemaResponse: java.util.Set getSchemas()>();
+
+        $r11 = <androidx.appsearch.app.VisibilityDocument: androidx.appsearch.app.AppSearchSchema SCHEMA>;
+
+        $z0 = interfaceinvoke r4.<java.util.Set: boolean contains(java.lang.Object)>($r11);
+
+        if $z0 == 0 goto label5;
+
+        $r19 = <androidx.appsearch.app.VisibilityPermissionDocument: androidx.appsearch.app.AppSearchSchema SCHEMA>;
+
+        $z2 = interfaceinvoke r4.<java.util.Set: boolean contains(java.lang.Object)>($r19);
+
+        if $z2 == 0 goto label5;
+
+        specialinvoke r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: void loadVisibilityDocumentMap()>();
+
+        goto label8;
+
+     label5:
+        $r15 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        $r12 = newarray (androidx.appsearch.app.AppSearchSchema)[2];
+
+        $r13 = <androidx.appsearch.app.VisibilityDocument: androidx.appsearch.app.AppSearchSchema SCHEMA>;
+
+        $r12[0] = $r13;
+
+        $r14 = <androidx.appsearch.app.VisibilityPermissionDocument: androidx.appsearch.app.AppSearchSchema SCHEMA>;
+
+        $r12[1] = $r14;
+
+        $r16 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r12);
+
+        $r17 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        r5 = virtualinvoke $r15.<androidx.appsearch.localstorage.AppSearchImpl: androidx.appsearch.app.InternalSetSchemaResponse setSchema(java.lang.String,java.lang.String,java.util.List,java.util.List,boolean,int,androidx.appsearch.localstorage.stats.SetSchemaStats$Builder)>("VS#Pkg", "VS#Db", $r16, $r17, 0, 2, null);
+
+        $z1 = virtualinvoke r5.<androidx.appsearch.app.InternalSetSchemaResponse: boolean isSuccess()>();
+
+        if $z1 != 0 goto label6;
+
+        $r18 = new androidx.appsearch.exceptions.AppSearchException;
+
+        specialinvoke $r18.<androidx.appsearch.exceptions.AppSearchException: void <init>(int,java.lang.String)>(2, "Fail to set the latest visibility schema to AppSearch. You may need to update the visibility schema version number.");
+
+        throw $r18;
+
+     label6:
+        goto label8;
+
+     label7:
+        $r23 = new androidx.appsearch.exceptions.AppSearchException;
+
+        $r24 = new java.lang.StringBuilder;
+
+        specialinvoke $r24.<java.lang.StringBuilder: void <init>()>();
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Found unsupported visibility version: ");
+
+        $i1 = virtualinvoke r2.<androidx.appsearch.app.GetSchemaResponse: int getVersion()>();
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r27 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r23.<androidx.appsearch.exceptions.AppSearchException: void <init>(int,java.lang.String)>(2, $r27);
+
+        throw $r23;
+
+     label8:
+        return;
+    }
+
+    public void setVisibility(java.util.List) throws androidx.appsearch.exceptions.AppSearchException
+    {
+        androidx.appsearch.localstorage.visibilitystore.VisibilityStore r0;
+        java.util.List r1;
+        androidx.appsearch.app.VisibilityDocument r2;
+        int $i0, i1;
+        com.google.android.icing.proto.PersistType$Code $r4;
+        androidx.appsearch.localstorage.AppSearchImpl $r5, $r7;
+        java.lang.Object $r6;
+        java.util.Map $r8;
+        java.lang.String $r9;
+
+        r0 := @this: androidx.appsearch.localstorage.visibilitystore.VisibilityStore;
+
+        r1 := @parameter0: java.util.List;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        i1 = 0;
+
+     label1:
+        $i0 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        if i1 >= $i0 goto label2;
+
+        $r6 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i1);
+
+        r2 = (androidx.appsearch.app.VisibilityDocument) $r6;
+
+        $r7 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        virtualinvoke $r7.<androidx.appsearch.localstorage.AppSearchImpl: void putDocument(java.lang.String,java.lang.String,androidx.appsearch.app.GenericDocument,boolean,androidx.appsearch.localstorage.AppSearchLogger)>("VS#Pkg", "VS#Db", r2, 0, null);
+
+        $r8 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.util.Map mVisibilityDocumentMap>;
+
+        $r9 = virtualinvoke r2.<androidx.appsearch.app.VisibilityDocument: java.lang.String getId()>();
+
+        interfaceinvoke $r8.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r9, r2);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        $r4 = <com.google.android.icing.proto.PersistType$Code: com.google.android.icing.proto.PersistType$Code LITE>;
+
+        virtualinvoke $r5.<androidx.appsearch.localstorage.AppSearchImpl: void persistToDisk(com.google.android.icing.proto.PersistType$Code)>($r4);
+
+        return;
+    }
+
+    public void removeVisibility(java.util.Set) throws androidx.appsearch.exceptions.AppSearchException
+    {
+        androidx.appsearch.localstorage.visibilitystore.VisibilityStore r0;
+        java.util.Set r1;
+        java.util.Iterator r2;
+        java.lang.String r3, $r14;
+        java.lang.Throwable r4, $r9;
+        boolean $z0;
+        java.lang.Object $r5, $r7;
+        java.util.Map $r6;
+        androidx.appsearch.localstorage.AppSearchImpl $r8;
+        int $i0;
+        java.lang.StringBuilder $r10, $r11, $r12, $r13;
+
+        r0 := @this: androidx.appsearch.localstorage.visibilitystore.VisibilityStore;
+
+        r1 := @parameter0: java.util.Set;
+
+        r2 = interfaceinvoke r1.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label7;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r5;
+
+        $r6 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.util.Map mVisibilityDocumentMap>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r3);
+
+        if $r7 == null goto label6;
+
+     label2:
+        $r8 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        virtualinvoke $r8.<androidx.appsearch.localstorage.AppSearchImpl: void remove(java.lang.String,java.lang.String,java.lang.String,java.lang.String,androidx.appsearch.localstorage.stats.RemoveStats$Builder)>("VS#Pkg", "VS#Db", "", r3, null);
+
+     label3:
+        goto label6;
+
+     label4:
+        $r9 := @caughtexception;
+
+        r4 = $r9;
+
+        $i0 = virtualinvoke r4.<androidx.appsearch.exceptions.AppSearchException: int getResultCode()>();
+
+        if $i0 != 6 goto label5;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cannot find visibility document for ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" to remove.");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("AppSearchVisibilityStor", $r14);
+
+        return;
+
+     label5:
+        throw r4;
+
+     label6:
+        goto label1;
+
+     label7:
+        return;
+
+        catch androidx.appsearch.exceptions.AppSearchException from label2 to label3 with label4;
+    }
+
+    public androidx.appsearch.app.VisibilityDocument getVisibility(java.lang.String)
+    {
+        androidx.appsearch.localstorage.visibilitystore.VisibilityStore r0;
+        java.lang.String r1;
+        java.util.Map $r2;
+        java.lang.Object $r3;
+        androidx.appsearch.app.VisibilityDocument $r4;
+
+        r0 := @this: androidx.appsearch.localstorage.visibilitystore.VisibilityStore;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.util.Map mVisibilityDocumentMap>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r4 = (androidx.appsearch.app.VisibilityDocument) $r3;
+
+        return $r4;
+    }
+
+    private void loadVisibilityDocumentMap() throws androidx.appsearch.exceptions.AppSearchException
+    {
+        androidx.appsearch.localstorage.visibilitystore.VisibilityStore r0;
+        java.util.List r1;
+        java.lang.String r2, r3;
+        androidx.appsearch.app.VisibilityDocument r4, $r8;
+        java.lang.Throwable r5, $r14;
+        androidx.appsearch.localstorage.AppSearchImpl $r6, $r9;
+        int $i0, $i1, i2;
+        java.lang.Object $r7;
+        boolean $z0;
+        java.util.Map $r10, $r12;
+        androidx.appsearch.app.GenericDocument $r11;
+
+        r0 := @this: androidx.appsearch.localstorage.visibilitystore.VisibilityStore;
+
+        $r6 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        r1 = virtualinvoke $r6.<androidx.appsearch.localstorage.AppSearchImpl: java.util.List getAllPrefixedSchemaTypes()>();
+
+        i2 = 0;
+
+     label1:
+        $i0 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        if i2 >= $i0 goto label8;
+
+        $r7 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i2);
+
+        r2 = (java.lang.String) $r7;
+
+        r3 = staticinvoke <androidx.appsearch.localstorage.util.PrefixUtil: java.lang.String getPackageName(java.lang.String)>(r2);
+
+        $z0 = virtualinvoke r3.<java.lang.String: boolean equals(java.lang.Object)>("VS#Pkg");
+
+        if $z0 == 0 goto label2;
+
+        goto label7;
+
+     label2:
+        $r8 = new androidx.appsearch.app.VisibilityDocument;
+
+        $r9 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        $r10 = staticinvoke <java.util.Collections: java.util.Map emptyMap()>();
+
+        $r11 = virtualinvoke $r9.<androidx.appsearch.localstorage.AppSearchImpl: androidx.appsearch.app.GenericDocument getDocument(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.util.Map)>("VS#Pkg", "VS#Db", "", r2, $r10);
+
+        specialinvoke $r8.<androidx.appsearch.app.VisibilityDocument: void <init>(androidx.appsearch.app.GenericDocument)>($r11);
+
+        r4 = $r8;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r14 := @caughtexception;
+
+        r5 = $r14;
+
+        $i1 = virtualinvoke r5.<androidx.appsearch.exceptions.AppSearchException: int getResultCode()>();
+
+        if $i1 != 6 goto label5;
+
+        goto label7;
+
+     label5:
+        throw r5;
+
+     label6:
+        $r12 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.util.Map mVisibilityDocumentMap>;
+
+        interfaceinvoke $r12.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, r4);
+
+     label7:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label8:
+        return;
+
+        catch androidx.appsearch.exceptions.AppSearchException from label2 to label3 with label4;
+    }
+
+    private void setLatestSchemaAndDocuments(java.util.List) throws androidx.appsearch.exceptions.AppSearchException
+    {
+        androidx.appsearch.localstorage.visibilitystore.VisibilityStore r0;
+        java.util.List r1, $r8, $r9;
+        androidx.appsearch.app.InternalSetSchemaResponse r2;
+        androidx.appsearch.app.VisibilityDocument r3;
+        androidx.appsearch.app.AppSearchSchema[] $r4;
+        androidx.appsearch.app.AppSearchSchema $r5, $r6;
+        androidx.appsearch.localstorage.AppSearchImpl $r7, $r14;
+        boolean $z0;
+        int $i0, i1;
+        java.lang.Object $r10;
+        java.util.Map $r11;
+        java.lang.String $r12, $r16;
+        androidx.appsearch.exceptions.AppSearchException $r15;
+
+        r0 := @this: androidx.appsearch.localstorage.visibilitystore.VisibilityStore;
+
+        r1 := @parameter0: java.util.List;
+
+        $r7 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        $r4 = newarray (androidx.appsearch.app.AppSearchSchema)[2];
+
+        $r5 = <androidx.appsearch.app.VisibilityDocument: androidx.appsearch.app.AppSearchSchema SCHEMA>;
+
+        $r4[0] = $r5;
+
+        $r6 = <androidx.appsearch.app.VisibilityPermissionDocument: androidx.appsearch.app.AppSearchSchema SCHEMA>;
+
+        $r4[1] = $r6;
+
+        $r8 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r4);
+
+        $r9 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        r2 = virtualinvoke $r7.<androidx.appsearch.localstorage.AppSearchImpl: androidx.appsearch.app.InternalSetSchemaResponse setSchema(java.lang.String,java.lang.String,java.util.List,java.util.List,boolean,int,androidx.appsearch.localstorage.stats.SetSchemaStats$Builder)>("VS#Pkg", "VS#Db", $r8, $r9, 1, 2, null);
+
+        $z0 = virtualinvoke r2.<androidx.appsearch.app.InternalSetSchemaResponse: boolean isSuccess()>();
+
+        if $z0 != 0 goto label1;
+
+        $r15 = new androidx.appsearch.exceptions.AppSearchException;
+
+        $r16 = virtualinvoke r2.<androidx.appsearch.app.InternalSetSchemaResponse: java.lang.String getErrorMessage()>();
+
+        specialinvoke $r15.<androidx.appsearch.exceptions.AppSearchException: void <init>(int,java.lang.String)>(2, $r16);
+
+        throw $r15;
+
+     label1:
+        i1 = 0;
+
+     label2:
+        $i0 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        if i1 >= $i0 goto label3;
+
+        $r10 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i1);
+
+        r3 = (androidx.appsearch.app.VisibilityDocument) $r10;
+
+        $r11 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: java.util.Map mVisibilityDocumentMap>;
+
+        $r12 = virtualinvoke r3.<androidx.appsearch.app.VisibilityDocument: java.lang.String getId()>();
+
+        interfaceinvoke $r11.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r12, r3);
+
+        $r14 = r0.<androidx.appsearch.localstorage.visibilitystore.VisibilityStore: androidx.appsearch.localstorage.AppSearchImpl mAppSearchImpl>;
+
+        virtualinvoke $r14.<androidx.appsearch.localstorage.AppSearchImpl: void putDocument(java.lang.String,java.lang.String,androidx.appsearch.app.GenericDocument,boolean,androidx.appsearch.localstorage.AppSearchLogger)>("VS#Pkg", "VS#Db", r3, 0, null);
+
+        i1 = i1 + 1;
+
+        goto label2;
+
+     label3:
+        return;
+    }
+

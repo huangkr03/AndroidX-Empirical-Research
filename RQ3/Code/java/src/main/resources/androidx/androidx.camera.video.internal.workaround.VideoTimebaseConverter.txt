@@ -1,0 +1,284 @@
+androidx.camera.video.internal.workaround.VideoTimebaseConverter
+<androidx.camera.video.internal.workaround.VideoTimebaseConverter: java.lang.String TAG>
+<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.video.internal.encoder.TimeProvider mTimeProvider>
+<androidx.camera.video.internal.workaround.VideoTimebaseConverter: long mUptimeToRealtimeOffsetUs>
+<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.core.impl.Timebase mInputTimebase>
+    public void <init>(androidx.camera.video.internal.encoder.TimeProvider, androidx.camera.core.impl.Timebase)
+    {
+        androidx.camera.video.internal.workaround.VideoTimebaseConverter r0;
+        androidx.camera.video.internal.encoder.TimeProvider r1;
+        androidx.camera.core.impl.Timebase r2;
+
+        r0 := @this: androidx.camera.video.internal.workaround.VideoTimebaseConverter;
+
+        r1 := @parameter0: androidx.camera.video.internal.encoder.TimeProvider;
+
+        r2 := @parameter1: androidx.camera.core.impl.Timebase;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: long mUptimeToRealtimeOffsetUs> = -1L;
+
+        r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.video.internal.encoder.TimeProvider mTimeProvider> = r1;
+
+        r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.core.impl.Timebase mInputTimebase> = r2;
+
+        return;
+    }
+
+    public long convertToUptimeUs(long)
+    {
+        androidx.camera.video.internal.workaround.VideoTimebaseConverter r0;
+        long l0, $l1, $l3, $l4, $l5;
+        androidx.camera.core.impl.Timebase $r1, $r5, $r8, $r9, $r11;
+        byte $b2;
+        java.lang.AssertionError $r2;
+        java.lang.StringBuilder $r3, $r4, $r6;
+        java.lang.String $r7;
+        boolean $z0;
+        int[] $r10;
+        int $i6, $i7;
+
+        r0 := @this: androidx.camera.video.internal.workaround.VideoTimebaseConverter;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.core.impl.Timebase mInputTimebase>;
+
+        if $r1 != null goto label2;
+
+        $z0 = specialinvoke r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: boolean isCloseToRealtime(long)>(l0);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("VideoTimebaseConverter", "Detected video buffer timestamp is close to realtime.");
+
+        $r9 = <androidx.camera.core.impl.Timebase: androidx.camera.core.impl.Timebase REALTIME>;
+
+        r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.core.impl.Timebase mInputTimebase> = $r9;
+
+        goto label2;
+
+     label1:
+        $r8 = <androidx.camera.core.impl.Timebase: androidx.camera.core.impl.Timebase UPTIME>;
+
+        r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.core.impl.Timebase mInputTimebase> = $r8;
+
+     label2:
+        $r10 = <androidx.camera.video.internal.workaround.VideoTimebaseConverter$1: int[] $SwitchMap$androidx$camera$core$impl$Timebase>;
+
+        $r11 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.core.impl.Timebase mInputTimebase>;
+
+        $i6 = virtualinvoke $r11.<androidx.camera.core.impl.Timebase: int ordinal()>();
+
+        $i7 = $r10[$i6];
+
+        lookupswitch($i7)
+        {
+            case 1: goto label3;
+            case 2: goto label5;
+            default: goto label6;
+        };
+
+     label3:
+        $l1 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: long mUptimeToRealtimeOffsetUs>;
+
+        $b2 = $l1 cmp -1L;
+
+        if $b2 != 0 goto label4;
+
+        $l5 = specialinvoke r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: long calculateUptimeToRealtimeOffsetUs()>();
+
+        r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: long mUptimeToRealtimeOffsetUs> = $l5;
+
+     label4:
+        $l3 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: long mUptimeToRealtimeOffsetUs>;
+
+        $l4 = l0 - $l3;
+
+        return $l4;
+
+     label5:
+        return l0;
+
+     label6:
+        $r2 = new java.lang.AssertionError;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unknown timebase: ");
+
+        $r5 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.core.impl.Timebase mInputTimebase>;
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.lang.AssertionError: void <init>(java.lang.Object)>($r7);
+
+        throw $r2;
+    }
+
+    private boolean isCloseToRealtime(long)
+    {
+        androidx.camera.video.internal.workaround.VideoTimebaseConverter r0;
+        long l0, l1, l2, $l3, $l4, $l5, $l6;
+        androidx.camera.video.internal.encoder.TimeProvider $r1, $r2;
+        byte $b7;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.video.internal.workaround.VideoTimebaseConverter;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.video.internal.encoder.TimeProvider mTimeProvider>;
+
+        l1 = interfaceinvoke $r1.<androidx.camera.video.internal.encoder.TimeProvider: long uptimeUs()>();
+
+        $r2 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.video.internal.encoder.TimeProvider mTimeProvider>;
+
+        l2 = interfaceinvoke $r2.<androidx.camera.video.internal.encoder.TimeProvider: long realtimeUs()>();
+
+        $l3 = l0 - l2;
+
+        $l4 = staticinvoke <java.lang.Math: long abs(long)>($l3);
+
+        $l5 = l0 - l1;
+
+        $l6 = staticinvoke <java.lang.Math: long abs(long)>($l5);
+
+        $b7 = $l4 cmp $l6;
+
+        if $b7 >= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private long calculateUptimeToRealtimeOffsetUs()
+    {
+        androidx.camera.video.internal.workaround.VideoTimebaseConverter r0;
+        long l0, l1, l2, l3, $l4, $l5, $l6, l8, l9;
+        androidx.camera.video.internal.encoder.TimeProvider $r1, $r2, $r3;
+        byte $b7;
+        int i10;
+
+        r0 := @this: androidx.camera.video.internal.workaround.VideoTimebaseConverter;
+
+        l8 = 9223372036854775807L;
+
+        l9 = 0L;
+
+        i10 = 0;
+
+     label1:
+        if i10 >= 3 goto label4;
+
+        $r1 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.video.internal.encoder.TimeProvider mTimeProvider>;
+
+        l0 = interfaceinvoke $r1.<androidx.camera.video.internal.encoder.TimeProvider: long uptimeUs()>();
+
+        $r2 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.video.internal.encoder.TimeProvider mTimeProvider>;
+
+        l1 = interfaceinvoke $r2.<androidx.camera.video.internal.encoder.TimeProvider: long realtimeUs()>();
+
+        $r3 = r0.<androidx.camera.video.internal.workaround.VideoTimebaseConverter: androidx.camera.video.internal.encoder.TimeProvider mTimeProvider>;
+
+        l2 = interfaceinvoke $r3.<androidx.camera.video.internal.encoder.TimeProvider: long uptimeUs()>();
+
+        l3 = l2 - l0;
+
+        if i10 == 0 goto label2;
+
+        $b7 = l3 cmp l8;
+
+        if $b7 >= 0 goto label3;
+
+     label2:
+        l8 = l3;
+
+        $l5 = l0 + l2;
+
+        $l6 = $l5 >> 1;
+
+        l9 = l1 - $l6;
+
+     label3:
+        i10 = i10 + 1;
+
+        goto label1;
+
+     label4:
+        $l4 = staticinvoke <java.lang.Math: long max(long,long)>(0L, l9);
+
+        return $l4;
+    }
+
+androidx.camera.video.internal.workaround.VideoTimebaseConverter$1
+<androidx.camera.video.internal.workaround.VideoTimebaseConverter$1: int[] $SwitchMap$androidx$camera$core$impl$Timebase>
+    static void <clinit>()
+    {
+        androidx.camera.core.impl.Timebase[] $r0;
+        int $i0, $i1, $i2;
+        int[] $r1, $r3, $r5;
+        androidx.camera.core.impl.Timebase $r2, $r4;
+        java.lang.Throwable $r6, $r7, r8, r9;
+
+        $r0 = staticinvoke <androidx.camera.core.impl.Timebase: androidx.camera.core.impl.Timebase[] values()>();
+
+        $i0 = lengthof $r0;
+
+        $r1 = newarray (int)[$i0];
+
+        <androidx.camera.video.internal.workaround.VideoTimebaseConverter$1: int[] $SwitchMap$androidx$camera$core$impl$Timebase> = $r1;
+
+     label1:
+        $r3 = <androidx.camera.video.internal.workaround.VideoTimebaseConverter$1: int[] $SwitchMap$androidx$camera$core$impl$Timebase>;
+
+        $r2 = <androidx.camera.core.impl.Timebase: androidx.camera.core.impl.Timebase REALTIME>;
+
+        $i1 = virtualinvoke $r2.<androidx.camera.core.impl.Timebase: int ordinal()>();
+
+        $r3[$i1] = 1;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r8 = $r7;
+
+     label4:
+        $r5 = <androidx.camera.video.internal.workaround.VideoTimebaseConverter$1: int[] $SwitchMap$androidx$camera$core$impl$Timebase>;
+
+        $r4 = <androidx.camera.core.impl.Timebase: androidx.camera.core.impl.Timebase UPTIME>;
+
+        $i2 = virtualinvoke $r4.<androidx.camera.core.impl.Timebase: int ordinal()>();
+
+        $r5[$i2] = 2;
+
+     label5:
+        goto label7;
+
+     label6:
+        $r6 := @caughtexception;
+
+        r9 = $r6;
+
+     label7:
+        return;
+
+        catch java.lang.NoSuchFieldError from label1 to label2 with label3;
+        catch java.lang.NoSuchFieldError from label4 to label5 with label6;
+    }
+

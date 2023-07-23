@@ -1,0 +1,174 @@
+androidx.room.SharedSQLiteStatement
+<androidx.room.SharedSQLiteStatement: androidx.room.RoomDatabase database>
+<androidx.room.SharedSQLiteStatement: java.util.concurrent.atomic.AtomicBoolean lock>
+<androidx.room.SharedSQLiteStatement: kotlin.Lazy stmt$delegate>
+    public void <init>(androidx.room.RoomDatabase)
+    {
+        androidx.room.SharedSQLiteStatement r0;
+        androidx.room.RoomDatabase r1;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+        androidx.room.SharedSQLiteStatement$stmt$2 $r3;
+        kotlin.jvm.functions.Function0 $r4;
+        kotlin.Lazy $r5;
+
+        r0 := @this: androidx.room.SharedSQLiteStatement;
+
+        r1 := @parameter0: androidx.room.RoomDatabase;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "database");
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.room.SharedSQLiteStatement: androidx.room.RoomDatabase database> = r1;
+
+        $r2 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<androidx.room.SharedSQLiteStatement: java.util.concurrent.atomic.AtomicBoolean lock> = $r2;
+
+        $r3 = new androidx.room.SharedSQLiteStatement$stmt$2;
+
+        specialinvoke $r3.<androidx.room.SharedSQLiteStatement$stmt$2: void <init>(androidx.room.SharedSQLiteStatement)>(r0);
+
+        $r4 = (kotlin.jvm.functions.Function0) $r3;
+
+        $r5 = staticinvoke <kotlin.LazyKt: kotlin.Lazy lazy(kotlin.jvm.functions.Function0)>($r4);
+
+        r0.<androidx.room.SharedSQLiteStatement: kotlin.Lazy stmt$delegate> = $r5;
+
+        return;
+    }
+
+    private final androidx.sqlite.db.SupportSQLiteStatement getStmt()
+    {
+        androidx.room.SharedSQLiteStatement r0;
+        kotlin.Lazy r1;
+        java.lang.Object $r2;
+        androidx.sqlite.db.SupportSQLiteStatement $r3;
+
+        r0 := @this: androidx.room.SharedSQLiteStatement;
+
+        r1 = r0.<androidx.room.SharedSQLiteStatement: kotlin.Lazy stmt$delegate>;
+
+        $r2 = interfaceinvoke r1.<kotlin.Lazy: java.lang.Object getValue()>();
+
+        $r3 = (androidx.sqlite.db.SupportSQLiteStatement) $r2;
+
+        return $r3;
+    }
+
+<androidx.room.SharedSQLiteStatement: java.lang.String createQuery()>
+    protected void assertNotMainThread()
+    {
+        androidx.room.SharedSQLiteStatement r0;
+        androidx.room.RoomDatabase $r1;
+
+        r0 := @this: androidx.room.SharedSQLiteStatement;
+
+        $r1 = r0.<androidx.room.SharedSQLiteStatement: androidx.room.RoomDatabase database>;
+
+        virtualinvoke $r1.<androidx.room.RoomDatabase: void assertNotMainThread()>();
+
+        return;
+    }
+
+    private final androidx.sqlite.db.SupportSQLiteStatement createNewStatement()
+    {
+        androidx.room.SharedSQLiteStatement r0;
+        java.lang.String r1;
+        androidx.room.RoomDatabase $r2;
+        androidx.sqlite.db.SupportSQLiteStatement $r3;
+
+        r0 := @this: androidx.room.SharedSQLiteStatement;
+
+        r1 = virtualinvoke r0.<androidx.room.SharedSQLiteStatement: java.lang.String createQuery()>();
+
+        $r2 = r0.<androidx.room.SharedSQLiteStatement: androidx.room.RoomDatabase database>;
+
+        $r3 = virtualinvoke $r2.<androidx.room.RoomDatabase: androidx.sqlite.db.SupportSQLiteStatement compileStatement(java.lang.String)>(r1);
+
+        return $r3;
+    }
+
+    private final androidx.sqlite.db.SupportSQLiteStatement getStmt(boolean)
+    {
+        androidx.room.SharedSQLiteStatement r0;
+        boolean z0;
+        androidx.sqlite.db.SupportSQLiteStatement r1, $r2;
+
+        r0 := @this: androidx.room.SharedSQLiteStatement;
+
+        z0 := @parameter0: boolean;
+
+        if z0 == 0 goto label1;
+
+        $r2 = specialinvoke r0.<androidx.room.SharedSQLiteStatement: androidx.sqlite.db.SupportSQLiteStatement getStmt()>();
+
+        goto label2;
+
+     label1:
+        $r2 = specialinvoke r0.<androidx.room.SharedSQLiteStatement: androidx.sqlite.db.SupportSQLiteStatement createNewStatement()>();
+
+     label2:
+        r1 = $r2;
+
+        return r1;
+    }
+
+    public androidx.sqlite.db.SupportSQLiteStatement acquire()
+    {
+        androidx.room.SharedSQLiteStatement r0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        boolean $z0;
+        androidx.sqlite.db.SupportSQLiteStatement $r2;
+
+        r0 := @this: androidx.room.SharedSQLiteStatement;
+
+        virtualinvoke r0.<androidx.room.SharedSQLiteStatement: void assertNotMainThread()>();
+
+        $r1 = r0.<androidx.room.SharedSQLiteStatement: java.util.concurrent.atomic.AtomicBoolean lock>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(0, 1);
+
+        $r2 = specialinvoke r0.<androidx.room.SharedSQLiteStatement: androidx.sqlite.db.SupportSQLiteStatement getStmt(boolean)>($z0);
+
+        return $r2;
+    }
+
+    public void release(androidx.sqlite.db.SupportSQLiteStatement)
+    {
+        androidx.room.SharedSQLiteStatement r0;
+        androidx.sqlite.db.SupportSQLiteStatement r1, $r2;
+        java.util.concurrent.atomic.AtomicBoolean $r3;
+
+        r0 := @this: androidx.room.SharedSQLiteStatement;
+
+        r1 := @parameter0: androidx.sqlite.db.SupportSQLiteStatement;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "statement");
+
+        $r2 = specialinvoke r0.<androidx.room.SharedSQLiteStatement: androidx.sqlite.db.SupportSQLiteStatement getStmt()>();
+
+        if r1 != $r2 goto label1;
+
+        $r3 = r0.<androidx.room.SharedSQLiteStatement: java.util.concurrent.atomic.AtomicBoolean lock>;
+
+        virtualinvoke $r3.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(0);
+
+     label1:
+        return;
+    }
+
+    public static final androidx.sqlite.db.SupportSQLiteStatement access$createNewStatement(androidx.room.SharedSQLiteStatement)
+    {
+        androidx.room.SharedSQLiteStatement $r0;
+        androidx.sqlite.db.SupportSQLiteStatement $r1;
+
+        $r0 := @parameter0: androidx.room.SharedSQLiteStatement;
+
+        $r1 = specialinvoke $r0.<androidx.room.SharedSQLiteStatement: androidx.sqlite.db.SupportSQLiteStatement createNewStatement()>();
+
+        return $r1;
+    }
+

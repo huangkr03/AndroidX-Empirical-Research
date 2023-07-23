@@ -1,0 +1,86 @@
+androidx.test.internal.runner.DirectTestLoader
+<androidx.test.internal.runner.DirectTestLoader: java.lang.ClassLoader classLoader>
+<androidx.test.internal.runner.DirectTestLoader: org.junit.runners.model.RunnerBuilder runnerBuilder>
+    void <init>(java.lang.ClassLoader, org.junit.runners.model.RunnerBuilder)
+    {
+        androidx.test.internal.runner.DirectTestLoader $r0;
+        java.lang.ClassLoader $r1;
+        org.junit.runners.model.RunnerBuilder $r2;
+
+        $r0 := @this: androidx.test.internal.runner.DirectTestLoader;
+
+        $r1 := @parameter0: java.lang.ClassLoader;
+
+        $r2 := @parameter1: org.junit.runners.model.RunnerBuilder;
+
+        specialinvoke $r0.<androidx.test.internal.runner.TestLoader: void <init>()>();
+
+        $r0.<androidx.test.internal.runner.DirectTestLoader: java.lang.ClassLoader classLoader> = $r1;
+
+        $r0.<androidx.test.internal.runner.DirectTestLoader: org.junit.runners.model.RunnerBuilder runnerBuilder> = $r2;
+
+        return;
+    }
+
+    protected org.junit.runner.Runner doCreateRunner(java.lang.String)
+    {
+        androidx.test.internal.runner.DirectTestLoader $r0;
+        java.lang.String $r1, $r8;
+        java.lang.ClassLoader $r2;
+        java.lang.Class $r3;
+        org.junit.runners.model.RunnerBuilder $r4;
+        org.junit.runner.Runner $r5;
+        java.lang.Throwable $r6, r11;
+        java.lang.Object[] $r7;
+        java.lang.RuntimeException r9;
+        androidx.test.internal.runner.ErrorReportingRunner r10;
+
+        $r0 := @this: androidx.test.internal.runner.DirectTestLoader;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<androidx.test.internal.runner.DirectTestLoader: java.lang.ClassLoader classLoader>;
+
+        $r3 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String,boolean,java.lang.ClassLoader)>($r1, 0, $r2);
+
+        $r4 = $r0.<androidx.test.internal.runner.DirectTestLoader: org.junit.runners.model.RunnerBuilder runnerBuilder>;
+
+     label1:
+        $r5 = virtualinvoke $r4.<org.junit.runners.model.RunnerBuilder: org.junit.runner.Runner safeRunnerForClass(java.lang.Class)>($r3);
+
+     label2:
+        return $r5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        goto label5;
+
+     label4:
+        $r6 := @caughtexception;
+
+     label5:
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r7[0] = $r1;
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Failed loading specified test class \'%s\'", $r7);
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("DirectTestLoader", $r8, $r6);
+
+        r10 = new androidx.test.internal.runner.ErrorReportingRunner;
+
+        r9 = new java.lang.RuntimeException;
+
+        specialinvoke r9.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>($r8, $r6);
+
+        r11 = (java.lang.Throwable) r9;
+
+        specialinvoke r10.<androidx.test.internal.runner.ErrorReportingRunner: void <init>(java.lang.String,java.lang.Throwable)>($r1, r11);
+
+        return r10;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label4;
+        catch java.lang.LinkageError from label1 to label2 with label3;
+    }
+

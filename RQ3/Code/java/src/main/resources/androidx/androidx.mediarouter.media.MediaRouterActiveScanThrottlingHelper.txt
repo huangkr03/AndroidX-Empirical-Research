@@ -1,0 +1,140 @@
+androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper
+<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long MAX_ACTIVE_SCAN_DURATION_MS>
+<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: android.os.Handler mHandler>
+<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: java.lang.Runnable mUpdateDiscoveryRequestRunnable>
+<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mSuppressActiveScanTimeout>
+<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mCurrentTime>
+<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: boolean mActiveScan>
+    void <init>(java.lang.Runnable)
+    {
+        androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper r0;
+        java.lang.Runnable r1;
+        android.os.Handler $r2;
+        android.os.Looper $r3;
+
+        r0 := @this: androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new android.os.Handler;
+
+        $r3 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r2.<android.os.Handler: void <init>(android.os.Looper)>($r3);
+
+        r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: android.os.Handler mHandler> = $r2;
+
+        r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: java.lang.Runnable mUpdateDiscoveryRequestRunnable> = r1;
+
+        return;
+    }
+
+    public void reset()
+    {
+        androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper r0;
+        long $l0;
+        java.lang.Runnable $r1;
+        android.os.Handler $r2;
+
+        r0 := @this: androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper;
+
+        r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mSuppressActiveScanTimeout> = 0L;
+
+        r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: boolean mActiveScan> = 0;
+
+        $l0 = staticinvoke <android.os.SystemClock: long elapsedRealtime()>();
+
+        r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mCurrentTime> = $l0;
+
+        $r2 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: android.os.Handler mHandler>;
+
+        $r1 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: java.lang.Runnable mUpdateDiscoveryRequestRunnable>;
+
+        virtualinvoke $r2.<android.os.Handler: void removeCallbacks(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    public void requestActiveScan(boolean, long)
+    {
+        androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper r0;
+        boolean z0;
+        long l0, $l1, $l2, $l4, $l5, $l6, $l7, $l8;
+        byte $b3;
+
+        r0 := @this: androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper;
+
+        z0 := @parameter0: boolean;
+
+        l0 := @parameter1: long;
+
+        if z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $l1 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mCurrentTime>;
+
+        $l2 = $l1 - l0;
+
+        $b3 = $l2 cmp 30000L;
+
+        if $b3 < 0 goto label2;
+
+        return;
+
+     label2:
+        $l7 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mSuppressActiveScanTimeout>;
+
+        $l5 = l0 + 30000L;
+
+        $l4 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mCurrentTime>;
+
+        $l6 = $l5 - $l4;
+
+        $l8 = staticinvoke <java.lang.Math: long max(long,long)>($l7, $l6);
+
+        r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mSuppressActiveScanTimeout> = $l8;
+
+        r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: boolean mActiveScan> = 1;
+
+        return;
+    }
+
+    public boolean finalizeActiveScanAndScheduleSuppressActiveScanRunnable()
+    {
+        androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper r0;
+        boolean $z0, $z2;
+        long $l0, $l2;
+        byte $b1;
+        java.lang.Runnable $r1;
+        android.os.Handler $r2;
+
+        r0 := @this: androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper;
+
+        $z0 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: boolean mActiveScan>;
+
+        if $z0 == 0 goto label1;
+
+        $l0 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mSuppressActiveScanTimeout>;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 <= 0 goto label1;
+
+        $r2 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: android.os.Handler mHandler>;
+
+        $r1 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: java.lang.Runnable mUpdateDiscoveryRequestRunnable>;
+
+        $l2 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: long mSuppressActiveScanTimeout>;
+
+        virtualinvoke $r2.<android.os.Handler: boolean postDelayed(java.lang.Runnable,long)>($r1, $l2);
+
+     label1:
+        $z2 = r0.<androidx.mediarouter.media.MediaRouterActiveScanThrottlingHelper: boolean mActiveScan>;
+
+        return $z2;
+    }
+

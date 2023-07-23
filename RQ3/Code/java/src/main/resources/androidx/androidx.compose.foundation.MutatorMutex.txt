@@ -1,0 +1,247 @@
+androidx.compose.foundation.MutatorMutex
+<androidx.compose.foundation.MutatorMutex: java.util.concurrent.atomic.AtomicReference currentMutator>
+<androidx.compose.foundation.MutatorMutex: kotlinx.coroutines.sync.Mutex mutex>
+    public void <init>()
+    {
+        androidx.compose.foundation.MutatorMutex r0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        kotlinx.coroutines.sync.Mutex $r2;
+
+        r0 := @this: androidx.compose.foundation.MutatorMutex;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.concurrent.atomic.AtomicReference;
+
+        specialinvoke $r1.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>(null);
+
+        r0.<androidx.compose.foundation.MutatorMutex: java.util.concurrent.atomic.AtomicReference currentMutator> = $r1;
+
+        $r2 = staticinvoke <kotlinx.coroutines.sync.MutexKt: kotlinx.coroutines.sync.Mutex Mutex$default(boolean,int,java.lang.Object)>(0, 1, null);
+
+        r0.<androidx.compose.foundation.MutatorMutex: kotlinx.coroutines.sync.Mutex mutex> = $r2;
+
+        return;
+    }
+
+    private final void tryMutateOrCancel(androidx.compose.foundation.MutatorMutex$Mutator)
+    {
+        androidx.compose.foundation.MutatorMutex r0;
+        androidx.compose.foundation.MutatorMutex$Mutator r1, r2;
+        java.util.concurrent.atomic.AtomicReference $r3, $r5;
+        java.lang.Object $r4;
+        boolean $z0, $z1;
+        java.util.concurrent.CancellationException r7;
+        java.lang.Throwable r8;
+
+        r0 := @this: androidx.compose.foundation.MutatorMutex;
+
+        r1 := @parameter0: androidx.compose.foundation.MutatorMutex$Mutator;
+
+     label1:
+        $r3 = r0.<androidx.compose.foundation.MutatorMutex: java.util.concurrent.atomic.AtomicReference currentMutator>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        r2 = (androidx.compose.foundation.MutatorMutex$Mutator) $r4;
+
+        if r2 == null goto label2;
+
+        $z1 = virtualinvoke r1.<androidx.compose.foundation.MutatorMutex$Mutator: boolean canInterrupt(androidx.compose.foundation.MutatorMutex$Mutator)>(r2);
+
+        if $z1 == 0 goto label4;
+
+     label2:
+        $r5 = r0.<androidx.compose.foundation.MutatorMutex: java.util.concurrent.atomic.AtomicReference currentMutator>;
+
+        $z0 = virtualinvoke $r5.<java.util.concurrent.atomic.AtomicReference: boolean compareAndSet(java.lang.Object,java.lang.Object)>(r2, r1);
+
+        if $z0 == 0 goto label1;
+
+        if r2 == null goto label3;
+
+        virtualinvoke r2.<androidx.compose.foundation.MutatorMutex$Mutator: void cancel()>();
+
+        goto label3;
+
+     label3:
+        goto label5;
+
+     label4:
+        r7 = new java.util.concurrent.CancellationException;
+
+        specialinvoke r7.<java.util.concurrent.CancellationException: void <init>(java.lang.String)>("Current mutation had a higher priority");
+
+        r8 = (java.lang.Throwable) r7;
+
+        throw r8;
+
+     label5:
+        return;
+    }
+
+    public final java.lang.Object mutate(androidx.compose.foundation.MutatePriority, kotlin.jvm.functions.Function1, kotlin.coroutines.Continuation)
+    {
+        androidx.compose.foundation.MutatorMutex r0;
+        androidx.compose.foundation.MutatePriority r1;
+        kotlin.jvm.functions.Function1 r2;
+        kotlin.coroutines.Continuation $r3;
+        androidx.compose.foundation.MutatorMutex$mutate$2 $r4;
+        kotlin.jvm.functions.Function2 $r5;
+        java.lang.Object $r6;
+
+        r0 := @this: androidx.compose.foundation.MutatorMutex;
+
+        r1 := @parameter0: androidx.compose.foundation.MutatePriority;
+
+        r2 := @parameter1: kotlin.jvm.functions.Function1;
+
+        $r3 := @parameter2: kotlin.coroutines.Continuation;
+
+        $r4 = new androidx.compose.foundation.MutatorMutex$mutate$2;
+
+        specialinvoke $r4.<androidx.compose.foundation.MutatorMutex$mutate$2: void <init>(androidx.compose.foundation.MutatePriority,androidx.compose.foundation.MutatorMutex,kotlin.jvm.functions.Function1,kotlin.coroutines.Continuation)>(r1, r0, r2, null);
+
+        $r5 = (kotlin.jvm.functions.Function2) $r4;
+
+        $r6 = staticinvoke <kotlinx.coroutines.CoroutineScopeKt: java.lang.Object coroutineScope(kotlin.jvm.functions.Function2,kotlin.coroutines.Continuation)>($r5, $r3);
+
+        return $r6;
+    }
+
+    public static java.lang.Object mutate$default(androidx.compose.foundation.MutatorMutex, androidx.compose.foundation.MutatePriority, kotlin.jvm.functions.Function1, kotlin.coroutines.Continuation, int, java.lang.Object)
+    {
+        androidx.compose.foundation.MutatorMutex r0;
+        kotlin.jvm.functions.Function1 r1;
+        kotlin.coroutines.Continuation r2;
+        int i0, $i1;
+        java.lang.Object r3, $r4;
+        androidx.compose.foundation.MutatePriority r5;
+
+        r0 := @parameter0: androidx.compose.foundation.MutatorMutex;
+
+        r5 := @parameter1: androidx.compose.foundation.MutatePriority;
+
+        r1 := @parameter2: kotlin.jvm.functions.Function1;
+
+        r2 := @parameter3: kotlin.coroutines.Continuation;
+
+        i0 := @parameter4: int;
+
+        r3 := @parameter5: java.lang.Object;
+
+        $i1 = i0 & 1;
+
+        if $i1 == 0 goto label1;
+
+        r5 = <androidx.compose.foundation.MutatePriority: androidx.compose.foundation.MutatePriority Default>;
+
+     label1:
+        $r4 = virtualinvoke r0.<androidx.compose.foundation.MutatorMutex: java.lang.Object mutate(androidx.compose.foundation.MutatePriority,kotlin.jvm.functions.Function1,kotlin.coroutines.Continuation)>(r5, r1, r2);
+
+        return $r4;
+    }
+
+    public final java.lang.Object mutateWith(java.lang.Object, androidx.compose.foundation.MutatePriority, kotlin.jvm.functions.Function2, kotlin.coroutines.Continuation)
+    {
+        androidx.compose.foundation.MutatorMutex r0;
+        java.lang.Object r1, $r7;
+        androidx.compose.foundation.MutatePriority r2;
+        kotlin.jvm.functions.Function2 r3, $r6;
+        kotlin.coroutines.Continuation $r4;
+        androidx.compose.foundation.MutatorMutex$mutateWith$2 $r5;
+
+        r0 := @this: androidx.compose.foundation.MutatorMutex;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: androidx.compose.foundation.MutatePriority;
+
+        r3 := @parameter2: kotlin.jvm.functions.Function2;
+
+        $r4 := @parameter3: kotlin.coroutines.Continuation;
+
+        $r5 = new androidx.compose.foundation.MutatorMutex$mutateWith$2;
+
+        specialinvoke $r5.<androidx.compose.foundation.MutatorMutex$mutateWith$2: void <init>(androidx.compose.foundation.MutatePriority,androidx.compose.foundation.MutatorMutex,kotlin.jvm.functions.Function2,java.lang.Object,kotlin.coroutines.Continuation)>(r2, r0, r3, r1, null);
+
+        $r6 = (kotlin.jvm.functions.Function2) $r5;
+
+        $r7 = staticinvoke <kotlinx.coroutines.CoroutineScopeKt: java.lang.Object coroutineScope(kotlin.jvm.functions.Function2,kotlin.coroutines.Continuation)>($r6, $r4);
+
+        return $r7;
+    }
+
+    public static java.lang.Object mutateWith$default(androidx.compose.foundation.MutatorMutex, java.lang.Object, androidx.compose.foundation.MutatePriority, kotlin.jvm.functions.Function2, kotlin.coroutines.Continuation, int, java.lang.Object)
+    {
+        androidx.compose.foundation.MutatorMutex r0;
+        java.lang.Object r1, r4, $r5;
+        kotlin.jvm.functions.Function2 r2;
+        kotlin.coroutines.Continuation r3;
+        int i0, $i1;
+        androidx.compose.foundation.MutatePriority r6;
+
+        r0 := @parameter0: androidx.compose.foundation.MutatorMutex;
+
+        r1 := @parameter1: java.lang.Object;
+
+        r6 := @parameter2: androidx.compose.foundation.MutatePriority;
+
+        r2 := @parameter3: kotlin.jvm.functions.Function2;
+
+        r3 := @parameter4: kotlin.coroutines.Continuation;
+
+        i0 := @parameter5: int;
+
+        r4 := @parameter6: java.lang.Object;
+
+        $i1 = i0 & 2;
+
+        if $i1 == 0 goto label1;
+
+        r6 = <androidx.compose.foundation.MutatePriority: androidx.compose.foundation.MutatePriority Default>;
+
+     label1:
+        $r5 = virtualinvoke r0.<androidx.compose.foundation.MutatorMutex: java.lang.Object mutateWith(java.lang.Object,androidx.compose.foundation.MutatePriority,kotlin.jvm.functions.Function2,kotlin.coroutines.Continuation)>(r1, r6, r2, r3);
+
+        return $r5;
+    }
+
+    public static final void access$tryMutateOrCancel(androidx.compose.foundation.MutatorMutex, androidx.compose.foundation.MutatorMutex$Mutator)
+    {
+        androidx.compose.foundation.MutatorMutex $r0;
+        androidx.compose.foundation.MutatorMutex$Mutator r1;
+
+        $r0 := @parameter0: androidx.compose.foundation.MutatorMutex;
+
+        r1 := @parameter1: androidx.compose.foundation.MutatorMutex$Mutator;
+
+        specialinvoke $r0.<androidx.compose.foundation.MutatorMutex: void tryMutateOrCancel(androidx.compose.foundation.MutatorMutex$Mutator)>(r1);
+
+        return;
+    }
+
+    public static final kotlinx.coroutines.sync.Mutex access$getMutex$p(androidx.compose.foundation.MutatorMutex)
+    {
+        androidx.compose.foundation.MutatorMutex $r0;
+        kotlinx.coroutines.sync.Mutex $r1;
+
+        $r0 := @parameter0: androidx.compose.foundation.MutatorMutex;
+
+        $r1 = $r0.<androidx.compose.foundation.MutatorMutex: kotlinx.coroutines.sync.Mutex mutex>;
+
+        return $r1;
+    }
+
+    public static final java.util.concurrent.atomic.AtomicReference access$getCurrentMutator$p(androidx.compose.foundation.MutatorMutex)
+    {
+        androidx.compose.foundation.MutatorMutex $r0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+
+        $r0 := @parameter0: androidx.compose.foundation.MutatorMutex;
+
+        $r1 = $r0.<androidx.compose.foundation.MutatorMutex: java.util.concurrent.atomic.AtomicReference currentMutator>;
+
+        return $r1;
+    }
+

@@ -1,0 +1,648 @@
+androidx.camera.core.impl.utils.executor.SequentialExecutor
+<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.lang.String TAG>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.concurrent.Executor mExecutor>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker mWorker>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor: long mWorkerRunCount>
+    void <init>(java.util.concurrent.Executor)
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor r0;
+        java.util.concurrent.Executor r1, $r6;
+        java.util.ArrayDeque $r2;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker $r3;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState $r4;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.camera.core.impl.utils.executor.SequentialExecutor;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.ArrayDeque;
+
+        specialinvoke $r2.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue> = $r2;
+
+        $r3 = new androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker;
+
+        specialinvoke $r3.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: void <init>(androidx.camera.core.impl.utils.executor.SequentialExecutor)>(r0);
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker mWorker> = $r3;
+
+        $r4 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState IDLE>;
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState> = $r4;
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: long mWorkerRunCount> = 0L;
+
+        $r5 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r6 = (java.util.concurrent.Executor) $r5;
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.concurrent.Executor mExecutor> = $r6;
+
+        return;
+    }
+
+    public void execute(java.lang.Runnable)
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor r0;
+        java.lang.Runnable r1;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$1 r2, $r11;
+        long l0, $l1;
+        boolean z0, $z3, $z4, $z5, $z6, z7;
+        java.lang.Throwable r3, $r22, $r23, $r24, r32, r33;
+        java.util.Deque $r5, $r8, $r12, $r18, $r25, $r28, r31, r34, r35;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState $r6, $r7, $r9, $r10, $r13, $r16, $r17, $r19, $r20, $r21, $r26, $r27, $r29, $r30;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker $r14;
+        java.util.concurrent.Executor $r15;
+        byte $b2;
+
+        r0 := @this: androidx.camera.core.impl.utils.executor.SequentialExecutor;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r5 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>;
+
+        r31 = $r5;
+
+        entermonitor $r5;
+
+     label01:
+        $r7 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState>;
+
+        $r6 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState RUNNING>;
+
+        if $r7 == $r6 goto label02;
+
+        $r10 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState>;
+
+        $r9 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUED>;
+
+        if $r10 != $r9 goto label04;
+
+     label02:
+        $r8 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>;
+
+        interfaceinvoke $r8.<java.util.Deque: boolean add(java.lang.Object)>(r1);
+
+        exitmonitor r31;
+
+     label03:
+        return;
+
+     label04:
+        l0 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: long mWorkerRunCount>;
+
+        $r11 = new androidx.camera.core.impl.utils.executor.SequentialExecutor$1;
+
+        specialinvoke $r11.<androidx.camera.core.impl.utils.executor.SequentialExecutor$1: void <init>(androidx.camera.core.impl.utils.executor.SequentialExecutor,java.lang.Runnable)>(r0, r1);
+
+        r2 = $r11;
+
+        $r12 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>;
+
+        interfaceinvoke $r12.<java.util.Deque: boolean add(java.lang.Object)>(r2);
+
+        $r13 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUING>;
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState> = $r13;
+
+        exitmonitor r31;
+
+     label05:
+        goto label08;
+
+     label06:
+        $r22 := @caughtexception;
+
+        r32 = $r22;
+
+        exitmonitor r31;
+
+     label07:
+        throw r32;
+
+     label08:
+        $r15 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.concurrent.Executor mExecutor>;
+
+        $r14 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker mWorker>;
+
+        interfaceinvoke $r15.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r14);
+
+     label09:
+        goto label21;
+
+     label10:
+        $r24 := @caughtexception;
+
+        r33 = $r24;
+
+        $r25 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>;
+
+        r34 = $r25;
+
+        entermonitor $r25;
+
+     label11:
+        $r27 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState>;
+
+        $r26 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState IDLE>;
+
+        if $r27 == $r26 goto label12;
+
+        $r30 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState>;
+
+        $r29 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUING>;
+
+        if $r30 != $r29 goto label13;
+
+     label12:
+        $r28 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>;
+
+        $z3 = interfaceinvoke $r28.<java.util.Deque: boolean removeLastOccurrence(java.lang.Object)>(r2);
+
+        if $z3 == 0 goto label13;
+
+        $z4 = 1;
+
+        goto label14;
+
+     label13:
+        $z4 = 0;
+
+     label14:
+        z0 = $z4;
+
+        $z5 = r33 instanceof java.util.concurrent.RejectedExecutionException;
+
+        if $z5 == 0 goto label15;
+
+        if z0 == 0 goto label16;
+
+     label15:
+        throw r33;
+
+     label16:
+        exitmonitor r34;
+
+     label17:
+        goto label20;
+
+     label18:
+        $r23 := @caughtexception;
+
+        r3 = $r23;
+
+        exitmonitor r34;
+
+     label19:
+        throw r3;
+
+     label20:
+        return;
+
+     label21:
+        $r17 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState>;
+
+        $r16 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUING>;
+
+        if $r17 == $r16 goto label22;
+
+        $z6 = 1;
+
+        goto label23;
+
+     label22:
+        $z6 = 0;
+
+     label23:
+        z7 = $z6;
+
+        if z7 == 0 goto label24;
+
+        return;
+
+     label24:
+        $r18 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>;
+
+        r35 = $r18;
+
+        entermonitor $r18;
+
+        $l1 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: long mWorkerRunCount>;
+
+        $b2 = $l1 cmp l0;
+
+        if $b2 != 0 goto label25;
+
+        $r20 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState>;
+
+        $r19 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUING>;
+
+        if $r20 != $r19 goto label25;
+
+        $r21 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUED>;
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState> = $r21;
+
+     label25:
+        exitmonitor r35;
+
+        goto label26;
+
+     label26:
+        return;
+
+        catch java.lang.Throwable from label01 to label03 with label06;
+        catch java.lang.Throwable from label04 to label05 with label06;
+        catch java.lang.Throwable from label06 to label07 with label06;
+        catch java.lang.RuntimeException from label08 to label09 with label10;
+        catch java.lang.Error from label08 to label09 with label10;
+        catch java.lang.Throwable from label11 to label17 with label18;
+        catch java.lang.Throwable from label18 to label19 with label18;
+    }
+
+androidx.camera.core.impl.utils.executor.SequentialExecutor$1
+<androidx.camera.core.impl.utils.executor.SequentialExecutor$1: java.lang.Runnable val$task>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor$1: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>
+    void <init>(androidx.camera.core.impl.utils.executor.SequentialExecutor, java.lang.Runnable)
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$1 r0;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor r1;
+        java.lang.Runnable r2;
+
+        r0 := @this: androidx.camera.core.impl.utils.executor.SequentialExecutor$1;
+
+        r1 := @parameter0: androidx.camera.core.impl.utils.executor.SequentialExecutor;
+
+        r2 := @parameter1: java.lang.Runnable;
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$1: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0> = r1;
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$1: java.lang.Runnable val$task> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$1 r0;
+        java.lang.Runnable $r1;
+
+        r0 := @this: androidx.camera.core.impl.utils.executor.SequentialExecutor$1;
+
+        $r1 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$1: java.lang.Runnable val$task>;
+
+        interfaceinvoke $r1.<java.lang.Runnable: void run()>();
+
+        return;
+    }
+
+androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker
+<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>
+    void <init>(androidx.camera.core.impl.utils.executor.SequentialExecutor)
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker r0;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor r1;
+
+        r0 := @this: androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker;
+
+        r1 := @parameter0: androidx.camera.core.impl.utils.executor.SequentialExecutor;
+
+        r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker r0;
+        java.lang.Throwable r1, $r3;
+        java.util.Deque r2, $r5;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor $r4, $r7;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState $r6;
+
+        r0 := @this: androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker;
+
+     label1:
+        specialinvoke r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: void workOnQueue()>();
+
+     label2:
+        goto label5;
+
+     label3:
+        $r3 := @caughtexception;
+
+        r1 = $r3;
+
+        $r4 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>;
+
+        $r5 = $r4.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>;
+
+        r2 = $r5;
+
+        entermonitor $r5;
+
+        $r7 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>;
+
+        $r6 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState IDLE>;
+
+        $r7.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState> = $r6;
+
+        exitmonitor r2;
+
+        goto label4;
+
+     label4:
+        throw r1;
+
+     label5:
+        return;
+
+        catch java.lang.Error from label1 to label2 with label3;
+    }
+
+    private void workOnQueue()
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker r0;
+        java.lang.Runnable r1;
+        java.lang.Throwable r2, r3, $r19, $r24, $r25, r28;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor $r4, $r6, $r10, $r12, $r15, $r17;
+        java.util.Deque $r5, $r7, r27;
+        java.lang.Object $r8;
+        boolean $z0, z1, z2;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState $r9, $r13, $r14, $r16;
+        java.lang.Thread $r11, $r18, $r26;
+        long $l0, $l1;
+        java.lang.StringBuilder $r20, $r21, $r22;
+        java.lang.String $r23;
+
+        r0 := @this: androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker;
+
+        z1 = 0;
+
+        z2 = 0;
+
+     label01:
+        $r4 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>;
+
+        $r5 = $r4.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>;
+
+        r27 = $r5;
+
+        entermonitor $r5;
+
+     label02:
+        if z2 != 0 goto label06;
+
+        $r12 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>;
+
+        $r14 = $r12.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState>;
+
+        $r13 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState RUNNING>;
+
+        if $r14 != $r13 goto label05;
+
+        exitmonitor r27;
+
+     label03:
+        if z1 == 0 goto label04;
+
+        $r18 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r18.<java.lang.Thread: void interrupt()>();
+
+     label04:
+        return;
+
+     label05:
+        $r15 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>;
+
+        $l0 = $r15.<androidx.camera.core.impl.utils.executor.SequentialExecutor: long mWorkerRunCount>;
+
+        $l1 = $l0 + 1L;
+
+        $r15.<androidx.camera.core.impl.utils.executor.SequentialExecutor: long mWorkerRunCount> = $l1;
+
+        $r17 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>;
+
+        $r16 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState RUNNING>;
+
+        $r17.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState> = $r16;
+
+        z2 = 1;
+
+     label06:
+        $r6 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>;
+
+        $r7 = $r6.<androidx.camera.core.impl.utils.executor.SequentialExecutor: java.util.Deque mQueue>;
+
+        $r8 = interfaceinvoke $r7.<java.util.Deque: java.lang.Object poll()>();
+
+        r1 = (java.lang.Runnable) $r8;
+
+        if r1 != null goto label09;
+
+        $r10 = r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$QueueWorker: androidx.camera.core.impl.utils.executor.SequentialExecutor this$0>;
+
+        $r9 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState IDLE>;
+
+        $r10.<androidx.camera.core.impl.utils.executor.SequentialExecutor: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState mWorkerRunningState> = $r9;
+
+        exitmonitor r27;
+
+     label07:
+        if z1 == 0 goto label08;
+
+        $r11 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r11.<java.lang.Thread: void interrupt()>();
+
+     label08:
+        return;
+
+     label09:
+        exitmonitor r27;
+
+     label10:
+        goto label13;
+
+     label11:
+        $r24 := @caughtexception;
+
+        r2 = $r24;
+
+        exitmonitor r27;
+
+     label12:
+        throw r2;
+
+     label13:
+        $z0 = staticinvoke <java.lang.Thread: boolean interrupted()>();
+
+        z1 = z1 | $z0;
+
+     label14:
+        interfaceinvoke r1.<java.lang.Runnable: void run()>();
+
+     label15:
+        goto label17;
+
+     label16:
+        $r19 := @caughtexception;
+
+        r28 = $r19;
+
+        $r20 = new java.lang.StringBuilder;
+
+        specialinvoke $r20.<java.lang.StringBuilder: void <init>()>();
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Exception while executing runnable ");
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("SequentialExecutor", $r23, r28);
+
+     label17:
+        goto label01;
+
+     label18:
+        $r25 := @caughtexception;
+
+        r3 = $r25;
+
+     label19:
+        if z1 == 0 goto label20;
+
+        $r26 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r26.<java.lang.Thread: void interrupt()>();
+
+     label20:
+        throw r3;
+
+        catch java.lang.Throwable from label02 to label03 with label11;
+        catch java.lang.Throwable from label05 to label07 with label11;
+        catch java.lang.Throwable from label09 to label10 with label11;
+        catch java.lang.Throwable from label11 to label12 with label11;
+        catch java.lang.RuntimeException from label14 to label15 with label16;
+        catch java.lang.Throwable from label01 to label03 with label18;
+        catch java.lang.Throwable from label09 to label19 with label18;
+    }
+
+androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState
+<androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState IDLE>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUING>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUED>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState RUNNING>
+<androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState[] $VALUES>
+    public static androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState[] values()
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState[]) $r1;
+
+        return $r2;
+    }
+
+    public static androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "Landroidx/camera/core/impl/utils/executor/SequentialExecutor$WorkerRunningState;", r0);
+
+        $r2 = (androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState $r0, $r1, $r2, $r3, $r5, $r6, $r7, $r8;
+        androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState[] $r4;
+
+        $r0 = new androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState;
+
+        specialinvoke $r0.<androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: void <init>(java.lang.String,int)>("IDLE", 0);
+
+        <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState IDLE> = $r0;
+
+        $r1 = new androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState;
+
+        specialinvoke $r1.<androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: void <init>(java.lang.String,int)>("QUEUING", 1);
+
+        <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUING> = $r1;
+
+        $r2 = new androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState;
+
+        specialinvoke $r2.<androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: void <init>(java.lang.String,int)>("QUEUED", 2);
+
+        <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUED> = $r2;
+
+        $r3 = new androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState;
+
+        specialinvoke $r3.<androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: void <init>(java.lang.String,int)>("RUNNING", 3);
+
+        <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState RUNNING> = $r3;
+
+        $r4 = newarray (androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState)[4];
+
+        $r5 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState IDLE>;
+
+        $r4[0] = $r5;
+
+        $r6 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUING>;
+
+        $r4[1] = $r6;
+
+        $r7 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState QUEUED>;
+
+        $r4[2] = $r7;
+
+        $r8 = <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState RUNNING>;
+
+        $r4[3] = $r8;
+
+        <androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState: androidx.camera.core.impl.utils.executor.SequentialExecutor$WorkerRunningState[] $VALUES> = $r4;
+
+        return;
+    }
+

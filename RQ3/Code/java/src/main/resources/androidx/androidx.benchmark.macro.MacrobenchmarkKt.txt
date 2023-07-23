@@ -1,0 +1,855 @@
+androidx.benchmark.macro.MacrobenchmarkKt
+    public static final androidx.benchmark.ConfigurationError$SuppressionState checkErrors(java.lang.String)
+    {
+        java.lang.String r0, $r12, $r13, $r19, $r20, $r37;
+        android.content.pm.PackageManager r1;
+        android.content.pm.ApplicationInfo r2, r39, r41;
+        android.app.Instrumentation $r3;
+        android.content.Context $r4;
+        int $i0, $i1, $i2;
+        androidx.benchmark.DeviceInfo $r5;
+        java.util.List $r6, $r22, $r25, r44;
+        java.lang.StringBuilder $r7, $r9, $r10, $r11, $r15, $r16, $r17, $r18, $r33, $r34, $r35, $r36;
+        java.util.Collection $r8;
+        androidx.benchmark.ConfigurationError $r14, $r21;
+        androidx.benchmark.macro.MacrobenchmarkKt$checkErrors$$inlined$sortedBy$1 $r23;
+        java.util.Comparator $r24;
+        java.lang.Iterable $r26, r43;
+        androidx.benchmark.Arguments $r27;
+        java.util.Set $r28;
+        androidx.benchmark.ConfigurationError$SuppressionState $r29;
+        java.lang.Throwable $r31, $r38, r40;
+        java.lang.AssertionError $r32;
+        boolean $z1, z2, $z3;
+        androidx.benchmark.ConfigurationError[] r42;
+
+        r0 := @parameter0: java.lang.String;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "packageName");
+
+        $r3 = staticinvoke <androidx.test.platform.app.InstrumentationRegistry: android.app.Instrumentation getInstrumentation()>();
+
+        $r4 = virtualinvoke $r3.<android.app.Instrumentation: android.content.Context getContext()>();
+
+        r1 = virtualinvoke $r4.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+     label1:
+        r39 = virtualinvoke r1.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>(r0, 0);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r31 := @caughtexception;
+
+        r40 = $r31;
+
+        $r32 = new java.lang.AssertionError;
+
+        $r33 = new java.lang.StringBuilder;
+
+        specialinvoke $r33.<java.lang.StringBuilder: void <init>()>();
+
+        $r34 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to find target package ");
+
+        $r35 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r36 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", is it installed?");
+
+        $r37 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r38 = (java.lang.Throwable) r40;
+
+        specialinvoke $r32.<java.lang.AssertionError: void <init>(java.lang.String,java.lang.Throwable)>($r37, $r38);
+
+        throw $r32;
+
+     label4:
+        r41 = r39;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r41, "try {\n        pm.getAppl\u2026Exception\n        )\n    }");
+
+        r2 = r41;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 29 goto label5;
+
+        $z1 = staticinvoke <androidx.benchmark.macro.Api29Kt: boolean isNotProfileableByShell(android.content.pm.ApplicationInfo)>(r2);
+
+        goto label6;
+
+     label5:
+        $z1 = 0;
+
+     label6:
+        z2 = $z1;
+
+        $r5 = <androidx.benchmark.DeviceInfo: androidx.benchmark.DeviceInfo INSTANCE>;
+
+        $r6 = virtualinvoke $r5.<androidx.benchmark.DeviceInfo: java.util.List getErrors()>();
+
+        $r8 = (java.util.Collection) $r6;
+
+        r42 = newarray (androidx.benchmark.ConfigurationError)[2];
+
+        $i1 = r2.<android.content.pm.ApplicationInfo: int flags>;
+
+        $i2 = $i1 & 2;
+
+        if $i2 == 0 goto label7;
+
+        $z3 = 1;
+
+        goto label8;
+
+     label7:
+        $z3 = 0;
+
+     label8:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n                    Target package ");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n                    is running with debuggable=true, which drastically reduces\n                    runtime performance in order to support debugging features. Run\n                    benchmarks with debuggable=false. Debuggable affects execution speed\n                    in ways that mean benchmark improvements might not carry over to a\n                    real user\'s experience (or even regress release performance).\n                ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r13 = staticinvoke <kotlin.text.StringsKt: java.lang.String trimIndent(java.lang.String)>($r12);
+
+        $r14 = staticinvoke <androidx.benchmark.ConfigurationErrorKt: androidx.benchmark.ConfigurationError conditionalError(boolean,java.lang.String,java.lang.String,java.lang.String)>($z3, "DEBUGGABLE", "Benchmark Target is Debuggable", $r13);
+
+        r42[0] = $r14;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n                    Target package ");
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n                    is running without profileable. Profileable is required to enable\n                    macrobenchmark to capture detailed trace information from the target process,\n                    such as System tracing sections defined in the app, or libraries.\n\n                    To make the target profileable, add the following in your target app\'s\n                    main AndroidManifest.xml, within the application tag:\n\n                    <!--suppress AndroidElementNotAllowed -->\n                    <profileable android:shell=\"true\"/>\n                ");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r20 = staticinvoke <kotlin.text.StringsKt: java.lang.String trimIndent(java.lang.String)>($r19);
+
+        $r21 = staticinvoke <androidx.benchmark.ConfigurationErrorKt: androidx.benchmark.ConfigurationError conditionalError(boolean,java.lang.String,java.lang.String,java.lang.String)>(z2, "NOT-PROFILEABLE", "Benchmark Target is NOT profileable", $r20);
+
+        r42[1] = $r21;
+
+        $r22 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List listOfNotNull(java.lang.Object[])>(r42);
+
+        r43 = (java.lang.Iterable) $r22;
+
+        $r23 = new androidx.benchmark.macro.MacrobenchmarkKt$checkErrors$$inlined$sortedBy$1;
+
+        specialinvoke $r23.<androidx.benchmark.macro.MacrobenchmarkKt$checkErrors$$inlined$sortedBy$1: void <init>()>();
+
+        $r24 = (java.util.Comparator) $r23;
+
+        $r25 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List sortedWith(java.lang.Iterable,java.util.Comparator)>(r43, $r24);
+
+        $r26 = (java.lang.Iterable) $r25;
+
+        r44 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List plus(java.util.Collection,java.lang.Iterable)>($r8, $r26);
+
+        $r27 = <androidx.benchmark.Arguments: androidx.benchmark.Arguments INSTANCE>;
+
+        $r28 = virtualinvoke $r27.<androidx.benchmark.Arguments: java.util.Set getSuppressedErrors()>();
+
+        $r29 = staticinvoke <androidx.benchmark.ConfigurationErrorKt: androidx.benchmark.ConfigurationError$SuppressionState checkAndGetSuppressionState(java.util.List,java.util.Set)>(r44, $r28);
+
+        return $r29;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    private static final void macrobenchmark(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, androidx.benchmark.macro.CompilationMode, int, boolean, androidx.benchmark.macro.StartupMode, kotlin.jvm.functions.Function1, kotlin.jvm.functions.Function1)
+    {
+        java.lang.String r0, r1, r2, r3, $r34, $r36, $r46, $r59, $r65, $r75, $r76, $r79, r82, r89, r103, $r124, $r126;
+        java.util.List r4, $r23, $r49, $r91, $r102;
+        androidx.benchmark.macro.CompilationMode r5;
+        int i0, i2, $i5, $i6, $i9, i10, i11, $i13;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9;
+        androidx.benchmark.macro.StartupMode r6;
+        kotlin.jvm.functions.Function1 r7, r8, $r26;
+        androidx.benchmark.ConfigurationError$SuppressionState r9;
+        long l1, $l3, $l4, $l7, $l8;
+        androidx.benchmark.macro.MacrobenchmarkScope r10, $r80;
+        androidx.benchmark.macro.Metric r11, r95;
+        java.util.Collection r12, $r16, r105;
+        androidx.benchmark.macro.IterationResult r13, $r57, $r111, r112;
+        java.lang.Throwable r14, $r66, $r68, $r70, $r71, $r73;
+        java.util.ArrayList r15, $r21, $r22, $r48;
+        kotlin.jvm.internal.Ref$ObjectRef $r17;
+        android.app.Instrumentation $r18;
+        android.content.Context $r19;
+        androidx.benchmark.perfetto.PerfettoCaptureWrapper $r20;
+        androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmark$6 $r24;
+        androidx.benchmark.InstrumentationResults $r25;
+        androidx.benchmark.BenchmarkResult $r27;
+        androidx.benchmark.ResultWriter $r28;
+        androidx.benchmark.macro.CompilationMode$Partial $r29;
+        java.lang.StringBuilder $r30, $r31, $r32, $r33, $r60, $r61, $r62, $r63, $r119, $r120, $r121, $r122, $r123;
+        java.lang.IllegalArgumentException $r35, $r58, $r64;
+        androidx.benchmark.UserspaceTracing $r37, $r39, $r41, $r42, $r47, $r50, $r67, $r69, $r72, $r74, $r83, $r87, $r118;
+        androidx.test.uiautomator.UiDevice $r38, $r81;
+        java.lang.Integer $r40, $r43;
+        androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmark$measurements$1$tracePath$1 $r44;
+        kotlin.jvm.functions.Function0 $r45, $r85;
+        kotlin.ranges.LongRange $r51, $r52;
+        kotlin.Unit $r53, $r86, $r97, $r99;
+        java.lang.Object $r54, r94, r107, r110;
+        java.lang.UnsupportedOperationException $r55;
+        androidx.benchmark.macro.Metric$CaptureInfo $r56;
+        androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmark$3$1 $r84;
+        java.lang.Iterable $r92, $r104, $r108;
+        java.util.Iterator $r93, r106, $r109;
+        java.lang.String[] $r101;
+        java.lang.Long $r114, $r115;
+        perfetto.protos.UiState $r116;
+        java.io.File $r117;
+        androidx.benchmark.BenchmarkResult$Measurements $r125;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.lang.String;
+
+        r3 := @parameter3: java.lang.String;
+
+        r4 := @parameter4: java.util.List;
+
+        r5 := @parameter5: androidx.benchmark.macro.CompilationMode;
+
+        i0 := @parameter6: int;
+
+        z0 := @parameter7: boolean;
+
+        r6 := @parameter8: androidx.benchmark.macro.StartupMode;
+
+        r7 := @parameter9: kotlin.jvm.functions.Function1;
+
+        r8 := @parameter10: kotlin.jvm.functions.Function1;
+
+        if i0 <= 0 goto label01;
+
+        $z7 = 1;
+
+        goto label02;
+
+     label01:
+        $z7 = 0;
+
+     label02:
+        if $z7 != 0 goto label03;
+
+        $r60 = new java.lang.StringBuilder;
+
+        specialinvoke $r60.<java.lang.StringBuilder: void <init>()>();
+
+        $r61 = virtualinvoke $r60.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Require iterations > 0 (iterations = ");
+
+        $r62 = virtualinvoke $r61.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r63 = virtualinvoke $r62.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(41);
+
+        $r75 = virtualinvoke $r63.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r64 = new java.lang.IllegalArgumentException;
+
+        $r65 = virtualinvoke $r75.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r64.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r65);
+
+        throw $r64;
+
+     label03:
+        $r16 = (java.util.Collection) r4;
+
+        $z1 = interfaceinvoke $r16.<java.util.Collection: boolean isEmpty()>();
+
+        if $z1 != 0 goto label04;
+
+        $z8 = 1;
+
+        goto label05;
+
+     label04:
+        $z8 = 0;
+
+     label05:
+        if $z8 != 0 goto label06;
+
+        $r76 = "Empty list of metrics passed to metrics param, must pass at least one Metric";
+
+        $r58 = new java.lang.IllegalArgumentException;
+
+        $r59 = virtualinvoke $r76.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r58.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r59);
+
+        throw $r58;
+
+     label06:
+        staticinvoke <androidx.benchmark.macro.CompilationModeKt: void assumeSupportedWithVmSettings(androidx.benchmark.macro.CompilationMode)>(r5);
+
+        r9 = staticinvoke <androidx.benchmark.macro.MacrobenchmarkKt: androidx.benchmark.ConfigurationError$SuppressionState checkErrors(java.lang.String)>(r3);
+
+        $r17 = new kotlin.jvm.internal.Ref$ObjectRef;
+
+        specialinvoke $r17.<kotlin.jvm.internal.Ref$ObjectRef: void <init>()>();
+
+        if r9 != null goto label07;
+
+        $r79 = "";
+
+        goto label08;
+
+     label07:
+        $r79 = virtualinvoke r9.<androidx.benchmark.ConfigurationError$SuppressionState: java.lang.String getWarningMessage()>();
+
+        if $r79 != null goto label08;
+
+        $r79 = "";
+
+     label08:
+        $r17.<kotlin.jvm.internal.Ref$ObjectRef: java.lang.Object element> = $r79;
+
+        l1 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r80 = new androidx.benchmark.macro.MacrobenchmarkScope;
+
+        specialinvoke $r80.<androidx.benchmark.macro.MacrobenchmarkScope: void <init>(java.lang.String,boolean)>(r3, z0);
+
+        r10 = $r80;
+
+        $r81 = virtualinvoke r10.<androidx.benchmark.macro.MacrobenchmarkScope: androidx.test.uiautomator.UiDevice getDevice()>();
+
+        virtualinvoke $r81.<androidx.test.uiautomator.UiDevice: void wakeUp()>();
+
+        virtualinvoke r10.<androidx.benchmark.macro.MacrobenchmarkScope: void killProcess()>();
+
+        r82 = staticinvoke <kotlin.jvm.internal.Intrinsics: java.lang.String stringPlus(java.lang.String,java.lang.Object)>("compile ", r3);
+
+        $r83 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void beginSection$default(androidx.benchmark.UserspaceTracing,java.lang.String,long,int,java.lang.Object)>($r83, r82, 0L, 2, null);
+
+     label09:
+        $r84 = new androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmark$3$1;
+
+        specialinvoke $r84.<androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmark$3$1: void <init>(kotlin.jvm.functions.Function1,androidx.benchmark.macro.MacrobenchmarkScope,kotlin.jvm.functions.Function1)>(r7, r10, r8);
+
+        $r85 = (kotlin.jvm.functions.Function0) $r84;
+
+        virtualinvoke r5.<androidx.benchmark.macro.CompilationMode: void resetAndCompile$benchmark_macro_release(java.lang.String,kotlin.jvm.functions.Function0)>(r3, $r85);
+
+        $r86 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label10:
+        $r87 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void endSection$default(androidx.benchmark.UserspaceTracing,long,int,java.lang.Object)>($r87, 0L, 1, null);
+
+        goto label13;
+
+     label11:
+        $r68 := @caughtexception;
+
+     label12:
+        $r69 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void endSection$default(androidx.benchmark.UserspaceTracing,long,int,java.lang.Object)>($r69, 0L, 1, null);
+
+        throw $r68;
+
+     label13:
+        $r18 = staticinvoke <androidx.test.platform.app.InstrumentationRegistry: android.app.Instrumentation getInstrumentation()>();
+
+        $r19 = virtualinvoke $r18.<android.app.Instrumentation: android.content.Context getContext()>();
+
+        r89 = virtualinvoke $r19.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r20 = new androidx.benchmark.perfetto.PerfettoCaptureWrapper;
+
+        specialinvoke $r20.<androidx.benchmark.perfetto.PerfettoCaptureWrapper: void <init>()>();
+
+        $r21 = new java.util.ArrayList;
+
+        specialinvoke $r21.<java.util.ArrayList: void <init>()>();
+
+        $r91 = (java.util.List) $r21;
+
+     label14:
+        $r92 = (java.lang.Iterable) r4;
+
+        $r93 = interfaceinvoke $r92.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label15:
+        $z2 = interfaceinvoke $r93.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label16;
+
+        r94 = interfaceinvoke $r93.<java.util.Iterator: java.lang.Object next()>();
+
+        r95 = (androidx.benchmark.macro.Metric) r94;
+
+        virtualinvoke r95.<androidx.benchmark.macro.Metric: void configure$benchmark_macro_release(java.lang.String)>(r3);
+
+        goto label15;
+
+     label16:
+        $r22 = new java.util.ArrayList;
+
+        specialinvoke $r22.<java.util.ArrayList: void <init>(int)>(i0);
+
+        $i9 = 0;
+
+     label17:
+        if $i9 >= i0 goto label44;
+
+        i10 = $i9;
+
+        $i9 = $i9 + 1;
+
+        i11 = i10;
+
+        r15 = $r22;
+
+        $r37 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void beginSection$default(androidx.benchmark.UserspaceTracing,java.lang.String,long,int,java.lang.Object)>($r37, "wake device", 0L, 2, null);
+
+     label18:
+        $r38 = virtualinvoke r10.<androidx.benchmark.macro.MacrobenchmarkScope: androidx.test.uiautomator.UiDevice getDevice()>();
+
+        virtualinvoke $r38.<androidx.test.uiautomator.UiDevice: void wakeUp()>();
+
+        $r97 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label19:
+        $r39 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void endSection$default(androidx.benchmark.UserspaceTracing,long,int,java.lang.Object)>($r39, 0L, 1, null);
+
+        goto label22;
+
+     label20:
+        $r71 := @caughtexception;
+
+     label21:
+        $r72 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void endSection$default(androidx.benchmark.UserspaceTracing,long,int,java.lang.Object)>($r72, 0L, 1, null);
+
+        throw $r71;
+
+     label22:
+        $r40 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i11);
+
+        virtualinvoke r10.<androidx.benchmark.macro.MacrobenchmarkScope: void setIteration$benchmark_macro_release(java.lang.Integer)>($r40);
+
+        $r41 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void beginSection$default(androidx.benchmark.UserspaceTracing,java.lang.String,long,int,java.lang.Object)>($r41, "setupBlock", 0L, 2, null);
+
+     label23:
+        interfaceinvoke r7.<kotlin.jvm.functions.Function1: java.lang.Object invoke(java.lang.Object)>(r10);
+
+        $r99 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label24:
+        $r42 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void endSection$default(androidx.benchmark.UserspaceTracing,long,int,java.lang.Object)>($r42, 0L, 1, null);
+
+        goto label27;
+
+     label25:
+        $r73 := @caughtexception;
+
+     label26:
+        $r74 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void endSection$default(androidx.benchmark.UserspaceTracing,long,int,java.lang.Object)>($r74, 0L, 1, null);
+
+        throw $r73;
+
+     label27:
+        $i5 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i5 < 24 goto label28;
+
+        $r101 = newarray (java.lang.String)[2];
+
+        $r101[0] = r3;
+
+        $r101[1] = r89;
+
+        $r102 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List listOf(java.lang.Object[])>($r101);
+
+        goto label29;
+
+     label28:
+        $r102 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List listOf(java.lang.Object)>(r3);
+
+     label29:
+        $r43 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i11);
+
+        $r44 = new androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmark$measurements$1$tracePath$1;
+
+        specialinvoke $r44.<androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmark$measurements$1$tracePath$1: void <init>(java.util.List,kotlin.jvm.functions.Function1,androidx.benchmark.macro.MacrobenchmarkScope)>(r4, r8, r10);
+
+        $r45 = (kotlin.jvm.functions.Function0) $r44;
+
+        $r46 = virtualinvoke $r20.<androidx.benchmark.perfetto.PerfettoCaptureWrapper: java.lang.String record(java.lang.String,java.util.List,java.lang.Integer,kotlin.jvm.functions.Function0)>(r0, $r102, $r43, $r45);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r46);
+
+        r103 = $r46;
+
+        interfaceinvoke $r91.<java.util.List: boolean add(java.lang.Object)>(r103);
+
+        $r47 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void beginSection$default(androidx.benchmark.UserspaceTracing,java.lang.String,long,int,java.lang.Object)>($r47, "extract metrics", 0L, 2, null);
+
+     label30:
+        $r104 = (java.lang.Iterable) r4;
+
+        $r48 = new java.util.ArrayList;
+
+        $i6 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r104, 10);
+
+        specialinvoke $r48.<java.util.ArrayList: void <init>(int)>($i6);
+
+        r105 = (java.util.Collection) $r48;
+
+        r106 = interfaceinvoke $r104.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label31:
+        $z9 = interfaceinvoke r106.<java.util.Iterator: boolean hasNext()>();
+
+        if $z9 == 0 goto label32;
+
+        r107 = interfaceinvoke r106.<java.util.Iterator: java.lang.Object next()>();
+
+        r11 = (androidx.benchmark.macro.Metric) r107;
+
+        r12 = r105;
+
+        i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        $r56 = new androidx.benchmark.macro.Metric$CaptureInfo;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r89, "macrobenchPackageName");
+
+        specialinvoke $r56.<androidx.benchmark.macro.Metric$CaptureInfo: void <init>(int,java.lang.String,java.lang.String,androidx.benchmark.macro.StartupMode)>(i2, r3, r89, r6);
+
+        $r57 = virtualinvoke r11.<androidx.benchmark.macro.Metric: androidx.benchmark.macro.IterationResult getMetrics$benchmark_macro_release(androidx.benchmark.macro.Metric$CaptureInfo,java.lang.String)>($r56, r103);
+
+        interfaceinvoke r12.<java.util.Collection: boolean add(java.lang.Object)>($r57);
+
+        goto label31;
+
+     label32:
+        $r49 = (java.util.List) r105;
+
+        $r108 = (java.lang.Iterable) $r49;
+
+        $r109 = interfaceinvoke $r108.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $z5 = interfaceinvoke $r109.<java.util.Iterator: boolean hasNext()>();
+
+        if $z5 != 0 goto label33;
+
+        $r55 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r55.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>("Empty collection can\'t be reduced.");
+
+        throw $r55;
+
+     label33:
+        r110 = interfaceinvoke $r109.<java.util.Iterator: java.lang.Object next()>();
+
+     label34:
+        $z6 = interfaceinvoke $r109.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label35;
+
+        $r54 = interfaceinvoke $r109.<java.util.Iterator: java.lang.Object next()>();
+
+        $r111 = (androidx.benchmark.macro.IterationResult) $r54;
+
+        r112 = (androidx.benchmark.macro.IterationResult) r110;
+
+        r110 = virtualinvoke r112.<androidx.benchmark.macro.IterationResult: androidx.benchmark.macro.IterationResult plus(androidx.benchmark.macro.IterationResult)>($r111);
+
+        goto label34;
+
+     label35:
+        r13 = (androidx.benchmark.macro.IterationResult) r110;
+
+     label36:
+        $r50 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void endSection$default(androidx.benchmark.UserspaceTracing,long,int,java.lang.Object)>($r50, 0L, 1, null);
+
+        goto label39;
+
+     label37:
+        $r66 := @caughtexception;
+
+        r14 = $r66;
+
+     label38:
+        $r67 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        staticinvoke <androidx.benchmark.UserspaceTracing: void endSection$default(androidx.benchmark.UserspaceTracing,long,int,java.lang.Object)>($r67, 0L, 1, null);
+
+        throw r14;
+
+     label39:
+        $r51 = virtualinvoke r13.<androidx.benchmark.macro.IterationResult: kotlin.ranges.LongRange getTimelineRangeNs()>();
+
+        if $r51 != null goto label40;
+
+        $r114 = null;
+
+        goto label41;
+
+     label40:
+        $l7 = virtualinvoke $r51.<kotlin.ranges.LongRange: long getFirst()>();
+
+        $r114 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l7);
+
+     label41:
+        $r52 = virtualinvoke r13.<androidx.benchmark.macro.IterationResult: kotlin.ranges.LongRange getTimelineRangeNs()>();
+
+        if $r52 != null goto label42;
+
+        $r115 = null;
+
+        goto label43;
+
+     label42:
+        $l8 = virtualinvoke $r52.<kotlin.ranges.LongRange: long getLast()>();
+
+        $r115 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l8);
+
+     label43:
+        $r116 = staticinvoke <androidx.benchmark.perfetto.UiStateKt: perfetto.protos.UiState UiState(java.lang.Long,java.lang.Long,java.lang.String)>($r114, $r115, r3);
+
+        $r117 = new java.io.File;
+
+        specialinvoke $r117.<java.io.File: void <init>(java.lang.String)>(r103);
+
+        $r118 = <androidx.benchmark.UserspaceTracing: androidx.benchmark.UserspaceTracing INSTANCE>;
+
+        virtualinvoke $r118.<androidx.benchmark.UserspaceTracing: perfetto.protos.Trace commitToTrace()>();
+
+        staticinvoke <androidx.benchmark.perfetto.UiStateKt: void appendUiState(java.io.File,perfetto.protos.UiState)>($r117, $r116);
+
+        $r53 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        $r119 = new java.lang.StringBuilder;
+
+        specialinvoke $r119.<java.lang.StringBuilder: void <init>()>();
+
+        $r120 = virtualinvoke $r119.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Iteration ");
+
+        $r121 = virtualinvoke $r120.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i11);
+
+        $r122 = virtualinvoke $r121.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" captured ");
+
+        $r123 = virtualinvoke $r122.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r116);
+
+        $r124 = virtualinvoke $r123.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("Benchmark", $r124);
+
+        virtualinvoke r15.<java.util.ArrayList: boolean add(java.lang.Object)>(r13);
+
+        goto label17;
+
+     label44:
+        $r23 = (java.util.List) $r22;
+
+        $r125 = staticinvoke <androidx.benchmark.macro.IterationResultKt: androidx.benchmark.BenchmarkResult$Measurements mergeIterationMeasurements(java.util.List)>($r23);
+
+        $z3 = virtualinvoke $r125.<androidx.benchmark.BenchmarkResult$Measurements: boolean isNotEmpty()>();
+
+        if $z3 != 0 goto label45;
+
+        $r30 = new java.lang.StringBuilder;
+
+        specialinvoke $r30.<java.lang.StringBuilder: void <init>()>();
+
+        $r31 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n                Unable to read any metrics during benchmark (metric list: ");
+
+        $r32 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r4);
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(").\n                Check that you\'re performing the operations to be measured. For example, if\n                using StartupTimingMetric, are you starting an activity for the specified package\n                in the measure block?\n            ");
+
+        $r34 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r126 = staticinvoke <kotlin.text.StringsKt: java.lang.String trimIndent(java.lang.String)>($r34);
+
+        $r35 = new java.lang.IllegalArgumentException;
+
+        $r36 = virtualinvoke $r126.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r35.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r36);
+
+        throw $r35;
+
+     label45:
+        $r25 = <androidx.benchmark.InstrumentationResults: androidx.benchmark.InstrumentationResults INSTANCE>;
+
+        $r24 = new androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmark$6;
+
+        specialinvoke $r24.<androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmark$6: void <init>(kotlin.jvm.internal.Ref$ObjectRef,java.lang.String,androidx.benchmark.BenchmarkResult$Measurements,java.util.List,androidx.benchmark.ConfigurationError$SuppressionState)>($r17, r0, $r125, $r91, r9);
+
+        $r26 = (kotlin.jvm.functions.Function1) $r24;
+
+        virtualinvoke $r25.<androidx.benchmark.InstrumentationResults: void instrumentationReport(kotlin.jvm.functions.Function1)>($r26);
+
+        $z4 = r5 instanceof androidx.benchmark.macro.CompilationMode$Partial;
+
+        if $z4 == 0 goto label46;
+
+        $r29 = (androidx.benchmark.macro.CompilationMode$Partial) r5;
+
+        $i13 = virtualinvoke $r29.<androidx.benchmark.macro.CompilationMode$Partial: int getWarmupIterations()>();
+
+        goto label47;
+
+     label46:
+        $i13 = 0;
+
+     label47:
+        $r28 = <androidx.benchmark.ResultWriter: androidx.benchmark.ResultWriter INSTANCE>;
+
+        $r27 = new androidx.benchmark.BenchmarkResult;
+
+        $l3 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l4 = $l3 - l1;
+
+        specialinvoke $r27.<androidx.benchmark.BenchmarkResult: void <init>(java.lang.String,java.lang.String,long,androidx.benchmark.BenchmarkResult$Measurements,int,long,int)>(r1, r2, $l4, $r125, i0, 0L, $i13);
+
+        virtualinvoke $r28.<androidx.benchmark.ResultWriter: void appendReport(androidx.benchmark.BenchmarkResult)>($r27);
+
+     label48:
+        virtualinvoke r10.<androidx.benchmark.macro.MacrobenchmarkScope: void killProcess()>();
+
+        goto label51;
+
+     label49:
+        $r70 := @caughtexception;
+
+     label50:
+        virtualinvoke r10.<androidx.benchmark.macro.MacrobenchmarkScope: void killProcess()>();
+
+        throw $r70;
+
+     label51:
+        return;
+
+        catch java.lang.Throwable from label09 to label10 with label11;
+        catch java.lang.Throwable from label11 to label12 with label11;
+        catch java.lang.Throwable from label18 to label19 with label20;
+        catch java.lang.Throwable from label20 to label21 with label20;
+        catch java.lang.Throwable from label23 to label24 with label25;
+        catch java.lang.Throwable from label25 to label26 with label25;
+        catch java.lang.Throwable from label30 to label36 with label37;
+        catch java.lang.Throwable from label37 to label38 with label37;
+        catch java.lang.Throwable from label14 to label48 with label49;
+        catch java.lang.Throwable from label49 to label50 with label49;
+    }
+
+    public static final void macrobenchmarkWithStartupMode(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, androidx.benchmark.macro.CompilationMode, int, androidx.benchmark.macro.StartupMode, kotlin.jvm.functions.Function1, kotlin.jvm.functions.Function1)
+    {
+        java.lang.String r0, r1, r2, r3;
+        java.util.List r4;
+        androidx.benchmark.macro.CompilationMode r5;
+        int i0;
+        androidx.benchmark.macro.StartupMode r6, $r9, $r12;
+        kotlin.jvm.functions.Function1 r7, r8, $r11;
+        boolean z0, $z1;
+        androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmarkWithStartupMode$1 $r10;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.lang.String;
+
+        r3 := @parameter3: java.lang.String;
+
+        r4 := @parameter4: java.util.List;
+
+        r5 := @parameter5: androidx.benchmark.macro.CompilationMode;
+
+        i0 := @parameter6: int;
+
+        r6 := @parameter7: androidx.benchmark.macro.StartupMode;
+
+        r7 := @parameter8: kotlin.jvm.functions.Function1;
+
+        r8 := @parameter9: kotlin.jvm.functions.Function1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "uniqueName");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "className");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r2, "testName");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r3, "packageName");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r4, "metrics");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r5, "compilationMode");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r7, "setupBlock");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r8, "measureBlock");
+
+        $r9 = <androidx.benchmark.macro.StartupMode: androidx.benchmark.macro.StartupMode COLD>;
+
+        if r6 == $r9 goto label1;
+
+        $r12 = <androidx.benchmark.macro.StartupMode: androidx.benchmark.macro.StartupMode WARM>;
+
+        if r6 != $r12 goto label2;
+
+     label1:
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        z0 = $z1;
+
+        $r10 = new androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmarkWithStartupMode$1;
+
+        specialinvoke $r10.<androidx.benchmark.macro.MacrobenchmarkKt$macrobenchmarkWithStartupMode$1: void <init>(androidx.benchmark.macro.StartupMode,kotlin.jvm.functions.Function1,kotlin.jvm.functions.Function1)>(r6, r7, r8);
+
+        $r11 = (kotlin.jvm.functions.Function1) $r10;
+
+        staticinvoke <androidx.benchmark.macro.MacrobenchmarkKt: void macrobenchmark(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.util.List,androidx.benchmark.macro.CompilationMode,int,boolean,androidx.benchmark.macro.StartupMode,kotlin.jvm.functions.Function1,kotlin.jvm.functions.Function1)>(r0, r1, r2, r3, r4, r5, i0, z0, r6, $r11, r8);
+
+        return;
+    }
+

@@ -1,0 +1,638 @@
+androidx.biometric.BiometricManager
+<androidx.biometric.BiometricManager: java.lang.String TAG>
+<androidx.biometric.BiometricManager: int BIOMETRIC_SUCCESS>
+<androidx.biometric.BiometricManager: int BIOMETRIC_STATUS_UNKNOWN>
+<androidx.biometric.BiometricManager: int BIOMETRIC_ERROR_UNSUPPORTED>
+<androidx.biometric.BiometricManager: int BIOMETRIC_ERROR_HW_UNAVAILABLE>
+<androidx.biometric.BiometricManager: int BIOMETRIC_ERROR_NONE_ENROLLED>
+<androidx.biometric.BiometricManager: int BIOMETRIC_ERROR_NO_HARDWARE>
+<androidx.biometric.BiometricManager: int BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED>
+<androidx.biometric.BiometricManager: androidx.biometric.BiometricManager$Injector mInjector>
+<androidx.biometric.BiometricManager: android.hardware.biometrics.BiometricManager mBiometricManager>
+<androidx.biometric.BiometricManager: androidx.core.hardware.fingerprint.FingerprintManagerCompat mFingerprintManager>
+    public static androidx.biometric.BiometricManager 'from'(android.content.Context)
+    {
+        android.content.Context r0;
+        androidx.biometric.BiometricManager $r1;
+        androidx.biometric.BiometricManager$DefaultInjector $r2;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r1 = new androidx.biometric.BiometricManager;
+
+        $r2 = new androidx.biometric.BiometricManager$DefaultInjector;
+
+        specialinvoke $r2.<androidx.biometric.BiometricManager$DefaultInjector: void <init>(android.content.Context)>(r0);
+
+        specialinvoke $r1.<androidx.biometric.BiometricManager: void <init>(androidx.biometric.BiometricManager$Injector)>($r2);
+
+        return $r1;
+    }
+
+    void <init>(androidx.biometric.BiometricManager$Injector)
+    {
+        androidx.biometric.BiometricManager r0;
+        androidx.biometric.BiometricManager$Injector r1;
+        int $i0, $i1;
+        android.hardware.biometrics.BiometricManager $r4;
+        androidx.core.hardware.fingerprint.FingerprintManagerCompat $r5;
+
+        r0 := @this: androidx.biometric.BiometricManager;
+
+        r1 := @parameter0: androidx.biometric.BiometricManager$Injector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.biometric.BiometricManager: androidx.biometric.BiometricManager$Injector mInjector> = r1;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 29 goto label1;
+
+        $r4 = interfaceinvoke r1.<androidx.biometric.BiometricManager$Injector: android.hardware.biometrics.BiometricManager getBiometricManager()>();
+
+        goto label2;
+
+     label1:
+        $r4 = null;
+
+     label2:
+        r0.<androidx.biometric.BiometricManager: android.hardware.biometrics.BiometricManager mBiometricManager> = $r4;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 > 29 goto label3;
+
+        $r5 = interfaceinvoke r1.<androidx.biometric.BiometricManager$Injector: androidx.core.hardware.fingerprint.FingerprintManagerCompat getFingerprintManager()>();
+
+        goto label4;
+
+     label3:
+        $r5 = null;
+
+     label4:
+        r0.<androidx.biometric.BiometricManager: androidx.core.hardware.fingerprint.FingerprintManagerCompat mFingerprintManager> = $r5;
+
+        return;
+    }
+
+    public int canAuthenticate()
+    {
+        androidx.biometric.BiometricManager r0;
+        int $i0;
+
+        r0 := @this: androidx.biometric.BiometricManager;
+
+        $i0 = virtualinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticate(int)>(255);
+
+        return $i0;
+    }
+
+    public int canAuthenticate(int)
+    {
+        androidx.biometric.BiometricManager r0;
+        int i0, $i1, $i2, $i3;
+        android.hardware.biometrics.BiometricManager $r1, $r2;
+
+        r0 := @this: androidx.biometric.BiometricManager;
+
+        i0 := @parameter0: int;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 30 goto label2;
+
+        $r1 = r0.<androidx.biometric.BiometricManager: android.hardware.biometrics.BiometricManager mBiometricManager>;
+
+        if $r1 != null goto label1;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("BiometricManager", "Failure in canAuthenticate(). BiometricManager was null.");
+
+        return 1;
+
+     label1:
+        $r2 = r0.<androidx.biometric.BiometricManager: android.hardware.biometrics.BiometricManager mBiometricManager>;
+
+        $i3 = staticinvoke <androidx.biometric.BiometricManager$Api30Impl: int canAuthenticate(android.hardware.biometrics.BiometricManager,int)>($r2, i0);
+
+        return $i3;
+
+     label2:
+        $i2 = specialinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticateCompat(int)>(i0);
+
+        return $i2;
+    }
+
+    private int canAuthenticateCompat(int)
+    {
+        androidx.biometric.BiometricManager r0;
+        int i0, $i1, $i2, $i3, $i5, $i6;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        androidx.biometric.BiometricManager$Injector $r1, $r2, $r3;
+        byte $b4;
+
+        r0 := @this: androidx.biometric.BiometricManager;
+
+        i0 := @parameter0: int;
+
+        $z0 = staticinvoke <androidx.biometric.AuthenticatorUtils: boolean isSupportedCombination(int)>(i0);
+
+        if $z0 != 0 goto label01;
+
+        return -2;
+
+     label01:
+        if i0 != 0 goto label02;
+
+        return 12;
+
+     label02:
+        $r1 = r0.<androidx.biometric.BiometricManager: androidx.biometric.BiometricManager$Injector mInjector>;
+
+        $z1 = interfaceinvoke $r1.<androidx.biometric.BiometricManager$Injector: boolean isDeviceSecurable()>();
+
+        if $z1 != 0 goto label03;
+
+        return 12;
+
+     label03:
+        $z2 = staticinvoke <androidx.biometric.AuthenticatorUtils: boolean isDeviceCredentialAllowed(int)>(i0);
+
+        if $z2 == 0 goto label06;
+
+        $r3 = r0.<androidx.biometric.BiometricManager: androidx.biometric.BiometricManager$Injector mInjector>;
+
+        $z5 = interfaceinvoke $r3.<androidx.biometric.BiometricManager$Injector: boolean isDeviceSecuredWithCredential()>();
+
+        if $z5 == 0 goto label04;
+
+        $b4 = 0;
+
+        goto label05;
+
+     label04:
+        $b4 = 11;
+
+     label05:
+        return $b4;
+
+     label06:
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 != 29 goto label09;
+
+        $z4 = staticinvoke <androidx.biometric.AuthenticatorUtils: boolean isWeakBiometricAllowed(int)>(i0);
+
+        if $z4 == 0 goto label07;
+
+        $i5 = specialinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticateWithWeakBiometricOnApi29()>();
+
+        goto label08;
+
+     label07:
+        $i5 = specialinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticateWithStrongBiometricOnApi29()>();
+
+     label08:
+        return $i5;
+
+     label09:
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 != 28 goto label12;
+
+        $r2 = r0.<androidx.biometric.BiometricManager: androidx.biometric.BiometricManager$Injector mInjector>;
+
+        $z3 = interfaceinvoke $r2.<androidx.biometric.BiometricManager$Injector: boolean isFingerprintHardwarePresent()>();
+
+        if $z3 == 0 goto label10;
+
+        $i6 = specialinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticateWithFingerprintOrUnknownBiometric()>();
+
+        goto label11;
+
+     label10:
+        $i6 = 12;
+
+     label11:
+        return $i6;
+
+     label12:
+        $i3 = specialinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticateWithFingerprint()>();
+
+        return $i3;
+    }
+
+    private int canAuthenticateWithStrongBiometricOnApi29()
+    {
+        androidx.biometric.BiometricManager r0;
+        java.lang.reflect.Method r1;
+        int $i0, $i2, i4;
+        androidx.biometric.BiometricPrompt$CryptoObject $r2;
+        java.lang.Object[] $r3;
+        android.hardware.biometrics.BiometricManager $r4;
+        boolean $z0, $z1;
+        java.lang.Integer $r5;
+        java.lang.Throwable $r6, r9;
+        android.hardware.biometrics.BiometricPrompt$CryptoObject r7;
+        java.lang.Object r8;
+        androidx.biometric.BiometricManager$Injector $r10;
+
+        r0 := @this: androidx.biometric.BiometricManager;
+
+        r1 = staticinvoke <androidx.biometric.BiometricManager$Api29Impl: java.lang.reflect.Method getCanAuthenticateWithCryptoMethod()>();
+
+        if r1 == null goto label6;
+
+        $r2 = staticinvoke <androidx.biometric.CryptoObjectUtils: androidx.biometric.BiometricPrompt$CryptoObject createFakeCryptoObject()>();
+
+        r7 = staticinvoke <androidx.biometric.CryptoObjectUtils: android.hardware.biometrics.BiometricPrompt$CryptoObject wrapForBiometricPrompt(androidx.biometric.BiometricPrompt$CryptoObject)>($r2);
+
+        if r7 == null goto label6;
+
+     label1:
+        $r4 = r0.<androidx.biometric.BiometricManager: android.hardware.biometrics.BiometricManager mBiometricManager>;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r3[0] = r7;
+
+        r8 = virtualinvoke r1.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r4, $r3);
+
+        $z0 = r8 instanceof java.lang.Integer;
+
+        if $z0 == 0 goto label3;
+
+        $r5 = (java.lang.Integer) r8;
+
+        $i2 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+     label2:
+        return $i2;
+
+     label3:
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("BiometricManager", "Invalid return type for canAuthenticate(CryptoObject).");
+
+     label4:
+        goto label6;
+
+     label5:
+        $r6 := @caughtexception;
+
+        r9 = $r6;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("BiometricManager", "Failed to invoke canAuthenticate(CryptoObject).", r9);
+
+     label6:
+        i4 = specialinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticateWithWeakBiometricOnApi29()>();
+
+        $r10 = r0.<androidx.biometric.BiometricManager: androidx.biometric.BiometricManager$Injector mInjector>;
+
+        $z1 = interfaceinvoke $r10.<androidx.biometric.BiometricManager$Injector: boolean isStrongBiometricGuaranteed()>();
+
+        if $z1 != 0 goto label7;
+
+        if i4 == 0 goto label8;
+
+     label7:
+        return i4;
+
+     label8:
+        $i0 = specialinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticateWithFingerprintOrUnknownBiometric()>();
+
+        return $i0;
+
+        catch java.lang.IllegalAccessException from label1 to label2 with label5;
+        catch java.lang.IllegalArgumentException from label1 to label2 with label5;
+        catch java.lang.reflect.InvocationTargetException from label1 to label2 with label5;
+        catch java.lang.IllegalAccessException from label3 to label4 with label5;
+        catch java.lang.IllegalArgumentException from label3 to label4 with label5;
+        catch java.lang.reflect.InvocationTargetException from label3 to label4 with label5;
+    }
+
+    private int canAuthenticateWithWeakBiometricOnApi29()
+    {
+        androidx.biometric.BiometricManager r0;
+        android.hardware.biometrics.BiometricManager $r1, $r2;
+        int $i0;
+
+        r0 := @this: androidx.biometric.BiometricManager;
+
+        $r1 = r0.<androidx.biometric.BiometricManager: android.hardware.biometrics.BiometricManager mBiometricManager>;
+
+        if $r1 != null goto label1;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("BiometricManager", "Failure in canAuthenticate(). BiometricManager was null.");
+
+        return 1;
+
+     label1:
+        $r2 = r0.<androidx.biometric.BiometricManager: android.hardware.biometrics.BiometricManager mBiometricManager>;
+
+        $i0 = staticinvoke <androidx.biometric.BiometricManager$Api29Impl: int canAuthenticate(android.hardware.biometrics.BiometricManager)>($r2);
+
+        return $i0;
+    }
+
+    private int canAuthenticateWithFingerprintOrUnknownBiometric()
+    {
+        androidx.biometric.BiometricManager r0;
+        androidx.biometric.BiometricManager$Injector $r1;
+        boolean $z0;
+        int $i0, $i1;
+        byte $b2;
+
+        r0 := @this: androidx.biometric.BiometricManager;
+
+        $r1 = r0.<androidx.biometric.BiometricManager: androidx.biometric.BiometricManager$Injector mInjector>;
+
+        $z0 = interfaceinvoke $r1.<androidx.biometric.BiometricManager$Injector: boolean isDeviceSecuredWithCredential()>();
+
+        if $z0 != 0 goto label1;
+
+        $i1 = specialinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticateWithFingerprint()>();
+
+        return $i1;
+
+     label1:
+        $i0 = specialinvoke r0.<androidx.biometric.BiometricManager: int canAuthenticateWithFingerprint()>();
+
+        if $i0 != 0 goto label2;
+
+        $b2 = 0;
+
+        goto label3;
+
+     label2:
+        $b2 = -1;
+
+     label3:
+        return $b2;
+    }
+
+    private int canAuthenticateWithFingerprint()
+    {
+        androidx.biometric.BiometricManager r0;
+        androidx.core.hardware.fingerprint.FingerprintManagerCompat $r1, $r2, $r3;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.biometric.BiometricManager;
+
+        $r1 = r0.<androidx.biometric.BiometricManager: androidx.core.hardware.fingerprint.FingerprintManagerCompat mFingerprintManager>;
+
+        if $r1 != null goto label1;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("BiometricManager", "Failure in canAuthenticate(). FingerprintManager was null.");
+
+        return 1;
+
+     label1:
+        $r2 = r0.<androidx.biometric.BiometricManager: androidx.core.hardware.fingerprint.FingerprintManagerCompat mFingerprintManager>;
+
+        $z0 = virtualinvoke $r2.<androidx.core.hardware.fingerprint.FingerprintManagerCompat: boolean isHardwareDetected()>();
+
+        if $z0 != 0 goto label2;
+
+        return 12;
+
+     label2:
+        $r3 = r0.<androidx.biometric.BiometricManager: androidx.core.hardware.fingerprint.FingerprintManagerCompat mFingerprintManager>;
+
+        $z1 = virtualinvoke $r3.<androidx.core.hardware.fingerprint.FingerprintManagerCompat: boolean hasEnrolledFingerprints()>();
+
+        if $z1 != 0 goto label3;
+
+        return 11;
+
+     label3:
+        return 0;
+    }
+
+androidx.biometric.BiometricManager$Api29Impl
+    private void <init>()
+    {
+        androidx.biometric.BiometricManager$Api29Impl r0;
+
+        r0 := @this: androidx.biometric.BiometricManager$Api29Impl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static android.hardware.biometrics.BiometricManager create(android.content.Context)
+    {
+        android.content.Context r0;
+        java.lang.Object $r1;
+        android.hardware.biometrics.BiometricManager $r2;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.Class)>(class "Landroid/hardware/biometrics/BiometricManager;");
+
+        $r2 = (android.hardware.biometrics.BiometricManager) $r1;
+
+        return $r2;
+    }
+
+    static int canAuthenticate(android.hardware.biometrics.BiometricManager)
+    {
+        android.hardware.biometrics.BiometricManager r0;
+        int $i0;
+
+        r0 := @parameter0: android.hardware.biometrics.BiometricManager;
+
+        $i0 = virtualinvoke r0.<android.hardware.biometrics.BiometricManager: int canAuthenticate()>();
+
+        return $i0;
+    }
+
+    static java.lang.reflect.Method getCanAuthenticateWithCryptoMethod()
+    {
+        java.lang.Throwable r0, $r4;
+        java.lang.Class[] $r1;
+        java.lang.Class $r2;
+        java.lang.reflect.Method $r3;
+
+     label1:
+        $r2 = class "Landroid/hardware/biometrics/BiometricManager;";
+
+        $r1 = newarray (java.lang.Class)[1];
+
+        $r1[0] = class "Landroid/hardware/biometrics/BiometricPrompt$CryptoObject;";
+
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("canAuthenticate", $r1);
+
+     label2:
+        return $r3;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r0 = $r4;
+
+        return null;
+
+        catch java.lang.NoSuchMethodException from label1 to label2 with label3;
+    }
+
+androidx.biometric.BiometricManager$Api30Impl
+    private void <init>()
+    {
+        androidx.biometric.BiometricManager$Api30Impl r0;
+
+        r0 := @this: androidx.biometric.BiometricManager$Api30Impl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static int canAuthenticate(android.hardware.biometrics.BiometricManager, int)
+    {
+        android.hardware.biometrics.BiometricManager r0;
+        int i0, $i1;
+
+        r0 := @parameter0: android.hardware.biometrics.BiometricManager;
+
+        i0 := @parameter1: int;
+
+        $i1 = virtualinvoke r0.<android.hardware.biometrics.BiometricManager: int canAuthenticate(int)>(i0);
+
+        return $i1;
+    }
+
+androidx.biometric.BiometricManager$Authenticators
+<androidx.biometric.BiometricManager$Authenticators: int BIOMETRIC_STRONG>
+<androidx.biometric.BiometricManager$Authenticators: int BIOMETRIC_WEAK>
+<androidx.biometric.BiometricManager$Authenticators: int DEVICE_CREDENTIAL>
+androidx.biometric.BiometricManager$DefaultInjector
+<androidx.biometric.BiometricManager$DefaultInjector: android.content.Context mContext>
+    void <init>(android.content.Context)
+    {
+        androidx.biometric.BiometricManager$DefaultInjector r0;
+        android.content.Context r1, $r2;
+
+        r0 := @this: androidx.biometric.BiometricManager$DefaultInjector;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = virtualinvoke r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        r0.<androidx.biometric.BiometricManager$DefaultInjector: android.content.Context mContext> = $r2;
+
+        return;
+    }
+
+    public android.hardware.biometrics.BiometricManager getBiometricManager()
+    {
+        androidx.biometric.BiometricManager$DefaultInjector r0;
+        android.content.Context $r1;
+        android.hardware.biometrics.BiometricManager $r2;
+
+        r0 := @this: androidx.biometric.BiometricManager$DefaultInjector;
+
+        $r1 = r0.<androidx.biometric.BiometricManager$DefaultInjector: android.content.Context mContext>;
+
+        $r2 = staticinvoke <androidx.biometric.BiometricManager$Api29Impl: android.hardware.biometrics.BiometricManager create(android.content.Context)>($r1);
+
+        return $r2;
+    }
+
+    public androidx.core.hardware.fingerprint.FingerprintManagerCompat getFingerprintManager()
+    {
+        androidx.biometric.BiometricManager$DefaultInjector r0;
+        android.content.Context $r1;
+        androidx.core.hardware.fingerprint.FingerprintManagerCompat $r2;
+
+        r0 := @this: androidx.biometric.BiometricManager$DefaultInjector;
+
+        $r1 = r0.<androidx.biometric.BiometricManager$DefaultInjector: android.content.Context mContext>;
+
+        $r2 = staticinvoke <androidx.core.hardware.fingerprint.FingerprintManagerCompat: androidx.core.hardware.fingerprint.FingerprintManagerCompat 'from'(android.content.Context)>($r1);
+
+        return $r2;
+    }
+
+    public boolean isDeviceSecurable()
+    {
+        androidx.biometric.BiometricManager$DefaultInjector r0;
+        android.content.Context $r1;
+        android.app.KeyguardManager $r2;
+        boolean $z0;
+
+        r0 := @this: androidx.biometric.BiometricManager$DefaultInjector;
+
+        $r1 = r0.<androidx.biometric.BiometricManager$DefaultInjector: android.content.Context mContext>;
+
+        $r2 = staticinvoke <androidx.biometric.KeyguardUtils: android.app.KeyguardManager getKeyguardManager(android.content.Context)>($r1);
+
+        if $r2 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public boolean isDeviceSecuredWithCredential()
+    {
+        androidx.biometric.BiometricManager$DefaultInjector r0;
+        android.content.Context $r1;
+        boolean $z0;
+
+        r0 := @this: androidx.biometric.BiometricManager$DefaultInjector;
+
+        $r1 = r0.<androidx.biometric.BiometricManager$DefaultInjector: android.content.Context mContext>;
+
+        $z0 = staticinvoke <androidx.biometric.KeyguardUtils: boolean isDeviceSecuredWithCredential(android.content.Context)>($r1);
+
+        return $z0;
+    }
+
+    public boolean isFingerprintHardwarePresent()
+    {
+        androidx.biometric.BiometricManager$DefaultInjector r0;
+        android.content.Context $r1;
+        boolean $z0;
+
+        r0 := @this: androidx.biometric.BiometricManager$DefaultInjector;
+
+        $r1 = r0.<androidx.biometric.BiometricManager$DefaultInjector: android.content.Context mContext>;
+
+        $z0 = staticinvoke <androidx.biometric.PackageUtils: boolean hasSystemFeatureFingerprint(android.content.Context)>($r1);
+
+        return $z0;
+    }
+
+    public boolean isStrongBiometricGuaranteed()
+    {
+        androidx.biometric.BiometricManager$DefaultInjector r0;
+        java.lang.String $r1;
+        android.content.Context $r2;
+        boolean $z0;
+
+        r0 := @this: androidx.biometric.BiometricManager$DefaultInjector;
+
+        $r2 = r0.<androidx.biometric.BiometricManager$DefaultInjector: android.content.Context mContext>;
+
+        $r1 = <android.os.Build: java.lang.String MODEL>;
+
+        $z0 = staticinvoke <androidx.biometric.DeviceUtils: boolean canAssumeStrongBiometrics(android.content.Context,java.lang.String)>($r2, $r1);
+
+        return $z0;
+    }
+
+androidx.biometric.BiometricManager$Injector
+<androidx.biometric.BiometricManager$Injector: android.hardware.biometrics.BiometricManager getBiometricManager()>
+<androidx.biometric.BiometricManager$Injector: androidx.core.hardware.fingerprint.FingerprintManagerCompat getFingerprintManager()>
+<androidx.biometric.BiometricManager$Injector: boolean isDeviceSecurable()>
+<androidx.biometric.BiometricManager$Injector: boolean isDeviceSecuredWithCredential()>
+<androidx.biometric.BiometricManager$Injector: boolean isFingerprintHardwarePresent()>
+<androidx.biometric.BiometricManager$Injector: boolean isStrongBiometricGuaranteed()>

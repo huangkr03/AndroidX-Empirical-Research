@@ -1,0 +1,966 @@
+androidx.camera.core.impl.CameraStateRegistry
+<androidx.camera.core.impl.CameraStateRegistry: java.lang.String TAG>
+<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>
+<androidx.camera.core.impl.CameraStateRegistry: java.lang.Object mLock>
+<androidx.camera.core.impl.CameraStateRegistry: int mMaxAllowedOpenedCameras>
+<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>
+<androidx.camera.core.impl.CameraStateRegistry: int mAvailableCameras>
+    public void <init>(int)
+    {
+        androidx.camera.core.impl.CameraStateRegistry r0;
+        int i0, $i1;
+        java.lang.String r1;
+        java.lang.StringBuilder $r2;
+        java.lang.Object $r3;
+        java.util.HashMap $r4;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString> = $r2;
+
+        $r3 = new java.lang.Object;
+
+        specialinvoke $r3.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.Object mLock> = $r3;
+
+        $r4 = new java.util.HashMap;
+
+        specialinvoke $r4.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates> = $r4;
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry: int mMaxAllowedOpenedCameras> = i0;
+
+        r1 = "mLock";
+
+        entermonitor "mLock";
+
+        $i1 = r0.<androidx.camera.core.impl.CameraStateRegistry: int mMaxAllowedOpenedCameras>;
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry: int mAvailableCameras> = $i1;
+
+        exitmonitor r1;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public void registerCamera(androidx.camera.core.Camera, java.util.concurrent.Executor, androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener)
+    {
+        androidx.camera.core.impl.CameraStateRegistry r0;
+        androidx.camera.core.Camera r1;
+        java.util.concurrent.Executor r2;
+        androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener r3;
+        java.lang.Object r4, $r6;
+        java.lang.Throwable r5, $r15;
+        java.util.Map $r7, $r13;
+        boolean $z0, $z1;
+        java.lang.StringBuilder $r8, $r9, $r10;
+        java.lang.String $r11;
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration $r12;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry;
+
+        r1 := @parameter0: androidx.camera.core.Camera;
+
+        r2 := @parameter1: java.util.concurrent.Executor;
+
+        r3 := @parameter2: androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener;
+
+        $r6 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.Object mLock>;
+
+        r4 = $r6;
+
+        entermonitor $r6;
+
+     label1:
+        $r7 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>;
+
+        $z0 = interfaceinvoke $r7.<java.util.Map: boolean containsKey(java.lang.Object)>(r1);
+
+        if $z0 != 0 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Camera is already registered: ");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z1, $r11);
+
+        $r13 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>;
+
+        $r12 = new androidx.camera.core.impl.CameraStateRegistry$CameraRegistration;
+
+        specialinvoke $r12.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: void <init>(androidx.camera.core.impl.CameraInternal$State,java.util.concurrent.Executor,androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener)>(null, r2, r3);
+
+        interfaceinvoke $r13.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r12);
+
+        exitmonitor r4;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r15 := @caughtexception;
+
+        r5 = $r15;
+
+        exitmonitor r4;
+
+     label6:
+        throw r5;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public boolean tryOpenCamera(androidx.camera.core.Camera)
+    {
+        androidx.camera.core.impl.CameraStateRegistry r0;
+        androidx.camera.core.Camera r1;
+        java.lang.Object r2, $r5, $r7, $r9;
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration r3, $r8;
+        java.lang.Throwable r4, $r31;
+        java.util.Map $r6;
+        boolean $z0, $z2, $z3, z4, $z5;
+        int $i0, $i2;
+        androidx.camera.core.impl.CameraInternal$State $r10, $r20, $r26, $r28;
+        java.lang.Object[] $r12, $r22;
+        java.util.Locale $r13, $r24;
+        java.lang.StringBuilder $r14, $r17, $r21, $r23;
+        java.lang.String $r15, $r18, $r29, $r32;
+        java.lang.Integer $r25;
+        java.lang.Boolean $r27;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry;
+
+        r1 := @parameter0: androidx.camera.core.Camera;
+
+        $r5 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.Object mLock>;
+
+        r2 = $r5;
+
+        entermonitor $r5;
+
+     label01:
+        $r6 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r8 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r7;
+
+        $r9 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r8, "Camera must first be registered with registerCamera()");
+
+        r3 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r9;
+
+        z4 = 0;
+
+        $z0 = staticinvoke <androidx.camera.core.Logger: boolean isDebugEnabled(java.lang.String)>("CameraStateRegistry");
+
+        if $z0 == 0 goto label02;
+
+        $r21 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        virtualinvoke $r21.<java.lang.StringBuilder: void setLength(int)>(0);
+
+        $r23 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        $r24 = <java.util.Locale: java.util.Locale US>;
+
+        $r22 = newarray (java.lang.Object)[4];
+
+        $r22[0] = r1;
+
+        $i2 = r0.<androidx.camera.core.impl.CameraStateRegistry: int mAvailableCameras>;
+
+        $r25 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $r22[1] = $r25;
+
+        $r26 = virtualinvoke r3.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State getState()>();
+
+        $z3 = staticinvoke <androidx.camera.core.impl.CameraStateRegistry: boolean isOpen(androidx.camera.core.impl.CameraInternal$State)>($r26);
+
+        $r27 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z3);
+
+        $r22[2] = $r27;
+
+        $r28 = virtualinvoke r3.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State getState()>();
+
+        $r22[3] = $r28;
+
+        $r29 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r24, "tryOpenCamera(%s) [Available Cameras: %d, Already Open: %b (Previous state: %s)]", $r22);
+
+        virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r29);
+
+     label02:
+        $i0 = r0.<androidx.camera.core.impl.CameraStateRegistry: int mAvailableCameras>;
+
+        if $i0 > 0 goto label03;
+
+        $r20 = virtualinvoke r3.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State getState()>();
+
+        $z2 = staticinvoke <androidx.camera.core.impl.CameraStateRegistry: boolean isOpen(androidx.camera.core.impl.CameraInternal$State)>($r20);
+
+        if $z2 == 0 goto label04;
+
+     label03:
+        $r10 = <androidx.camera.core.impl.CameraInternal$State: androidx.camera.core.impl.CameraInternal$State OPENING>;
+
+        virtualinvoke r3.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State setState(androidx.camera.core.impl.CameraInternal$State)>($r10);
+
+        z4 = 1;
+
+     label04:
+        $z5 = staticinvoke <androidx.camera.core.Logger: boolean isDebugEnabled(java.lang.String)>("CameraStateRegistry");
+
+        if $z5 == 0 goto label07;
+
+        $r14 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        $r13 = <java.util.Locale: java.util.Locale US>;
+
+        $r12 = newarray (java.lang.Object)[1];
+
+        if z4 == 0 goto label05;
+
+        $r32 = "SUCCESS";
+
+        goto label06;
+
+     label05:
+        $r32 = "FAIL";
+
+     label06:
+        $r12[0] = $r32;
+
+        $r15 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r13, " --> %s", $r12);
+
+        virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r15);
+
+        $r17 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("CameraStateRegistry", $r18);
+
+     label07:
+        if z4 == 0 goto label08;
+
+        specialinvoke r0.<androidx.camera.core.impl.CameraStateRegistry: void recalculateAvailableCameras()>();
+
+     label08:
+        exitmonitor r2;
+
+     label09:
+        return z4;
+
+     label10:
+        $r31 := @caughtexception;
+
+        r4 = $r31;
+
+        exitmonitor r2;
+
+     label11:
+        throw r4;
+
+        catch java.lang.Throwable from label01 to label09 with label10;
+        catch java.lang.Throwable from label10 to label11 with label10;
+    }
+
+    public void markCameraState(androidx.camera.core.Camera, androidx.camera.core.impl.CameraInternal$State)
+    {
+        androidx.camera.core.impl.CameraStateRegistry r0;
+        androidx.camera.core.Camera r1;
+        androidx.camera.core.impl.CameraInternal$State r2;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry;
+
+        r1 := @parameter0: androidx.camera.core.Camera;
+
+        r2 := @parameter1: androidx.camera.core.impl.CameraInternal$State;
+
+        virtualinvoke r0.<androidx.camera.core.impl.CameraStateRegistry: void markCameraState(androidx.camera.core.Camera,androidx.camera.core.impl.CameraInternal$State,boolean)>(r1, r2, 1);
+
+        return;
+    }
+
+    public void markCameraState(androidx.camera.core.Camera, androidx.camera.core.impl.CameraInternal$State, boolean)
+    {
+        androidx.camera.core.impl.CameraStateRegistry r0;
+        androidx.camera.core.Camera r1, $r24;
+        androidx.camera.core.impl.CameraInternal$State r2, $r7, $r8, $r21, $r22, r30;
+        boolean z0, $z1, $z2;
+        int i0, $i1, $i2;
+        java.util.Iterator r3, r31;
+        java.util.Map$Entry r4;
+        java.lang.Throwable r5, $r27;
+        java.lang.Object $r6, $r10, $r13, $r18, $r19, $r23, $r25, r29;
+        java.util.Collection $r9;
+        java.util.HashMap $r11, $r15, r28;
+        java.util.Map $r12, $r16;
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration $r14, $r20, $r26, r32;
+        java.util.Set $r17;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry;
+
+        r1 := @parameter0: androidx.camera.core.Camera;
+
+        r2 := @parameter1: androidx.camera.core.impl.CameraInternal$State;
+
+        z0 := @parameter2: boolean;
+
+        r28 = null;
+
+        $r6 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.Object mLock>;
+
+        r29 = $r6;
+
+        entermonitor $r6;
+
+     label01:
+        i0 = r0.<androidx.camera.core.impl.CameraStateRegistry: int mAvailableCameras>;
+
+        $r7 = <androidx.camera.core.impl.CameraInternal$State: androidx.camera.core.impl.CameraInternal$State RELEASED>;
+
+        if r2 != $r7 goto label02;
+
+        r30 = specialinvoke r0.<androidx.camera.core.impl.CameraStateRegistry: androidx.camera.core.impl.CameraInternal$State unregisterCamera(androidx.camera.core.Camera)>(r1);
+
+        goto label03;
+
+     label02:
+        r30 = specialinvoke r0.<androidx.camera.core.impl.CameraStateRegistry: androidx.camera.core.impl.CameraInternal$State updateAndVerifyState(androidx.camera.core.Camera,androidx.camera.core.impl.CameraInternal$State)>(r1, r2);
+
+     label03:
+        if r30 != r2 goto label05;
+
+        exitmonitor r29;
+
+     label04:
+        return;
+
+     label05:
+        if i0 >= 1 goto label09;
+
+        $i2 = r0.<androidx.camera.core.impl.CameraStateRegistry: int mAvailableCameras>;
+
+        if $i2 <= 0 goto label09;
+
+        $r15 = new java.util.HashMap;
+
+        specialinvoke $r15.<java.util.HashMap: void <init>()>();
+
+        r28 = $r15;
+
+        $r16 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>;
+
+        $r17 = interfaceinvoke $r16.<java.util.Map: java.util.Set entrySet()>();
+
+        r3 = interfaceinvoke $r17.<java.util.Set: java.util.Iterator iterator()>();
+
+     label06:
+        $z2 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label08;
+
+        $r18 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (java.util.Map$Entry) $r18;
+
+        $r19 = interfaceinvoke r4.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r20 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r19;
+
+        $r21 = virtualinvoke $r20.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State getState()>();
+
+        $r22 = <androidx.camera.core.impl.CameraInternal$State: androidx.camera.core.impl.CameraInternal$State PENDING_OPEN>;
+
+        if $r21 != $r22 goto label07;
+
+        $r23 = interfaceinvoke r4.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r24 = (androidx.camera.core.Camera) $r23;
+
+        $r25 = interfaceinvoke r4.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r26 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r25;
+
+        interfaceinvoke r28.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r24, $r26);
+
+     label07:
+        goto label06;
+
+     label08:
+        goto label10;
+
+     label09:
+        $r8 = <androidx.camera.core.impl.CameraInternal$State: androidx.camera.core.impl.CameraInternal$State PENDING_OPEN>;
+
+        if r2 != $r8 goto label10;
+
+        $i1 = r0.<androidx.camera.core.impl.CameraStateRegistry: int mAvailableCameras>;
+
+        if $i1 <= 0 goto label10;
+
+        $r11 = new java.util.HashMap;
+
+        specialinvoke $r11.<java.util.HashMap: void <init>()>();
+
+        r28 = $r11;
+
+        $r12 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>;
+
+        $r13 = interfaceinvoke $r12.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r14 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r13;
+
+        interfaceinvoke r28.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r14);
+
+     label10:
+        if r28 == null goto label11;
+
+        if z0 != 0 goto label11;
+
+        interfaceinvoke r28.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r1);
+
+     label11:
+        exitmonitor r29;
+
+     label12:
+        goto label15;
+
+     label13:
+        $r27 := @caughtexception;
+
+        r5 = $r27;
+
+        exitmonitor r29;
+
+     label14:
+        throw r5;
+
+     label15:
+        if r28 == null goto label17;
+
+        $r9 = interfaceinvoke r28.<java.util.Map: java.util.Collection values()>();
+
+        r31 = interfaceinvoke $r9.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label16:
+        $z1 = interfaceinvoke r31.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label17;
+
+        $r10 = interfaceinvoke r31.<java.util.Iterator: java.lang.Object next()>();
+
+        r32 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r10;
+
+        virtualinvoke r32.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: void notifyListener()>();
+
+        goto label16;
+
+     label17:
+        return;
+
+        catch java.lang.Throwable from label01 to label04 with label13;
+        catch java.lang.Throwable from label05 to label12 with label13;
+        catch java.lang.Throwable from label13 to label14 with label13;
+    }
+
+    private androidx.camera.core.impl.CameraInternal$State unregisterCamera(androidx.camera.core.Camera)
+    {
+        androidx.camera.core.impl.CameraStateRegistry r0;
+        androidx.camera.core.Camera r1;
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration r2;
+        java.util.Map $r3;
+        java.lang.Object $r4;
+        androidx.camera.core.impl.CameraInternal$State $r5;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry;
+
+        r1 := @parameter0: androidx.camera.core.Camera;
+
+        $r3 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r1);
+
+        r2 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r4;
+
+        if r2 == null goto label1;
+
+        specialinvoke r0.<androidx.camera.core.impl.CameraStateRegistry: void recalculateAvailableCameras()>();
+
+        $r5 = virtualinvoke r2.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State getState()>();
+
+        return $r5;
+
+     label1:
+        return null;
+    }
+
+    private androidx.camera.core.impl.CameraInternal$State updateAndVerifyState(androidx.camera.core.Camera, androidx.camera.core.impl.CameraInternal$State)
+    {
+        androidx.camera.core.impl.CameraStateRegistry r0;
+        androidx.camera.core.Camera r1;
+        androidx.camera.core.impl.CameraInternal$State r2, r3, $r9, $r10;
+        java.util.Map $r4;
+        java.lang.Object $r5, $r7;
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration $r6, $r8;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry;
+
+        r1 := @parameter0: androidx.camera.core.Camera;
+
+        r2 := @parameter1: androidx.camera.core.impl.CameraInternal$State;
+
+        $r4 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>;
+
+        $r5 = interfaceinvoke $r4.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r6 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r5;
+
+        $r7 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r6, "Cannot update state of camera which has not yet been registered. Register with CameraStateRegistry.registerCamera()");
+
+        $r8 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r7;
+
+        r3 = virtualinvoke $r8.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State setState(androidx.camera.core.impl.CameraInternal$State)>(r2);
+
+        $r9 = <androidx.camera.core.impl.CameraInternal$State: androidx.camera.core.impl.CameraInternal$State OPENING>;
+
+        if r2 != $r9 goto label4;
+
+        $z0 = staticinvoke <androidx.camera.core.impl.CameraStateRegistry: boolean isOpen(androidx.camera.core.impl.CameraInternal$State)>(r2);
+
+        if $z0 != 0 goto label1;
+
+        $r10 = <androidx.camera.core.impl.CameraInternal$State: androidx.camera.core.impl.CameraInternal$State OPENING>;
+
+        if r3 != $r10 goto label2;
+
+     label1:
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z1, "Cannot mark camera as opening until camera was successful at calling CameraStateRegistry.tryOpenCamera()");
+
+     label4:
+        if r3 == r2 goto label5;
+
+        specialinvoke r0.<androidx.camera.core.impl.CameraStateRegistry: void recalculateAvailableCameras()>();
+
+     label5:
+        return r3;
+    }
+
+    private static boolean isOpen(androidx.camera.core.impl.CameraInternal$State)
+    {
+        androidx.camera.core.impl.CameraInternal$State r0;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: androidx.camera.core.impl.CameraInternal$State;
+
+        if r0 == null goto label1;
+
+        $z0 = virtualinvoke r0.<androidx.camera.core.impl.CameraInternal$State: boolean holdsCameraSlot()>();
+
+        if $z0 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    private void recalculateAvailableCameras()
+    {
+        androidx.camera.core.impl.CameraStateRegistry r0;
+        java.util.Iterator r1;
+        java.util.Map$Entry r2;
+        java.lang.String r3, $r13, $r16, $r26, $r27, $r38, $r42;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        java.util.Map $r4;
+        java.util.Set $r5;
+        int $i0, $i1, $i2, $i3, i4;
+        java.lang.StringBuilder $r6, $r9, $r15, $r22, $r32, $r33, $r37, $r40;
+        java.lang.Object[] $r8, $r21, $r35;
+        java.util.Locale $r10, $r23, $r36;
+        java.lang.Integer $r11, $r12;
+        java.lang.Object $r17, $r18, $r24, $r29, $r43;
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration $r19, $r30, $r44;
+        androidx.camera.core.impl.CameraInternal$State $r20, $r31, $r45;
+        androidx.camera.core.Camera $r25;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry;
+
+        $z0 = staticinvoke <androidx.camera.core.Logger: boolean isDebugEnabled(java.lang.String)>("CameraStateRegistry");
+
+        if $z0 == 0 goto label1;
+
+        $r32 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        virtualinvoke $r32.<java.lang.StringBuilder: void setLength(int)>(0);
+
+        $r33 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Recalculating open cameras:\n");
+
+        $r37 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        $r36 = <java.util.Locale: java.util.Locale US>;
+
+        $r35 = newarray (java.lang.Object)[2];
+
+        $r35[0] = "Camera";
+
+        $r35[1] = "State";
+
+        $r38 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r36, "%-45s%-22s\n", $r35);
+
+        virtualinvoke $r37.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r38);
+
+        $r40 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        virtualinvoke $r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-------------------------------------------------------------------\n");
+
+     label1:
+        i4 = 0;
+
+        $r4 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>;
+
+        $r5 = interfaceinvoke $r4.<java.util.Map: java.util.Set entrySet()>();
+
+        r1 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z3 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label7;
+
+        $r17 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (java.util.Map$Entry) $r17;
+
+        $z2 = staticinvoke <androidx.camera.core.Logger: boolean isDebugEnabled(java.lang.String)>("CameraStateRegistry");
+
+        if $z2 == 0 goto label5;
+
+        $r18 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r19 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r18;
+
+        $r20 = virtualinvoke $r19.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State getState()>();
+
+        if $r20 == null goto label3;
+
+        $r29 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r30 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r29;
+
+        $r31 = virtualinvoke $r30.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State getState()>();
+
+        $r42 = virtualinvoke $r31.<androidx.camera.core.impl.CameraInternal$State: java.lang.String toString()>();
+
+        goto label4;
+
+     label3:
+        $r42 = "UNKNOWN";
+
+     label4:
+        r3 = $r42;
+
+        $r22 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        $r23 = <java.util.Locale: java.util.Locale US>;
+
+        $r21 = newarray (java.lang.Object)[2];
+
+        $r24 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r25 = (androidx.camera.core.Camera) $r24;
+
+        $r26 = virtualinvoke $r25.<java.lang.Object: java.lang.String toString()>();
+
+        $r21[0] = $r26;
+
+        $r21[1] = r3;
+
+        $r27 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r23, "%-45s%-22s\n", $r21);
+
+        virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r27);
+
+     label5:
+        $r43 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r44 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r43;
+
+        $r45 = virtualinvoke $r44.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State getState()>();
+
+        $z4 = staticinvoke <androidx.camera.core.impl.CameraStateRegistry: boolean isOpen(androidx.camera.core.impl.CameraInternal$State)>($r45);
+
+        if $z4 == 0 goto label6;
+
+        i4 = i4 + 1;
+
+     label6:
+        goto label2;
+
+     label7:
+        $z1 = staticinvoke <androidx.camera.core.Logger: boolean isDebugEnabled(java.lang.String)>("CameraStateRegistry");
+
+        if $z1 == 0 goto label8;
+
+        $r6 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-------------------------------------------------------------------\n");
+
+        $r9 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        $r10 = <java.util.Locale: java.util.Locale US>;
+
+        $r8 = newarray (java.lang.Object)[2];
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i4);
+
+        $r8[0] = $r11;
+
+        $i3 = r0.<androidx.camera.core.impl.CameraStateRegistry: int mMaxAllowedOpenedCameras>;
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i3);
+
+        $r8[1] = $r12;
+
+        $r13 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r10, "Open count: %d (Max allowed: %d)", $r8);
+
+        virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r13);
+
+        $r15 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.StringBuilder mDebugString>;
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("CameraStateRegistry", $r16);
+
+     label8:
+        $i0 = r0.<androidx.camera.core.impl.CameraStateRegistry: int mMaxAllowedOpenedCameras>;
+
+        $i1 = $i0 - i4;
+
+        $i2 = staticinvoke <java.lang.Math: int max(int,int)>($i1, 0);
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry: int mAvailableCameras> = $i2;
+
+        return;
+    }
+
+    public boolean isCameraClosing()
+    {
+        androidx.camera.core.impl.CameraStateRegistry r0;
+        java.lang.Object r1, $r5, $r8, $r9;
+        java.util.Iterator r2;
+        java.util.Map$Entry r3;
+        java.lang.Throwable r4, $r13;
+        java.util.Map $r6;
+        java.util.Set $r7;
+        boolean $z0;
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration $r10;
+        androidx.camera.core.impl.CameraInternal$State $r11, $r12;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry;
+
+        $r5 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.lang.Object mLock>;
+
+        r1 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.camera.core.impl.CameraStateRegistry: java.util.Map mCameraStates>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.util.Set entrySet()>();
+
+        r2 = interfaceinvoke $r7.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r8 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.util.Map$Entry) $r8;
+
+        $r9 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r10 = (androidx.camera.core.impl.CameraStateRegistry$CameraRegistration) $r9;
+
+        $r11 = virtualinvoke $r10.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State getState()>();
+
+        $r12 = <androidx.camera.core.impl.CameraInternal$State: androidx.camera.core.impl.CameraInternal$State CLOSING>;
+
+        if $r11 != $r12 goto label4;
+
+        exitmonitor r1;
+
+     label3:
+        return 1;
+
+     label4:
+        goto label2;
+
+     label5:
+        exitmonitor r1;
+
+     label6:
+        return 0;
+
+     label7:
+        $r13 := @caughtexception;
+
+        r4 = $r13;
+
+        exitmonitor r1;
+
+     label8:
+        throw r4;
+
+        catch java.lang.Throwable from label1 to label3 with label7;
+        catch java.lang.Throwable from label4 to label6 with label7;
+        catch java.lang.Throwable from label7 to label8 with label7;
+    }
+
+androidx.camera.core.impl.CameraStateRegistry$CameraRegistration
+<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State mState>
+<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: java.util.concurrent.Executor mNotifyExecutor>
+<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener mCameraAvailableListener>
+    void <init>(androidx.camera.core.impl.CameraInternal$State, java.util.concurrent.Executor, androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener)
+    {
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration r0;
+        androidx.camera.core.impl.CameraInternal$State r1;
+        java.util.concurrent.Executor r2;
+        androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener r3;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry$CameraRegistration;
+
+        r1 := @parameter0: androidx.camera.core.impl.CameraInternal$State;
+
+        r2 := @parameter1: java.util.concurrent.Executor;
+
+        r3 := @parameter2: androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State mState> = r1;
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: java.util.concurrent.Executor mNotifyExecutor> = r2;
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener mCameraAvailableListener> = r3;
+
+        return;
+    }
+
+    androidx.camera.core.impl.CameraInternal$State setState(androidx.camera.core.impl.CameraInternal$State)
+    {
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration r0;
+        androidx.camera.core.impl.CameraInternal$State r1, r2;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry$CameraRegistration;
+
+        r1 := @parameter0: androidx.camera.core.impl.CameraInternal$State;
+
+        r2 = r0.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State mState>;
+
+        r0.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State mState> = r1;
+
+        return r2;
+    }
+
+    androidx.camera.core.impl.CameraInternal$State getState()
+    {
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration r0;
+        androidx.camera.core.impl.CameraInternal$State $r1;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry$CameraRegistration;
+
+        $r1 = r0.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraInternal$State mState>;
+
+        return $r1;
+    }
+
+    void notifyListener()
+    {
+        androidx.camera.core.impl.CameraStateRegistry$CameraRegistration r0;
+        java.lang.Throwable r1, $r6;
+        androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener $r2;
+        java.util.concurrent.Executor $r3;
+        java.lang.Runnable $r5;
+
+        r0 := @this: androidx.camera.core.impl.CameraStateRegistry$CameraRegistration;
+
+     label1:
+        $r3 = r0.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: java.util.concurrent.Executor mNotifyExecutor>;
+
+        $r2 = r0.<androidx.camera.core.impl.CameraStateRegistry$CameraRegistration: androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener mCameraAvailableListener>;
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r2);
+
+        $r5 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener)>($r2) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_INTERFACE" <androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener: void onOpenAvailable()>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r3.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r5);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r1 = $r6;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("CameraStateRegistry", "Unable to notify camera.", r1);
+
+     label4:
+        return;
+
+        catch java.util.concurrent.RejectedExecutionException from label1 to label2 with label3;
+    }
+
+androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener
+<androidx.camera.core.impl.CameraStateRegistry$OnOpenAvailableListener: void onOpenAvailable()>

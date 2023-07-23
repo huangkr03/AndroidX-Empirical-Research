@@ -1,0 +1,792 @@
+androidx.media3.extractor.jpeg.JpegExtractor
+<androidx.media3.extractor.jpeg.JpegExtractor: int STATE_READING_MARKER>
+<androidx.media3.extractor.jpeg.JpegExtractor: int STATE_READING_SEGMENT_LENGTH>
+<androidx.media3.extractor.jpeg.JpegExtractor: int STATE_READING_SEGMENT>
+<androidx.media3.extractor.jpeg.JpegExtractor: int STATE_SNIFFING_MOTION_PHOTO_VIDEO>
+<androidx.media3.extractor.jpeg.JpegExtractor: int STATE_READING_MOTION_PHOTO_VIDEO>
+<androidx.media3.extractor.jpeg.JpegExtractor: int STATE_ENDED>
+<androidx.media3.extractor.jpeg.JpegExtractor: int EXIF_ID_CODE_LENGTH>
+<androidx.media3.extractor.jpeg.JpegExtractor: long EXIF_HEADER>
+<androidx.media3.extractor.jpeg.JpegExtractor: int MARKER_SOI>
+<androidx.media3.extractor.jpeg.JpegExtractor: int MARKER_SOS>
+<androidx.media3.extractor.jpeg.JpegExtractor: int MARKER_APP0>
+<androidx.media3.extractor.jpeg.JpegExtractor: int MARKER_APP1>
+<androidx.media3.extractor.jpeg.JpegExtractor: java.lang.String HEADER_XMP_APP1>
+<androidx.media3.extractor.jpeg.JpegExtractor: int IMAGE_TRACK_ID>
+<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>
+<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>
+<androidx.media3.extractor.jpeg.JpegExtractor: int state>
+<androidx.media3.extractor.jpeg.JpegExtractor: int marker>
+<androidx.media3.extractor.jpeg.JpegExtractor: int segmentLength>
+<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition>
+<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata motionPhotoMetadata>
+<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.ExtractorInput lastExtractorInput>
+<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.jpeg.StartOffsetExtractorInput mp4ExtractorStartOffsetExtractorInput>
+<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor>
+    public void <init>()
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.common.util.ParsableByteArray $r1;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r1.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(6);
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch> = $r1;
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition> = -1L;
+
+        return;
+    }
+
+    public boolean sniff(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        int $i0, $i1, $i2, $i3, $i6, $i7;
+        androidx.media3.common.util.ParsableByteArray $r2, $r3, $r5, $r6;
+        byte[] $r4;
+        long $l4;
+        byte $b5;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $i0 = specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: int peekMarker(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        if $i0 == 65496 goto label1;
+
+        return 0;
+
+     label1:
+        $i1 = specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: int peekMarker(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker> = $i1;
+
+        $i2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker>;
+
+        if $i2 != 65504 goto label2;
+
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void advancePeekPositionToNextSegment(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        $i7 = specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: int peekMarker(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker> = $i7;
+
+     label2:
+        $i3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker>;
+
+        if $i3 == 65505 goto label3;
+
+        return 0;
+
+     label3:
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(2);
+
+        $r2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void reset(int)>(6);
+
+        $r3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, 6);
+
+        $r5 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $l4 = virtualinvoke $r5.<androidx.media3.common.util.ParsableByteArray: long readUnsignedInt()>();
+
+        $b5 = $l4 cmp 1165519206L;
+
+        if $b5 != 0 goto label4;
+
+        $r6 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $i6 = virtualinvoke $r6.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        if $i6 != 0 goto label4;
+
+        $z0 = 1;
+
+        goto label5;
+
+     label4:
+        $z0 = 0;
+
+     label5:
+        return $z0;
+    }
+
+    public void init(androidx.media3.extractor.ExtractorOutput)
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput> = r1;
+
+        return;
+    }
+
+    public int read(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.PositionHolder) throws java.io.IOException
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1, $r5;
+        androidx.media3.extractor.PositionHolder r2;
+        int i0, $i1;
+        androidx.media3.extractor.jpeg.StartOffsetExtractorInput $r3, $r4, $r10;
+        long $l2, $l3, $l4, $l5, $l6, $l7, $l9;
+        byte $b8;
+        java.lang.IllegalStateException $r6;
+        androidx.media3.extractor.mp4.Mp4Extractor $r7, $r9;
+        java.lang.Object $r8;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: androidx.media3.extractor.PositionHolder;
+
+        $i1 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int state>;
+
+        tableswitch($i1)
+        {
+            case 0: goto label01;
+            case 1: goto label02;
+            case 2: goto label03;
+            case 3: goto label11;
+            case 4: goto label04;
+            case 5: goto label06;
+            case 6: goto label10;
+            default: goto label11;
+        };
+
+     label01:
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void readMarker(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return 0;
+
+     label02:
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void readSegmentLength(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return 0;
+
+     label03:
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void readSegment(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return 0;
+
+     label04:
+        $l6 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l7 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition>;
+
+        $b8 = $l6 cmp $l7;
+
+        if $b8 == 0 goto label05;
+
+        $l9 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition>;
+
+        r2.<androidx.media3.extractor.PositionHolder: long position> = $l9;
+
+        return 1;
+
+     label05:
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void sniffMotionPhotoVideo(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return 0;
+
+     label06:
+        $r3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.jpeg.StartOffsetExtractorInput mp4ExtractorStartOffsetExtractorInput>;
+
+        if $r3 == null goto label07;
+
+        $r5 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.ExtractorInput lastExtractorInput>;
+
+        if r1 == $r5 goto label08;
+
+     label07:
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.ExtractorInput lastExtractorInput> = r1;
+
+        $r4 = new androidx.media3.extractor.jpeg.StartOffsetExtractorInput;
+
+        $l2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition>;
+
+        specialinvoke $r4.<androidx.media3.extractor.jpeg.StartOffsetExtractorInput: void <init>(androidx.media3.extractor.ExtractorInput,long)>(r1, $l2);
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.jpeg.StartOffsetExtractorInput mp4ExtractorStartOffsetExtractorInput> = $r4;
+
+     label08:
+        $r7 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor>;
+
+        $r8 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r7);
+
+        $r9 = (androidx.media3.extractor.mp4.Mp4Extractor) $r8;
+
+        $r10 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.jpeg.StartOffsetExtractorInput mp4ExtractorStartOffsetExtractorInput>;
+
+        i0 = virtualinvoke $r9.<androidx.media3.extractor.mp4.Mp4Extractor: int read(androidx.media3.extractor.ExtractorInput,androidx.media3.extractor.PositionHolder)>($r10, r2);
+
+        if i0 != 1 goto label09;
+
+        $l4 = r2.<androidx.media3.extractor.PositionHolder: long position>;
+
+        $l3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition>;
+
+        $l5 = $l4 + $l3;
+
+        r2.<androidx.media3.extractor.PositionHolder: long position> = $l5;
+
+     label09:
+        return i0;
+
+     label10:
+        return -1;
+
+     label11:
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r6;
+    }
+
+    public void seek(long, long)
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        long l0, l1;
+        byte $b2;
+        int $i3;
+        androidx.media3.extractor.mp4.Mp4Extractor $r1, $r3;
+        java.lang.Object $r2;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $b2 = l0 cmp 0L;
+
+        if $b2 != 0 goto label1;
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int state> = 0;
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor> = null;
+
+        goto label2;
+
+     label1:
+        $i3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int state>;
+
+        if $i3 != 5 goto label2;
+
+        $r1 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor>;
+
+        $r2 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r3 = (androidx.media3.extractor.mp4.Mp4Extractor) $r2;
+
+        virtualinvoke $r3.<androidx.media3.extractor.mp4.Mp4Extractor: void seek(long,long)>(l0, l1);
+
+     label2:
+        return;
+    }
+
+    public void release()
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.mp4.Mp4Extractor $r1, $r2;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        $r1 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor>;
+
+        virtualinvoke $r2.<androidx.media3.extractor.mp4.Mp4Extractor: void release()>();
+
+     label1:
+        return;
+    }
+
+    private int peekMarker(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.common.util.ParsableByteArray $r2, $r3, $r5;
+        byte[] $r4;
+        int $i0;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void reset(int)>(2);
+
+        $r3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, 2);
+
+        $r5 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $i0 = virtualinvoke $r5.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        return $i0;
+    }
+
+    private void advancePeekPositionToNextSegment(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        int i0, $i1;
+        androidx.media3.common.util.ParsableByteArray $r2, $r3, $r5;
+        byte[] $r4;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void reset(int)>(2);
+
+        $r3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, 2);
+
+        $r5 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $i1 = virtualinvoke $r5.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        i0 = $i1 - 2;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(i0);
+
+        return;
+    }
+
+    private void readMarker(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.common.util.ParsableByteArray $r2, $r3, $r5;
+        byte[] $r4;
+        int $i0, $i1, $i2, $i3, $i4;
+        long $l5;
+        byte $b6;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void reset(int)>(2);
+
+        $r3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r4, 0, 2);
+
+        $r5 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $i0 = virtualinvoke $r5.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker> = $i0;
+
+        $i1 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker>;
+
+        if $i1 != 65498 goto label2;
+
+        $l5 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition>;
+
+        $b6 = $l5 cmp -1L;
+
+        if $b6 == 0 goto label1;
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int state> = 4;
+
+        goto label4;
+
+     label1:
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void endReadingWithImageTrack()>();
+
+        goto label4;
+
+     label2:
+        $i2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker>;
+
+        if $i2 < 65488 goto label3;
+
+        $i4 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker>;
+
+        if $i4 <= 65497 goto label4;
+
+     label3:
+        $i3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker>;
+
+        if $i3 == 65281 goto label4;
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int state> = 1;
+
+     label4:
+        return;
+    }
+
+    private void readSegmentLength(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.common.util.ParsableByteArray $r2, $r3, $r5;
+        byte[] $r4;
+        int $i0, $i1;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void reset(int)>(2);
+
+        $r3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r4, 0, 2);
+
+        $r5 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $i0 = virtualinvoke $r5.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        $i1 = $i0 - 2;
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int segmentLength> = $i1;
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int state> = 2;
+
+        return;
+    }
+
+    private void readSegment(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.common.util.ParsableByteArray r2, $r4;
+        java.lang.String r3, $r7, $r8;
+        int $i0, $i1, $i2, $i3;
+        byte[] $r5;
+        androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata $r6, $r9, $r10, $r11;
+        boolean $z0;
+        long $l4, $l5;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $i0 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int marker>;
+
+        if $i0 != 65505 goto label2;
+
+        $r4 = new androidx.media3.common.util.ParsableByteArray;
+
+        $i2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int segmentLength>;
+
+        specialinvoke $r4.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>($i2);
+
+        r2 = $r4;
+
+        $r5 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $i3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int segmentLength>;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r5, 0, $i3);
+
+        $r6 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata motionPhotoMetadata>;
+
+        if $r6 != null goto label1;
+
+        $r7 = "http://ns.adobe.com/xap/1.0/";
+
+        $r8 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: java.lang.String readNullTerminatedString()>();
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>($r8);
+
+        if $z0 == 0 goto label1;
+
+        r3 = virtualinvoke r2.<androidx.media3.common.util.ParsableByteArray: java.lang.String readNullTerminatedString()>();
+
+        if r3 == null goto label1;
+
+        $l4 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        $r9 = staticinvoke <androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata getMotionPhotoMetadata(java.lang.String,long)>(r3, $l4);
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata motionPhotoMetadata> = $r9;
+
+        $r10 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata motionPhotoMetadata>;
+
+        if $r10 == null goto label1;
+
+        $r11 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata motionPhotoMetadata>;
+
+        $l5 = $r11.<androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata: long videoStartPosition>;
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition> = $l5;
+
+     label1:
+        goto label3;
+
+     label2:
+        $i1 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: int segmentLength>;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i1);
+
+     label3:
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int state> = 0;
+
+        return;
+    }
+
+    private void sniffMotionPhotoVideo(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        boolean z0, $z1;
+        androidx.media3.common.util.ParsableByteArray $r2;
+        byte[] $r3;
+        androidx.media3.extractor.mp4.Mp4Extractor $r4, $r7, $r10, $r13;
+        androidx.media3.extractor.jpeg.StartOffsetExtractorInput $r5, $r6;
+        long $l0, $l1;
+        androidx.media3.extractor.jpeg.StartOffsetExtractorOutput $r8;
+        androidx.media3.extractor.ExtractorOutput $r9, $r12;
+        java.lang.Object $r11;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.common.util.ParsableByteArray scratch>;
+
+        $r3 = virtualinvoke $r2.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        z0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: boolean peekFully(byte[],int,int,boolean)>($r3, 0, 1, 1);
+
+        if z0 != 0 goto label1;
+
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void endReadingWithImageTrack()>();
+
+        goto label4;
+
+     label1:
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $r4 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor>;
+
+        if $r4 != null goto label2;
+
+        $r13 = new androidx.media3.extractor.mp4.Mp4Extractor;
+
+        specialinvoke $r13.<androidx.media3.extractor.mp4.Mp4Extractor: void <init>()>();
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor> = $r13;
+
+     label2:
+        $r5 = new androidx.media3.extractor.jpeg.StartOffsetExtractorInput;
+
+        $l0 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition>;
+
+        specialinvoke $r5.<androidx.media3.extractor.jpeg.StartOffsetExtractorInput: void <init>(androidx.media3.extractor.ExtractorInput,long)>(r1, $l0);
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.jpeg.StartOffsetExtractorInput mp4ExtractorStartOffsetExtractorInput> = $r5;
+
+        $r7 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor>;
+
+        $r6 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.jpeg.StartOffsetExtractorInput mp4ExtractorStartOffsetExtractorInput>;
+
+        $z1 = virtualinvoke $r7.<androidx.media3.extractor.mp4.Mp4Extractor: boolean sniff(androidx.media3.extractor.ExtractorInput)>($r6);
+
+        if $z1 == 0 goto label3;
+
+        $r10 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.mp4.Mp4Extractor mp4Extractor>;
+
+        $r8 = new androidx.media3.extractor.jpeg.StartOffsetExtractorOutput;
+
+        $l1 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: long mp4StartPosition>;
+
+        $r9 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r11 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r9);
+
+        $r12 = (androidx.media3.extractor.ExtractorOutput) $r11;
+
+        specialinvoke $r8.<androidx.media3.extractor.jpeg.StartOffsetExtractorOutput: void <init>(long,androidx.media3.extractor.ExtractorOutput)>($l1, $r12);
+
+        virtualinvoke $r10.<androidx.media3.extractor.mp4.Mp4Extractor: void init(androidx.media3.extractor.ExtractorOutput)>($r8);
+
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void startReadingMotionPhoto()>();
+
+        goto label4;
+
+     label3:
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void endReadingWithImageTrack()>();
+
+     label4:
+        return;
+    }
+
+    private void startReadingMotionPhoto()
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.common.Metadata$Entry[] $r1;
+        androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata $r2;
+        java.lang.Object $r3;
+        androidx.media3.common.Metadata$Entry $r4;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        $r1 = newarray (androidx.media3.common.Metadata$Entry)[1];
+
+        $r2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata motionPhotoMetadata>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r4 = (androidx.media3.common.Metadata$Entry) $r3;
+
+        $r1[0] = $r4;
+
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void outputImageTrack(androidx.media3.common.Metadata$Entry[])>($r1);
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int state> = 5;
+
+        return;
+    }
+
+    private void endReadingWithImageTrack()
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.common.Metadata$Entry[] $r1;
+        androidx.media3.extractor.ExtractorOutput $r2, $r4, $r6;
+        java.lang.Object $r3;
+        androidx.media3.extractor.SeekMap$Unseekable $r5;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        $r1 = newarray (androidx.media3.common.Metadata$Entry)[0];
+
+        specialinvoke r0.<androidx.media3.extractor.jpeg.JpegExtractor: void outputImageTrack(androidx.media3.common.Metadata$Entry[])>($r1);
+
+        $r2 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r4 = (androidx.media3.extractor.ExtractorOutput) $r3;
+
+        interfaceinvoke $r4.<androidx.media3.extractor.ExtractorOutput: void endTracks()>();
+
+        $r6 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r5 = new androidx.media3.extractor.SeekMap$Unseekable;
+
+        specialinvoke $r5.<androidx.media3.extractor.SeekMap$Unseekable: void <init>(long)>(-9223372036854775807L);
+
+        interfaceinvoke $r6.<androidx.media3.extractor.ExtractorOutput: void seekMap(androidx.media3.extractor.SeekMap)>($r5);
+
+        r0.<androidx.media3.extractor.jpeg.JpegExtractor: int state> = 6;
+
+        return;
+    }
+
+    private transient void outputImageTrack(androidx.media3.common.Metadata$Entry[])
+    {
+        androidx.media3.extractor.jpeg.JpegExtractor r0;
+        androidx.media3.common.Metadata$Entry[] r1;
+        androidx.media3.extractor.TrackOutput r2;
+        androidx.media3.extractor.ExtractorOutput $r3, $r5;
+        java.lang.Object $r4;
+        androidx.media3.common.Format$Builder $r6, $r7, $r9;
+        androidx.media3.common.Metadata $r8;
+        androidx.media3.common.Format $r10;
+
+        r0 := @this: androidx.media3.extractor.jpeg.JpegExtractor;
+
+        r1 := @parameter0: androidx.media3.common.Metadata$Entry[];
+
+        $r3 = r0.<androidx.media3.extractor.jpeg.JpegExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r4 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        $r5 = (androidx.media3.extractor.ExtractorOutput) $r4;
+
+        r2 = interfaceinvoke $r5.<androidx.media3.extractor.ExtractorOutput: androidx.media3.extractor.TrackOutput track(int,int)>(1024, 4);
+
+        $r6 = new androidx.media3.common.Format$Builder;
+
+        specialinvoke $r6.<androidx.media3.common.Format$Builder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setContainerMimeType(java.lang.String)>("image/jpeg");
+
+        $r8 = new androidx.media3.common.Metadata;
+
+        specialinvoke $r8.<androidx.media3.common.Metadata: void <init>(androidx.media3.common.Metadata$Entry[])>(r1);
+
+        $r9 = virtualinvoke $r7.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setMetadata(androidx.media3.common.Metadata)>($r8);
+
+        $r10 = virtualinvoke $r9.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        interfaceinvoke r2.<androidx.media3.extractor.TrackOutput: void format(androidx.media3.common.Format)>($r10);
+
+        return;
+    }
+
+    private static androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata getMotionPhotoMetadata(java.lang.String, long) throws java.io.IOException
+    {
+        java.lang.String r0;
+        long l0;
+        androidx.media3.extractor.jpeg.MotionPhotoDescription r1;
+        byte $b1;
+        androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        l0 := @parameter1: long;
+
+        $b1 = l0 cmp -1L;
+
+        if $b1 != 0 goto label1;
+
+        return null;
+
+     label1:
+        r1 = staticinvoke <androidx.media3.extractor.jpeg.XmpMotionPhotoDescriptionParser: androidx.media3.extractor.jpeg.MotionPhotoDescription parse(java.lang.String)>(r0);
+
+        if r1 != null goto label2;
+
+        return null;
+
+     label2:
+        $r2 = virtualinvoke r1.<androidx.media3.extractor.jpeg.MotionPhotoDescription: androidx.media3.extractor.metadata.mp4.MotionPhotoMetadata getMotionPhotoMetadata(long)>(l0);
+
+        return $r2;
+    }
+

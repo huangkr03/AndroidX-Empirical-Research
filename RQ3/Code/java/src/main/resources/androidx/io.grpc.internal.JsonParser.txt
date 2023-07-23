@@ -1,0 +1,447 @@
+io.grpc.internal.JsonParser
+<io.grpc.internal.JsonParser: java.util.logging.Logger logger>
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+
+        $r0 = class "Lio/grpc/internal/JsonParser;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.internal.JsonParser: java.util.logging.Logger logger> = $r2;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        io.grpc.internal.JsonParser $r0;
+
+        $r0 := @this: io.grpc.internal.JsonParser;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.Object parse(java.lang.String) throws java.io.IOException
+    {
+        com.google.gson.stream.JsonReader $r0;
+        java.lang.Object $r1;
+        java.lang.String $r2;
+        java.io.StringReader $r3;
+        java.lang.Throwable $r4;
+        java.util.logging.Logger $r5;
+        java.util.logging.Level $r6;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r0 = new com.google.gson.stream.JsonReader;
+
+        $r3 = new java.io.StringReader;
+
+        specialinvoke $r3.<java.io.StringReader: void <init>(java.lang.String)>($r2);
+
+        specialinvoke $r0.<com.google.gson.stream.JsonReader: void <init>(java.io.Reader)>($r3);
+
+        $r1 = staticinvoke <io.grpc.internal.JsonParser: java.lang.Object parseRecursive(com.google.gson.stream.JsonReader)>($r0);
+
+     label1:
+        virtualinvoke $r0.<com.google.gson.stream.JsonReader: void close()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r5 = <io.grpc.internal.JsonParser: java.util.logging.Logger logger>;
+
+        $r6 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        virtualinvoke $r5.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r6, "io.grpc.internal.JsonParser", "parse", "Failed to close", $r4);
+
+     label4:
+        return $r1;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    private static java.util.List parseJsonArray(com.google.gson.stream.JsonReader) throws java.io.IOException
+    {
+        java.util.ArrayList $r0, r8;
+        com.google.gson.stream.JsonReader $r1;
+        boolean $z0;
+        java.lang.Object $r2;
+        com.google.gson.stream.JsonToken $r3, $r4;
+        java.lang.StringBuilder $r5, r9;
+        java.lang.String $r6;
+        java.util.List $r7;
+
+        $r1 := @parameter0: com.google.gson.stream.JsonReader;
+
+        virtualinvoke $r1.<com.google.gson.stream.JsonReader: void beginArray()>();
+
+        r8 = new java.util.ArrayList;
+
+        $r0 = r8;
+
+        specialinvoke r8.<java.util.ArrayList: void <init>()>();
+
+     label1:
+        $z0 = virtualinvoke $r1.<com.google.gson.stream.JsonReader: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r2 = staticinvoke <io.grpc.internal.JsonParser: java.lang.Object parseRecursive(com.google.gson.stream.JsonReader)>($r1);
+
+        $r7 = (java.util.List) $r0;
+
+        interfaceinvoke $r7.<java.util.List: boolean add(java.lang.Object)>($r2);
+
+        goto label1;
+
+     label2:
+        $r3 = virtualinvoke $r1.<com.google.gson.stream.JsonReader: com.google.gson.stream.JsonToken peek()>();
+
+        $r4 = <com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken END_ARRAY>;
+
+        if $r3 != $r4 goto label3;
+
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        r9 = new java.lang.StringBuilder;
+
+        specialinvoke r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Bad token: ");
+
+        $r6 = virtualinvoke $r1.<com.google.gson.stream.JsonReader: java.lang.String getPath()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, $r6);
+
+        virtualinvoke $r1.<com.google.gson.stream.JsonReader: void endArray()>();
+
+        $r7 = (java.util.List) $r0;
+
+        $r7 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r7);
+
+        return $r7;
+    }
+
+    private static java.lang.Void parseJsonNull(com.google.gson.stream.JsonReader) throws java.io.IOException
+    {
+        com.google.gson.stream.JsonReader $r0;
+
+        $r0 := @parameter0: com.google.gson.stream.JsonReader;
+
+        virtualinvoke $r0.<com.google.gson.stream.JsonReader: void nextNull()>();
+
+        return null;
+    }
+
+    private static java.util.Map parseJsonObject(com.google.gson.stream.JsonReader) throws java.io.IOException
+    {
+        java.util.LinkedHashMap $r0, r8;
+        com.google.gson.stream.JsonReader $r1;
+        boolean $z0;
+        java.lang.String $r2;
+        java.lang.Object $r3;
+        com.google.gson.stream.JsonToken $r4, $r5;
+        java.lang.StringBuilder $r6, r9;
+        java.util.Map $r7;
+
+        $r1 := @parameter0: com.google.gson.stream.JsonReader;
+
+        virtualinvoke $r1.<com.google.gson.stream.JsonReader: void beginObject()>();
+
+        r8 = new java.util.LinkedHashMap;
+
+        $r0 = r8;
+
+        specialinvoke r8.<java.util.LinkedHashMap: void <init>()>();
+
+     label1:
+        $z0 = virtualinvoke $r1.<com.google.gson.stream.JsonReader: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r2 = virtualinvoke $r1.<com.google.gson.stream.JsonReader: java.lang.String nextName()>();
+
+        $r3 = staticinvoke <io.grpc.internal.JsonParser: java.lang.Object parseRecursive(com.google.gson.stream.JsonReader)>($r1);
+
+        $r7 = (java.util.Map) $r0;
+
+        interfaceinvoke $r7.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r2, $r3);
+
+        goto label1;
+
+     label2:
+        $r4 = virtualinvoke $r1.<com.google.gson.stream.JsonReader: com.google.gson.stream.JsonToken peek()>();
+
+        $r5 = <com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken END_OBJECT>;
+
+        if $r4 != $r5 goto label3;
+
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        r9 = new java.lang.StringBuilder;
+
+        specialinvoke r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Bad token: ");
+
+        $r2 = virtualinvoke $r1.<com.google.gson.stream.JsonReader: java.lang.String getPath()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, $r2);
+
+        virtualinvoke $r1.<com.google.gson.stream.JsonReader: void endObject()>();
+
+        $r7 = (java.util.Map) $r0;
+
+        $r7 = staticinvoke <java.util.Collections: java.util.Map unmodifiableMap(java.util.Map)>($r7);
+
+        return $r7;
+    }
+
+    private static java.lang.Object parseRecursive(com.google.gson.stream.JsonReader) throws java.io.IOException
+    {
+        com.google.gson.stream.JsonReader $r0;
+        boolean $z0;
+        int[] $r1;
+        com.google.gson.stream.JsonToken $r2;
+        int $i0;
+        java.lang.IllegalStateException $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        java.lang.Void $r6;
+        java.lang.Boolean $r7;
+        double $d0;
+        java.lang.Double $r8;
+        java.util.Map $r9;
+        java.util.List $r10;
+
+        $r0 := @parameter0: com.google.gson.stream.JsonReader;
+
+        $z0 = virtualinvoke $r0.<com.google.gson.stream.JsonReader: boolean hasNext()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "unexpected end of JSON");
+
+        $r1 = <io.grpc.internal.JsonParser$1: int[] $SwitchMap$com$google$gson$stream$JsonToken>;
+
+        $r2 = virtualinvoke $r0.<com.google.gson.stream.JsonReader: com.google.gson.stream.JsonToken peek()>();
+
+        $i0 = virtualinvoke $r2.<com.google.gson.stream.JsonToken: int ordinal()>();
+
+        $i0 = $r1[$i0];
+
+        lookupswitch($i0)
+        {
+            case 1: goto label7;
+            case 2: goto label6;
+            case 3: goto label5;
+            case 4: goto label4;
+            case 5: goto label3;
+            case 6: goto label2;
+            default: goto label1;
+        };
+
+     label1:
+        $r3 = new java.lang.IllegalStateException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Bad token: ");
+
+        $r5 = virtualinvoke $r0.<com.google.gson.stream.JsonReader: java.lang.String getPath()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r5);
+
+        throw $r3;
+
+     label2:
+        $r6 = staticinvoke <io.grpc.internal.JsonParser: java.lang.Void parseJsonNull(com.google.gson.stream.JsonReader)>($r0);
+
+        return $r6;
+
+     label3:
+        $z0 = virtualinvoke $r0.<com.google.gson.stream.JsonReader: boolean nextBoolean()>();
+
+        $r7 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+        return $r7;
+
+     label4:
+        $d0 = virtualinvoke $r0.<com.google.gson.stream.JsonReader: double nextDouble()>();
+
+        $r8 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d0);
+
+        return $r8;
+
+     label5:
+        $r5 = virtualinvoke $r0.<com.google.gson.stream.JsonReader: java.lang.String nextString()>();
+
+        return $r5;
+
+     label6:
+        $r9 = staticinvoke <io.grpc.internal.JsonParser: java.util.Map parseJsonObject(com.google.gson.stream.JsonReader)>($r0);
+
+        return $r9;
+
+     label7:
+        $r10 = staticinvoke <io.grpc.internal.JsonParser: java.util.List parseJsonArray(com.google.gson.stream.JsonReader)>($r0);
+
+        return $r10;
+    }
+
+io.grpc.internal.JsonParser$1
+<io.grpc.internal.JsonParser$1: int[] $SwitchMap$com$google$gson$stream$JsonToken>
+    static void <clinit>()
+    {
+        com.google.gson.stream.JsonToken[] $r0;
+        int $i0;
+        int[] $r1;
+        com.google.gson.stream.JsonToken $r2;
+        java.lang.Throwable $r3, $r4, $r5, $r6, $r7, $r8;
+
+        $r0 = staticinvoke <com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken[] values()>();
+
+        $i0 = lengthof $r0;
+
+        $r1 = newarray (int)[$i0];
+
+        <io.grpc.internal.JsonParser$1: int[] $SwitchMap$com$google$gson$stream$JsonToken> = $r1;
+
+        $r2 = <com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken BEGIN_ARRAY>;
+
+     label01:
+        $i0 = virtualinvoke $r2.<com.google.gson.stream.JsonToken: int ordinal()>();
+
+     label02:
+        $r1[$i0] = 1;
+
+        goto label04;
+
+     label03:
+        $r3 := @caughtexception;
+
+     label04:
+        $r1 = <io.grpc.internal.JsonParser$1: int[] $SwitchMap$com$google$gson$stream$JsonToken>;
+
+        $r2 = <com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken BEGIN_OBJECT>;
+
+     label05:
+        $i0 = virtualinvoke $r2.<com.google.gson.stream.JsonToken: int ordinal()>();
+
+     label06:
+        $r1[$i0] = 2;
+
+        goto label08;
+
+     label07:
+        $r4 := @caughtexception;
+
+     label08:
+        $r1 = <io.grpc.internal.JsonParser$1: int[] $SwitchMap$com$google$gson$stream$JsonToken>;
+
+        $r2 = <com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken STRING>;
+
+     label09:
+        $i0 = virtualinvoke $r2.<com.google.gson.stream.JsonToken: int ordinal()>();
+
+     label10:
+        $r1[$i0] = 3;
+
+        goto label12;
+
+     label11:
+        $r5 := @caughtexception;
+
+     label12:
+        $r1 = <io.grpc.internal.JsonParser$1: int[] $SwitchMap$com$google$gson$stream$JsonToken>;
+
+        $r2 = <com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken NUMBER>;
+
+     label13:
+        $i0 = virtualinvoke $r2.<com.google.gson.stream.JsonToken: int ordinal()>();
+
+     label14:
+        $r1[$i0] = 4;
+
+        goto label16;
+
+     label15:
+        $r6 := @caughtexception;
+
+     label16:
+        $r1 = <io.grpc.internal.JsonParser$1: int[] $SwitchMap$com$google$gson$stream$JsonToken>;
+
+        $r2 = <com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken BOOLEAN>;
+
+     label17:
+        $i0 = virtualinvoke $r2.<com.google.gson.stream.JsonToken: int ordinal()>();
+
+     label18:
+        $r1[$i0] = 5;
+
+        goto label20;
+
+     label19:
+        $r7 := @caughtexception;
+
+     label20:
+        $r1 = <io.grpc.internal.JsonParser$1: int[] $SwitchMap$com$google$gson$stream$JsonToken>;
+
+        $r2 = <com.google.gson.stream.JsonToken: com.google.gson.stream.JsonToken NULL>;
+
+     label21:
+        $i0 = virtualinvoke $r2.<com.google.gson.stream.JsonToken: int ordinal()>();
+
+     label22:
+        $r1[$i0] = 6;
+
+        return;
+
+     label23:
+        $r8 := @caughtexception;
+
+        return;
+
+        catch java.lang.NoSuchFieldError from label01 to label02 with label03;
+        catch java.lang.NoSuchFieldError from label05 to label06 with label07;
+        catch java.lang.NoSuchFieldError from label09 to label10 with label11;
+        catch java.lang.NoSuchFieldError from label13 to label14 with label15;
+        catch java.lang.NoSuchFieldError from label17 to label18 with label19;
+        catch java.lang.NoSuchFieldError from label21 to label22 with label23;
+    }
+

@@ -1,0 +1,525 @@
+androidx.media3.extractor.ts.MpegAudioReader
+<androidx.media3.extractor.ts.MpegAudioReader: int STATE_FINDING_HEADER>
+<androidx.media3.extractor.ts.MpegAudioReader: int STATE_READING_HEADER>
+<androidx.media3.extractor.ts.MpegAudioReader: int STATE_READING_FRAME>
+<androidx.media3.extractor.ts.MpegAudioReader: int HEADER_SIZE>
+<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.common.util.ParsableByteArray headerScratch>
+<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.MpegAudioUtil$Header header>
+<androidx.media3.extractor.ts.MpegAudioReader: java.lang.String language>
+<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.TrackOutput output>
+<androidx.media3.extractor.ts.MpegAudioReader: java.lang.String formatId>
+<androidx.media3.extractor.ts.MpegAudioReader: int state>
+<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead>
+<androidx.media3.extractor.ts.MpegAudioReader: boolean hasOutputFormat>
+<androidx.media3.extractor.ts.MpegAudioReader: boolean lastByteWasFF>
+<androidx.media3.extractor.ts.MpegAudioReader: long frameDurationUs>
+<androidx.media3.extractor.ts.MpegAudioReader: int frameSize>
+<androidx.media3.extractor.ts.MpegAudioReader: long timeUs>
+    public void <init>()
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.MpegAudioReader: void <init>(java.lang.String)>(null);
+
+        return;
+    }
+
+    public void <init>(java.lang.String)
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+        java.lang.String r1;
+        androidx.media3.common.util.ParsableByteArray $r2, $r3;
+        byte[] $r4;
+        androidx.media3.extractor.MpegAudioUtil$Header $r5;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int state> = 0;
+
+        $r2 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(4);
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.common.util.ParsableByteArray headerScratch> = $r2;
+
+        $r3 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.common.util.ParsableByteArray headerScratch>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $r4[0] = -1;
+
+        $r5 = new androidx.media3.extractor.MpegAudioUtil$Header;
+
+        specialinvoke $r5.<androidx.media3.extractor.MpegAudioUtil$Header: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.MpegAudioUtil$Header header> = $r5;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: long timeUs> = -9223372036854775807L;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: java.lang.String language> = r1;
+
+        return;
+    }
+
+    public void seek()
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int state> = 0;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead> = 0;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: boolean lastByteWasFF> = 0;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: long timeUs> = -9223372036854775807L;
+
+        return;
+    }
+
+    public void createTracks(androidx.media3.extractor.ExtractorOutput, androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator)
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+        androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator r2;
+        java.lang.String $r3;
+        int $i0;
+        androidx.media3.extractor.TrackOutput $r4;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        r2 := @parameter1: androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator;
+
+        virtualinvoke r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: void generateNewId()>();
+
+        $r3 = virtualinvoke r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: java.lang.String getFormatId()>();
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: java.lang.String formatId> = $r3;
+
+        $i0 = virtualinvoke r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: int getTrackId()>();
+
+        $r4 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: androidx.media3.extractor.TrackOutput track(int,int)>($i0, 1);
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.TrackOutput output> = $r4;
+
+        return;
+    }
+
+    public void packetStarted(long, int)
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+        long l0;
+        int i1;
+        byte $b2;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        $b2 = l0 cmp -9223372036854775807L;
+
+        if $b2 == 0 goto label1;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: long timeUs> = l0;
+
+     label1:
+        return;
+    }
+
+    public void consume(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        androidx.media3.extractor.TrackOutput $r2;
+        int $i0, $i1;
+        java.lang.IllegalStateException $r4;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        $r2 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.TrackOutput output>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r2);
+
+     label1:
+        $i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i1 <= 0 goto label6;
+
+        $i0 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int state>;
+
+        tableswitch($i0)
+        {
+            case 0: goto label2;
+            case 1: goto label3;
+            case 2: goto label4;
+            default: goto label5;
+        };
+
+     label2:
+        specialinvoke r0.<androidx.media3.extractor.ts.MpegAudioReader: void findHeader(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        goto label1;
+
+     label3:
+        specialinvoke r0.<androidx.media3.extractor.ts.MpegAudioReader: void readHeaderRemainder(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        goto label1;
+
+     label4:
+        specialinvoke r0.<androidx.media3.extractor.ts.MpegAudioReader: void readFrameRemainder(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        goto label1;
+
+     label5:
+        $r4 = new java.lang.IllegalStateException;
+
+        specialinvoke $r4.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r4;
+
+     label6:
+        return;
+    }
+
+    public void packetFinished()
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        return;
+    }
+
+    private void findHeader(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+        androidx.media3.common.util.ParsableByteArray r1, $r3;
+        byte[] r2, $r4;
+        int i0, i1, $i4, i8;
+        boolean z0, z1, $z2, $z3, $z4;
+        byte $b2, $b5, $b6;
+        short $s3, $s7;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        i0 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+        i8 = i0;
+
+     label1:
+        if i8 >= i1 goto label7;
+
+        $b2 = r2[i8];
+
+        $s3 = $b2 & 255;
+
+        if $s3 != 255 goto label2;
+
+        $z3 = 1;
+
+        goto label3;
+
+     label2:
+        $z3 = 0;
+
+     label3:
+        z0 = $z3;
+
+        $z2 = r0.<androidx.media3.extractor.ts.MpegAudioReader: boolean lastByteWasFF>;
+
+        if $z2 == 0 goto label4;
+
+        $b6 = r2[i8];
+
+        $s7 = $b6 & 224;
+
+        if $s7 != 224 goto label4;
+
+        $z4 = 1;
+
+        goto label5;
+
+     label4:
+        $z4 = 0;
+
+     label5:
+        z1 = $z4;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: boolean lastByteWasFF> = z0;
+
+        if z1 == 0 goto label6;
+
+        $i4 = i8 + 1;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>($i4);
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: boolean lastByteWasFF> = 0;
+
+        $r3 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.common.util.ParsableByteArray headerScratch>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $b5 = r2[i8];
+
+        $r4[1] = $b5;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead> = 2;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int state> = 1;
+
+        return;
+
+     label6:
+        i8 = i8 + 1;
+
+        goto label1;
+
+     label7:
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i1);
+
+        return;
+    }
+
+    private void readHeaderRemainder(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+        androidx.media3.common.util.ParsableByteArray r1, $r3, $r5, $r6, $r9, $r10;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i12, $i16, $i17;
+        boolean z0, $z1;
+        androidx.media3.common.Format r2;
+        byte[] $r4;
+        androidx.media3.extractor.MpegAudioUtil$Header $r7, $r8, $r12, $r13, $r17, $r21, $r23;
+        androidx.media3.extractor.TrackOutput $r11, $r27;
+        long $l11, $l13, $l14, $l15;
+        androidx.media3.common.Format$Builder $r14, $r16, $r19, $r20, $r22, $r24, $r26;
+        java.lang.String $r15, $r18, $r25;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        $i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        $i2 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead>;
+
+        $i3 = 4 - $i2;
+
+        i0 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i3);
+
+        $r3 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.common.util.ParsableByteArray headerScratch>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $i4 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead>;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void readBytes(byte[],int,int)>($r4, $i4, i0);
+
+        $i5 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead>;
+
+        $i6 = $i5 + i0;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead> = $i6;
+
+        $i7 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead>;
+
+        if $i7 >= 4 goto label1;
+
+        return;
+
+     label1:
+        $r5 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.common.util.ParsableByteArray headerScratch>;
+
+        virtualinvoke $r5.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r7 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.MpegAudioUtil$Header header>;
+
+        $r6 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.common.util.ParsableByteArray headerScratch>;
+
+        $i8 = virtualinvoke $r6.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        z0 = virtualinvoke $r7.<androidx.media3.extractor.MpegAudioUtil$Header: boolean setForHeaderData(int)>($i8);
+
+        if z0 != 0 goto label2;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead> = 0;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int state> = 1;
+
+        return;
+
+     label2:
+        $r8 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.MpegAudioUtil$Header header>;
+
+        $i9 = $r8.<androidx.media3.extractor.MpegAudioUtil$Header: int frameSize>;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameSize> = $i9;
+
+        $z1 = r0.<androidx.media3.extractor.ts.MpegAudioReader: boolean hasOutputFormat>;
+
+        if $z1 != 0 goto label3;
+
+        $r12 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.MpegAudioUtil$Header header>;
+
+        $i10 = $r12.<androidx.media3.extractor.MpegAudioUtil$Header: int samplesPerFrame>;
+
+        $l11 = (long) $i10;
+
+        $l14 = 1000000L * $l11;
+
+        $r13 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.MpegAudioUtil$Header header>;
+
+        $i12 = $r13.<androidx.media3.extractor.MpegAudioUtil$Header: int sampleRate>;
+
+        $l13 = (long) $i12;
+
+        $l15 = $l14 / $l13;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: long frameDurationUs> = $l15;
+
+        $r14 = new androidx.media3.common.Format$Builder;
+
+        specialinvoke $r14.<androidx.media3.common.Format$Builder: void <init>()>();
+
+        $r15 = r0.<androidx.media3.extractor.ts.MpegAudioReader: java.lang.String formatId>;
+
+        $r16 = virtualinvoke $r14.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setId(java.lang.String)>($r15);
+
+        $r17 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.MpegAudioUtil$Header header>;
+
+        $r18 = $r17.<androidx.media3.extractor.MpegAudioUtil$Header: java.lang.String mimeType>;
+
+        $r19 = virtualinvoke $r16.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleMimeType(java.lang.String)>($r18);
+
+        $r20 = virtualinvoke $r19.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setMaxInputSize(int)>(4096);
+
+        $r21 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.MpegAudioUtil$Header header>;
+
+        $i16 = $r21.<androidx.media3.extractor.MpegAudioUtil$Header: int channels>;
+
+        $r22 = virtualinvoke $r20.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setChannelCount(int)>($i16);
+
+        $r23 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.MpegAudioUtil$Header header>;
+
+        $i17 = $r23.<androidx.media3.extractor.MpegAudioUtil$Header: int sampleRate>;
+
+        $r24 = virtualinvoke $r22.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleRate(int)>($i17);
+
+        $r25 = r0.<androidx.media3.extractor.ts.MpegAudioReader: java.lang.String language>;
+
+        $r26 = virtualinvoke $r24.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setLanguage(java.lang.String)>($r25);
+
+        r2 = virtualinvoke $r26.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        $r27 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.TrackOutput output>;
+
+        interfaceinvoke $r27.<androidx.media3.extractor.TrackOutput: void format(androidx.media3.common.Format)>(r2);
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: boolean hasOutputFormat> = 1;
+
+     label3:
+        $r9 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.common.util.ParsableByteArray headerScratch>;
+
+        virtualinvoke $r9.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        $r11 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.TrackOutput output>;
+
+        $r10 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.common.util.ParsableByteArray headerScratch>;
+
+        interfaceinvoke $r11.<androidx.media3.extractor.TrackOutput: void sampleData(androidx.media3.common.util.ParsableByteArray,int)>($r10, 4);
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int state> = 2;
+
+        return;
+    }
+
+    private void readFrameRemainder(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.ts.MpegAudioReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i11;
+        androidx.media3.extractor.TrackOutput $r2, $r3;
+        long $l9, $l12, $l13, $l14, $l15;
+        byte $b10;
+
+        r0 := @this: androidx.media3.extractor.ts.MpegAudioReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        $i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        $i3 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameSize>;
+
+        $i2 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead>;
+
+        $i4 = $i3 - $i2;
+
+        i0 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i4);
+
+        $r2 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.TrackOutput output>;
+
+        interfaceinvoke $r2.<androidx.media3.extractor.TrackOutput: void sampleData(androidx.media3.common.util.ParsableByteArray,int)>(r1, i0);
+
+        $i5 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead>;
+
+        $i6 = $i5 + i0;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead> = $i6;
+
+        $i8 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead>;
+
+        $i7 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameSize>;
+
+        if $i8 >= $i7 goto label1;
+
+        return;
+
+     label1:
+        $l9 = r0.<androidx.media3.extractor.ts.MpegAudioReader: long timeUs>;
+
+        $b10 = $l9 cmp -9223372036854775807L;
+
+        if $b10 == 0 goto label2;
+
+        $r3 = r0.<androidx.media3.extractor.ts.MpegAudioReader: androidx.media3.extractor.TrackOutput output>;
+
+        $l12 = r0.<androidx.media3.extractor.ts.MpegAudioReader: long timeUs>;
+
+        $i11 = r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameSize>;
+
+        interfaceinvoke $r3.<androidx.media3.extractor.TrackOutput: void sampleMetadata(long,int,int,int,androidx.media3.extractor.TrackOutput$CryptoData)>($l12, 1, $i11, 0, null);
+
+        $l14 = r0.<androidx.media3.extractor.ts.MpegAudioReader: long timeUs>;
+
+        $l13 = r0.<androidx.media3.extractor.ts.MpegAudioReader: long frameDurationUs>;
+
+        $l15 = $l14 + $l13;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: long timeUs> = $l15;
+
+     label2:
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int frameBytesRead> = 0;
+
+        r0.<androidx.media3.extractor.ts.MpegAudioReader: int state> = 0;
+
+        return;
+    }
+

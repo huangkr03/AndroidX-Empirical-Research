@@ -1,0 +1,1034 @@
+androidx.media3.extractor.amr.AmrExtractor
+<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.ExtractorsFactory FACTORY>
+<androidx.media3.extractor.amr.AmrExtractor: int FLAG_ENABLE_CONSTANT_BITRATE_SEEKING>
+<androidx.media3.extractor.amr.AmrExtractor: int FLAG_ENABLE_CONSTANT_BITRATE_SEEKING_ALWAYS>
+<androidx.media3.extractor.amr.AmrExtractor: int[] frameSizeBytesByTypeNb>
+<androidx.media3.extractor.amr.AmrExtractor: int[] frameSizeBytesByTypeWb>
+<androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureNb>
+<androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureWb>
+<androidx.media3.extractor.amr.AmrExtractor: int MAX_FRAME_SIZE_BYTES>
+<androidx.media3.extractor.amr.AmrExtractor: int NUM_SAME_SIZE_CONSTANT_BIT_RATE_THRESHOLD>
+<androidx.media3.extractor.amr.AmrExtractor: int SAMPLE_RATE_WB>
+<androidx.media3.extractor.amr.AmrExtractor: int SAMPLE_RATE_NB>
+<androidx.media3.extractor.amr.AmrExtractor: int SAMPLE_TIME_PER_FRAME_US>
+<androidx.media3.extractor.amr.AmrExtractor: byte[] scratch>
+<androidx.media3.extractor.amr.AmrExtractor: int flags>
+<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBand>
+<androidx.media3.extractor.amr.AmrExtractor: long currentSampleTimeUs>
+<androidx.media3.extractor.amr.AmrExtractor: int currentSampleSize>
+<androidx.media3.extractor.amr.AmrExtractor: int currentSampleBytesRemaining>
+<androidx.media3.extractor.amr.AmrExtractor: boolean hasOutputSeekMap>
+<androidx.media3.extractor.amr.AmrExtractor: long firstSamplePosition>
+<androidx.media3.extractor.amr.AmrExtractor: int firstSampleSize>
+<androidx.media3.extractor.amr.AmrExtractor: int numSamplesWithSameSize>
+<androidx.media3.extractor.amr.AmrExtractor: long timeOffsetUs>
+<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>
+<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.TrackOutput trackOutput>
+<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.SeekMap seekMap>
+<androidx.media3.extractor.amr.AmrExtractor: boolean hasOutputFormat>
+    public void <init>()
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: void <init>(int)>(0);
+
+        return;
+    }
+
+    public void <init>(int)
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        int $i0, i1;
+        byte[] $r1;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        i1 := @parameter0: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $i0 = i1 & 2;
+
+        if $i0 == 0 goto label1;
+
+        i1 = i1 | 1;
+
+     label1:
+        r0.<androidx.media3.extractor.amr.AmrExtractor: int flags> = i1;
+
+        $r1 = newarray (byte)[1];
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: byte[] scratch> = $r1;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: int firstSampleSize> = -1;
+
+        return;
+    }
+
+    public boolean sniff(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $z0 = specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: boolean readAmrHeader(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        return $z0;
+    }
+
+    public void init(androidx.media3.extractor.ExtractorOutput)
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+        androidx.media3.extractor.TrackOutput $r2;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput> = r1;
+
+        $r2 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: androidx.media3.extractor.TrackOutput track(int,int)>(0, 1);
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.TrackOutput trackOutput> = $r2;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: void endTracks()>();
+
+        return;
+    }
+
+    public int read(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.PositionHolder) throws java.io.IOException
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.PositionHolder r2;
+        int i0;
+        long $l1, $l3;
+        byte $b2;
+        boolean $z0;
+        androidx.media3.common.ParserException $r3;
+        java.lang.Throwable r4;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r2 := @parameter1: androidx.media3.extractor.PositionHolder;
+
+        specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: void assertInitialized()>();
+
+        $l1 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $b2 = $l1 cmp 0L;
+
+        if $b2 != 0 goto label1;
+
+        $z0 = specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: boolean readAmrHeader(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        $r3 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>("Could not find AMR header.", null);
+
+        r4 = (java.lang.Throwable) $r3;
+
+        throw r4;
+
+     label1:
+        specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: void maybeOutputFormat()>();
+
+        i0 = specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: int readSample(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        $l3 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: void maybeOutputSeekMap(long,int)>($l3, i0);
+
+        return i0;
+    }
+
+    public void seek(long, long)
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        long l0, l1, $l3;
+        byte $b2;
+        androidx.media3.extractor.SeekMap $r1, $r2;
+        boolean $z0;
+        androidx.media3.extractor.ConstantBitrateSeekMap $r3;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: long currentSampleTimeUs> = 0L;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleSize> = 0;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleBytesRemaining> = 0;
+
+        $b2 = l0 cmp 0L;
+
+        if $b2 == 0 goto label1;
+
+        $r1 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.SeekMap seekMap>;
+
+        $z0 = $r1 instanceof androidx.media3.extractor.ConstantBitrateSeekMap;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.SeekMap seekMap>;
+
+        $r3 = (androidx.media3.extractor.ConstantBitrateSeekMap) $r2;
+
+        $l3 = virtualinvoke $r3.<androidx.media3.extractor.ConstantBitrateSeekMap: long getTimeUsAtPosition(long)>(l0);
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: long timeOffsetUs> = $l3;
+
+        goto label2;
+
+     label1:
+        r0.<androidx.media3.extractor.amr.AmrExtractor: long timeOffsetUs> = 0L;
+
+     label2:
+        return;
+    }
+
+    public void release()
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        return;
+    }
+
+    static int frameSizeBytesByTypeNb(int)
+    {
+        int i0, $i1;
+        int[] $r0;
+
+        i0 := @parameter0: int;
+
+        $r0 = <androidx.media3.extractor.amr.AmrExtractor: int[] frameSizeBytesByTypeNb>;
+
+        $i1 = $r0[i0];
+
+        return $i1;
+    }
+
+    static int frameSizeBytesByTypeWb(int)
+    {
+        int i0, $i1;
+        int[] $r0;
+
+        i0 := @parameter0: int;
+
+        $r0 = <androidx.media3.extractor.amr.AmrExtractor: int[] frameSizeBytesByTypeWb>;
+
+        $i1 = $r0[i0];
+
+        return $i1;
+    }
+
+    static byte[] amrSignatureNb()
+    {
+        byte[] $r0, $r1, $r2;
+        int $i0;
+
+        $r1 = <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureNb>;
+
+        $r0 = <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureNb>;
+
+        $i0 = lengthof $r0;
+
+        $r2 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r1, $i0);
+
+        return $r2;
+    }
+
+    static byte[] amrSignatureWb()
+    {
+        byte[] $r0, $r1, $r2;
+        int $i0;
+
+        $r1 = <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureWb>;
+
+        $r0 = <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureWb>;
+
+        $i0 = lengthof $r0;
+
+        $r2 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r1, $i0);
+
+        return $r2;
+    }
+
+    private boolean readAmrHeader(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        byte[] $r2, $r3, $r4, $r5;
+        boolean $z0, $z1;
+        int $i0, $i1;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r2 = <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureNb>;
+
+        $z0 = staticinvoke <androidx.media3.extractor.amr.AmrExtractor: boolean peekAmrSignature(androidx.media3.extractor.ExtractorInput,byte[])>(r1, $r2);
+
+        if $z0 == 0 goto label1;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBand> = 0;
+
+        $r5 = <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureNb>;
+
+        $i1 = lengthof $r5;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i1);
+
+        return 1;
+
+     label1:
+        $r3 = <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureWb>;
+
+        $z1 = staticinvoke <androidx.media3.extractor.amr.AmrExtractor: boolean peekAmrSignature(androidx.media3.extractor.ExtractorInput,byte[])>(r1, $r3);
+
+        if $z1 == 0 goto label2;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBand> = 1;
+
+        $r4 = <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureWb>;
+
+        $i0 = lengthof $r4;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i0);
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    private static boolean peekAmrSignature(androidx.media3.extractor.ExtractorInput, byte[]) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        byte[] r1, r2;
+        int $i0, $i1;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r1 := @parameter1: byte[];
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $i0 = lengthof r1;
+
+        r2 = newarray (byte)[$i0];
+
+        $i1 = lengthof r1;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>(r2, 0, $i1);
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r2, r1);
+
+        return $z0;
+    }
+
+    private void maybeOutputFormat()
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        java.lang.String r1, $r9;
+        short s0, $s2;
+        boolean $z0, $z1, $z2;
+        androidx.media3.common.Format$Builder $r2, $r4, $r5, $r6, $r7;
+        androidx.media3.extractor.TrackOutput $r3;
+        int $i1;
+        androidx.media3.common.Format $r8;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        $z0 = r0.<androidx.media3.extractor.amr.AmrExtractor: boolean hasOutputFormat>;
+
+        if $z0 != 0 goto label5;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: boolean hasOutputFormat> = 1;
+
+        $z1 = r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBand>;
+
+        if $z1 == 0 goto label1;
+
+        $r9 = "audio/amr-wb";
+
+        goto label2;
+
+     label1:
+        $r9 = "audio/3gpp";
+
+     label2:
+        r1 = $r9;
+
+        $z2 = r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBand>;
+
+        if $z2 == 0 goto label3;
+
+        $s2 = 16000;
+
+        goto label4;
+
+     label3:
+        $s2 = 8000;
+
+     label4:
+        s0 = $s2;
+
+        $r3 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        $r2 = new androidx.media3.common.Format$Builder;
+
+        specialinvoke $r2.<androidx.media3.common.Format$Builder: void <init>()>();
+
+        $r4 = virtualinvoke $r2.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleMimeType(java.lang.String)>(r1);
+
+        $i1 = <androidx.media3.extractor.amr.AmrExtractor: int MAX_FRAME_SIZE_BYTES>;
+
+        $r5 = virtualinvoke $r4.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setMaxInputSize(int)>($i1);
+
+        $r6 = virtualinvoke $r5.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setChannelCount(int)>(1);
+
+        $r7 = virtualinvoke $r6.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleRate(int)>(s0);
+
+        $r8 = virtualinvoke $r7.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        interfaceinvoke $r3.<androidx.media3.extractor.TrackOutput: void format(androidx.media3.common.Format)>($r8);
+
+     label5:
+        return;
+    }
+
+    private int readSample(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        int $i0, $i1, $i2, $i3, $i6, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i18, $i19, i20;
+        long $l4, $l5, $l7, $l8, $l9, $l17;
+        androidx.media3.extractor.TrackOutput $r2, $r5;
+        java.lang.Throwable $r3, r4;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $i0 = r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleBytesRemaining>;
+
+        if $i0 != 0 goto label6;
+
+     label1:
+        $i10 = specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: int peekNextSampleSize(androidx.media3.extractor.ExtractorInput)>(r1);
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleSize> = $i10;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+        r4 = $r3;
+
+        return -1;
+
+     label4:
+        $i11 = r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleSize>;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleBytesRemaining> = $i11;
+
+        $i12 = r0.<androidx.media3.extractor.amr.AmrExtractor: int firstSampleSize>;
+
+        if $i12 != -1 goto label5;
+
+        $l17 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: long firstSamplePosition> = $l17;
+
+        $i18 = r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleSize>;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: int firstSampleSize> = $i18;
+
+     label5:
+        $i14 = r0.<androidx.media3.extractor.amr.AmrExtractor: int firstSampleSize>;
+
+        $i13 = r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleSize>;
+
+        if $i14 != $i13 goto label6;
+
+        $i15 = r0.<androidx.media3.extractor.amr.AmrExtractor: int numSamplesWithSameSize>;
+
+        $i16 = $i15 + 1;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: int numSamplesWithSameSize> = $i16;
+
+     label6:
+        $r5 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        $i19 = r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleBytesRemaining>;
+
+        i20 = interfaceinvoke $r5.<androidx.media3.extractor.TrackOutput: int sampleData(androidx.media3.common.DataReader,int,boolean)>(r1, $i19, 1);
+
+        if i20 != -1 goto label7;
+
+        return -1;
+
+     label7:
+        $i1 = r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleBytesRemaining>;
+
+        $i2 = $i1 - i20;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleBytesRemaining> = $i2;
+
+        $i3 = r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleBytesRemaining>;
+
+        if $i3 <= 0 goto label8;
+
+        return 0;
+
+     label8:
+        $r2 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        $l5 = r0.<androidx.media3.extractor.amr.AmrExtractor: long timeOffsetUs>;
+
+        $l4 = r0.<androidx.media3.extractor.amr.AmrExtractor: long currentSampleTimeUs>;
+
+        $l7 = $l5 + $l4;
+
+        $i6 = r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleSize>;
+
+        interfaceinvoke $r2.<androidx.media3.extractor.TrackOutput: void sampleMetadata(long,int,int,int,androidx.media3.extractor.TrackOutput$CryptoData)>($l7, 1, $i6, 0, null);
+
+        $l8 = r0.<androidx.media3.extractor.amr.AmrExtractor: long currentSampleTimeUs>;
+
+        $l9 = $l8 + 20000L;
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: long currentSampleTimeUs> = $l9;
+
+        return 0;
+
+        catch java.io.EOFException from label1 to label2 with label3;
+    }
+
+    private int peekNextSampleSize(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        byte b0, b1, $b3;
+        byte[] $r2, $r3;
+        short $s2;
+        int $i4;
+        java.lang.StringBuilder $r5, $r6, r9;
+        java.lang.String $r7;
+        androidx.media3.common.ParserException $r8;
+        java.lang.Throwable r10;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $r2 = r0.<androidx.media3.extractor.amr.AmrExtractor: byte[] scratch>;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r2, 0, 1);
+
+        $r3 = r0.<androidx.media3.extractor.amr.AmrExtractor: byte[] scratch>;
+
+        b0 = $r3[0];
+
+        $s2 = b0 & 131;
+
+        if $s2 <= 0 goto label1;
+
+        r9 = new java.lang.StringBuilder;
+
+        specialinvoke r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid padding bits for frame header ");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(b0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r8 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>($r7, null);
+
+        r10 = (java.lang.Throwable) $r8;
+
+        throw r10;
+
+     label1:
+        $b3 = b0 >> 3;
+
+        b1 = $b3 & 15;
+
+        $i4 = specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: int getFrameSizeInBytes(int)>(b1);
+
+        return $i4;
+    }
+
+    private int getFrameSizeInBytes(int) throws androidx.media3.common.ParserException
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        int i0, $i1;
+        boolean $z0, $z1, $z2;
+        int[] $r1, $r2;
+        java.lang.StringBuilder $r4, $r5, $r6, $r7, r11;
+        java.lang.String $r8, $r10;
+        androidx.media3.common.ParserException $r9;
+        java.lang.Throwable r12;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        i0 := @parameter0: int;
+
+        $z0 = specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isValidFrameType(int)>(i0);
+
+        if $z0 != 0 goto label3;
+
+        r11 = new java.lang.StringBuilder;
+
+        specialinvoke r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Illegal AMR ");
+
+        $z2 = r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBand>;
+
+        if $z2 == 0 goto label1;
+
+        $r10 = "WB";
+
+        goto label2;
+
+     label1:
+        $r10 = "NB";
+
+     label2:
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" frame type ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>($r8, null);
+
+        r12 = (java.lang.Throwable) $r9;
+
+        throw r12;
+
+     label3:
+        $z1 = r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBand>;
+
+        if $z1 == 0 goto label4;
+
+        $r2 = <androidx.media3.extractor.amr.AmrExtractor: int[] frameSizeBytesByTypeWb>;
+
+        $i1 = $r2[i0];
+
+        goto label5;
+
+     label4:
+        $r1 = <androidx.media3.extractor.amr.AmrExtractor: int[] frameSizeBytesByTypeNb>;
+
+        $i1 = $r1[i0];
+
+     label5:
+        return $i1;
+    }
+
+    private boolean isValidFrameType(int)
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        int i0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        i0 := @parameter0: int;
+
+        if i0 < 0 goto label2;
+
+        if i0 > 15 goto label2;
+
+        $z0 = specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBandValidFrameType(int)>(i0);
+
+        if $z0 != 0 goto label1;
+
+        $z1 = specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isNarrowBandValidFrameType(int)>(i0);
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        return $z2;
+    }
+
+    private boolean isWideBandValidFrameType(int)
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        int i0;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        i0 := @parameter0: int;
+
+        $z0 = r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBand>;
+
+        if $z0 == 0 goto label2;
+
+        if i0 < 10 goto label1;
+
+        if i0 <= 13 goto label2;
+
+     label1:
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    private boolean isNarrowBandValidFrameType(int)
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        int i0;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        i0 := @parameter0: int;
+
+        $z0 = r0.<androidx.media3.extractor.amr.AmrExtractor: boolean isWideBand>;
+
+        if $z0 != 0 goto label2;
+
+        if i0 < 12 goto label1;
+
+        if i0 <= 14 goto label2;
+
+     label1:
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    private void maybeOutputSeekMap(long, int)
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        long l0;
+        int i1, $i2, $i3, $i5, $i6, $i7, $i8, $i10, $i11;
+        boolean $z0, $z1;
+        byte $b4;
+        androidx.media3.extractor.SeekMap $r1, $r2, $r8;
+        androidx.media3.extractor.ExtractorOutput $r3, $r7;
+        androidx.media3.extractor.SeekMap$Unseekable $r6;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        $z0 = r0.<androidx.media3.extractor.amr.AmrExtractor: boolean hasOutputSeekMap>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $i2 = r0.<androidx.media3.extractor.amr.AmrExtractor: int flags>;
+
+        $i3 = $i2 & 1;
+
+        if $i3 == 0 goto label2;
+
+        $b4 = l0 cmp -1L;
+
+        if $b4 == 0 goto label2;
+
+        $i5 = r0.<androidx.media3.extractor.amr.AmrExtractor: int firstSampleSize>;
+
+        if $i5 == -1 goto label3;
+
+        $i11 = r0.<androidx.media3.extractor.amr.AmrExtractor: int firstSampleSize>;
+
+        $i10 = r0.<androidx.media3.extractor.amr.AmrExtractor: int currentSampleSize>;
+
+        if $i11 == $i10 goto label3;
+
+     label2:
+        $r6 = new androidx.media3.extractor.SeekMap$Unseekable;
+
+        specialinvoke $r6.<androidx.media3.extractor.SeekMap$Unseekable: void <init>(long)>(-9223372036854775807L);
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.SeekMap seekMap> = $r6;
+
+        $r7 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r8 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.SeekMap seekMap>;
+
+        interfaceinvoke $r7.<androidx.media3.extractor.ExtractorOutput: void seekMap(androidx.media3.extractor.SeekMap)>($r8);
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: boolean hasOutputSeekMap> = 1;
+
+        goto label7;
+
+     label3:
+        $i6 = r0.<androidx.media3.extractor.amr.AmrExtractor: int numSamplesWithSameSize>;
+
+        if $i6 >= 20 goto label4;
+
+        if i1 != -1 goto label7;
+
+     label4:
+        $i7 = r0.<androidx.media3.extractor.amr.AmrExtractor: int flags>;
+
+        $i8 = $i7 & 2;
+
+        if $i8 == 0 goto label5;
+
+        $z1 = 1;
+
+        goto label6;
+
+     label5:
+        $z1 = 0;
+
+     label6:
+        $r1 = specialinvoke r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.SeekMap getConstantBitrateSeekMap(long,boolean)>(l0, $z1);
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.SeekMap seekMap> = $r1;
+
+        $r3 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        $r2 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.SeekMap seekMap>;
+
+        interfaceinvoke $r3.<androidx.media3.extractor.ExtractorOutput: void seekMap(androidx.media3.extractor.SeekMap)>($r2);
+
+        r0.<androidx.media3.extractor.amr.AmrExtractor: boolean hasOutputSeekMap> = 1;
+
+     label7:
+        return;
+    }
+
+    private androidx.media3.extractor.SeekMap getConstantBitrateSeekMap(long, boolean)
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        long l0, $l4;
+        boolean z0;
+        int i1, $i2, $i3;
+        androidx.media3.extractor.ConstantBitrateSeekMap $r1;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        l0 := @parameter0: long;
+
+        z0 := @parameter1: boolean;
+
+        $i2 = r0.<androidx.media3.extractor.amr.AmrExtractor: int firstSampleSize>;
+
+        i1 = staticinvoke <androidx.media3.extractor.amr.AmrExtractor: int getBitrateFromFrameSize(int,long)>($i2, 20000L);
+
+        $r1 = new androidx.media3.extractor.ConstantBitrateSeekMap;
+
+        $l4 = r0.<androidx.media3.extractor.amr.AmrExtractor: long firstSamplePosition>;
+
+        $i3 = r0.<androidx.media3.extractor.amr.AmrExtractor: int firstSampleSize>;
+
+        specialinvoke $r1.<androidx.media3.extractor.ConstantBitrateSeekMap: void <init>(long,long,int,int,boolean)>(l0, $l4, i1, $i3, z0);
+
+        return $r1;
+    }
+
+    private void assertInitialized()
+    {
+        androidx.media3.extractor.amr.AmrExtractor r0;
+        androidx.media3.extractor.TrackOutput $r1;
+        androidx.media3.extractor.ExtractorOutput $r3;
+
+        r0 := @this: androidx.media3.extractor.amr.AmrExtractor;
+
+        $r1 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.TrackOutput trackOutput>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r1);
+
+        $r3 = r0.<androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.ExtractorOutput extractorOutput>;
+
+        staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r3);
+
+        return;
+    }
+
+    private static int getBitrateFromFrameSize(int, long)
+    {
+        int i0, $i6;
+        long l1, $l2, $l3, $l4, $l5;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        $l2 = (long) i0;
+
+        $l3 = $l2 * 8L;
+
+        $l4 = $l3 * 1000000L;
+
+        $l5 = $l4 / l1;
+
+        $i6 = (int) $l5;
+
+        return $i6;
+    }
+
+    private static androidx.media3.extractor.Extractor[] lambda$static$0()
+    {
+        androidx.media3.extractor.Extractor[] $r0;
+        androidx.media3.extractor.amr.AmrExtractor $r1;
+
+        $r0 = newarray (androidx.media3.extractor.Extractor)[1];
+
+        $r1 = new androidx.media3.extractor.amr.AmrExtractor;
+
+        specialinvoke $r1.<androidx.media3.extractor.amr.AmrExtractor: void <init>()>();
+
+        $r0[0] = $r1;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.media3.extractor.ExtractorsFactory $r0;
+        int[] $r1, $r2, $r5;
+        byte[] $r3, $r4;
+        int $i0;
+
+        $r0 = dynamicinvoke "createExtractors" <androidx.media3.extractor.ExtractorsFactory ()>() <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: androidx.media3.extractor.Extractor[] __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.Extractor[] lambda$static$0()>, methodtype: androidx.media3.extractor.Extractor[] __METHODTYPE__());
+
+        <androidx.media3.extractor.amr.AmrExtractor: androidx.media3.extractor.ExtractorsFactory FACTORY> = $r0;
+
+        $r1 = newarray (int)[16];
+
+        $r1[0] = 13;
+
+        $r1[1] = 14;
+
+        $r1[2] = 16;
+
+        $r1[3] = 18;
+
+        $r1[4] = 20;
+
+        $r1[5] = 21;
+
+        $r1[6] = 27;
+
+        $r1[7] = 32;
+
+        $r1[8] = 6;
+
+        $r1[9] = 7;
+
+        $r1[10] = 6;
+
+        $r1[11] = 6;
+
+        $r1[12] = 1;
+
+        $r1[13] = 1;
+
+        $r1[14] = 1;
+
+        $r1[15] = 1;
+
+        <androidx.media3.extractor.amr.AmrExtractor: int[] frameSizeBytesByTypeNb> = $r1;
+
+        $r2 = newarray (int)[16];
+
+        $r2[0] = 18;
+
+        $r2[1] = 24;
+
+        $r2[2] = 33;
+
+        $r2[3] = 37;
+
+        $r2[4] = 41;
+
+        $r2[5] = 47;
+
+        $r2[6] = 51;
+
+        $r2[7] = 59;
+
+        $r2[8] = 61;
+
+        $r2[9] = 6;
+
+        $r2[10] = 1;
+
+        $r2[11] = 1;
+
+        $r2[12] = 1;
+
+        $r2[13] = 1;
+
+        $r2[14] = 1;
+
+        $r2[15] = 1;
+
+        <androidx.media3.extractor.amr.AmrExtractor: int[] frameSizeBytesByTypeWb> = $r2;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Util: byte[] getUtf8Bytes(java.lang.String)>("#!AMR\n");
+
+        <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureNb> = $r3;
+
+        $r4 = staticinvoke <androidx.media3.common.util.Util: byte[] getUtf8Bytes(java.lang.String)>("#!AMR-WB\n");
+
+        <androidx.media3.extractor.amr.AmrExtractor: byte[] amrSignatureWb> = $r4;
+
+        $r5 = <androidx.media3.extractor.amr.AmrExtractor: int[] frameSizeBytesByTypeWb>;
+
+        $i0 = $r5[8];
+
+        <androidx.media3.extractor.amr.AmrExtractor: int MAX_FRAME_SIZE_BYTES> = $i0;
+
+        return;
+    }
+
+androidx.media3.extractor.amr.AmrExtractor$Flags

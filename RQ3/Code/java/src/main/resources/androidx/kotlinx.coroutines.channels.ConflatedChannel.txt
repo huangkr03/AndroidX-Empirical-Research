@@ -1,0 +1,450 @@
+kotlinx.coroutines.channels.ConflatedChannel
+<kotlinx.coroutines.channels.ConflatedChannel: java.util.concurrent.locks.ReentrantLock lock>
+<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value>
+    public void <init>(kotlin.jvm.functions.Function1)
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+        kotlin.jvm.functions.Function1 $r1;
+        java.util.concurrent.locks.ReentrantLock $r2;
+        kotlinx.coroutines.internal.Symbol $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        $r1 := @parameter0: kotlin.jvm.functions.Function1;
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractChannel: void <init>(kotlin.jvm.functions.Function1)>($r1);
+
+        $r2 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r2.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.util.concurrent.locks.ReentrantLock lock> = $r2;
+
+        $r3 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value> = $r3;
+
+        return;
+    }
+
+    private final kotlinx.coroutines.internal.UndeliveredElementException updateValueLocked(java.lang.Object)
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+        java.lang.Object $r1, $r2;
+        kotlinx.coroutines.internal.UndeliveredElementException $r3;
+        kotlinx.coroutines.internal.Symbol $r4;
+        kotlin.jvm.functions.Function1 $r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value>;
+
+        $r4 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        $r3 = null;
+
+        if $r2 != $r4 goto label2;
+
+     label1:
+        goto label3;
+
+     label2:
+        $r5 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: kotlin.jvm.functions.Function1 onUndeliveredElement>;
+
+        if $r5 == null goto label1;
+
+        $r3 = staticinvoke <kotlinx.coroutines.internal.OnUndeliveredElementKt: kotlinx.coroutines.internal.UndeliveredElementException callUndeliveredElementCatchingException$default(kotlin.jvm.functions.Function1,java.lang.Object,kotlinx.coroutines.internal.UndeliveredElementException,int,java.lang.Object)>($r5, $r2, null, 2, null);
+
+     label3:
+        $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value> = $r1;
+
+        return $r3;
+    }
+
+    protected boolean enqueueReceiveInternal(kotlinx.coroutines.channels.Receive)
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+        boolean $z0;
+        kotlinx.coroutines.channels.Receive $r1;
+        java.util.concurrent.locks.ReentrantLock $r2;
+        java.lang.Throwable $r3;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        $r1 := @parameter0: kotlinx.coroutines.channels.Receive;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "receive");
+
+        $r2 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r2.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label1:
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.channels.AbstractChannel: boolean enqueueReceiveInternal(kotlinx.coroutines.channels.Receive)>($r1);
+
+     label2:
+        interfaceinvoke $r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $z0;
+
+     label3:
+        $r3 := @caughtexception;
+
+        interfaceinvoke $r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    protected java.lang.String getBufferDebugString()
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+        java.lang.Object $r2;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4;
+        java.lang.Throwable $r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r2 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value>;
+
+        $r3 = new java.lang.StringBuilder;
+
+     label1:
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("(value=");
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label2:
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    protected final boolean isBufferAlwaysEmpty()
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        return 0;
+    }
+
+    protected final boolean isBufferAlwaysFull()
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        return 0;
+    }
+
+    protected final boolean isBufferEmpty()
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+        kotlinx.coroutines.internal.Symbol $r2;
+        java.lang.Object $r3;
+        boolean $z0;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value>;
+
+        $r2 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        if $r3 != $r2 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $z0;
+    }
+
+    protected final boolean isBufferFull()
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        return 0;
+    }
+
+    protected java.lang.Object offerInternal(java.lang.Object)
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+        java.lang.Object $r2, $r4;
+        kotlinx.coroutines.channels.Closed $r3;
+        kotlinx.coroutines.internal.Symbol $r5, $r7;
+        kotlinx.coroutines.channels.ReceiveOrClosed $r6;
+        boolean $z0;
+        java.lang.AssertionError $r8;
+        kotlin.Unit $r9;
+        kotlinx.coroutines.internal.UndeliveredElementException $r10;
+        java.lang.Throwable $r11;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        $r2 := @parameter0: java.lang.Object;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label01:
+        $r3 = virtualinvoke $r0.<kotlinx.coroutines.channels.ConflatedChannel: kotlinx.coroutines.channels.Closed getClosedForSend()>();
+
+     label02:
+        if $r3 == null goto label03;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r3;
+
+     label03:
+        $r4 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value>;
+
+        $r5 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        if $r4 != $r5 goto label16;
+
+     label04:
+        $r6 = virtualinvoke $r0.<kotlinx.coroutines.channels.ConflatedChannel: kotlinx.coroutines.channels.ReceiveOrClosed takeFirstReceiveOrPeekClosed()>();
+
+     label05:
+        if $r6 != null goto label06;
+
+        goto label16;
+
+     label06:
+        $z0 = $r6 instanceof kotlinx.coroutines.channels.Closed;
+
+        if $z0 == 0 goto label07;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r6;
+
+     label07:
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r6);
+
+     label08:
+        $r5 = interfaceinvoke $r6.<kotlinx.coroutines.channels.ReceiveOrClosed: kotlinx.coroutines.internal.Symbol tryResumeReceive(java.lang.Object,kotlinx.coroutines.internal.LockFreeLinkedListNode$PrepareOp)>($r2, null);
+
+     label09:
+        if $r5 == null goto label04;
+
+        $z0 = staticinvoke <kotlinx.coroutines.DebugKt: boolean getASSERTIONS_ENABLED()>();
+
+        if $z0 == 0 goto label15;
+
+        $r7 = <kotlinx.coroutines.CancellableContinuationImplKt: kotlinx.coroutines.internal.Symbol RESUME_TOKEN>;
+
+        if $r5 != $r7 goto label10;
+
+        $z0 = 1;
+
+        goto label11;
+
+     label10:
+        $z0 = 0;
+
+     label11:
+        if $z0 == 0 goto label12;
+
+        goto label15;
+
+     label12:
+        $r8 = new java.lang.AssertionError;
+
+     label13:
+        specialinvoke $r8.<java.lang.AssertionError: void <init>()>();
+
+     label14:
+        throw $r8;
+
+     label15:
+        $r9 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        interfaceinvoke $r6.<kotlinx.coroutines.channels.ReceiveOrClosed: void completeResumeReceive(java.lang.Object)>($r2);
+
+        $r2 = interfaceinvoke $r6.<kotlinx.coroutines.channels.ReceiveOrClosed: java.lang.Object getOfferResult()>();
+
+        return $r2;
+
+     label16:
+        $r10 = specialinvoke $r0.<kotlinx.coroutines.channels.ConflatedChannel: kotlinx.coroutines.internal.UndeliveredElementException updateValueLocked(java.lang.Object)>($r2);
+
+     label17:
+        if $r10 != null goto label18;
+
+        $r5 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol OFFER_SUCCESS>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r5;
+
+     label18:
+        throw $r10;
+
+     label19:
+        $r11 := @caughtexception;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label20;
+
+     label20:
+        throw $r11;
+
+        catch java.lang.Throwable from label01 to label02 with label19;
+        catch java.lang.Throwable from label04 to label05 with label19;
+        catch java.lang.Throwable from label08 to label09 with label19;
+        catch java.lang.Throwable from label13 to label14 with label19;
+        catch java.lang.Throwable from label16 to label17 with label19;
+    }
+
+    protected void onCancelIdempotent(boolean)
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+        kotlin.Unit $r2;
+        kotlinx.coroutines.internal.UndeliveredElementException $r3;
+        boolean $z0;
+        kotlinx.coroutines.internal.Symbol $r4;
+        java.lang.Throwable $r5;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r4 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+     label1:
+        $r3 = specialinvoke $r0.<kotlinx.coroutines.channels.ConflatedChannel: kotlinx.coroutines.internal.UndeliveredElementException updateValueLocked(java.lang.Object)>($r4);
+
+     label2:
+        $r2 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        specialinvoke $r0.<kotlinx.coroutines.channels.AbstractChannel: void onCancelIdempotent(boolean)>($z0);
+
+        if $r3 != null goto label3;
+
+        return;
+
+     label3:
+        throw $r3;
+
+     label4:
+        $r5 := @caughtexception;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label4;
+    }
+
+    protected java.lang.Object pollInternal()
+    {
+        kotlinx.coroutines.channels.ConflatedChannel $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+        kotlinx.coroutines.channels.Closed $r2;
+        java.lang.Object $r3;
+        kotlinx.coroutines.internal.Symbol $r4;
+        kotlin.Unit $r5;
+        java.lang.Throwable $r6;
+
+        $r0 := @this: kotlinx.coroutines.channels.ConflatedChannel;
+
+        $r1 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.util.concurrent.locks.ReentrantLock lock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r3 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value>;
+
+        $r4 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        if $r3 != $r4 goto label4;
+
+     label1:
+        $r2 = virtualinvoke $r0.<kotlinx.coroutines.channels.ConflatedChannel: kotlinx.coroutines.channels.Closed getClosedForSend()>();
+
+     label2:
+        $r3 = $r2;
+
+        if $r2 != null goto label3;
+
+        $r3 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol POLL_FAILED>;
+
+     label3:
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r3;
+
+     label4:
+        $r3 = $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value>;
+
+        $r4 = <kotlinx.coroutines.channels.AbstractChannelKt: kotlinx.coroutines.internal.Symbol EMPTY>;
+
+        $r0.<kotlinx.coroutines.channels.ConflatedChannel: java.lang.Object value> = $r4;
+
+        $r5 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return $r3;
+
+     label5:
+        $r6 := @caughtexception;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+    }
+

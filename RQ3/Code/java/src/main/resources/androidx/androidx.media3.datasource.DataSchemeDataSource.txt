@@ -1,0 +1,316 @@
+androidx.media3.datasource.DataSchemeDataSource
+<androidx.media3.datasource.DataSchemeDataSource: java.lang.String SCHEME_DATA>
+<androidx.media3.datasource.DataSchemeDataSource: androidx.media3.datasource.DataSpec dataSpec>
+<androidx.media3.datasource.DataSchemeDataSource: byte[] data>
+<androidx.media3.datasource.DataSchemeDataSource: int readPosition>
+<androidx.media3.datasource.DataSchemeDataSource: int bytesRemaining>
+    public void <init>()
+    {
+        androidx.media3.datasource.DataSchemeDataSource r0;
+
+        r0 := @this: androidx.media3.datasource.DataSchemeDataSource;
+
+        specialinvoke r0.<androidx.media3.datasource.BaseDataSource: void <init>(boolean)>(0);
+
+        return;
+    }
+
+    public long open(androidx.media3.datasource.DataSpec) throws java.io.IOException
+    {
+        androidx.media3.datasource.DataSchemeDataSource r0;
+        androidx.media3.datasource.DataSpec r1;
+        android.net.Uri r2;
+        java.lang.String r3, r5, $r7, $r11, $r12, $r13, $r15, $r16, $r25, $r31;
+        java.lang.String[] r4;
+        java.lang.Throwable r6, $r27, r37;
+        boolean $z0, $z1;
+        java.lang.StringBuilder $r9, $r10, $r23, $r24, $r29, $r30, r33, r34, r35;
+        int $i0, $i1, $i6, $i7, $i8, $i9, $i14, $i15, $i19;
+        java.nio.charset.Charset $r14;
+        byte[] $r17, $r18, $r19, $r21;
+        long $l2, $l3, $l5, $l10, $l12, $l16, $l17, $l18, $l20;
+        byte $b4, $b11, $b13;
+        androidx.media3.common.ParserException $r26, $r32;
+        androidx.media3.datasource.DataSourceException r36;
+
+        r0 := @this: androidx.media3.datasource.DataSchemeDataSource;
+
+        r1 := @parameter0: androidx.media3.datasource.DataSpec;
+
+        virtualinvoke r0.<androidx.media3.datasource.DataSchemeDataSource: void transferInitializing(androidx.media3.datasource.DataSpec)>(r1);
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: androidx.media3.datasource.DataSpec dataSpec> = r1;
+
+        r2 = r1.<androidx.media3.datasource.DataSpec: android.net.Uri uri>;
+
+        r3 = virtualinvoke r2.<android.net.Uri: java.lang.String getScheme()>();
+
+        $r7 = "data";
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        r33 = new java.lang.StringBuilder;
+
+        specialinvoke r33.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unsupported scheme: ");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z0, $r11);
+
+        $r12 = virtualinvoke r2.<android.net.Uri: java.lang.String getSchemeSpecificPart()>();
+
+        r4 = staticinvoke <androidx.media3.common.util.Util: java.lang.String[] split(java.lang.String,java.lang.String)>($r12, ",");
+
+        $i0 = lengthof r4;
+
+        if $i0 == 2 goto label01;
+
+        r34 = new java.lang.StringBuilder;
+
+        specialinvoke r34.<java.lang.StringBuilder: void <init>()>();
+
+        $r23 = virtualinvoke r34.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unexpected URI format: ");
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r26 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedDataOfUnknownType(java.lang.String,java.lang.Throwable)>($r25, null);
+
+        throw $r26;
+
+     label01:
+        r5 = r4[1];
+
+        $r13 = r4[0];
+
+        $z1 = virtualinvoke $r13.<java.lang.String: boolean contains(java.lang.CharSequence)>(";base64");
+
+        if $z1 == 0 goto label05;
+
+     label02:
+        $r21 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>(r5, 0);
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: byte[] data> = $r21;
+
+     label03:
+        goto label06;
+
+     label04:
+        $r27 := @caughtexception;
+
+        r6 = $r27;
+
+        r35 = new java.lang.StringBuilder;
+
+        specialinvoke r35.<java.lang.StringBuilder: void <init>()>();
+
+        $r29 = virtualinvoke r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Error while parsing Base64 encoded string: ");
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r5);
+
+        $r31 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r32 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedDataOfUnknownType(java.lang.String,java.lang.Throwable)>($r31, r6);
+
+        throw $r32;
+
+     label05:
+        $r14 = <com.google.common.base.Charsets: java.nio.charset.Charset US_ASCII>;
+
+        $r15 = virtualinvoke $r14.<java.nio.charset.Charset: java.lang.String name()>();
+
+        $r16 = staticinvoke <java.net.URLDecoder: java.lang.String decode(java.lang.String,java.lang.String)>(r5, $r15);
+
+        $r17 = staticinvoke <androidx.media3.common.util.Util: byte[] getUtf8Bytes(java.lang.String)>($r16);
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: byte[] data> = $r17;
+
+     label06:
+        $l3 = r1.<androidx.media3.datasource.DataSpec: long position>;
+
+        $r18 = r0.<androidx.media3.datasource.DataSchemeDataSource: byte[] data>;
+
+        $i1 = lengthof $r18;
+
+        $l2 = (long) $i1;
+
+        $b4 = $l3 cmp $l2;
+
+        if $b4 <= 0 goto label07;
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: byte[] data> = null;
+
+        r36 = new androidx.media3.datasource.DataSourceException;
+
+        specialinvoke r36.<androidx.media3.datasource.DataSourceException: void <init>(int)>(2008);
+
+        r37 = (java.lang.Throwable) r36;
+
+        throw r37;
+
+     label07:
+        $l5 = r1.<androidx.media3.datasource.DataSpec: long position>;
+
+        $i6 = (int) $l5;
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: int readPosition> = $i6;
+
+        $r19 = r0.<androidx.media3.datasource.DataSchemeDataSource: byte[] data>;
+
+        $i8 = lengthof $r19;
+
+        $i7 = r0.<androidx.media3.datasource.DataSchemeDataSource: int readPosition>;
+
+        $i9 = $i8 - $i7;
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: int bytesRemaining> = $i9;
+
+        $l10 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $b11 = $l10 cmp -1L;
+
+        if $b11 == 0 goto label08;
+
+        $i15 = r0.<androidx.media3.datasource.DataSchemeDataSource: int bytesRemaining>;
+
+        $l17 = (long) $i15;
+
+        $l16 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $l18 = staticinvoke <java.lang.Math: long min(long,long)>($l17, $l16);
+
+        $i19 = (int) $l18;
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: int bytesRemaining> = $i19;
+
+     label08:
+        virtualinvoke r0.<androidx.media3.datasource.DataSchemeDataSource: void transferStarted(androidx.media3.datasource.DataSpec)>(r1);
+
+        $l12 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $b13 = $l12 cmp -1L;
+
+        if $b13 == 0 goto label09;
+
+        $l20 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        goto label10;
+
+     label09:
+        $i14 = r0.<androidx.media3.datasource.DataSchemeDataSource: int bytesRemaining>;
+
+        $l20 = (long) $i14;
+
+     label10:
+        return $l20;
+
+        catch java.lang.IllegalArgumentException from label02 to label03 with label04;
+    }
+
+    public int read(byte[], int, int)
+    {
+        androidx.media3.datasource.DataSchemeDataSource r0;
+        byte[] r1, $r2;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8, i9;
+        java.lang.Object $r3;
+
+        r0 := @this: androidx.media3.datasource.DataSchemeDataSource;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i8 := @parameter2: int;
+
+        if i8 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $i1 = r0.<androidx.media3.datasource.DataSchemeDataSource: int bytesRemaining>;
+
+        if $i1 != 0 goto label2;
+
+        return -1;
+
+     label2:
+        $i2 = r0.<androidx.media3.datasource.DataSchemeDataSource: int bytesRemaining>;
+
+        i9 = staticinvoke <java.lang.Math: int min(int,int)>(i8, $i2);
+
+        $r2 = r0.<androidx.media3.datasource.DataSchemeDataSource: byte[] data>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r2);
+
+        $i3 = r0.<androidx.media3.datasource.DataSchemeDataSource: int readPosition>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r3, $i3, r1, i0, i9);
+
+        $i4 = r0.<androidx.media3.datasource.DataSchemeDataSource: int readPosition>;
+
+        $i5 = $i4 + i9;
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: int readPosition> = $i5;
+
+        $i6 = r0.<androidx.media3.datasource.DataSchemeDataSource: int bytesRemaining>;
+
+        $i7 = $i6 - i9;
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: int bytesRemaining> = $i7;
+
+        virtualinvoke r0.<androidx.media3.datasource.DataSchemeDataSource: void bytesTransferred(int)>(i9);
+
+        return i9;
+    }
+
+    public android.net.Uri getUri()
+    {
+        androidx.media3.datasource.DataSchemeDataSource r0;
+        androidx.media3.datasource.DataSpec $r1, $r2;
+        android.net.Uri $r3;
+
+        r0 := @this: androidx.media3.datasource.DataSchemeDataSource;
+
+        $r1 = r0.<androidx.media3.datasource.DataSchemeDataSource: androidx.media3.datasource.DataSpec dataSpec>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.media3.datasource.DataSchemeDataSource: androidx.media3.datasource.DataSpec dataSpec>;
+
+        $r3 = $r2.<androidx.media3.datasource.DataSpec: android.net.Uri uri>;
+
+        goto label2;
+
+     label1:
+        $r3 = null;
+
+     label2:
+        return $r3;
+    }
+
+    public void close()
+    {
+        androidx.media3.datasource.DataSchemeDataSource r0;
+        byte[] $r1;
+
+        r0 := @this: androidx.media3.datasource.DataSchemeDataSource;
+
+        $r1 = r0.<androidx.media3.datasource.DataSchemeDataSource: byte[] data>;
+
+        if $r1 == null goto label1;
+
+        r0.<androidx.media3.datasource.DataSchemeDataSource: byte[] data> = null;
+
+        virtualinvoke r0.<androidx.media3.datasource.DataSchemeDataSource: void transferEnded()>();
+
+     label1:
+        r0.<androidx.media3.datasource.DataSchemeDataSource: androidx.media3.datasource.DataSpec dataSpec> = null;
+
+        return;
+    }
+

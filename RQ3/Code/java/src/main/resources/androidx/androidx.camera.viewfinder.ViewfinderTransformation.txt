@@ -1,0 +1,961 @@
+androidx.camera.viewfinder.ViewfinderTransformation
+<androidx.camera.viewfinder.ViewfinderTransformation: java.lang.String TAG>
+<androidx.camera.viewfinder.ViewfinderTransformation: androidx.camera.viewfinder.CameraViewfinder$ScaleType DEFAULT_SCALE_TYPE>
+<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>
+<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>
+<androidx.camera.viewfinder.ViewfinderTransformation: int mViewfinderRotationDegrees>
+<androidx.camera.viewfinder.ViewfinderTransformation: int mTargetRotation>
+<androidx.camera.viewfinder.ViewfinderTransformation: boolean mIsFrontCamera>
+<androidx.camera.viewfinder.ViewfinderTransformation: androidx.camera.viewfinder.CameraViewfinder$ScaleType mScaleType>
+    void <init>()
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        androidx.camera.viewfinder.CameraViewfinder$ScaleType $r1;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = <androidx.camera.viewfinder.ViewfinderTransformation: androidx.camera.viewfinder.CameraViewfinder$ScaleType DEFAULT_SCALE_TYPE>;
+
+        r0.<androidx.camera.viewfinder.ViewfinderTransformation: androidx.camera.viewfinder.CameraViewfinder$ScaleType mScaleType> = $r1;
+
+        return;
+    }
+
+    void setTransformationInfo(androidx.camera.viewfinder.internal.transform.TransformationInfo, android.util.Size, boolean)
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        androidx.camera.viewfinder.internal.transform.TransformationInfo r1;
+        android.util.Size r2;
+        boolean z0;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        r1 := @parameter0: androidx.camera.viewfinder.internal.transform.TransformationInfo;
+
+        r2 := @parameter1: android.util.Size;
+
+        z0 := @parameter2: boolean;
+
+        virtualinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: void updateTransformInfo(androidx.camera.viewfinder.internal.transform.TransformationInfo)>(r1);
+
+        r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution> = r2;
+
+        r0.<androidx.camera.viewfinder.ViewfinderTransformation: boolean mIsFrontCamera> = z0;
+
+        return;
+    }
+
+    void updateTransformInfo(androidx.camera.viewfinder.internal.transform.TransformationInfo)
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        androidx.camera.viewfinder.internal.transform.TransformationInfo r1;
+        android.graphics.Rect $r2;
+        int $i0, $i1;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        r1 := @parameter0: androidx.camera.viewfinder.internal.transform.TransformationInfo;
+
+        $r2 = virtualinvoke r1.<androidx.camera.viewfinder.internal.transform.TransformationInfo: android.graphics.Rect getCropRect()>();
+
+        r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect> = $r2;
+
+        $i0 = virtualinvoke r1.<androidx.camera.viewfinder.internal.transform.TransformationInfo: int getRotationDegrees()>();
+
+        r0.<androidx.camera.viewfinder.ViewfinderTransformation: int mViewfinderRotationDegrees> = $i0;
+
+        $i1 = virtualinvoke r1.<androidx.camera.viewfinder.internal.transform.TransformationInfo: int getTargetRotation()>();
+
+        r0.<androidx.camera.viewfinder.ViewfinderTransformation: int mTargetRotation> = $i1;
+
+        return;
+    }
+
+    void transformView(android.util.Size, int, android.view.View)
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        android.util.Size r1, $r11, $r12;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+        android.view.View r2;
+        java.lang.StringBuilder $r3, $r4, $r5;
+        java.lang.String $r6;
+        boolean $z0, $z1;
+        android.view.TextureView $r7;
+        android.graphics.Matrix $r8;
+        android.view.Display r9;
+        android.graphics.RectF r10;
+        float $f0, $f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8, $f9, $f10, $f11;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        r1 := @parameter0: android.util.Size;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: android.view.View;
+
+        $i1 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        if $i1 == 0 goto label1;
+
+        $i2 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        if $i2 != 0 goto label2;
+
+     label1:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Transform not applied due to Viewfinder size: ");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.viewfinder.internal.utils.Logger: void w(java.lang.String,java.lang.String)>("ViewfinderTransformation", $r6);
+
+        return;
+
+     label2:
+        $z0 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: boolean isTransformationInfoReady()>();
+
+        if $z0 != 0 goto label3;
+
+        return;
+
+     label3:
+        $z1 = r2 instanceof android.view.TextureView;
+
+        if $z1 == 0 goto label4;
+
+        $r7 = (android.view.TextureView) r2;
+
+        $r8 = virtualinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Matrix getTextureViewCorrectionMatrix()>();
+
+        virtualinvoke $r7.<android.view.TextureView: void setTransform(android.graphics.Matrix)>($r8);
+
+        goto label5;
+
+     label4:
+        r9 = virtualinvoke r2.<android.view.View: android.view.Display getDisplay()>();
+
+        if r9 == null goto label5;
+
+        $i3 = virtualinvoke r9.<android.view.Display: int getRotation()>();
+
+        $i4 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: int mTargetRotation>;
+
+        if $i3 == $i4 goto label5;
+
+        staticinvoke <androidx.camera.viewfinder.internal.utils.Logger: void e(java.lang.String,java.lang.String)>("ViewfinderTransformation", "Non-display rotation not supported with SurfaceView / PERFORMANCE mode.");
+
+     label5:
+        r10 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.RectF getTransformedSurfaceRect(android.util.Size,int)>(r1, i0);
+
+        virtualinvoke r2.<android.view.View: void setPivotX(float)>(0.0F);
+
+        virtualinvoke r2.<android.view.View: void setPivotY(float)>(0.0F);
+
+        $f0 = virtualinvoke r10.<android.graphics.RectF: float width()>();
+
+        $r11 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>;
+
+        $i5 = virtualinvoke $r11.<android.util.Size: int getWidth()>();
+
+        $f1 = (float) $i5;
+
+        $f2 = $f0 / $f1;
+
+        virtualinvoke r2.<android.view.View: void setScaleX(float)>($f2);
+
+        $f3 = virtualinvoke r10.<android.graphics.RectF: float height()>();
+
+        $r12 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>;
+
+        $i6 = virtualinvoke $r12.<android.util.Size: int getHeight()>();
+
+        $f4 = (float) $i6;
+
+        $f5 = $f3 / $f4;
+
+        virtualinvoke r2.<android.view.View: void setScaleY(float)>($f5);
+
+        $f6 = r10.<android.graphics.RectF: float left>;
+
+        $i7 = virtualinvoke r2.<android.view.View: int getLeft()>();
+
+        $f7 = (float) $i7;
+
+        $f8 = $f6 - $f7;
+
+        virtualinvoke r2.<android.view.View: void setTranslationX(float)>($f8);
+
+        $f9 = r10.<android.graphics.RectF: float top>;
+
+        $i8 = virtualinvoke r2.<android.view.View: int getTop()>();
+
+        $f10 = (float) $i8;
+
+        $f11 = $f9 - $f10;
+
+        virtualinvoke r2.<android.view.View: void setTranslationY(float)>($f11);
+
+        return;
+    }
+
+    void setScaleType(androidx.camera.viewfinder.CameraViewfinder$ScaleType)
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        androidx.camera.viewfinder.CameraViewfinder$ScaleType r1;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        r1 := @parameter0: androidx.camera.viewfinder.CameraViewfinder$ScaleType;
+
+        r0.<androidx.camera.viewfinder.ViewfinderTransformation: androidx.camera.viewfinder.CameraViewfinder$ScaleType mScaleType> = r1;
+
+        return;
+    }
+
+    androidx.camera.viewfinder.CameraViewfinder$ScaleType getScaleType()
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        androidx.camera.viewfinder.CameraViewfinder$ScaleType $r1;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        $r1 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: androidx.camera.viewfinder.CameraViewfinder$ScaleType mScaleType>;
+
+        return $r1;
+    }
+
+    android.graphics.Bitmap createTransformedBitmap(android.graphics.Bitmap, android.util.Size, int)
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        android.graphics.Bitmap r1, r5;
+        android.util.Size r2, $r11, $r12;
+        int i0, $i1, $i2, $i3, $i4;
+        android.graphics.Matrix r3, r7, $r10;
+        android.graphics.RectF r4;
+        android.graphics.Canvas r6, $r9;
+        boolean $z0;
+        android.graphics.Bitmap$Config $r8;
+        float $f0, $f1, $f2, $f3, $f4, $f5, $f6, $f7;
+        android.graphics.Paint $r13;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        r1 := @parameter0: android.graphics.Bitmap;
+
+        r2 := @parameter1: android.util.Size;
+
+        i0 := @parameter2: int;
+
+        $z0 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: boolean isTransformationInfoReady()>();
+
+        if $z0 != 0 goto label1;
+
+        return r1;
+
+     label1:
+        r3 = virtualinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Matrix getTextureViewCorrectionMatrix()>();
+
+        r4 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.RectF getTransformedSurfaceRect(android.util.Size,int)>(r2, i0);
+
+        $i1 = virtualinvoke r2.<android.util.Size: int getWidth()>();
+
+        $i2 = virtualinvoke r2.<android.util.Size: int getHeight()>();
+
+        $r8 = virtualinvoke r1.<android.graphics.Bitmap: android.graphics.Bitmap$Config getConfig()>();
+
+        r5 = staticinvoke <android.graphics.Bitmap: android.graphics.Bitmap createBitmap(int,int,android.graphics.Bitmap$Config)>($i1, $i2, $r8);
+
+        $r9 = new android.graphics.Canvas;
+
+        specialinvoke $r9.<android.graphics.Canvas: void <init>(android.graphics.Bitmap)>(r5);
+
+        r6 = $r9;
+
+        $r10 = new android.graphics.Matrix;
+
+        specialinvoke $r10.<android.graphics.Matrix: void <init>()>();
+
+        r7 = $r10;
+
+        virtualinvoke r7.<android.graphics.Matrix: boolean postConcat(android.graphics.Matrix)>(r3);
+
+        $f0 = virtualinvoke r4.<android.graphics.RectF: float width()>();
+
+        $r11 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>;
+
+        $i3 = virtualinvoke $r11.<android.util.Size: int getWidth()>();
+
+        $f1 = (float) $i3;
+
+        $f2 = $f0 / $f1;
+
+        $f3 = virtualinvoke r4.<android.graphics.RectF: float height()>();
+
+        $r12 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>;
+
+        $i4 = virtualinvoke $r12.<android.util.Size: int getHeight()>();
+
+        $f4 = (float) $i4;
+
+        $f5 = $f3 / $f4;
+
+        virtualinvoke r7.<android.graphics.Matrix: boolean postScale(float,float)>($f2, $f5);
+
+        $f7 = r4.<android.graphics.RectF: float left>;
+
+        $f6 = r4.<android.graphics.RectF: float top>;
+
+        virtualinvoke r7.<android.graphics.Matrix: boolean postTranslate(float,float)>($f7, $f6);
+
+        $r13 = new android.graphics.Paint;
+
+        specialinvoke $r13.<android.graphics.Paint: void <init>(int)>(7);
+
+        virtualinvoke r6.<android.graphics.Canvas: void drawBitmap(android.graphics.Bitmap,android.graphics.Matrix,android.graphics.Paint)>(r1, r7, $r13);
+
+        return r5;
+    }
+
+    android.graphics.Matrix getTextureViewCorrectionMatrix()
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        android.graphics.RectF r1, $r2;
+        int i0, $i1, $i2, $i3, $i4;
+        boolean $z0;
+        android.util.Size $r3, $r4;
+        float $f0, $f1;
+        android.graphics.Matrix $r5;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        $z0 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: boolean isTransformationInfoReady()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean)>($z0);
+
+        $r2 = new android.graphics.RectF;
+
+        $r3 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>;
+
+        $i1 = virtualinvoke $r3.<android.util.Size: int getWidth()>();
+
+        $f0 = (float) $i1;
+
+        $r4 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>;
+
+        $i2 = virtualinvoke $r4.<android.util.Size: int getHeight()>();
+
+        $f1 = (float) $i2;
+
+        specialinvoke $r2.<android.graphics.RectF: void <init>(float,float,float,float)>(0.0F, 0.0F, $f0, $f1);
+
+        r1 = $r2;
+
+        $i3 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: int mTargetRotation>;
+
+        $i4 = staticinvoke <androidx.camera.viewfinder.internal.utils.TransformUtils: int surfaceRotationToRotationDegrees(int)>($i3);
+
+        i0 = neg $i4;
+
+        $r5 = staticinvoke <androidx.camera.viewfinder.internal.utils.TransformUtils: android.graphics.Matrix getRectToRect(android.graphics.RectF,android.graphics.RectF,int)>(r1, r1, i0);
+
+        return $r5;
+    }
+
+    private boolean isTransformationInfoReady()
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        android.graphics.Rect $r1;
+        android.util.Size $r2;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        $r1 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>;
+
+        if $r2 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private android.graphics.RectF getTransformedSurfaceRect(android.util.Size, int)
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        android.util.Size r1, $r5, $r6;
+        int i0, $i1, $i2;
+        android.graphics.Matrix r2;
+        android.graphics.RectF r3, $r4;
+        boolean $z0;
+        float $f0, $f1;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        r1 := @parameter0: android.util.Size;
+
+        i0 := @parameter1: int;
+
+        $z0 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: boolean isTransformationInfoReady()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean)>($z0);
+
+        r2 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Matrix getSurfaceToViewfinderMatrix(android.util.Size,int)>(r1, i0);
+
+        $r4 = new android.graphics.RectF;
+
+        $r5 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>;
+
+        $i1 = virtualinvoke $r5.<android.util.Size: int getWidth()>();
+
+        $f0 = (float) $i1;
+
+        $r6 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size mResolution>;
+
+        $i2 = virtualinvoke $r6.<android.util.Size: int getHeight()>();
+
+        $f1 = (float) $i2;
+
+        specialinvoke $r4.<android.graphics.RectF: void <init>(float,float,float,float)>(0.0F, 0.0F, $f0, $f1);
+
+        r3 = $r4;
+
+        virtualinvoke r2.<android.graphics.Matrix: boolean mapRect(android.graphics.RectF)>(r3);
+
+        return r3;
+    }
+
+    private android.graphics.Matrix getSurfaceToViewfinderMatrix(android.util.Size, int)
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        android.util.Size r1;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+        android.graphics.Matrix r2;
+        boolean $z0, $z1, $z2, $z3;
+        android.graphics.RectF $r3, $r9, r10;
+        android.graphics.Rect $r4, $r5, $r6, $r7, $r8;
+        float $f0, $f1, $f2, $f3, $f4, $f5;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        r1 := @parameter0: android.util.Size;
+
+        i0 := @parameter1: int;
+
+        $z0 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: boolean isTransformationInfoReady()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean)>($z0);
+
+        $z1 = virtualinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: boolean isViewportAspectRatioMatchViewfinder(android.util.Size)>(r1);
+
+        if $z1 == 0 goto label1;
+
+        $r9 = new android.graphics.RectF;
+
+        $i7 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        $f4 = (float) $i7;
+
+        $i8 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        $f5 = (float) $i8;
+
+        specialinvoke $r9.<android.graphics.RectF: void <init>(float,float,float,float)>(0.0F, 0.0F, $f4, $f5);
+
+        r10 = $r9;
+
+        goto label2;
+
+     label1:
+        r10 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.RectF getViewfinderViewportRectForMismatchedAspectRatios(android.util.Size,int)>(r1, i0);
+
+     label2:
+        $r3 = new android.graphics.RectF;
+
+        $r4 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        specialinvoke $r3.<android.graphics.RectF: void <init>(android.graphics.Rect)>($r4);
+
+        $i1 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: int mViewfinderRotationDegrees>;
+
+        r2 = staticinvoke <androidx.camera.viewfinder.internal.utils.TransformUtils: android.graphics.Matrix getRectToRect(android.graphics.RectF,android.graphics.RectF,int)>($r3, r10, $i1);
+
+        $z2 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: boolean mIsFrontCamera>;
+
+        if $z2 == 0 goto label4;
+
+        $i2 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: int mViewfinderRotationDegrees>;
+
+        $z3 = staticinvoke <androidx.camera.viewfinder.internal.utils.TransformUtils: boolean is90or270(int)>($i2);
+
+        if $z3 == 0 goto label3;
+
+        $r7 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        $i5 = virtualinvoke $r7.<android.graphics.Rect: int centerX()>();
+
+        $f2 = (float) $i5;
+
+        $r8 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        $i6 = virtualinvoke $r8.<android.graphics.Rect: int centerY()>();
+
+        $f3 = (float) $i6;
+
+        virtualinvoke r2.<android.graphics.Matrix: boolean preScale(float,float,float,float)>(1.0F, -1.0F, $f2, $f3);
+
+        goto label4;
+
+     label3:
+        $r5 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        $i3 = virtualinvoke $r5.<android.graphics.Rect: int centerX()>();
+
+        $f0 = (float) $i3;
+
+        $r6 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        $i4 = virtualinvoke $r6.<android.graphics.Rect: int centerY()>();
+
+        $f1 = (float) $i4;
+
+        virtualinvoke r2.<android.graphics.Matrix: boolean preScale(float,float,float,float)>(-1.0F, 1.0F, $f0, $f1);
+
+     label4:
+        return r2;
+    }
+
+    boolean isViewportAspectRatioMatchViewfinder(android.util.Size)
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        android.util.Size r1, r2;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        r1 := @parameter0: android.util.Size;
+
+        r2 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size getRotatedViewportSize()>();
+
+        $z0 = staticinvoke <androidx.camera.viewfinder.internal.utils.TransformUtils: boolean isAspectRatioMatchingWithRoundingError(android.util.Size,boolean,android.util.Size,boolean)>(r1, 1, r2, 0);
+
+        return $z0;
+    }
+
+    private android.util.Size getRotatedViewportSize()
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        boolean $z0;
+        android.util.Size $r1, $r4;
+        android.graphics.Rect $r2, $r3, $r5, $r6;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        $i0 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: int mViewfinderRotationDegrees>;
+
+        $z0 = staticinvoke <androidx.camera.viewfinder.internal.utils.TransformUtils: boolean is90or270(int)>($i0);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = new android.util.Size;
+
+        $r5 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        $i3 = virtualinvoke $r5.<android.graphics.Rect: int height()>();
+
+        $r6 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        $i4 = virtualinvoke $r6.<android.graphics.Rect: int width()>();
+
+        specialinvoke $r4.<android.util.Size: void <init>(int,int)>($i3, $i4);
+
+        return $r4;
+
+     label1:
+        $r1 = new android.util.Size;
+
+        $r2 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        $i1 = virtualinvoke $r2.<android.graphics.Rect: int width()>();
+
+        $r3 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.Rect mSurfaceCropRect>;
+
+        $i2 = virtualinvoke $r3.<android.graphics.Rect: int height()>();
+
+        specialinvoke $r1.<android.util.Size: void <init>(int,int)>($i1, $i2);
+
+        return $r1;
+    }
+
+    private android.graphics.RectF getViewfinderViewportRectForMismatchedAspectRatios(android.util.Size, int)
+    {
+        androidx.camera.viewfinder.ViewfinderTransformation r0;
+        android.util.Size r1, r3;
+        int i0, $i1, $i2, $i3, $i4, $i5;
+        android.graphics.RectF r2, r4, $r6, $r7, $r10;
+        android.graphics.Matrix r5, $r8;
+        float $f0, $f1, $f2, $f3, $f4, $f5;
+        androidx.camera.viewfinder.CameraViewfinder$ScaleType $r9;
+
+        r0 := @this: androidx.camera.viewfinder.ViewfinderTransformation;
+
+        r1 := @parameter0: android.util.Size;
+
+        i0 := @parameter1: int;
+
+        $r6 = new android.graphics.RectF;
+
+        $i1 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        $f0 = (float) $i1;
+
+        $i2 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        $f1 = (float) $i2;
+
+        specialinvoke $r6.<android.graphics.RectF: void <init>(float,float,float,float)>(0.0F, 0.0F, $f0, $f1);
+
+        r2 = $r6;
+
+        r3 = specialinvoke r0.<androidx.camera.viewfinder.ViewfinderTransformation: android.util.Size getRotatedViewportSize()>();
+
+        $r7 = new android.graphics.RectF;
+
+        $i3 = virtualinvoke r3.<android.util.Size: int getWidth()>();
+
+        $f2 = (float) $i3;
+
+        $i4 = virtualinvoke r3.<android.util.Size: int getHeight()>();
+
+        $f3 = (float) $i4;
+
+        specialinvoke $r7.<android.graphics.RectF: void <init>(float,float,float,float)>(0.0F, 0.0F, $f2, $f3);
+
+        r4 = $r7;
+
+        $r8 = new android.graphics.Matrix;
+
+        specialinvoke $r8.<android.graphics.Matrix: void <init>()>();
+
+        r5 = $r8;
+
+        $r9 = r0.<androidx.camera.viewfinder.ViewfinderTransformation: androidx.camera.viewfinder.CameraViewfinder$ScaleType mScaleType>;
+
+        staticinvoke <androidx.camera.viewfinder.ViewfinderTransformation: void setMatrixRectToRect(android.graphics.Matrix,android.graphics.RectF,android.graphics.RectF,androidx.camera.viewfinder.CameraViewfinder$ScaleType)>(r5, r4, r2, $r9);
+
+        virtualinvoke r5.<android.graphics.Matrix: boolean mapRect(android.graphics.RectF)>(r4);
+
+        if i0 != 1 goto label1;
+
+        $i5 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        $f4 = (float) $i5;
+
+        $f5 = $f4 / 2.0F;
+
+        $r10 = staticinvoke <androidx.camera.viewfinder.ViewfinderTransformation: android.graphics.RectF flipHorizontally(android.graphics.RectF,float)>(r4, $f5);
+
+        return $r10;
+
+     label1:
+        return r4;
+    }
+
+    private static void setMatrixRectToRect(android.graphics.Matrix, android.graphics.RectF, android.graphics.RectF, androidx.camera.viewfinder.CameraViewfinder$ScaleType)
+    {
+        android.graphics.Matrix r0;
+        android.graphics.RectF r1, r2;
+        androidx.camera.viewfinder.CameraViewfinder$ScaleType r3, $r5, $r6, $r12;
+        boolean z0, $z4;
+        int[] $r4;
+        int $i0, $i1;
+        java.lang.StringBuilder $r7, $r8, $r9;
+        java.lang.String $r10;
+        android.graphics.Matrix$ScaleToFit r11;
+
+        r0 := @parameter0: android.graphics.Matrix;
+
+        r1 := @parameter1: android.graphics.RectF;
+
+        r2 := @parameter2: android.graphics.RectF;
+
+        r3 := @parameter3: androidx.camera.viewfinder.CameraViewfinder$ScaleType;
+
+        $r4 = <androidx.camera.viewfinder.ViewfinderTransformation$1: int[] $SwitchMap$androidx$camera$viewfinder$CameraViewfinder$ScaleType>;
+
+        $i0 = virtualinvoke r3.<androidx.camera.viewfinder.CameraViewfinder$ScaleType: int ordinal()>();
+
+        $i1 = $r4[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label01;
+            case 2: goto label01;
+            case 3: goto label02;
+            case 4: goto label02;
+            case 5: goto label03;
+            case 6: goto label03;
+            default: goto label04;
+        };
+
+     label01:
+        r11 = <android.graphics.Matrix$ScaleToFit: android.graphics.Matrix$ScaleToFit CENTER>;
+
+        goto label05;
+
+     label02:
+        r11 = <android.graphics.Matrix$ScaleToFit: android.graphics.Matrix$ScaleToFit END>;
+
+        goto label05;
+
+     label03:
+        r11 = <android.graphics.Matrix$ScaleToFit: android.graphics.Matrix$ScaleToFit START>;
+
+        goto label05;
+
+     label04:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unexpected crop rect: ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.viewfinder.internal.utils.Logger: void e(java.lang.String,java.lang.String)>("ViewfinderTransformation", $r10);
+
+        r11 = <android.graphics.Matrix$ScaleToFit: android.graphics.Matrix$ScaleToFit FILL>;
+
+     label05:
+        $r12 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FIT_CENTER>;
+
+        if r3 == $r12 goto label06;
+
+        $r5 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FIT_START>;
+
+        if r3 == $r5 goto label06;
+
+        $r6 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FIT_END>;
+
+        if r3 != $r6 goto label07;
+
+     label06:
+        $z4 = 1;
+
+        goto label08;
+
+     label07:
+        $z4 = 0;
+
+     label08:
+        z0 = $z4;
+
+        if z0 == 0 goto label09;
+
+        virtualinvoke r0.<android.graphics.Matrix: boolean setRectToRect(android.graphics.RectF,android.graphics.RectF,android.graphics.Matrix$ScaleToFit)>(r1, r2, r11);
+
+        goto label10;
+
+     label09:
+        virtualinvoke r0.<android.graphics.Matrix: boolean setRectToRect(android.graphics.RectF,android.graphics.RectF,android.graphics.Matrix$ScaleToFit)>(r2, r1, r11);
+
+        virtualinvoke r0.<android.graphics.Matrix: boolean invert(android.graphics.Matrix)>(r0);
+
+     label10:
+        return;
+    }
+
+    private static android.graphics.RectF flipHorizontally(android.graphics.RectF, float)
+    {
+        android.graphics.RectF r0, $r1;
+        float f0, $f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8;
+
+        r0 := @parameter0: android.graphics.RectF;
+
+        f0 := @parameter1: float;
+
+        $r1 = new android.graphics.RectF;
+
+        $f2 = f0 + f0;
+
+        $f1 = r0.<android.graphics.RectF: float right>;
+
+        $f8 = $f2 - $f1;
+
+        $f7 = r0.<android.graphics.RectF: float top>;
+
+        $f4 = f0 + f0;
+
+        $f3 = r0.<android.graphics.RectF: float left>;
+
+        $f6 = $f4 - $f3;
+
+        $f5 = r0.<android.graphics.RectF: float bottom>;
+
+        specialinvoke $r1.<android.graphics.RectF: void <init>(float,float,float,float)>($f8, $f7, $f6, $f5);
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.viewfinder.CameraViewfinder$ScaleType $r0;
+
+        $r0 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FILL_CENTER>;
+
+        <androidx.camera.viewfinder.ViewfinderTransformation: androidx.camera.viewfinder.CameraViewfinder$ScaleType DEFAULT_SCALE_TYPE> = $r0;
+
+        return;
+    }
+
+androidx.camera.viewfinder.ViewfinderTransformation$1
+<androidx.camera.viewfinder.ViewfinderTransformation$1: int[] $SwitchMap$androidx$camera$viewfinder$CameraViewfinder$ScaleType>
+    static void <clinit>()
+    {
+        androidx.camera.viewfinder.CameraViewfinder$ScaleType[] $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        int[] $r1, $r3, $r5, $r7, $r9, $r11, $r13;
+        androidx.camera.viewfinder.CameraViewfinder$ScaleType $r2, $r4, $r6, $r8, $r10, $r12;
+        java.lang.Throwable $r14, $r15, $r16, $r17, $r18, $r19, r20, r21, r22, r23, r24, r25;
+
+        $r0 = staticinvoke <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType[] values()>();
+
+        $i0 = lengthof $r0;
+
+        $r1 = newarray (int)[$i0];
+
+        <androidx.camera.viewfinder.ViewfinderTransformation$1: int[] $SwitchMap$androidx$camera$viewfinder$CameraViewfinder$ScaleType> = $r1;
+
+     label01:
+        $r3 = <androidx.camera.viewfinder.ViewfinderTransformation$1: int[] $SwitchMap$androidx$camera$viewfinder$CameraViewfinder$ScaleType>;
+
+        $r2 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FIT_CENTER>;
+
+        $i1 = virtualinvoke $r2.<androidx.camera.viewfinder.CameraViewfinder$ScaleType: int ordinal()>();
+
+        $r3[$i1] = 1;
+
+     label02:
+        goto label04;
+
+     label03:
+        $r17 := @caughtexception;
+
+        r20 = $r17;
+
+     label04:
+        $r5 = <androidx.camera.viewfinder.ViewfinderTransformation$1: int[] $SwitchMap$androidx$camera$viewfinder$CameraViewfinder$ScaleType>;
+
+        $r4 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FILL_CENTER>;
+
+        $i2 = virtualinvoke $r4.<androidx.camera.viewfinder.CameraViewfinder$ScaleType: int ordinal()>();
+
+        $r5[$i2] = 2;
+
+     label05:
+        goto label07;
+
+     label06:
+        $r16 := @caughtexception;
+
+        r21 = $r16;
+
+     label07:
+        $r7 = <androidx.camera.viewfinder.ViewfinderTransformation$1: int[] $SwitchMap$androidx$camera$viewfinder$CameraViewfinder$ScaleType>;
+
+        $r6 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FIT_END>;
+
+        $i3 = virtualinvoke $r6.<androidx.camera.viewfinder.CameraViewfinder$ScaleType: int ordinal()>();
+
+        $r7[$i3] = 3;
+
+     label08:
+        goto label10;
+
+     label09:
+        $r15 := @caughtexception;
+
+        r22 = $r15;
+
+     label10:
+        $r9 = <androidx.camera.viewfinder.ViewfinderTransformation$1: int[] $SwitchMap$androidx$camera$viewfinder$CameraViewfinder$ScaleType>;
+
+        $r8 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FILL_END>;
+
+        $i4 = virtualinvoke $r8.<androidx.camera.viewfinder.CameraViewfinder$ScaleType: int ordinal()>();
+
+        $r9[$i4] = 4;
+
+     label11:
+        goto label13;
+
+     label12:
+        $r14 := @caughtexception;
+
+        r23 = $r14;
+
+     label13:
+        $r11 = <androidx.camera.viewfinder.ViewfinderTransformation$1: int[] $SwitchMap$androidx$camera$viewfinder$CameraViewfinder$ScaleType>;
+
+        $r10 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FIT_START>;
+
+        $i5 = virtualinvoke $r10.<androidx.camera.viewfinder.CameraViewfinder$ScaleType: int ordinal()>();
+
+        $r11[$i5] = 5;
+
+     label14:
+        goto label16;
+
+     label15:
+        $r19 := @caughtexception;
+
+        r24 = $r19;
+
+     label16:
+        $r13 = <androidx.camera.viewfinder.ViewfinderTransformation$1: int[] $SwitchMap$androidx$camera$viewfinder$CameraViewfinder$ScaleType>;
+
+        $r12 = <androidx.camera.viewfinder.CameraViewfinder$ScaleType: androidx.camera.viewfinder.CameraViewfinder$ScaleType FILL_START>;
+
+        $i6 = virtualinvoke $r12.<androidx.camera.viewfinder.CameraViewfinder$ScaleType: int ordinal()>();
+
+        $r13[$i6] = 6;
+
+     label17:
+        goto label19;
+
+     label18:
+        $r18 := @caughtexception;
+
+        r25 = $r18;
+
+     label19:
+        return;
+
+        catch java.lang.NoSuchFieldError from label01 to label02 with label03;
+        catch java.lang.NoSuchFieldError from label04 to label05 with label06;
+        catch java.lang.NoSuchFieldError from label07 to label08 with label09;
+        catch java.lang.NoSuchFieldError from label10 to label11 with label12;
+        catch java.lang.NoSuchFieldError from label13 to label14 with label15;
+        catch java.lang.NoSuchFieldError from label16 to label17 with label18;
+    }
+

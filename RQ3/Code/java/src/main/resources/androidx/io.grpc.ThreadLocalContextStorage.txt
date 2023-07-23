@@ -1,0 +1,130 @@
+io.grpc.ThreadLocalContextStorage
+<io.grpc.ThreadLocalContextStorage: java.lang.ThreadLocal localContext>
+<io.grpc.ThreadLocalContextStorage: java.util.logging.Logger log>
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+        java.lang.ThreadLocal $r3;
+
+        $r0 = class "Lio/grpc/ThreadLocalContextStorage;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.ThreadLocalContextStorage: java.util.logging.Logger log> = $r2;
+
+        $r3 = new java.lang.ThreadLocal;
+
+        specialinvoke $r3.<java.lang.ThreadLocal: void <init>()>();
+
+        <io.grpc.ThreadLocalContextStorage: java.lang.ThreadLocal localContext> = $r3;
+
+        return;
+    }
+
+    void <init>()
+    {
+        io.grpc.ThreadLocalContextStorage $r0;
+
+        $r0 := @this: io.grpc.ThreadLocalContextStorage;
+
+        specialinvoke $r0.<io.grpc.Context$Storage: void <init>()>();
+
+        return;
+    }
+
+    public io.grpc.Context current()
+    {
+        io.grpc.ThreadLocalContextStorage $r0;
+        java.lang.Object $r1;
+        java.lang.ThreadLocal $r2;
+        io.grpc.Context $r3;
+
+        $r0 := @this: io.grpc.ThreadLocalContextStorage;
+
+        $r2 = <io.grpc.ThreadLocalContextStorage: java.lang.ThreadLocal localContext>;
+
+        $r1 = virtualinvoke $r2.<java.lang.ThreadLocal: java.lang.Object get()>();
+
+        $r3 = (io.grpc.Context) $r1;
+
+        if $r3 != null goto label1;
+
+        $r3 = <io.grpc.Context: io.grpc.Context ROOT>;
+
+     label1:
+        return $r3;
+    }
+
+    public void detach(io.grpc.Context, io.grpc.Context)
+    {
+        io.grpc.ThreadLocalContextStorage $r0;
+        java.util.logging.Logger $r1;
+        java.util.logging.Level $r2;
+        io.grpc.Context $r3, $r4, $r5;
+        java.lang.Throwable $r6;
+        java.lang.ThreadLocal $r7;
+
+        $r0 := @this: io.grpc.ThreadLocalContextStorage;
+
+        $r3 := @parameter0: io.grpc.Context;
+
+        $r4 := @parameter1: io.grpc.Context;
+
+        $r5 = virtualinvoke $r0.<io.grpc.ThreadLocalContextStorage: io.grpc.Context current()>();
+
+        if $r5 == $r3 goto label1;
+
+        $r1 = <io.grpc.ThreadLocalContextStorage: java.util.logging.Logger log>;
+
+        $r2 = <java.util.logging.Level: java.util.logging.Level SEVERE>;
+
+        $r6 = new java.lang.Throwable;
+
+        specialinvoke $r6.<java.lang.Throwable: void <init>()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.Throwable: java.lang.Throwable fillInStackTrace()>();
+
+        virtualinvoke $r1.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r2, "io.grpc.ThreadLocalContextStorage", "detach", "Context was not attached when detaching", $r6);
+
+     label1:
+        $r3 = <io.grpc.Context: io.grpc.Context ROOT>;
+
+        if $r4 == $r3 goto label2;
+
+        $r7 = <io.grpc.ThreadLocalContextStorage: java.lang.ThreadLocal localContext>;
+
+        virtualinvoke $r7.<java.lang.ThreadLocal: void set(java.lang.Object)>($r4);
+
+        return;
+
+     label2:
+        $r7 = <io.grpc.ThreadLocalContextStorage: java.lang.ThreadLocal localContext>;
+
+        virtualinvoke $r7.<java.lang.ThreadLocal: void set(java.lang.Object)>(null);
+
+        return;
+    }
+
+    public io.grpc.Context doAttach(io.grpc.Context)
+    {
+        io.grpc.ThreadLocalContextStorage $r0;
+        io.grpc.Context $r1, $r3;
+        java.lang.ThreadLocal $r2;
+
+        $r0 := @this: io.grpc.ThreadLocalContextStorage;
+
+        $r1 := @parameter0: io.grpc.Context;
+
+        $r3 = virtualinvoke $r0.<io.grpc.ThreadLocalContextStorage: io.grpc.Context current()>();
+
+        $r2 = <io.grpc.ThreadLocalContextStorage: java.lang.ThreadLocal localContext>;
+
+        virtualinvoke $r2.<java.lang.ThreadLocal: void set(java.lang.Object)>($r1);
+
+        return $r3;
+    }
+

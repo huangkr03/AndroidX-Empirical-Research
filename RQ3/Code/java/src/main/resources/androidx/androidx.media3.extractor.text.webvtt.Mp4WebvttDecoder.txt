@@ -1,0 +1,212 @@
+androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder
+<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: int BOX_HEADER_SIZE>
+<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: int TYPE_payl>
+<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: int TYPE_sttg>
+<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: int TYPE_vttc>
+<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.util.ParsableByteArray sampleData>
+    public void <init>()
+    {
+        androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder r0;
+        androidx.media3.common.util.ParsableByteArray $r1;
+
+        r0 := @this: androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder;
+
+        specialinvoke r0.<androidx.media3.extractor.text.SimpleSubtitleDecoder: void <init>(java.lang.String)>("Mp4WebvttDecoder");
+
+        $r1 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r1.<androidx.media3.common.util.ParsableByteArray: void <init>()>();
+
+        r0.<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.util.ParsableByteArray sampleData> = $r1;
+
+        return;
+    }
+
+    protected androidx.media3.extractor.text.Subtitle decode(byte[], int, boolean) throws androidx.media3.extractor.text.SubtitleDecoderException
+    {
+        androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder r0;
+        byte[] r1;
+        int i0, i1, i2, $i3, $i4, $i5, $i6;
+        boolean z0;
+        java.util.ArrayList r2, r14;
+        androidx.media3.common.util.ParsableByteArray $r3, $r5, $r7, $r8, $r9, $r10, $r11;
+        androidx.media3.common.text.Cue $r12;
+        androidx.media3.extractor.text.SubtitleDecoderException r15;
+        androidx.media3.extractor.text.webvtt.Mp4WebvttSubtitle r16;
+        java.lang.Throwable r17;
+
+        r0 := @this: androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        z0 := @parameter2: boolean;
+
+        $r3 = r0.<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: void reset(byte[],int)>(r1, i0);
+
+        r14 = new java.util.ArrayList;
+
+        specialinvoke r14.<java.util.ArrayList: void <init>()>();
+
+        r2 = r14;
+
+     label1:
+        $r5 = r0.<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        $i3 = virtualinvoke $r5.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i3 <= 0 goto label5;
+
+        $r7 = r0.<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        $i4 = virtualinvoke $r7.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i4 >= 8 goto label2;
+
+        r15 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        specialinvoke r15.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String)>("Incomplete Mp4Webvtt Top Level box header found.");
+
+        r17 = (java.lang.Throwable) r15;
+
+        throw r17;
+
+     label2:
+        $r8 = r0.<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        i1 = virtualinvoke $r8.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        $r9 = r0.<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        i2 = virtualinvoke $r9.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        if i2 != 1987343459 goto label3;
+
+        $r11 = r0.<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        $i6 = i1 - 8;
+
+        $r12 = staticinvoke <androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.text.Cue parseVttCueBox(androidx.media3.common.util.ParsableByteArray,int)>($r11, $i6);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r12);
+
+        goto label4;
+
+     label3:
+        $r10 = r0.<androidx.media3.extractor.text.webvtt.Mp4WebvttDecoder: androidx.media3.common.util.ParsableByteArray sampleData>;
+
+        $i5 = i1 - 8;
+
+        virtualinvoke $r10.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>($i5);
+
+     label4:
+        goto label1;
+
+     label5:
+        r16 = new androidx.media3.extractor.text.webvtt.Mp4WebvttSubtitle;
+
+        specialinvoke r16.<androidx.media3.extractor.text.webvtt.Mp4WebvttSubtitle: void <init>(java.util.List)>(r2);
+
+        return r16;
+    }
+
+    private static androidx.media3.common.text.Cue parseVttCueBox(androidx.media3.common.util.ParsableByteArray, int) throws androidx.media3.extractor.text.SubtitleDecoderException
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0, i1, i2, $i3, i4, i5;
+        java.lang.String r1, $r4;
+        androidx.media3.common.text.Cue$Builder $r2, r7;
+        byte[] $r3;
+        java.util.List $r5;
+        java.lang.Object r8;
+        androidx.media3.common.text.Cue $r9;
+        androidx.media3.extractor.text.SubtitleDecoderException r10;
+        java.lang.Throwable r11;
+        java.lang.CharSequence r12, r13;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i4 := @parameter1: int;
+
+        r7 = null;
+
+        r8 = null;
+
+     label1:
+        if i4 <= 0 goto label5;
+
+        if i4 >= 8 goto label2;
+
+        r10 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        specialinvoke r10.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String)>("Incomplete vtt cue box header found.");
+
+        r11 = (java.lang.Throwable) r10;
+
+        throw r11;
+
+     label2:
+        i0 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        i1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        i5 = i4 + -8;
+
+        i2 = i0 - 8;
+
+        $r3 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $i3 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        r1 = staticinvoke <androidx.media3.common.util.Util: java.lang.String fromUtf8Bytes(byte[],int,int)>($r3, $i3, i2);
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(i2);
+
+        i4 = i5 - i2;
+
+        if i1 != 1937011815 goto label3;
+
+        r7 = staticinvoke <androidx.media3.extractor.text.webvtt.WebvttCueParser: androidx.media3.common.text.Cue$Builder parseCueSettingsList(java.lang.String)>(r1);
+
+        goto label4;
+
+     label3:
+        if i1 != 1885436268 goto label4;
+
+        $r4 = virtualinvoke r1.<java.lang.String: java.lang.String trim()>();
+
+        $r5 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        r8 = staticinvoke <androidx.media3.extractor.text.webvtt.WebvttCueParser: android.text.SpannedString parseCueText(java.lang.String,java.lang.String,java.util.List)>(null, $r4, $r5);
+
+     label4:
+        goto label1;
+
+     label5:
+        if r8 != null goto label6;
+
+        r8 = "";
+
+     label6:
+        if r7 == null goto label7;
+
+        r12 = (java.lang.CharSequence) r8;
+
+        $r2 = virtualinvoke r7.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue$Builder setText(java.lang.CharSequence)>(r12);
+
+        $r9 = virtualinvoke $r2.<androidx.media3.common.text.Cue$Builder: androidx.media3.common.text.Cue build()>();
+
+        goto label8;
+
+     label7:
+        r13 = (java.lang.CharSequence) r8;
+
+        $r9 = staticinvoke <androidx.media3.extractor.text.webvtt.WebvttCueParser: androidx.media3.common.text.Cue newCueForText(java.lang.CharSequence)>(r13);
+
+     label8:
+        return $r9;
+    }
+

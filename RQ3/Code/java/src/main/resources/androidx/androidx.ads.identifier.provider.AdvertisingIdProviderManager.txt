@@ -1,0 +1,212 @@
+androidx.ads.identifier.provider.AdvertisingIdProviderManager
+<androidx.ads.identifier.provider.AdvertisingIdProviderManager: java.lang.String OPEN_SETTINGS_ACTION>
+<androidx.ads.identifier.provider.AdvertisingIdProviderManager: java.util.concurrent.Callable sProviderCallable>
+    private void <init>()
+    {
+        androidx.ads.identifier.provider.AdvertisingIdProviderManager r0;
+
+        r0 := @this: androidx.ads.identifier.provider.AdvertisingIdProviderManager;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void registerProviderCallable(java.util.concurrent.Callable)
+    {
+        java.util.concurrent.Callable r0, $r2;
+        java.lang.Object $r1;
+
+        r0 := @parameter0: java.util.concurrent.Callable;
+
+        $r1 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r0);
+
+        $r2 = (java.util.concurrent.Callable) $r1;
+
+        <androidx.ads.identifier.provider.AdvertisingIdProviderManager: java.util.concurrent.Callable sProviderCallable> = $r2;
+
+        return;
+    }
+
+    public static java.util.concurrent.Callable getProviderCallable()
+    {
+        java.util.concurrent.Callable $r0;
+
+        $r0 = <androidx.ads.identifier.provider.AdvertisingIdProviderManager: java.util.concurrent.Callable sProviderCallable>;
+
+        return $r0;
+    }
+
+    public static void clearProviderCallable()
+    {
+        <androidx.ads.identifier.provider.AdvertisingIdProviderManager: java.util.concurrent.Callable sProviderCallable> = null;
+
+        return;
+    }
+
+    public static java.util.List getAdvertisingIdProviders(android.content.Context)
+    {
+        android.content.Context r0;
+        android.content.pm.PackageManager r1;
+        java.util.List r2, $r20;
+        java.util.Map r3;
+        android.content.pm.ServiceInfo r4, r7;
+        java.util.ArrayList r5, $r11;
+        java.util.Iterator r6;
+        java.lang.String r8, r10;
+        androidx.ads.identifier.provider.AdvertisingIdProviderInfo$Builder r9, $r13, $r14;
+        boolean $z0, $z1, $z3;
+        java.lang.Object $r12, $r15;
+        androidx.ads.identifier.provider.AdvertisingIdProviderInfo $r16;
+        android.content.Intent $r17, $r18;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        r2 = staticinvoke <androidx.ads.identifier.AdvertisingIdUtils: java.util.List getAdvertisingIdProviderServices(android.content.pm.PackageManager)>(r1);
+
+        $z0 = interfaceinvoke r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r20 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r20;
+
+     label1:
+        r3 = staticinvoke <androidx.ads.identifier.provider.AdvertisingIdProviderManager: java.util.Map getOpenSettingsActivities(android.content.pm.PackageManager)>(r1);
+
+        r4 = staticinvoke <androidx.ads.identifier.AdvertisingIdUtils: android.content.pm.ServiceInfo selectServiceByPriority(java.util.List,android.content.pm.PackageManager)>(r2, r1);
+
+        $r11 = new java.util.ArrayList;
+
+        specialinvoke $r11.<java.util.ArrayList: void <init>()>();
+
+        r5 = $r11;
+
+        r6 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label6;
+
+        $r12 = interfaceinvoke r6.<java.util.Iterator: java.lang.Object next()>();
+
+        r7 = (android.content.pm.ServiceInfo) $r12;
+
+        r8 = r7.<android.content.pm.ServiceInfo: java.lang.String packageName>;
+
+        $r13 = staticinvoke <androidx.ads.identifier.provider.AdvertisingIdProviderInfo: androidx.ads.identifier.provider.AdvertisingIdProviderInfo$Builder builder()>();
+
+        $r14 = virtualinvoke $r13.<androidx.ads.identifier.provider.AdvertisingIdProviderInfo$Builder: androidx.ads.identifier.provider.AdvertisingIdProviderInfo$Builder setPackageName(java.lang.String)>(r8);
+
+        if r7 != r4 goto label3;
+
+        $z3 = 1;
+
+        goto label4;
+
+     label3:
+        $z3 = 0;
+
+     label4:
+        r9 = virtualinvoke $r14.<androidx.ads.identifier.provider.AdvertisingIdProviderInfo$Builder: androidx.ads.identifier.provider.AdvertisingIdProviderInfo$Builder setHighestPriority(boolean)>($z3);
+
+        $r15 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>(r8);
+
+        r10 = (java.lang.String) $r15;
+
+        if r10 == null goto label5;
+
+        $r17 = new android.content.Intent;
+
+        specialinvoke $r17.<android.content.Intent: void <init>(java.lang.String)>("androidx.ads.identifier.provider.OPEN_SETTINGS");
+
+        $r18 = virtualinvoke $r17.<android.content.Intent: android.content.Intent setClassName(java.lang.String,java.lang.String)>(r8, r10);
+
+        virtualinvoke r9.<androidx.ads.identifier.provider.AdvertisingIdProviderInfo$Builder: androidx.ads.identifier.provider.AdvertisingIdProviderInfo$Builder setSettingsIntent(android.content.Intent)>($r18);
+
+     label5:
+        $r16 = virtualinvoke r9.<androidx.ads.identifier.provider.AdvertisingIdProviderInfo$Builder: androidx.ads.identifier.provider.AdvertisingIdProviderInfo build()>();
+
+        interfaceinvoke r5.<java.util.List: boolean add(java.lang.Object)>($r16);
+
+        goto label2;
+
+     label6:
+        return r5;
+    }
+
+    private static java.util.Map getOpenSettingsActivities(android.content.pm.PackageManager)
+    {
+        android.content.pm.PackageManager r0;
+        android.content.Intent r1, $r7;
+        java.util.List r2;
+        java.util.HashMap r3, $r8;
+        java.util.Iterator r4;
+        android.content.pm.ResolveInfo r5;
+        android.content.pm.ActivityInfo r6;
+        boolean $z0, $z1;
+        java.lang.Object $r9;
+        java.lang.String $r10, $r11;
+        java.util.Map $r13;
+
+        r0 := @parameter0: android.content.pm.PackageManager;
+
+        $r7 = new android.content.Intent;
+
+        specialinvoke $r7.<android.content.Intent: void <init>(java.lang.String)>("androidx.ads.identifier.provider.OPEN_SETTINGS");
+
+        r1 = $r7;
+
+        r2 = virtualinvoke r0.<android.content.pm.PackageManager: java.util.List queryIntentActivities(android.content.Intent,int)>(r1, 0);
+
+        $z0 = interfaceinvoke r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r13 = staticinvoke <java.util.Collections: java.util.Map emptyMap()>();
+
+        return $r13;
+
+     label1:
+        $r8 = new java.util.HashMap;
+
+        specialinvoke $r8.<java.util.HashMap: void <init>()>();
+
+        r3 = $r8;
+
+        r4 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r9 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (android.content.pm.ResolveInfo) $r9;
+
+        r6 = r5.<android.content.pm.ResolveInfo: android.content.pm.ActivityInfo activityInfo>;
+
+        $r11 = r6.<android.content.pm.ActivityInfo: java.lang.String packageName>;
+
+        $r10 = r6.<android.content.pm.ActivityInfo: java.lang.String name>;
+
+        interfaceinvoke r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r11, $r10);
+
+        goto label2;
+
+     label3:
+        return r3;
+    }
+
+    static void <clinit>()
+    {
+        <androidx.ads.identifier.provider.AdvertisingIdProviderManager: java.util.concurrent.Callable sProviderCallable> = null;
+
+        return;
+    }
+

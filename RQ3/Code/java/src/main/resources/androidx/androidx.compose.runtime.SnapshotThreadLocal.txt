@@ -1,0 +1,131 @@
+androidx.compose.runtime.SnapshotThreadLocal
+<androidx.compose.runtime.SnapshotThreadLocal: java.util.concurrent.atomic.AtomicReference map>
+<androidx.compose.runtime.SnapshotThreadLocal: java.lang.Object writeMutex>
+    public void <init>()
+    {
+        androidx.compose.runtime.SnapshotThreadLocal r0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        androidx.compose.runtime.internal.ThreadMap $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: androidx.compose.runtime.SnapshotThreadLocal;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.concurrent.atomic.AtomicReference;
+
+        $r2 = staticinvoke <androidx.compose.runtime.internal.ThreadMapKt: androidx.compose.runtime.internal.ThreadMap getEmptyThreadMap()>();
+
+        specialinvoke $r1.<java.util.concurrent.atomic.AtomicReference: void <init>(java.lang.Object)>($r2);
+
+        r0.<androidx.compose.runtime.SnapshotThreadLocal: java.util.concurrent.atomic.AtomicReference map> = $r1;
+
+        $r3 = new java.lang.Object;
+
+        specialinvoke $r3.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.compose.runtime.SnapshotThreadLocal: java.lang.Object writeMutex> = $r3;
+
+        return;
+    }
+
+    public final java.lang.Object get()
+    {
+        androidx.compose.runtime.SnapshotThreadLocal r0;
+        java.util.concurrent.atomic.AtomicReference $r1;
+        java.lang.Object $r2, $r5;
+        androidx.compose.runtime.internal.ThreadMap $r3;
+        java.lang.Thread $r4;
+        long $l0;
+
+        r0 := @this: androidx.compose.runtime.SnapshotThreadLocal;
+
+        $r1 = r0.<androidx.compose.runtime.SnapshotThreadLocal: java.util.concurrent.atomic.AtomicReference map>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        $r3 = (androidx.compose.runtime.internal.ThreadMap) $r2;
+
+        $r4 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        $l0 = virtualinvoke $r4.<java.lang.Thread: long getId()>();
+
+        $r5 = virtualinvoke $r3.<androidx.compose.runtime.internal.ThreadMap: java.lang.Object get(long)>($l0);
+
+        return $r5;
+    }
+
+    public final void set(java.lang.Object)
+    {
+        androidx.compose.runtime.SnapshotThreadLocal r0;
+        java.lang.Object r1, r2, r3, $r7;
+        long l0;
+        androidx.compose.runtime.internal.ThreadMap r4, $r9;
+        java.lang.Thread $r5;
+        java.util.concurrent.atomic.AtomicReference $r6, $r8;
+        boolean $z2;
+        java.lang.Throwable $r10, r12;
+        kotlin.Unit r11;
+
+        r0 := @this: androidx.compose.runtime.SnapshotThreadLocal;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r5 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        l0 = virtualinvoke $r5.<java.lang.Thread: long getId()>();
+
+        r2 = r0.<androidx.compose.runtime.SnapshotThreadLocal: java.lang.Object writeMutex>;
+
+        r3 = r2;
+
+        entermonitor r3;
+
+     label1:
+        $r6 = r0.<androidx.compose.runtime.SnapshotThreadLocal: java.util.concurrent.atomic.AtomicReference map>;
+
+        $r7 = virtualinvoke $r6.<java.util.concurrent.atomic.AtomicReference: java.lang.Object get()>();
+
+        r4 = (androidx.compose.runtime.internal.ThreadMap) $r7;
+
+        $z2 = virtualinvoke r4.<androidx.compose.runtime.internal.ThreadMap: boolean trySet(long,java.lang.Object)>(l0, r1);
+
+        if $z2 == 0 goto label3;
+
+     label2:
+        exitmonitor r3;
+
+        return;
+
+     label3:
+        $r8 = r0.<androidx.compose.runtime.SnapshotThreadLocal: java.util.concurrent.atomic.AtomicReference map>;
+
+        $r9 = virtualinvoke r4.<androidx.compose.runtime.internal.ThreadMap: androidx.compose.runtime.internal.ThreadMap newWith(long,java.lang.Object)>(l0, r1);
+
+        virtualinvoke $r8.<java.util.concurrent.atomic.AtomicReference: void set(java.lang.Object)>($r9);
+
+        r11 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label4:
+        exitmonitor r3;
+
+        goto label7;
+
+     label5:
+        $r10 := @caughtexception;
+
+        r12 = $r10;
+
+     label6:
+        exitmonitor r3;
+
+        throw r12;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+

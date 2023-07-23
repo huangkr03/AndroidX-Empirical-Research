@@ -1,0 +1,401 @@
+androidx.appcompat.app.TwilightManager
+<androidx.appcompat.app.TwilightManager: java.lang.String TAG>
+<androidx.appcompat.app.TwilightManager: int SUNRISE>
+<androidx.appcompat.app.TwilightManager: int SUNSET>
+<androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager sInstance>
+<androidx.appcompat.app.TwilightManager: android.content.Context mContext>
+<androidx.appcompat.app.TwilightManager: android.location.LocationManager mLocationManager>
+<androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager$TwilightState mTwilightState>
+    static androidx.appcompat.app.TwilightManager getInstance(android.content.Context)
+    {
+        androidx.appcompat.app.TwilightManager $r0, $r1, $r2;
+        java.lang.Object $r3;
+        android.location.LocationManager $r4;
+        android.content.Context r5, r6;
+
+        r5 := @parameter0: android.content.Context;
+
+        $r0 = <androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager sInstance>;
+
+        if $r0 != null goto label1;
+
+        r6 = virtualinvoke r5.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r2 = new androidx.appcompat.app.TwilightManager;
+
+        $r3 = virtualinvoke r6.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("location");
+
+        $r4 = (android.location.LocationManager) $r3;
+
+        specialinvoke $r2.<androidx.appcompat.app.TwilightManager: void <init>(android.content.Context,android.location.LocationManager)>(r6, $r4);
+
+        <androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager sInstance> = $r2;
+
+     label1:
+        $r1 = <androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager sInstance>;
+
+        return $r1;
+    }
+
+    static void setInstance(androidx.appcompat.app.TwilightManager)
+    {
+        androidx.appcompat.app.TwilightManager r0;
+
+        r0 := @parameter0: androidx.appcompat.app.TwilightManager;
+
+        <androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager sInstance> = r0;
+
+        return;
+    }
+
+    void <init>(android.content.Context, android.location.LocationManager)
+    {
+        androidx.appcompat.app.TwilightManager r0;
+        android.content.Context r1;
+        android.location.LocationManager r2;
+        androidx.appcompat.app.TwilightManager$TwilightState $r3;
+
+        r0 := @this: androidx.appcompat.app.TwilightManager;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.location.LocationManager;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new androidx.appcompat.app.TwilightManager$TwilightState;
+
+        specialinvoke $r3.<androidx.appcompat.app.TwilightManager$TwilightState: void <init>()>();
+
+        r0.<androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager$TwilightState mTwilightState> = $r3;
+
+        r0.<androidx.appcompat.app.TwilightManager: android.content.Context mContext> = r1;
+
+        r0.<androidx.appcompat.app.TwilightManager: android.location.LocationManager mLocationManager> = r2;
+
+        return;
+    }
+
+    boolean isNight()
+    {
+        androidx.appcompat.app.TwilightManager r0;
+        androidx.appcompat.app.TwilightManager$TwilightState r1;
+        android.location.Location r2;
+        java.util.Calendar r3;
+        int i0;
+        boolean $z0, $z1, $z2, $z3;
+
+        r0 := @this: androidx.appcompat.app.TwilightManager;
+
+        r1 = r0.<androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager$TwilightState mTwilightState>;
+
+        $z0 = specialinvoke r0.<androidx.appcompat.app.TwilightManager: boolean isStateValid()>();
+
+        if $z0 == 0 goto label1;
+
+        $z2 = r1.<androidx.appcompat.app.TwilightManager$TwilightState: boolean isNight>;
+
+        return $z2;
+
+     label1:
+        r2 = specialinvoke r0.<androidx.appcompat.app.TwilightManager: android.location.Location getLastKnownLocation()>();
+
+        if r2 == null goto label2;
+
+        specialinvoke r0.<androidx.appcompat.app.TwilightManager: void updateState(android.location.Location)>(r2);
+
+        $z1 = r1.<androidx.appcompat.app.TwilightManager$TwilightState: boolean isNight>;
+
+        return $z1;
+
+     label2:
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("TwilightManager", "Could not get last known location. This is probably because the app does not have any location permissions. Falling back to hardcoded sunrise/sunset values.");
+
+        r3 = staticinvoke <java.util.Calendar: java.util.Calendar getInstance()>();
+
+        i0 = virtualinvoke r3.<java.util.Calendar: int get(int)>(11);
+
+        if i0 < 6 goto label3;
+
+        if i0 < 22 goto label4;
+
+     label3:
+        $z3 = 1;
+
+        goto label5;
+
+     label4:
+        $z3 = 0;
+
+     label5:
+        return $z3;
+    }
+
+    private android.location.Location getLastKnownLocation()
+    {
+        androidx.appcompat.app.TwilightManager r0;
+        android.content.Context $r1, $r2;
+        long $l0, $l1;
+        byte $b2;
+        android.location.Location r3, r4, $r5, $r6;
+        int i3, i4;
+
+        r0 := @this: androidx.appcompat.app.TwilightManager;
+
+        r3 = null;
+
+        r4 = null;
+
+        $r1 = r0.<androidx.appcompat.app.TwilightManager: android.content.Context mContext>;
+
+        i3 = staticinvoke <androidx.core.content.PermissionChecker: int checkSelfPermission(android.content.Context,java.lang.String)>($r1, "android.permission.ACCESS_COARSE_LOCATION");
+
+        if i3 != 0 goto label1;
+
+        r3 = specialinvoke r0.<androidx.appcompat.app.TwilightManager: android.location.Location getLastKnownLocationForProvider(java.lang.String)>("network");
+
+     label1:
+        $r2 = r0.<androidx.appcompat.app.TwilightManager: android.content.Context mContext>;
+
+        i4 = staticinvoke <androidx.core.content.PermissionChecker: int checkSelfPermission(android.content.Context,java.lang.String)>($r2, "android.permission.ACCESS_FINE_LOCATION");
+
+        if i4 != 0 goto label2;
+
+        r4 = specialinvoke r0.<androidx.appcompat.app.TwilightManager: android.location.Location getLastKnownLocationForProvider(java.lang.String)>("gps");
+
+     label2:
+        if r4 == null goto label5;
+
+        if r3 == null goto label5;
+
+        $l0 = virtualinvoke r4.<android.location.Location: long getTime()>();
+
+        $l1 = virtualinvoke r3.<android.location.Location: long getTime()>();
+
+        $b2 = $l0 cmp $l1;
+
+        if $b2 <= 0 goto label3;
+
+        $r5 = r4;
+
+        goto label4;
+
+     label3:
+        $r5 = r3;
+
+     label4:
+        return $r5;
+
+     label5:
+        if r4 == null goto label6;
+
+        $r6 = r4;
+
+        goto label7;
+
+     label6:
+        $r6 = r3;
+
+     label7:
+        return $r6;
+    }
+
+    private android.location.Location getLastKnownLocationForProvider(java.lang.String)
+    {
+        androidx.appcompat.app.TwilightManager r0;
+        java.lang.String r1;
+        java.lang.Throwable r2, $r6;
+        android.location.LocationManager $r3, $r4;
+        boolean $z0;
+        android.location.Location $r5;
+
+        r0 := @this: androidx.appcompat.app.TwilightManager;
+
+        r1 := @parameter0: java.lang.String;
+
+     label1:
+        $r3 = r0.<androidx.appcompat.app.TwilightManager: android.location.LocationManager mLocationManager>;
+
+        $z0 = virtualinvoke $r3.<android.location.LocationManager: boolean isProviderEnabled(java.lang.String)>(r1);
+
+        if $z0 == 0 goto label3;
+
+        $r4 = r0.<androidx.appcompat.app.TwilightManager: android.location.LocationManager mLocationManager>;
+
+        $r5 = virtualinvoke $r4.<android.location.LocationManager: android.location.Location getLastKnownLocation(java.lang.String)>(r1);
+
+     label2:
+        return $r5;
+
+     label3:
+        goto label5;
+
+     label4:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String,java.lang.Throwable)>("TwilightManager", "Failed to get last known location", r2);
+
+     label5:
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label4;
+    }
+
+    private boolean isStateValid()
+    {
+        androidx.appcompat.app.TwilightManager r0;
+        androidx.appcompat.app.TwilightManager$TwilightState $r1;
+        long $l0, $l1;
+        byte $b2;
+        boolean $z0;
+
+        r0 := @this: androidx.appcompat.app.TwilightManager;
+
+        $r1 = r0.<androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager$TwilightState mTwilightState>;
+
+        $l0 = $r1.<androidx.appcompat.app.TwilightManager$TwilightState: long nextUpdate>;
+
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $b2 = $l0 cmp $l1;
+
+        if $b2 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private void updateState(android.location.Location)
+    {
+        androidx.appcompat.app.TwilightManager r0;
+        android.location.Location r1;
+        androidx.appcompat.app.TwilightManager$TwilightState r2;
+        long l0, l1, l2, l3, $l4, $l6, l11, l12, l13;
+        androidx.appcompat.app.TwilightCalculator r3;
+        boolean z0, $z1;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+        int $i5;
+        byte $b7, $b8, $b9, $b10;
+
+        r0 := @this: androidx.appcompat.app.TwilightManager;
+
+        r1 := @parameter0: android.location.Location;
+
+        r2 = r0.<androidx.appcompat.app.TwilightManager: androidx.appcompat.app.TwilightManager$TwilightState mTwilightState>;
+
+        l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        r3 = staticinvoke <androidx.appcompat.app.TwilightCalculator: androidx.appcompat.app.TwilightCalculator getInstance()>();
+
+        $l4 = l0 - 86400000L;
+
+        $d0 = virtualinvoke r1.<android.location.Location: double getLatitude()>();
+
+        $d1 = virtualinvoke r1.<android.location.Location: double getLongitude()>();
+
+        virtualinvoke r3.<androidx.appcompat.app.TwilightCalculator: void calculateTwilight(long,double,double)>($l4, $d0, $d1);
+
+        $d2 = virtualinvoke r1.<android.location.Location: double getLatitude()>();
+
+        $d3 = virtualinvoke r1.<android.location.Location: double getLongitude()>();
+
+        virtualinvoke r3.<androidx.appcompat.app.TwilightCalculator: void calculateTwilight(long,double,double)>(l0, $d2, $d3);
+
+        $i5 = r3.<androidx.appcompat.app.TwilightCalculator: int state>;
+
+        if $i5 != 1 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        z0 = $z1;
+
+        l1 = r3.<androidx.appcompat.app.TwilightCalculator: long sunrise>;
+
+        l2 = r3.<androidx.appcompat.app.TwilightCalculator: long sunset>;
+
+        $l6 = l0 + 86400000L;
+
+        $d4 = virtualinvoke r1.<android.location.Location: double getLatitude()>();
+
+        $d5 = virtualinvoke r1.<android.location.Location: double getLongitude()>();
+
+        virtualinvoke r3.<androidx.appcompat.app.TwilightCalculator: void calculateTwilight(long,double,double)>($l6, $d4, $d5);
+
+        l3 = r3.<androidx.appcompat.app.TwilightCalculator: long sunrise>;
+
+        l11 = 0L;
+
+        $b7 = l1 cmp -1L;
+
+        if $b7 == 0 goto label3;
+
+        $b8 = l2 cmp -1L;
+
+        if $b8 != 0 goto label4;
+
+     label3:
+        l12 = l0 + 43200000L;
+
+        goto label8;
+
+     label4:
+        $b9 = l0 cmp l2;
+
+        if $b9 <= 0 goto label5;
+
+        l13 = l11 + l3;
+
+        goto label7;
+
+     label5:
+        $b10 = l0 cmp l1;
+
+        if $b10 <= 0 goto label6;
+
+        l13 = l11 + l2;
+
+        goto label7;
+
+     label6:
+        l13 = l11 + l1;
+
+     label7:
+        l12 = l13 + 60000L;
+
+     label8:
+        r2.<androidx.appcompat.app.TwilightManager$TwilightState: boolean isNight> = z0;
+
+        r2.<androidx.appcompat.app.TwilightManager$TwilightState: long nextUpdate> = l12;
+
+        return;
+    }
+
+androidx.appcompat.app.TwilightManager$TwilightState
+<androidx.appcompat.app.TwilightManager$TwilightState: boolean isNight>
+<androidx.appcompat.app.TwilightManager$TwilightState: long nextUpdate>
+    void <init>()
+    {
+        androidx.appcompat.app.TwilightManager$TwilightState r0;
+
+        r0 := @this: androidx.appcompat.app.TwilightManager$TwilightState;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

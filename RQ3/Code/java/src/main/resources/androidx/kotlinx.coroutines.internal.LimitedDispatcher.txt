@@ -1,0 +1,320 @@
+kotlinx.coroutines.internal.LimitedDispatcher
+<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.Delay $$delegate_0>
+<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.CoroutineDispatcher dispatcher>
+<kotlinx.coroutines.internal.LimitedDispatcher: int parallelism>
+<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.internal.LockFreeTaskQueue queue>
+<kotlinx.coroutines.internal.LimitedDispatcher: int runningWorkers>
+<kotlinx.coroutines.internal.LimitedDispatcher: java.lang.Object workerAllocationLock>
+    public void <init>(kotlinx.coroutines.CoroutineDispatcher, int)
+    {
+        kotlinx.coroutines.internal.LimitedDispatcher $r0;
+        kotlinx.coroutines.Delay $r1;
+        kotlinx.coroutines.CoroutineDispatcher $r2;
+        int $i0;
+        boolean $z0;
+        kotlinx.coroutines.internal.LockFreeTaskQueue $r3;
+        java.lang.Object $r4;
+
+        $r0 := @this: kotlinx.coroutines.internal.LimitedDispatcher;
+
+        $r2 := @parameter0: kotlinx.coroutines.CoroutineDispatcher;
+
+        $i0 := @parameter1: int;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "dispatcher");
+
+        specialinvoke $r0.<kotlinx.coroutines.CoroutineDispatcher: void <init>()>();
+
+        $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.CoroutineDispatcher dispatcher> = $r2;
+
+        $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int parallelism> = $i0;
+
+        $z0 = $r2 instanceof kotlinx.coroutines.Delay;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = (kotlinx.coroutines.Delay) $r2;
+
+        goto label2;
+
+     label1:
+        $r1 = null;
+
+     label2:
+        if $r1 != null goto label3;
+
+        $r1 = staticinvoke <kotlinx.coroutines.DefaultExecutorKt: kotlinx.coroutines.Delay getDefaultDelay()>();
+
+     label3:
+        $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.Delay $$delegate_0> = $r1;
+
+        $r3 = new kotlinx.coroutines.internal.LockFreeTaskQueue;
+
+        specialinvoke $r3.<kotlinx.coroutines.internal.LockFreeTaskQueue: void <init>(boolean)>(0);
+
+        $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.internal.LockFreeTaskQueue queue> = $r3;
+
+        $r4 = new java.lang.Object;
+
+        specialinvoke $r4.<java.lang.Object: void <init>()>();
+
+        $r0.<kotlinx.coroutines.internal.LimitedDispatcher: java.lang.Object workerAllocationLock> = $r4;
+
+        return;
+    }
+
+    private final boolean addAndTryDispatching(java.lang.Runnable)
+    {
+        kotlinx.coroutines.internal.LimitedDispatcher $r0;
+        java.lang.Runnable $r1;
+        kotlinx.coroutines.internal.LockFreeTaskQueue $r2;
+        int $i0, $i1;
+
+        $r0 := @this: kotlinx.coroutines.internal.LimitedDispatcher;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.internal.LockFreeTaskQueue queue>;
+
+        virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeTaskQueue: boolean addLast(java.lang.Object)>($r1);
+
+        $i0 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int runningWorkers>;
+
+        $i1 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int parallelism>;
+
+        if $i0 < $i1 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private final boolean tryAllocateWorker()
+    {
+        kotlinx.coroutines.internal.LimitedDispatcher $r0;
+        java.lang.Object $r1;
+        int $i0, $i1;
+
+        $r0 := @this: kotlinx.coroutines.internal.LimitedDispatcher;
+
+        $r1 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: java.lang.Object workerAllocationLock>;
+
+        entermonitor $r1;
+
+        $i0 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int runningWorkers>;
+
+        $i1 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int parallelism>;
+
+        if $i0 < $i1 goto label1;
+
+        exitmonitor $r1;
+
+        return 0;
+
+     label1:
+        $i0 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int runningWorkers>;
+
+        $i0 = $i0 + 1;
+
+        $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int runningWorkers> = $i0;
+
+        exitmonitor $r1;
+
+        return 1;
+    }
+
+    public void dispatch(kotlin.coroutines.CoroutineContext, java.lang.Runnable)
+    {
+        kotlinx.coroutines.internal.LimitedDispatcher $r0;
+        java.lang.Runnable $r1;
+        kotlin.coroutines.CoroutineContext $r2;
+        boolean $z0;
+        kotlinx.coroutines.CoroutineDispatcher $r3;
+
+        $r0 := @this: kotlinx.coroutines.internal.LimitedDispatcher;
+
+        $r2 := @parameter0: kotlin.coroutines.CoroutineContext;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "context");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "block");
+
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.internal.LimitedDispatcher: boolean addAndTryDispatching(java.lang.Runnable)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = specialinvoke $r0.<kotlinx.coroutines.internal.LimitedDispatcher: boolean tryAllocateWorker()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.CoroutineDispatcher dispatcher>;
+
+        virtualinvoke $r3.<kotlinx.coroutines.CoroutineDispatcher: void dispatch(kotlin.coroutines.CoroutineContext,java.lang.Runnable)>($r0, $r0);
+
+     label1:
+        return;
+    }
+
+    public kotlinx.coroutines.DisposableHandle invokeOnTimeout(long, java.lang.Runnable, kotlin.coroutines.CoroutineContext)
+    {
+        kotlinx.coroutines.internal.LimitedDispatcher $r0;
+        java.lang.Runnable $r1;
+        kotlin.coroutines.CoroutineContext $r2;
+        kotlinx.coroutines.DisposableHandle $r3;
+        long $l0;
+        kotlinx.coroutines.Delay $r4;
+
+        $r0 := @this: kotlinx.coroutines.internal.LimitedDispatcher;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: java.lang.Runnable;
+
+        $r2 := @parameter2: kotlin.coroutines.CoroutineContext;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "block");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "context");
+
+        $r4 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.Delay $$delegate_0>;
+
+        $r3 = interfaceinvoke $r4.<kotlinx.coroutines.Delay: kotlinx.coroutines.DisposableHandle invokeOnTimeout(long,java.lang.Runnable,kotlin.coroutines.CoroutineContext)>($l0, $r1, $r2);
+
+        return $r3;
+    }
+
+    public void run()
+    {
+        kotlinx.coroutines.internal.LimitedDispatcher $r0;
+        kotlin.coroutines.EmptyCoroutineContext $r1;
+        int $i0;
+        kotlinx.coroutines.internal.LockFreeTaskQueue $r2;
+        java.lang.Object $r3;
+        java.lang.Runnable $r4;
+        java.lang.Throwable $r5, $r8;
+        kotlinx.coroutines.CoroutineDispatcher $r6;
+        boolean $z0;
+        kotlin.Unit $r7;
+
+        $r0 := @this: kotlinx.coroutines.internal.LimitedDispatcher;
+
+        $i0 = 0;
+
+     label01:
+        $r2 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.internal.LockFreeTaskQueue queue>;
+
+        $r3 = virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeTaskQueue: java.lang.Object removeFirstOrNull()>();
+
+        $r4 = (java.lang.Runnable) $r3;
+
+        if $r4 == null goto label06;
+
+     label02:
+        interfaceinvoke $r4.<java.lang.Runnable: void run()>();
+
+     label03:
+        goto label05;
+
+     label04:
+        $r5 := @caughtexception;
+
+        $r1 = <kotlin.coroutines.EmptyCoroutineContext: kotlin.coroutines.EmptyCoroutineContext INSTANCE>;
+
+        staticinvoke <kotlinx.coroutines.CoroutineExceptionHandlerKt: void handleCoroutineException(kotlin.coroutines.CoroutineContext,java.lang.Throwable)>($r1, $r5);
+
+     label05:
+        $i0 = $i0 + 1;
+
+        if $i0 < 16 goto label01;
+
+        $r6 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.CoroutineDispatcher dispatcher>;
+
+        $z0 = virtualinvoke $r6.<kotlinx.coroutines.CoroutineDispatcher: boolean isDispatchNeeded(kotlin.coroutines.CoroutineContext)>($r0);
+
+        if $z0 == 0 goto label01;
+
+        $r6 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.CoroutineDispatcher dispatcher>;
+
+        virtualinvoke $r6.<kotlinx.coroutines.CoroutineDispatcher: void dispatch(kotlin.coroutines.CoroutineContext,java.lang.Runnable)>($r0, $r0);
+
+        return;
+
+     label06:
+        $r3 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: java.lang.Object workerAllocationLock>;
+
+        entermonitor $r3;
+
+     label07:
+        $i0 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int runningWorkers>;
+
+        $i0 = $i0 + -1;
+
+        $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int runningWorkers> = $i0;
+
+        $r2 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.internal.LockFreeTaskQueue queue>;
+
+        $i0 = virtualinvoke $r2.<kotlinx.coroutines.internal.LockFreeTaskQueue: int getSize()>();
+
+     label08:
+        if $i0 != 0 goto label09;
+
+        exitmonitor $r3;
+
+        return;
+
+     label09:
+        $i0 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int runningWorkers>;
+
+        $i0 = $i0 + 1;
+
+        $r0.<kotlinx.coroutines.internal.LimitedDispatcher: int runningWorkers> = $i0;
+
+        $r7 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label10:
+        exitmonitor $r3;
+
+        $i0 = 0;
+
+        goto label01;
+
+     label11:
+        $r8 := @caughtexception;
+
+        exitmonitor $r3;
+
+        goto label12;
+
+     label12:
+        throw $r8;
+
+        catch java.lang.Throwable from label02 to label03 with label04;
+        catch java.lang.Throwable from label07 to label08 with label11;
+        catch java.lang.Throwable from label09 to label10 with label11;
+    }
+
+    public void scheduleResumeAfterDelay(long, kotlinx.coroutines.CancellableContinuation)
+    {
+        kotlinx.coroutines.internal.LimitedDispatcher $r0;
+        long $l0;
+        kotlinx.coroutines.CancellableContinuation $r1;
+        kotlinx.coroutines.Delay $r2;
+
+        $r0 := @this: kotlinx.coroutines.internal.LimitedDispatcher;
+
+        $l0 := @parameter0: long;
+
+        $r1 := @parameter1: kotlinx.coroutines.CancellableContinuation;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "continuation");
+
+        $r2 = $r0.<kotlinx.coroutines.internal.LimitedDispatcher: kotlinx.coroutines.Delay $$delegate_0>;
+
+        interfaceinvoke $r2.<kotlinx.coroutines.Delay: void scheduleResumeAfterDelay(long,kotlinx.coroutines.CancellableContinuation)>($l0, $r1);
+
+        return;
+    }
+

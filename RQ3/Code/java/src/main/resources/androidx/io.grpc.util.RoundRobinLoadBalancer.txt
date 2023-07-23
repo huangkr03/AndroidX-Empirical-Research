@@ -1,0 +1,1228 @@
+io.grpc.util.RoundRobinLoadBalancer
+<io.grpc.util.RoundRobinLoadBalancer: io.grpc.Status EMPTY_OK>
+<io.grpc.util.RoundRobinLoadBalancer: io.grpc.Attributes$Key STATE_INFO>
+<io.grpc.util.RoundRobinLoadBalancer: io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker currentPicker>
+<io.grpc.util.RoundRobinLoadBalancer: io.grpc.ConnectivityState currentState>
+<io.grpc.util.RoundRobinLoadBalancer: io.grpc.LoadBalancer$Helper helper>
+<io.grpc.util.RoundRobinLoadBalancer: java.util.Random random>
+<io.grpc.util.RoundRobinLoadBalancer: java.util.Map subchannels>
+    static void <clinit>()
+    {
+        io.grpc.Attributes$Key $r0;
+        io.grpc.Status $r1;
+
+        $r0 = staticinvoke <io.grpc.Attributes$Key: io.grpc.Attributes$Key create(java.lang.String)>("state-info");
+
+        <io.grpc.util.RoundRobinLoadBalancer: io.grpc.Attributes$Key STATE_INFO> = $r0;
+
+        $r1 = <io.grpc.Status: io.grpc.Status OK>;
+
+        $r1 = virtualinvoke $r1.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("no subchannels ready");
+
+        <io.grpc.util.RoundRobinLoadBalancer: io.grpc.Status EMPTY_OK> = $r1;
+
+        return;
+    }
+
+    void <init>(io.grpc.LoadBalancer$Helper)
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        io.grpc.Status $r1;
+        java.lang.Object $r2;
+        io.grpc.LoadBalancer$Helper $r3;
+        java.util.HashMap r4;
+        io.grpc.util.RoundRobinLoadBalancer$EmptyPicker r5;
+        java.util.Random r6;
+        java.util.Map r7;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r3 := @parameter0: io.grpc.LoadBalancer$Helper;
+
+        specialinvoke $r0.<io.grpc.LoadBalancer: void <init>()>();
+
+        r4 = new java.util.HashMap;
+
+        specialinvoke r4.<java.util.HashMap: void <init>()>();
+
+        r7 = (java.util.Map) r4;
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Map subchannels> = r7;
+
+        r5 = new io.grpc.util.RoundRobinLoadBalancer$EmptyPicker;
+
+        $r1 = <io.grpc.util.RoundRobinLoadBalancer: io.grpc.Status EMPTY_OK>;
+
+        specialinvoke r5.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: void <init>(io.grpc.Status)>($r1);
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker currentPicker> = r5;
+
+        $r2 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "helper");
+
+        $r3 = (io.grpc.LoadBalancer$Helper) $r2;
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.LoadBalancer$Helper helper> = $r3;
+
+        r6 = new java.util.Random;
+
+        specialinvoke r6.<java.util.Random: void <init>()>();
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Random random> = r6;
+
+        return;
+    }
+
+    static void access$000(io.grpc.util.RoundRobinLoadBalancer, io.grpc.LoadBalancer$Subchannel, io.grpc.ConnectivityStateInfo)
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        io.grpc.LoadBalancer$Subchannel $r1;
+        io.grpc.ConnectivityStateInfo $r2;
+
+        $r0 := @parameter0: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r1 := @parameter1: io.grpc.LoadBalancer$Subchannel;
+
+        $r2 := @parameter2: io.grpc.ConnectivityStateInfo;
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: void processSubchannelState(io.grpc.LoadBalancer$Subchannel,io.grpc.ConnectivityStateInfo)>($r1, $r2);
+
+        return;
+    }
+
+    private static java.util.List filterNonFailingSubchannels(java.util.Collection)
+    {
+        java.util.ArrayList $r0, r5;
+        java.util.Collection $r1;
+        int $i0;
+        java.util.Iterator $r2;
+        boolean $z0;
+        java.lang.Object $r3;
+        io.grpc.LoadBalancer$Subchannel $r4;
+        java.util.List r6;
+
+        $r1 := @parameter0: java.util.Collection;
+
+        r5 = new java.util.ArrayList;
+
+        $r0 = r5;
+
+        $i0 = interfaceinvoke $r1.<java.util.Collection: int size()>();
+
+        specialinvoke r5.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r2 = interfaceinvoke $r1.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (io.grpc.LoadBalancer$Subchannel) $r3;
+
+        $z0 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: boolean isReady(io.grpc.LoadBalancer$Subchannel)>($r4);
+
+        if $z0 == 0 goto label1;
+
+        r6 = (java.util.List) $r0;
+
+        interfaceinvoke r6.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        goto label1;
+
+     label2:
+        r6 = (java.util.List) $r0;
+
+        return r6;
+    }
+
+    private static io.grpc.util.RoundRobinLoadBalancer$Ref getSubchannelStateInfoRef(io.grpc.LoadBalancer$Subchannel)
+    {
+        io.grpc.LoadBalancer$Subchannel $r0;
+        io.grpc.Attributes $r1;
+        io.grpc.Attributes$Key $r2;
+        java.lang.Object $r3;
+        io.grpc.util.RoundRobinLoadBalancer$Ref $r4;
+
+        $r0 := @parameter0: io.grpc.LoadBalancer$Subchannel;
+
+        $r1 = virtualinvoke $r0.<io.grpc.LoadBalancer$Subchannel: io.grpc.Attributes getAttributes()>();
+
+        $r2 = <io.grpc.util.RoundRobinLoadBalancer: io.grpc.Attributes$Key STATE_INFO>;
+
+        $r3 = virtualinvoke $r1.<io.grpc.Attributes: java.lang.Object get(io.grpc.Attributes$Key)>($r2);
+
+        $r4 = (io.grpc.util.RoundRobinLoadBalancer$Ref) $r3;
+
+        $r3 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r4, "STATE_INFO");
+
+        $r4 = (io.grpc.util.RoundRobinLoadBalancer$Ref) $r3;
+
+        return $r4;
+    }
+
+    static boolean isReady(io.grpc.LoadBalancer$Subchannel)
+    {
+        io.grpc.ConnectivityState $r0, $r5;
+        io.grpc.LoadBalancer$Subchannel $r1;
+        io.grpc.util.RoundRobinLoadBalancer$Ref $r2;
+        java.lang.Object $r3;
+        io.grpc.ConnectivityStateInfo $r4;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$Subchannel;
+
+        $r2 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: io.grpc.util.RoundRobinLoadBalancer$Ref getSubchannelStateInfoRef(io.grpc.LoadBalancer$Subchannel)>($r1);
+
+        $r3 = $r2.<io.grpc.util.RoundRobinLoadBalancer$Ref: java.lang.Object value>;
+
+        $r4 = (io.grpc.ConnectivityStateInfo) $r3;
+
+        $r5 = virtualinvoke $r4.<io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityState getState()>();
+
+        $r0 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState READY>;
+
+        if $r5 != $r0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private void processSubchannelState(io.grpc.LoadBalancer$Subchannel, io.grpc.ConnectivityStateInfo)
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        io.grpc.ConnectivityStateInfo $r1, $r10;
+        io.grpc.LoadBalancer$Subchannel $r2;
+        java.util.Map $r3;
+        io.grpc.EquivalentAddressGroup $r4;
+        java.lang.Object $r5;
+        io.grpc.ConnectivityState $r6, $r7;
+        io.grpc.LoadBalancer$Helper $r8;
+        io.grpc.util.RoundRobinLoadBalancer$Ref $r9;
+        boolean $z0;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r2 := @parameter0: io.grpc.LoadBalancer$Subchannel;
+
+        $r1 := @parameter1: io.grpc.ConnectivityStateInfo;
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Map subchannels>;
+
+        $r4 = virtualinvoke $r2.<io.grpc.LoadBalancer$Subchannel: io.grpc.EquivalentAddressGroup getAddresses()>();
+
+        $r4 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: io.grpc.EquivalentAddressGroup stripAttrs(io.grpc.EquivalentAddressGroup)>($r4);
+
+        $r5 = interfaceinvoke $r3.<java.util.Map: java.lang.Object get(java.lang.Object)>($r4);
+
+        if $r5 == $r2 goto label1;
+
+        return;
+
+     label1:
+        $r6 = virtualinvoke $r1.<io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityState getState()>();
+
+        $r7 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState TRANSIENT_FAILURE>;
+
+        if $r6 == $r7 goto label2;
+
+        $r6 = virtualinvoke $r1.<io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityState getState()>();
+
+        $r7 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState IDLE>;
+
+        if $r6 != $r7 goto label3;
+
+     label2:
+        $r8 = $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.LoadBalancer$Helper helper>;
+
+        virtualinvoke $r8.<io.grpc.LoadBalancer$Helper: void refreshNameResolution()>();
+
+     label3:
+        $r6 = virtualinvoke $r1.<io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityState getState()>();
+
+        $r7 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState IDLE>;
+
+        if $r6 != $r7 goto label4;
+
+        virtualinvoke $r2.<io.grpc.LoadBalancer$Subchannel: void requestConnection()>();
+
+     label4:
+        $r9 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: io.grpc.util.RoundRobinLoadBalancer$Ref getSubchannelStateInfoRef(io.grpc.LoadBalancer$Subchannel)>($r2);
+
+        $r5 = $r9.<io.grpc.util.RoundRobinLoadBalancer$Ref: java.lang.Object value>;
+
+        $r10 = (io.grpc.ConnectivityStateInfo) $r5;
+
+        $r6 = virtualinvoke $r10.<io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityState getState()>();
+
+        $r7 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState TRANSIENT_FAILURE>;
+
+        $z0 = virtualinvoke $r6.<io.grpc.ConnectivityState: boolean equals(java.lang.Object)>($r7);
+
+        if $z0 == 0 goto label5;
+
+        $r6 = virtualinvoke $r1.<io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityState getState()>();
+
+        $r7 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState CONNECTING>;
+
+        $z0 = virtualinvoke $r6.<io.grpc.ConnectivityState: boolean equals(java.lang.Object)>($r7);
+
+        if $z0 != 0 goto label6;
+
+        $r6 = virtualinvoke $r1.<io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityState getState()>();
+
+        $r7 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState IDLE>;
+
+        $z0 = virtualinvoke $r6.<io.grpc.ConnectivityState: boolean equals(java.lang.Object)>($r7);
+
+        if $z0 == 0 goto label5;
+
+        return;
+
+     label5:
+        $r9.<io.grpc.util.RoundRobinLoadBalancer$Ref: java.lang.Object value> = $r1;
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: void updateBalancingState()>();
+
+     label6:
+        return;
+    }
+
+    private static java.util.Set setsDifference(java.util.Set, java.util.Set)
+    {
+        java.util.Set $r0, $r1;
+        java.util.HashSet $r2, r3;
+        java.util.Collection r4;
+
+        $r0 := @parameter0: java.util.Set;
+
+        $r1 := @parameter1: java.util.Set;
+
+        r3 = new java.util.HashSet;
+
+        $r2 = r3;
+
+        r4 = (java.util.Collection) $r0;
+
+        specialinvoke r3.<java.util.HashSet: void <init>(java.util.Collection)>(r4);
+
+        $r0 = (java.util.Set) $r2;
+
+        r4 = (java.util.Collection) $r1;
+
+        interfaceinvoke $r0.<java.util.Set: boolean removeAll(java.util.Collection)>(r4);
+
+        $r0 = (java.util.Set) $r2;
+
+        return $r0;
+    }
+
+    private void shutdownSubchannel(io.grpc.LoadBalancer$Subchannel)
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        io.grpc.LoadBalancer$Subchannel $r1;
+        io.grpc.util.RoundRobinLoadBalancer$Ref $r2;
+        io.grpc.ConnectivityState $r3;
+        io.grpc.ConnectivityStateInfo $r4;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$Subchannel;
+
+        virtualinvoke $r1.<io.grpc.LoadBalancer$Subchannel: void shutdown()>();
+
+        $r2 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: io.grpc.util.RoundRobinLoadBalancer$Ref getSubchannelStateInfoRef(io.grpc.LoadBalancer$Subchannel)>($r1);
+
+        $r3 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState SHUTDOWN>;
+
+        $r4 = staticinvoke <io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityStateInfo forNonError(io.grpc.ConnectivityState)>($r3);
+
+        $r2.<io.grpc.util.RoundRobinLoadBalancer$Ref: java.lang.Object value> = $r4;
+
+        return;
+    }
+
+    private static io.grpc.EquivalentAddressGroup stripAttrs(io.grpc.EquivalentAddressGroup)
+    {
+        io.grpc.EquivalentAddressGroup $r0, $r2;
+        java.util.List $r1;
+
+        $r2 := @parameter0: io.grpc.EquivalentAddressGroup;
+
+        $r0 = new io.grpc.EquivalentAddressGroup;
+
+        $r1 = virtualinvoke $r2.<io.grpc.EquivalentAddressGroup: java.util.List getAddresses()>();
+
+        specialinvoke $r0.<io.grpc.EquivalentAddressGroup: void <init>(java.util.List)>($r1);
+
+        return $r0;
+    }
+
+    private static java.util.Map stripAttrs(java.util.List)
+    {
+        java.util.HashMap $r0, r6;
+        java.util.List $r1;
+        int $i0;
+        java.util.Iterator $r2;
+        boolean $z0;
+        java.lang.Object $r3;
+        io.grpc.EquivalentAddressGroup $r4, $r5;
+        java.util.Map r7;
+
+        $r1 := @parameter0: java.util.List;
+
+        r6 = new java.util.HashMap;
+
+        $r0 = r6;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        $i0 = $i0 + $i0;
+
+        specialinvoke r6.<java.util.HashMap: void <init>(int)>($i0);
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (io.grpc.EquivalentAddressGroup) $r3;
+
+        $r5 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: io.grpc.EquivalentAddressGroup stripAttrs(io.grpc.EquivalentAddressGroup)>($r4);
+
+        r7 = (java.util.Map) $r0;
+
+        interfaceinvoke r7.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r5, $r4);
+
+        goto label1;
+
+     label2:
+        r7 = (java.util.Map) $r0;
+
+        return r7;
+    }
+
+    private void updateBalancingState()
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        java.util.Collection $r1;
+        java.util.List $r2;
+        boolean $z0, $z1;
+        io.grpc.Status $r3, $r11;
+        java.util.Iterator $r4;
+        java.lang.Object $r5;
+        io.grpc.LoadBalancer$Subchannel $r6;
+        io.grpc.util.RoundRobinLoadBalancer$Ref $r7;
+        io.grpc.ConnectivityStateInfo $r8;
+        io.grpc.ConnectivityState $r9, $r10;
+        io.grpc.util.RoundRobinLoadBalancer$EmptyPicker $r12;
+        java.util.Random $r13;
+        int $i0;
+        io.grpc.util.RoundRobinLoadBalancer$ReadyPicker $r14;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r1 = virtualinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Collection getSubchannels()>();
+
+        $r2 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: java.util.List filterNonFailingSubchannels(java.util.Collection)>($r1);
+
+        $z0 = interfaceinvoke $r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label8;
+
+        $r3 = <io.grpc.util.RoundRobinLoadBalancer: io.grpc.Status EMPTY_OK>;
+
+        $r1 = virtualinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Collection getSubchannels()>();
+
+        $r4 = interfaceinvoke $r1.<java.util.Collection: java.util.Iterator iterator()>();
+
+        $z0 = 0;
+
+     label1:
+        $z1 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label5;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (io.grpc.LoadBalancer$Subchannel) $r5;
+
+        $r7 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: io.grpc.util.RoundRobinLoadBalancer$Ref getSubchannelStateInfoRef(io.grpc.LoadBalancer$Subchannel)>($r6);
+
+        $r5 = $r7.<io.grpc.util.RoundRobinLoadBalancer$Ref: java.lang.Object value>;
+
+        $r8 = (io.grpc.ConnectivityStateInfo) $r5;
+
+        $r9 = virtualinvoke $r8.<io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityState getState()>();
+
+        $r10 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState CONNECTING>;
+
+        if $r9 == $r10 goto label2;
+
+        $r9 = virtualinvoke $r8.<io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityState getState()>();
+
+        $r10 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState IDLE>;
+
+        if $r9 != $r10 goto label3;
+
+     label2:
+        $z0 = 1;
+
+     label3:
+        $r11 = <io.grpc.util.RoundRobinLoadBalancer: io.grpc.Status EMPTY_OK>;
+
+        if $r3 == $r11 goto label4;
+
+        $z1 = virtualinvoke $r3.<io.grpc.Status: boolean isOk()>();
+
+        if $z1 != 0 goto label1;
+
+     label4:
+        $r3 = virtualinvoke $r8.<io.grpc.ConnectivityStateInfo: io.grpc.Status getStatus()>();
+
+        goto label1;
+
+     label5:
+        if $z0 == 0 goto label6;
+
+        $r9 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState CONNECTING>;
+
+        goto label7;
+
+     label6:
+        $r9 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState TRANSIENT_FAILURE>;
+
+     label7:
+        $r12 = new io.grpc.util.RoundRobinLoadBalancer$EmptyPicker;
+
+        specialinvoke $r12.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: void <init>(io.grpc.Status)>($r3);
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: void updateBalancingState(io.grpc.ConnectivityState,io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker)>($r9, $r12);
+
+        return;
+
+     label8:
+        $r13 = $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Random random>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        $i0 = virtualinvoke $r13.<java.util.Random: int nextInt(int)>($i0);
+
+        $r9 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState READY>;
+
+        $r14 = new io.grpc.util.RoundRobinLoadBalancer$ReadyPicker;
+
+        specialinvoke $r14.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: void <init>(java.util.List,int)>($r2, $i0);
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: void updateBalancingState(io.grpc.ConnectivityState,io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker)>($r9, $r14);
+
+        return;
+    }
+
+    private void updateBalancingState(io.grpc.ConnectivityState, io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker)
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        io.grpc.ConnectivityState $r1, $r3;
+        io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker $r2, $r4;
+        boolean $z0;
+        io.grpc.LoadBalancer$Helper $r5;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r1 := @parameter0: io.grpc.ConnectivityState;
+
+        $r2 := @parameter1: io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker;
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.ConnectivityState currentState>;
+
+        if $r1 != $r3 goto label2;
+
+        $r4 = $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker currentPicker>;
+
+        $z0 = virtualinvoke $r2.<io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker: boolean isEquivalentTo(io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker)>($r4);
+
+        if $z0 != 0 goto label1;
+
+        goto label2;
+
+     label1:
+        return;
+
+     label2:
+        $r5 = $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.LoadBalancer$Helper helper>;
+
+        virtualinvoke $r5.<io.grpc.LoadBalancer$Helper: void updateBalancingState(io.grpc.ConnectivityState,io.grpc.LoadBalancer$SubchannelPicker)>($r1, $r2);
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.ConnectivityState currentState> = $r1;
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker currentPicker> = $r2;
+
+        return;
+    }
+
+    java.util.Collection getSubchannels()
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        java.util.Collection $r1;
+        java.util.Map $r2;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r2 = $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Map subchannels>;
+
+        $r1 = interfaceinvoke $r2.<java.util.Map: java.util.Collection values()>();
+
+        return $r1;
+    }
+
+    public void handleNameResolutionError(io.grpc.Status)
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        io.grpc.Status $r1;
+        io.grpc.ConnectivityState $r2, $r3;
+        io.grpc.util.RoundRobinLoadBalancer$EmptyPicker $r4;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r1 := @parameter0: io.grpc.Status;
+
+        $r2 = $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.ConnectivityState currentState>;
+
+        $r3 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState READY>;
+
+        if $r2 == $r3 goto label1;
+
+        $r2 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState TRANSIENT_FAILURE>;
+
+        $r4 = new io.grpc.util.RoundRobinLoadBalancer$EmptyPicker;
+
+        specialinvoke $r4.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: void <init>(io.grpc.Status)>($r1);
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: void updateBalancingState(io.grpc.ConnectivityState,io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker)>($r2, $r4);
+
+     label1:
+        return;
+    }
+
+    public void handleResolvedAddresses(io.grpc.LoadBalancer$ResolvedAddresses)
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        io.grpc.LoadBalancer$ResolvedAddresses $r1;
+        java.util.List $r2;
+        java.util.Map $r3;
+        java.util.Set $r4, $r5;
+        java.util.Iterator $r6;
+        boolean $z0;
+        java.lang.Object $r7;
+        java.util.Map$Entry $r8;
+        io.grpc.EquivalentAddressGroup $r9, $r10;
+        io.grpc.LoadBalancer$Subchannel $r11;
+        io.grpc.Attributes$Builder $r12;
+        io.grpc.Attributes$Key $r13;
+        io.grpc.util.RoundRobinLoadBalancer$Ref $r14;
+        io.grpc.ConnectivityState $r15;
+        io.grpc.ConnectivityStateInfo $r16;
+        io.grpc.LoadBalancer$Helper $r17;
+        io.grpc.LoadBalancer$CreateSubchannelArgs$Builder $r18;
+        io.grpc.Attributes $r19;
+        io.grpc.LoadBalancer$CreateSubchannelArgs $r20;
+        io.grpc.util.RoundRobinLoadBalancer$1 $r21;
+        java.util.ArrayList $r22;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$ResolvedAddresses;
+
+        $r2 = virtualinvoke $r1.<io.grpc.LoadBalancer$ResolvedAddresses: java.util.List getAddresses()>();
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Map subchannels>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.util.Set keySet()>();
+
+        $r3 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: java.util.Map stripAttrs(java.util.List)>($r2);
+
+        $r5 = interfaceinvoke $r3.<java.util.Map: java.util.Set keySet()>();
+
+        $r4 = staticinvoke <io.grpc.util.RoundRobinLoadBalancer: java.util.Set setsDifference(java.util.Set,java.util.Set)>($r4, $r5);
+
+        $r5 = interfaceinvoke $r3.<java.util.Map: java.util.Set entrySet()>();
+
+        $r6 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (java.util.Map$Entry) $r7;
+
+        $r7 = interfaceinvoke $r8.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r9 = (io.grpc.EquivalentAddressGroup) $r7;
+
+        $r7 = interfaceinvoke $r8.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r10 = (io.grpc.EquivalentAddressGroup) $r7;
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Map subchannels>;
+
+        $r7 = interfaceinvoke $r3.<java.util.Map: java.lang.Object get(java.lang.Object)>($r9);
+
+        $r11 = (io.grpc.LoadBalancer$Subchannel) $r7;
+
+        if $r11 == null goto label2;
+
+        $r2 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>($r10);
+
+        virtualinvoke $r11.<io.grpc.LoadBalancer$Subchannel: void updateAddresses(java.util.List)>($r2);
+
+        goto label1;
+
+     label2:
+        $r12 = staticinvoke <io.grpc.Attributes: io.grpc.Attributes$Builder newBuilder()>();
+
+        $r13 = <io.grpc.util.RoundRobinLoadBalancer: io.grpc.Attributes$Key STATE_INFO>;
+
+        $r14 = new io.grpc.util.RoundRobinLoadBalancer$Ref;
+
+        $r15 = <io.grpc.ConnectivityState: io.grpc.ConnectivityState IDLE>;
+
+        $r16 = staticinvoke <io.grpc.ConnectivityStateInfo: io.grpc.ConnectivityStateInfo forNonError(io.grpc.ConnectivityState)>($r15);
+
+        specialinvoke $r14.<io.grpc.util.RoundRobinLoadBalancer$Ref: void <init>(java.lang.Object)>($r16);
+
+        $r12 = virtualinvoke $r12.<io.grpc.Attributes$Builder: io.grpc.Attributes$Builder set(io.grpc.Attributes$Key,java.lang.Object)>($r13, $r14);
+
+        $r17 = $r0.<io.grpc.util.RoundRobinLoadBalancer: io.grpc.LoadBalancer$Helper helper>;
+
+        $r18 = staticinvoke <io.grpc.LoadBalancer$CreateSubchannelArgs: io.grpc.LoadBalancer$CreateSubchannelArgs$Builder newBuilder()>();
+
+        $r18 = virtualinvoke $r18.<io.grpc.LoadBalancer$CreateSubchannelArgs$Builder: io.grpc.LoadBalancer$CreateSubchannelArgs$Builder setAddresses(io.grpc.EquivalentAddressGroup)>($r10);
+
+        $r19 = virtualinvoke $r12.<io.grpc.Attributes$Builder: io.grpc.Attributes build()>();
+
+        $r18 = virtualinvoke $r18.<io.grpc.LoadBalancer$CreateSubchannelArgs$Builder: io.grpc.LoadBalancer$CreateSubchannelArgs$Builder setAttributes(io.grpc.Attributes)>($r19);
+
+        $r20 = virtualinvoke $r18.<io.grpc.LoadBalancer$CreateSubchannelArgs$Builder: io.grpc.LoadBalancer$CreateSubchannelArgs build()>();
+
+        $r11 = virtualinvoke $r17.<io.grpc.LoadBalancer$Helper: io.grpc.LoadBalancer$Subchannel createSubchannel(io.grpc.LoadBalancer$CreateSubchannelArgs)>($r20);
+
+        $r7 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r11, "subchannel");
+
+        $r11 = (io.grpc.LoadBalancer$Subchannel) $r7;
+
+        $r21 = new io.grpc.util.RoundRobinLoadBalancer$1;
+
+        specialinvoke $r21.<io.grpc.util.RoundRobinLoadBalancer$1: void <init>(io.grpc.util.RoundRobinLoadBalancer,io.grpc.LoadBalancer$Subchannel)>($r0, $r11);
+
+        virtualinvoke $r11.<io.grpc.LoadBalancer$Subchannel: void start(io.grpc.LoadBalancer$SubchannelStateListener)>($r21);
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Map subchannels>;
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r9, $r11);
+
+        virtualinvoke $r11.<io.grpc.LoadBalancer$Subchannel: void requestConnection()>();
+
+        goto label1;
+
+     label3:
+        $r22 = new java.util.ArrayList;
+
+        specialinvoke $r22.<java.util.ArrayList: void <init>()>();
+
+        $r6 = interfaceinvoke $r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label4:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (io.grpc.EquivalentAddressGroup) $r7;
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Map subchannels>;
+
+        $r7 = interfaceinvoke $r3.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r9);
+
+        $r11 = (io.grpc.LoadBalancer$Subchannel) $r7;
+
+        virtualinvoke $r22.<java.util.ArrayList: boolean add(java.lang.Object)>($r11);
+
+        goto label4;
+
+     label5:
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: void updateBalancingState()>();
+
+        $r6 = virtualinvoke $r22.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label6:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label7;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r11 = (io.grpc.LoadBalancer$Subchannel) $r7;
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: void shutdownSubchannel(io.grpc.LoadBalancer$Subchannel)>($r11);
+
+        goto label6;
+
+     label7:
+        return;
+    }
+
+    public void shutdown()
+    {
+        io.grpc.util.RoundRobinLoadBalancer $r0;
+        java.util.Collection $r1;
+        java.util.Iterator $r2;
+        boolean $z0;
+        java.lang.Object $r3;
+        io.grpc.LoadBalancer$Subchannel $r4;
+        java.util.Map $r5;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r1 = virtualinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Collection getSubchannels()>();
+
+        $r2 = interfaceinvoke $r1.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (io.grpc.LoadBalancer$Subchannel) $r3;
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer: void shutdownSubchannel(io.grpc.LoadBalancer$Subchannel)>($r4);
+
+        goto label1;
+
+     label2:
+        $r5 = $r0.<io.grpc.util.RoundRobinLoadBalancer: java.util.Map subchannels>;
+
+        interfaceinvoke $r5.<java.util.Map: void clear()>();
+
+        return;
+    }
+
+io.grpc.util.RoundRobinLoadBalancer$1
+<io.grpc.util.RoundRobinLoadBalancer$1: io.grpc.util.RoundRobinLoadBalancer this$0>
+<io.grpc.util.RoundRobinLoadBalancer$1: io.grpc.LoadBalancer$Subchannel val$subchannel>
+    void <init>(io.grpc.util.RoundRobinLoadBalancer, io.grpc.LoadBalancer$Subchannel)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$1 $r0;
+        io.grpc.util.RoundRobinLoadBalancer $r1;
+        io.grpc.LoadBalancer$Subchannel $r2;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$1;
+
+        $r1 := @parameter0: io.grpc.util.RoundRobinLoadBalancer;
+
+        $r2 := @parameter1: io.grpc.LoadBalancer$Subchannel;
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer$1: io.grpc.util.RoundRobinLoadBalancer this$0> = $r1;
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer$1: io.grpc.LoadBalancer$Subchannel val$subchannel> = $r2;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onSubchannelState(io.grpc.ConnectivityStateInfo)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$1 $r0;
+        io.grpc.ConnectivityStateInfo $r1;
+        io.grpc.util.RoundRobinLoadBalancer $r2;
+        io.grpc.LoadBalancer$Subchannel $r3;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$1;
+
+        $r1 := @parameter0: io.grpc.ConnectivityStateInfo;
+
+        $r2 = $r0.<io.grpc.util.RoundRobinLoadBalancer$1: io.grpc.util.RoundRobinLoadBalancer this$0>;
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer$1: io.grpc.LoadBalancer$Subchannel val$subchannel>;
+
+        staticinvoke <io.grpc.util.RoundRobinLoadBalancer: void access$000(io.grpc.util.RoundRobinLoadBalancer,io.grpc.LoadBalancer$Subchannel,io.grpc.ConnectivityStateInfo)>($r2, $r3, $r1);
+
+        return;
+    }
+
+io.grpc.util.RoundRobinLoadBalancer$EmptyPicker
+<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: io.grpc.Status status>
+    void <init>(io.grpc.Status)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$EmptyPicker $r0;
+        java.lang.Object $r1;
+        io.grpc.Status $r2;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$EmptyPicker;
+
+        $r2 := @parameter0: io.grpc.Status;
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker: void <init>(io.grpc.util.RoundRobinLoadBalancer$1)>(null);
+
+        $r1 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "status");
+
+        $r2 = (io.grpc.Status) $r1;
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: io.grpc.Status status> = $r2;
+
+        return;
+    }
+
+    boolean isEquivalentTo(io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$EmptyPicker $r0, $r4;
+        io.grpc.Status $r1, $r3;
+        io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker $r2;
+        boolean $z0;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$EmptyPicker;
+
+        $r2 := @parameter0: io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker;
+
+        $z0 = $r2 instanceof io.grpc.util.RoundRobinLoadBalancer$EmptyPicker;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: io.grpc.Status status>;
+
+        $r4 = (io.grpc.util.RoundRobinLoadBalancer$EmptyPicker) $r2;
+
+        $r1 = $r4.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: io.grpc.Status status>;
+
+        $z0 = staticinvoke <com.google.common.base.Objects: boolean equal(java.lang.Object,java.lang.Object)>($r3, $r1);
+
+        if $z0 != 0 goto label1;
+
+        $r1 = $r0.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: io.grpc.Status status>;
+
+        $z0 = virtualinvoke $r1.<io.grpc.Status: boolean isOk()>();
+
+        if $z0 == 0 goto label2;
+
+        $r1 = $r4.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: io.grpc.Status status>;
+
+        $z0 = virtualinvoke $r1.<io.grpc.Status: boolean isOk()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    public io.grpc.LoadBalancer$PickResult pickSubchannel(io.grpc.LoadBalancer$PickSubchannelArgs)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$EmptyPicker $r0;
+        io.grpc.LoadBalancer$PickSubchannelArgs $r1;
+        io.grpc.Status $r2;
+        boolean $z0;
+        io.grpc.LoadBalancer$PickResult $r3;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$EmptyPicker;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$PickSubchannelArgs;
+
+        $r2 = $r0.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: io.grpc.Status status>;
+
+        $z0 = virtualinvoke $r2.<io.grpc.Status: boolean isOk()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = staticinvoke <io.grpc.LoadBalancer$PickResult: io.grpc.LoadBalancer$PickResult withNoResult()>();
+
+        return $r3;
+
+     label1:
+        $r2 = $r0.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: io.grpc.Status status>;
+
+        $r3 = staticinvoke <io.grpc.LoadBalancer$PickResult: io.grpc.LoadBalancer$PickResult withError(io.grpc.Status)>($r2);
+
+        return $r3;
+    }
+
+    public java.lang.String toString()
+    {
+        io.grpc.util.RoundRobinLoadBalancer$EmptyPicker $r0;
+        io.grpc.Status $r1;
+        com.google.common.base.MoreObjects$ToStringHelper $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$EmptyPicker;
+
+        $r2 = staticinvoke <com.google.common.base.MoreObjects: com.google.common.base.MoreObjects$ToStringHelper toStringHelper(java.lang.Class)>(class "Lio/grpc/util/RoundRobinLoadBalancer$EmptyPicker;");
+
+        $r1 = $r0.<io.grpc.util.RoundRobinLoadBalancer$EmptyPicker: io.grpc.Status status>;
+
+        $r2 = virtualinvoke $r2.<com.google.common.base.MoreObjects$ToStringHelper: com.google.common.base.MoreObjects$ToStringHelper add(java.lang.String,java.lang.Object)>("status", $r1);
+
+        $r3 = virtualinvoke $r2.<com.google.common.base.MoreObjects$ToStringHelper: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+io.grpc.util.RoundRobinLoadBalancer$ReadyPicker
+<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.concurrent.atomic.AtomicIntegerFieldUpdater indexUpdater>
+<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: int index>
+<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.List list>
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r0;
+
+        $r0 = staticinvoke <java.util.concurrent.atomic.AtomicIntegerFieldUpdater: java.util.concurrent.atomic.AtomicIntegerFieldUpdater newUpdater(java.lang.Class,java.lang.String)>(class "Lio/grpc/util/RoundRobinLoadBalancer$ReadyPicker;", "index");
+
+        <io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.concurrent.atomic.AtomicIntegerFieldUpdater indexUpdater> = $r0;
+
+        return;
+    }
+
+    void <init>(java.util.List, int)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$ReadyPicker $r0;
+        java.util.List $r1;
+        boolean $z0;
+        int $i0;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$ReadyPicker;
+
+        $r1 := @parameter0: java.util.List;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker: void <init>(io.grpc.util.RoundRobinLoadBalancer$1)>(null);
+
+        $z0 = interfaceinvoke $r1.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "empty list");
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.List list> = $r1;
+
+        $i0 = $i0 + -1;
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: int index> = $i0;
+
+        return;
+    }
+
+    private io.grpc.LoadBalancer$Subchannel nextSubchannel()
+    {
+        io.grpc.util.RoundRobinLoadBalancer$ReadyPicker $r0;
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r1;
+        java.util.List $r2;
+        int $i0, $i1, $i2;
+        java.lang.Object $r3;
+        io.grpc.LoadBalancer$Subchannel $r4;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$ReadyPicker;
+
+        $r2 = $r0.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.List list>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        $r1 = <io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.concurrent.atomic.AtomicIntegerFieldUpdater indexUpdater>;
+
+        $i1 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: int incrementAndGet(java.lang.Object)>($r0);
+
+        $i2 = $i1;
+
+        if $i1 < $i0 goto label1;
+
+        $i0 = $i1 % $i0;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: boolean compareAndSet(java.lang.Object,int,int)>($r0, $i1, $i0);
+
+        $i2 = $i0;
+
+        goto label1;
+
+     label1:
+        $r2 = $r0.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.List list>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>($i2);
+
+        $r4 = (io.grpc.LoadBalancer$Subchannel) $r3;
+
+        return $r4;
+    }
+
+    boolean isEquivalentTo(io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$ReadyPicker $r0, $r2;
+        io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker $r1;
+        boolean $z0, $z1;
+        java.util.List $r3;
+        int $i0, $i1;
+        java.util.HashSet r4;
+        java.util.Collection r5;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$ReadyPicker;
+
+        $r1 := @parameter0: io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker;
+
+        $z0 = $r1 instanceof io.grpc.util.RoundRobinLoadBalancer$ReadyPicker;
+
+        $z1 = 0;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r2 = (io.grpc.util.RoundRobinLoadBalancer$ReadyPicker) $r1;
+
+        if $r2 == $r0 goto label3;
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.List list>;
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        $r3 = $r2.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.List list>;
+
+        $i1 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i0 != $i1 goto label2;
+
+        r4 = new java.util.HashSet;
+
+        $r3 = $r0.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.List list>;
+
+        r5 = (java.util.Collection) $r3;
+
+        specialinvoke r4.<java.util.HashSet: void <init>(java.util.Collection)>(r5);
+
+        $r3 = $r2.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.List list>;
+
+        r5 = (java.util.Collection) $r3;
+
+        $z0 = virtualinvoke r4.<java.util.HashSet: boolean containsAll(java.util.Collection)>(r5);
+
+        if $z0 == 0 goto label2;
+
+        goto label3;
+
+     label2:
+        goto label4;
+
+     label3:
+        $z1 = 1;
+
+     label4:
+        return $z1;
+    }
+
+    public io.grpc.LoadBalancer$PickResult pickSubchannel(io.grpc.LoadBalancer$PickSubchannelArgs)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$ReadyPicker $r0;
+        io.grpc.LoadBalancer$PickSubchannelArgs $r1;
+        io.grpc.LoadBalancer$Subchannel $r2;
+        io.grpc.LoadBalancer$PickResult $r3;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$ReadyPicker;
+
+        $r1 := @parameter0: io.grpc.LoadBalancer$PickSubchannelArgs;
+
+        $r2 = specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: io.grpc.LoadBalancer$Subchannel nextSubchannel()>();
+
+        $r3 = staticinvoke <io.grpc.LoadBalancer$PickResult: io.grpc.LoadBalancer$PickResult withSubchannel(io.grpc.LoadBalancer$Subchannel)>($r2);
+
+        return $r3;
+    }
+
+    public java.lang.String toString()
+    {
+        io.grpc.util.RoundRobinLoadBalancer$ReadyPicker $r0;
+        java.util.List $r1;
+        com.google.common.base.MoreObjects$ToStringHelper $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$ReadyPicker;
+
+        $r2 = staticinvoke <com.google.common.base.MoreObjects: com.google.common.base.MoreObjects$ToStringHelper toStringHelper(java.lang.Class)>(class "Lio/grpc/util/RoundRobinLoadBalancer$ReadyPicker;");
+
+        $r1 = $r0.<io.grpc.util.RoundRobinLoadBalancer$ReadyPicker: java.util.List list>;
+
+        $r2 = virtualinvoke $r2.<com.google.common.base.MoreObjects$ToStringHelper: com.google.common.base.MoreObjects$ToStringHelper add(java.lang.String,java.lang.Object)>("list", $r1);
+
+        $r3 = virtualinvoke $r2.<com.google.common.base.MoreObjects$ToStringHelper: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+io.grpc.util.RoundRobinLoadBalancer$Ref
+<io.grpc.util.RoundRobinLoadBalancer$Ref: java.lang.Object value>
+    void <init>(java.lang.Object)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$Ref $r0;
+        java.lang.Object $r1;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$Ref;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<io.grpc.util.RoundRobinLoadBalancer$Ref: java.lang.Object value> = $r1;
+
+        return;
+    }
+
+io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker
+    private void <init>()
+    {
+        io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker $r0;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker;
+
+        specialinvoke $r0.<io.grpc.LoadBalancer$SubchannelPicker: void <init>()>();
+
+        return;
+    }
+
+    void <init>(io.grpc.util.RoundRobinLoadBalancer$1)
+    {
+        io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker $r0;
+        io.grpc.util.RoundRobinLoadBalancer$1 $r1;
+
+        $r0 := @this: io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker;
+
+        $r1 := @parameter0: io.grpc.util.RoundRobinLoadBalancer$1;
+
+        specialinvoke $r0.<io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker: void <init>()>();
+
+        return;
+    }
+
+<io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker: boolean isEquivalentTo(io.grpc.util.RoundRobinLoadBalancer$RoundRobinPicker)>

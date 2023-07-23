@@ -1,0 +1,287 @@
+androidx.core.content.PackageManagerCompat
+<androidx.core.content.PackageManagerCompat: java.lang.String LOG_TAG>
+<androidx.core.content.PackageManagerCompat: java.lang.String ACTION_PERMISSION_REVOCATION_SETTINGS>
+    private void <init>()
+    {
+        androidx.core.content.PackageManagerCompat r0;
+
+        r0 := @this: androidx.core.content.PackageManagerCompat;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static com.google.common.util.concurrent.ListenableFuture getUnusedAppRestrictionsStatus(android.content.Context)
+    {
+        android.content.Context r0;
+        androidx.concurrent.futures.ResolvableFuture r1;
+        int i0, $i1, $i2;
+        androidx.core.content.UnusedAppRestrictionsBackportServiceConnection r2, r17;
+        boolean $z0, $z1, $z2, $z4;
+        android.content.pm.PackageManager $r3;
+        android.content.pm.ApplicationInfo $r4;
+        java.lang.Runnable $r7;
+        java.util.concurrent.ExecutorService $r8;
+        java.lang.Integer $r9, $r11, $r12, $r14, $r15, $r16;
+        byte $b5, $b6;
+        java.util.concurrent.Executor r18;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 = staticinvoke <androidx.concurrent.futures.ResolvableFuture: androidx.concurrent.futures.ResolvableFuture create()>();
+
+        $z0 = staticinvoke <androidx.core.os.UserManagerCompat: boolean isUserUnlocked(android.content.Context)>(r0);
+
+        if $z0 != 0 goto label01;
+
+        $r16 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+        virtualinvoke r1.<androidx.concurrent.futures.ResolvableFuture: boolean set(java.lang.Object)>($r16);
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("PackageManagerCompat", "User is in locked direct boot mode");
+
+        return r1;
+
+     label01:
+        $r3 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $z1 = staticinvoke <androidx.core.content.PackageManagerCompat: boolean areUnusedAppRestrictionsAvailable(android.content.pm.PackageManager)>($r3);
+
+        if $z1 != 0 goto label02;
+
+        $r15 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(1);
+
+        virtualinvoke r1.<androidx.concurrent.futures.ResolvableFuture: boolean set(java.lang.Object)>($r15);
+
+        return r1;
+
+     label02:
+        $r4 = virtualinvoke r0.<android.content.Context: android.content.pm.ApplicationInfo getApplicationInfo()>();
+
+        i0 = $r4.<android.content.pm.ApplicationInfo: int targetSdkVersion>;
+
+        if i0 >= 30 goto label03;
+
+        $r14 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+        virtualinvoke r1.<androidx.concurrent.futures.ResolvableFuture: boolean set(java.lang.Object)>($r14);
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("PackageManagerCompat", "Target SDK version below API 30");
+
+        return r1;
+
+     label03:
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 31 goto label08;
+
+        $z4 = staticinvoke <androidx.core.content.PackageManagerCompat$Api30Impl: boolean areUnusedAppRestrictionsEnabled(android.content.Context)>(r0);
+
+        if $z4 == 0 goto label06;
+
+        if i0 < 31 goto label04;
+
+        $b5 = 5;
+
+        goto label05;
+
+     label04:
+        $b5 = 4;
+
+     label05:
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($b5);
+
+        virtualinvoke r1.<androidx.concurrent.futures.ResolvableFuture: boolean set(java.lang.Object)>($r12);
+
+        goto label07;
+
+     label06:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(2);
+
+        virtualinvoke r1.<androidx.concurrent.futures.ResolvableFuture: boolean set(java.lang.Object)>($r11);
+
+     label07:
+        return r1;
+
+     label08:
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 != 30 goto label11;
+
+        $z2 = staticinvoke <androidx.core.content.PackageManagerCompat$Api30Impl: boolean areUnusedAppRestrictionsEnabled(android.content.Context)>(r0);
+
+        if $z2 == 0 goto label09;
+
+        $b6 = 4;
+
+        goto label10;
+
+     label09:
+        $b6 = 2;
+
+     label10:
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($b6);
+
+        virtualinvoke r1.<androidx.concurrent.futures.ResolvableFuture: boolean set(java.lang.Object)>($r9);
+
+        return r1;
+
+     label11:
+        r17 = new androidx.core.content.UnusedAppRestrictionsBackportServiceConnection;
+
+        specialinvoke r17.<androidx.core.content.UnusedAppRestrictionsBackportServiceConnection: void <init>(android.content.Context)>(r0);
+
+        r2 = r17;
+
+        staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>(r2);
+
+        $r7 = dynamicinvoke "run" <java.lang.Runnable (androidx.core.content.UnusedAppRestrictionsBackportServiceConnection)>(r2) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_VIRTUAL" <androidx.core.content.UnusedAppRestrictionsBackportServiceConnection: void disconnectFromService()>, methodtype: void __METHODTYPE__());
+
+        $r8 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ExecutorService newSingleThreadExecutor()>();
+
+        r18 = (java.util.concurrent.Executor) $r8;
+
+        virtualinvoke r1.<androidx.concurrent.futures.ResolvableFuture: void addListener(java.lang.Runnable,java.util.concurrent.Executor)>($r7, r18);
+
+        virtualinvoke r2.<androidx.core.content.UnusedAppRestrictionsBackportServiceConnection: void connectAndFetchResult(androidx.concurrent.futures.ResolvableFuture)>(r1);
+
+        return r1;
+    }
+
+    public static boolean areUnusedAppRestrictionsAvailable(android.content.pm.PackageManager)
+    {
+        android.content.pm.PackageManager r0;
+        boolean z0, z1, z2, $z3, $z4, $z5, $z6;
+        int $i0, $i1, $i2;
+        java.lang.String $r1;
+
+        r0 := @parameter0: android.content.pm.PackageManager;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 30 goto label1;
+
+        $z3 = 1;
+
+        goto label2;
+
+     label1:
+        $z3 = 0;
+
+     label2:
+        z0 = $z3;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 23 goto label3;
+
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 >= 30 goto label3;
+
+        $z4 = 1;
+
+        goto label4;
+
+     label3:
+        $z4 = 0;
+
+     label4:
+        z1 = $z4;
+
+        $r1 = staticinvoke <androidx.core.content.PackageManagerCompat: java.lang.String getPermissionRevocationVerifierApp(android.content.pm.PackageManager)>(r0);
+
+        if $r1 == null goto label5;
+
+        $z5 = 1;
+
+        goto label6;
+
+     label5:
+        $z5 = 0;
+
+     label6:
+        z2 = $z5;
+
+        if z0 != 0 goto label7;
+
+        if z1 == 0 goto label8;
+
+        if z2 == 0 goto label8;
+
+     label7:
+        $z6 = 1;
+
+        goto label9;
+
+     label8:
+        $z6 = 0;
+
+     label9:
+        return $z6;
+    }
+
+    public static java.lang.String getPermissionRevocationVerifierApp(android.content.pm.PackageManager)
+    {
+        android.content.pm.PackageManager r0;
+        android.content.Intent r1, $r6;
+        java.util.List r2;
+        java.util.Iterator r3;
+        android.content.pm.ResolveInfo r4;
+        java.lang.String r5, r10;
+        android.net.Uri $r7;
+        java.lang.Object $r8;
+        android.content.pm.ActivityInfo $r9;
+        int $i0;
+        boolean $z0;
+
+        r0 := @parameter0: android.content.pm.PackageManager;
+
+        $r6 = new android.content.Intent;
+
+        specialinvoke $r6.<android.content.Intent: void <init>(java.lang.String)>("android.intent.action.AUTO_REVOKE_PERMISSIONS");
+
+        $r7 = staticinvoke <android.net.Uri: android.net.Uri fromParts(java.lang.String,java.lang.String,java.lang.String)>("package", "com.example", null);
+
+        r1 = virtualinvoke $r6.<android.content.Intent: android.content.Intent setData(android.net.Uri)>($r7);
+
+        r2 = virtualinvoke r0.<android.content.pm.PackageManager: java.util.List queryIntentActivities(android.content.Intent,int)>(r1, 0);
+
+        r10 = null;
+
+        r3 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r8 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (android.content.pm.ResolveInfo) $r8;
+
+        $r9 = r4.<android.content.pm.ResolveInfo: android.content.pm.ActivityInfo activityInfo>;
+
+        r5 = $r9.<android.content.pm.ActivityInfo: java.lang.String packageName>;
+
+        $i0 = virtualinvoke r0.<android.content.pm.PackageManager: int checkPermission(java.lang.String,java.lang.String)>("android.permission.PACKAGE_VERIFICATION_AGENT", r5);
+
+        if $i0 == 0 goto label2;
+
+        goto label1;
+
+     label2:
+        if r10 == null goto label3;
+
+        return r10;
+
+     label3:
+        r10 = r5;
+
+        goto label1;
+
+     label4:
+        return r10;
+    }
+

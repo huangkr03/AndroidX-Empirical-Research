@@ -1,0 +1,818 @@
+androidx.media3.datasource.RawResourceDataSource
+<androidx.media3.datasource.RawResourceDataSource: java.lang.String RAW_RESOURCE_SCHEME>
+<androidx.media3.datasource.RawResourceDataSource: android.content.res.Resources resources>
+<androidx.media3.datasource.RawResourceDataSource: java.lang.String packageName>
+<androidx.media3.datasource.RawResourceDataSource: android.net.Uri uri>
+<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>
+<androidx.media3.datasource.RawResourceDataSource: java.io.InputStream inputStream>
+<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>
+<androidx.media3.datasource.RawResourceDataSource: boolean opened>
+    public static android.net.Uri buildRawResourceUri(int)
+    {
+        int i0;
+        java.lang.StringBuilder $r0, $r1, $r2;
+        java.lang.String $r3;
+        android.net.Uri $r4;
+
+        i0 := @parameter0: int;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("rawresource:///");
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>($r3);
+
+        return $r4;
+    }
+
+    public void <init>(android.content.Context)
+    {
+        androidx.media3.datasource.RawResourceDataSource r0;
+        android.content.Context r1;
+        android.content.res.Resources $r2;
+        java.lang.String $r3;
+
+        r0 := @this: androidx.media3.datasource.RawResourceDataSource;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<androidx.media3.datasource.BaseDataSource: void <init>(boolean)>(0);
+
+        $r2 = virtualinvoke r1.<android.content.Context: android.content.res.Resources getResources()>();
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.Resources resources> = $r2;
+
+        $r3 = virtualinvoke r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: java.lang.String packageName> = $r3;
+
+        return;
+    }
+
+    public long open(androidx.media3.datasource.DataSpec) throws androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException
+    {
+        androidx.media3.datasource.RawResourceDataSource r0;
+        androidx.media3.datasource.DataSpec r1;
+        android.net.Uri r2;
+        java.lang.String r3, $r6, $r7, $r9, $r22, $r23, $r25, $r33, $r37, $r39, $r47, r48, r49, $r50;
+        java.io.FileInputStream r4, r62;
+        long l0, $l2, $l3, $l4, $l5, $l8, $l9, $l11, $l13, $l15, $l16, $l17, $l19, $l20, $l21, $l22, $l24, l28, l29, $l30, $l31, $l33;
+        java.nio.channels.FileChannel r5;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        java.lang.Object $r8, $r26, $r38;
+        android.content.res.Resources $r10, $r34;
+        java.io.FileDescriptor $r12;
+        byte $b1, $b6, $b7, $b10, $b12, $b14, $b18, $b23, $b25, $b32;
+        java.lang.StringBuilder $r20, $r21, $r29, $r30, $r31, $r32, r55, r56, r60;
+        java.util.List $r36;
+        int $i26, i27;
+        java.lang.Throwable $r40, $r42, $r44, r46, r52, r53, r68, r69, r70, r71, r72, r73, r74, r75, r76, r77;
+        android.content.res.AssetFileDescriptor r51;
+        androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException r54, r57, r58, r59, r61, r63, r64, r65, r67;
+        androidx.media3.datasource.DataSourceException r66;
+
+        r0 := @this: androidx.media3.datasource.RawResourceDataSource;
+
+        r1 := @parameter0: androidx.media3.datasource.DataSpec;
+
+        r2 = r1.<androidx.media3.datasource.DataSpec: android.net.Uri uri>;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: android.net.Uri uri> = r2;
+
+        $r6 = virtualinvoke r2.<android.net.Uri: java.lang.String getScheme()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean equals(java.lang.CharSequence,java.lang.CharSequence)>("rawresource", $r6);
+
+        if $z0 != 0 goto label01;
+
+        $r23 = virtualinvoke r2.<android.net.Uri: java.lang.String getScheme()>();
+
+        $z1 = staticinvoke <android.text.TextUtils: boolean equals(java.lang.CharSequence,java.lang.CharSequence)>("android.resource", $r23);
+
+        if $z1 == 0 goto label04;
+
+        $r36 = virtualinvoke r2.<android.net.Uri: java.util.List getPathSegments()>();
+
+        $i26 = interfaceinvoke $r36.<java.util.List: int size()>();
+
+        if $i26 != 1 goto label04;
+
+        $r37 = virtualinvoke r2.<android.net.Uri: java.lang.String getLastPathSegment()>();
+
+        $r38 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r37);
+
+        $r39 = (java.lang.String) $r38;
+
+        $z4 = virtualinvoke $r39.<java.lang.String: boolean matches(java.lang.String)>("\\d+");
+
+        if $z4 == 0 goto label04;
+
+     label01:
+        $r7 = virtualinvoke r2.<android.net.Uri: java.lang.String getLastPathSegment()>();
+
+        $r8 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r7);
+
+        $r9 = (java.lang.String) $r8;
+
+        i27 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r9);
+
+     label02:
+        goto label10;
+
+     label03:
+        $r42 := @caughtexception;
+
+        r46 = $r42;
+
+        r54 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r54.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>("Resource identifier must be an integer.", null, 1004);
+
+        r68 = (java.lang.Throwable) r54;
+
+        throw r68;
+
+     label04:
+        $r47 = virtualinvoke r2.<android.net.Uri: java.lang.String getScheme()>();
+
+        $z5 = staticinvoke <android.text.TextUtils: boolean equals(java.lang.CharSequence,java.lang.CharSequence)>("android.resource", $r47);
+
+        if $z5 == 0 goto label09;
+
+        $r25 = virtualinvoke r2.<android.net.Uri: java.lang.String getPath()>();
+
+        $r26 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r25);
+
+        r48 = (java.lang.String) $r26;
+
+        $z2 = virtualinvoke r48.<java.lang.String: boolean startsWith(java.lang.String)>("/");
+
+        if $z2 == 0 goto label05;
+
+        r48 = virtualinvoke r48.<java.lang.String: java.lang.String substring(int)>(1);
+
+     label05:
+        r49 = virtualinvoke r2.<android.net.Uri: java.lang.String getHost()>();
+
+        r55 = new java.lang.StringBuilder;
+
+        specialinvoke r55.<java.lang.StringBuilder: void <init>()>();
+
+        $z3 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>(r49);
+
+        if $z3 == 0 goto label06;
+
+        $r50 = "";
+
+        goto label07;
+
+     label06:
+        r56 = new java.lang.StringBuilder;
+
+        specialinvoke r56.<java.lang.StringBuilder: void <init>()>();
+
+        $r29 = virtualinvoke r56.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r49);
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(":");
+
+        $r50 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label07:
+        $r31 = virtualinvoke r55.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r50);
+
+        $r32 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r48);
+
+        r3 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r34 = r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.Resources resources>;
+
+        $r33 = r0.<androidx.media3.datasource.RawResourceDataSource: java.lang.String packageName>;
+
+        i27 = virtualinvoke $r34.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>(r3, "raw", $r33);
+
+        if i27 != 0 goto label08;
+
+        r57 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r57.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>("Resource not found.", null, 2005);
+
+        r69 = (java.lang.Throwable) r57;
+
+        throw r69;
+
+     label08:
+        goto label10;
+
+     label09:
+        r58 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r58.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>("URI must either use scheme rawresource or android.resource", null, 1004);
+
+        r70 = (java.lang.Throwable) r58;
+
+        throw r70;
+
+     label10:
+        virtualinvoke r0.<androidx.media3.datasource.RawResourceDataSource: void transferInitializing(androidx.media3.datasource.DataSpec)>(r1);
+
+     label11:
+        $r10 = r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.Resources resources>;
+
+        r51 = virtualinvoke $r10.<android.content.res.Resources: android.content.res.AssetFileDescriptor openRawResourceFd(int)>(i27);
+
+     label12:
+        goto label14;
+
+     label13:
+        $r44 := @caughtexception;
+
+        r52 = $r44;
+
+        r59 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r59.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(null, r52, 2005);
+
+        r71 = (java.lang.Throwable) r59;
+
+        throw r71;
+
+     label14:
+        r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = r51;
+
+        if r51 != null goto label15;
+
+        r61 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        r60 = new java.lang.StringBuilder;
+
+        specialinvoke r60.<java.lang.StringBuilder: void <init>()>();
+
+        $r20 = virtualinvoke r60.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Resource is compressed: ");
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r61.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>($r22, null, 2000);
+
+        r72 = (java.lang.Throwable) r61;
+
+        throw r72;
+
+     label15:
+        l28 = virtualinvoke r51.<android.content.res.AssetFileDescriptor: long getLength()>();
+
+        r62 = new java.io.FileInputStream;
+
+        $r12 = virtualinvoke r51.<android.content.res.AssetFileDescriptor: java.io.FileDescriptor getFileDescriptor()>();
+
+        specialinvoke r62.<java.io.FileInputStream: void <init>(java.io.FileDescriptor)>($r12);
+
+        r4 = r62;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: java.io.InputStream inputStream> = r4;
+
+     label16:
+        $b1 = l28 cmp -1L;
+
+        if $b1 == 0 goto label17;
+
+        $l24 = r1.<androidx.media3.datasource.DataSpec: long position>;
+
+        $b25 = $l24 cmp l28;
+
+        if $b25 <= 0 goto label17;
+
+        r63 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r63.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(null, null, 2008);
+
+        r73 = (java.lang.Throwable) r63;
+
+        throw r73;
+
+     label17:
+        l29 = virtualinvoke r51.<android.content.res.AssetFileDescriptor: long getStartOffset()>();
+
+        $l2 = r1.<androidx.media3.datasource.DataSpec: long position>;
+
+        $l3 = l29 + $l2;
+
+        $l4 = virtualinvoke r4.<java.io.FileInputStream: long skip(long)>($l3);
+
+        l0 = $l4 - l29;
+
+        $l5 = r1.<androidx.media3.datasource.DataSpec: long position>;
+
+        $b6 = l0 cmp $l5;
+
+        if $b6 == 0 goto label18;
+
+        r64 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r64.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(null, null, 2008);
+
+        r74 = (java.lang.Throwable) r64;
+
+        throw r74;
+
+     label18:
+        $b7 = l28 cmp -1L;
+
+        if $b7 != 0 goto label21;
+
+        r5 = virtualinvoke r4.<java.io.FileInputStream: java.nio.channels.FileChannel getChannel()>();
+
+        $l17 = virtualinvoke r5.<java.nio.channels.FileChannel: long size()>();
+
+        $b18 = $l17 cmp 0L;
+
+        if $b18 != 0 goto label19;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining> = -1L;
+
+        goto label20;
+
+     label19:
+        $l19 = virtualinvoke r5.<java.nio.channels.FileChannel: long size()>();
+
+        $l20 = virtualinvoke r5.<java.nio.channels.FileChannel: long position()>();
+
+        $l21 = $l19 - $l20;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining> = $l21;
+
+        $l22 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $b23 = $l22 cmp 0L;
+
+        if $b23 >= 0 goto label20;
+
+        r65 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r65.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(null, null, 2008);
+
+        r75 = (java.lang.Throwable) r65;
+
+        throw r75;
+
+     label20:
+        goto label22;
+
+     label21:
+        $l8 = l28 - l0;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining> = $l8;
+
+        $l9 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $b10 = $l9 cmp 0L;
+
+        if $b10 >= 0 goto label22;
+
+        r66 = new androidx.media3.datasource.DataSourceException;
+
+        specialinvoke r66.<androidx.media3.datasource.DataSourceException: void <init>(int)>(2008);
+
+        r76 = (java.lang.Throwable) r66;
+
+        throw r76;
+
+     label22:
+        goto label24;
+
+     label23:
+        $r40 := @caughtexception;
+
+        r53 = $r40;
+
+        r67 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r67.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(null, r53, 2000);
+
+        r77 = (java.lang.Throwable) r67;
+
+        throw r77;
+
+     label24:
+        $l11 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $b12 = $l11 cmp -1L;
+
+        if $b12 == 0 goto label27;
+
+        $l13 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $b14 = $l13 cmp -1L;
+
+        if $b14 != 0 goto label25;
+
+        $l30 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        goto label26;
+
+     label25:
+        $l16 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $l15 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $l30 = staticinvoke <java.lang.Math: long min(long,long)>($l16, $l15);
+
+     label26:
+        r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining> = $l30;
+
+     label27:
+        r0.<androidx.media3.datasource.RawResourceDataSource: boolean opened> = 1;
+
+        virtualinvoke r0.<androidx.media3.datasource.RawResourceDataSource: void transferStarted(androidx.media3.datasource.DataSpec)>(r1);
+
+        $l31 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $b32 = $l31 cmp -1L;
+
+        if $b32 == 0 goto label28;
+
+        $l33 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        goto label29;
+
+     label28:
+        $l33 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+     label29:
+        return $l33;
+
+        catch java.lang.NumberFormatException from label01 to label02 with label03;
+        catch android.content.res.Resources$NotFoundException from label11 to label12 with label13;
+        catch java.io.IOException from label16 to label22 with label23;
+    }
+
+    public int read(byte[], int, int) throws androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException
+    {
+        androidx.media3.datasource.RawResourceDataSource r0;
+        byte[] r1;
+        int i0, i1, i2, $i17, i18;
+        long $l3, $l5, $l7, $l8, $l9, $l10, $l12, $l13, $l14, $l15;
+        byte $b4, $b6, $b11, $b16;
+        java.io.InputStream $r2, $r4;
+        java.lang.Object $r3;
+        java.lang.Throwable $r7, r9, r13, r14;
+        androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException r10, r12;
+        java.io.EOFException r11;
+
+        r0 := @this: androidx.media3.datasource.RawResourceDataSource;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        if i1 != 0 goto label01;
+
+        return 0;
+
+     label01:
+        $l3 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $b4 = $l3 cmp 0L;
+
+        if $b4 != 0 goto label02;
+
+        return -1;
+
+     label02:
+        $l5 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $b6 = $l5 cmp -1L;
+
+        if $b6 != 0 goto label03;
+
+        $i17 = i1;
+
+        goto label04;
+
+     label03:
+        $l8 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $l7 = (long) i1;
+
+        $l9 = staticinvoke <java.lang.Math: long min(long,long)>($l8, $l7);
+
+        $i17 = (int) $l9;
+
+     label04:
+        i18 = $i17;
+
+        $r2 = r0.<androidx.media3.datasource.RawResourceDataSource: java.io.InputStream inputStream>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r2);
+
+        $r4 = (java.io.InputStream) $r3;
+
+        i2 = virtualinvoke $r4.<java.io.InputStream: int read(byte[],int,int)>(r1, i0, i18);
+
+     label05:
+        goto label07;
+
+     label06:
+        $r7 := @caughtexception;
+
+        r9 = $r7;
+
+        r10 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r10.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(null, r9, 2000);
+
+        r13 = (java.lang.Throwable) r10;
+
+        throw r13;
+
+     label07:
+        if i2 != -1 goto label09;
+
+        $l15 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $b16 = $l15 cmp -1L;
+
+        if $b16 == 0 goto label08;
+
+        r12 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        r11 = new java.io.EOFException;
+
+        specialinvoke r11.<java.io.EOFException: void <init>()>();
+
+        specialinvoke r12.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>("End of stream reached having not read sufficient data.", r11, 2000);
+
+        r14 = (java.lang.Throwable) r12;
+
+        throw r14;
+
+     label08:
+        return -1;
+
+     label09:
+        $l10 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $b11 = $l10 cmp -1L;
+
+        if $b11 == 0 goto label10;
+
+        $l13 = r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining>;
+
+        $l12 = (long) i2;
+
+        $l14 = $l13 - $l12;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: long bytesRemaining> = $l14;
+
+     label10:
+        virtualinvoke r0.<androidx.media3.datasource.RawResourceDataSource: void bytesTransferred(int)>(i2);
+
+        return i2;
+
+        catch java.io.IOException from label02 to label05 with label06;
+    }
+
+    public android.net.Uri getUri()
+    {
+        androidx.media3.datasource.RawResourceDataSource r0;
+        android.net.Uri $r1;
+
+        r0 := @this: androidx.media3.datasource.RawResourceDataSource;
+
+        $r1 = r0.<androidx.media3.datasource.RawResourceDataSource: android.net.Uri uri>;
+
+        return $r1;
+    }
+
+    public void close() throws androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException
+    {
+        androidx.media3.datasource.RawResourceDataSource r0;
+        java.lang.Throwable r1, r2, r3, r4, $r9, $r10, $r12, $r14, $r16, $r17, r20, r21, r25, r26, r27;
+        java.io.InputStream $r5, $r8;
+        android.content.res.AssetFileDescriptor $r6, $r7, $r18, $r19;
+        boolean $z0, $z1, $z2, $z3;
+        androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException r22, r23, r24;
+
+        r0 := @this: androidx.media3.datasource.RawResourceDataSource;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: android.net.Uri uri> = null;
+
+     label01:
+        $r5 = r0.<androidx.media3.datasource.RawResourceDataSource: java.io.InputStream inputStream>;
+
+        if $r5 == null goto label02;
+
+        $r8 = r0.<androidx.media3.datasource.RawResourceDataSource: java.io.InputStream inputStream>;
+
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label02:
+        r0.<androidx.media3.datasource.RawResourceDataSource: java.io.InputStream inputStream> = null;
+
+     label03:
+        $r6 = r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>;
+
+        if $r6 == null goto label04;
+
+        $r7 = r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>;
+
+        virtualinvoke $r7.<android.content.res.AssetFileDescriptor: void close()>();
+
+     label04:
+        r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = null;
+
+        $z0 = r0.<androidx.media3.datasource.RawResourceDataSource: boolean opened>;
+
+        if $z0 == 0 goto label09;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: boolean opened> = 0;
+
+        virtualinvoke r0.<androidx.media3.datasource.RawResourceDataSource: void transferEnded()>();
+
+        goto label09;
+
+     label05:
+        $r12 := @caughtexception;
+
+        r20 = $r12;
+
+        r22 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r22.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(null, r20, 2000);
+
+        r25 = (java.lang.Throwable) r22;
+
+        throw r25;
+
+     label06:
+        $r16 := @caughtexception;
+
+        r1 = $r16;
+
+     label07:
+        r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = null;
+
+        $z2 = r0.<androidx.media3.datasource.RawResourceDataSource: boolean opened>;
+
+        if $z2 == 0 goto label08;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: boolean opened> = 0;
+
+        virtualinvoke r0.<androidx.media3.datasource.RawResourceDataSource: void transferEnded()>();
+
+     label08:
+        throw r1;
+
+     label09:
+        goto label20;
+
+     label10:
+        $r14 := @caughtexception;
+
+        r21 = $r14;
+
+        r23 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r23.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(null, r21, 2000);
+
+        r26 = (java.lang.Throwable) r23;
+
+        throw r26;
+
+     label11:
+        $r17 := @caughtexception;
+
+        r2 = $r17;
+
+     label12:
+        r0.<androidx.media3.datasource.RawResourceDataSource: java.io.InputStream inputStream> = null;
+
+     label13:
+        $r18 = r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>;
+
+        if $r18 == null goto label14;
+
+        $r19 = r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor>;
+
+        virtualinvoke $r19.<android.content.res.AssetFileDescriptor: void close()>();
+
+     label14:
+        r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = null;
+
+        $z3 = r0.<androidx.media3.datasource.RawResourceDataSource: boolean opened>;
+
+        if $z3 == 0 goto label19;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: boolean opened> = 0;
+
+        virtualinvoke r0.<androidx.media3.datasource.RawResourceDataSource: void transferEnded()>();
+
+        goto label19;
+
+     label15:
+        $r10 := @caughtexception;
+
+        r3 = $r10;
+
+        r24 = new androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        specialinvoke r24.<androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(null, r3, 2000);
+
+        r27 = (java.lang.Throwable) r24;
+
+        throw r27;
+
+     label16:
+        $r9 := @caughtexception;
+
+        r4 = $r9;
+
+     label17:
+        r0.<androidx.media3.datasource.RawResourceDataSource: android.content.res.AssetFileDescriptor assetFileDescriptor> = null;
+
+        $z1 = r0.<androidx.media3.datasource.RawResourceDataSource: boolean opened>;
+
+        if $z1 == 0 goto label18;
+
+        r0.<androidx.media3.datasource.RawResourceDataSource: boolean opened> = 0;
+
+        virtualinvoke r0.<androidx.media3.datasource.RawResourceDataSource: void transferEnded()>();
+
+     label18:
+        throw r4;
+
+     label19:
+        throw r2;
+
+     label20:
+        return;
+
+        catch java.io.IOException from label03 to label04 with label05;
+        catch java.lang.Throwable from label03 to label04 with label06;
+        catch java.lang.Throwable from label05 to label07 with label06;
+        catch java.io.IOException from label01 to label02 with label10;
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.io.IOException from label13 to label14 with label15;
+        catch java.lang.Throwable from label13 to label14 with label16;
+        catch java.lang.Throwable from label15 to label17 with label16;
+        catch java.lang.Throwable from label10 to label12 with label11;
+    }
+
+androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException
+    public void <init>(java.lang.String)
+    {
+        androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException r0;
+        java.lang.String r1;
+
+        r0 := @this: androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<androidx.media3.datasource.DataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(r1, null, 2000);
+
+        return;
+    }
+
+    public void <init>(java.lang.Throwable)
+    {
+        androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException r0;
+        java.lang.Throwable r1;
+
+        r0 := @this: androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        specialinvoke r0.<androidx.media3.datasource.DataSourceException: void <init>(java.lang.Throwable,int)>(r1, 2000);
+
+        return;
+    }
+
+    public void <init>(java.lang.String, java.lang.Throwable, int)
+    {
+        androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException r0;
+        java.lang.String r1;
+        java.lang.Throwable r2;
+        int i0;
+
+        r0 := @this: androidx.media3.datasource.RawResourceDataSource$RawResourceDataSourceException;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.Throwable;
+
+        i0 := @parameter2: int;
+
+        specialinvoke r0.<androidx.media3.datasource.DataSourceException: void <init>(java.lang.String,java.lang.Throwable,int)>(r1, r2, i0);
+
+        return;
+    }
+

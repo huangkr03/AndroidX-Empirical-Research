@@ -1,0 +1,324 @@
+androidx.camera.camera2.internal.DisplayInfoManager
+<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size MAX_PREVIEW_SIZE>
+<androidx.camera.camera2.internal.DisplayInfoManager: java.lang.Object INSTANCE_LOCK>
+<androidx.camera.camera2.internal.DisplayInfoManager: androidx.camera.camera2.internal.DisplayInfoManager sInstance>
+<androidx.camera.camera2.internal.DisplayInfoManager: android.hardware.display.DisplayManager mDisplayManager>
+<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size mPreviewSize>
+<androidx.camera.camera2.internal.DisplayInfoManager: androidx.camera.camera2.internal.compat.workaround.MaxPreviewSize mMaxPreviewSize>
+    private void <init>(android.content.Context)
+    {
+        androidx.camera.camera2.internal.DisplayInfoManager r0;
+        android.content.Context r1;
+        androidx.camera.camera2.internal.compat.workaround.MaxPreviewSize $r2;
+        java.lang.Object $r3;
+        android.hardware.display.DisplayManager $r4;
+
+        r0 := @this: androidx.camera.camera2.internal.DisplayInfoManager;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size mPreviewSize> = null;
+
+        $r2 = new androidx.camera.camera2.internal.compat.workaround.MaxPreviewSize;
+
+        specialinvoke $r2.<androidx.camera.camera2.internal.compat.workaround.MaxPreviewSize: void <init>()>();
+
+        r0.<androidx.camera.camera2.internal.DisplayInfoManager: androidx.camera.camera2.internal.compat.workaround.MaxPreviewSize mMaxPreviewSize> = $r2;
+
+        $r3 = virtualinvoke r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("display");
+
+        $r4 = (android.hardware.display.DisplayManager) $r3;
+
+        r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.hardware.display.DisplayManager mDisplayManager> = $r4;
+
+        return;
+    }
+
+    public static androidx.camera.camera2.internal.DisplayInfoManager getInstance(android.content.Context)
+    {
+        android.content.Context r0;
+        java.lang.Object r1, $r5;
+        java.lang.Throwable r2, $r8;
+        androidx.camera.camera2.internal.DisplayInfoManager $r3, $r4, $r6, $r7;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r3 = <androidx.camera.camera2.internal.DisplayInfoManager: androidx.camera.camera2.internal.DisplayInfoManager sInstance>;
+
+        if $r3 != null goto label6;
+
+        $r5 = <androidx.camera.camera2.internal.DisplayInfoManager: java.lang.Object INSTANCE_LOCK>;
+
+        r1 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = <androidx.camera.camera2.internal.DisplayInfoManager: androidx.camera.camera2.internal.DisplayInfoManager sInstance>;
+
+        if $r6 != null goto label2;
+
+        $r7 = new androidx.camera.camera2.internal.DisplayInfoManager;
+
+        specialinvoke $r7.<androidx.camera.camera2.internal.DisplayInfoManager: void <init>(android.content.Context)>(r0);
+
+        <androidx.camera.camera2.internal.DisplayInfoManager: androidx.camera.camera2.internal.DisplayInfoManager sInstance> = $r7;
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r2 = $r8;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        $r4 = <androidx.camera.camera2.internal.DisplayInfoManager: androidx.camera.camera2.internal.DisplayInfoManager sInstance>;
+
+        return $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    static void releaseInstance()
+    {
+        <androidx.camera.camera2.internal.DisplayInfoManager: androidx.camera.camera2.internal.DisplayInfoManager sInstance> = null;
+
+        return;
+    }
+
+    void refresh()
+    {
+        androidx.camera.camera2.internal.DisplayInfoManager r0;
+        android.util.Size $r1;
+
+        r0 := @this: androidx.camera.camera2.internal.DisplayInfoManager;
+
+        $r1 = specialinvoke r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size calculatePreviewSize()>();
+
+        r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size mPreviewSize> = $r1;
+
+        return;
+    }
+
+    public android.view.Display getMaxSizeDisplay()
+    {
+        androidx.camera.camera2.internal.DisplayInfoManager r0;
+        android.view.Display[] r1, r2;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8, i9;
+        android.view.Display r3, $r8, r9;
+        android.graphics.Point r4, $r7;
+        android.hardware.display.DisplayManager $r5;
+        java.lang.IllegalArgumentException $r6;
+
+        r0 := @this: androidx.camera.camera2.internal.DisplayInfoManager;
+
+        $r5 = r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.hardware.display.DisplayManager mDisplayManager>;
+
+        r1 = virtualinvoke $r5.<android.hardware.display.DisplayManager: android.view.Display[] getDisplays()>();
+
+        $i1 = lengthof r1;
+
+        if $i1 != 1 goto label1;
+
+        $r8 = r1[0];
+
+        return $r8;
+
+     label1:
+        r9 = null;
+
+        i8 = -1;
+
+        r2 = r1;
+
+        i0 = lengthof r2;
+
+        i9 = 0;
+
+     label2:
+        if i9 >= i0 goto label4;
+
+        r3 = r2[i9];
+
+        $i2 = virtualinvoke r3.<android.view.Display: int getState()>();
+
+        if $i2 == 1 goto label3;
+
+        $r7 = new android.graphics.Point;
+
+        specialinvoke $r7.<android.graphics.Point: void <init>()>();
+
+        r4 = $r7;
+
+        virtualinvoke r3.<android.view.Display: void getRealSize(android.graphics.Point)>(r4);
+
+        $i4 = r4.<android.graphics.Point: int x>;
+
+        $i3 = r4.<android.graphics.Point: int y>;
+
+        $i5 = $i4 * $i3;
+
+        if $i5 <= i8 goto label3;
+
+        $i7 = r4.<android.graphics.Point: int x>;
+
+        $i6 = r4.<android.graphics.Point: int y>;
+
+        i8 = $i7 * $i6;
+
+        r9 = r3;
+
+     label3:
+        i9 = i9 + 1;
+
+        goto label2;
+
+     label4:
+        if r9 != null goto label5;
+
+        $r6 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("No display can be found from the input display manager!");
+
+        throw $r6;
+
+     label5:
+        return r9;
+    }
+
+    android.util.Size getPreviewSize()
+    {
+        androidx.camera.camera2.internal.DisplayInfoManager r0;
+        android.util.Size $r1, $r2, $r3, $r4;
+
+        r0 := @this: androidx.camera.camera2.internal.DisplayInfoManager;
+
+        $r1 = r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size mPreviewSize>;
+
+        if $r1 == null goto label1;
+
+        $r4 = r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size mPreviewSize>;
+
+        return $r4;
+
+     label1:
+        $r2 = specialinvoke r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size calculatePreviewSize()>();
+
+        r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size mPreviewSize> = $r2;
+
+        $r3 = r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size mPreviewSize>;
+
+        return $r3;
+    }
+
+    private android.util.Size calculatePreviewSize()
+    {
+        androidx.camera.camera2.internal.DisplayInfoManager r0;
+        android.graphics.Point r1, $r3;
+        android.view.Display r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11;
+        android.util.Size $r4, $r5, $r6, $r8, $r9, r10;
+        androidx.camera.camera2.internal.compat.workaround.MaxPreviewSize $r7;
+
+        r0 := @this: androidx.camera.camera2.internal.DisplayInfoManager;
+
+        $r3 = new android.graphics.Point;
+
+        specialinvoke $r3.<android.graphics.Point: void <init>()>();
+
+        r1 = $r3;
+
+        r2 = virtualinvoke r0.<androidx.camera.camera2.internal.DisplayInfoManager: android.view.Display getMaxSizeDisplay()>();
+
+        virtualinvoke r2.<android.view.Display: void getRealSize(android.graphics.Point)>(r1);
+
+        $i1 = r1.<android.graphics.Point: int x>;
+
+        $i0 = r1.<android.graphics.Point: int y>;
+
+        if $i1 <= $i0 goto label1;
+
+        $r9 = new android.util.Size;
+
+        $i11 = r1.<android.graphics.Point: int x>;
+
+        $i10 = r1.<android.graphics.Point: int y>;
+
+        specialinvoke $r9.<android.util.Size: void <init>(int,int)>($i11, $i10);
+
+        r10 = $r9;
+
+        goto label2;
+
+     label1:
+        $r4 = new android.util.Size;
+
+        $i3 = r1.<android.graphics.Point: int y>;
+
+        $i2 = r1.<android.graphics.Point: int x>;
+
+        specialinvoke $r4.<android.util.Size: void <init>(int,int)>($i3, $i2);
+
+        r10 = $r4;
+
+     label2:
+        $i4 = virtualinvoke r10.<android.util.Size: int getWidth()>();
+
+        $i5 = virtualinvoke r10.<android.util.Size: int getHeight()>();
+
+        $i6 = $i4 * $i5;
+
+        $r5 = <androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size MAX_PREVIEW_SIZE>;
+
+        $i7 = virtualinvoke $r5.<android.util.Size: int getWidth()>();
+
+        $r6 = <androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size MAX_PREVIEW_SIZE>;
+
+        $i8 = virtualinvoke $r6.<android.util.Size: int getHeight()>();
+
+        $i9 = $i7 * $i8;
+
+        if $i6 <= $i9 goto label3;
+
+        r10 = <androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size MAX_PREVIEW_SIZE>;
+
+     label3:
+        $r7 = r0.<androidx.camera.camera2.internal.DisplayInfoManager: androidx.camera.camera2.internal.compat.workaround.MaxPreviewSize mMaxPreviewSize>;
+
+        $r8 = virtualinvoke $r7.<androidx.camera.camera2.internal.compat.workaround.MaxPreviewSize: android.util.Size getMaxPreviewResolution(android.util.Size)>(r10);
+
+        return $r8;
+    }
+
+    static void <clinit>()
+    {
+        android.util.Size $r0;
+        java.lang.Object $r1;
+
+        $r0 = new android.util.Size;
+
+        specialinvoke $r0.<android.util.Size: void <init>(int,int)>(1920, 1080);
+
+        <androidx.camera.camera2.internal.DisplayInfoManager: android.util.Size MAX_PREVIEW_SIZE> = $r0;
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        <androidx.camera.camera2.internal.DisplayInfoManager: java.lang.Object INSTANCE_LOCK> = $r1;
+
+        return;
+    }
+

@@ -1,0 +1,328 @@
+com.google.common.flogger.AbstractLogger
+<com.google.common.flogger.AbstractLogger: com.google.common.flogger.backend.LoggerBackend backend>
+    protected void <init>(com.google.common.flogger.backend.LoggerBackend)
+    {
+        com.google.common.flogger.AbstractLogger $r0;
+        java.lang.Object $r1;
+        com.google.common.flogger.backend.LoggerBackend $r2;
+
+        $r0 := @this: com.google.common.flogger.AbstractLogger;
+
+        $r2 := @parameter0: com.google.common.flogger.backend.LoggerBackend;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r1 = staticinvoke <com.google.common.flogger.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.String)>($r2, "backend");
+
+        $r2 = (com.google.common.flogger.backend.LoggerBackend) $r1;
+
+        $r0.<com.google.common.flogger.AbstractLogger: com.google.common.flogger.backend.LoggerBackend backend> = $r2;
+
+        return;
+    }
+
+    private static java.lang.String formatTimestampIso8601(com.google.common.flogger.backend.LogData)
+    {
+        java.util.Date $r0;
+        com.google.common.flogger.backend.LogData $r1;
+        java.util.concurrent.TimeUnit $r2;
+        long $l0;
+        java.text.SimpleDateFormat $r3;
+        java.lang.String $r4;
+
+        $r1 := @parameter0: com.google.common.flogger.backend.LogData;
+
+        $r0 = new java.util.Date;
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l0 = interfaceinvoke $r1.<com.google.common.flogger.backend.LogData: long getTimestampNanos()>();
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.TimeUnit: long toMillis(long)>($l0);
+
+        specialinvoke $r0.<java.util.Date: void <init>(long)>($l0);
+
+        $r3 = new java.text.SimpleDateFormat;
+
+        specialinvoke $r3.<java.text.SimpleDateFormat: void <init>(java.lang.String)>("yyyy-MM-dd\'T\'HH:mm:ss.SSSZ");
+
+        $r4 = virtualinvoke $r3.<java.text.SimpleDateFormat: java.lang.String format(java.util.Date)>($r0);
+
+        return $r4;
+    }
+
+    private void handleErrorRobustly(java.lang.RuntimeException, com.google.common.flogger.backend.LogData)
+    {
+        com.google.common.flogger.AbstractLogger $r0;
+        java.lang.RuntimeException $r1;
+        com.google.common.flogger.backend.LogData $r2;
+        com.google.common.flogger.backend.LoggerBackend $r3;
+        java.lang.Throwable $r4, $r10;
+        java.lang.Class $r5;
+        java.lang.String $r6, $r7;
+        java.lang.StringBuilder $r8;
+        java.io.PrintStream $r9;
+
+        $r0 := @this: com.google.common.flogger.AbstractLogger;
+
+        $r1 := @parameter0: java.lang.RuntimeException;
+
+        $r2 := @parameter1: com.google.common.flogger.backend.LogData;
+
+        $r3 = $r0.<com.google.common.flogger.AbstractLogger: com.google.common.flogger.backend.LoggerBackend backend>;
+
+     label1:
+        virtualinvoke $r3.<com.google.common.flogger.backend.LoggerBackend: void handleError(java.lang.RuntimeException,com.google.common.flogger.backend.LogData)>($r1, $r2);
+
+     label2:
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r5 = virtualinvoke $r4.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.String getName()>();
+
+        $r7 = virtualinvoke $r4.<java.lang.RuntimeException: java.lang.String getMessage()>();
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": ");
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r6 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.flogger.AbstractLogger: void reportError(java.lang.String,com.google.common.flogger.backend.LogData)>($r6, $r2);
+
+        $r9 = <java.lang.System: java.io.PrintStream err>;
+
+     label4:
+        virtualinvoke $r4.<java.lang.RuntimeException: void printStackTrace(java.io.PrintStream)>($r9);
+
+     label5:
+        return;
+
+     label6:
+        $r10 := @caughtexception;
+
+        return;
+
+        catch java.lang.RuntimeException from label1 to label2 with label3;
+        catch java.lang.RuntimeException from label4 to label5 with label6;
+    }
+
+    private static void reportError(java.lang.String, com.google.common.flogger.backend.LogData)
+    {
+        java.lang.StringBuilder $r0, $r4;
+        java.lang.String $r1, $r3;
+        com.google.common.flogger.backend.LogData $r2;
+        com.google.common.flogger.LogSite $r5;
+        java.io.PrintStream $r6;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.google.common.flogger.backend.LogData;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = staticinvoke <com.google.common.flogger.AbstractLogger: java.lang.String formatTimestampIso8601(com.google.common.flogger.backend.LogData)>($r2);
+
+        $r4 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": logging error [");
+
+        $r5 = interfaceinvoke $r2.<com.google.common.flogger.backend.LogData: com.google.common.flogger.LogSite getLogSite()>();
+
+        staticinvoke <com.google.common.flogger.backend.MessageUtils: boolean appendLogSite(com.google.common.flogger.LogSite,java.lang.StringBuilder)>($r5, $r0);
+
+        $r4 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]: ");
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r6 = <java.lang.System: java.io.PrintStream err>;
+
+        virtualinvoke $r6.<java.io.PrintStream: void println(java.lang.Object)>($r0);
+
+        $r6 = <java.lang.System: java.io.PrintStream err>;
+
+        virtualinvoke $r6.<java.io.PrintStream: void flush()>();
+
+        return;
+    }
+
+<com.google.common.flogger.AbstractLogger: com.google.common.flogger.LoggingApi at(java.util.logging.Level)>
+    public final com.google.common.flogger.LoggingApi atFinest()
+    {
+        com.google.common.flogger.AbstractLogger $r0;
+        com.google.common.flogger.LoggingApi $r1;
+        java.util.logging.Level $r2;
+
+        $r0 := @this: com.google.common.flogger.AbstractLogger;
+
+        $r2 = <java.util.logging.Level: java.util.logging.Level FINEST>;
+
+        $r1 = virtualinvoke $r0.<com.google.common.flogger.AbstractLogger: com.google.common.flogger.LoggingApi at(java.util.logging.Level)>($r2);
+
+        return $r1;
+    }
+
+    protected java.lang.String getName()
+    {
+        com.google.common.flogger.AbstractLogger $r0;
+        java.lang.String $r1;
+        com.google.common.flogger.backend.LoggerBackend $r2;
+
+        $r0 := @this: com.google.common.flogger.AbstractLogger;
+
+        $r2 = $r0.<com.google.common.flogger.AbstractLogger: com.google.common.flogger.backend.LoggerBackend backend>;
+
+        $r1 = virtualinvoke $r2.<com.google.common.flogger.backend.LoggerBackend: java.lang.String getLoggerName()>();
+
+        return $r1;
+    }
+
+    protected final boolean isLoggable(java.util.logging.Level)
+    {
+        com.google.common.flogger.AbstractLogger $r0;
+        com.google.common.flogger.backend.LoggerBackend $r1;
+        boolean $z0;
+        java.util.logging.Level $r2;
+
+        $r0 := @this: com.google.common.flogger.AbstractLogger;
+
+        $r2 := @parameter0: java.util.logging.Level;
+
+        $r1 = $r0.<com.google.common.flogger.AbstractLogger: com.google.common.flogger.backend.LoggerBackend backend>;
+
+        $z0 = virtualinvoke $r1.<com.google.common.flogger.backend.LoggerBackend: boolean isLoggable(java.util.logging.Level)>($r2);
+
+        return $z0;
+    }
+
+    final void write(com.google.common.flogger.backend.LogData)
+    {
+        com.google.common.flogger.AbstractLogger $r0;
+        com.google.common.flogger.backend.LogData $r1;
+        com.google.common.flogger.util.RecursionDepth $r2;
+        int $i0;
+        com.google.common.flogger.backend.LoggerBackend $r3;
+        java.lang.Throwable $r4, $r5, $r6;
+
+        $r0 := @this: com.google.common.flogger.AbstractLogger;
+
+        $r1 := @parameter0: com.google.common.flogger.backend.LogData;
+
+        staticinvoke <com.google.common.flogger.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.String)>($r1, "data");
+
+        $r2 = staticinvoke <com.google.common.flogger.util.RecursionDepth: com.google.common.flogger.util.RecursionDepth enterLogStatement()>();
+
+     label01:
+        $i0 = virtualinvoke $r2.<com.google.common.flogger.util.RecursionDepth: int getValue()>();
+
+     label02:
+        if $i0 > 100 goto label05;
+
+        $r3 = $r0.<com.google.common.flogger.AbstractLogger: com.google.common.flogger.backend.LoggerBackend backend>;
+
+     label03:
+        virtualinvoke $r3.<com.google.common.flogger.backend.LoggerBackend: void log(com.google.common.flogger.backend.LogData)>($r1);
+
+     label04:
+        goto label06;
+
+     label05:
+        staticinvoke <com.google.common.flogger.AbstractLogger: void reportError(java.lang.String,com.google.common.flogger.backend.LogData)>("unbounded recursion in log statement", $r1);
+
+     label06:
+        if $r2 == null goto label15;
+
+     label07:
+        virtualinvoke $r2.<com.google.common.flogger.util.RecursionDepth: void close()>();
+
+     label08:
+        return;
+
+     label09:
+        $r4 := @caughtexception;
+
+        if $r2 == null goto label13;
+
+     label10:
+        virtualinvoke $r2.<com.google.common.flogger.util.RecursionDepth: void close()>();
+
+     label11:
+        goto label13;
+
+     label12:
+        $r5 := @caughtexception;
+
+        staticinvoke <com.google.common.flogger.AbstractLogger$$ExternalSyntheticBackport0: void m(java.lang.Throwable,java.lang.Throwable)>($r4, $r5);
+
+     label13:
+        throw $r4;
+
+     label14:
+        $r6 := @caughtexception;
+
+        specialinvoke $r0.<com.google.common.flogger.AbstractLogger: void handleErrorRobustly(java.lang.RuntimeException,com.google.common.flogger.backend.LogData)>($r6, $r1);
+
+     label15:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label09;
+        catch java.lang.Throwable from label03 to label04 with label09;
+        catch java.lang.RuntimeException from label07 to label08 with label14;
+        catch java.lang.Throwable from label10 to label11 with label12;
+        catch java.lang.RuntimeException from label13 to label14 with label14;
+    }
+
+com.google.common.flogger.AbstractLogger$$ExternalSyntheticBackport0
+    public static void m(java.lang.Throwable, java.lang.Throwable)
+    {
+        java.lang.Throwable $r0, $r3, $r6;
+        java.lang.Class[] $r1;
+        java.lang.reflect.Method $r2;
+        java.lang.Class $r4;
+        java.lang.Object[] $r5;
+
+        $r3 := @parameter0: java.lang.Throwable;
+
+        $r0 := @parameter1: java.lang.Throwable;
+
+        $r4 = class "Ljava/lang/Throwable;";
+
+        $r1 = newarray (java.lang.Class)[1];
+
+        $r1[0] = class "Ljava/lang/Throwable;";
+
+     label1:
+        $r2 = virtualinvoke $r4.<java.lang.Class: java.lang.reflect.Method getDeclaredMethod(java.lang.String,java.lang.Class[])>("addSuppressed", $r1);
+
+     label2:
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r5[0] = $r0;
+
+     label3:
+        virtualinvoke $r2.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r3, $r5);
+
+     label4:
+        return;
+
+     label5:
+        $r6 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+

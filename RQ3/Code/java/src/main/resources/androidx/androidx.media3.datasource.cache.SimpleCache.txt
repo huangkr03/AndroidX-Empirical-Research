@@ -1,0 +1,2662 @@
+androidx.media3.datasource.cache.SimpleCache
+<androidx.media3.datasource.cache.SimpleCache: java.lang.String TAG>
+<androidx.media3.datasource.cache.SimpleCache: int SUBDIRECTORY_COUNT>
+<androidx.media3.datasource.cache.SimpleCache: java.lang.String UID_FILE_SUFFIX>
+<androidx.media3.datasource.cache.SimpleCache: java.util.HashSet lockedCacheDirs>
+<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>
+<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheEvictor evictor>
+<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>
+<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>
+<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners>
+<androidx.media3.datasource.cache.SimpleCache: java.util.Random random>
+<androidx.media3.datasource.cache.SimpleCache: boolean touchCacheSpans>
+<androidx.media3.datasource.cache.SimpleCache: long uid>
+<androidx.media3.datasource.cache.SimpleCache: long totalSpace>
+<androidx.media3.datasource.cache.SimpleCache: boolean released>
+<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.Cache$CacheException initializationException>
+    public static synchronized boolean isCacheFolderLocked(java.io.File)
+    {
+        java.io.File r0, $r2;
+        java.util.HashSet $r1;
+        boolean $z0;
+
+        r0 := @parameter0: java.io.File;
+
+        $r1 = <androidx.media3.datasource.cache.SimpleCache: java.util.HashSet lockedCacheDirs>;
+
+        $r2 = virtualinvoke r0.<java.io.File: java.io.File getAbsoluteFile()>();
+
+        $z0 = virtualinvoke $r1.<java.util.HashSet: boolean contains(java.lang.Object)>($r2);
+
+        return $z0;
+    }
+
+    public static void delete(java.io.File, androidx.media3.database.DatabaseProvider)
+    {
+        java.io.File r0;
+        androidx.media3.database.DatabaseProvider r1;
+        java.io.File[] r2;
+        long l0;
+        boolean $z0;
+        byte $b1;
+        java.lang.Throwable $r3, $r8, r13, r14;
+        java.lang.StringBuilder $r4, $r5, $r6, $r9, $r10, $r11;
+        java.lang.String $r7, $r12;
+
+        r0 := @parameter0: java.io.File;
+
+        r1 := @parameter1: androidx.media3.database.DatabaseProvider;
+
+        $z0 = virtualinvoke r0.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        r2 = virtualinvoke r0.<java.io.File: java.io.File[] listFiles()>();
+
+        if r2 != null goto label2;
+
+        virtualinvoke r0.<java.io.File: boolean delete()>();
+
+        return;
+
+     label2:
+        if r1 == null goto label9;
+
+        l0 = staticinvoke <androidx.media3.datasource.cache.SimpleCache: long loadUid(java.io.File[])>(r2);
+
+        $b1 = l0 cmp -1L;
+
+        if $b1 == 0 goto label9;
+
+     label3:
+        staticinvoke <androidx.media3.datasource.cache.CacheFileMetadataIndex: void delete(androidx.media3.database.DatabaseProvider,long)>(r1, l0);
+
+     label4:
+        goto label6;
+
+     label5:
+        $r8 := @caughtexception;
+
+        r13 = $r8;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to delete file metadata: ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("SimpleCache", $r12);
+
+     label6:
+        staticinvoke <androidx.media3.datasource.cache.CachedContentIndex: void delete(androidx.media3.database.DatabaseProvider,long)>(r1, l0);
+
+     label7:
+        goto label9;
+
+     label8:
+        $r3 := @caughtexception;
+
+        r14 = $r3;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to delete file metadata: ");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("SimpleCache", $r7);
+
+     label9:
+        staticinvoke <androidx.media3.common.util.Util: void recursiveDelete(java.io.File)>(r0);
+
+        return;
+
+        catch androidx.media3.database.DatabaseIOException from label3 to label4 with label5;
+        catch androidx.media3.database.DatabaseIOException from label6 to label7 with label8;
+    }
+
+    public void <init>(java.io.File, androidx.media3.datasource.cache.CacheEvictor)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.io.File r1;
+        androidx.media3.datasource.cache.CacheEvictor r2;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.io.File;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.CacheEvictor;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void <init>(java.io.File,androidx.media3.datasource.cache.CacheEvictor,byte[],boolean)>(r1, r2, null, 0);
+
+        return;
+    }
+
+    public void <init>(java.io.File, androidx.media3.datasource.cache.CacheEvictor, byte[])
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.io.File r1;
+        androidx.media3.datasource.cache.CacheEvictor r2;
+        byte[] r3;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.io.File;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.CacheEvictor;
+
+        r3 := @parameter2: byte[];
+
+        if r3 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void <init>(java.io.File,androidx.media3.datasource.cache.CacheEvictor,byte[],boolean)>(r1, r2, r3, $z0);
+
+        return;
+    }
+
+    public void <init>(java.io.File, androidx.media3.datasource.cache.CacheEvictor, byte[], boolean)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.io.File r1;
+        androidx.media3.datasource.cache.CacheEvictor r2;
+        byte[] r3;
+        boolean z0;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.io.File;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.CacheEvictor;
+
+        r3 := @parameter2: byte[];
+
+        z0 := @parameter3: boolean;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void <init>(java.io.File,androidx.media3.datasource.cache.CacheEvictor,androidx.media3.database.DatabaseProvider,byte[],boolean,boolean)>(r1, r2, null, r3, z0, 1);
+
+        return;
+    }
+
+    public void <init>(java.io.File, androidx.media3.datasource.cache.CacheEvictor, androidx.media3.database.DatabaseProvider)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.io.File r1;
+        androidx.media3.datasource.cache.CacheEvictor r2;
+        androidx.media3.database.DatabaseProvider r3;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.io.File;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.CacheEvictor;
+
+        r3 := @parameter2: androidx.media3.database.DatabaseProvider;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void <init>(java.io.File,androidx.media3.datasource.cache.CacheEvictor,androidx.media3.database.DatabaseProvider,byte[],boolean,boolean)>(r1, r2, r3, null, 0, 0);
+
+        return;
+    }
+
+    public void <init>(java.io.File, androidx.media3.datasource.cache.CacheEvictor, androidx.media3.database.DatabaseProvider, byte[], boolean, boolean)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.io.File r1;
+        androidx.media3.datasource.cache.CacheEvictor r2;
+        androidx.media3.database.DatabaseProvider r3;
+        byte[] r4;
+        boolean z0, z1;
+        androidx.media3.datasource.cache.CacheFileMetadataIndex $r5, $r10;
+        androidx.media3.datasource.cache.CachedContentIndex $r9;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.io.File;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.CacheEvictor;
+
+        r3 := @parameter2: androidx.media3.database.DatabaseProvider;
+
+        r4 := @parameter3: byte[];
+
+        z0 := @parameter4: boolean;
+
+        z1 := @parameter5: boolean;
+
+        $r9 = new androidx.media3.datasource.cache.CachedContentIndex;
+
+        specialinvoke $r9.<androidx.media3.datasource.cache.CachedContentIndex: void <init>(androidx.media3.database.DatabaseProvider,java.io.File,byte[],boolean,boolean)>(r3, r1, r4, z0, z1);
+
+        if r3 == null goto label1;
+
+        if z1 != 0 goto label1;
+
+        $r5 = new androidx.media3.datasource.cache.CacheFileMetadataIndex;
+
+        $r10 = $r5;
+
+        specialinvoke $r5.<androidx.media3.datasource.cache.CacheFileMetadataIndex: void <init>(androidx.media3.database.DatabaseProvider)>(r3);
+
+        goto label2;
+
+     label1:
+        $r10 = null;
+
+     label2:
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void <init>(java.io.File,androidx.media3.datasource.cache.CacheEvictor,androidx.media3.datasource.cache.CachedContentIndex,androidx.media3.datasource.cache.CacheFileMetadataIndex)>(r1, r2, $r9, $r10);
+
+        return;
+    }
+
+    void <init>(java.io.File, androidx.media3.datasource.cache.CacheEvictor, androidx.media3.datasource.cache.CachedContentIndex, androidx.media3.datasource.cache.CacheFileMetadataIndex)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.io.File r1;
+        androidx.media3.datasource.cache.CacheEvictor r2;
+        androidx.media3.datasource.cache.CachedContentIndex r3;
+        androidx.media3.datasource.cache.CacheFileMetadataIndex r4;
+        android.os.ConditionVariable r5, $r8;
+        boolean $z0, $z1;
+        java.util.HashMap $r6;
+        java.util.Random $r7;
+        androidx.media3.datasource.cache.SimpleCache$1 $r9;
+        java.lang.IllegalStateException $r10;
+        java.lang.StringBuilder $r11, $r12, $r13;
+        java.lang.String $r14;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.io.File;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.CacheEvictor;
+
+        r3 := @parameter2: androidx.media3.datasource.cache.CachedContentIndex;
+
+        r4 := @parameter3: androidx.media3.datasource.cache.CacheFileMetadataIndex;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $z0 = staticinvoke <androidx.media3.datasource.cache.SimpleCache: boolean lockFolder(java.io.File)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        $r10 = new java.lang.IllegalStateException;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Another SimpleCache instance uses the folder: ");
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r10.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r14);
+
+        throw $r10;
+
+     label1:
+        r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir> = r1;
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheEvictor evictor> = r2;
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex> = r3;
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex> = r4;
+
+        $r6 = new java.util.HashMap;
+
+        specialinvoke $r6.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners> = $r6;
+
+        $r7 = new java.util.Random;
+
+        specialinvoke $r7.<java.util.Random: void <init>()>();
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: java.util.Random random> = $r7;
+
+        $z1 = interfaceinvoke r2.<androidx.media3.datasource.cache.CacheEvictor: boolean requiresCacheSpanTouches()>();
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: boolean touchCacheSpans> = $z1;
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: long uid> = -1L;
+
+        $r8 = new android.os.ConditionVariable;
+
+        specialinvoke $r8.<android.os.ConditionVariable: void <init>()>();
+
+        r5 = $r8;
+
+        $r9 = new androidx.media3.datasource.cache.SimpleCache$1;
+
+        specialinvoke $r9.<androidx.media3.datasource.cache.SimpleCache$1: void <init>(androidx.media3.datasource.cache.SimpleCache,java.lang.String,android.os.ConditionVariable)>(r0, "ExoPlayer:SimpleCacheInit", r5);
+
+        virtualinvoke $r9.<androidx.media3.datasource.cache.SimpleCache$1: void start()>();
+
+        virtualinvoke r5.<android.os.ConditionVariable: void block()>();
+
+        return;
+    }
+
+    public synchronized void checkInitialization() throws androidx.media3.datasource.cache.Cache$CacheException
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        androidx.media3.datasource.cache.Cache$CacheException $r1, $r2;
+        java.lang.Throwable r3;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        $r1 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.Cache$CacheException initializationException>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.Cache$CacheException initializationException>;
+
+        r3 = (java.lang.Throwable) $r2;
+
+        throw r3;
+
+     label1:
+        return;
+    }
+
+    public synchronized long getUid()
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        $l0 = r0.<androidx.media3.datasource.cache.SimpleCache: long uid>;
+
+        return $l0;
+    }
+
+    public synchronized void release()
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.Throwable r1, r2, $r6, $r8;
+        boolean $z0;
+        java.util.HashMap $r3;
+        androidx.media3.datasource.cache.CachedContentIndex $r4;
+        java.io.File $r5, $r7, $r9;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners>;
+
+        virtualinvoke $r3.<java.util.HashMap: void clear()>();
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void removeStaleSpans()>();
+
+     label2:
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        virtualinvoke $r4.<androidx.media3.datasource.cache.CachedContentIndex: void store()>();
+
+     label3:
+        $r5 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        staticinvoke <androidx.media3.datasource.cache.SimpleCache: void unlockFolder(java.io.File)>($r5);
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: boolean released> = 1;
+
+        goto label7;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r1 = $r8;
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("SimpleCache", "Storing index file failed", r1);
+
+     label5:
+        $r9 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        staticinvoke <androidx.media3.datasource.cache.SimpleCache: void unlockFolder(java.io.File)>($r9);
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: boolean released> = 1;
+
+        goto label7;
+
+     label6:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        $r7 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        staticinvoke <androidx.media3.datasource.cache.SimpleCache: void unlockFolder(java.io.File)>($r7);
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: boolean released> = 1;
+
+        throw r2;
+
+     label7:
+        return;
+
+        catch java.io.IOException from label2 to label3 with label4;
+        catch java.lang.Throwable from label2 to label3 with label6;
+        catch java.lang.Throwable from label4 to label5 with label6;
+    }
+
+    public synchronized java.util.NavigableSet addListener(java.lang.String, androidx.media3.datasource.cache.Cache$Listener)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        androidx.media3.datasource.cache.Cache$Listener r2;
+        boolean $z0, $z2;
+        java.util.HashMap $r5, $r9;
+        java.lang.Object $r6;
+        java.util.NavigableSet $r7;
+        java.util.ArrayList $r8, r11;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.Cache$Listener;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z2);
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $r5 = r0.<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners>;
+
+        $r6 = virtualinvoke $r5.<java.util.HashMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        r11 = (java.util.ArrayList) $r6;
+
+        if r11 != null goto label3;
+
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        r11 = $r8;
+
+        $r9 = r0.<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners>;
+
+        virtualinvoke $r9.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r11);
+
+     label3:
+        virtualinvoke r11.<java.util.ArrayList: boolean add(java.lang.Object)>(r2);
+
+        $r7 = virtualinvoke r0.<androidx.media3.datasource.cache.SimpleCache: java.util.NavigableSet getCachedSpans(java.lang.String)>(r1);
+
+        return $r7;
+    }
+
+    public synchronized void removeListener(java.lang.String, androidx.media3.datasource.cache.Cache$Listener)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        androidx.media3.datasource.cache.Cache$Listener r2;
+        java.util.ArrayList r3;
+        boolean $z0, $z2;
+        java.util.HashMap $r4, $r6;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.Cache$Listener;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners>;
+
+        $r5 = virtualinvoke $r4.<java.util.HashMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        r3 = (java.util.ArrayList) $r5;
+
+        if r3 == null goto label2;
+
+        virtualinvoke r3.<java.util.ArrayList: boolean remove(java.lang.Object)>(r2);
+
+        $z2 = virtualinvoke r3.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z2 == 0 goto label2;
+
+        $r6 = r0.<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners>;
+
+        virtualinvoke $r6.<java.util.HashMap: java.lang.Object remove(java.lang.Object)>(r1);
+
+     label2:
+        return;
+    }
+
+    public synchronized java.util.NavigableSet getCachedSpans(java.lang.String)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        androidx.media3.datasource.cache.CachedContent r2;
+        boolean $z0, $z1, $z2;
+        androidx.media3.datasource.cache.CachedContentIndex $r3;
+        java.util.TreeSet $r4, $r5;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z2);
+
+        $r3 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        r2 = virtualinvoke $r3.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent get(java.lang.String)>(r1);
+
+        if r2 == null goto label3;
+
+        $z1 = virtualinvoke r2.<androidx.media3.datasource.cache.CachedContent: boolean isEmpty()>();
+
+        if $z1 == 0 goto label4;
+
+     label3:
+        $r5 = new java.util.TreeSet;
+
+        specialinvoke $r5.<java.util.TreeSet: void <init>()>();
+
+        goto label5;
+
+     label4:
+        $r5 = new java.util.TreeSet;
+
+        $r4 = virtualinvoke r2.<androidx.media3.datasource.cache.CachedContent: java.util.TreeSet getSpans()>();
+
+        specialinvoke $r5.<java.util.TreeSet: void <init>(java.util.Collection)>($r4);
+
+     label5:
+        return $r5;
+    }
+
+    public synchronized java.util.Set getKeys()
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        boolean $z0, $z1;
+        java.util.HashSet $r1;
+        androidx.media3.datasource.cache.CachedContentIndex $r2;
+        java.util.Set $r3;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $r1 = new java.util.HashSet;
+
+        $r2 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r3 = virtualinvoke $r2.<androidx.media3.datasource.cache.CachedContentIndex: java.util.Set getKeys()>();
+
+        specialinvoke $r1.<java.util.HashSet: void <init>(java.util.Collection)>($r3);
+
+        return $r1;
+    }
+
+    public synchronized long getCacheSpace()
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        boolean $z0, $z1;
+        long $l0;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $l0 = r0.<androidx.media3.datasource.cache.SimpleCache: long totalSpace>;
+
+        return $l0;
+    }
+
+    public synchronized androidx.media3.datasource.cache.CacheSpan startReadWrite(java.lang.String, long, long) throws java.lang.InterruptedException, androidx.media3.datasource.cache.Cache$CacheException
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        long l0, l1;
+        androidx.media3.datasource.cache.CacheSpan r2;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        virtualinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void checkInitialization()>();
+
+     label3:
+        r2 = virtualinvoke r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheSpan startReadWriteNonBlocking(java.lang.String,long,long)>(r1, l0, l1);
+
+        if r2 == null goto label4;
+
+        return r2;
+
+     label4:
+        virtualinvoke r0.<java.lang.Object: void wait()>();
+
+        goto label3;
+    }
+
+    public synchronized androidx.media3.datasource.cache.CacheSpan startReadWriteNonBlocking(java.lang.String, long, long) throws androidx.media3.datasource.cache.Cache$CacheException
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        long l0, l1, $l2;
+        androidx.media3.datasource.cache.SimpleCacheSpan r2, $r5;
+        androidx.media3.datasource.cache.CachedContent r3;
+        boolean $z0, $z1, $z2, $z3;
+        androidx.media3.datasource.cache.CachedContentIndex $r4;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z3 = 1;
+
+        goto label2;
+
+     label1:
+        $z3 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z3);
+
+        virtualinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void checkInitialization()>();
+
+        r2 = specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.SimpleCacheSpan getSpan(java.lang.String,long,long)>(r1, l0, l1);
+
+        $z1 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: boolean isCached>;
+
+        if $z1 == 0 goto label3;
+
+        $r5 = specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.SimpleCacheSpan touchSpan(java.lang.String,androidx.media3.datasource.cache.SimpleCacheSpan)>(r1, r2);
+
+        return $r5;
+
+     label3:
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        r3 = virtualinvoke $r4.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent getOrAdd(java.lang.String)>(r1);
+
+        $l2 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: long length>;
+
+        $z2 = virtualinvoke r3.<androidx.media3.datasource.cache.CachedContent: boolean lockRange(long,long)>(l0, $l2);
+
+        if $z2 == 0 goto label4;
+
+        return r2;
+
+     label4:
+        return null;
+    }
+
+    public synchronized java.io.File startFile(java.lang.String, long, long) throws androidx.media3.datasource.cache.Cache$CacheException
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1, $r11;
+        long l0, l1, l2;
+        androidx.media3.datasource.cache.CachedContent r2;
+        java.io.File r3, $r6, $r8, $r10, $r12, $r13;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        androidx.media3.datasource.cache.CachedContentIndex $r4;
+        androidx.media3.datasource.cache.CacheEvictor $r7;
+        java.util.Random $r9;
+        int $i3, $i4;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z4 = 1;
+
+        goto label2;
+
+     label1:
+        $z4 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z4);
+
+        virtualinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void checkInitialization()>();
+
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        r2 = virtualinvoke $r4.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent get(java.lang.String)>(r1);
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $z1 = virtualinvoke r2.<androidx.media3.datasource.cache.CachedContent: boolean isFullyLocked(long,long)>(l0, l1);
+
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $r6 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        $z2 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+        if $z2 != 0 goto label3;
+
+        $r13 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        staticinvoke <androidx.media3.datasource.cache.SimpleCache: void createCacheDirectories(java.io.File)>($r13);
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void removeStaleSpans()>();
+
+     label3:
+        $r7 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheEvictor evictor>;
+
+        interfaceinvoke $r7.<androidx.media3.datasource.cache.CacheEvictor: void onStartFile(androidx.media3.datasource.cache.Cache,java.lang.String,long,long)>(r0, r1, l0, l1);
+
+        $r8 = new java.io.File;
+
+        $r10 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        $r9 = r0.<androidx.media3.datasource.cache.SimpleCache: java.util.Random random>;
+
+        $i3 = virtualinvoke $r9.<java.util.Random: int nextInt(int)>(10);
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i3);
+
+        specialinvoke $r8.<java.io.File: void <init>(java.io.File,java.lang.String)>($r10, $r11);
+
+        r3 = $r8;
+
+        $z3 = virtualinvoke r3.<java.io.File: boolean exists()>();
+
+        if $z3 != 0 goto label4;
+
+        staticinvoke <androidx.media3.datasource.cache.SimpleCache: void createCacheDirectories(java.io.File)>(r3);
+
+     label4:
+        l2 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $i4 = r2.<androidx.media3.datasource.cache.CachedContent: int id>;
+
+        $r12 = staticinvoke <androidx.media3.datasource.cache.SimpleCacheSpan: java.io.File getCacheFile(java.io.File,int,long,long)>(r3, $i4, l0, l2);
+
+        return $r12;
+    }
+
+    public synchronized void commitFile(java.io.File, long) throws androidx.media3.datasource.cache.Cache$CacheException
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.io.File r1;
+        long l0, l1, $l3, $l4, $l6, $l7, $l8, $l9, $l10;
+        androidx.media3.datasource.cache.SimpleCacheSpan r2, $r6;
+        androidx.media3.datasource.cache.CachedContent r3, $r10;
+        java.lang.Throwable r4, $r15, $r17, r21, r24, r25;
+        boolean $z0, $z1, $z2, $z4, $z5;
+        byte $b2, $b5, $b11;
+        androidx.media3.datasource.cache.CachedContentIndex $r5, $r9, $r13;
+        java.lang.Object $r7, $r11;
+        java.lang.String $r8, r20;
+        androidx.media3.datasource.cache.DefaultContentMetadata $r12;
+        androidx.media3.datasource.cache.CacheFileMetadataIndex $r14, $r19;
+        androidx.media3.datasource.cache.Cache$CacheException r22, r23;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.io.File;
+
+        l0 := @parameter1: long;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label01;
+
+        $z4 = 1;
+
+        goto label02;
+
+     label01:
+        $z4 = 0;
+
+     label02:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z4);
+
+        $z1 = virtualinvoke r1.<java.io.File: boolean exists()>();
+
+        if $z1 != 0 goto label03;
+
+        return;
+
+     label03:
+        $b2 = l0 cmp 0L;
+
+        if $b2 != 0 goto label04;
+
+        virtualinvoke r1.<java.io.File: boolean delete()>();
+
+        return;
+
+     label04:
+        $r5 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r6 = staticinvoke <androidx.media3.datasource.cache.SimpleCacheSpan: androidx.media3.datasource.cache.SimpleCacheSpan createCacheEntry(java.io.File,long,androidx.media3.datasource.cache.CachedContentIndex)>(r1, l0, $r5);
+
+        $r7 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r6);
+
+        r2 = (androidx.media3.datasource.cache.SimpleCacheSpan) $r7;
+
+        $r9 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r8 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: java.lang.String key>;
+
+        $r10 = virtualinvoke $r9.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent get(java.lang.String)>($r8);
+
+        $r11 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r10);
+
+        r3 = (androidx.media3.datasource.cache.CachedContent) $r11;
+
+        $l4 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: long position>;
+
+        $l3 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: long length>;
+
+        $z2 = virtualinvoke r3.<androidx.media3.datasource.cache.CachedContent: boolean isFullyLocked(long,long)>($l4, $l3);
+
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z2);
+
+        $r12 = virtualinvoke r3.<androidx.media3.datasource.cache.CachedContent: androidx.media3.datasource.cache.DefaultContentMetadata getMetadata()>();
+
+        l1 = staticinvoke <androidx.media3.datasource.cache.ContentMetadata: long getContentLength(androidx.media3.datasource.cache.ContentMetadata)>($r12);
+
+        $b5 = l1 cmp -1L;
+
+        if $b5 == 0 goto label07;
+
+        $l9 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: long position>;
+
+        $l8 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: long length>;
+
+        $l10 = $l9 + $l8;
+
+        $b11 = $l10 cmp l1;
+
+        if $b11 > 0 goto label05;
+
+        $z5 = 1;
+
+        goto label06;
+
+     label05:
+        $z5 = 0;
+
+     label06:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z5);
+
+     label07:
+        $r19 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        if $r19 == null goto label11;
+
+        r20 = virtualinvoke r1.<java.io.File: java.lang.String getName()>();
+
+     label08:
+        $r14 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        $l7 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: long length>;
+
+        $l6 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: long lastTouchTimestamp>;
+
+        virtualinvoke $r14.<androidx.media3.datasource.cache.CacheFileMetadataIndex: void set(java.lang.String,long,long)>(r20, $l7, $l6);
+
+     label09:
+        goto label11;
+
+     label10:
+        $r17 := @caughtexception;
+
+        r4 = $r17;
+
+        r22 = new androidx.media3.datasource.cache.Cache$CacheException;
+
+        specialinvoke r22.<androidx.media3.datasource.cache.Cache$CacheException: void <init>(java.lang.Throwable)>(r4);
+
+        r24 = (java.lang.Throwable) r22;
+
+        throw r24;
+
+     label11:
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void addSpan(androidx.media3.datasource.cache.SimpleCacheSpan)>(r2);
+
+     label12:
+        $r13 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        virtualinvoke $r13.<androidx.media3.datasource.cache.CachedContentIndex: void store()>();
+
+     label13:
+        goto label15;
+
+     label14:
+        $r15 := @caughtexception;
+
+        r21 = $r15;
+
+        r23 = new androidx.media3.datasource.cache.Cache$CacheException;
+
+        specialinvoke r23.<androidx.media3.datasource.cache.Cache$CacheException: void <init>(java.lang.Throwable)>(r21);
+
+        r25 = (java.lang.Throwable) r23;
+
+        throw r25;
+
+     label15:
+        virtualinvoke r0.<java.lang.Object: void notifyAll()>();
+
+        return;
+
+        catch java.io.IOException from label08 to label09 with label10;
+        catch java.io.IOException from label12 to label13 with label14;
+    }
+
+    public synchronized void releaseHoleSpan(androidx.media3.datasource.cache.CacheSpan)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        androidx.media3.datasource.cache.CacheSpan r1;
+        androidx.media3.datasource.cache.CachedContent r2, $r5;
+        boolean $z0, $z1;
+        java.lang.String $r3, $r7;
+        androidx.media3.datasource.cache.CachedContentIndex $r4, $r8;
+        java.lang.Object $r6;
+        long $l0;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.CacheSpan;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r3 = r1.<androidx.media3.datasource.cache.CacheSpan: java.lang.String key>;
+
+        $r5 = virtualinvoke $r4.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent get(java.lang.String)>($r3);
+
+        $r6 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r5);
+
+        r2 = (androidx.media3.datasource.cache.CachedContent) $r6;
+
+        $l0 = r1.<androidx.media3.datasource.cache.CacheSpan: long position>;
+
+        virtualinvoke r2.<androidx.media3.datasource.cache.CachedContent: void unlockRange(long)>($l0);
+
+        $r8 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r7 = r2.<androidx.media3.datasource.cache.CachedContent: java.lang.String key>;
+
+        virtualinvoke $r8.<androidx.media3.datasource.cache.CachedContentIndex: void maybeRemove(java.lang.String)>($r7);
+
+        virtualinvoke r0.<java.lang.Object: void notifyAll()>();
+
+        return;
+    }
+
+    public synchronized void removeResource(java.lang.String)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        java.util.Iterator r2;
+        androidx.media3.datasource.cache.CacheSpan r3;
+        boolean $z0, $z1, $z2;
+        java.util.NavigableSet $r4;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $r4 = virtualinvoke r0.<androidx.media3.datasource.cache.SimpleCache: java.util.NavigableSet getCachedSpans(java.lang.String)>(r1);
+
+        r2 = interfaceinvoke $r4.<java.util.NavigableSet: java.util.Iterator iterator()>();
+
+     label3:
+        $z2 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label4;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.media3.datasource.cache.CacheSpan) $r5;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void removeSpanInternal(androidx.media3.datasource.cache.CacheSpan)>(r3);
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public synchronized void removeSpan(androidx.media3.datasource.cache.CacheSpan)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        androidx.media3.datasource.cache.CacheSpan r1;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.CacheSpan;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void removeSpanInternal(androidx.media3.datasource.cache.CacheSpan)>(r1);
+
+        return;
+    }
+
+    public synchronized boolean isCached(java.lang.String, long, long)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        long l0, l1, $l2;
+        androidx.media3.datasource.cache.CachedContent r2;
+        boolean $z0, $z1, $z2;
+        androidx.media3.datasource.cache.CachedContentIndex $r3;
+        byte $b3;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $r3 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        r2 = virtualinvoke $r3.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent get(java.lang.String)>(r1);
+
+        if r2 == null goto label3;
+
+        $l2 = virtualinvoke r2.<androidx.media3.datasource.cache.CachedContent: long getCachedBytesLength(long,long)>(l0, l1);
+
+        $b3 = $l2 cmp l1;
+
+        if $b3 < 0 goto label3;
+
+        $z2 = 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        return $z2;
+    }
+
+    public synchronized long getCachedLength(java.lang.String, long, long)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        long l0, l2, $l3;
+        androidx.media3.datasource.cache.CachedContent r2;
+        boolean $z0, $z1;
+        byte $b1;
+        androidx.media3.datasource.cache.CachedContentIndex $r3;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        l0 := @parameter1: long;
+
+        l2 := @parameter2: long;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $b1 = l2 cmp -1L;
+
+        if $b1 != 0 goto label3;
+
+        l2 = 9223372036854775807L;
+
+     label3:
+        $r3 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        r2 = virtualinvoke $r3.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent get(java.lang.String)>(r1);
+
+        if r2 == null goto label4;
+
+        $l3 = virtualinvoke r2.<androidx.media3.datasource.cache.CachedContent: long getCachedBytesLength(long,long)>(l0, l2);
+
+        goto label5;
+
+     label4:
+        $l3 = neg l2;
+
+     label5:
+        return $l3;
+    }
+
+    public synchronized long getCachedBytes(java.lang.String, long, long)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        long l0, l1, l2, $l6, l7, l8, l9, l11;
+        byte $b3, $b4, $b5, $b10;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        $b3 = l1 cmp -1L;
+
+        if $b3 != 0 goto label1;
+
+        $l6 = 9223372036854775807L;
+
+        goto label2;
+
+     label1:
+        $l6 = l0 + l1;
+
+     label2:
+        l7 = $l6;
+
+        $b4 = l7 cmp 0L;
+
+        if $b4 >= 0 goto label3;
+
+        l7 = 9223372036854775807L;
+
+     label3:
+        l8 = l0;
+
+        l9 = 0L;
+
+     label4:
+        $b10 = l8 cmp l7;
+
+        if $b10 >= 0 goto label7;
+
+        l2 = l7 - l8;
+
+        l11 = virtualinvoke r0.<androidx.media3.datasource.cache.SimpleCache: long getCachedLength(java.lang.String,long,long)>(r1, l8, l2);
+
+        $b5 = l11 cmp 0L;
+
+        if $b5 <= 0 goto label5;
+
+        l9 = l9 + l11;
+
+        goto label6;
+
+     label5:
+        l11 = neg l11;
+
+     label6:
+        l8 = l8 + l11;
+
+        goto label4;
+
+     label7:
+        return l9;
+    }
+
+    public synchronized void applyContentMetadataMutations(java.lang.String, androidx.media3.datasource.cache.ContentMetadataMutations) throws androidx.media3.datasource.cache.Cache$CacheException
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        androidx.media3.datasource.cache.ContentMetadataMutations r2;
+        java.lang.Throwable r3, $r6, r9;
+        boolean $z0, $z1;
+        androidx.media3.datasource.cache.CachedContentIndex $r4, $r5;
+        androidx.media3.datasource.cache.Cache$CacheException r8;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.ContentMetadataMutations;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        virtualinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void checkInitialization()>();
+
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        virtualinvoke $r4.<androidx.media3.datasource.cache.CachedContentIndex: void applyContentMetadataMutations(java.lang.String,androidx.media3.datasource.cache.ContentMetadataMutations)>(r1, r2);
+
+     label3:
+        $r5 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        virtualinvoke $r5.<androidx.media3.datasource.cache.CachedContentIndex: void store()>();
+
+     label4:
+        goto label6;
+
+     label5:
+        $r6 := @caughtexception;
+
+        r3 = $r6;
+
+        r8 = new androidx.media3.datasource.cache.Cache$CacheException;
+
+        specialinvoke r8.<androidx.media3.datasource.cache.Cache$CacheException: void <init>(java.lang.Throwable)>(r3);
+
+        r9 = (java.lang.Throwable) r8;
+
+        throw r9;
+
+     label6:
+        return;
+
+        catch java.io.IOException from label3 to label4 with label5;
+    }
+
+    public synchronized androidx.media3.datasource.cache.ContentMetadata getContentMetadata(java.lang.String)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        boolean $z0, $z1;
+        androidx.media3.datasource.cache.CachedContentIndex $r2;
+        androidx.media3.datasource.cache.ContentMetadata $r3;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean released>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z1);
+
+        $r2 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r3 = virtualinvoke $r2.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.ContentMetadata getContentMetadata(java.lang.String)>(r1);
+
+        return $r3;
+    }
+
+    private void initialize()
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.io.File[] r1;
+        java.io.File $r2, $r3, $r6, $r11, $r14, $r17, $r20, $r25, $r31;
+        boolean $z0;
+        long $l0, $l1, $l3, $l4, $l5;
+        byte $b2;
+        androidx.media3.datasource.cache.CachedContentIndex $r4, $r7, $r8;
+        androidx.media3.datasource.cache.CacheFileMetadataIndex $r5, $r9, $r10, $r12;
+        java.util.Set $r13;
+        java.lang.StringBuilder $r15, $r16, $r18, $r23, $r24, $r26, $r29, $r30, $r32;
+        androidx.media3.datasource.cache.Cache$CacheException $r19, $r27, $r33;
+        java.lang.Throwable $r21, $r22, $r28, r35, r38, r40;
+        java.lang.String r34, r36, r39;
+        java.util.Map r37;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        $r2 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label01;
+
+        $r20 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        staticinvoke <androidx.media3.datasource.cache.SimpleCache: void createCacheDirectories(java.io.File)>($r20);
+
+        goto label01;
+
+     label01:
+        $r3 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        r1 = virtualinvoke $r3.<java.io.File: java.io.File[] listFiles()>();
+
+        if r1 != null goto label02;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to list cache directory files: ");
+
+        $r17 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        $r18 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r17);
+
+        r34 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String)>("SimpleCache", r34);
+
+        $r19 = new androidx.media3.datasource.cache.Cache$CacheException;
+
+        specialinvoke $r19.<androidx.media3.datasource.cache.Cache$CacheException: void <init>(java.lang.String)>(r34);
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.Cache$CacheException initializationException> = $r19;
+
+        return;
+
+     label02:
+        $l0 = staticinvoke <androidx.media3.datasource.cache.SimpleCache: long loadUid(java.io.File[])>(r1);
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: long uid> = $l0;
+
+        $l1 = r0.<androidx.media3.datasource.cache.SimpleCache: long uid>;
+
+        $b2 = $l1 cmp -1L;
+
+        if $b2 != 0 goto label06;
+
+     label03:
+        $r14 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        $l5 = staticinvoke <androidx.media3.datasource.cache.SimpleCache: long createUid(java.io.File)>($r14);
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: long uid> = $l5;
+
+     label04:
+        goto label06;
+
+     label05:
+        $r28 := @caughtexception;
+
+        r35 = $r28;
+
+        $r29 = new java.lang.StringBuilder;
+
+        specialinvoke $r29.<java.lang.StringBuilder: void <init>()>();
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to create cache UID: ");
+
+        $r31 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        $r32 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r31);
+
+        r36 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("SimpleCache", r36, r35);
+
+        $r33 = new androidx.media3.datasource.cache.Cache$CacheException;
+
+        specialinvoke $r33.<androidx.media3.datasource.cache.Cache$CacheException: void <init>(java.lang.String,java.lang.Throwable)>(r36, r35);
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.Cache$CacheException initializationException> = $r33;
+
+        return;
+
+     label06:
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $l3 = r0.<androidx.media3.datasource.cache.SimpleCache: long uid>;
+
+        virtualinvoke $r4.<androidx.media3.datasource.cache.CachedContentIndex: void initialize(long)>($l3);
+
+        $r5 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        if $r5 == null goto label07;
+
+        $r9 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        $l4 = r0.<androidx.media3.datasource.cache.SimpleCache: long uid>;
+
+        virtualinvoke $r9.<androidx.media3.datasource.cache.CacheFileMetadataIndex: void initialize(long)>($l4);
+
+        $r10 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        r37 = virtualinvoke $r10.<androidx.media3.datasource.cache.CacheFileMetadataIndex: java.util.Map getAll()>();
+
+        $r11 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void loadDirectory(java.io.File,boolean,java.io.File[],java.util.Map)>($r11, 1, r1, r37);
+
+        $r12 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        $r13 = interfaceinvoke r37.<java.util.Map: java.util.Set keySet()>();
+
+        virtualinvoke $r12.<androidx.media3.datasource.cache.CacheFileMetadataIndex: void removeAll(java.util.Set)>($r13);
+
+        goto label08;
+
+     label07:
+        $r6 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void loadDirectory(java.io.File,boolean,java.io.File[],java.util.Map)>($r6, 1, r1, null);
+
+     label08:
+        goto label10;
+
+     label09:
+        $r22 := @caughtexception;
+
+        r38 = $r22;
+
+        $r23 = new java.lang.StringBuilder;
+
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to initialize cache indices: ");
+
+        $r25 = r0.<androidx.media3.datasource.cache.SimpleCache: java.io.File cacheDir>;
+
+        $r26 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r25);
+
+        r39 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("SimpleCache", r39, r38);
+
+        $r27 = new androidx.media3.datasource.cache.Cache$CacheException;
+
+        specialinvoke $r27.<androidx.media3.datasource.cache.Cache$CacheException: void <init>(java.lang.String,java.lang.Throwable)>(r39, r38);
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.Cache$CacheException initializationException> = $r27;
+
+        return;
+
+     label10:
+        $r7 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        virtualinvoke $r7.<androidx.media3.datasource.cache.CachedContentIndex: void removeEmpty()>();
+
+     label11:
+        $r8 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        virtualinvoke $r8.<androidx.media3.datasource.cache.CachedContentIndex: void store()>();
+
+     label12:
+        goto label14;
+
+     label13:
+        $r21 := @caughtexception;
+
+        r40 = $r21;
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("SimpleCache", "Storing index file failed", r40);
+
+     label14:
+        return;
+
+        catch java.io.IOException from label03 to label04 with label05;
+        catch java.io.IOException from label06 to label08 with label09;
+        catch java.io.IOException from label11 to label12 with label13;
+    }
+
+    private void loadDirectory(java.io.File, boolean, java.io.File[], java.util.Map)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.io.File r1, r5;
+        boolean z0, $z3, $z4;
+        java.io.File[] r2, r4, $r11;
+        java.util.Map r3;
+        int i0, $i1, $i2, i3;
+        java.lang.String r6;
+        androidx.media3.datasource.cache.CacheFileMetadata r7, $r12;
+        androidx.media3.datasource.cache.SimpleCacheSpan r8;
+        androidx.media3.datasource.cache.CachedContentIndex $r9;
+        java.lang.Object $r10;
+        long l4, l5;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.io.File;
+
+        z0 := @parameter1: boolean;
+
+        r2 := @parameter2: java.io.File[];
+
+        r3 := @parameter3: java.util.Map;
+
+        if r2 == null goto label01;
+
+        $i1 = lengthof r2;
+
+        if $i1 != 0 goto label03;
+
+     label01:
+        if z0 != 0 goto label02;
+
+        virtualinvoke r1.<java.io.File: boolean delete()>();
+
+     label02:
+        return;
+
+     label03:
+        r4 = r2;
+
+        i0 = lengthof r4;
+
+        i3 = 0;
+
+     label04:
+        if i3 >= i0 goto label12;
+
+        r5 = r4[i3];
+
+        r6 = virtualinvoke r5.<java.io.File: java.lang.String getName()>();
+
+        if z0 == 0 goto label05;
+
+        $i2 = virtualinvoke r6.<java.lang.String: int indexOf(int)>(46);
+
+        if $i2 != -1 goto label05;
+
+        $r11 = virtualinvoke r5.<java.io.File: java.io.File[] listFiles()>();
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void loadDirectory(java.io.File,boolean,java.io.File[],java.util.Map)>(r5, 0, $r11, r3);
+
+        goto label11;
+
+     label05:
+        if z0 == 0 goto label06;
+
+        $z3 = staticinvoke <androidx.media3.datasource.cache.CachedContentIndex: boolean isIndexFile(java.lang.String)>(r6);
+
+        if $z3 != 0 goto label11;
+
+        $z4 = virtualinvoke r6.<java.lang.String: boolean endsWith(java.lang.String)>(".uid");
+
+        if $z4 == 0 goto label06;
+
+        goto label11;
+
+     label06:
+        l4 = -1L;
+
+        l5 = -9223372036854775807L;
+
+        if r3 == null goto label07;
+
+        $r10 = interfaceinvoke r3.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r6);
+
+        $r12 = (androidx.media3.datasource.cache.CacheFileMetadata) $r10;
+
+        goto label08;
+
+     label07:
+        $r12 = null;
+
+     label08:
+        r7 = $r12;
+
+        if r7 == null goto label09;
+
+        l4 = r7.<androidx.media3.datasource.cache.CacheFileMetadata: long length>;
+
+        l5 = r7.<androidx.media3.datasource.cache.CacheFileMetadata: long lastTouchTimestamp>;
+
+     label09:
+        $r9 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        r8 = staticinvoke <androidx.media3.datasource.cache.SimpleCacheSpan: androidx.media3.datasource.cache.SimpleCacheSpan createCacheEntry(java.io.File,long,long,androidx.media3.datasource.cache.CachedContentIndex)>(r5, l4, l5, $r9);
+
+        if r8 == null goto label10;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void addSpan(androidx.media3.datasource.cache.SimpleCacheSpan)>(r8);
+
+        goto label11;
+
+     label10:
+        virtualinvoke r5.<java.io.File: boolean delete()>();
+
+     label11:
+        i3 = i3 + 1;
+
+        goto label04;
+
+     label12:
+        return;
+    }
+
+    private androidx.media3.datasource.cache.SimpleCacheSpan touchSpan(java.lang.String, androidx.media3.datasource.cache.SimpleCacheSpan)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1, r3;
+        androidx.media3.datasource.cache.SimpleCacheSpan r2, r13;
+        long l0, l1;
+        boolean $z0, z1;
+        java.io.File $r4, $r6;
+        java.lang.Object $r5;
+        androidx.media3.datasource.cache.CacheFileMetadataIndex $r7, $r8;
+        java.lang.Throwable $r9, r10;
+        androidx.media3.datasource.cache.CachedContentIndex $r11;
+        androidx.media3.datasource.cache.CachedContent $r12;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.SimpleCacheSpan;
+
+        $z0 = r0.<androidx.media3.datasource.cache.SimpleCache: boolean touchCacheSpans>;
+
+        if $z0 != 0 goto label1;
+
+        return r2;
+
+     label1:
+        $r4 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: java.io.File file>;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        $r6 = (java.io.File) $r5;
+
+        r3 = virtualinvoke $r6.<java.io.File: java.lang.String getName()>();
+
+        l0 = r2.<androidx.media3.datasource.cache.SimpleCacheSpan: long length>;
+
+        l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        z1 = 0;
+
+        $r7 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        if $r7 == null goto label5;
+
+     label2:
+        $r8 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        virtualinvoke $r8.<androidx.media3.datasource.cache.CacheFileMetadataIndex: void set(java.lang.String,long,long)>(r3, l0, l1);
+
+     label3:
+        goto label6;
+
+     label4:
+        $r9 := @caughtexception;
+
+        r10 = $r9;
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("SimpleCache", "Failed to update index with new touch timestamp.");
+
+        goto label6;
+
+     label5:
+        z1 = 1;
+
+     label6:
+        $r11 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r12 = virtualinvoke $r11.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent get(java.lang.String)>(r1);
+
+        r13 = virtualinvoke $r12.<androidx.media3.datasource.cache.CachedContent: androidx.media3.datasource.cache.SimpleCacheSpan setLastTouchTimestamp(androidx.media3.datasource.cache.SimpleCacheSpan,long,boolean)>(r2, l1, z1);
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void notifySpanTouched(androidx.media3.datasource.cache.SimpleCacheSpan,androidx.media3.datasource.cache.CacheSpan)>(r2, r13);
+
+        return r13;
+
+        catch java.io.IOException from label2 to label3 with label4;
+    }
+
+    private androidx.media3.datasource.cache.SimpleCacheSpan getSpan(java.lang.String, long, long)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.lang.String r1;
+        long l0, l1, $l2, $l3;
+        androidx.media3.datasource.cache.CachedContent r2;
+        androidx.media3.datasource.cache.SimpleCacheSpan r3, $r6;
+        androidx.media3.datasource.cache.CachedContentIndex $r4;
+        boolean $z0;
+        java.io.File $r5;
+        byte $b4;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: java.lang.String;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        r2 = virtualinvoke $r4.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent get(java.lang.String)>(r1);
+
+        if r2 != null goto label1;
+
+        $r6 = staticinvoke <androidx.media3.datasource.cache.SimpleCacheSpan: androidx.media3.datasource.cache.SimpleCacheSpan createHole(java.lang.String,long,long)>(r1, l0, l1);
+
+        return $r6;
+
+     label1:
+        r3 = virtualinvoke r2.<androidx.media3.datasource.cache.CachedContent: androidx.media3.datasource.cache.SimpleCacheSpan getSpan(long,long)>(l0, l1);
+
+        $z0 = r3.<androidx.media3.datasource.cache.SimpleCacheSpan: boolean isCached>;
+
+        if $z0 == 0 goto label2;
+
+        $r5 = r3.<androidx.media3.datasource.cache.SimpleCacheSpan: java.io.File file>;
+
+        $l2 = virtualinvoke $r5.<java.io.File: long length()>();
+
+        $l3 = r3.<androidx.media3.datasource.cache.SimpleCacheSpan: long length>;
+
+        $b4 = $l2 cmp $l3;
+
+        if $b4 == 0 goto label2;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void removeStaleSpans()>();
+
+        goto label1;
+
+     label2:
+        return r3;
+    }
+
+    private void addSpan(androidx.media3.datasource.cache.SimpleCacheSpan)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        androidx.media3.datasource.cache.SimpleCacheSpan r1;
+        java.lang.String $r2;
+        androidx.media3.datasource.cache.CachedContentIndex $r3;
+        androidx.media3.datasource.cache.CachedContent $r4;
+        long $l0, $l1, $l2;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.SimpleCacheSpan;
+
+        $r3 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r2 = r1.<androidx.media3.datasource.cache.SimpleCacheSpan: java.lang.String key>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent getOrAdd(java.lang.String)>($r2);
+
+        virtualinvoke $r4.<androidx.media3.datasource.cache.CachedContent: void addSpan(androidx.media3.datasource.cache.SimpleCacheSpan)>(r1);
+
+        $l1 = r0.<androidx.media3.datasource.cache.SimpleCache: long totalSpace>;
+
+        $l0 = r1.<androidx.media3.datasource.cache.SimpleCacheSpan: long length>;
+
+        $l2 = $l1 + $l0;
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: long totalSpace> = $l2;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void notifySpanAdded(androidx.media3.datasource.cache.SimpleCacheSpan)>(r1);
+
+        return;
+    }
+
+    private void removeSpanInternal(androidx.media3.datasource.cache.CacheSpan)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        androidx.media3.datasource.cache.CacheSpan r1;
+        androidx.media3.datasource.cache.CachedContent r2;
+        java.lang.String r3, $r5, $r14, $r16;
+        java.lang.Throwable r4, $r10;
+        androidx.media3.datasource.cache.CachedContentIndex $r6, $r15;
+        boolean $z0;
+        long $l0, $l1, $l2;
+        androidx.media3.datasource.cache.CacheFileMetadataIndex $r7, $r9;
+        java.io.File $r8;
+        java.lang.StringBuilder $r11, $r12, $r13;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.CacheSpan;
+
+        $r6 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r5 = r1.<androidx.media3.datasource.cache.CacheSpan: java.lang.String key>;
+
+        r2 = virtualinvoke $r6.<androidx.media3.datasource.cache.CachedContentIndex: androidx.media3.datasource.cache.CachedContent get(java.lang.String)>($r5);
+
+        if r2 == null goto label1;
+
+        $z0 = virtualinvoke r2.<androidx.media3.datasource.cache.CachedContent: boolean removeSpan(androidx.media3.datasource.cache.CacheSpan)>(r1);
+
+        if $z0 != 0 goto label2;
+
+     label1:
+        return;
+
+     label2:
+        $l1 = r0.<androidx.media3.datasource.cache.SimpleCache: long totalSpace>;
+
+        $l0 = r1.<androidx.media3.datasource.cache.CacheSpan: long length>;
+
+        $l2 = $l1 - $l0;
+
+        r0.<androidx.media3.datasource.cache.SimpleCache: long totalSpace> = $l2;
+
+        $r7 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        if $r7 == null goto label6;
+
+        $r8 = r1.<androidx.media3.datasource.cache.CacheSpan: java.io.File file>;
+
+        r3 = virtualinvoke $r8.<java.io.File: java.lang.String getName()>();
+
+     label3:
+        $r9 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheFileMetadataIndex fileIndex>;
+
+        virtualinvoke $r9.<androidx.media3.datasource.cache.CacheFileMetadataIndex: void remove(java.lang.String)>(r3);
+
+     label4:
+        goto label6;
+
+     label5:
+        $r10 := @caughtexception;
+
+        r4 = $r10;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to remove file index entry for: ");
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("SimpleCache", $r14);
+
+     label6:
+        $r15 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r16 = r2.<androidx.media3.datasource.cache.CachedContent: java.lang.String key>;
+
+        virtualinvoke $r15.<androidx.media3.datasource.cache.CachedContentIndex: void maybeRemove(java.lang.String)>($r16);
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void notifySpanRemoved(androidx.media3.datasource.cache.CacheSpan)>(r1);
+
+        return;
+
+        catch java.io.IOException from label3 to label4 with label5;
+    }
+
+    private void removeStaleSpans()
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        java.util.ArrayList r1, $r5;
+        androidx.media3.datasource.cache.CachedContent r2;
+        java.util.Iterator r3, r14;
+        androidx.media3.datasource.cache.CacheSpan r4, $r9;
+        androidx.media3.datasource.cache.CachedContentIndex $r6;
+        java.util.Collection $r7;
+        boolean $z0, $z1;
+        int $i0, i4;
+        java.lang.Object $r8, $r10, $r12;
+        java.util.TreeSet $r11;
+        java.io.File $r13;
+        long $l1, $l2;
+        byte $b3;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r1 = $r5;
+
+        $r6 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CachedContentIndex contentIndex>;
+
+        $r7 = virtualinvoke $r6.<androidx.media3.datasource.cache.CachedContentIndex: java.util.Collection getAll()>();
+
+        r14 = interfaceinvoke $r7.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r14.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r10 = interfaceinvoke r14.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (androidx.media3.datasource.cache.CachedContent) $r10;
+
+        $r11 = virtualinvoke r2.<androidx.media3.datasource.cache.CachedContent: java.util.TreeSet getSpans()>();
+
+        r3 = virtualinvoke $r11.<java.util.TreeSet: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        $r12 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (androidx.media3.datasource.cache.CacheSpan) $r12;
+
+        $r13 = r4.<androidx.media3.datasource.cache.CacheSpan: java.io.File file>;
+
+        $l1 = virtualinvoke $r13.<java.io.File: long length()>();
+
+        $l2 = r4.<androidx.media3.datasource.cache.CacheSpan: long length>;
+
+        $b3 = $l1 cmp $l2;
+
+        if $b3 == 0 goto label3;
+
+        virtualinvoke r1.<java.util.ArrayList: boolean add(java.lang.Object)>(r4);
+
+     label3:
+        goto label2;
+
+     label4:
+        goto label1;
+
+     label5:
+        i4 = 0;
+
+     label6:
+        $i0 = virtualinvoke r1.<java.util.ArrayList: int size()>();
+
+        if i4 >= $i0 goto label7;
+
+        $r8 = virtualinvoke r1.<java.util.ArrayList: java.lang.Object get(int)>(i4);
+
+        $r9 = (androidx.media3.datasource.cache.CacheSpan) $r8;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void removeSpanInternal(androidx.media3.datasource.cache.CacheSpan)>($r9);
+
+        i4 = i4 + 1;
+
+        goto label6;
+
+     label7:
+        return;
+    }
+
+    private void notifySpanRemoved(androidx.media3.datasource.cache.CacheSpan)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        androidx.media3.datasource.cache.CacheSpan r1;
+        java.util.ArrayList r2;
+        java.lang.String $r3;
+        java.util.HashMap $r4;
+        java.lang.Object $r5, $r7;
+        androidx.media3.datasource.cache.CacheEvictor $r6;
+        int $i0, i1;
+        androidx.media3.datasource.cache.Cache$Listener $r8;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.CacheSpan;
+
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners>;
+
+        $r3 = r1.<androidx.media3.datasource.cache.CacheSpan: java.lang.String key>;
+
+        $r5 = virtualinvoke $r4.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r3);
+
+        r2 = (java.util.ArrayList) $r5;
+
+        if r2 == null goto label2;
+
+        $i0 = virtualinvoke r2.<java.util.ArrayList: int size()>();
+
+        i1 = $i0 - 1;
+
+     label1:
+        if i1 < 0 goto label2;
+
+        $r7 = virtualinvoke r2.<java.util.ArrayList: java.lang.Object get(int)>(i1);
+
+        $r8 = (androidx.media3.datasource.cache.Cache$Listener) $r7;
+
+        interfaceinvoke $r8.<androidx.media3.datasource.cache.Cache$Listener: void onSpanRemoved(androidx.media3.datasource.cache.Cache,androidx.media3.datasource.cache.CacheSpan)>(r0, r1);
+
+        i1 = i1 + -1;
+
+        goto label1;
+
+     label2:
+        $r6 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheEvictor evictor>;
+
+        interfaceinvoke $r6.<androidx.media3.datasource.cache.CacheEvictor: void onSpanRemoved(androidx.media3.datasource.cache.Cache,androidx.media3.datasource.cache.CacheSpan)>(r0, r1);
+
+        return;
+    }
+
+    private void notifySpanAdded(androidx.media3.datasource.cache.SimpleCacheSpan)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        androidx.media3.datasource.cache.SimpleCacheSpan r1;
+        java.util.ArrayList r2;
+        java.lang.String $r3;
+        java.util.HashMap $r4;
+        java.lang.Object $r5, $r7;
+        androidx.media3.datasource.cache.CacheEvictor $r6;
+        int $i0, i1;
+        androidx.media3.datasource.cache.Cache$Listener $r8;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.SimpleCacheSpan;
+
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners>;
+
+        $r3 = r1.<androidx.media3.datasource.cache.SimpleCacheSpan: java.lang.String key>;
+
+        $r5 = virtualinvoke $r4.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r3);
+
+        r2 = (java.util.ArrayList) $r5;
+
+        if r2 == null goto label2;
+
+        $i0 = virtualinvoke r2.<java.util.ArrayList: int size()>();
+
+        i1 = $i0 - 1;
+
+     label1:
+        if i1 < 0 goto label2;
+
+        $r7 = virtualinvoke r2.<java.util.ArrayList: java.lang.Object get(int)>(i1);
+
+        $r8 = (androidx.media3.datasource.cache.Cache$Listener) $r7;
+
+        interfaceinvoke $r8.<androidx.media3.datasource.cache.Cache$Listener: void onSpanAdded(androidx.media3.datasource.cache.Cache,androidx.media3.datasource.cache.CacheSpan)>(r0, r1);
+
+        i1 = i1 + -1;
+
+        goto label1;
+
+     label2:
+        $r6 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheEvictor evictor>;
+
+        interfaceinvoke $r6.<androidx.media3.datasource.cache.CacheEvictor: void onSpanAdded(androidx.media3.datasource.cache.Cache,androidx.media3.datasource.cache.CacheSpan)>(r0, r1);
+
+        return;
+    }
+
+    private void notifySpanTouched(androidx.media3.datasource.cache.SimpleCacheSpan, androidx.media3.datasource.cache.CacheSpan)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        androidx.media3.datasource.cache.SimpleCacheSpan r1;
+        androidx.media3.datasource.cache.CacheSpan r2;
+        java.util.ArrayList r3;
+        java.lang.String $r4;
+        java.util.HashMap $r5;
+        java.lang.Object $r6, $r8;
+        androidx.media3.datasource.cache.CacheEvictor $r7;
+        int $i0, i1;
+        androidx.media3.datasource.cache.Cache$Listener $r9;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.SimpleCacheSpan;
+
+        r2 := @parameter1: androidx.media3.datasource.cache.CacheSpan;
+
+        $r5 = r0.<androidx.media3.datasource.cache.SimpleCache: java.util.HashMap listeners>;
+
+        $r4 = r1.<androidx.media3.datasource.cache.SimpleCacheSpan: java.lang.String key>;
+
+        $r6 = virtualinvoke $r5.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r4);
+
+        r3 = (java.util.ArrayList) $r6;
+
+        if r3 == null goto label2;
+
+        $i0 = virtualinvoke r3.<java.util.ArrayList: int size()>();
+
+        i1 = $i0 - 1;
+
+     label1:
+        if i1 < 0 goto label2;
+
+        $r8 = virtualinvoke r3.<java.util.ArrayList: java.lang.Object get(int)>(i1);
+
+        $r9 = (androidx.media3.datasource.cache.Cache$Listener) $r8;
+
+        interfaceinvoke $r9.<androidx.media3.datasource.cache.Cache$Listener: void onSpanTouched(androidx.media3.datasource.cache.Cache,androidx.media3.datasource.cache.CacheSpan,androidx.media3.datasource.cache.CacheSpan)>(r0, r1, r2);
+
+        i1 = i1 + -1;
+
+        goto label1;
+
+     label2:
+        $r7 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheEvictor evictor>;
+
+        interfaceinvoke $r7.<androidx.media3.datasource.cache.CacheEvictor: void onSpanTouched(androidx.media3.datasource.cache.Cache,androidx.media3.datasource.cache.CacheSpan,androidx.media3.datasource.cache.CacheSpan)>(r0, r1, r2);
+
+        return;
+    }
+
+    private static long loadUid(java.io.File[])
+    {
+        java.io.File[] r0, r1;
+        int i0, i2;
+        java.io.File r2;
+        java.lang.String r3, $r9;
+        java.lang.Throwable r4, $r5;
+        boolean $z0;
+        long $l1;
+        java.lang.StringBuilder $r6, $r7, $r8;
+
+        r0 := @parameter0: java.io.File[];
+
+        r1 = r0;
+
+        i0 = lengthof r1;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label6;
+
+        r2 = r1[i2];
+
+        r3 = virtualinvoke r2.<java.io.File: java.lang.String getName()>();
+
+        $z0 = virtualinvoke r3.<java.lang.String: boolean endsWith(java.lang.String)>(".uid");
+
+        if $z0 == 0 goto label5;
+
+     label2:
+        $l1 = staticinvoke <androidx.media3.datasource.cache.SimpleCache: long parseUid(java.lang.String)>(r3);
+
+     label3:
+        return $l1;
+
+     label4:
+        $r5 := @caughtexception;
+
+        r4 = $r5;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Malformed UID file: ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String)>("SimpleCache", $r9);
+
+        virtualinvoke r2.<java.io.File: boolean delete()>();
+
+     label5:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label6:
+        return -1L;
+
+        catch java.lang.NumberFormatException from label2 to label3 with label4;
+    }
+
+    private static long createUid(java.io.File) throws java.io.IOException
+    {
+        java.io.File r0, r2, r16;
+        java.lang.String r1, $r8, $r13;
+        byte $b0;
+        java.lang.StringBuilder $r6, $r7, $r11, $r12, r15, r17;
+        boolean $z0;
+        long l1, $l2, l3;
+        java.security.SecureRandom r14;
+        java.io.IOException r18;
+        java.lang.Throwable r19;
+
+        r0 := @parameter0: java.io.File;
+
+        r14 = new java.security.SecureRandom;
+
+        specialinvoke r14.<java.security.SecureRandom: void <init>()>();
+
+        l1 = virtualinvoke r14.<java.security.SecureRandom: long nextLong()>();
+
+        $b0 = l1 cmp -9223372036854775808L;
+
+        if $b0 != 0 goto label1;
+
+        $l2 = 0L;
+
+        goto label2;
+
+     label1:
+        $l2 = staticinvoke <java.lang.Math: long abs(long)>(l1);
+
+     label2:
+        l3 = $l2;
+
+        r1 = staticinvoke <java.lang.Long: java.lang.String toString(long,int)>(l3, 16);
+
+        r16 = new java.io.File;
+
+        r15 = new java.lang.StringBuilder;
+
+        specialinvoke r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".uid");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r16.<java.io.File: void <init>(java.io.File,java.lang.String)>(r0, $r8);
+
+        r2 = r16;
+
+        $z0 = virtualinvoke r2.<java.io.File: boolean createNewFile()>();
+
+        if $z0 != 0 goto label3;
+
+        r18 = new java.io.IOException;
+
+        r17 = new java.lang.StringBuilder;
+
+        specialinvoke r17.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to create UID file: ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r18.<java.io.IOException: void <init>(java.lang.String)>($r13);
+
+        r19 = (java.lang.Throwable) r18;
+
+        throw r19;
+
+     label3:
+        return l3;
+    }
+
+    private static long parseUid(java.lang.String)
+    {
+        java.lang.String r0, $r1;
+        int $i0;
+        long $l1;
+
+        r0 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke r0.<java.lang.String: int indexOf(int)>(46);
+
+        $r1 = virtualinvoke r0.<java.lang.String: java.lang.String substring(int,int)>(0, $i0);
+
+        $l1 = staticinvoke <java.lang.Long: long parseLong(java.lang.String,int)>($r1, 16);
+
+        return $l1;
+    }
+
+    private static void createCacheDirectories(java.io.File) throws androidx.media3.datasource.cache.Cache$CacheException
+    {
+        java.io.File r0;
+        java.lang.String r1;
+        boolean $z0, $z1;
+        java.lang.StringBuilder $r3, $r4, r6;
+        androidx.media3.datasource.cache.Cache$CacheException r7;
+        java.lang.Throwable r8;
+
+        r0 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke r0.<java.io.File: boolean mkdirs()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = virtualinvoke r0.<java.io.File: boolean isDirectory()>();
+
+        if $z1 != 0 goto label1;
+
+        r6 = new java.lang.StringBuilder;
+
+        specialinvoke r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to create cache directory: ");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String)>("SimpleCache", r1);
+
+        r7 = new androidx.media3.datasource.cache.Cache$CacheException;
+
+        specialinvoke r7.<androidx.media3.datasource.cache.Cache$CacheException: void <init>(java.lang.String)>(r1);
+
+        r8 = (java.lang.Throwable) r7;
+
+        throw r8;
+
+     label1:
+        return;
+    }
+
+    private static synchronized boolean lockFolder(java.io.File)
+    {
+        java.io.File r0, $r2;
+        java.util.HashSet $r1;
+        boolean $z0;
+
+        r0 := @parameter0: java.io.File;
+
+        $r1 = <androidx.media3.datasource.cache.SimpleCache: java.util.HashSet lockedCacheDirs>;
+
+        $r2 = virtualinvoke r0.<java.io.File: java.io.File getAbsoluteFile()>();
+
+        $z0 = virtualinvoke $r1.<java.util.HashSet: boolean add(java.lang.Object)>($r2);
+
+        return $z0;
+    }
+
+    private static synchronized void unlockFolder(java.io.File)
+    {
+        java.io.File r0, $r2;
+        java.util.HashSet $r1;
+
+        r0 := @parameter0: java.io.File;
+
+        $r1 = <androidx.media3.datasource.cache.SimpleCache: java.util.HashSet lockedCacheDirs>;
+
+        $r2 = virtualinvoke r0.<java.io.File: java.io.File getAbsoluteFile()>();
+
+        virtualinvoke $r1.<java.util.HashSet: boolean remove(java.lang.Object)>($r2);
+
+        return;
+    }
+
+    static void access$000(androidx.media3.datasource.cache.SimpleCache)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+
+        r0 := @parameter0: androidx.media3.datasource.cache.SimpleCache;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.SimpleCache: void initialize()>();
+
+        return;
+    }
+
+    static androidx.media3.datasource.cache.CacheEvictor access$100(androidx.media3.datasource.cache.SimpleCache)
+    {
+        androidx.media3.datasource.cache.SimpleCache r0;
+        androidx.media3.datasource.cache.CacheEvictor $r1;
+
+        r0 := @parameter0: androidx.media3.datasource.cache.SimpleCache;
+
+        $r1 = r0.<androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheEvictor evictor>;
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        java.util.HashSet $r0;
+
+        $r0 = new java.util.HashSet;
+
+        specialinvoke $r0.<java.util.HashSet: void <init>()>();
+
+        <androidx.media3.datasource.cache.SimpleCache: java.util.HashSet lockedCacheDirs> = $r0;
+
+        return;
+    }
+
+androidx.media3.datasource.cache.SimpleCache$1
+<androidx.media3.datasource.cache.SimpleCache$1: android.os.ConditionVariable val$conditionVariable>
+<androidx.media3.datasource.cache.SimpleCache$1: androidx.media3.datasource.cache.SimpleCache this$0>
+    void <init>(androidx.media3.datasource.cache.SimpleCache, java.lang.String, android.os.ConditionVariable)
+    {
+        androidx.media3.datasource.cache.SimpleCache$1 r0;
+        androidx.media3.datasource.cache.SimpleCache r1;
+        java.lang.String r2;
+        android.os.ConditionVariable r3;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache$1;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.SimpleCache;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: android.os.ConditionVariable;
+
+        r0.<androidx.media3.datasource.cache.SimpleCache$1: androidx.media3.datasource.cache.SimpleCache this$0> = r1;
+
+        r0.<androidx.media3.datasource.cache.SimpleCache$1: android.os.ConditionVariable val$conditionVariable> = r3;
+
+        specialinvoke r0.<java.lang.Thread: void <init>(java.lang.String)>(r2);
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.media3.datasource.cache.SimpleCache$1 r0;
+        androidx.media3.datasource.cache.SimpleCache r1, $r3, $r5, $r6;
+        java.lang.Throwable r2, $r8;
+        android.os.ConditionVariable $r4;
+        androidx.media3.datasource.cache.CacheEvictor $r7;
+
+        r0 := @this: androidx.media3.datasource.cache.SimpleCache$1;
+
+        $r3 = r0.<androidx.media3.datasource.cache.SimpleCache$1: androidx.media3.datasource.cache.SimpleCache this$0>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.media3.datasource.cache.SimpleCache$1: android.os.ConditionVariable val$conditionVariable>;
+
+        virtualinvoke $r4.<android.os.ConditionVariable: void open()>();
+
+        $r5 = r0.<androidx.media3.datasource.cache.SimpleCache$1: androidx.media3.datasource.cache.SimpleCache this$0>;
+
+        staticinvoke <androidx.media3.datasource.cache.SimpleCache: void access$000(androidx.media3.datasource.cache.SimpleCache)>($r5);
+
+        $r6 = r0.<androidx.media3.datasource.cache.SimpleCache$1: androidx.media3.datasource.cache.SimpleCache this$0>;
+
+        $r7 = staticinvoke <androidx.media3.datasource.cache.SimpleCache: androidx.media3.datasource.cache.CacheEvictor access$100(androidx.media3.datasource.cache.SimpleCache)>($r6);
+
+        interfaceinvoke $r7.<androidx.media3.datasource.cache.CacheEvictor: void onCacheInitialized()>();
+
+        exitmonitor r1;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r2 = $r8;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+

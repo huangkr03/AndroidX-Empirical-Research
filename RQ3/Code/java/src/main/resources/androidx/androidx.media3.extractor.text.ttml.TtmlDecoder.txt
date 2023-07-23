@@ -1,0 +1,3099 @@
+androidx.media3.extractor.text.ttml.TtmlDecoder
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String TAG>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String TTP>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String ATTR_BEGIN>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String ATTR_DURATION>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String ATTR_END>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String ATTR_STYLE>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String ATTR_REGION>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String ATTR_IMAGE>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern CLOCK_TIME>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern OFFSET_TIME>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern FONT_SIZE>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern SIGNED_PERCENTAGE>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern PERCENTAGE_COORDINATES>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern PIXEL_COORDINATES>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern CELL_RESOLUTION>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: int DEFAULT_FRAME_RATE>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate DEFAULT_FRAME_AND_TICK_RATE>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution DEFAULT_CELL_RESOLUTION>
+<androidx.media3.extractor.text.ttml.TtmlDecoder: org.xmlpull.v1.XmlPullParserFactory xmlParserFactory>
+    public void <init>()
+    {
+        androidx.media3.extractor.text.ttml.TtmlDecoder r0;
+        java.lang.Throwable r1, $r4;
+        org.xmlpull.v1.XmlPullParserFactory $r2, $r3;
+        java.lang.RuntimeException $r5;
+
+        r0 := @this: androidx.media3.extractor.text.ttml.TtmlDecoder;
+
+        specialinvoke r0.<androidx.media3.extractor.text.SimpleSubtitleDecoder: void <init>(java.lang.String)>("TtmlDecoder");
+
+     label1:
+        $r2 = staticinvoke <org.xmlpull.v1.XmlPullParserFactory: org.xmlpull.v1.XmlPullParserFactory newInstance()>();
+
+        r0.<androidx.media3.extractor.text.ttml.TtmlDecoder: org.xmlpull.v1.XmlPullParserFactory xmlParserFactory> = $r2;
+
+        $r3 = r0.<androidx.media3.extractor.text.ttml.TtmlDecoder: org.xmlpull.v1.XmlPullParserFactory xmlParserFactory>;
+
+        virtualinvoke $r3.<org.xmlpull.v1.XmlPullParserFactory: void setNamespaceAware(boolean)>(1);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+        $r5 = new java.lang.RuntimeException;
+
+        specialinvoke $r5.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>("Couldn\'t create XmlPullParserFactory instance", r1);
+
+        throw $r5;
+
+     label4:
+        return;
+
+        catch org.xmlpull.v1.XmlPullParserException from label1 to label2 with label3;
+    }
+
+    protected androidx.media3.extractor.text.Subtitle decode(byte[], int, boolean) throws androidx.media3.extractor.text.SubtitleDecoderException
+    {
+        androidx.media3.extractor.text.ttml.TtmlDecoder r0;
+        byte[] r1;
+        int i0, i2, i3;
+        boolean z0, $z1, $z2, $z3, $z4;
+        java.util.HashMap r2, r3, r4, r51, r52, r53;
+        java.io.ByteArrayInputStream r5, r55;
+        java.util.ArrayDeque r6, r56;
+        androidx.media3.extractor.text.ttml.TtmlNode r7, r9, $r24, $r26, $r28, $r30;
+        java.lang.String r8, $r20, $r29, $r31, $r32, $r36, $r38;
+        org.xmlpull.v1.XmlPullParserFactory $r10;
+        java.lang.Object $r19, $r23, $r25, $r27;
+        java.lang.StringBuilder $r35, $r37, r57;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution $r39, r47;
+        java.lang.Throwable $r40, $r42, r49, r50, r62, r63;
+        org.xmlpull.v1.XmlPullParser r44;
+        androidx.media3.extractor.text.ttml.TtmlSubtitle r45, r58;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate r46;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent r48;
+        androidx.media3.extractor.text.ttml.TtmlRegion r54;
+        androidx.media3.extractor.text.SubtitleDecoderException r59, r60;
+        java.lang.IllegalStateException r61;
+
+        r0 := @this: androidx.media3.extractor.text.ttml.TtmlDecoder;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        z0 := @parameter2: boolean;
+
+     label01:
+        $r10 = r0.<androidx.media3.extractor.text.ttml.TtmlDecoder: org.xmlpull.v1.XmlPullParserFactory xmlParserFactory>;
+
+        r44 = virtualinvoke $r10.<org.xmlpull.v1.XmlPullParserFactory: org.xmlpull.v1.XmlPullParser newPullParser()>();
+
+        r51 = new java.util.HashMap;
+
+        specialinvoke r51.<java.util.HashMap: void <init>()>();
+
+        r2 = r51;
+
+        r52 = new java.util.HashMap;
+
+        specialinvoke r52.<java.util.HashMap: void <init>()>();
+
+        r3 = r52;
+
+        r53 = new java.util.HashMap;
+
+        specialinvoke r53.<java.util.HashMap: void <init>()>();
+
+        r4 = r53;
+
+        r54 = new androidx.media3.extractor.text.ttml.TtmlRegion;
+
+        specialinvoke r54.<androidx.media3.extractor.text.ttml.TtmlRegion: void <init>(java.lang.String)>("");
+
+        interfaceinvoke r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("", r54);
+
+        r55 = new java.io.ByteArrayInputStream;
+
+        specialinvoke r55.<java.io.ByteArrayInputStream: void <init>(byte[],int,int)>(r1, 0, i0);
+
+        r5 = r55;
+
+        interfaceinvoke r44.<org.xmlpull.v1.XmlPullParser: void setInput(java.io.InputStream,java.lang.String)>(r5, null);
+
+        r45 = null;
+
+        r56 = new java.util.ArrayDeque;
+
+        specialinvoke r56.<java.util.ArrayDeque: void <init>()>();
+
+        r6 = r56;
+
+        i2 = 0;
+
+        i3 = interfaceinvoke r44.<org.xmlpull.v1.XmlPullParser: int getEventType()>();
+
+        r46 = <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate DEFAULT_FRAME_AND_TICK_RATE>;
+
+        r47 = <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution DEFAULT_CELL_RESOLUTION>;
+
+        r48 = null;
+
+     label02:
+        if i3 == 1 goto label14;
+
+        $r19 = virtualinvoke r6.<java.util.ArrayDeque: java.lang.Object peek()>();
+
+        r7 = (androidx.media3.extractor.text.ttml.TtmlNode) $r19;
+
+        if i2 != 0 goto label11;
+
+        r8 = interfaceinvoke r44.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        if i3 != 2 goto label07;
+
+        $r31 = "tt";
+
+        $z2 = virtualinvoke $r31.<java.lang.String: boolean equals(java.lang.Object)>(r8);
+
+        if $z2 == 0 goto label03;
+
+        r46 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate parseFrameAndTickRates(org.xmlpull.v1.XmlPullParser)>(r44);
+
+        $r39 = <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution DEFAULT_CELL_RESOLUTION>;
+
+        r47 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution parseCellResolution(org.xmlpull.v1.XmlPullParser,androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution)>(r44, $r39);
+
+        r48 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent parseTtsExtent(org.xmlpull.v1.XmlPullParser)>(r44);
+
+     label03:
+        $z3 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: boolean isSupportedTag(java.lang.String)>(r8);
+
+        if $z3 != 0 goto label04;
+
+        r57 = new java.lang.StringBuilder;
+
+        specialinvoke r57.<java.lang.StringBuilder: void <init>()>();
+
+        $r35 = virtualinvoke r57.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring unsupported tag: ");
+
+        $r36 = interfaceinvoke r44.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $r37 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r36);
+
+        $r38 = virtualinvoke $r37.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void i(java.lang.String,java.lang.String)>("TtmlDecoder", $r38);
+
+        i2 = i2 + 1;
+
+        goto label10;
+
+     label04:
+        $r32 = "head";
+
+        $z4 = virtualinvoke $r32.<java.lang.String: boolean equals(java.lang.Object)>(r8);
+
+        if $z4 == 0 goto label05;
+
+        staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.Map parseHeader(org.xmlpull.v1.XmlPullParser,java.util.Map,androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution,androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent,java.util.Map,java.util.Map)>(r44, r2, r47, r48, r3, r4);
+
+        goto label10;
+
+     label05:
+        r9 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlNode parseNode(org.xmlpull.v1.XmlPullParser,androidx.media3.extractor.text.ttml.TtmlNode,java.util.Map,androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate)>(r44, r7, r3, r46);
+
+        virtualinvoke r6.<java.util.ArrayDeque: void push(java.lang.Object)>(r9);
+
+        if r7 == null goto label06;
+
+        virtualinvoke r7.<androidx.media3.extractor.text.ttml.TtmlNode: void addChild(androidx.media3.extractor.text.ttml.TtmlNode)>(r9);
+
+     label06:
+        goto label10;
+
+     label07:
+        if i3 != 4 goto label08;
+
+        $r27 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r7);
+
+        $r28 = (androidx.media3.extractor.text.ttml.TtmlNode) $r27;
+
+        $r29 = interfaceinvoke r44.<org.xmlpull.v1.XmlPullParser: java.lang.String getText()>();
+
+        $r30 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlNode: androidx.media3.extractor.text.ttml.TtmlNode buildTextNode(java.lang.String)>($r29);
+
+        virtualinvoke $r28.<androidx.media3.extractor.text.ttml.TtmlNode: void addChild(androidx.media3.extractor.text.ttml.TtmlNode)>($r30);
+
+        goto label10;
+
+     label08:
+        if i3 != 3 goto label10;
+
+        $r20 = interfaceinvoke r44.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $z1 = virtualinvoke $r20.<java.lang.String: boolean equals(java.lang.Object)>("tt");
+
+        if $z1 == 0 goto label09;
+
+        r58 = new androidx.media3.extractor.text.ttml.TtmlSubtitle;
+
+        $r23 = virtualinvoke r6.<java.util.ArrayDeque: java.lang.Object peek()>();
+
+        $r24 = (androidx.media3.extractor.text.ttml.TtmlNode) $r23;
+
+        $r25 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r24);
+
+        $r26 = (androidx.media3.extractor.text.ttml.TtmlNode) $r25;
+
+        specialinvoke r58.<androidx.media3.extractor.text.ttml.TtmlSubtitle: void <init>(androidx.media3.extractor.text.ttml.TtmlNode,java.util.Map,java.util.Map,java.util.Map)>($r26, r2, r3, r4);
+
+        r45 = r58;
+
+     label09:
+        virtualinvoke r6.<java.util.ArrayDeque: java.lang.Object pop()>();
+
+     label10:
+        goto label13;
+
+     label11:
+        if i3 != 2 goto label12;
+
+        i2 = i2 + 1;
+
+        goto label13;
+
+     label12:
+        if i3 != 3 goto label13;
+
+        i2 = i2 + -1;
+
+     label13:
+        interfaceinvoke r44.<org.xmlpull.v1.XmlPullParser: int next()>();
+
+        i3 = interfaceinvoke r44.<org.xmlpull.v1.XmlPullParser: int getEventType()>();
+
+        goto label02;
+
+     label14:
+        if r45 == null goto label16;
+
+     label15:
+        return r45;
+
+     label16:
+        r59 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        specialinvoke r59.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String)>("No TTML subtitles found");
+
+        r62 = (java.lang.Throwable) r59;
+
+        throw r62;
+
+     label17:
+        $r42 := @caughtexception;
+
+        r49 = $r42;
+
+        r60 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        specialinvoke r60.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to decode source", r49);
+
+        r63 = (java.lang.Throwable) r60;
+
+        throw r63;
+
+     label18:
+        $r40 := @caughtexception;
+
+        r50 = $r40;
+
+        r61 = new java.lang.IllegalStateException;
+
+        specialinvoke r61.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Unexpected error when reading input.", r50);
+
+        throw r61;
+
+        catch org.xmlpull.v1.XmlPullParserException from label01 to label15 with label17;
+        catch org.xmlpull.v1.XmlPullParserException from label16 to label17 with label17;
+        catch java.io.IOException from label01 to label15 with label18;
+        catch java.io.IOException from label16 to label17 with label18;
+    }
+
+    private static androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate parseFrameAndTickRates(org.xmlpull.v1.XmlPullParser) throws androidx.media3.extractor.text.SubtitleDecoderException
+    {
+        org.xmlpull.v1.XmlPullParser r0;
+        java.lang.String r1, r2, r3, $r7, $r8, r11;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate $r4, $r5, r13;
+        float $f0, $f1, f2, f3, f4;
+        int $i0, $i1, $i2, i3, i4, i5;
+        java.lang.String[] r10;
+        androidx.media3.extractor.text.SubtitleDecoderException r12;
+        java.lang.Throwable r14;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlPullParser;
+
+        i3 = 30;
+
+        r1 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>("http://www.w3.org/ns/ttml#parameter", "frameRate");
+
+        if r1 == null goto label1;
+
+        i3 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r1);
+
+     label1:
+        f2 = 1.0F;
+
+        r2 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>("http://www.w3.org/ns/ttml#parameter", "frameRateMultiplier");
+
+        if r2 == null goto label3;
+
+        r10 = staticinvoke <androidx.media3.common.util.Util: java.lang.String[] split(java.lang.String,java.lang.String)>(r2, " ");
+
+        $i0 = lengthof r10;
+
+        if $i0 == 2 goto label2;
+
+        r12 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        specialinvoke r12.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String)>("frameRateMultiplier doesn\'t have 2 parts");
+
+        r14 = (java.lang.Throwable) r12;
+
+        throw r14;
+
+     label2:
+        $r7 = r10[0];
+
+        $i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r7);
+
+        f3 = (float) $i1;
+
+        $r8 = r10[1];
+
+        $i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r8);
+
+        f4 = (float) $i2;
+
+        f2 = f3 / f4;
+
+     label3:
+        $r4 = <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate DEFAULT_FRAME_AND_TICK_RATE>;
+
+        i4 = $r4.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: int subFrameRate>;
+
+        r11 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>("http://www.w3.org/ns/ttml#parameter", "subFrameRate");
+
+        if r11 == null goto label4;
+
+        i4 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r11);
+
+     label4:
+        $r5 = <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate DEFAULT_FRAME_AND_TICK_RATE>;
+
+        i5 = $r5.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: int tickRate>;
+
+        r3 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>("http://www.w3.org/ns/ttml#parameter", "tickRate");
+
+        if r3 == null goto label5;
+
+        i5 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r3);
+
+     label5:
+        r13 = new androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate;
+
+        $f0 = (float) i3;
+
+        $f1 = $f0 * f2;
+
+        specialinvoke r13.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: void <init>(float,int,int)>($f1, i4, i5);
+
+        return r13;
+    }
+
+    private static androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution parseCellResolution(org.xmlpull.v1.XmlPullParser, androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution) throws androidx.media3.extractor.text.SubtitleDecoderException
+    {
+        org.xmlpull.v1.XmlPullParser r0;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution r1, r32;
+        java.lang.String r2, $r5, $r7, $r8, $r10, $r17, $r22, $r27;
+        java.util.regex.Matcher r3;
+        int i0, i1;
+        java.util.regex.Pattern $r4;
+        boolean $z0;
+        java.lang.Object $r6, $r9;
+        java.lang.StringBuilder $r13, $r14, $r15, $r16, $r20, $r21, $r25, $r26, r29, r30, r33;
+        java.lang.Throwable $r23, r28, r34;
+        androidx.media3.extractor.text.SubtitleDecoderException r31;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlPullParser;
+
+        r1 := @parameter1: androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution;
+
+        r2 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>("http://www.w3.org/ns/ttml#parameter", "cellResolution");
+
+        if r2 != null goto label1;
+
+        return r1;
+
+     label1:
+        $r4 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern CELL_RESOLUTION>;
+
+        r3 = virtualinvoke $r4.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r2);
+
+        $z0 = virtualinvoke r3.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z0 != 0 goto label2;
+
+        r29 = new java.lang.StringBuilder;
+
+        specialinvoke r29.<java.lang.StringBuilder: void <init>()>();
+
+        $r20 = virtualinvoke r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring malformed cell resolution: ");
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r22);
+
+        return r1;
+
+     label2:
+        $r5 = virtualinvoke r3.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r6 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r5);
+
+        $r7 = (java.lang.String) $r6;
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r7);
+
+        $r8 = virtualinvoke r3.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $r9 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r8);
+
+        $r10 = (java.lang.String) $r9;
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r10);
+
+        if i1 == 0 goto label3;
+
+        if i0 != 0 goto label4;
+
+     label3:
+        r31 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        r30 = new java.lang.StringBuilder;
+
+        specialinvoke r30.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = virtualinvoke r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid cell resolution ");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r31.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String)>($r17);
+
+        r34 = (java.lang.Throwable) r31;
+
+        throw r34;
+
+     label4:
+        r32 = new androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution;
+
+        specialinvoke r32.<androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution: void <init>(int,int)>(i1, i0);
+
+     label5:
+        return r32;
+
+     label6:
+        $r23 := @caughtexception;
+
+        r28 = $r23;
+
+        r33 = new java.lang.StringBuilder;
+
+        specialinvoke r33.<java.lang.StringBuilder: void <init>()>();
+
+        $r25 = virtualinvoke r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring malformed cell resolution: ");
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r27 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r27);
+
+        return r1;
+
+        catch java.lang.NumberFormatException from label2 to label5 with label6;
+    }
+
+    private static androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent parseTtsExtent(org.xmlpull.v1.XmlPullParser)
+    {
+        org.xmlpull.v1.XmlPullParser r0;
+        java.lang.String r1, $r4, $r6, $r7, $r9, $r14, $r19;
+        java.util.regex.Matcher r2;
+        int i0, i1;
+        java.util.regex.Pattern $r3;
+        boolean $z0;
+        java.lang.Object $r5, $r8;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent $r10;
+        java.lang.StringBuilder $r11, $r12, $r13, $r16, $r17, $r18;
+        java.lang.Throwable $r15, r20;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlPullParser;
+
+        r1 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: java.lang.String getAttributeValue(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "extent");
+
+        if r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r3 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern PIXEL_COORDINATES>;
+
+        r2 = virtualinvoke $r3.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r1);
+
+        $z0 = virtualinvoke r2.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z0 != 0 goto label2;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring non-pixel tts extent: ");
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r14);
+
+        return null;
+
+     label2:
+        $r4 = virtualinvoke r2.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        $r6 = (java.lang.String) $r5;
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r6);
+
+        $r7 = virtualinvoke r2.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $r8 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r7);
+
+        $r9 = (java.lang.String) $r8;
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r9);
+
+        $r10 = new androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent;
+
+        specialinvoke $r10.<androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent: void <init>(int,int)>(i1, i0);
+
+     label3:
+        return $r10;
+
+     label4:
+        $r15 := @caughtexception;
+
+        r20 = $r15;
+
+        $r16 = new java.lang.StringBuilder;
+
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring malformed tts extent: ");
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r19);
+
+        return null;
+
+        catch java.lang.NumberFormatException from label2 to label3 with label4;
+    }
+
+    private static java.util.Map parseHeader(org.xmlpull.v1.XmlPullParser, java.util.Map, androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution, androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent, java.util.Map, java.util.Map) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException
+    {
+        org.xmlpull.v1.XmlPullParser r0;
+        java.util.Map r1, r4, r5;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution r2;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent r3;
+        androidx.media3.extractor.text.ttml.TtmlStyle r6, $r10, $r13;
+        int i0, i2;
+        java.lang.String r7, $r8, r15, r17;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Object $r12;
+        java.lang.String[] r16;
+        androidx.media3.extractor.text.ttml.TtmlRegion r18;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlPullParser;
+
+        r1 := @parameter1: java.util.Map;
+
+        r2 := @parameter2: androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution;
+
+        r3 := @parameter3: androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent;
+
+        r4 := @parameter4: java.util.Map;
+
+        r5 := @parameter5: java.util.Map;
+
+     label1:
+        interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: int next()>();
+
+        $z0 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: boolean isStartTag(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "style");
+
+        if $z0 == 0 goto label5;
+
+        r15 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: java.lang.String getAttributeValue(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "style");
+
+        $r10 = new androidx.media3.extractor.text.ttml.TtmlStyle;
+
+        specialinvoke $r10.<androidx.media3.extractor.text.ttml.TtmlStyle: void <init>()>();
+
+        r6 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle parseStyleAttributes(org.xmlpull.v1.XmlPullParser,androidx.media3.extractor.text.ttml.TtmlStyle)>(r0, $r10);
+
+        if r15 == null goto label3;
+
+        r16 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String[] parseStyleIds(java.lang.String)>(r15);
+
+        i0 = lengthof r16;
+
+        i2 = 0;
+
+     label2:
+        if i2 >= i0 goto label3;
+
+        r7 = r16[i2];
+
+        $r12 = interfaceinvoke r1.<java.util.Map: java.lang.Object get(java.lang.Object)>(r7);
+
+        $r13 = (androidx.media3.extractor.text.ttml.TtmlStyle) $r12;
+
+        virtualinvoke r6.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle chain(androidx.media3.extractor.text.ttml.TtmlStyle)>($r13);
+
+        i2 = i2 + 1;
+
+        goto label2;
+
+     label3:
+        r17 = virtualinvoke r6.<androidx.media3.extractor.text.ttml.TtmlStyle: java.lang.String getId()>();
+
+        if r17 == null goto label4;
+
+        interfaceinvoke r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r17, r6);
+
+     label4:
+        goto label8;
+
+     label5:
+        $z1 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: boolean isStartTag(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "region");
+
+        if $z1 == 0 goto label7;
+
+        r18 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlRegion parseRegionAttributes(org.xmlpull.v1.XmlPullParser,androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution,androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent)>(r0, r2, r3);
+
+        if r18 == null goto label6;
+
+        $r8 = r18.<androidx.media3.extractor.text.ttml.TtmlRegion: java.lang.String id>;
+
+        interfaceinvoke r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r8, r18);
+
+     label6:
+        goto label8;
+
+     label7:
+        $z2 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: boolean isStartTag(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "metadata");
+
+        if $z2 == 0 goto label8;
+
+        staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: void parseMetadata(org.xmlpull.v1.XmlPullParser,java.util.Map)>(r0, r5);
+
+     label8:
+        $z3 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: boolean isEndTag(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "head");
+
+        if $z3 == 0 goto label1;
+
+        return r1;
+    }
+
+    private static void parseMetadata(org.xmlpull.v1.XmlPullParser, java.util.Map) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException
+    {
+        org.xmlpull.v1.XmlPullParser r0;
+        java.util.Map r1;
+        java.lang.String r2, r3;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlPullParser;
+
+        r1 := @parameter1: java.util.Map;
+
+     label1:
+        interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: int next()>();
+
+        $z0 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: boolean isStartTag(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "image");
+
+        if $z0 == 0 goto label2;
+
+        r2 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: java.lang.String getAttributeValue(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "id");
+
+        if r2 == null goto label2;
+
+        r3 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String nextText()>();
+
+        interfaceinvoke r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, r3);
+
+     label2:
+        $z1 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: boolean isEndTag(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "metadata");
+
+        if $z1 == 0 goto label1;
+
+        return;
+    }
+
+    private static androidx.media3.extractor.text.ttml.TtmlRegion parseRegionAttributes(org.xmlpull.v1.XmlPullParser, androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution, androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent)
+    {
+        org.xmlpull.v1.XmlPullParser r0;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution r1;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent r2;
+        java.lang.String r3, r4, r5, r6, $r12, $r13, $r15, $r16, $r18, $r24, $r25, $r27, $r28, $r30, $r34, $r35, $r37, $r38, $r40, $r44, $r45, $r47, $r48, $r50, $r55, $r60, $r65, $r70, r75, r80, r81;
+        java.util.regex.Pattern $r7, $r8, $r19, $r20;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8;
+        java.lang.StringBuilder $r9, $r10, $r11, $r21, $r22, $r23, $r31, $r32, $r33, $r41, $r42, $r43, $r52, $r53, $r54, $r57, $r58, $r59, $r62, $r63, $r64, $r67, $r68, $r69;
+        java.lang.Object $r14, $r17, $r26, $r29, $r36, $r39, $r46, $r49;
+        int $i0, $i1, $i2, $i3, $i4, $i5, i6, i7, i8, i9, $i12, i13;
+        float $f0, $f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8, $f9, $f10, $f11, $f12, f13, f14, f15, f16, $f17, f18;
+        java.lang.Throwable $r51, $r56, $r61, $r66, r73, r74, r78, r79;
+        java.util.regex.Matcher r71, r72, r76, r77;
+        byte b10, b11, b14;
+        androidx.media3.extractor.text.ttml.TtmlRegion $r82;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlPullParser;
+
+        r1 := @parameter1: androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution;
+
+        r2 := @parameter2: androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent;
+
+        r3 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: java.lang.String getAttributeValue(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "id");
+
+        if r3 != null goto label01;
+
+        return null;
+
+     label01:
+        r4 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: java.lang.String getAttributeValue(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "origin");
+
+        if r4 == null goto label11;
+
+        $r7 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern PERCENTAGE_COORDINATES>;
+
+        r71 = virtualinvoke $r7.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r4);
+
+        $r8 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern PIXEL_COORDINATES>;
+
+        r72 = virtualinvoke $r8.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r4);
+
+        $z0 = virtualinvoke r71.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z0 == 0 goto label05;
+
+     label02:
+        $r45 = virtualinvoke r71.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r46 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r45);
+
+        $r47 = (java.lang.String) $r46;
+
+        $f11 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r47);
+
+        f13 = $f11 / 100.0F;
+
+        $r48 = virtualinvoke r71.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $r49 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r48);
+
+        $r50 = (java.lang.String) $r49;
+
+        $f12 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r50);
+
+        f14 = $f12 / 100.0F;
+
+     label03:
+        goto label10;
+
+     label04:
+        $r61 := @caughtexception;
+
+        r73 = $r61;
+
+        $r62 = new java.lang.StringBuilder;
+
+        specialinvoke $r62.<java.lang.StringBuilder: void <init>()>();
+
+        $r63 = virtualinvoke $r62.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring region with malformed origin: ");
+
+        $r64 = virtualinvoke $r63.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r65 = virtualinvoke $r64.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r65);
+
+        return null;
+
+     label05:
+        $z1 = virtualinvoke r72.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z1 == 0 goto label09;
+
+        if r2 != null goto label06;
+
+        $r41 = new java.lang.StringBuilder;
+
+        specialinvoke $r41.<java.lang.StringBuilder: void <init>()>();
+
+        $r42 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring region with missing tts:extent: ");
+
+        $r43 = virtualinvoke $r42.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r44 = virtualinvoke $r43.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r44);
+
+        return null;
+
+     label06:
+        $r13 = virtualinvoke r72.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r14 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r13);
+
+        $r15 = (java.lang.String) $r14;
+
+        i6 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r15);
+
+        $r16 = virtualinvoke r72.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $r17 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r16);
+
+        $r18 = (java.lang.String) $r17;
+
+        i7 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r18);
+
+        $f1 = (float) i6;
+
+        $i0 = r2.<androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent: int width>;
+
+        $f0 = (float) $i0;
+
+        f13 = $f1 / $f0;
+
+        $f3 = (float) i7;
+
+        $i1 = r2.<androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent: int height>;
+
+        $f2 = (float) $i1;
+
+        f14 = $f3 / $f2;
+
+     label07:
+        goto label10;
+
+     label08:
+        $r56 := @caughtexception;
+
+        r74 = $r56;
+
+        $r57 = new java.lang.StringBuilder;
+
+        specialinvoke $r57.<java.lang.StringBuilder: void <init>()>();
+
+        $r58 = virtualinvoke $r57.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring region with malformed origin: ");
+
+        $r59 = virtualinvoke $r58.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r60 = virtualinvoke $r59.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r60);
+
+        return null;
+
+     label09:
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring region with unsupported origin: ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r12);
+
+        return null;
+
+     label10:
+        goto label12;
+
+     label11:
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", "Ignoring region without an origin");
+
+        return null;
+
+     label12:
+        r75 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: java.lang.String getAttributeValue(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "extent");
+
+        if r75 == null goto label22;
+
+        $r19 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern PERCENTAGE_COORDINATES>;
+
+        r76 = virtualinvoke $r19.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r75);
+
+        $r20 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern PIXEL_COORDINATES>;
+
+        r77 = virtualinvoke $r20.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r75);
+
+        $z2 = virtualinvoke r76.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z2 == 0 goto label16;
+
+     label13:
+        $r35 = virtualinvoke r76.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r36 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r35);
+
+        $r37 = (java.lang.String) $r36;
+
+        $f9 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r37);
+
+        f15 = $f9 / 100.0F;
+
+        $r38 = virtualinvoke r76.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $r39 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r38);
+
+        $r40 = (java.lang.String) $r39;
+
+        $f10 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r40);
+
+        f16 = $f10 / 100.0F;
+
+     label14:
+        goto label21;
+
+     label15:
+        $r66 := @caughtexception;
+
+        r78 = $r66;
+
+        $r67 = new java.lang.StringBuilder;
+
+        specialinvoke $r67.<java.lang.StringBuilder: void <init>()>();
+
+        $r68 = virtualinvoke $r67.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring region with malformed extent: ");
+
+        $r69 = virtualinvoke $r68.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r70 = virtualinvoke $r69.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r70);
+
+        return null;
+
+     label16:
+        $z3 = virtualinvoke r77.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z3 == 0 goto label20;
+
+        if r2 != null goto label17;
+
+        $r31 = new java.lang.StringBuilder;
+
+        specialinvoke $r31.<java.lang.StringBuilder: void <init>()>();
+
+        $r32 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring region with missing tts:extent: ");
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r34 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r34);
+
+        return null;
+
+     label17:
+        $r25 = virtualinvoke r77.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r26 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r25);
+
+        $r27 = (java.lang.String) $r26;
+
+        i8 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r27);
+
+        $r28 = virtualinvoke r77.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $r29 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r28);
+
+        $r30 = (java.lang.String) $r29;
+
+        i9 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r30);
+
+        $f5 = (float) i8;
+
+        $i2 = r2.<androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent: int width>;
+
+        $f4 = (float) $i2;
+
+        f15 = $f5 / $f4;
+
+        $f7 = (float) i9;
+
+        $i3 = r2.<androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent: int height>;
+
+        $f6 = (float) $i3;
+
+        f16 = $f7 / $f6;
+
+     label18:
+        goto label21;
+
+     label19:
+        $r51 := @caughtexception;
+
+        r79 = $r51;
+
+        $r52 = new java.lang.StringBuilder;
+
+        specialinvoke $r52.<java.lang.StringBuilder: void <init>()>();
+
+        $r53 = virtualinvoke $r52.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring region with malformed extent: ");
+
+        $r54 = virtualinvoke $r53.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r55 = virtualinvoke $r54.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r55);
+
+        return null;
+
+     label20:
+        $r21 = new java.lang.StringBuilder;
+
+        specialinvoke $r21.<java.lang.StringBuilder: void <init>()>();
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Ignoring region with unsupported extent: ");
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r4);
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r24);
+
+        return null;
+
+     label21:
+        goto label23;
+
+     label22:
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", "Ignoring region without an extent");
+
+        return null;
+
+     label23:
+        b10 = 0;
+
+        r80 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: java.lang.String getAttributeValue(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "displayAlign");
+
+        if r80 == null goto label29;
+
+        r81 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r80);
+
+        b11 = -1;
+
+        $i5 = virtualinvoke r81.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i5)
+        {
+            case -1364013995: goto label24;
+            case 92734940: goto label25;
+            default: goto label26;
+        };
+
+     label24:
+        $z8 = virtualinvoke r81.<java.lang.String: boolean equals(java.lang.Object)>("center");
+
+        if $z8 == 0 goto label26;
+
+        b11 = 0;
+
+        goto label26;
+
+     label25:
+        $z7 = virtualinvoke r81.<java.lang.String: boolean equals(java.lang.Object)>("after");
+
+        if $z7 == 0 goto label26;
+
+        b11 = 1;
+
+     label26:
+        lookupswitch(b11)
+        {
+            case 0: goto label27;
+            case 1: goto label28;
+            default: goto label29;
+        };
+
+     label27:
+        b10 = 1;
+
+        $f8 = f16 / 2.0F;
+
+        f14 = f14 + $f8;
+
+        goto label29;
+
+     label28:
+        b10 = 2;
+
+        f14 = f14 + f16;
+
+        goto label29;
+
+     label29:
+        $i12 = r1.<androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution: int rows>;
+
+        $f17 = (float) $i12;
+
+        f18 = 1.0F / $f17;
+
+        i13 = -2147483648;
+
+        r5 = staticinvoke <androidx.media3.common.util.XmlPullParserUtil: java.lang.String getAttributeValue(org.xmlpull.v1.XmlPullParser,java.lang.String)>(r0, "writingMode");
+
+        if r5 == null goto label36;
+
+        r6 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r5);
+
+        b14 = -1;
+
+        $i4 = virtualinvoke r6.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i4)
+        {
+            case 3694: goto label30;
+            case 3553396: goto label31;
+            case 3553576: goto label32;
+            default: goto label33;
+        };
+
+     label30:
+        $z6 = virtualinvoke r6.<java.lang.String: boolean equals(java.lang.Object)>("tb");
+
+        if $z6 == 0 goto label33;
+
+        b14 = 0;
+
+        goto label33;
+
+     label31:
+        $z5 = virtualinvoke r6.<java.lang.String: boolean equals(java.lang.Object)>("tblr");
+
+        if $z5 == 0 goto label33;
+
+        b14 = 1;
+
+        goto label33;
+
+     label32:
+        $z4 = virtualinvoke r6.<java.lang.String: boolean equals(java.lang.Object)>("tbrl");
+
+        if $z4 == 0 goto label33;
+
+        b14 = 2;
+
+     label33:
+        tableswitch(b14)
+        {
+            case 0: goto label34;
+            case 1: goto label34;
+            case 2: goto label35;
+            default: goto label36;
+        };
+
+     label34:
+        i13 = 2;
+
+        goto label36;
+
+     label35:
+        i13 = 1;
+
+        goto label36;
+
+     label36:
+        $r82 = new androidx.media3.extractor.text.ttml.TtmlRegion;
+
+        specialinvoke $r82.<androidx.media3.extractor.text.ttml.TtmlRegion: void <init>(java.lang.String,float,float,int,int,float,float,int,float,int)>(r3, f13, f14, 0, b10, f15, f16, 1, f18, i13);
+
+        return $r82;
+
+        catch java.lang.NumberFormatException from label02 to label03 with label04;
+        catch java.lang.NumberFormatException from label06 to label07 with label08;
+        catch java.lang.NumberFormatException from label13 to label14 with label15;
+        catch java.lang.NumberFormatException from label17 to label18 with label19;
+    }
+
+    private static java.lang.String[] parseStyleIds(java.lang.String)
+    {
+        boolean $z0;
+        java.lang.String r0, r1;
+        java.lang.String[] $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 = virtualinvoke r0.<java.lang.String: java.lang.String trim()>();
+
+        $z0 = virtualinvoke r1.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = newarray (java.lang.String)[0];
+
+        goto label2;
+
+     label1:
+        $r2 = staticinvoke <androidx.media3.common.util.Util: java.lang.String[] split(java.lang.String,java.lang.String)>(r1, "\\s+");
+
+     label2:
+        return $r2;
+    }
+
+    private static androidx.media3.extractor.text.ttml.TtmlStyle parseStyleAttributes(org.xmlpull.v1.XmlPullParser, androidx.media3.extractor.text.ttml.TtmlStyle)
+    {
+        org.xmlpull.v1.XmlPullParser r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8;
+        java.lang.String r1, r2, $r23, $r25, $r29, $r30, $r36, $r41, r45, r46, r47, r48;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, $z11, $z12, $z13, $z14, $z15, $z16, $z17, $z18, $z19, $z20, $z21, $z22, $z23, $z24, $z25, $z26, $z27, $z28, $z29, $z30, $z31;
+        androidx.media3.extractor.text.ttml.TtmlStyle $r3, $r4, $r6, $r7, $r8, $r9, $r10, $r11, $r12, $r13, $r14, $r15, $r16, $r17, $r18, $r20, $r22, $r24, $r26, $r31, r42;
+        float $f0;
+        androidx.media3.extractor.text.ttml.TextEmphasis $r5;
+        android.text.Layout$Alignment $r19, $r21;
+        java.lang.Throwable $r32, $r37, r43, r44;
+        java.lang.StringBuilder $r33, $r34, $r35, $r38, $r39, $r40;
+        byte b9, b10, b11, b12, b13;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlPullParser;
+
+        r42 := @parameter1: androidx.media3.extractor.text.ttml.TtmlStyle;
+
+        i0 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: int getAttributeCount()>();
+
+        i8 = 0;
+
+     label01:
+        if i8 >= i0 goto label74;
+
+        r1 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(int)>(i8);
+
+        r2 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeName(int)>(i8);
+
+        b9 = -1;
+
+        $i1 = virtualinvoke r2.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i1)
+        {
+            case -1550943582: goto label08;
+            case -1224696685: goto label05;
+            case -1065511464: goto label09;
+            case -879295043: goto label14;
+            case -734428249: goto label07;
+            case 3355: goto label02;
+            case 3511770: goto label12;
+            case 94842723: goto label04;
+            case 109403361: goto label16;
+            case 110138194: goto label11;
+            case 365601008: goto label06;
+            case 921125321: goto label15;
+            case 1115953443: goto label13;
+            case 1287124693: goto label03;
+            case 1754920356: goto label10;
+            default: goto label17;
+        };
+
+     label02:
+        $z26 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("id");
+
+        if $z26 == 0 goto label17;
+
+        b9 = 0;
+
+        goto label17;
+
+     label03:
+        $z18 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("backgroundColor");
+
+        if $z18 == 0 goto label17;
+
+        b9 = 1;
+
+        goto label17;
+
+     label04:
+        $z24 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("color");
+
+        if $z24 == 0 goto label17;
+
+        b9 = 2;
+
+        goto label17;
+
+     label05:
+        $z30 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("fontFamily");
+
+        if $z30 == 0 goto label17;
+
+        b9 = 3;
+
+        goto label17;
+
+     label06:
+        $z21 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("fontSize");
+
+        if $z21 == 0 goto label17;
+
+        b9 = 4;
+
+        goto label17;
+
+     label07:
+        $z27 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("fontWeight");
+
+        if $z27 == 0 goto label17;
+
+        b9 = 5;
+
+        goto label17;
+
+     label08:
+        $z31 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("fontStyle");
+
+        if $z31 == 0 goto label17;
+
+        b9 = 6;
+
+        goto label17;
+
+     label09:
+        $z29 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("textAlign");
+
+        if $z29 == 0 goto label17;
+
+        b9 = 7;
+
+        goto label17;
+
+     label10:
+        $z0 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("multiRowAlign");
+
+        if $z0 == 0 goto label17;
+
+        b9 = 8;
+
+        goto label17;
+
+     label11:
+        $z22 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("textCombine");
+
+        if $z22 == 0 goto label17;
+
+        b9 = 9;
+
+        goto label17;
+
+     label12:
+        $z25 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("ruby");
+
+        if $z25 == 0 goto label17;
+
+        b9 = 10;
+
+        goto label17;
+
+     label13:
+        $z19 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("rubyPosition");
+
+        if $z19 == 0 goto label17;
+
+        b9 = 11;
+
+        goto label17;
+
+     label14:
+        $z28 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("textDecoration");
+
+        if $z28 == 0 goto label17;
+
+        b9 = 12;
+
+        goto label17;
+
+     label15:
+        $z20 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("textEmphasis");
+
+        if $z20 == 0 goto label17;
+
+        b9 = 13;
+
+        goto label17;
+
+     label16:
+        $z23 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("shear");
+
+        if $z23 == 0 goto label17;
+
+        b9 = 14;
+
+     label17:
+        tableswitch(b9)
+        {
+            case 0: goto label18;
+            case 1: goto label19;
+            case 2: goto label23;
+            case 3: goto label27;
+            case 4: goto label28;
+            case 5: goto label29;
+            case 6: goto label30;
+            case 7: goto label31;
+            case 8: goto label32;
+            case 9: goto label33;
+            case 10: goto label40;
+            case 11: goto label53;
+            case 12: goto label60;
+            case 13: goto label71;
+            case 14: goto label72;
+            default: goto label73;
+        };
+
+     label18:
+        $r29 = "style";
+
+        $r30 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $z17 = virtualinvoke $r29.<java.lang.String: boolean equals(java.lang.Object)>($r30);
+
+        if $z17 == 0 goto label73;
+
+        $r31 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r31.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setId(java.lang.String)>(r1);
+
+        goto label73;
+
+     label19:
+        r42 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+     label20:
+        $i7 = staticinvoke <androidx.media3.common.util.ColorParser: int parseTtmlColor(java.lang.String)>(r1);
+
+        virtualinvoke r42.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setBackgroundColor(int)>($i7);
+
+     label21:
+        goto label73;
+
+     label22:
+        $r32 := @caughtexception;
+
+        r43 = $r32;
+
+        $r33 = new java.lang.StringBuilder;
+
+        specialinvoke $r33.<java.lang.StringBuilder: void <init>()>();
+
+        $r34 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed parsing background value: ");
+
+        $r35 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r36 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r36);
+
+        goto label73;
+
+     label23:
+        r42 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+     label24:
+        $i6 = staticinvoke <androidx.media3.common.util.ColorParser: int parseTtmlColor(java.lang.String)>(r1);
+
+        virtualinvoke r42.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setFontColor(int)>($i6);
+
+     label25:
+        goto label73;
+
+     label26:
+        $r37 := @caughtexception;
+
+        r44 = $r37;
+
+        $r38 = new java.lang.StringBuilder;
+
+        specialinvoke $r38.<java.lang.StringBuilder: void <init>()>();
+
+        $r39 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed parsing color value: ");
+
+        $r40 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r41 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r41);
+
+        goto label73;
+
+     label27:
+        $r26 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r26.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setFontFamily(java.lang.String)>(r1);
+
+        goto label73;
+
+     label28:
+        r42 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: void parseFontSize(java.lang.String,androidx.media3.extractor.text.ttml.TtmlStyle)>(r1, r42);
+
+        goto label73;
+
+     label29:
+        $r24 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        $r25 = "bold";
+
+        $z16 = virtualinvoke $r25.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>(r1);
+
+        r42 = virtualinvoke $r24.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setBold(boolean)>($z16);
+
+        goto label73;
+
+     label30:
+        $r22 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        $r23 = "italic";
+
+        $z15 = virtualinvoke $r23.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>(r1);
+
+        r42 = virtualinvoke $r22.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setItalic(boolean)>($z15);
+
+        goto label73;
+
+     label31:
+        $r20 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        $r21 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: android.text.Layout$Alignment parseAlignment(java.lang.String)>(r1);
+
+        r42 = virtualinvoke $r20.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setTextAlign(android.text.Layout$Alignment)>($r21);
+
+        goto label73;
+
+     label32:
+        $r18 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        $r19 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: android.text.Layout$Alignment parseAlignment(java.lang.String)>(r1);
+
+        r42 = virtualinvoke $r18.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setMultiRowAlign(android.text.Layout$Alignment)>($r19);
+
+        goto label73;
+
+     label33:
+        r45 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r1);
+
+        b10 = -1;
+
+        $i5 = virtualinvoke r45.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i5)
+        {
+            case 96673: goto label35;
+            case 3387192: goto label34;
+            default: goto label36;
+        };
+
+     label34:
+        $z13 = virtualinvoke r45.<java.lang.String: boolean equals(java.lang.Object)>("none");
+
+        if $z13 == 0 goto label36;
+
+        b10 = 0;
+
+        goto label36;
+
+     label35:
+        $z14 = virtualinvoke r45.<java.lang.String: boolean equals(java.lang.Object)>("all");
+
+        if $z14 == 0 goto label36;
+
+        b10 = 1;
+
+     label36:
+        lookupswitch(b10)
+        {
+            case 0: goto label37;
+            case 1: goto label38;
+            default: goto label39;
+        };
+
+     label37:
+        $r17 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r17.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setTextCombine(boolean)>(0);
+
+        goto label39;
+
+     label38:
+        $r16 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r16.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setTextCombine(boolean)>(1);
+
+        goto label39;
+
+     label39:
+        goto label73;
+
+     label40:
+        r46 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r1);
+
+        b11 = -1;
+
+        $i4 = virtualinvoke r46.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i4)
+        {
+            case -618561360: goto label43;
+            case -410956671: goto label41;
+            case -250518009: goto label46;
+            case -136074796: goto label45;
+            case 3016401: goto label42;
+            case 3556653: goto label44;
+            default: goto label47;
+        };
+
+     label41:
+        $z11 = virtualinvoke r46.<java.lang.String: boolean equals(java.lang.Object)>("container");
+
+        if $z11 == 0 goto label47;
+
+        b11 = 0;
+
+        goto label47;
+
+     label42:
+        $z8 = virtualinvoke r46.<java.lang.String: boolean equals(java.lang.Object)>("base");
+
+        if $z8 == 0 goto label47;
+
+        b11 = 1;
+
+        goto label47;
+
+     label43:
+        $z12 = virtualinvoke r46.<java.lang.String: boolean equals(java.lang.Object)>("baseContainer");
+
+        if $z12 == 0 goto label47;
+
+        b11 = 2;
+
+        goto label47;
+
+     label44:
+        $z7 = virtualinvoke r46.<java.lang.String: boolean equals(java.lang.Object)>("text");
+
+        if $z7 == 0 goto label47;
+
+        b11 = 3;
+
+        goto label47;
+
+     label45:
+        $z9 = virtualinvoke r46.<java.lang.String: boolean equals(java.lang.Object)>("textContainer");
+
+        if $z9 == 0 goto label47;
+
+        b11 = 4;
+
+        goto label47;
+
+     label46:
+        $z10 = virtualinvoke r46.<java.lang.String: boolean equals(java.lang.Object)>("delimiter");
+
+        if $z10 == 0 goto label47;
+
+        b11 = 5;
+
+     label47:
+        tableswitch(b11)
+        {
+            case 0: goto label48;
+            case 1: goto label49;
+            case 2: goto label49;
+            case 3: goto label50;
+            case 4: goto label50;
+            case 5: goto label51;
+            default: goto label52;
+        };
+
+     label48:
+        $r15 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r15.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setRubyType(int)>(1);
+
+        goto label52;
+
+     label49:
+        $r14 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r14.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setRubyType(int)>(2);
+
+        goto label52;
+
+     label50:
+        $r13 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r13.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setRubyType(int)>(3);
+
+        goto label52;
+
+     label51:
+        $r12 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r12.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setRubyType(int)>(4);
+
+        goto label52;
+
+     label52:
+        goto label73;
+
+     label53:
+        r47 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r1);
+
+        b12 = -1;
+
+        $i3 = virtualinvoke r47.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i3)
+        {
+            case -1392885889: goto label54;
+            case 92734940: goto label55;
+            default: goto label56;
+        };
+
+     label54:
+        $z6 = virtualinvoke r47.<java.lang.String: boolean equals(java.lang.Object)>("before");
+
+        if $z6 == 0 goto label56;
+
+        b12 = 0;
+
+        goto label56;
+
+     label55:
+        $z5 = virtualinvoke r47.<java.lang.String: boolean equals(java.lang.Object)>("after");
+
+        if $z5 == 0 goto label56;
+
+        b12 = 1;
+
+     label56:
+        lookupswitch(b12)
+        {
+            case 0: goto label57;
+            case 1: goto label58;
+            default: goto label59;
+        };
+
+     label57:
+        $r11 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r11.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setRubyPosition(int)>(1);
+
+        goto label59;
+
+     label58:
+        $r10 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r10.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setRubyPosition(int)>(2);
+
+        goto label59;
+
+     label59:
+        goto label73;
+
+     label60:
+        r48 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r1);
+
+        b13 = -1;
+
+        $i2 = virtualinvoke r48.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i2)
+        {
+            case -1461280213: goto label64;
+            case -1026963764: goto label63;
+            case 913457136: goto label62;
+            case 1679736913: goto label61;
+            default: goto label65;
+        };
+
+     label61:
+        $z1 = virtualinvoke r48.<java.lang.String: boolean equals(java.lang.Object)>("linethrough");
+
+        if $z1 == 0 goto label65;
+
+        b13 = 0;
+
+        goto label65;
+
+     label62:
+        $z2 = virtualinvoke r48.<java.lang.String: boolean equals(java.lang.Object)>("nolinethrough");
+
+        if $z2 == 0 goto label65;
+
+        b13 = 1;
+
+        goto label65;
+
+     label63:
+        $z3 = virtualinvoke r48.<java.lang.String: boolean equals(java.lang.Object)>("underline");
+
+        if $z3 == 0 goto label65;
+
+        b13 = 2;
+
+        goto label65;
+
+     label64:
+        $z4 = virtualinvoke r48.<java.lang.String: boolean equals(java.lang.Object)>("nounderline");
+
+        if $z4 == 0 goto label65;
+
+        b13 = 3;
+
+     label65:
+        tableswitch(b13)
+        {
+            case 0: goto label66;
+            case 1: goto label67;
+            case 2: goto label68;
+            case 3: goto label69;
+            default: goto label70;
+        };
+
+     label66:
+        $r9 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r9.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setLinethrough(boolean)>(1);
+
+        goto label70;
+
+     label67:
+        $r8 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r8.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setLinethrough(boolean)>(0);
+
+        goto label70;
+
+     label68:
+        $r7 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r7.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setUnderline(boolean)>(1);
+
+        goto label70;
+
+     label69:
+        $r6 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        r42 = virtualinvoke $r6.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setUnderline(boolean)>(0);
+
+     label70:
+        goto label73;
+
+     label71:
+        $r4 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        $r5 = staticinvoke <androidx.media3.extractor.text.ttml.TextEmphasis: androidx.media3.extractor.text.ttml.TextEmphasis parse(java.lang.String)>(r1);
+
+        r42 = virtualinvoke $r4.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setTextEmphasis(androidx.media3.extractor.text.ttml.TextEmphasis)>($r5);
+
+        goto label73;
+
+     label72:
+        $r3 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)>(r42);
+
+        $f0 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: float parseShear(java.lang.String)>(r1);
+
+        r42 = virtualinvoke $r3.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setShearPercentage(float)>($f0);
+
+        goto label73;
+
+     label73:
+        i8 = i8 + 1;
+
+        goto label01;
+
+     label74:
+        return r42;
+
+        catch java.lang.IllegalArgumentException from label20 to label21 with label22;
+        catch java.lang.IllegalArgumentException from label24 to label25 with label26;
+    }
+
+    private static androidx.media3.extractor.text.ttml.TtmlStyle createIfNull(androidx.media3.extractor.text.ttml.TtmlStyle)
+    {
+        androidx.media3.extractor.text.ttml.TtmlStyle r0, $r1;
+
+        r0 := @parameter0: androidx.media3.extractor.text.ttml.TtmlStyle;
+
+        if r0 != null goto label1;
+
+        $r1 = new androidx.media3.extractor.text.ttml.TtmlStyle;
+
+        specialinvoke $r1.<androidx.media3.extractor.text.ttml.TtmlStyle: void <init>()>();
+
+        goto label2;
+
+     label1:
+        $r1 = r0;
+
+     label2:
+        return $r1;
+    }
+
+    private static android.text.Layout$Alignment parseAlignment(java.lang.String)
+    {
+        java.lang.String r0, r1;
+        int $i0;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        android.text.Layout$Alignment $r2, $r3, $r4;
+        byte b1;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r0);
+
+        b1 = -1;
+
+        $i0 = virtualinvoke r1.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i0)
+        {
+            case -1364013995: goto label05;
+            case 100571: goto label04;
+            case 3317767: goto label01;
+            case 108511772: goto label03;
+            case 109757538: goto label02;
+            default: goto label06;
+        };
+
+     label01:
+        $z2 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("left");
+
+        if $z2 == 0 goto label06;
+
+        b1 = 0;
+
+        goto label06;
+
+     label02:
+        $z0 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("start");
+
+        if $z0 == 0 goto label06;
+
+        b1 = 1;
+
+        goto label06;
+
+     label03:
+        $z1 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("right");
+
+        if $z1 == 0 goto label06;
+
+        b1 = 2;
+
+        goto label06;
+
+     label04:
+        $z3 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("end");
+
+        if $z3 == 0 goto label06;
+
+        b1 = 3;
+
+        goto label06;
+
+     label05:
+        $z4 = virtualinvoke r1.<java.lang.String: boolean equals(java.lang.Object)>("center");
+
+        if $z4 == 0 goto label06;
+
+        b1 = 4;
+
+     label06:
+        tableswitch(b1)
+        {
+            case 0: goto label07;
+            case 1: goto label07;
+            case 2: goto label08;
+            case 3: goto label08;
+            case 4: goto label09;
+            default: goto label10;
+        };
+
+     label07:
+        $r4 = <android.text.Layout$Alignment: android.text.Layout$Alignment ALIGN_NORMAL>;
+
+        return $r4;
+
+     label08:
+        $r3 = <android.text.Layout$Alignment: android.text.Layout$Alignment ALIGN_OPPOSITE>;
+
+        return $r3;
+
+     label09:
+        $r2 = <android.text.Layout$Alignment: android.text.Layout$Alignment ALIGN_CENTER>;
+
+        return $r2;
+
+     label10:
+        return null;
+    }
+
+    private static androidx.media3.extractor.text.ttml.TtmlNode parseNode(org.xmlpull.v1.XmlPullParser, androidx.media3.extractor.text.ttml.TtmlNode, java.util.Map, androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate) throws androidx.media3.extractor.text.SubtitleDecoderException
+    {
+        org.xmlpull.v1.XmlPullParser r0;
+        androidx.media3.extractor.text.ttml.TtmlNode r1, $r13;
+        java.util.Map r2;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate r3;
+        int i0, $i10, $i11, i15;
+        androidx.media3.extractor.text.ttml.TtmlStyle r4;
+        java.lang.String r5, r6, r7, r9, r10, $r12;
+        java.lang.String[] r8, r11;
+        byte $b1, $b3, $b5, $b6, $b7, b16, $b17;
+        long $l2, $l4, $l8, $l9, l12, l13, l14;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7;
+
+        r0 := @parameter0: org.xmlpull.v1.XmlPullParser;
+
+        r1 := @parameter1: androidx.media3.extractor.text.ttml.TtmlNode;
+
+        r2 := @parameter2: java.util.Map;
+
+        r3 := @parameter3: androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate;
+
+        l12 = -9223372036854775807L;
+
+        l13 = -9223372036854775807L;
+
+        l14 = -9223372036854775807L;
+
+        r9 = "";
+
+        r10 = null;
+
+        r11 = null;
+
+        i0 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: int getAttributeCount()>();
+
+        r4 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlStyle parseStyleAttributes(org.xmlpull.v1.XmlPullParser,androidx.media3.extractor.text.ttml.TtmlStyle)>(r0, null);
+
+        i15 = 0;
+
+     label01:
+        if i15 >= i0 goto label16;
+
+        r5 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeName(int)>(i15);
+
+        r6 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getAttributeValue(int)>(i15);
+
+        r7 = r5;
+
+        b16 = -1;
+
+        $i10 = virtualinvoke r7.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i10)
+        {
+            case -934795532: goto label06;
+            case 99841: goto label04;
+            case 100571: goto label03;
+            case 93616297: goto label02;
+            case 109780401: goto label05;
+            case 1292595405: goto label07;
+            default: goto label08;
+        };
+
+     label02:
+        $z4 = virtualinvoke r7.<java.lang.String: boolean equals(java.lang.Object)>("begin");
+
+        if $z4 == 0 goto label08;
+
+        b16 = 0;
+
+        goto label08;
+
+     label03:
+        $z5 = virtualinvoke r7.<java.lang.String: boolean equals(java.lang.Object)>("end");
+
+        if $z5 == 0 goto label08;
+
+        b16 = 1;
+
+        goto label08;
+
+     label04:
+        $z6 = virtualinvoke r7.<java.lang.String: boolean equals(java.lang.Object)>("dur");
+
+        if $z6 == 0 goto label08;
+
+        b16 = 2;
+
+        goto label08;
+
+     label05:
+        $z3 = virtualinvoke r7.<java.lang.String: boolean equals(java.lang.Object)>("style");
+
+        if $z3 == 0 goto label08;
+
+        b16 = 3;
+
+        goto label08;
+
+     label06:
+        $z7 = virtualinvoke r7.<java.lang.String: boolean equals(java.lang.Object)>("region");
+
+        if $z7 == 0 goto label08;
+
+        b16 = 4;
+
+        goto label08;
+
+     label07:
+        $z0 = virtualinvoke r7.<java.lang.String: boolean equals(java.lang.Object)>("backgroundImage");
+
+        if $z0 == 0 goto label08;
+
+        b16 = 5;
+
+     label08:
+        tableswitch(b16)
+        {
+            case 0: goto label09;
+            case 1: goto label10;
+            case 2: goto label11;
+            case 3: goto label12;
+            case 4: goto label13;
+            case 5: goto label14;
+            default: goto label15;
+        };
+
+     label09:
+        l13 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: long parseTimeExpression(java.lang.String,androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate)>(r6, r3);
+
+        goto label15;
+
+     label10:
+        l14 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: long parseTimeExpression(java.lang.String,androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate)>(r6, r3);
+
+        goto label15;
+
+     label11:
+        l12 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: long parseTimeExpression(java.lang.String,androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate)>(r6, r3);
+
+        goto label15;
+
+     label12:
+        r8 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlDecoder: java.lang.String[] parseStyleIds(java.lang.String)>(r6);
+
+        $i11 = lengthof r8;
+
+        if $i11 <= 0 goto label15;
+
+        r11 = r8;
+
+        goto label15;
+
+     label13:
+        $z2 = interfaceinvoke r2.<java.util.Map: boolean containsKey(java.lang.Object)>(r6);
+
+        if $z2 == 0 goto label15;
+
+        r9 = r6;
+
+        goto label15;
+
+     label14:
+        $z1 = virtualinvoke r6.<java.lang.String: boolean startsWith(java.lang.String)>("#");
+
+        if $z1 == 0 goto label15;
+
+        r10 = virtualinvoke r6.<java.lang.String: java.lang.String substring(int)>(1);
+
+        goto label15;
+
+     label15:
+        i15 = i15 + 1;
+
+        goto label01;
+
+     label16:
+        if r1 == null goto label18;
+
+        $l4 = r1.<androidx.media3.extractor.text.ttml.TtmlNode: long startTimeUs>;
+
+        $b5 = $l4 cmp -9223372036854775807L;
+
+        if $b5 == 0 goto label18;
+
+        $b6 = l13 cmp -9223372036854775807L;
+
+        if $b6 == 0 goto label17;
+
+        $l9 = r1.<androidx.media3.extractor.text.ttml.TtmlNode: long startTimeUs>;
+
+        l13 = l13 + $l9;
+
+     label17:
+        $b7 = l14 cmp -9223372036854775807L;
+
+        if $b7 == 0 goto label18;
+
+        $l8 = r1.<androidx.media3.extractor.text.ttml.TtmlNode: long startTimeUs>;
+
+        l14 = l14 + $l8;
+
+     label18:
+        $b17 = l14 cmp -9223372036854775807L;
+
+        if $b17 != 0 goto label20;
+
+        $b1 = l12 cmp -9223372036854775807L;
+
+        if $b1 == 0 goto label19;
+
+        l14 = l13 + l12;
+
+        goto label20;
+
+     label19:
+        if r1 == null goto label20;
+
+        $l2 = r1.<androidx.media3.extractor.text.ttml.TtmlNode: long endTimeUs>;
+
+        $b3 = $l2 cmp -9223372036854775807L;
+
+        if $b3 == 0 goto label20;
+
+        l14 = r1.<androidx.media3.extractor.text.ttml.TtmlNode: long endTimeUs>;
+
+     label20:
+        $r12 = interfaceinvoke r0.<org.xmlpull.v1.XmlPullParser: java.lang.String getName()>();
+
+        $r13 = staticinvoke <androidx.media3.extractor.text.ttml.TtmlNode: androidx.media3.extractor.text.ttml.TtmlNode buildNode(java.lang.String,long,long,androidx.media3.extractor.text.ttml.TtmlStyle,java.lang.String[],java.lang.String,java.lang.String,androidx.media3.extractor.text.ttml.TtmlNode)>($r12, l13, l14, r4, r11, r9, r10, r1);
+
+        return $r13;
+    }
+
+    private static boolean isSupportedTag(java.lang.String)
+    {
+        java.lang.String r0;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, $z11, $z12, $z13, $z14, $z15;
+
+        r0 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("tt");
+
+        if $z0 != 0 goto label1;
+
+        $z1 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("head");
+
+        if $z1 != 0 goto label1;
+
+        $z2 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("body");
+
+        if $z2 != 0 goto label1;
+
+        $z3 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("div");
+
+        if $z3 != 0 goto label1;
+
+        $z4 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("p");
+
+        if $z4 != 0 goto label1;
+
+        $z5 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("span");
+
+        if $z5 != 0 goto label1;
+
+        $z6 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("br");
+
+        if $z6 != 0 goto label1;
+
+        $z7 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("style");
+
+        if $z7 != 0 goto label1;
+
+        $z8 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("styling");
+
+        if $z8 != 0 goto label1;
+
+        $z9 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("layout");
+
+        if $z9 != 0 goto label1;
+
+        $z10 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("region");
+
+        if $z10 != 0 goto label1;
+
+        $z11 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("metadata");
+
+        if $z11 != 0 goto label1;
+
+        $z12 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("image");
+
+        if $z12 != 0 goto label1;
+
+        $z13 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("data");
+
+        if $z13 != 0 goto label1;
+
+        $z14 = virtualinvoke r0.<java.lang.String: boolean equals(java.lang.Object)>("information");
+
+        if $z14 == 0 goto label2;
+
+     label1:
+        $z15 = 1;
+
+        goto label3;
+
+     label2:
+        $z15 = 0;
+
+     label3:
+        return $z15;
+    }
+
+    private static void parseFontSize(java.lang.String, androidx.media3.extractor.text.ttml.TtmlStyle) throws androidx.media3.extractor.text.SubtitleDecoderException
+    {
+        java.lang.String r0, r3, r4, $r10, $r11, $r18, $r19, $r30, $r33, $r35;
+        androidx.media3.extractor.text.ttml.TtmlStyle r1;
+        java.lang.String[] r2;
+        int $i0, $i1, $i2, $i3;
+        java.lang.StringBuilder $r7, $r8, $r9, $r15, $r16, $r17, $r27, $r28, $r29, r36, r38, r40;
+        java.util.regex.Pattern $r12, $r31;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Object $r20, $r34;
+        java.util.regex.Matcher r32;
+        byte b4;
+        float $f0;
+        androidx.media3.extractor.text.SubtitleDecoderException r37, r39, r41;
+        java.lang.Throwable r42, r43, r44;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: androidx.media3.extractor.text.ttml.TtmlStyle;
+
+        r2 = staticinvoke <androidx.media3.common.util.Util: java.lang.String[] split(java.lang.String,java.lang.String)>(r0, "\\s+");
+
+        $i0 = lengthof r2;
+
+        if $i0 != 1 goto label01;
+
+        $r31 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern FONT_SIZE>;
+
+        r32 = virtualinvoke $r31.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r0);
+
+        goto label03;
+
+     label01:
+        $i1 = lengthof r2;
+
+        if $i1 != 2 goto label02;
+
+        $r12 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern FONT_SIZE>;
+
+        $r11 = r2[1];
+
+        r32 = virtualinvoke $r12.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r11);
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", "Multiple values in fontSize attribute. Picking the second value for vertical font size and ignoring the first.");
+
+        goto label03;
+
+     label02:
+        r37 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        r36 = new java.lang.StringBuilder;
+
+        specialinvoke r36.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke r36.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid number of entries for fontSize: ");
+
+        $i2 = lengthof r2;
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r37.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String)>($r10);
+
+        r42 = (java.lang.Throwable) r37;
+
+        throw r42;
+
+     label03:
+        $z0 = virtualinvoke r32.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z0 == 0 goto label13;
+
+        $r19 = virtualinvoke r32.<java.util.regex.Matcher: java.lang.String group(int)>(3);
+
+        $r20 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r19);
+
+        r3 = (java.lang.String) $r20;
+
+        r4 = r3;
+
+        b4 = -1;
+
+        $i3 = virtualinvoke r4.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i3)
+        {
+            case 37: goto label06;
+            case 3240: goto label05;
+            case 3592: goto label04;
+            default: goto label07;
+        };
+
+     label04:
+        $z1 = virtualinvoke r4.<java.lang.String: boolean equals(java.lang.Object)>("px");
+
+        if $z1 == 0 goto label07;
+
+        b4 = 0;
+
+        goto label07;
+
+     label05:
+        $z2 = virtualinvoke r4.<java.lang.String: boolean equals(java.lang.Object)>("em");
+
+        if $z2 == 0 goto label07;
+
+        b4 = 1;
+
+        goto label07;
+
+     label06:
+        $z3 = virtualinvoke r4.<java.lang.String: boolean equals(java.lang.Object)>("%");
+
+        if $z3 == 0 goto label07;
+
+        b4 = 2;
+
+     label07:
+        tableswitch(b4)
+        {
+            case 0: goto label08;
+            case 1: goto label09;
+            case 2: goto label10;
+            default: goto label11;
+        };
+
+     label08:
+        virtualinvoke r1.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setFontSizeUnit(int)>(1);
+
+        goto label12;
+
+     label09:
+        virtualinvoke r1.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setFontSizeUnit(int)>(2);
+
+        goto label12;
+
+     label10:
+        virtualinvoke r1.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setFontSizeUnit(int)>(3);
+
+        goto label12;
+
+     label11:
+        r39 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        r38 = new java.lang.StringBuilder;
+
+        specialinvoke r38.<java.lang.StringBuilder: void <init>()>();
+
+        $r27 = virtualinvoke r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid unit for fontSize: \'");
+
+        $r28 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r29 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\'.");
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r39.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String)>($r30);
+
+        r43 = (java.lang.Throwable) r39;
+
+        throw r43;
+
+     label12:
+        $r33 = virtualinvoke r32.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r34 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r33);
+
+        $r35 = (java.lang.String) $r34;
+
+        $f0 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r35);
+
+        virtualinvoke r1.<androidx.media3.extractor.text.ttml.TtmlStyle: androidx.media3.extractor.text.ttml.TtmlStyle setFontSize(float)>($f0);
+
+        goto label14;
+
+     label13:
+        r41 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        r40 = new java.lang.StringBuilder;
+
+        specialinvoke r40.<java.lang.StringBuilder: void <init>()>();
+
+        $r15 = virtualinvoke r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid expression for fontSize: \'");
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\'.");
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r41.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String)>($r18);
+
+        r44 = (java.lang.Throwable) r41;
+
+        throw r44;
+
+     label14:
+        return;
+    }
+
+    private static float parseShear(java.lang.String)
+    {
+        java.lang.String r0, $r3, $r8, $r13, r14;
+        java.util.regex.Matcher r1;
+        java.util.regex.Pattern $r2;
+        boolean $z0;
+        java.lang.Object $r4;
+        java.lang.StringBuilder $r5, $r6, $r7, $r10, $r11, $r12;
+        java.lang.Throwable $r9, r15;
+        float f0, f1, f2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r2 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern SIGNED_PERCENTAGE>;
+
+        r1 = virtualinvoke $r2.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r0);
+
+        $z0 = virtualinvoke r1.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z0 != 0 goto label1;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid value for shear: ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("TtmlDecoder", $r8);
+
+        return 3.4028235E38F;
+
+     label1:
+        $r3 = virtualinvoke r1.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r4 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        r14 = (java.lang.String) $r4;
+
+        f0 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>(r14);
+
+        f1 = staticinvoke <java.lang.Math: float max(float,float)>(-100.0F, f0);
+
+        f2 = staticinvoke <java.lang.Math: float min(float,float)>(100.0F, f1);
+
+     label2:
+        return f2;
+
+     label3:
+        $r9 := @caughtexception;
+
+        r15 = $r9;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to parse shear: ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String,java.lang.Throwable)>("TtmlDecoder", $r13, r15);
+
+        return 3.4028235E38F;
+
+        catch java.lang.NumberFormatException from label1 to label2 with label3;
+    }
+
+    private static long parseTimeExpression(java.lang.String, androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate) throws androidx.media3.extractor.text.SubtitleDecoderException
+    {
+        java.lang.String r0, r2, r3, $r10, $r11, $r13, $r15, $r17, $r19, r22, r23, r24, r25, r27, r28, r29;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate r1;
+        java.util.regex.Pattern $r4, $r5;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7;
+        java.lang.StringBuilder $r8, $r9, r30;
+        java.lang.Object $r12, $r14, $r16, $r18, $r20;
+        int $i0, $i1, $i9;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, d12, d13, d14, $d15, d16, $d17, d18, $d19, d20, d21, $d22;
+        float $f0, $f1, $f2, $f3, $f4;
+        long $l2, $l3, $l4, $l5, $l6, $l7, $l8, $l10, $l12;
+        java.util.regex.Matcher r21, r26;
+        byte b11;
+        androidx.media3.extractor.text.SubtitleDecoderException r31;
+        java.lang.Throwable r32;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate;
+
+        $r4 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern CLOCK_TIME>;
+
+        r21 = virtualinvoke $r4.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r0);
+
+        $z0 = virtualinvoke r21.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z0 == 0 goto label07;
+
+        $r15 = virtualinvoke r21.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r16 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r15);
+
+        r22 = (java.lang.String) $r16;
+
+        $l2 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r22);
+
+        $l3 = $l2 * 3600L;
+
+        d12 = (double) $l3;
+
+        $r17 = virtualinvoke r21.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $r18 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r17);
+
+        r23 = (java.lang.String) $r18;
+
+        $l4 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r23);
+
+        $l5 = $l4 * 60L;
+
+        $d2 = (double) $l5;
+
+        d13 = d12 + $d2;
+
+        $r19 = virtualinvoke r21.<java.util.regex.Matcher: java.lang.String group(int)>(3);
+
+        $r20 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r19);
+
+        r24 = (java.lang.String) $r20;
+
+        $l6 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r24);
+
+        $d3 = (double) $l6;
+
+        d14 = d13 + $d3;
+
+        r25 = virtualinvoke r21.<java.util.regex.Matcher: java.lang.String group(int)>(4);
+
+        if r25 == null goto label01;
+
+        $d15 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>(r25);
+
+        goto label02;
+
+     label01:
+        $d15 = 0.0;
+
+     label02:
+        d16 = d14 + $d15;
+
+        r2 = virtualinvoke r21.<java.util.regex.Matcher: java.lang.String group(int)>(5);
+
+        if r2 == null goto label03;
+
+        $l10 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r2);
+
+        $f3 = (float) $l10;
+
+        $f2 = r1.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: float effectiveFrameRate>;
+
+        $f4 = $f3 / $f2;
+
+        $d17 = (double) $f4;
+
+        goto label04;
+
+     label03:
+        $d17 = 0.0;
+
+     label04:
+        d18 = d16 + $d17;
+
+        r3 = virtualinvoke r21.<java.util.regex.Matcher: java.lang.String group(int)>(6);
+
+        if r3 == null goto label05;
+
+        $l8 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r3);
+
+        $d6 = (double) $l8;
+
+        $i9 = r1.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: int subFrameRate>;
+
+        $d5 = (double) $i9;
+
+        $d8 = $d6 / $d5;
+
+        $f1 = r1.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: float effectiveFrameRate>;
+
+        $d7 = (double) $f1;
+
+        $d19 = $d8 / $d7;
+
+        goto label06;
+
+     label05:
+        $d19 = 0.0;
+
+     label06:
+        d20 = d18 + $d19;
+
+        $d4 = d20 * 1000000.0;
+
+        $l7 = (long) $d4;
+
+        return $l7;
+
+     label07:
+        $r5 = <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern OFFSET_TIME>;
+
+        r26 = virtualinvoke $r5.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r0);
+
+        $z1 = virtualinvoke r26.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z1 == 0 goto label22;
+
+        $r11 = virtualinvoke r26.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        $r12 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r11);
+
+        r27 = (java.lang.String) $r12;
+
+        d21 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>(r27);
+
+        $r13 = virtualinvoke r26.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $r14 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r13);
+
+        r28 = (java.lang.String) $r14;
+
+        r29 = r28;
+
+        b11 = -1;
+
+        $i0 = virtualinvoke r29.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i0)
+        {
+            case 102: goto label12;
+            case 104: goto label08;
+            case 109: goto label09;
+            case 115: goto label10;
+            case 116: goto label13;
+            case 3494: goto label11;
+            default: goto label14;
+        };
+
+     label08:
+        $z6 = virtualinvoke r29.<java.lang.String: boolean equals(java.lang.Object)>("h");
+
+        if $z6 == 0 goto label14;
+
+        b11 = 0;
+
+        goto label14;
+
+     label09:
+        $z5 = virtualinvoke r29.<java.lang.String: boolean equals(java.lang.Object)>("m");
+
+        if $z5 == 0 goto label14;
+
+        b11 = 1;
+
+        goto label14;
+
+     label10:
+        $z4 = virtualinvoke r29.<java.lang.String: boolean equals(java.lang.Object)>("s");
+
+        if $z4 == 0 goto label14;
+
+        b11 = 2;
+
+        goto label14;
+
+     label11:
+        $z2 = virtualinvoke r29.<java.lang.String: boolean equals(java.lang.Object)>("ms");
+
+        if $z2 == 0 goto label14;
+
+        b11 = 3;
+
+        goto label14;
+
+     label12:
+        $z7 = virtualinvoke r29.<java.lang.String: boolean equals(java.lang.Object)>("f");
+
+        if $z7 == 0 goto label14;
+
+        b11 = 4;
+
+        goto label14;
+
+     label13:
+        $z3 = virtualinvoke r29.<java.lang.String: boolean equals(java.lang.Object)>("t");
+
+        if $z3 == 0 goto label14;
+
+        b11 = 5;
+
+     label14:
+        tableswitch(b11)
+        {
+            case 0: goto label15;
+            case 1: goto label16;
+            case 2: goto label17;
+            case 3: goto label18;
+            case 4: goto label19;
+            case 5: goto label20;
+            default: goto label21;
+        };
+
+     label15:
+        d21 = d21 * 3600.0;
+
+        goto label21;
+
+     label16:
+        d21 = d21 * 60.0;
+
+        goto label21;
+
+     label17:
+        goto label21;
+
+     label18:
+        d21 = d21 / 1000.0;
+
+        goto label21;
+
+     label19:
+        $f0 = r1.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: float effectiveFrameRate>;
+
+        $d1 = (double) $f0;
+
+        d21 = d21 / $d1;
+
+        goto label21;
+
+     label20:
+        $i1 = r1.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: int tickRate>;
+
+        $d0 = (double) $i1;
+
+        d21 = d21 / $d0;
+
+     label21:
+        $d22 = d21 * 1000000.0;
+
+        $l12 = (long) $d22;
+
+        return $l12;
+
+     label22:
+        r31 = new androidx.media3.extractor.text.SubtitleDecoderException;
+
+        r30 = new java.lang.StringBuilder;
+
+        specialinvoke r30.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Malformed time expression: ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r31.<androidx.media3.extractor.text.SubtitleDecoderException: void <init>(java.lang.String)>($r10);
+
+        r32 = (java.lang.Throwable) r31;
+
+        throw r32;
+    }
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0, $r1, $r2, $r3, $r4, $r5, $r6;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate $r7;
+        androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution $r8;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("^([0-9][0-9]+):([0-9][0-9]):([0-9][0-9])(?:(\\.[0-9]+)|:([0-9][0-9])(?:\\.([0-9]+))?)?$");
+
+        <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern CLOCK_TIME> = $r0;
+
+        $r1 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("^([0-9]+(?:\\.[0-9]+)?)(h|m|s|ms|f|t)$");
+
+        <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern OFFSET_TIME> = $r1;
+
+        $r2 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("^(([0-9]*.)?[0-9]+)(px|em|%)$");
+
+        <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern FONT_SIZE> = $r2;
+
+        $r3 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("^([-+]?\\d+\\.?\\d*?)%$");
+
+        <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern SIGNED_PERCENTAGE> = $r3;
+
+        $r4 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("^(\\d+\\.?\\d*?)% (\\d+\\.?\\d*?)%$");
+
+        <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern PERCENTAGE_COORDINATES> = $r4;
+
+        $r5 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("^(\\d+\\.?\\d*?)px (\\d+\\.?\\d*?)px$");
+
+        <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern PIXEL_COORDINATES> = $r5;
+
+        $r6 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("^(\\d+) (\\d+)$");
+
+        <androidx.media3.extractor.text.ttml.TtmlDecoder: java.util.regex.Pattern CELL_RESOLUTION> = $r6;
+
+        $r7 = new androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate;
+
+        specialinvoke $r7.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: void <init>(float,int,int)>(30.0F, 1, 1);
+
+        <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate DEFAULT_FRAME_AND_TICK_RATE> = $r7;
+
+        $r8 = new androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution;
+
+        specialinvoke $r8.<androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution: void <init>(int,int)>(32, 15);
+
+        <androidx.media3.extractor.text.ttml.TtmlDecoder: androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution DEFAULT_CELL_RESOLUTION> = $r8;
+
+        return;
+    }
+
+androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution
+<androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution: int columns>
+<androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution: int rows>
+    void <init>(int, int)
+    {
+        androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution r0;
+        int i0, i1;
+
+        r0 := @this: androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution: int columns> = i0;
+
+        r0.<androidx.media3.extractor.text.ttml.TtmlDecoder$CellResolution: int rows> = i1;
+
+        return;
+    }
+
+androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate
+<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: float effectiveFrameRate>
+<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: int subFrameRate>
+<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: int tickRate>
+    void <init>(float, int, int)
+    {
+        androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate r0;
+        float f0;
+        int i0, i1;
+
+        r0 := @this: androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate;
+
+        f0 := @parameter0: float;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: float effectiveFrameRate> = f0;
+
+        r0.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: int subFrameRate> = i0;
+
+        r0.<androidx.media3.extractor.text.ttml.TtmlDecoder$FrameAndTickRate: int tickRate> = i1;
+
+        return;
+    }
+
+androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent
+<androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent: int width>
+<androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent: int height>
+    void <init>(int, int)
+    {
+        androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent r0;
+        int i0, i1;
+
+        r0 := @this: androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent: int width> = i0;
+
+        r0.<androidx.media3.extractor.text.ttml.TtmlDecoder$TtsExtent: int height> = i1;
+
+        return;
+    }
+

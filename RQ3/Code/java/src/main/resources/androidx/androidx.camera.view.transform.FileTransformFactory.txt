@@ -1,0 +1,199 @@
+androidx.camera.view.transform.FileTransformFactory
+<androidx.camera.view.transform.FileTransformFactory: boolean mUsingExifOrientation>
+    public void <init>()
+    {
+        androidx.camera.view.transform.FileTransformFactory r0;
+
+        r0 := @this: androidx.camera.view.transform.FileTransformFactory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void setUsingExifOrientation(boolean)
+    {
+        androidx.camera.view.transform.FileTransformFactory r0;
+        boolean z0;
+
+        r0 := @this: androidx.camera.view.transform.FileTransformFactory;
+
+        z0 := @parameter0: boolean;
+
+        r0.<androidx.camera.view.transform.FileTransformFactory: boolean mUsingExifOrientation> = z0;
+
+        return;
+    }
+
+    public boolean isUsingExifOrientation()
+    {
+        androidx.camera.view.transform.FileTransformFactory r0;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.view.transform.FileTransformFactory;
+
+        $z0 = r0.<androidx.camera.view.transform.FileTransformFactory: boolean mUsingExifOrientation>;
+
+        return $z0;
+    }
+
+    public androidx.camera.view.transform.OutputTransform getOutputTransform(android.content.ContentResolver, android.net.Uri) throws java.io.IOException
+    {
+        androidx.camera.view.transform.FileTransformFactory r0;
+        android.content.ContentResolver r1;
+        android.net.Uri r2;
+        java.io.InputStream r3;
+        java.lang.Throwable r4, $r5, $r6, r8;
+        androidx.camera.view.transform.OutputTransform r7;
+
+        r0 := @this: androidx.camera.view.transform.FileTransformFactory;
+
+        r1 := @parameter0: android.content.ContentResolver;
+
+        r2 := @parameter1: android.net.Uri;
+
+        r3 = virtualinvoke r1.<android.content.ContentResolver: java.io.InputStream openInputStream(android.net.Uri)>(r2);
+
+     label1:
+        r7 = virtualinvoke r0.<androidx.camera.view.transform.FileTransformFactory: androidx.camera.view.transform.OutputTransform getOutputTransform(java.io.InputStream)>(r3);
+
+     label2:
+        if r3 == null goto label3;
+
+        virtualinvoke r3.<java.io.InputStream: void close()>();
+
+     label3:
+        return r7;
+
+     label4:
+        $r6 := @caughtexception;
+
+        r8 = $r6;
+
+        if r3 == null goto label8;
+
+     label5:
+        virtualinvoke r3.<java.io.InputStream: void close()>();
+
+     label6:
+        goto label8;
+
+     label7:
+        $r5 := @caughtexception;
+
+        r4 = $r5;
+
+        virtualinvoke r8.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r4);
+
+     label8:
+        throw r8;
+
+        catch java.lang.Throwable from label1 to label2 with label4;
+        catch java.lang.Throwable from label5 to label6 with label7;
+    }
+
+    public androidx.camera.view.transform.OutputTransform getOutputTransform(java.io.File) throws java.io.IOException
+    {
+        androidx.camera.view.transform.FileTransformFactory r0;
+        java.io.File r1;
+        java.io.FileInputStream r2, $r4;
+        java.lang.Throwable r3, $r5, $r6, r8;
+        androidx.camera.view.transform.OutputTransform r7;
+
+        r0 := @this: androidx.camera.view.transform.FileTransformFactory;
+
+        r1 := @parameter0: java.io.File;
+
+        $r4 = new java.io.FileInputStream;
+
+        specialinvoke $r4.<java.io.FileInputStream: void <init>(java.io.File)>(r1);
+
+        r2 = $r4;
+
+     label1:
+        r7 = virtualinvoke r0.<androidx.camera.view.transform.FileTransformFactory: androidx.camera.view.transform.OutputTransform getOutputTransform(java.io.InputStream)>(r2);
+
+     label2:
+        virtualinvoke r2.<java.io.InputStream: void close()>();
+
+        return r7;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r8 = $r6;
+
+     label4:
+        virtualinvoke r2.<java.io.InputStream: void close()>();
+
+     label5:
+        goto label7;
+
+     label6:
+        $r5 := @caughtexception;
+
+        r3 = $r5;
+
+        virtualinvoke r8.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r3);
+
+     label7:
+        throw r8;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label4 to label5 with label6;
+    }
+
+    public androidx.camera.view.transform.OutputTransform getOutputTransform(java.io.InputStream) throws java.io.IOException
+    {
+        androidx.camera.view.transform.FileTransformFactory r0;
+        java.io.InputStream r1;
+        androidx.camera.core.impl.utils.Exif r2;
+        android.graphics.Rect r3, $r5;
+        android.graphics.Matrix r4, $r8;
+        int $i0, $i1, $i2, $i3, $i4;
+        boolean $z0;
+        androidx.camera.view.transform.OutputTransform $r6;
+        android.util.Size $r7;
+
+        r0 := @this: androidx.camera.view.transform.FileTransformFactory;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        r2 = staticinvoke <androidx.camera.core.impl.utils.Exif: androidx.camera.core.impl.utils.Exif createFromInputStream(java.io.InputStream)>(r1);
+
+        $r5 = new android.graphics.Rect;
+
+        $i0 = virtualinvoke r2.<androidx.camera.core.impl.utils.Exif: int getWidth()>();
+
+        $i1 = virtualinvoke r2.<androidx.camera.core.impl.utils.Exif: int getHeight()>();
+
+        specialinvoke $r5.<android.graphics.Rect: void <init>(int,int,int,int)>(0, 0, $i0, $i1);
+
+        r3 = $r5;
+
+        r4 = staticinvoke <androidx.camera.core.impl.utils.TransformUtils: android.graphics.Matrix getNormalizedToBuffer(android.graphics.Rect)>(r3);
+
+        $z0 = r0.<androidx.camera.view.transform.FileTransformFactory: boolean mUsingExifOrientation>;
+
+        if $z0 == 0 goto label1;
+
+        $i2 = virtualinvoke r2.<androidx.camera.core.impl.utils.Exif: int getOrientation()>();
+
+        $i3 = virtualinvoke r2.<androidx.camera.core.impl.utils.Exif: int getWidth()>();
+
+        $i4 = virtualinvoke r2.<androidx.camera.core.impl.utils.Exif: int getHeight()>();
+
+        $r8 = staticinvoke <androidx.camera.core.impl.utils.TransformUtils: android.graphics.Matrix getExifTransform(int,int,int)>($i2, $i3, $i4);
+
+        virtualinvoke r4.<android.graphics.Matrix: boolean postConcat(android.graphics.Matrix)>($r8);
+
+     label1:
+        $r6 = new androidx.camera.view.transform.OutputTransform;
+
+        $r7 = staticinvoke <androidx.camera.core.impl.utils.TransformUtils: android.util.Size rectToSize(android.graphics.Rect)>(r3);
+
+        specialinvoke $r6.<androidx.camera.view.transform.OutputTransform: void <init>(android.graphics.Matrix,android.util.Size)>(r4, $r7);
+
+        return $r6;
+    }
+

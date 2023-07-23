@@ -1,0 +1,485 @@
+android.support.media.instantvideo.preload.InstantVideoPreloadManager
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager: java.lang.String TAG>
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager: boolean DEBUG>
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager: int DEFAULT_MAX_VIDEO_COUNT>
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.media.instantvideo.preload.InstantVideoPreloadManager sInstance>
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache>
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.content.Context mAppContext>
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory mVideoPreloaderFactory>
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager: int mMaxVideoCount>
+    public static synchronized android.support.media.instantvideo.preload.InstantVideoPreloadManager getInstance(android.content.Context)
+    {
+        android.content.Context r0;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager $r1, $r2, $r3;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory $r4;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r1 = <android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.media.instantvideo.preload.InstantVideoPreloadManager sInstance>;
+
+        if $r1 != null goto label1;
+
+        $r3 = new android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        $r4 = new android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory;
+
+        specialinvoke $r4.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory: void <init>(android.support.media.instantvideo.preload.InstantVideoPreloadManager$1)>(null);
+
+        specialinvoke $r3.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: void <init>(android.content.Context,android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory)>(r0, $r4);
+
+        <android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.media.instantvideo.preload.InstantVideoPreloadManager sInstance> = $r3;
+
+     label1:
+        $r2 = <android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.media.instantvideo.preload.InstantVideoPreloadManager sInstance>;
+
+        return $r2;
+    }
+
+    void <init>(android.content.Context, android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r0;
+        android.content.Context r1, $r4;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory r2;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$1 $r3;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new android.support.media.instantvideo.preload.InstantVideoPreloadManager$1;
+
+        specialinvoke $r3.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$1: void <init>(android.support.media.instantvideo.preload.InstantVideoPreloadManager,int)>(r0, 20);
+
+        r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache> = $r3;
+
+        r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: int mMaxVideoCount> = 20;
+
+        $r4 = virtualinvoke r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.content.Context mAppContext> = $r4;
+
+        r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory mVideoPreloaderFactory> = r2;
+
+        return;
+    }
+
+    public void preload(android.net.Uri)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r0;
+        android.net.Uri r1;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader r2, $r10;
+        android.support.v4.util.LruCache $r3, $r5, $r7, $r8, $r9;
+        java.lang.Object $r4;
+        int $i0, $i1, $i2;
+        java.lang.IllegalArgumentException $r12;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        r1 := @parameter0: android.net.Uri;
+
+        if r1 != null goto label1;
+
+        $r12 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r12.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("The video URI shouldn\'t be null.");
+
+        throw $r12;
+
+     label1:
+        $r3 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache>;
+
+        $r4 = virtualinvoke $r3.<android.support.v4.util.LruCache: java.lang.Object get(java.lang.Object)>(r1);
+
+        r2 = (android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader) $r4;
+
+        if r2 != null goto label2;
+
+        $r9 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache>;
+
+        $r10 = specialinvoke r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader startVideoPreloading(android.net.Uri)>(r1);
+
+        virtualinvoke $r9.<android.support.v4.util.LruCache: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r10);
+
+        goto label3;
+
+     label2:
+        $r5 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache>;
+
+        virtualinvoke $r5.<android.support.v4.util.LruCache: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r2);
+
+     label3:
+        $r7 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache>;
+
+        $i0 = virtualinvoke $r7.<android.support.v4.util.LruCache: int size()>();
+
+        $i1 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: int mMaxVideoCount>;
+
+        if $i0 <= $i1 goto label4;
+
+        $r8 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache>;
+
+        $i2 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: int mMaxVideoCount>;
+
+        virtualinvoke $r8.<android.support.v4.util.LruCache: void resize(int)>($i2);
+
+     label4:
+        return;
+    }
+
+    int getCacheSize()
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r0;
+        android.support.v4.util.LruCache $r1;
+        int $i0;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        $r1 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache>;
+
+        $i0 = virtualinvoke $r1.<android.support.v4.util.LruCache: int size()>();
+
+        return $i0;
+    }
+
+    private void onEntryRemovedFromCache(android.net.Uri, android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r0;
+        android.net.Uri r1;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader r2;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        r1 := @parameter0: android.net.Uri;
+
+        r2 := @parameter1: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader;
+
+        interfaceinvoke r2.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader: void stop()>();
+
+        return;
+    }
+
+    public void clearCache()
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r0;
+        android.support.v4.util.LruCache $r1;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        $r1 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache>;
+
+        virtualinvoke $r1.<android.support.v4.util.LruCache: void evictAll()>();
+
+        return;
+    }
+
+    public void setMaxCacheSize(int)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r0;
+        int i0;
+        java.lang.IllegalArgumentException $r1;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        i0 := @parameter0: int;
+
+        if i0 > 0 goto label1;
+
+        $r1 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r1.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("The maximum cache size should be greater than 0.");
+
+        throw $r1;
+
+     label1:
+        return;
+    }
+
+    public void setMaxPreloadVideoCount(int)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r0;
+        int i0;
+        android.support.v4.util.LruCache $r1;
+        java.lang.IllegalArgumentException $r2;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        i0 := @parameter0: int;
+
+        if i0 > 0 goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("The maximum video count should be greater than 0.");
+
+        throw $r2;
+
+     label1:
+        r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: int mMaxVideoCount> = i0;
+
+        $r1 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.v4.util.LruCache mVideoCache>;
+
+        virtualinvoke $r1.<android.support.v4.util.LruCache: void resize(int)>(i0);
+
+        return;
+    }
+
+    private android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader startVideoPreloading(android.net.Uri)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r0;
+        android.net.Uri r1;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader r2;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory $r3;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        r1 := @parameter0: android.net.Uri;
+
+        $r3 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory mVideoPreloaderFactory>;
+
+        r2 = interfaceinvoke $r3.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader createVideoPreloader(android.net.Uri)>(r1);
+
+        interfaceinvoke r2.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader: void start()>();
+
+        return r2;
+    }
+
+    static void access$100(android.support.media.instantvideo.preload.InstantVideoPreloadManager, android.net.Uri, android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r0;
+        android.net.Uri r1;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader r2;
+
+        r0 := @parameter0: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        r1 := @parameter1: android.net.Uri;
+
+        r2 := @parameter2: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader;
+
+        specialinvoke r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager: void onEntryRemovedFromCache(android.net.Uri,android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader)>(r1, r2);
+
+        return;
+    }
+
+android.support.media.instantvideo.preload.InstantVideoPreloadManager$1
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager$1: android.support.media.instantvideo.preload.InstantVideoPreloadManager this$0>
+    void <init>(android.support.media.instantvideo.preload.InstantVideoPreloadManager, int)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$1 r0;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager r1;
+        int i0;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$1;
+
+        r1 := @parameter0: android.support.media.instantvideo.preload.InstantVideoPreloadManager;
+
+        i0 := @parameter1: int;
+
+        r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$1: android.support.media.instantvideo.preload.InstantVideoPreloadManager this$0> = r1;
+
+        specialinvoke r0.<android.support.v4.util.LruCache: void <init>(int)>(i0);
+
+        return;
+    }
+
+    protected void entryRemoved(boolean, android.net.Uri, android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader, android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$1 r0;
+        boolean z0;
+        android.net.Uri r1;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader r2, r3;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager $r4;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$1;
+
+        z0 := @parameter0: boolean;
+
+        r1 := @parameter1: android.net.Uri;
+
+        r2 := @parameter2: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader;
+
+        r3 := @parameter3: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader;
+
+        if r3 == null goto label1;
+
+        $r4 = r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$1: android.support.media.instantvideo.preload.InstantVideoPreloadManager this$0>;
+
+        staticinvoke <android.support.media.instantvideo.preload.InstantVideoPreloadManager: void access$100(android.support.media.instantvideo.preload.InstantVideoPreloadManager,android.net.Uri,android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader)>($r4, r1, r2);
+
+     label1:
+        return;
+    }
+
+    protected volatile void entryRemoved(boolean, java.lang.Object, java.lang.Object, java.lang.Object)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$1 r0;
+        boolean z0;
+        java.lang.Object r1, r2, r3;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader $r4, $r5;
+        android.net.Uri $r6;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$1;
+
+        z0 := @parameter0: boolean;
+
+        r1 := @parameter1: java.lang.Object;
+
+        r2 := @parameter2: java.lang.Object;
+
+        r3 := @parameter3: java.lang.Object;
+
+        $r6 = (android.net.Uri) r1;
+
+        $r5 = (android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader) r2;
+
+        $r4 = (android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader) r3;
+
+        virtualinvoke r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$1: void entryRemoved(boolean,android.net.Uri,android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader,android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader)>(z0, $r6, $r5, $r4);
+
+        return;
+    }
+
+android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader: android.net.Uri mVideoUri>
+    private void <init>(android.net.Uri)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader r0;
+        android.net.Uri r1;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader;
+
+        r1 := @parameter0: android.net.Uri;
+
+        specialinvoke r0.<android.os.AsyncTask: void <init>()>();
+
+        r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader: android.net.Uri mVideoUri> = r1;
+
+        return;
+    }
+
+    public void start()
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader r0;
+        java.lang.Void[] $r1;
+        java.util.concurrent.Executor $r2;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader;
+
+        $r2 = <android.os.AsyncTask: java.util.concurrent.Executor THREAD_POOL_EXECUTOR>;
+
+        $r1 = newarray (java.lang.Void)[0];
+
+        virtualinvoke r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader: android.os.AsyncTask executeOnExecutor(java.util.concurrent.Executor,java.lang.Object[])>($r2, $r1);
+
+        return;
+    }
+
+    public void stop()
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader r0;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader;
+
+        virtualinvoke r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader: boolean cancel(boolean)>(1);
+
+        return;
+    }
+
+    protected transient java.lang.Void doInBackground(java.lang.Void[])
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader r0;
+        java.lang.Void[] r1;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader;
+
+        r1 := @parameter0: java.lang.Void[];
+
+        return null;
+    }
+
+    protected volatile java.lang.Object doInBackground(java.lang.Object[])
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader r0;
+        java.lang.Object[] r1;
+        java.lang.Void[] $r2;
+        java.lang.Void $r3;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader;
+
+        r1 := @parameter0: java.lang.Object[];
+
+        $r2 = (java.lang.Void[]) r1;
+
+        $r3 = virtualinvoke r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader: java.lang.Void doInBackground(java.lang.Void[])>($r2);
+
+        return $r3;
+    }
+
+    void <init>(android.net.Uri, android.support.media.instantvideo.preload.InstantVideoPreloadManager$1)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader r0;
+        android.net.Uri r1;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$1 r2;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader;
+
+        r1 := @parameter0: android.net.Uri;
+
+        r2 := @parameter1: android.support.media.instantvideo.preload.InstantVideoPreloadManager$1;
+
+        specialinvoke r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader: void <init>(android.net.Uri)>(r1);
+
+        return;
+    }
+
+android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory
+    private void <init>()
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory r0;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader createVideoPreloader(android.net.Uri)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory r0;
+        android.net.Uri r1;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader $r2;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory;
+
+        r1 := @parameter0: android.net.Uri;
+
+        $r2 = new android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader;
+
+        specialinvoke $r2.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$AsyncTaskVideoPreloader: void <init>(android.net.Uri,android.support.media.instantvideo.preload.InstantVideoPreloadManager$1)>(r1, null);
+
+        return $r2;
+    }
+
+    void <init>(android.support.media.instantvideo.preload.InstantVideoPreloadManager$1)
+    {
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory r0;
+        android.support.media.instantvideo.preload.InstantVideoPreloadManager$1 r1;
+
+        r0 := @this: android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory;
+
+        r1 := @parameter0: android.support.media.instantvideo.preload.InstantVideoPreloadManager$1;
+
+        specialinvoke r0.<android.support.media.instantvideo.preload.InstantVideoPreloadManager$InternalVideoPreloaderFactory: void <init>()>();
+
+        return;
+    }
+
+android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader: void start()>
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader: void stop()>
+android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory
+<android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloaderFactory: android.support.media.instantvideo.preload.InstantVideoPreloadManager$VideoPreloader createVideoPreloader(android.net.Uri)>

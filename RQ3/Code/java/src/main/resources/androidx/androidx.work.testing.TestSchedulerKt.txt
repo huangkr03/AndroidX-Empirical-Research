@@ -1,0 +1,155 @@
+androidx.work.testing.TestSchedulerKt
+    public static final boolean isRunnable(androidx.work.testing.InternalWorkState)
+    {
+        androidx.work.testing.InternalWorkState $r0;
+        boolean $z0, $z1, $z2, $z3;
+
+        $r0 := @parameter0: androidx.work.testing.InternalWorkState;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r0, "<this>");
+
+        $z0 = virtualinvoke $r0.<androidx.work.testing.InternalWorkState: boolean getConstraintsMet()>();
+
+        if $z0 == 0 goto label1;
+
+        $z1 = virtualinvoke $r0.<androidx.work.testing.InternalWorkState: boolean getInitialDelayMet()>();
+
+        if $z1 == 0 goto label1;
+
+        $z2 = virtualinvoke $r0.<androidx.work.testing.InternalWorkState: boolean getPeriodDelayMet()>();
+
+        if $z2 == 0 goto label1;
+
+        $z3 = 1;
+
+        goto label2;
+
+     label1:
+        $z3 = 0;
+
+     label2:
+        return $z3;
+    }
+
+    public static final androidx.work.testing.InternalWorkState InternalWorkState(androidx.work.impl.model.WorkSpec)
+    {
+        androidx.work.impl.model.WorkSpec r0;
+        boolean $z0, $z3, $z4, $z5, $z6;
+        long $l0;
+        byte $b1;
+        androidx.work.testing.InternalWorkState $r1;
+        int $i2;
+
+        r0 := @parameter0: androidx.work.impl.model.WorkSpec;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "spec");
+
+        $r1 = new androidx.work.testing.InternalWorkState;
+
+        $i2 = virtualinvoke r0.<androidx.work.impl.model.WorkSpec: int getGeneration()>();
+
+        $z0 = virtualinvoke r0.<androidx.work.impl.model.WorkSpec: boolean hasConstraints()>();
+
+        if $z0 != 0 goto label1;
+
+        $z3 = 1;
+
+        goto label2;
+
+     label1:
+        $z3 = 0;
+
+     label2:
+        $l0 = r0.<androidx.work.impl.model.WorkSpec: long initialDelay>;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label3;
+
+        $z4 = 1;
+
+        goto label4;
+
+     label3:
+        $z4 = 0;
+
+     label4:
+        $z5 = virtualinvoke r0.<androidx.work.impl.model.WorkSpec: boolean hasConstraints()>();
+
+        $z6 = virtualinvoke r0.<androidx.work.impl.model.WorkSpec: boolean isPeriodic()>();
+
+        specialinvoke $r1.<androidx.work.testing.InternalWorkState: void <init>(int,boolean,boolean,boolean,boolean,boolean)>($i2, $z3, $z4, 1, $z5, $z6);
+
+        return $r1;
+    }
+
+    private static final void rewindLastEnqueueTime(androidx.work.impl.WorkManagerImpl, java.lang.String)
+    {
+        androidx.work.impl.WorkManagerImpl $r0;
+        java.lang.String r1;
+        androidx.work.impl.WorkDatabase r2, $r5;
+        androidx.work.impl.model.WorkSpecDao r3;
+        androidx.work.impl.model.WorkSpec r4, $r6;
+        long l0, l1, $l2, $l4, $l5;
+        byte $b3;
+        java.lang.IllegalStateException $r7;
+
+        $r0 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r5 = virtualinvoke $r0.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r5, "workDatabase");
+
+        r2 = $r5;
+
+        r3 = virtualinvoke r2.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        $r6 = interfaceinvoke r3.<androidx.work.impl.model.WorkSpecDao: androidx.work.impl.model.WorkSpec getWorkSpec(java.lang.String)>(r1);
+
+        if $r6 != null goto label1;
+
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.String)>("WorkSpec is already deleted from WM\'s db");
+
+        throw $r7;
+
+     label1:
+        r4 = $r6;
+
+        l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l2 = virtualinvoke r4.<androidx.work.impl.model.WorkSpec: long calculateNextRunTime()>();
+
+        l1 = $l2 - l0;
+
+        $b3 = l1 cmp 0L;
+
+        if $b3 <= 0 goto label2;
+
+        $l4 = r4.<androidx.work.impl.model.WorkSpec: long lastEnqueueTime>;
+
+        $l5 = $l4 - l1;
+
+        interfaceinvoke r3.<androidx.work.impl.model.WorkSpecDao: void setLastEnqueuedTime(java.lang.String,long)>(r1, $l5);
+
+     label2:
+        return;
+    }
+
+    public static final void access$rewindLastEnqueueTime(androidx.work.impl.WorkManagerImpl, java.lang.String)
+    {
+        androidx.work.impl.WorkManagerImpl $r0;
+        java.lang.String r1;
+
+        $r0 := @parameter0: androidx.work.impl.WorkManagerImpl;
+
+        r1 := @parameter1: java.lang.String;
+
+        staticinvoke <androidx.work.testing.TestSchedulerKt: void rewindLastEnqueueTime(androidx.work.impl.WorkManagerImpl,java.lang.String)>($r0, r1);
+
+        return;
+    }
+

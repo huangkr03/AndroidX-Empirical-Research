@@ -1,0 +1,805 @@
+androidx.media3.exoplayer.AudioFocusManager
+<androidx.media3.exoplayer.AudioFocusManager: int PLAYER_COMMAND_DO_NOT_PLAY>
+<androidx.media3.exoplayer.AudioFocusManager: int PLAYER_COMMAND_WAIT_FOR_CALLBACK>
+<androidx.media3.exoplayer.AudioFocusManager: int PLAYER_COMMAND_PLAY_WHEN_READY>
+<androidx.media3.exoplayer.AudioFocusManager: int AUDIO_FOCUS_STATE_NO_FOCUS>
+<androidx.media3.exoplayer.AudioFocusManager: int AUDIO_FOCUS_STATE_HAVE_FOCUS>
+<androidx.media3.exoplayer.AudioFocusManager: int AUDIO_FOCUS_STATE_LOSS_TRANSIENT>
+<androidx.media3.exoplayer.AudioFocusManager: int AUDIO_FOCUS_STATE_LOSS_TRANSIENT_DUCK>
+<androidx.media3.exoplayer.AudioFocusManager: int AUDIOFOCUS_NONE>
+<androidx.media3.exoplayer.AudioFocusManager: int AUDIOFOCUS_GAIN>
+<androidx.media3.exoplayer.AudioFocusManager: int AUDIOFOCUS_GAIN_TRANSIENT>
+<androidx.media3.exoplayer.AudioFocusManager: int AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK>
+<androidx.media3.exoplayer.AudioFocusManager: int AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE>
+<androidx.media3.exoplayer.AudioFocusManager: java.lang.String TAG>
+<androidx.media3.exoplayer.AudioFocusManager: float VOLUME_MULTIPLIER_DUCK>
+<androidx.media3.exoplayer.AudioFocusManager: float VOLUME_MULTIPLIER_DEFAULT>
+<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioManager audioManager>
+<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener focusListener>
+<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$PlayerControl playerControl>
+<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.common.AudioAttributes audioAttributes>
+<androidx.media3.exoplayer.AudioFocusManager: int audioFocusState>
+<androidx.media3.exoplayer.AudioFocusManager: int focusGainToRequest>
+<androidx.media3.exoplayer.AudioFocusManager: float volumeMultiplier>
+<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioFocusRequest audioFocusRequest>
+<androidx.media3.exoplayer.AudioFocusManager: boolean rebuildAudioFocusRequest>
+    public void <init>(android.content.Context, android.os.Handler, androidx.media3.exoplayer.AudioFocusManager$PlayerControl)
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        android.content.Context r1, $r4;
+        android.os.Handler r2;
+        androidx.media3.exoplayer.AudioFocusManager$PlayerControl r3;
+        java.lang.Object $r5, $r7;
+        android.media.AudioManager $r6, $r8;
+        androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener $r9;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.os.Handler;
+
+        r3 := @parameter2: androidx.media3.exoplayer.AudioFocusManager$PlayerControl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: float volumeMultiplier> = 1.0F;
+
+        $r4 = virtualinvoke r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r5 = virtualinvoke $r4.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("audio");
+
+        $r6 = (android.media.AudioManager) $r5;
+
+        $r7 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r6);
+
+        $r8 = (android.media.AudioManager) $r7;
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioManager audioManager> = $r8;
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$PlayerControl playerControl> = r3;
+
+        $r9 = new androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener;
+
+        specialinvoke $r9.<androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener: void <init>(androidx.media3.exoplayer.AudioFocusManager,android.os.Handler)>(r0, r2);
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener focusListener> = $r9;
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: int audioFocusState> = 0;
+
+        return;
+    }
+
+    public float getVolumeMultiplier()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        float $f0;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        $f0 = r0.<androidx.media3.exoplayer.AudioFocusManager: float volumeMultiplier>;
+
+        return $f0;
+    }
+
+    public void setAudioAttributes(androidx.media3.common.AudioAttributes)
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        androidx.media3.common.AudioAttributes r1, $r2;
+        boolean $z0, $z1;
+        int $i0, $i1, $i2;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        r1 := @parameter0: androidx.media3.common.AudioAttributes;
+
+        $r2 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.common.AudioAttributes audioAttributes>;
+
+        $z0 = staticinvoke <androidx.media3.common.util.Util: boolean areEqual(java.lang.Object,java.lang.Object)>($r2, r1);
+
+        if $z0 != 0 goto label4;
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.common.AudioAttributes audioAttributes> = r1;
+
+        $i0 = staticinvoke <androidx.media3.exoplayer.AudioFocusManager: int convertAudioAttributesToFocusGain(androidx.media3.common.AudioAttributes)>(r1);
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: int focusGainToRequest> = $i0;
+
+        $i1 = r0.<androidx.media3.exoplayer.AudioFocusManager: int focusGainToRequest>;
+
+        if $i1 == 1 goto label1;
+
+        $i2 = r0.<androidx.media3.exoplayer.AudioFocusManager: int focusGainToRequest>;
+
+        if $i2 != 0 goto label2;
+
+     label1:
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "Automatic handling of audio focus is only available for USAGE_MEDIA and USAGE_GAME.");
+
+     label4:
+        return;
+    }
+
+    public int updateAudioFocus(boolean, int)
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        boolean z0, $z1;
+        int i0, $i2;
+        byte $b1;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        z0 := @parameter0: boolean;
+
+        i0 := @parameter1: int;
+
+        $z1 = specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: boolean shouldAbandonAudioFocusIfHeld(int)>(i0);
+
+        if $z1 == 0 goto label3;
+
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void abandonAudioFocusIfHeld()>();
+
+        if z0 == 0 goto label1;
+
+        $b1 = 1;
+
+        goto label2;
+
+     label1:
+        $b1 = -1;
+
+     label2:
+        return $b1;
+
+     label3:
+        if z0 == 0 goto label4;
+
+        $i2 = specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: int requestAudioFocus()>();
+
+        goto label5;
+
+     label4:
+        $i2 = -1;
+
+     label5:
+        return $i2;
+    }
+
+    public void release()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$PlayerControl playerControl> = null;
+
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void abandonAudioFocusIfHeld()>();
+
+        return;
+    }
+
+    android.media.AudioManager$OnAudioFocusChangeListener getFocusListener()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener $r1;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        $r1 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener focusListener>;
+
+        return $r1;
+    }
+
+    private boolean shouldAbandonAudioFocusIfHeld(int)
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        int i0, $i1;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        i0 := @parameter0: int;
+
+        if i0 == 1 goto label1;
+
+        $i1 = r0.<androidx.media3.exoplayer.AudioFocusManager: int focusGainToRequest>;
+
+        if $i1 == 1 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    private int requestAudioFocus()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        int i0, $i1, $i2, $i3;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        $i1 = r0.<androidx.media3.exoplayer.AudioFocusManager: int audioFocusState>;
+
+        if $i1 != 1 goto label1;
+
+        return 1;
+
+     label1:
+        $i2 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i2 < 26 goto label2;
+
+        $i3 = specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: int requestAudioFocusV26()>();
+
+        goto label3;
+
+     label2:
+        $i3 = specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: int requestAudioFocusDefault()>();
+
+     label3:
+        i0 = $i3;
+
+        if i0 != 1 goto label4;
+
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void setAudioFocusState(int)>(1);
+
+        return 1;
+
+     label4:
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void setAudioFocusState(int)>(0);
+
+        return -1;
+    }
+
+    private void abandonAudioFocusIfHeld()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        int $i0, $i1;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        $i0 = r0.<androidx.media3.exoplayer.AudioFocusManager: int audioFocusState>;
+
+        if $i0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $i1 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i1 < 26 goto label2;
+
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void abandonAudioFocusV26()>();
+
+        goto label3;
+
+     label2:
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void abandonAudioFocusDefault()>();
+
+     label3:
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void setAudioFocusState(int)>(0);
+
+        return;
+    }
+
+    private int requestAudioFocusDefault()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        androidx.media3.common.AudioAttributes $r1, $r5;
+        android.media.AudioManager $r2;
+        androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener $r3;
+        java.lang.Object $r4;
+        int $i0, $i1, $i2, $i3;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        $r2 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioManager audioManager>;
+
+        $r3 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener focusListener>;
+
+        $r1 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.common.AudioAttributes audioAttributes>;
+
+        $r4 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r5 = (androidx.media3.common.AudioAttributes) $r4;
+
+        $i0 = $r5.<androidx.media3.common.AudioAttributes: int usage>;
+
+        $i1 = staticinvoke <androidx.media3.common.util.Util: int getStreamTypeForAudioUsage(int)>($i0);
+
+        $i2 = r0.<androidx.media3.exoplayer.AudioFocusManager: int focusGainToRequest>;
+
+        $i3 = virtualinvoke $r2.<android.media.AudioManager: int requestAudioFocus(android.media.AudioManager$OnAudioFocusChangeListener,int,int)>($r3, $i1, $i2);
+
+        return $i3;
+    }
+
+    private int requestAudioFocusV26()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        android.media.AudioFocusRequest$Builder r1, $r10, $r11, $r13, $r15;
+        boolean z0, $z1;
+        android.media.AudioFocusRequest $r2, $r3, $r4, $r14, $r17;
+        androidx.media3.common.AudioAttributes $r5, $r7;
+        java.lang.Object $r6;
+        androidx.media3.common.AudioAttributes$AudioAttributesV21 $r8;
+        android.media.AudioAttributes $r9;
+        androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener $r12;
+        int $i0, $i1;
+        android.media.AudioManager $r16;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        $r2 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioFocusRequest audioFocusRequest>;
+
+        if $r2 == null goto label1;
+
+        $z1 = r0.<androidx.media3.exoplayer.AudioFocusManager: boolean rebuildAudioFocusRequest>;
+
+        if $z1 == 0 goto label4;
+
+     label1:
+        $r3 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioFocusRequest audioFocusRequest>;
+
+        if $r3 != null goto label2;
+
+        $r15 = new android.media.AudioFocusRequest$Builder;
+
+        $i0 = r0.<androidx.media3.exoplayer.AudioFocusManager: int focusGainToRequest>;
+
+        specialinvoke $r15.<android.media.AudioFocusRequest$Builder: void <init>(int)>($i0);
+
+        goto label3;
+
+     label2:
+        $r15 = new android.media.AudioFocusRequest$Builder;
+
+        $r4 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioFocusRequest audioFocusRequest>;
+
+        specialinvoke $r15.<android.media.AudioFocusRequest$Builder: void <init>(android.media.AudioFocusRequest)>($r4);
+
+     label3:
+        r1 = $r15;
+
+        z0 = specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: boolean willPauseWhenDucked()>();
+
+        $r5 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.common.AudioAttributes audioAttributes>;
+
+        $r6 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r5);
+
+        $r7 = (androidx.media3.common.AudioAttributes) $r6;
+
+        $r8 = virtualinvoke $r7.<androidx.media3.common.AudioAttributes: androidx.media3.common.AudioAttributes$AudioAttributesV21 getAudioAttributesV21()>();
+
+        $r9 = $r8.<androidx.media3.common.AudioAttributes$AudioAttributesV21: android.media.AudioAttributes audioAttributes>;
+
+        $r10 = virtualinvoke r1.<android.media.AudioFocusRequest$Builder: android.media.AudioFocusRequest$Builder setAudioAttributes(android.media.AudioAttributes)>($r9);
+
+        $r11 = virtualinvoke $r10.<android.media.AudioFocusRequest$Builder: android.media.AudioFocusRequest$Builder setWillPauseWhenDucked(boolean)>(z0);
+
+        $r12 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener focusListener>;
+
+        $r13 = virtualinvoke $r11.<android.media.AudioFocusRequest$Builder: android.media.AudioFocusRequest$Builder setOnAudioFocusChangeListener(android.media.AudioManager$OnAudioFocusChangeListener)>($r12);
+
+        $r14 = virtualinvoke $r13.<android.media.AudioFocusRequest$Builder: android.media.AudioFocusRequest build()>();
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioFocusRequest audioFocusRequest> = $r14;
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager: boolean rebuildAudioFocusRequest> = 0;
+
+     label4:
+        $r16 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioManager audioManager>;
+
+        $r17 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioFocusRequest audioFocusRequest>;
+
+        $i1 = virtualinvoke $r16.<android.media.AudioManager: int requestAudioFocus(android.media.AudioFocusRequest)>($r17);
+
+        return $i1;
+    }
+
+    private void abandonAudioFocusDefault()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener $r1;
+        android.media.AudioManager $r2;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        $r2 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioManager audioManager>;
+
+        $r1 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener focusListener>;
+
+        virtualinvoke $r2.<android.media.AudioManager: int abandonAudioFocus(android.media.AudioManager$OnAudioFocusChangeListener)>($r1);
+
+        return;
+    }
+
+    private void abandonAudioFocusV26()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        android.media.AudioFocusRequest $r1, $r2;
+        android.media.AudioManager $r3;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        $r1 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioFocusRequest audioFocusRequest>;
+
+        if $r1 == null goto label1;
+
+        $r3 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioManager audioManager>;
+
+        $r2 = r0.<androidx.media3.exoplayer.AudioFocusManager: android.media.AudioFocusRequest audioFocusRequest>;
+
+        virtualinvoke $r3.<android.media.AudioManager: int abandonAudioFocusRequest(android.media.AudioFocusRequest)>($r2);
+
+     label1:
+        return;
+    }
+
+    private boolean willPauseWhenDucked()
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        androidx.media3.common.AudioAttributes $r1, $r2;
+        int $i0;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        $r1 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.common.AudioAttributes audioAttributes>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.common.AudioAttributes audioAttributes>;
+
+        $i0 = $r2.<androidx.media3.common.AudioAttributes: int contentType>;
+
+        if $i0 != 1 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private static int convertAudioAttributesToFocusGain(androidx.media3.common.AudioAttributes)
+    {
+        androidx.media3.common.AudioAttributes r0;
+        int $i0, $i1, $i2, $i3;
+        java.lang.StringBuilder $r1, $r2, $r3;
+        java.lang.String $r4;
+
+        r0 := @parameter0: androidx.media3.common.AudioAttributes;
+
+        if r0 != null goto label01;
+
+        return 0;
+
+     label01:
+        $i0 = r0.<androidx.media3.common.AudioAttributes: int usage>;
+
+        tableswitch($i0)
+        {
+            case 0: goto label04;
+            case 1: goto label03;
+            case 2: goto label05;
+            case 3: goto label02;
+            case 4: goto label05;
+            case 5: goto label06;
+            case 6: goto label06;
+            case 7: goto label06;
+            case 8: goto label06;
+            case 9: goto label06;
+            case 10: goto label06;
+            case 11: goto label09;
+            case 12: goto label06;
+            case 13: goto label06;
+            case 14: goto label03;
+            case 15: goto label11;
+            case 16: goto label07;
+            default: goto label11;
+        };
+
+     label02:
+        return 0;
+
+     label03:
+        return 1;
+
+     label04:
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("AudioFocusManager", "Specify a proper usage in the audio attributes for audio focus handling. Using AUDIOFOCUS_GAIN by default.");
+
+        return 1;
+
+     label05:
+        return 2;
+
+     label06:
+        return 3;
+
+     label07:
+        $i1 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i1 < 19 goto label08;
+
+        return 4;
+
+     label08:
+        return 2;
+
+     label09:
+        $i2 = r0.<androidx.media3.common.AudioAttributes: int contentType>;
+
+        if $i2 != 1 goto label10;
+
+        return 2;
+
+     label10:
+        return 3;
+
+     label11:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unidentified audio usage: ");
+
+        $i3 = r0.<androidx.media3.common.AudioAttributes: int usage>;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i3);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("AudioFocusManager", $r4);
+
+        return 0;
+    }
+
+    private void setAudioFocusState(int)
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        int i0, $i1;
+        float f0, $f1, $f2;
+        byte $b2;
+        androidx.media3.exoplayer.AudioFocusManager$PlayerControl $r1, $r2;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        i0 := @parameter0: int;
+
+        $i1 = r0.<androidx.media3.exoplayer.AudioFocusManager: int audioFocusState>;
+
+        if $i1 != i0 goto label1;
+
+        return;
+
+     label1:
+        r0.<androidx.media3.exoplayer.AudioFocusManager: int audioFocusState> = i0;
+
+        if i0 != 3 goto label2;
+
+        $f2 = 0.2F;
+
+        goto label3;
+
+     label2:
+        $f2 = 1.0F;
+
+     label3:
+        f0 = $f2;
+
+        $f1 = r0.<androidx.media3.exoplayer.AudioFocusManager: float volumeMultiplier>;
+
+        $b2 = $f1 cmpl f0;
+
+        if $b2 != 0 goto label4;
+
+        return;
+
+     label4:
+        r0.<androidx.media3.exoplayer.AudioFocusManager: float volumeMultiplier> = f0;
+
+        $r1 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$PlayerControl playerControl>;
+
+        if $r1 == null goto label5;
+
+        $r2 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$PlayerControl playerControl>;
+
+        interfaceinvoke $r2.<androidx.media3.exoplayer.AudioFocusManager$PlayerControl: void setVolumeMultiplier(float)>(f0);
+
+     label5:
+        return;
+    }
+
+    private void handlePlatformAudioFocusChange(int)
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        int i0;
+        boolean $z0;
+        java.lang.StringBuilder $r1, $r2, $r3;
+        java.lang.String $r4;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        i0 := @parameter0: int;
+
+        tableswitch(i0)
+        {
+            case -3: goto label3;
+            case -2: goto label3;
+            case -1: goto label2;
+            case 0: goto label7;
+            case 1: goto label1;
+            default: goto label7;
+        };
+
+     label1:
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void setAudioFocusState(int)>(1);
+
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void executePlayerCommand(int)>(1);
+
+        return;
+
+     label2:
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void executePlayerCommand(int)>(-1);
+
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void abandonAudioFocusIfHeld()>();
+
+        return;
+
+     label3:
+        if i0 == -2 goto label4;
+
+        $z0 = specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: boolean willPauseWhenDucked()>();
+
+        if $z0 == 0 goto label5;
+
+     label4:
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void executePlayerCommand(int)>(0);
+
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void setAudioFocusState(int)>(2);
+
+        goto label6;
+
+     label5:
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void setAudioFocusState(int)>(3);
+
+     label6:
+        return;
+
+     label7:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unknown focus change type: ");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("AudioFocusManager", $r4);
+
+        return;
+    }
+
+    private void executePlayerCommand(int)
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        int i0;
+        androidx.media3.exoplayer.AudioFocusManager$PlayerControl $r1, $r2;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$PlayerControl playerControl>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.media3.exoplayer.AudioFocusManager: androidx.media3.exoplayer.AudioFocusManager$PlayerControl playerControl>;
+
+        interfaceinvoke $r2.<androidx.media3.exoplayer.AudioFocusManager$PlayerControl: void executePlayerCommand(int)>(i0);
+
+     label1:
+        return;
+    }
+
+    static void access$000(androidx.media3.exoplayer.AudioFocusManager, int)
+    {
+        androidx.media3.exoplayer.AudioFocusManager r0;
+        int i0;
+
+        r0 := @parameter0: androidx.media3.exoplayer.AudioFocusManager;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<androidx.media3.exoplayer.AudioFocusManager: void handlePlatformAudioFocusChange(int)>(i0);
+
+        return;
+    }
+
+androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener
+<androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener: android.os.Handler eventHandler>
+<androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener: androidx.media3.exoplayer.AudioFocusManager this$0>
+    public void <init>(androidx.media3.exoplayer.AudioFocusManager, android.os.Handler)
+    {
+        androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener r0;
+        androidx.media3.exoplayer.AudioFocusManager r1;
+        android.os.Handler r2;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener;
+
+        r1 := @parameter0: androidx.media3.exoplayer.AudioFocusManager;
+
+        r2 := @parameter1: android.os.Handler;
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener: androidx.media3.exoplayer.AudioFocusManager this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener: android.os.Handler eventHandler> = r2;
+
+        return;
+    }
+
+    public void onAudioFocusChange(int)
+    {
+        androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener r0;
+        int i0;
+        android.os.Handler $r1;
+        java.lang.Runnable $r2;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener: android.os.Handler eventHandler>;
+
+        $r2 = dynamicinvoke "run" <java.lang.Runnable (androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener,int)>(r0, i0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener: void lambda$onAudioFocusChange$0(int)>, methodtype: void __METHODTYPE__());
+
+        virtualinvoke $r1.<android.os.Handler: boolean post(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    private void lambda$onAudioFocusChange$0(int)
+    {
+        androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener r0;
+        int i0;
+        androidx.media3.exoplayer.AudioFocusManager $r1;
+
+        r0 := @this: androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<androidx.media3.exoplayer.AudioFocusManager$AudioFocusListener: androidx.media3.exoplayer.AudioFocusManager this$0>;
+
+        staticinvoke <androidx.media3.exoplayer.AudioFocusManager: void access$000(androidx.media3.exoplayer.AudioFocusManager,int)>($r1, i0);
+
+        return;
+    }
+
+androidx.media3.exoplayer.AudioFocusManager$PlayerCommand
+androidx.media3.exoplayer.AudioFocusManager$PlayerControl
+<androidx.media3.exoplayer.AudioFocusManager$PlayerControl: void setVolumeMultiplier(float)>
+<androidx.media3.exoplayer.AudioFocusManager$PlayerControl: void executePlayerCommand(int)>

@@ -1,0 +1,97 @@
+androidx.work.impl.background.systemalarm.RescheduleReceiver
+<androidx.work.impl.background.systemalarm.RescheduleReceiver: java.lang.String TAG>
+    public void <init>()
+    {
+        androidx.work.impl.background.systemalarm.RescheduleReceiver r0;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.RescheduleReceiver;
+
+        specialinvoke r0.<android.content.BroadcastReceiver: void <init>()>();
+
+        return;
+    }
+
+    public void onReceive(android.content.Context, android.content.Intent)
+    {
+        androidx.work.impl.background.systemalarm.RescheduleReceiver r0;
+        android.content.Context r1;
+        android.content.Intent r2, r16;
+        android.content.BroadcastReceiver$PendingResult r3;
+        androidx.work.Logger $r4, $r12;
+        java.lang.StringBuilder $r5, $r7, $r8;
+        java.lang.String $r6, $r9, $r13;
+        int $i0;
+        java.lang.Throwable $r11, r15;
+        androidx.work.impl.WorkManagerImpl r14;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.RescheduleReceiver;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.content.Intent;
+
+        $r4 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r6 = <androidx.work.impl.background.systemalarm.RescheduleReceiver: java.lang.String TAG>;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Received intent ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r6, $r9);
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 23 goto label4;
+
+     label1:
+        r14 = staticinvoke <androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkManagerImpl getInstance(android.content.Context)>(r1);
+
+        r3 = virtualinvoke r0.<androidx.work.impl.background.systemalarm.RescheduleReceiver: android.content.BroadcastReceiver$PendingResult goAsync()>();
+
+        virtualinvoke r14.<androidx.work.impl.WorkManagerImpl: void setReschedulePendingResult(android.content.BroadcastReceiver$PendingResult)>(r3);
+
+     label2:
+        goto label5;
+
+     label3:
+        $r11 := @caughtexception;
+
+        r15 = $r11;
+
+        $r12 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r13 = <androidx.work.impl.background.systemalarm.RescheduleReceiver: java.lang.String TAG>;
+
+        virtualinvoke $r12.<androidx.work.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>($r13, "Cannot reschedule jobs. WorkManager needs to be initialized via a ContentProvider#onCreate() or an Application#onCreate().", r15);
+
+        goto label5;
+
+     label4:
+        r16 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: android.content.Intent createRescheduleIntent(android.content.Context)>(r1);
+
+        virtualinvoke r1.<android.content.Context: android.content.ComponentName startService(android.content.Intent)>(r16);
+
+     label5:
+        return;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("RescheduleReceiver");
+
+        <androidx.work.impl.background.systemalarm.RescheduleReceiver: java.lang.String TAG> = $r0;
+
+        return;
+    }
+

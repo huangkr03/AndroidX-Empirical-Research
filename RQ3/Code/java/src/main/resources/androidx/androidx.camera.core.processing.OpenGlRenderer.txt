@@ -1,0 +1,1569 @@
+androidx.camera.core.processing.OpenGlRenderer
+<androidx.camera.core.processing.OpenGlRenderer: java.lang.String TAG>
+<androidx.camera.core.processing.OpenGlRenderer: java.lang.String VAR_TEXTURE_COORD>
+<androidx.camera.core.processing.OpenGlRenderer: java.lang.String VAR_TEXTURE>
+<androidx.camera.core.processing.OpenGlRenderer: java.lang.String DEFAULT_VERTEX_SHADER>
+<androidx.camera.core.processing.OpenGlRenderer: java.lang.String DEFAULT_FRAGMENT_SHADER>
+<androidx.camera.core.processing.OpenGlRenderer: float[] VERTEX_COORDS>
+<androidx.camera.core.processing.OpenGlRenderer: java.nio.FloatBuffer VERTEX_BUF>
+<androidx.camera.core.processing.OpenGlRenderer: float[] TEX_COORDS>
+<androidx.camera.core.processing.OpenGlRenderer: java.nio.FloatBuffer TEX_BUF>
+<androidx.camera.core.processing.OpenGlRenderer: int SIZEOF_FLOAT>
+<androidx.camera.core.processing.OpenGlRenderer: int TEX_TARGET>
+<androidx.camera.core.processing.OpenGlRenderer: java.util.concurrent.atomic.AtomicBoolean mInitialized>
+<androidx.camera.core.processing.OpenGlRenderer: java.util.Map mOutputSurfaceMap>
+<androidx.camera.core.processing.OpenGlRenderer: java.lang.Thread mGlThread>
+<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>
+<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext>
+<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLConfig mEglConfig>
+<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLSurface mTempSurface>
+<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface>
+<androidx.camera.core.processing.OpenGlRenderer: int mTexId>
+<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle>
+<androidx.camera.core.processing.OpenGlRenderer: int mTexMatrixLoc>
+<androidx.camera.core.processing.OpenGlRenderer: int mPositionLoc>
+<androidx.camera.core.processing.OpenGlRenderer: int mTexCoordLoc>
+    public void <init>()
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        java.util.HashMap $r2;
+        android.opengl.EGLDisplay $r3;
+        android.opengl.EGLContext $r4;
+        android.opengl.EGLSurface $r5;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.concurrent.atomic.AtomicBoolean mInitialized> = $r1;
+
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>()>();
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.Map mOutputSurfaceMap> = $r2;
+
+        $r3 = <android.opengl.EGL14: android.opengl.EGLDisplay EGL_NO_DISPLAY>;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay> = $r3;
+
+        $r4 = <android.opengl.EGL14: android.opengl.EGLContext EGL_NO_CONTEXT>;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext> = $r4;
+
+        $r5 = <android.opengl.EGL14: android.opengl.EGLSurface EGL_NO_SURFACE>;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLSurface mTempSurface> = $r5;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexId> = -1;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle> = -1;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexMatrixLoc> = -1;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mPositionLoc> = -1;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexCoordLoc> = -1;
+
+        return;
+    }
+
+    public void init(androidx.camera.core.processing.ShaderProvider)
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        androidx.camera.core.processing.ShaderProvider r1;
+        java.lang.Throwable r2, $r6;
+        android.opengl.EGLSurface $r3;
+        java.lang.Thread $r4;
+        java.util.concurrent.atomic.AtomicBoolean $r5;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        r1 := @parameter0: androidx.camera.core.processing.ShaderProvider;
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void checkInitializedOrThrow(boolean)>(0);
+
+     label1:
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void createEglContext()>();
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void createTempSurface()>();
+
+        $r3 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLSurface mTempSurface>;
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void makeCurrent(android.opengl.EGLSurface)>($r3);
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void createProgram(androidx.camera.core.processing.ShaderProvider)>(r1);
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void loadLocations()>();
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void createTexture()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void releaseInternal()>();
+
+        throw r2;
+
+     label4:
+        $r4 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: java.lang.Thread mGlThread> = $r4;
+
+        $r5 = r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.concurrent.atomic.AtomicBoolean mInitialized>;
+
+        virtualinvoke $r5.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(1);
+
+        return;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+        catch java.lang.IllegalArgumentException from label1 to label2 with label3;
+    }
+
+    public void release()
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        $r1 = r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.concurrent.atomic.AtomicBoolean mInitialized>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: boolean getAndSet(boolean)>(0);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void checkGlThreadOrThrow()>();
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void releaseInternal()>();
+
+        return;
+    }
+
+    public void setOutputSurface(android.view.Surface)
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        android.view.Surface r1;
+        android.opengl.EGLSurface r2, $r11;
+        android.util.Size r3;
+        java.util.Map $r4, $r5, $r20;
+        boolean $z0;
+        java.lang.Object $r6, $r8, $r18;
+        androidx.camera.core.processing.OpenGlRenderer$OutputSurface $r7, $r9, $r10, $r12, $r13, $r14, $r15, $r21;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        android.opengl.EGLConfig $r16, $r19;
+        android.opengl.EGLDisplay $r17;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        r1 := @parameter0: android.view.Surface;
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void checkInitializedOrThrow(boolean)>(1);
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void checkGlThreadOrThrow()>();
+
+        $r4 = r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.Map mOutputSurfaceMap>;
+
+        $z0 = interfaceinvoke $r4.<java.util.Map: boolean containsKey(java.lang.Object)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        $r17 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r16 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLConfig mEglConfig>;
+
+        $r18 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r16);
+
+        $r19 = (android.opengl.EGLConfig) $r18;
+
+        r2 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLSurface createWindowSurface(android.opengl.EGLDisplay,android.opengl.EGLConfig,android.view.Surface)>($r17, $r19, r1);
+
+        r3 = specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: android.util.Size getSurfaceSize(android.opengl.EGLSurface)>(r2);
+
+        $r20 = r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.Map mOutputSurfaceMap>;
+
+        $i4 = virtualinvoke r3.<android.util.Size: int getWidth()>();
+
+        $i5 = virtualinvoke r3.<android.util.Size: int getHeight()>();
+
+        $r21 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer$OutputSurface: androidx.camera.core.processing.OpenGlRenderer$OutputSurface of(android.opengl.EGLSurface,int,int)>(r2, $i4, $i5);
+
+        interfaceinvoke $r20.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r21);
+
+     label1:
+        $r5 = r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.Map mOutputSurfaceMap>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r7 = (androidx.camera.core.processing.OpenGlRenderer$OutputSurface) $r6;
+
+        $r8 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r7);
+
+        $r9 = (androidx.camera.core.processing.OpenGlRenderer$OutputSurface) $r8;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface> = $r9;
+
+        $r10 = r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface>;
+
+        $r11 = virtualinvoke $r10.<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: android.opengl.EGLSurface getEglSurface()>();
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void makeCurrent(android.opengl.EGLSurface)>($r11);
+
+        $r12 = r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface>;
+
+        $i0 = virtualinvoke $r12.<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: int getWidth()>();
+
+        $r13 = r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface>;
+
+        $i1 = virtualinvoke $r13.<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: int getHeight()>();
+
+        staticinvoke <android.opengl.GLES20: void glViewport(int,int,int,int)>(0, 0, $i0, $i1);
+
+        $r14 = r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface>;
+
+        $i2 = virtualinvoke $r14.<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: int getWidth()>();
+
+        $r15 = r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface>;
+
+        $i3 = virtualinvoke $r15.<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: int getHeight()>();
+
+        staticinvoke <android.opengl.GLES20: void glScissor(int,int,int,int)>(0, 0, $i2, $i3);
+
+        return;
+    }
+
+    public int getTextureName()
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        int $i0;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void checkInitializedOrThrow(boolean)>(1);
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void checkGlThreadOrThrow()>();
+
+        $i0 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexId>;
+
+        return $i0;
+    }
+
+    public void render(long, float[])
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        long l0;
+        float[] r1;
+        byte b1, b2, b3, b4;
+        androidx.camera.core.processing.OpenGlRenderer$OutputSurface $r2, $r5, $r8;
+        int $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14;
+        java.nio.FloatBuffer $r3, $r4;
+        android.opengl.EGLDisplay $r6, $r9;
+        android.opengl.EGLSurface $r7, $r10;
+        boolean $z1;
+        java.lang.StringBuilder $r11, $r12, $r14;
+        java.lang.String $r13, $r15;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: float[];
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void checkInitializedOrThrow(boolean)>(1);
+
+        specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: void checkGlThreadOrThrow()>();
+
+        $r2 = r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface>;
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        $i5 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle>;
+
+        staticinvoke <android.opengl.GLES20: void glUseProgram(int)>($i5);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glUseProgram");
+
+        staticinvoke <android.opengl.GLES20: void glActiveTexture(int)>(33984);
+
+        $i6 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexId>;
+
+        staticinvoke <android.opengl.GLES20: void glBindTexture(int,int)>(36197, $i6);
+
+        $i7 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexMatrixLoc>;
+
+        staticinvoke <android.opengl.GLES20: void glUniformMatrix4fv(int,int,boolean,float[],int)>($i7, 1, 0, r1, 0);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glUniformMatrix4fv");
+
+        $i8 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mPositionLoc>;
+
+        staticinvoke <android.opengl.GLES20: void glEnableVertexAttribArray(int)>($i8);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glEnableVertexAttribArray");
+
+        b1 = 2;
+
+        b2 = 0;
+
+        $i9 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mPositionLoc>;
+
+        $r3 = <androidx.camera.core.processing.OpenGlRenderer: java.nio.FloatBuffer VERTEX_BUF>;
+
+        staticinvoke <android.opengl.GLES20: void glVertexAttribPointer(int,int,int,boolean,int,java.nio.Buffer)>($i9, b1, 5126, 0, b2, $r3);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glVertexAttribPointer");
+
+        $i10 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexCoordLoc>;
+
+        staticinvoke <android.opengl.GLES20: void glEnableVertexAttribArray(int)>($i10);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glEnableVertexAttribArray");
+
+        b3 = 2;
+
+        b4 = 0;
+
+        $i11 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexCoordLoc>;
+
+        $r4 = <androidx.camera.core.processing.OpenGlRenderer: java.nio.FloatBuffer TEX_BUF>;
+
+        staticinvoke <android.opengl.GLES20: void glVertexAttribPointer(int,int,int,boolean,int,java.nio.Buffer)>($i11, b3, 5126, 0, b4, $r4);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glVertexAttribPointer");
+
+        staticinvoke <android.opengl.GLES20: void glDrawArrays(int,int,int)>(5, 0, 4);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glDrawArrays");
+
+        $i12 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mPositionLoc>;
+
+        staticinvoke <android.opengl.GLES20: void glDisableVertexAttribArray(int)>($i12);
+
+        $i13 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexCoordLoc>;
+
+        staticinvoke <android.opengl.GLES20: void glDisableVertexAttribArray(int)>($i13);
+
+        staticinvoke <android.opengl.GLES20: void glUseProgram(int)>(0);
+
+        staticinvoke <android.opengl.GLES20: void glBindTexture(int,int)>(36197, 0);
+
+        $r6 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r5 = r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface>;
+
+        $r7 = virtualinvoke $r5.<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: android.opengl.EGLSurface getEglSurface()>();
+
+        staticinvoke <android.opengl.EGLExt: boolean eglPresentationTimeANDROID(android.opengl.EGLDisplay,android.opengl.EGLSurface,long)>($r6, $r7, l0);
+
+        $r9 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r8 = r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface>;
+
+        $r10 = virtualinvoke $r8.<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: android.opengl.EGLSurface getEglSurface()>();
+
+        $z1 = staticinvoke <android.opengl.EGL14: boolean eglSwapBuffers(android.opengl.EGLDisplay,android.opengl.EGLSurface)>($r9, $r10);
+
+        if $z1 != 0 goto label2;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to swap buffers with EGL error: 0x");
+
+        $i14 = staticinvoke <android.opengl.EGL14: int eglGetError()>();
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($i14);
+
+        $r14 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r13);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("OpenGlRenderer", $r15);
+
+     label2:
+        return;
+    }
+
+    private void createEglContext()
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        int[] r1, r2, r4, r6, r8, $r13, $r15;
+        android.opengl.EGLConfig[] r3;
+        android.opengl.EGLConfig r5;
+        android.opengl.EGLContext r7, $r16, $r18;
+        android.opengl.EGLDisplay $r9, $r10, $r11, $r12, $r14, $r17, $r19, $r25;
+        boolean $z0, $z1, $z2;
+        int $i0, $i1;
+        java.lang.StringBuilder $r20, $r21, $r22;
+        java.lang.String $r23;
+        java.lang.IllegalStateException $r24, $r26, $r27;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        $r9 = staticinvoke <android.opengl.EGL14: android.opengl.EGLDisplay eglGetDisplay(int)>(0);
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay> = $r9;
+
+        $r11 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r10 = <android.opengl.EGL14: android.opengl.EGLDisplay EGL_NO_DISPLAY>;
+
+        $z0 = staticinvoke <java.util.Objects: boolean equals(java.lang.Object,java.lang.Object)>($r11, $r10);
+
+        if $z0 == 0 goto label1;
+
+        $r27 = new java.lang.IllegalStateException;
+
+        specialinvoke $r27.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Unable to get EGL14 display");
+
+        throw $r27;
+
+     label1:
+        r1 = newarray (int)[2];
+
+        $r12 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $z1 = staticinvoke <android.opengl.EGL14: boolean eglInitialize(android.opengl.EGLDisplay,int[],int,int[],int)>($r12, r1, 0, r1, 1);
+
+        if $z1 != 0 goto label2;
+
+        $r25 = <android.opengl.EGL14: android.opengl.EGLDisplay EGL_NO_DISPLAY>;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay> = $r25;
+
+        $r26 = new java.lang.IllegalStateException;
+
+        specialinvoke $r26.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Unable to initialize EGL14");
+
+        throw $r26;
+
+     label2:
+        $r13 = newarray (int)[15];
+
+        $r13[0] = 12324;
+
+        $r13[1] = 8;
+
+        $r13[2] = 12323;
+
+        $r13[3] = 8;
+
+        $r13[4] = 12322;
+
+        $r13[5] = 8;
+
+        $r13[6] = 12321;
+
+        $r13[7] = 8;
+
+        $r13[8] = 12352;
+
+        $r13[9] = 4;
+
+        $r13[10] = 12610;
+
+        $r13[11] = 1;
+
+        $r13[12] = 12339;
+
+        $r13[13] = 5;
+
+        $r13[14] = 12344;
+
+        r2 = $r13;
+
+        r3 = newarray (android.opengl.EGLConfig)[1];
+
+        r4 = newarray (int)[1];
+
+        $r14 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $i0 = lengthof r3;
+
+        $z2 = staticinvoke <android.opengl.EGL14: boolean eglChooseConfig(android.opengl.EGLDisplay,int[],int,android.opengl.EGLConfig[],int,int,int[],int)>($r14, r2, 0, r3, 0, $i0, r4, 0);
+
+        if $z2 != 0 goto label3;
+
+        $r24 = new java.lang.IllegalStateException;
+
+        specialinvoke $r24.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Unable to find a suitable EGLConfig");
+
+        throw $r24;
+
+     label3:
+        r5 = r3[0];
+
+        $r15 = newarray (int)[3];
+
+        $r15[0] = 12440;
+
+        $r15[1] = 2;
+
+        $r15[2] = 12344;
+
+        r6 = $r15;
+
+        $r17 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r16 = <android.opengl.EGL14: android.opengl.EGLContext EGL_NO_CONTEXT>;
+
+        r7 = staticinvoke <android.opengl.EGL14: android.opengl.EGLContext eglCreateContext(android.opengl.EGLDisplay,android.opengl.EGLConfig,android.opengl.EGLContext,int[],int)>($r17, r5, $r16, r6, 0);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkEglErrorOrThrow(java.lang.String)>("eglCreateContext");
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLConfig mEglConfig> = r5;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext> = r7;
+
+        r8 = newarray (int)[1];
+
+        $r19 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r18 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext>;
+
+        staticinvoke <android.opengl.EGL14: boolean eglQueryContext(android.opengl.EGLDisplay,android.opengl.EGLContext,int,int[],int)>($r19, $r18, 12440, r8, 0);
+
+        $r20 = new java.lang.StringBuilder;
+
+        specialinvoke $r20.<java.lang.StringBuilder: void <init>()>();
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("EGLContext created, client version ");
+
+        $i1 = r8[0];
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("OpenGlRenderer", $r23);
+
+        return;
+    }
+
+    private void createTempSurface()
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        android.opengl.EGLConfig $r1, $r4;
+        android.opengl.EGLDisplay $r2;
+        java.lang.Object $r3;
+        android.opengl.EGLSurface $r5;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        $r2 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r1 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLConfig mEglConfig>;
+
+        $r3 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r1);
+
+        $r4 = (android.opengl.EGLConfig) $r3;
+
+        $r5 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLSurface createPBufferSurface(android.opengl.EGLDisplay,android.opengl.EGLConfig,int,int)>($r2, $r4, 1, 1);
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLSurface mTempSurface> = $r5;
+
+        return;
+    }
+
+    private void makeCurrent(android.opengl.EGLSurface)
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        android.opengl.EGLSurface r1;
+        android.opengl.EGLDisplay $r2, $r7;
+        android.opengl.EGLContext $r4, $r6;
+        boolean $z0;
+        java.lang.IllegalStateException $r8;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        r1 := @parameter0: android.opengl.EGLSurface;
+
+        $r2 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r4 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext>;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        $r7 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r6 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext>;
+
+        $z0 = staticinvoke <android.opengl.EGL14: boolean eglMakeCurrent(android.opengl.EGLDisplay,android.opengl.EGLSurface,android.opengl.EGLSurface,android.opengl.EGLContext)>($r7, r1, r1, $r6);
+
+        if $z0 != 0 goto label1;
+
+        $r8 = new java.lang.IllegalStateException;
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.String)>("eglMakeCurrent failed");
+
+        throw $r8;
+
+     label1:
+        return;
+    }
+
+    private void createProgram(androidx.camera.core.processing.ShaderProvider)
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        androidx.camera.core.processing.ShaderProvider r1;
+        java.lang.String $r2, $r6, $r8;
+        int $i0, i1, i2, i3;
+        java.lang.IllegalStateException $r3;
+        java.lang.StringBuilder $r4, $r5, $r7;
+        java.lang.Throwable $r9, r11;
+        int[] r10;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        r1 := @parameter0: androidx.camera.core.processing.ShaderProvider;
+
+        i1 = -1;
+
+        i2 = -1;
+
+        i3 = -1;
+
+     label1:
+        $r2 = <androidx.camera.core.processing.OpenGlRenderer: java.lang.String DEFAULT_VERTEX_SHADER>;
+
+        i1 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer: int loadShader(int,java.lang.String)>(35633, $r2);
+
+        i2 = specialinvoke r0.<androidx.camera.core.processing.OpenGlRenderer: int loadFragmentShader(androidx.camera.core.processing.ShaderProvider)>(r1);
+
+        i3 = staticinvoke <android.opengl.GLES20: int glCreateProgram()>();
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glCreateProgram");
+
+        staticinvoke <android.opengl.GLES20: void glAttachShader(int,int)>(i3, i1);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glAttachShader");
+
+        staticinvoke <android.opengl.GLES20: void glAttachShader(int,int)>(i3, i2);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glAttachShader");
+
+        staticinvoke <android.opengl.GLES20: void glLinkProgram(int)>(i3);
+
+        r10 = newarray (int)[1];
+
+        staticinvoke <android.opengl.GLES20: void glGetProgramiv(int,int,int[],int)>(i3, 35714, r10, 0);
+
+        $i0 = r10[0];
+
+        if $i0 == 1 goto label2;
+
+        $r3 = new java.lang.IllegalStateException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Could not link program: ");
+
+        $r6 = staticinvoke <android.opengl.GLES20: java.lang.String glGetProgramInfoLog(int)>(i3);
+
+        $r7 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r8);
+
+        throw $r3;
+
+     label2:
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle> = i3;
+
+     label3:
+        goto label8;
+
+     label4:
+        $r9 := @caughtexception;
+
+        r11 = $r9;
+
+        if i1 == -1 goto label5;
+
+        staticinvoke <android.opengl.GLES20: void glDeleteShader(int)>(i1);
+
+     label5:
+        if i2 == -1 goto label6;
+
+        staticinvoke <android.opengl.GLES20: void glDeleteShader(int)>(i2);
+
+     label6:
+        if i3 == -1 goto label7;
+
+        staticinvoke <android.opengl.GLES20: void glDeleteProgram(int)>(i3);
+
+     label7:
+        throw r11;
+
+     label8:
+        return;
+
+        catch java.lang.IllegalStateException from label1 to label3 with label4;
+        catch java.lang.IllegalArgumentException from label1 to label3 with label4;
+    }
+
+    private void loadLocations()
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        $i0 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle>;
+
+        $i1 = staticinvoke <android.opengl.GLES20: int glGetAttribLocation(int,java.lang.String)>($i0, "aPosition");
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mPositionLoc> = $i1;
+
+        $i2 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mPositionLoc>;
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkLocationOrThrow(int,java.lang.String)>($i2, "aPosition");
+
+        $i3 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle>;
+
+        $i4 = staticinvoke <android.opengl.GLES20: int glGetAttribLocation(int,java.lang.String)>($i3, "aTextureCoord");
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexCoordLoc> = $i4;
+
+        $i5 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexCoordLoc>;
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkLocationOrThrow(int,java.lang.String)>($i5, "aTextureCoord");
+
+        $i6 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle>;
+
+        $i7 = staticinvoke <android.opengl.GLES20: int glGetUniformLocation(int,java.lang.String)>($i6, "uTexMatrix");
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexMatrixLoc> = $i7;
+
+        $i8 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexMatrixLoc>;
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkLocationOrThrow(int,java.lang.String)>($i8, "uTexMatrix");
+
+        return;
+    }
+
+    private void createTexture()
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        int[] r1;
+        int i0;
+        java.lang.StringBuilder $r2, $r3, $r4;
+        java.lang.String $r5;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        r1 = newarray (int)[1];
+
+        staticinvoke <android.opengl.GLES20: void glGenTextures(int,int[],int)>(1, r1, 0);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glGenTextures");
+
+        i0 = r1[0];
+
+        staticinvoke <android.opengl.GLES20: void glBindTexture(int,int)>(36197, i0);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("glBindTexture ");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>($r5);
+
+        staticinvoke <android.opengl.GLES20: void glTexParameterf(int,int,float)>(36197, 10241, 9728.0F);
+
+        staticinvoke <android.opengl.GLES20: void glTexParameterf(int,int,float)>(36197, 10240, 9729.0F);
+
+        staticinvoke <android.opengl.GLES20: void glTexParameteri(int,int,int)>(36197, 10242, 33071);
+
+        staticinvoke <android.opengl.GLES20: void glTexParameteri(int,int,int)>(36197, 10243, 33071);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>("glTexParameter");
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexId> = i0;
+
+        return;
+    }
+
+    private int loadFragmentShader(androidx.camera.core.processing.ShaderProvider)
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        androidx.camera.core.processing.ShaderProvider r1, $r4;
+        java.lang.String r2, $r5;
+        java.lang.Throwable r3, $r6;
+        boolean $z0, $z1, $z2;
+        int $i0, $i1;
+        java.lang.IllegalArgumentException $r7, $r8;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        r1 := @parameter0: androidx.camera.core.processing.ShaderProvider;
+
+        $r4 = <androidx.camera.core.processing.ShaderProvider: androidx.camera.core.processing.ShaderProvider DEFAULT>;
+
+        if r1 != $r4 goto label1;
+
+        $r5 = <androidx.camera.core.processing.OpenGlRenderer: java.lang.String DEFAULT_FRAGMENT_SHADER>;
+
+        $i1 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer: int loadShader(int,java.lang.String)>(35632, $r5);
+
+        return $i1;
+
+     label1:
+        r2 = interfaceinvoke r1.<androidx.camera.core.processing.ShaderProvider: java.lang.String createFragmentShader(java.lang.String,java.lang.String)>("sTexture", "vTextureCoord");
+
+        if r2 == null goto label2;
+
+        $z0 = virtualinvoke r2.<java.lang.String: boolean contains(java.lang.CharSequence)>("vTextureCoord");
+
+        if $z0 == 0 goto label2;
+
+        $z1 = virtualinvoke r2.<java.lang.String: boolean contains(java.lang.CharSequence)>("sTexture");
+
+        if $z1 != 0 goto label3;
+
+     label2:
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Invalid fragment shader");
+
+        throw $r8;
+
+     label3:
+        $i0 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer: int loadShader(int,java.lang.String)>(35632, r2);
+
+     label4:
+        return $i0;
+
+     label5:
+        $r6 := @caughtexception;
+
+        r3 = $r6;
+
+        $z2 = r3 instanceof java.lang.IllegalArgumentException;
+
+        if $z2 == 0 goto label6;
+
+        throw r3;
+
+     label6:
+        $r7 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r7.<java.lang.IllegalArgumentException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to compile fragment shader", r3);
+
+        throw $r7;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+    }
+
+    private android.util.Size getSurfaceSize(android.opengl.EGLSurface)
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        android.opengl.EGLSurface r1;
+        int i0, i1;
+        android.opengl.EGLDisplay $r2, $r3;
+        android.util.Size $r4;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        r1 := @parameter0: android.opengl.EGLSurface;
+
+        $r2 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        i0 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer: int querySurface(android.opengl.EGLDisplay,android.opengl.EGLSurface,int)>($r2, r1, 12375);
+
+        $r3 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        i1 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer: int querySurface(android.opengl.EGLDisplay,android.opengl.EGLSurface,int)>($r3, r1, 12374);
+
+        $r4 = new android.util.Size;
+
+        specialinvoke $r4.<android.util.Size: void <init>(int,int)>(i0, i1);
+
+        return $r4;
+    }
+
+    private void releaseInternal()
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        java.util.Iterator r1;
+        androidx.camera.core.processing.OpenGlRenderer$OutputSurface r2;
+        int $i0, $i1;
+        java.util.Map $r3, $r5;
+        java.util.Collection $r4;
+        android.opengl.EGLSurface $r6, $r7, $r15, $r16, $r21, $r23, $r26;
+        boolean $z0, $z1, $z2, $z8;
+        android.opengl.EGLDisplay $r8, $r9, $r12, $r13, $r17, $r19, $r22, $r25;
+        android.opengl.EGLContext $r10, $r11, $r14, $r18, $r20;
+        java.lang.Object $r24;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        $i0 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle>;
+
+        if $i0 == -1 goto label1;
+
+        $i1 = r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle>;
+
+        staticinvoke <android.opengl.GLES20: void glDeleteProgram(int)>($i1);
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle> = -1;
+
+     label1:
+        $r3 = r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.Map mOutputSurfaceMap>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.util.Collection values()>();
+
+        r1 = interfaceinvoke $r4.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label2:
+        $z8 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z8 == 0 goto label3;
+
+        $r24 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (androidx.camera.core.processing.OpenGlRenderer$OutputSurface) $r24;
+
+        $r25 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r26 = virtualinvoke r2.<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: android.opengl.EGLSurface getEglSurface()>();
+
+        staticinvoke <android.opengl.EGL14: boolean eglDestroySurface(android.opengl.EGLDisplay,android.opengl.EGLSurface)>($r25, $r26);
+
+        goto label2;
+
+     label3:
+        $r5 = r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.Map mOutputSurfaceMap>;
+
+        interfaceinvoke $r5.<java.util.Map: void clear()>();
+
+        $r7 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLSurface mTempSurface>;
+
+        $r6 = <android.opengl.EGL14: android.opengl.EGLSurface EGL_NO_SURFACE>;
+
+        $z0 = staticinvoke <java.util.Objects: boolean equals(java.lang.Object,java.lang.Object)>($r7, $r6);
+
+        if $z0 != 0 goto label4;
+
+        $r22 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r21 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLSurface mTempSurface>;
+
+        staticinvoke <android.opengl.EGL14: boolean eglDestroySurface(android.opengl.EGLDisplay,android.opengl.EGLSurface)>($r22, $r21);
+
+        $r23 = <android.opengl.EGL14: android.opengl.EGLSurface EGL_NO_SURFACE>;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLSurface mTempSurface> = $r23;
+
+     label4:
+        $r9 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r8 = <android.opengl.EGL14: android.opengl.EGLDisplay EGL_NO_DISPLAY>;
+
+        $z1 = staticinvoke <java.util.Objects: boolean equals(java.lang.Object,java.lang.Object)>($r9, $r8);
+
+        if $z1 != 0 goto label6;
+
+        $r11 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext>;
+
+        $r10 = <android.opengl.EGL14: android.opengl.EGLContext EGL_NO_CONTEXT>;
+
+        $z2 = staticinvoke <java.util.Objects: boolean equals(java.lang.Object,java.lang.Object)>($r11, $r10);
+
+        if $z2 != 0 goto label5;
+
+        $r17 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r16 = <android.opengl.EGL14: android.opengl.EGLSurface EGL_NO_SURFACE>;
+
+        $r15 = <android.opengl.EGL14: android.opengl.EGLSurface EGL_NO_SURFACE>;
+
+        $r14 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext>;
+
+        staticinvoke <android.opengl.EGL14: boolean eglMakeCurrent(android.opengl.EGLDisplay,android.opengl.EGLSurface,android.opengl.EGLSurface,android.opengl.EGLContext)>($r17, $r16, $r15, $r14);
+
+        $r19 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        $r18 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext>;
+
+        staticinvoke <android.opengl.EGL14: boolean eglDestroyContext(android.opengl.EGLDisplay,android.opengl.EGLContext)>($r19, $r18);
+
+        $r20 = <android.opengl.EGL14: android.opengl.EGLContext EGL_NO_CONTEXT>;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLContext mEglContext> = $r20;
+
+     label5:
+        $r12 = r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay>;
+
+        staticinvoke <android.opengl.EGL14: boolean eglTerminate(android.opengl.EGLDisplay)>($r12);
+
+        $r13 = <android.opengl.EGL14: android.opengl.EGLDisplay EGL_NO_DISPLAY>;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLDisplay mEglDisplay> = $r13;
+
+     label6:
+        r0.<androidx.camera.core.processing.OpenGlRenderer: android.opengl.EGLConfig mEglConfig> = null;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mProgramHandle> = -1;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexMatrixLoc> = -1;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mPositionLoc> = -1;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexCoordLoc> = -1;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: int mTexId> = -1;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: androidx.camera.core.processing.OpenGlRenderer$OutputSurface mCurrentOutputSurface> = null;
+
+        r0.<androidx.camera.core.processing.OpenGlRenderer: java.lang.Thread mGlThread> = null;
+
+        return;
+    }
+
+    private void checkInitializedOrThrow(boolean)
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        boolean z0, z1, $z2, $z3;
+        java.lang.String r1, $r3;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        z0 := @parameter0: boolean;
+
+        $r2 = r0.<androidx.camera.core.processing.OpenGlRenderer: java.util.concurrent.atomic.AtomicBoolean mInitialized>;
+
+        $z2 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if z0 != $z2 goto label1;
+
+        $z3 = 1;
+
+        goto label2;
+
+     label1:
+        $z3 = 0;
+
+     label2:
+        z1 = $z3;
+
+        if z0 == 0 goto label3;
+
+        $r3 = "OpenGlRenderer is not initialized";
+
+        goto label4;
+
+     label3:
+        $r3 = "OpenGlRenderer is already initialized";
+
+     label4:
+        r1 = $r3;
+
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>(z1, r1);
+
+        return;
+    }
+
+    private void checkGlThreadOrThrow()
+    {
+        androidx.camera.core.processing.OpenGlRenderer r0;
+        java.lang.Thread $r1, $r2;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer;
+
+        $r1 = r0.<androidx.camera.core.processing.OpenGlRenderer: java.lang.Thread mGlThread>;
+
+        $r2 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        if $r1 != $r2 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z0, "Method call must be called on the GL thread.");
+
+        return;
+    }
+
+    private static android.opengl.EGLSurface createPBufferSurface(android.opengl.EGLDisplay, android.opengl.EGLConfig, int, int)
+    {
+        android.opengl.EGLDisplay r0;
+        android.opengl.EGLConfig r1;
+        int i0, i1;
+        int[] r2, $r4;
+        android.opengl.EGLSurface r3;
+        java.lang.IllegalStateException $r5;
+
+        r0 := @parameter0: android.opengl.EGLDisplay;
+
+        r1 := @parameter1: android.opengl.EGLConfig;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        $r4 = newarray (int)[5];
+
+        $r4[0] = 12375;
+
+        $r4[1] = i0;
+
+        $r4[2] = 12374;
+
+        $r4[3] = i1;
+
+        $r4[4] = 12344;
+
+        r2 = $r4;
+
+        r3 = staticinvoke <android.opengl.EGL14: android.opengl.EGLSurface eglCreatePbufferSurface(android.opengl.EGLDisplay,android.opengl.EGLConfig,int[],int)>(r0, r1, r2, 0);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkEglErrorOrThrow(java.lang.String)>("eglCreatePbufferSurface");
+
+        if r3 != null goto label1;
+
+        $r5 = new java.lang.IllegalStateException;
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.String)>("surface was null");
+
+        throw $r5;
+
+     label1:
+        return r3;
+    }
+
+    private static android.opengl.EGLSurface createWindowSurface(android.opengl.EGLDisplay, android.opengl.EGLConfig, android.view.Surface)
+    {
+        android.opengl.EGLDisplay r0;
+        android.opengl.EGLConfig r1;
+        android.view.Surface r2;
+        int[] r3, $r5;
+        android.opengl.EGLSurface r4;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @parameter0: android.opengl.EGLDisplay;
+
+        r1 := @parameter1: android.opengl.EGLConfig;
+
+        r2 := @parameter2: android.view.Surface;
+
+        $r5 = newarray (int)[1];
+
+        $r5[0] = 12344;
+
+        r3 = $r5;
+
+        r4 = staticinvoke <android.opengl.EGL14: android.opengl.EGLSurface eglCreateWindowSurface(android.opengl.EGLDisplay,android.opengl.EGLConfig,java.lang.Object,int[],int)>(r0, r1, r2, r3, 0);
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkEglErrorOrThrow(java.lang.String)>("eglCreateWindowSurface");
+
+        if r4 != null goto label1;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>("surface was null");
+
+        throw $r6;
+
+     label1:
+        return r4;
+    }
+
+    private static int loadShader(int, java.lang.String)
+    {
+        int i0, i1, $i2;
+        java.lang.String r0, $r5, $r9, $r15, $r17;
+        int[] r1;
+        java.lang.StringBuilder $r2, $r3, $r4, $r6, $r7, $r8, $r11, $r12, $r13, $r14, $r16;
+        java.lang.IllegalStateException $r10;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: java.lang.String;
+
+        i1 = staticinvoke <android.opengl.GLES20: int glCreateShader(int)>(i0);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("glCreateShader type=");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.processing.OpenGlRenderer: void checkGlErrorOrThrow(java.lang.String)>($r5);
+
+        staticinvoke <android.opengl.GLES20: void glShaderSource(int,java.lang.String)>(i1, r0);
+
+        staticinvoke <android.opengl.GLES20: void glCompileShader(int)>(i1);
+
+        r1 = newarray (int)[1];
+
+        staticinvoke <android.opengl.GLES20: void glGetShaderiv(int,int,int[],int)>(i1, 35713, r1, 0);
+
+        $i2 = r1[0];
+
+        if $i2 != 0 goto label1;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Could not compile shader: ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("OpenGlRenderer", $r9);
+
+        staticinvoke <android.opengl.GLES20: void glDeleteShader(int)>(i1);
+
+        $r10 = new java.lang.IllegalStateException;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Could not compile shader type ");
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(":");
+
+        $r15 = staticinvoke <android.opengl.GLES20: java.lang.String glGetShaderInfoLog(int)>(i1);
+
+        $r16 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r15);
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r10.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r17);
+
+        throw $r10;
+
+     label1:
+        return i1;
+    }
+
+    private static int querySurface(android.opengl.EGLDisplay, android.opengl.EGLSurface, int)
+    {
+        android.opengl.EGLDisplay r0;
+        android.opengl.EGLSurface r1;
+        int i0, $i1;
+        int[] r2;
+
+        r0 := @parameter0: android.opengl.EGLDisplay;
+
+        r1 := @parameter1: android.opengl.EGLSurface;
+
+        i0 := @parameter2: int;
+
+        r2 = newarray (int)[1];
+
+        staticinvoke <android.opengl.EGL14: boolean eglQuerySurface(android.opengl.EGLDisplay,android.opengl.EGLSurface,int,int[],int)>(r0, r1, i0, r2, 0);
+
+        $i1 = r2[0];
+
+        return $i1;
+    }
+
+    public static java.nio.FloatBuffer createFloatBuffer(float[])
+    {
+        float[] r0;
+        java.nio.ByteBuffer r1;
+        java.nio.FloatBuffer r2;
+        int $i0, $i1;
+        java.nio.ByteOrder $r3;
+
+        r0 := @parameter0: float[];
+
+        $i0 = lengthof r0;
+
+        $i1 = $i0 * 4;
+
+        r1 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocateDirect(int)>($i1);
+
+        $r3 = staticinvoke <java.nio.ByteOrder: java.nio.ByteOrder nativeOrder()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.ByteBuffer order(java.nio.ByteOrder)>($r3);
+
+        r2 = virtualinvoke r1.<java.nio.ByteBuffer: java.nio.FloatBuffer asFloatBuffer()>();
+
+        virtualinvoke r2.<java.nio.FloatBuffer: java.nio.FloatBuffer put(float[])>(r0);
+
+        virtualinvoke r2.<java.nio.FloatBuffer: java.nio.Buffer position(int)>(0);
+
+        return r2;
+    }
+
+    private static void checkLocationOrThrow(int, java.lang.String)
+    {
+        int i0;
+        java.lang.String r0, $r6;
+        java.lang.IllegalStateException $r1;
+        java.lang.StringBuilder $r2, $r3, $r4, $r5;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: java.lang.String;
+
+        if i0 >= 0 goto label1;
+
+        $r1 = new java.lang.IllegalStateException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to locate \'");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\' in program");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r6);
+
+        throw $r1;
+
+     label1:
+        return;
+    }
+
+    private static void checkEglErrorOrThrow(java.lang.String)
+    {
+        java.lang.String r0, $r5, $r7;
+        int i0;
+        java.lang.IllegalStateException $r1;
+        java.lang.StringBuilder $r2, $r3, $r4, $r6;
+
+        r0 := @parameter0: java.lang.String;
+
+        i0 = staticinvoke <android.opengl.EGL14: int eglGetError()>();
+
+        if i0 == 12288 goto label1;
+
+        $r1 = new java.lang.IllegalStateException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": EGL error: 0x");
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>(i0);
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r7);
+
+        throw $r1;
+
+     label1:
+        return;
+    }
+
+    private static void checkGlErrorOrThrow(java.lang.String)
+    {
+        java.lang.String r0, $r5, $r7;
+        int i0;
+        java.lang.IllegalStateException $r1;
+        java.lang.StringBuilder $r2, $r3, $r4, $r6;
+
+        r0 := @parameter0: java.lang.String;
+
+        i0 = staticinvoke <android.opengl.GLES20: int glGetError()>();
+
+        if i0 == 0 goto label1;
+
+        $r1 = new java.lang.IllegalStateException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": GL error 0x");
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>(i0);
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r7);
+
+        throw $r1;
+
+     label1:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Object[] $r0, $r3;
+        java.util.Locale $r1, $r4;
+        java.lang.String $r2, $r5;
+        float[] $r6, $r7, $r9, $r10;
+        java.nio.FloatBuffer $r8, $r11;
+
+        $r1 = <java.util.Locale: java.util.Locale US>;
+
+        $r0 = newarray (java.lang.Object)[2];
+
+        $r0[0] = "vTextureCoord";
+
+        $r0[1] = "vTextureCoord";
+
+        $r2 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r1, "uniform mat4 uTexMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 %s;\nvoid main() {\n    gl_Position = aPosition;\n    %s = (uTexMatrix * aTextureCoord).xy;\n}\n", $r0);
+
+        <androidx.camera.core.processing.OpenGlRenderer: java.lang.String DEFAULT_VERTEX_SHADER> = $r2;
+
+        $r4 = <java.util.Locale: java.util.Locale US>;
+
+        $r3 = newarray (java.lang.Object)[4];
+
+        $r3[0] = "vTextureCoord";
+
+        $r3[1] = "sTexture";
+
+        $r3[2] = "sTexture";
+
+        $r3[3] = "vTextureCoord";
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r4, "#extension GL_OES_EGL_image_external : require\nprecision mediump float;\nvarying vec2 %s;\nuniform samplerExternalOES %s;\nvoid main() {\n    gl_FragColor = texture2D(%s, %s);\n}\n", $r3);
+
+        <androidx.camera.core.processing.OpenGlRenderer: java.lang.String DEFAULT_FRAGMENT_SHADER> = $r5;
+
+        $r6 = newarray (float)[8];
+
+        $r6[0] = -1.0F;
+
+        $r6[1] = -1.0F;
+
+        $r6[2] = 1.0F;
+
+        $r6[3] = -1.0F;
+
+        $r6[4] = -1.0F;
+
+        $r6[5] = 1.0F;
+
+        $r6[6] = 1.0F;
+
+        $r6[7] = 1.0F;
+
+        <androidx.camera.core.processing.OpenGlRenderer: float[] VERTEX_COORDS> = $r6;
+
+        $r7 = <androidx.camera.core.processing.OpenGlRenderer: float[] VERTEX_COORDS>;
+
+        $r8 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer: java.nio.FloatBuffer createFloatBuffer(float[])>($r7);
+
+        <androidx.camera.core.processing.OpenGlRenderer: java.nio.FloatBuffer VERTEX_BUF> = $r8;
+
+        $r9 = newarray (float)[8];
+
+        $r9[0] = 0.0F;
+
+        $r9[1] = 0.0F;
+
+        $r9[2] = 1.0F;
+
+        $r9[3] = 0.0F;
+
+        $r9[4] = 0.0F;
+
+        $r9[5] = 1.0F;
+
+        $r9[6] = 1.0F;
+
+        $r9[7] = 1.0F;
+
+        <androidx.camera.core.processing.OpenGlRenderer: float[] TEX_COORDS> = $r9;
+
+        $r10 = <androidx.camera.core.processing.OpenGlRenderer: float[] TEX_COORDS>;
+
+        $r11 = staticinvoke <androidx.camera.core.processing.OpenGlRenderer: java.nio.FloatBuffer createFloatBuffer(float[])>($r10);
+
+        <androidx.camera.core.processing.OpenGlRenderer: java.nio.FloatBuffer TEX_BUF> = $r11;
+
+        return;
+    }
+
+androidx.camera.core.processing.OpenGlRenderer$OutputSurface
+    void <init>()
+    {
+        androidx.camera.core.processing.OpenGlRenderer$OutputSurface r0;
+
+        r0 := @this: androidx.camera.core.processing.OpenGlRenderer$OutputSurface;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static androidx.camera.core.processing.OpenGlRenderer$OutputSurface of(android.opengl.EGLSurface, int, int)
+    {
+        android.opengl.EGLSurface r0;
+        int i0, i1;
+        androidx.camera.core.processing.AutoValue_OpenGlRenderer_OutputSurface $r1;
+
+        r0 := @parameter0: android.opengl.EGLSurface;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $r1 = new androidx.camera.core.processing.AutoValue_OpenGlRenderer_OutputSurface;
+
+        specialinvoke $r1.<androidx.camera.core.processing.AutoValue_OpenGlRenderer_OutputSurface: void <init>(android.opengl.EGLSurface,int,int)>(r0, i0, i1);
+
+        return $r1;
+    }
+
+<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: android.opengl.EGLSurface getEglSurface()>
+<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: int getWidth()>
+<androidx.camera.core.processing.OpenGlRenderer$OutputSurface: int getHeight()>

@@ -1,0 +1,576 @@
+androidx.slice.SliceViewManagerBase
+<androidx.slice.SliceViewManagerBase: android.util.ArrayMap mListenerLookup>
+<androidx.slice.SliceViewManagerBase: android.content.Context mContext>
+    void <init>(android.content.Context)
+    {
+        androidx.slice.SliceViewManagerBase r0;
+        android.content.Context r1;
+        android.util.ArrayMap $r2;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<androidx.slice.SliceViewManager: void <init>()>();
+
+        $r2 = new android.util.ArrayMap;
+
+        specialinvoke $r2.<android.util.ArrayMap: void <init>()>();
+
+        r0.<androidx.slice.SliceViewManagerBase: android.util.ArrayMap mListenerLookup> = $r2;
+
+        r0.<androidx.slice.SliceViewManagerBase: android.content.Context mContext> = r1;
+
+        return;
+    }
+
+    public void registerSliceCallback(android.net.Uri, androidx.slice.SliceViewManager$SliceCallback)
+    {
+        androidx.slice.SliceViewManagerBase r0;
+        android.net.Uri r1;
+        androidx.slice.SliceViewManager$SliceCallback r2;
+        android.os.Handler r3, $r4;
+        android.os.Looper $r5;
+        androidx.slice.SliceViewManagerBase$1 $r6;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase;
+
+        r1 := @parameter0: android.net.Uri;
+
+        r2 := @parameter1: androidx.slice.SliceViewManager$SliceCallback;
+
+        $r4 = new android.os.Handler;
+
+        $r5 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r4.<android.os.Handler: void <init>(android.os.Looper)>($r5);
+
+        r3 = $r4;
+
+        $r6 = new androidx.slice.SliceViewManagerBase$1;
+
+        specialinvoke $r6.<androidx.slice.SliceViewManagerBase$1: void <init>(androidx.slice.SliceViewManagerBase,android.os.Handler)>(r0, r3);
+
+        virtualinvoke r0.<androidx.slice.SliceViewManagerBase: void registerSliceCallback(android.net.Uri,java.util.concurrent.Executor,androidx.slice.SliceViewManager$SliceCallback)>(r1, $r6, r2);
+
+        return;
+    }
+
+    public void registerSliceCallback(android.net.Uri, java.util.concurrent.Executor, androidx.slice.SliceViewManager$SliceCallback)
+    {
+        androidx.slice.SliceViewManagerBase r0;
+        android.net.Uri r1;
+        java.util.concurrent.Executor r2;
+        androidx.slice.SliceViewManager$SliceCallback r3;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl $r4, $r5;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase;
+
+        r1 := @parameter0: android.net.Uri;
+
+        r2 := @parameter1: java.util.concurrent.Executor;
+
+        r3 := @parameter2: androidx.slice.SliceViewManager$SliceCallback;
+
+        $r4 = new androidx.slice.SliceViewManagerBase$SliceListenerImpl;
+
+        specialinvoke $r4.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: void <init>(androidx.slice.SliceViewManagerBase,android.net.Uri,java.util.concurrent.Executor,androidx.slice.SliceViewManager$SliceCallback)>(r0, r1, r2, r3);
+
+        $r5 = specialinvoke r0.<androidx.slice.SliceViewManagerBase: androidx.slice.SliceViewManagerBase$SliceListenerImpl getListener(android.net.Uri,androidx.slice.SliceViewManager$SliceCallback,androidx.slice.SliceViewManagerBase$SliceListenerImpl)>(r1, r3, $r4);
+
+        virtualinvoke $r5.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: void startListening()>();
+
+        return;
+    }
+
+    public void unregisterSliceCallback(android.net.Uri, androidx.slice.SliceViewManager$SliceCallback)
+    {
+        androidx.slice.SliceViewManagerBase r0;
+        android.net.Uri r1;
+        androidx.slice.SliceViewManager$SliceCallback r2;
+        android.util.ArrayMap r3, $r6, $r8;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl r4;
+        java.lang.Throwable r5, $r10;
+        android.util.Pair $r7;
+        java.lang.Object $r9;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase;
+
+        r1 := @parameter0: android.net.Uri;
+
+        r2 := @parameter1: androidx.slice.SliceViewManager$SliceCallback;
+
+        $r6 = r0.<androidx.slice.SliceViewManagerBase: android.util.ArrayMap mListenerLookup>;
+
+        r3 = $r6;
+
+        entermonitor $r6;
+
+     label1:
+        $r8 = r0.<androidx.slice.SliceViewManagerBase: android.util.ArrayMap mListenerLookup>;
+
+        $r7 = new android.util.Pair;
+
+        specialinvoke $r7.<android.util.Pair: void <init>(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        $r9 = virtualinvoke $r8.<android.util.ArrayMap: java.lang.Object remove(java.lang.Object)>($r7);
+
+        r4 = (androidx.slice.SliceViewManagerBase$SliceListenerImpl) $r9;
+
+        if r4 == null goto label2;
+
+        virtualinvoke r4.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: void stopListening()>();
+
+     label2:
+        exitmonitor r3;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r10 := @caughtexception;
+
+        r5 = $r10;
+
+        exitmonitor r3;
+
+     label5:
+        throw r5;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    private androidx.slice.SliceViewManagerBase$SliceListenerImpl getListener(android.net.Uri, androidx.slice.SliceViewManager$SliceCallback, androidx.slice.SliceViewManagerBase$SliceListenerImpl)
+    {
+        androidx.slice.SliceViewManagerBase r0;
+        android.net.Uri r1;
+        androidx.slice.SliceViewManager$SliceCallback r2;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl r3, $r14;
+        android.util.Pair r4, $r7;
+        android.util.ArrayMap r5, $r8, $r9, $r10, $r12;
+        java.lang.Throwable r6, $r15;
+        boolean $z0;
+        java.lang.Object $r13;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase;
+
+        r1 := @parameter0: android.net.Uri;
+
+        r2 := @parameter1: androidx.slice.SliceViewManager$SliceCallback;
+
+        r3 := @parameter2: androidx.slice.SliceViewManagerBase$SliceListenerImpl;
+
+        $r7 = new android.util.Pair;
+
+        specialinvoke $r7.<android.util.Pair: void <init>(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        r4 = $r7;
+
+        $r8 = r0.<androidx.slice.SliceViewManagerBase: android.util.ArrayMap mListenerLookup>;
+
+        r5 = $r8;
+
+        entermonitor $r8;
+
+     label1:
+        $r9 = r0.<androidx.slice.SliceViewManagerBase: android.util.ArrayMap mListenerLookup>;
+
+        $z0 = virtualinvoke $r9.<android.util.ArrayMap: boolean containsKey(java.lang.Object)>(r4);
+
+        if $z0 == 0 goto label2;
+
+        $r12 = r0.<androidx.slice.SliceViewManagerBase: android.util.ArrayMap mListenerLookup>;
+
+        $r13 = virtualinvoke $r12.<android.util.ArrayMap: java.lang.Object get(java.lang.Object)>(r4);
+
+        $r14 = (androidx.slice.SliceViewManagerBase$SliceListenerImpl) $r13;
+
+        virtualinvoke $r14.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: void stopListening()>();
+
+     label2:
+        $r10 = r0.<androidx.slice.SliceViewManagerBase: android.util.ArrayMap mListenerLookup>;
+
+        virtualinvoke $r10.<android.util.ArrayMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(r4, r3);
+
+        exitmonitor r5;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r15 := @caughtexception;
+
+        r6 = $r15;
+
+        exitmonitor r5;
+
+     label5:
+        throw r6;
+
+     label6:
+        return r3;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+androidx.slice.SliceViewManagerBase$1
+<androidx.slice.SliceViewManagerBase$1: android.os.Handler val$h>
+<androidx.slice.SliceViewManagerBase$1: androidx.slice.SliceViewManagerBase this$0>
+    void <init>(androidx.slice.SliceViewManagerBase, android.os.Handler)
+    {
+        androidx.slice.SliceViewManagerBase$1 r0;
+        androidx.slice.SliceViewManagerBase r1;
+        android.os.Handler r2;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$1;
+
+        r1 := @parameter0: androidx.slice.SliceViewManagerBase;
+
+        r2 := @parameter1: android.os.Handler;
+
+        r0.<androidx.slice.SliceViewManagerBase$1: androidx.slice.SliceViewManagerBase this$0> = r1;
+
+        r0.<androidx.slice.SliceViewManagerBase$1: android.os.Handler val$h> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void execute(java.lang.Runnable)
+    {
+        androidx.slice.SliceViewManagerBase$1 r0;
+        java.lang.Runnable r1;
+        android.os.Handler $r2;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$1;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = r0.<androidx.slice.SliceViewManagerBase$1: android.os.Handler val$h>;
+
+        virtualinvoke $r2.<android.os.Handler: boolean post(java.lang.Runnable)>(r1);
+
+        return;
+    }
+
+androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1: androidx.slice.Slice val$s>
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl$1 this$2>
+    void <init>(androidx.slice.SliceViewManagerBase$SliceListenerImpl$1, androidx.slice.Slice)
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1 r0;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$1 r1;
+        androidx.slice.Slice r2;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1;
+
+        r1 := @parameter0: androidx.slice.SliceViewManagerBase$SliceListenerImpl$1;
+
+        r2 := @parameter1: androidx.slice.Slice;
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl$1 this$2> = r1;
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1: androidx.slice.Slice val$s> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1 r0;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$1 $r1;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl $r2;
+        androidx.slice.Slice $r3;
+        androidx.slice.SliceViewManager$SliceCallback $r4;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1;
+
+        $r1 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl$1 this$2>;
+
+        $r2 = $r1.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1>;
+
+        $r4 = $r2.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManager$SliceCallback mCallback>;
+
+        $r3 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1: androidx.slice.Slice val$s>;
+
+        interfaceinvoke $r4.<androidx.slice.SliceViewManager$SliceCallback: void onSliceUpdated(androidx.slice.Slice)>($r3);
+
+        return;
+    }
+
+androidx.slice.SliceViewManagerBase$SliceListenerImpl$1
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1>
+    void <init>(androidx.slice.SliceViewManagerBase$SliceListenerImpl)
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$1 r0;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl r1;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl$1;
+
+        r1 := @parameter0: androidx.slice.SliceViewManagerBase$SliceListenerImpl;
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$1 r0;
+        androidx.slice.Slice r1;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl $r2, $r3, $r5, $r9;
+        androidx.slice.SliceViewManagerBase $r4;
+        java.util.Set $r6;
+        android.net.Uri $r7;
+        android.content.Context $r8;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1 $r10;
+        java.util.concurrent.Executor $r11;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl$1;
+
+        $r2 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1>;
+
+        virtualinvoke $r2.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: void tryPin()>();
+
+        $r3 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1>;
+
+        $r4 = $r3.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManagerBase this$0>;
+
+        $r8 = $r4.<androidx.slice.SliceViewManagerBase: android.content.Context mContext>;
+
+        $r5 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1>;
+
+        $r7 = $r5.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.net.Uri mUri>;
+
+        $r6 = <androidx.slice.widget.SliceLiveData: java.util.Set SUPPORTED_SPECS>;
+
+        r1 = staticinvoke <androidx.slice.Slice: androidx.slice.Slice bindSlice(android.content.Context,android.net.Uri,java.util.Set)>($r8, $r7, $r6);
+
+        $r9 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1>;
+
+        $r11 = $r9.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: java.util.concurrent.Executor mExecutor>;
+
+        $r10 = new androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1;
+
+        specialinvoke $r10.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1$1: void <init>(androidx.slice.SliceViewManagerBase$SliceListenerImpl$1,androidx.slice.Slice)>(r0, r1);
+
+        interfaceinvoke $r11.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r10);
+
+        return;
+    }
+
+androidx.slice.SliceViewManagerBase$SliceListenerImpl$2
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl$2: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1>
+    void <init>(androidx.slice.SliceViewManagerBase$SliceListenerImpl, android.os.Handler)
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$2 r0;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl r1;
+        android.os.Handler r2;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl$2;
+
+        r1 := @parameter0: androidx.slice.SliceViewManagerBase$SliceListenerImpl;
+
+        r2 := @parameter1: android.os.Handler;
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$2: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1> = r1;
+
+        specialinvoke r0.<android.database.ContentObserver: void <init>(android.os.Handler)>(r2);
+
+        return;
+    }
+
+    public void onChange(boolean)
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$2 r0;
+        boolean z0;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl $r1;
+        java.lang.Runnable $r2;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl$2;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$2: androidx.slice.SliceViewManagerBase$SliceListenerImpl this$1>;
+
+        $r2 = $r1.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: java.lang.Runnable mUpdateSlice>;
+
+        staticinvoke <android.os.AsyncTask: void execute(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+androidx.slice.SliceViewManagerBase$SliceListenerImpl
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.net.Uri mUri>
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl: java.util.concurrent.Executor mExecutor>
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManager$SliceCallback mCallback>
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl: boolean mPinned>
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl: java.lang.Runnable mUpdateSlice>
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.database.ContentObserver mObserver>
+<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManagerBase this$0>
+    void <init>(androidx.slice.SliceViewManagerBase, android.net.Uri, java.util.concurrent.Executor, androidx.slice.SliceViewManager$SliceCallback)
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl r0;
+        androidx.slice.SliceViewManagerBase r1;
+        android.net.Uri r2;
+        java.util.concurrent.Executor r3;
+        androidx.slice.SliceViewManager$SliceCallback r4;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$1 $r5;
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl$2 $r6;
+        android.os.Handler $r7;
+        android.os.Looper $r8;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl;
+
+        r1 := @parameter0: androidx.slice.SliceViewManagerBase;
+
+        r2 := @parameter1: android.net.Uri;
+
+        r3 := @parameter2: java.util.concurrent.Executor;
+
+        r4 := @parameter3: androidx.slice.SliceViewManager$SliceCallback;
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManagerBase this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r5 = new androidx.slice.SliceViewManagerBase$SliceListenerImpl$1;
+
+        specialinvoke $r5.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$1: void <init>(androidx.slice.SliceViewManagerBase$SliceListenerImpl)>(r0);
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: java.lang.Runnable mUpdateSlice> = $r5;
+
+        $r6 = new androidx.slice.SliceViewManagerBase$SliceListenerImpl$2;
+
+        $r7 = new android.os.Handler;
+
+        $r8 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r7.<android.os.Handler: void <init>(android.os.Looper)>($r8);
+
+        specialinvoke $r6.<androidx.slice.SliceViewManagerBase$SliceListenerImpl$2: void <init>(androidx.slice.SliceViewManagerBase$SliceListenerImpl,android.os.Handler)>(r0, $r7);
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.database.ContentObserver mObserver> = $r6;
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.net.Uri mUri> = r2;
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: java.util.concurrent.Executor mExecutor> = r3;
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManager$SliceCallback mCallback> = r4;
+
+        return;
+    }
+
+    void startListening()
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl r0;
+        androidx.slice.SliceViewManagerBase $r1;
+        android.content.Context $r2;
+        android.content.ContentResolver $r3;
+        android.database.ContentObserver $r4;
+        android.net.Uri $r5;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl;
+
+        $r1 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManagerBase this$0>;
+
+        $r2 = $r1.<androidx.slice.SliceViewManagerBase: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r5 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.net.Uri mUri>;
+
+        $r4 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.database.ContentObserver mObserver>;
+
+        virtualinvoke $r3.<android.content.ContentResolver: void registerContentObserver(android.net.Uri,boolean,android.database.ContentObserver)>($r5, 1, $r4);
+
+        virtualinvoke r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: void tryPin()>();
+
+        return;
+    }
+
+    void tryPin()
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl r0;
+        java.lang.Throwable r1, $r4;
+        boolean $z0;
+        android.net.Uri $r2;
+        androidx.slice.SliceViewManagerBase $r3;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl;
+
+        $z0 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: boolean mPinned>;
+
+        if $z0 != 0 goto label4;
+
+     label1:
+        $r3 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManagerBase this$0>;
+
+        $r2 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.net.Uri mUri>;
+
+        virtualinvoke $r3.<androidx.slice.SliceViewManagerBase: void pinSlice(android.net.Uri)>($r2);
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: boolean mPinned> = 1;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+     label4:
+        return;
+
+        catch java.lang.SecurityException from label1 to label2 with label3;
+    }
+
+    void stopListening()
+    {
+        androidx.slice.SliceViewManagerBase$SliceListenerImpl r0;
+        androidx.slice.SliceViewManagerBase $r1, $r6;
+        android.content.Context $r2;
+        android.content.ContentResolver $r3;
+        android.database.ContentObserver $r4;
+        boolean $z0;
+        android.net.Uri $r5;
+
+        r0 := @this: androidx.slice.SliceViewManagerBase$SliceListenerImpl;
+
+        $r1 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManagerBase this$0>;
+
+        $r2 = $r1.<androidx.slice.SliceViewManagerBase: android.content.Context mContext>;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r4 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.database.ContentObserver mObserver>;
+
+        virtualinvoke $r3.<android.content.ContentResolver: void unregisterContentObserver(android.database.ContentObserver)>($r4);
+
+        $z0 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: boolean mPinned>;
+
+        if $z0 == 0 goto label1;
+
+        $r6 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: androidx.slice.SliceViewManagerBase this$0>;
+
+        $r5 = r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: android.net.Uri mUri>;
+
+        virtualinvoke $r6.<androidx.slice.SliceViewManagerBase: void unpinSlice(android.net.Uri)>($r5);
+
+        r0.<androidx.slice.SliceViewManagerBase$SliceListenerImpl: boolean mPinned> = 0;
+
+     label1:
+        return;
+    }
+

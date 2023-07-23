@@ -1,0 +1,114 @@
+androidx.camera.camera2.internal.compat.workaround.FlashAvailabilityChecker
+<androidx.camera.camera2.internal.compat.workaround.FlashAvailabilityChecker: java.lang.String TAG>
+    public static boolean isFlashAvailable(androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat)
+    {
+        androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat r0;
+        androidx.camera.core.impl.Quirk $r1;
+        boolean $z0, $z1;
+        java.lang.StringBuilder $r2, $r3, $r6, $r7;
+        java.lang.Class $r4;
+        java.lang.String $r5, $r8;
+
+        r0 := @parameter0: androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat;
+
+        $r1 = staticinvoke <androidx.camera.camera2.internal.compat.quirk.DeviceQuirks: androidx.camera.core.impl.Quirk get(java.lang.Class)>(class "Landroidx/camera/camera2/internal/compat/quirk/FlashAvailabilityBufferUnderflowQuirk;");
+
+        if $r1 == null goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Device has quirk ");
+
+        $r4 = class "Landroidx/camera/camera2/internal/compat/quirk/FlashAvailabilityBufferUnderflowQuirk;";
+
+        $r5 = virtualinvoke $r4.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Checking for flash availability safely...");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("FlashAvailability", $r8);
+
+        $z1 = staticinvoke <androidx.camera.camera2.internal.compat.workaround.FlashAvailabilityChecker: boolean checkFlashAvailabilityWithPossibleBufferUnderflow(androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat)>(r0);
+
+        return $z1;
+
+     label1:
+        $z0 = staticinvoke <androidx.camera.camera2.internal.compat.workaround.FlashAvailabilityChecker: boolean checkFlashAvailabilityNormally(androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat)>(r0);
+
+        return $z0;
+    }
+
+    private static boolean checkFlashAvailabilityWithPossibleBufferUnderflow(androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat)
+    {
+        androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat r0;
+        java.lang.Throwable r1, $r2;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat;
+
+     label1:
+        $z0 = staticinvoke <androidx.camera.camera2.internal.compat.workaround.FlashAvailabilityChecker: boolean checkFlashAvailabilityNormally(androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat)>(r0);
+
+     label2:
+        return $z0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r1 = $r2;
+
+        return 0;
+
+        catch java.nio.BufferUnderflowException from label1 to label2 with label3;
+    }
+
+    private static boolean checkFlashAvailabilityNormally(androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat)
+    {
+        androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat r0;
+        java.lang.Boolean r1;
+        android.hardware.camera2.CameraCharacteristics$Key $r2;
+        java.lang.Object $r3;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat;
+
+        $r2 = <android.hardware.camera2.CameraCharacteristics: android.hardware.camera2.CameraCharacteristics$Key FLASH_INFO_AVAILABLE>;
+
+        $r3 = virtualinvoke r0.<androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat: java.lang.Object get(android.hardware.camera2.CameraCharacteristics$Key)>($r2);
+
+        r1 = (java.lang.Boolean) $r3;
+
+        if r1 != null goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("FlashAvailability", "Characteristics did not contain key FLASH_INFO_AVAILABLE. Flash is not available.");
+
+     label1:
+        if r1 == null goto label2;
+
+        $z0 = virtualinvoke r1.<java.lang.Boolean: boolean booleanValue()>();
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    private void <init>()
+    {
+        androidx.camera.camera2.internal.compat.workaround.FlashAvailabilityChecker r0;
+
+        r0 := @this: androidx.camera.camera2.internal.compat.workaround.FlashAvailabilityChecker;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

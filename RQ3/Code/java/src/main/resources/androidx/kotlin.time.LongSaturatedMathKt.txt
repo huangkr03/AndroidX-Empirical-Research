@@ -1,0 +1,224 @@
+kotlin.time.LongSaturatedMathKt
+    private static final long checkInfiniteSumDefined-PjuGub4(long, long, long)
+    {
+        byte $b0;
+        boolean $z0;
+        long $l1, $l2, $l3;
+        java.lang.IllegalArgumentException $r0;
+
+        $l1 := @parameter0: long;
+
+        $l2 := @parameter1: long;
+
+        $l3 := @parameter2: long;
+
+        $z0 = staticinvoke <kotlin.time.Duration: boolean isInfinite-impl(long)>($l2);
+
+        if $z0 == 0 goto label2;
+
+        $l2 = $l1 ^ $l3;
+
+        $b0 = $l2 cmp 0L;
+
+        if $b0 < 0 goto label1;
+
+        return $l1;
+
+     label1:
+        $r0 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r0.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Summing infinities of different signs");
+
+        throw $r0;
+
+     label2:
+        return $l1;
+    }
+
+    public static final long saturatingAdd-pTJri5U(long, long)
+    {
+        byte $b0;
+        long $l1, $l2, $l3, $l4;
+
+        $l1 := @parameter0: long;
+
+        $l2 := @parameter1: long;
+
+        $l3 = staticinvoke <kotlin.time.Duration: long getInWholeNanoseconds-impl(long)>($l2);
+
+        $l4 = $l1 + -1L;
+
+        $l4 = $l4 | 1L;
+
+        $b0 = $l4 cmp 9223372036854775807L;
+
+        if $b0 != 0 goto label1;
+
+        $l1 = staticinvoke <kotlin.time.LongSaturatedMathKt: long checkInfiniteSumDefined-PjuGub4(long,long,long)>($l1, $l2, $l3);
+
+        return $l1;
+
+     label1:
+        $l4 = -1L + $l3;
+
+        $l4 = $l4 | 1L;
+
+        $b0 = $l4 cmp 9223372036854775807L;
+
+        if $b0 != 0 goto label2;
+
+        $l1 = staticinvoke <kotlin.time.LongSaturatedMathKt: long saturatingAddInHalves-pTJri5U(long,long)>($l1, $l2);
+
+        return $l1;
+
+     label2:
+        $l2 = $l1 + $l3;
+
+        $l4 = $l1 ^ $l2;
+
+        $l3 = $l3 ^ $l2;
+
+        $l3 = $l4 & $l3;
+
+        $b0 = $l3 cmp 0L;
+
+        if $b0 >= 0 goto label3;
+
+        $b0 = $l1 cmp 0L;
+
+        if $b0 >= 0 goto label4;
+
+        return -9223372036854775808L;
+
+     label3:
+        return $l2;
+
+     label4:
+        return 9223372036854775807L;
+    }
+
+    private static final long saturatingAddInHalves-pTJri5U(long, long)
+    {
+        byte $b0;
+        long $l1, $l2, $l3, $l4;
+        double $d0, $d1;
+        kotlin.time.DurationUnit $r0;
+
+        $l1 := @parameter0: long;
+
+        $l2 := @parameter1: long;
+
+        $l3 = staticinvoke <kotlin.time.Duration: long div-UwyO8pc(long,int)>($l2, 2);
+
+        $l4 = staticinvoke <kotlin.time.Duration: long getInWholeNanoseconds-impl(long)>($l3);
+
+        $l4 = $l4 + -1L;
+
+        $l4 = $l4 | 1L;
+
+        $b0 = $l4 cmp 9223372036854775807L;
+
+        if $b0 != 0 goto label1;
+
+        $d0 = (double) $l1;
+
+        $r0 = <kotlin.time.DurationUnit: kotlin.time.DurationUnit NANOSECONDS>;
+
+        $d1 = staticinvoke <kotlin.time.Duration: double toDouble-impl(long,kotlin.time.DurationUnit)>($l2, $r0);
+
+        staticinvoke <java.lang.Double: boolean isNaN(double)>($d0);
+
+        $d0 = $d0 + $d1;
+
+        $l1 = (long) $d0;
+
+        return $l1;
+
+     label1:
+        $l1 = staticinvoke <kotlin.time.LongSaturatedMathKt: long saturatingAdd-pTJri5U(long,long)>($l1, $l3);
+
+        $l1 = staticinvoke <kotlin.time.LongSaturatedMathKt: long saturatingAdd-pTJri5U(long,long)>($l1, $l3);
+
+        return $l1;
+    }
+
+    public static final long saturatingDiff(long, long)
+    {
+        long $l0, $l1, $l2, $l4, $l5;
+        byte $b3;
+        kotlin.time.DurationUnit $r0;
+        kotlin.time.Duration$Companion $r1;
+
+        $l1 := @parameter0: long;
+
+        $l2 := @parameter1: long;
+
+        $l0 = $l2 + -1L;
+
+        $l0 = $l0 | 1L;
+
+        $b3 = $l0 cmp 9223372036854775807L;
+
+        if $b3 != 0 goto label1;
+
+        $r0 = <kotlin.time.DurationUnit: kotlin.time.DurationUnit DAYS>;
+
+        $l1 = staticinvoke <kotlin.time.DurationKt: long toDuration(long,kotlin.time.DurationUnit)>($l2, $r0);
+
+        $l1 = staticinvoke <kotlin.time.Duration: long unaryMinus-UwyO8pc(long)>($l1);
+
+        return $l1;
+
+     label1:
+        $l0 = $l1 - $l2;
+
+        $l4 = $l0 ^ $l1;
+
+        $l5 = $l0 ^ $l2;
+
+        $l5 = -1L ^ $l5;
+
+        $l4 = $l5 & $l4;
+
+        $b3 = $l4 cmp 0L;
+
+        if $b3 >= 0 goto label2;
+
+        $r1 = <kotlin.time.Duration: kotlin.time.Duration$Companion Companion>;
+
+        $r0 = <kotlin.time.DurationUnit: kotlin.time.DurationUnit MILLISECONDS>;
+
+        $l4 = $l1 / 1000000L;
+
+        $l0 = $l2 / 1000000L;
+
+        $l0 = $l4 - $l0;
+
+        $l0 = staticinvoke <kotlin.time.DurationKt: long toDuration(long,kotlin.time.DurationUnit)>($l0, $r0);
+
+        $r1 = <kotlin.time.Duration: kotlin.time.Duration$Companion Companion>;
+
+        $l1 = $l1 % 1000000L;
+
+        $l2 = $l2 % 1000000L;
+
+        $l1 = $l1 - $l2;
+
+        $r0 = <kotlin.time.DurationUnit: kotlin.time.DurationUnit NANOSECONDS>;
+
+        $l1 = staticinvoke <kotlin.time.DurationKt: long toDuration(long,kotlin.time.DurationUnit)>($l1, $r0);
+
+        $l1 = staticinvoke <kotlin.time.Duration: long plus-LRDsOJo(long,long)>($l0, $l1);
+
+        return $l1;
+
+     label2:
+        $r1 = <kotlin.time.Duration: kotlin.time.Duration$Companion Companion>;
+
+        $r0 = <kotlin.time.DurationUnit: kotlin.time.DurationUnit NANOSECONDS>;
+
+        $l1 = staticinvoke <kotlin.time.DurationKt: long toDuration(long,kotlin.time.DurationUnit)>($l0, $r0);
+
+        return $l1;
+    }
+

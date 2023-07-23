@@ -1,0 +1,466 @@
+androidx.sharetarget.ShareTargetXmlParser
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String TAG>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String META_DATA_APP_SHORTCUTS>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String TAG_SHARE_TARGET>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String ATTR_TARGET_CLASS>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String TAG_DATA>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String ATTR_SCHEME>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String ATTR_HOST>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String ATTR_PORT>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String ATTR_PATH>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String ATTR_PATH_PATTERN>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String ATTR_PATH_PREFIX>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String ATTR_MIME_TYPE>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String TAG_CATEGORY>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.String ATTR_NAME>
+<androidx.sharetarget.ShareTargetXmlParser: java.util.ArrayList sShareTargets>
+<androidx.sharetarget.ShareTargetXmlParser: java.lang.Object GET_INSTANCE_LOCK>
+    static java.util.ArrayList getShareTargets(android.content.Context)
+    {
+        android.content.Context r0;
+        java.lang.Object r1, $r5;
+        java.lang.Throwable r2, $r8;
+        java.util.ArrayList $r3, $r4, $r6, $r7;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r3 = <androidx.sharetarget.ShareTargetXmlParser: java.util.ArrayList sShareTargets>;
+
+        if $r3 != null goto label6;
+
+        $r5 = <androidx.sharetarget.ShareTargetXmlParser: java.lang.Object GET_INSTANCE_LOCK>;
+
+        r1 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = <androidx.sharetarget.ShareTargetXmlParser: java.util.ArrayList sShareTargets>;
+
+        if $r6 != null goto label2;
+
+        $r7 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.util.ArrayList parseShareTargets(android.content.Context)>(r0);
+
+        <androidx.sharetarget.ShareTargetXmlParser: java.util.ArrayList sShareTargets> = $r7;
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r2 = $r8;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        $r4 = <androidx.sharetarget.ShareTargetXmlParser: java.util.ArrayList sShareTargets>;
+
+        return $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    private void <init>()
+    {
+        androidx.sharetarget.ShareTargetXmlParser r0;
+
+        r0 := @this: androidx.sharetarget.ShareTargetXmlParser;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.util.ArrayList parseShareTargets(android.content.Context)
+    {
+        android.content.Context r0;
+        java.util.ArrayList r1, r8, $r9;
+        android.content.Intent r2, $r10;
+        java.util.List r3;
+        java.util.Iterator r4;
+        android.content.pm.ResolveInfo r5;
+        android.content.pm.ActivityInfo r6;
+        android.os.Bundle r7;
+        java.lang.String $r12;
+        android.content.pm.PackageManager $r14;
+        boolean $z0, $z1;
+        java.lang.Object $r15;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r9 = new java.util.ArrayList;
+
+        specialinvoke $r9.<java.util.ArrayList: void <init>()>();
+
+        r1 = $r9;
+
+        $r10 = new android.content.Intent;
+
+        specialinvoke $r10.<android.content.Intent: void <init>(java.lang.String)>("android.intent.action.MAIN");
+
+        r2 = $r10;
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent addCategory(java.lang.String)>("android.intent.category.LAUNCHER");
+
+        $r12 = virtualinvoke r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>($r12);
+
+        $r14 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        r3 = virtualinvoke $r14.<android.content.pm.PackageManager: java.util.List queryIntentActivities(android.content.Intent,int)>(r2, 128);
+
+        if r3 != null goto label1;
+
+        return r1;
+
+     label1:
+        r4 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r15 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (android.content.pm.ResolveInfo) $r15;
+
+        r6 = r5.<android.content.pm.ResolveInfo: android.content.pm.ActivityInfo activityInfo>;
+
+        r7 = r6.<android.content.pm.ActivityInfo: android.os.Bundle metaData>;
+
+        if r7 == null goto label3;
+
+        $z1 = virtualinvoke r7.<android.os.Bundle: boolean containsKey(java.lang.String)>("android.app.shortcuts");
+
+        if $z1 == 0 goto label3;
+
+        r8 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.util.ArrayList parseShareTargets(android.content.Context,android.content.pm.ActivityInfo)>(r0, r6);
+
+        virtualinvoke r1.<java.util.ArrayList: boolean addAll(java.util.Collection)>(r8);
+
+     label3:
+        goto label2;
+
+     label4:
+        return r1;
+    }
+
+    private static java.util.ArrayList parseShareTargets(android.content.Context, android.content.pm.ActivityInfo)
+    {
+        android.content.Context r0;
+        android.content.pm.ActivityInfo r1;
+        java.util.ArrayList r2, $r5;
+        android.content.res.XmlResourceParser r3;
+        androidx.sharetarget.ShareTargetCompat r4;
+        java.lang.String $r6;
+        boolean $z0;
+        java.lang.Throwable $r7, r8;
+        int $i1, i2;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.pm.ActivityInfo;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r2 = $r5;
+
+        r3 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: android.content.res.XmlResourceParser getXmlResourceParser(android.content.Context,android.content.pm.ActivityInfo)>(r0, r1);
+
+     label1:
+        $i1 = interfaceinvoke r3.<android.content.res.XmlResourceParser: int next()>();
+
+        i2 = $i1;
+
+        if $i1 == 1 goto label3;
+
+        if i2 != 2 goto label1;
+
+        $r6 = interfaceinvoke r3.<android.content.res.XmlResourceParser: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>("share-target");
+
+        if $z0 == 0 goto label1;
+
+        r4 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: androidx.sharetarget.ShareTargetCompat parseShareTarget(android.content.res.XmlResourceParser)>(r3);
+
+        if r4 == null goto label2;
+
+        virtualinvoke r2.<java.util.ArrayList: boolean add(java.lang.Object)>(r4);
+
+     label2:
+        goto label1;
+
+     label3:
+        goto label5;
+
+     label4:
+        $r7 := @caughtexception;
+
+        r8 = $r7;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("ShareTargetXmlParser", "Failed to parse the Xml resource: ", r8);
+
+     label5:
+        interfaceinvoke r3.<android.content.res.XmlResourceParser: void close()>();
+
+        return r2;
+
+        catch java.lang.Exception from label1 to label3 with label4;
+    }
+
+    private static android.content.res.XmlResourceParser getXmlResourceParser(android.content.Context, android.content.pm.ActivityInfo)
+    {
+        android.content.Context r0;
+        android.content.pm.ActivityInfo r1;
+        android.content.res.XmlResourceParser r2;
+        android.content.pm.PackageManager $r3;
+        java.lang.IllegalArgumentException $r4;
+        java.lang.StringBuilder $r5, $r6, $r8;
+        java.lang.String $r7, $r9;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.pm.ActivityInfo;
+
+        $r3 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        r2 = virtualinvoke r1.<android.content.pm.ActivityInfo: android.content.res.XmlResourceParser loadXmlMetaData(android.content.pm.PackageManager,java.lang.String)>($r3, "android.app.shortcuts");
+
+        if r2 != null goto label1;
+
+        $r4 = new java.lang.IllegalArgumentException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to open android.app.shortcuts meta-data resource of ");
+
+        $r7 = r1.<android.content.pm.ActivityInfo: java.lang.String name>;
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r9);
+
+        throw $r4;
+
+     label1:
+        return r2;
+    }
+
+    private static androidx.sharetarget.ShareTargetCompat parseShareTarget(android.content.res.XmlResourceParser) throws java.lang.Exception
+    {
+        android.content.res.XmlResourceParser r0;
+        java.lang.String r1, r4, $r14, $r15;
+        java.util.ArrayList r2, r3, $r5, $r6;
+        int i0, $i1, $i2, $i3, $i4;
+        boolean $z0, $z1, $z2, $z3, $z6;
+        androidx.sharetarget.ShareTargetCompat $r7;
+        androidx.sharetarget.ShareTargetCompat$TargetData[] $r8, $r10;
+        java.lang.Object[] $r9, $r12;
+        java.lang.String[] $r11, $r13;
+        androidx.sharetarget.ShareTargetCompat$TargetData $r16;
+        byte b5;
+
+        r0 := @parameter0: android.content.res.XmlResourceParser;
+
+        r1 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.lang.String getAttributeValue(android.content.res.XmlResourceParser,java.lang.String)>(r0, "targetClass");
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r2 = $r5;
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        r3 = $r6;
+
+     label01:
+        $i4 = interfaceinvoke r0.<android.content.res.XmlResourceParser: int next()>();
+
+        i0 = $i4;
+
+        if $i4 == 1 goto label09;
+
+        if i0 != 2 goto label08;
+
+        r4 = interfaceinvoke r0.<android.content.res.XmlResourceParser: java.lang.String getName()>();
+
+        b5 = -1;
+
+        $i3 = virtualinvoke r4.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i3)
+        {
+            case 3076010: goto label02;
+            case 50511102: goto label03;
+            default: goto label04;
+        };
+
+     label02:
+        $z6 = virtualinvoke r4.<java.lang.String: boolean equals(java.lang.Object)>("data");
+
+        if $z6 == 0 goto label04;
+
+        b5 = 0;
+
+        goto label04;
+
+     label03:
+        $z3 = virtualinvoke r4.<java.lang.String: boolean equals(java.lang.Object)>("category");
+
+        if $z3 == 0 goto label04;
+
+        b5 = 1;
+
+     label04:
+        lookupswitch(b5)
+        {
+            case 0: goto label05;
+            case 1: goto label06;
+            default: goto label07;
+        };
+
+     label05:
+        $r16 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: androidx.sharetarget.ShareTargetCompat$TargetData parseTargetData(android.content.res.XmlResourceParser)>(r0);
+
+        virtualinvoke r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r16);
+
+        goto label07;
+
+     label06:
+        $r15 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.lang.String getAttributeValue(android.content.res.XmlResourceParser,java.lang.String)>(r0, "name");
+
+        virtualinvoke r3.<java.util.ArrayList: boolean add(java.lang.Object)>($r15);
+
+     label07:
+        goto label01;
+
+     label08:
+        if i0 != 3 goto label01;
+
+        $r14 = interfaceinvoke r0.<android.content.res.XmlResourceParser: java.lang.String getName()>();
+
+        $z2 = virtualinvoke $r14.<java.lang.String: boolean equals(java.lang.Object)>("share-target");
+
+        if $z2 == 0 goto label01;
+
+        goto label09;
+
+     label09:
+        $z0 = virtualinvoke r2.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z0 != 0 goto label10;
+
+        if r1 == null goto label10;
+
+        $z1 = virtualinvoke r3.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z1 == 0 goto label11;
+
+     label10:
+        return null;
+
+     label11:
+        $r7 = new androidx.sharetarget.ShareTargetCompat;
+
+        $i1 = virtualinvoke r2.<java.util.ArrayList: int size()>();
+
+        $r8 = newarray (androidx.sharetarget.ShareTargetCompat$TargetData)[$i1];
+
+        $r9 = virtualinvoke r2.<java.util.ArrayList: java.lang.Object[] toArray(java.lang.Object[])>($r8);
+
+        $r10 = (androidx.sharetarget.ShareTargetCompat$TargetData[]) $r9;
+
+        $i2 = virtualinvoke r3.<java.util.ArrayList: int size()>();
+
+        $r11 = newarray (java.lang.String)[$i2];
+
+        $r12 = virtualinvoke r3.<java.util.ArrayList: java.lang.Object[] toArray(java.lang.Object[])>($r11);
+
+        $r13 = (java.lang.String[]) $r12;
+
+        specialinvoke $r7.<androidx.sharetarget.ShareTargetCompat: void <init>(androidx.sharetarget.ShareTargetCompat$TargetData[],java.lang.String,java.lang.String[])>($r10, r1, $r13);
+
+        return $r7;
+    }
+
+    private static androidx.sharetarget.ShareTargetCompat$TargetData parseTargetData(android.content.res.XmlResourceParser)
+    {
+        android.content.res.XmlResourceParser r0;
+        java.lang.String r1, r2, r3, r4, r5, r6, r7;
+        androidx.sharetarget.ShareTargetCompat$TargetData $r8;
+
+        r0 := @parameter0: android.content.res.XmlResourceParser;
+
+        r1 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.lang.String getAttributeValue(android.content.res.XmlResourceParser,java.lang.String)>(r0, "scheme");
+
+        r2 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.lang.String getAttributeValue(android.content.res.XmlResourceParser,java.lang.String)>(r0, "host");
+
+        r3 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.lang.String getAttributeValue(android.content.res.XmlResourceParser,java.lang.String)>(r0, "port");
+
+        r4 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.lang.String getAttributeValue(android.content.res.XmlResourceParser,java.lang.String)>(r0, "path");
+
+        r5 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.lang.String getAttributeValue(android.content.res.XmlResourceParser,java.lang.String)>(r0, "pathPattern");
+
+        r6 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.lang.String getAttributeValue(android.content.res.XmlResourceParser,java.lang.String)>(r0, "pathPrefix");
+
+        r7 = staticinvoke <androidx.sharetarget.ShareTargetXmlParser: java.lang.String getAttributeValue(android.content.res.XmlResourceParser,java.lang.String)>(r0, "mimeType");
+
+        $r8 = new androidx.sharetarget.ShareTargetCompat$TargetData;
+
+        specialinvoke $r8.<androidx.sharetarget.ShareTargetCompat$TargetData: void <init>(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)>(r1, r2, r3, r4, r5, r6, r7);
+
+        return $r8;
+    }
+
+    private static java.lang.String getAttributeValue(android.content.res.XmlResourceParser, java.lang.String)
+    {
+        android.content.res.XmlResourceParser r0;
+        java.lang.String r1, r2;
+
+        r0 := @parameter0: android.content.res.XmlResourceParser;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 = interfaceinvoke r0.<android.content.res.XmlResourceParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>("http://schemas.android.com/apk/res/android", r1);
+
+        if r2 != null goto label1;
+
+        r2 = interfaceinvoke r0.<android.content.res.XmlResourceParser: java.lang.String getAttributeValue(java.lang.String,java.lang.String)>(null, r1);
+
+     label1:
+        return r2;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Object $r0;
+
+        $r0 = new java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        <androidx.sharetarget.ShareTargetXmlParser: java.lang.Object GET_INSTANCE_LOCK> = $r0;
+
+        return;
+    }
+

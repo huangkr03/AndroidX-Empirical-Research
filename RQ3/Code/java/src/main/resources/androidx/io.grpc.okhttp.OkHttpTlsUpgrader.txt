@@ -1,0 +1,166 @@
+io.grpc.okhttp.OkHttpTlsUpgrader
+<io.grpc.okhttp.OkHttpTlsUpgrader: java.util.List TLS_PROTOCOLS>
+    static void <clinit>()
+    {
+        io.grpc.okhttp.internal.Protocol $r0;
+        io.grpc.okhttp.internal.Protocol[] $r1;
+        java.util.List $r2;
+
+        $r1 = newarray (io.grpc.okhttp.internal.Protocol)[1];
+
+        $r0 = <io.grpc.okhttp.internal.Protocol: io.grpc.okhttp.internal.Protocol HTTP_2>;
+
+        $r1[0] = $r0;
+
+        $r2 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r1);
+
+        $r2 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r2);
+
+        <io.grpc.okhttp.OkHttpTlsUpgrader: java.util.List TLS_PROTOCOLS> = $r2;
+
+        return;
+    }
+
+    static java.lang.String canonicalizeHost(java.lang.String)
+    {
+        java.lang.String $r0;
+        boolean $z0;
+        int $i0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean startsWith(java.lang.String)>("[");
+
+        if $z0 == 0 goto label1;
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean endsWith(java.lang.String)>("]");
+
+        if $z0 == 0 goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 + -1;
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>(1, $i0);
+
+     label1:
+        return $r0;
+    }
+
+    public static javax.net.ssl.SSLSocket upgrade(javax.net.ssl.SSLSocketFactory, javax.net.ssl.HostnameVerifier, java.net.Socket, java.lang.String, int, io.grpc.okhttp.internal.ConnectionSpec) throws java.io.IOException
+    {
+        java.lang.String $r0, $r8, $r10;
+        javax.net.ssl.SSLSocketFactory $r1;
+        java.lang.Object $r2;
+        java.net.Socket $r3;
+        int $i0;
+        io.grpc.okhttp.internal.ConnectionSpec $r4;
+        javax.net.ssl.SSLSocket $r5;
+        io.grpc.okhttp.OkHttpProtocolNegotiator $r6;
+        boolean $z0;
+        java.util.List $r7;
+        io.grpc.okhttp.internal.Protocol $r9;
+        java.lang.StringBuilder $r11, r13;
+        javax.net.ssl.SSLSession $r12;
+        javax.net.ssl.SSLPeerUnverifiedException r14;
+        javax.net.ssl.HostnameVerifier r15;
+
+        $r1 := @parameter0: javax.net.ssl.SSLSocketFactory;
+
+        $r2 := @parameter1: javax.net.ssl.HostnameVerifier;
+
+        $r3 := @parameter2: java.net.Socket;
+
+        $r0 := @parameter3: java.lang.String;
+
+        $i0 := @parameter4: int;
+
+        $r4 := @parameter5: io.grpc.okhttp.internal.ConnectionSpec;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "sslSocketFactory");
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "socket");
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r4, "spec");
+
+        $r3 = virtualinvoke $r1.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.net.Socket,java.lang.String,int,boolean)>($r3, $r0, $i0, 1);
+
+        $r5 = (javax.net.ssl.SSLSocket) $r3;
+
+        virtualinvoke $r4.<io.grpc.okhttp.internal.ConnectionSpec: void apply(javax.net.ssl.SSLSocket,boolean)>($r5, 0);
+
+        $r6 = staticinvoke <io.grpc.okhttp.OkHttpProtocolNegotiator: io.grpc.okhttp.OkHttpProtocolNegotiator get()>();
+
+        $z0 = virtualinvoke $r4.<io.grpc.okhttp.internal.ConnectionSpec: boolean supportsTlsExtensions()>();
+
+        if $z0 == 0 goto label1;
+
+        $r7 = <io.grpc.okhttp.OkHttpTlsUpgrader: java.util.List TLS_PROTOCOLS>;
+
+        goto label2;
+
+     label1:
+        $r7 = null;
+
+     label2:
+        $r8 = virtualinvoke $r6.<io.grpc.okhttp.OkHttpProtocolNegotiator: java.lang.String negotiate(javax.net.ssl.SSLSocket,java.lang.String,java.util.List)>($r5, $r0, $r7);
+
+        $r7 = <io.grpc.okhttp.OkHttpTlsUpgrader: java.util.List TLS_PROTOCOLS>;
+
+        $r9 = staticinvoke <io.grpc.okhttp.internal.Protocol: io.grpc.okhttp.internal.Protocol get(java.lang.String)>($r8);
+
+        $z0 = interfaceinvoke $r7.<java.util.List: boolean contains(java.lang.Object)>($r9);
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r7);
+
+        r13 = new java.lang.StringBuilder;
+
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Only ");
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" are supported, but negotiated protocol is %s");
+
+        $r10 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.String,java.lang.Object)>($z0, $r10, $r8);
+
+        if $r2 != null goto label3;
+
+        $r2 = <io.grpc.okhttp.internal.OkHostnameVerifier: io.grpc.okhttp.internal.OkHostnameVerifier INSTANCE>;
+
+        goto label3;
+
+     label3:
+        $r8 = staticinvoke <io.grpc.okhttp.OkHttpTlsUpgrader: java.lang.String canonicalizeHost(java.lang.String)>($r0);
+
+        $r12 = virtualinvoke $r5.<javax.net.ssl.SSLSocket: javax.net.ssl.SSLSession getSession()>();
+
+        r15 = (javax.net.ssl.HostnameVerifier) $r2;
+
+        $z0 = interfaceinvoke r15.<javax.net.ssl.HostnameVerifier: boolean verify(java.lang.String,javax.net.ssl.SSLSession)>($r8, $r12);
+
+        if $z0 == 0 goto label4;
+
+        return $r5;
+
+     label4:
+        r14 = new javax.net.ssl.SSLPeerUnverifiedException;
+
+        r13 = new java.lang.StringBuilder;
+
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cannot verify hostname: ");
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r14.<javax.net.ssl.SSLPeerUnverifiedException: void <init>(java.lang.String)>($r0);
+
+        throw r14;
+    }
+

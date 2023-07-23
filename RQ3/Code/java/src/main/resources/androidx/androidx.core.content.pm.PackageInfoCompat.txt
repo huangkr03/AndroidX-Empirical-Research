@@ -1,0 +1,447 @@
+androidx.core.content.pm.PackageInfoCompat
+    public static long getLongVersionCode(android.content.pm.PackageInfo)
+    {
+        android.content.pm.PackageInfo r0;
+        int $i0, $i1;
+        long $l2, $l3;
+
+        r0 := @parameter0: android.content.pm.PackageInfo;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label1;
+
+        $l3 = staticinvoke <androidx.core.content.pm.PackageInfoCompat$Api28Impl: long getLongVersionCode(android.content.pm.PackageInfo)>(r0);
+
+        return $l3;
+
+     label1:
+        $i1 = r0.<android.content.pm.PackageInfo: int versionCode>;
+
+        $l2 = (long) $i1;
+
+        return $l2;
+    }
+
+    public static java.util.List getSignatures(android.content.pm.PackageManager, java.lang.String) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        android.content.pm.PackageManager r0;
+        java.lang.String r1;
+        android.content.pm.SigningInfo r2;
+        int $i0;
+        java.util.List $r3, $r4;
+        boolean $z0;
+        android.content.pm.PackageInfo r5, r7;
+        android.content.pm.Signature[] r6;
+
+        r0 := @parameter0: android.content.pm.PackageManager;
+
+        r1 := @parameter1: java.lang.String;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label3;
+
+        r5 = virtualinvoke r0.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>(r1, 134217728);
+
+        r2 = r5.<android.content.pm.PackageInfo: android.content.pm.SigningInfo signingInfo>;
+
+        $z0 = staticinvoke <androidx.core.content.pm.PackageInfoCompat$Api28Impl: boolean hasMultipleSigners(android.content.pm.SigningInfo)>(r2);
+
+        if $z0 == 0 goto label1;
+
+        r6 = staticinvoke <androidx.core.content.pm.PackageInfoCompat$Api28Impl: android.content.pm.Signature[] getApkContentsSigners(android.content.pm.SigningInfo)>(r2);
+
+        goto label2;
+
+     label1:
+        r6 = staticinvoke <androidx.core.content.pm.PackageInfoCompat$Api28Impl: android.content.pm.Signature[] getSigningCertificateHistory(android.content.pm.SigningInfo)>(r2);
+
+     label2:
+        goto label4;
+
+     label3:
+        r7 = virtualinvoke r0.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>(r1, 64);
+
+        r6 = r7.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+     label4:
+        if r6 != null goto label5;
+
+        $r4 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r4;
+
+     label5:
+        $r3 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>(r6);
+
+        return $r3;
+    }
+
+    public static boolean hasSignatures(android.content.pm.PackageManager, java.lang.String, java.util.Map, boolean) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        android.content.pm.PackageManager r0;
+        java.lang.String r1, $r15, $r30, $r35, $r40;
+        java.util.Map r2;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, z8;
+        java.util.Set r3;
+        byte[] r4, $r18, $r19, r42, r46;
+        java.lang.Integer r5, $r7, r43, r47;
+        android.content.pm.Signature r6, $r10, $r17;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, i11;
+        java.lang.Object $r8, $r9, $r16, $r20, $r21, $r22, $r23;
+        java.lang.IllegalArgumentException $r11, $r24, $r31, $r36;
+        java.lang.StringBuilder $r12, $r13, $r14, $r25, $r26, $r27, $r28, $r29, $r32, $r33, $r34, $r37, $r38, $r39;
+        java.util.Iterator r41, r45, r49;
+        java.util.List r44;
+        byte[][] r48;
+
+        r0 := @parameter0: android.content.pm.PackageManager;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.util.Map;
+
+        z0 := @parameter3: boolean;
+
+        $z1 = interfaceinvoke r2.<java.util.Map: boolean isEmpty()>();
+
+        if $z1 == 0 goto label01;
+
+        return 0;
+
+     label01:
+        r3 = interfaceinvoke r2.<java.util.Map: java.util.Set keySet()>();
+
+        r41 = interfaceinvoke r3.<java.util.Set: java.util.Iterator iterator()>();
+
+     label02:
+        $z2 = interfaceinvoke r41.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label08;
+
+        $r22 = interfaceinvoke r41.<java.util.Iterator: java.lang.Object next()>();
+
+        r42 = (byte[]) $r22;
+
+        if r42 != null goto label03;
+
+        $r36 = new java.lang.IllegalArgumentException;
+
+        $r37 = new java.lang.StringBuilder;
+
+        specialinvoke $r37.<java.lang.StringBuilder: void <init>()>();
+
+        $r38 = virtualinvoke $r37.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cert byte array cannot be null when verifying ");
+
+        $r39 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r40 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r36.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r40);
+
+        throw $r36;
+
+     label03:
+        $r23 = interfaceinvoke r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r42);
+
+        r43 = (java.lang.Integer) $r23;
+
+        if r43 != null goto label04;
+
+        $r31 = new java.lang.IllegalArgumentException;
+
+        $r32 = new java.lang.StringBuilder;
+
+        specialinvoke $r32.<java.lang.StringBuilder: void <init>()>();
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Type must be specified for cert when verifying ");
+
+        $r34 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r35 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r31.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r35);
+
+        throw $r31;
+
+     label04:
+        $i10 = virtualinvoke r43.<java.lang.Integer: int intValue()>();
+
+        lookupswitch($i10)
+        {
+            case 0: goto label05;
+            case 1: goto label05;
+            default: goto label06;
+        };
+
+     label05:
+        goto label07;
+
+     label06:
+        $r24 = new java.lang.IllegalArgumentException;
+
+        $r25 = new java.lang.StringBuilder;
+
+        specialinvoke $r25.<java.lang.StringBuilder: void <init>()>();
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unsupported certificate type ");
+
+        $r27 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r43);
+
+        $r28 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" when verifying ");
+
+        $r29 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r24.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r30);
+
+        throw $r24;
+
+     label07:
+        goto label02;
+
+     label08:
+        r44 = staticinvoke <androidx.core.content.pm.PackageInfoCompat: java.util.List getSignatures(android.content.pm.PackageManager,java.lang.String)>(r0, r1);
+
+        if z0 != 0 goto label12;
+
+        $i8 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i8 < 28 goto label12;
+
+        r45 = interfaceinvoke r3.<java.util.Set: java.util.Iterator iterator()>();
+
+     label09:
+        $z6 = interfaceinvoke r45.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label11;
+
+        $r20 = interfaceinvoke r45.<java.util.Iterator: java.lang.Object next()>();
+
+        r46 = (byte[]) $r20;
+
+        $r21 = interfaceinvoke r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r46);
+
+        r47 = (java.lang.Integer) $r21;
+
+        $i9 = virtualinvoke r47.<java.lang.Integer: int intValue()>();
+
+        $z7 = staticinvoke <androidx.core.content.pm.PackageInfoCompat$Api28Impl: boolean hasSigningCertificate(android.content.pm.PackageManager,java.lang.String,byte[],int)>(r0, r1, r46, $i9);
+
+        if $z7 != 0 goto label10;
+
+        return 0;
+
+     label10:
+        goto label09;
+
+     label11:
+        return 1;
+
+     label12:
+        $i0 = interfaceinvoke r44.<java.util.List: int size()>();
+
+        if $i0 == 0 goto label13;
+
+        $i1 = interfaceinvoke r2.<java.util.Map: int size()>();
+
+        $i2 = interfaceinvoke r44.<java.util.List: int size()>();
+
+        if $i1 > $i2 goto label13;
+
+        if z0 == 0 goto label14;
+
+        $i6 = interfaceinvoke r2.<java.util.Map: int size()>();
+
+        $i7 = interfaceinvoke r44.<java.util.List: int size()>();
+
+        if $i6 == $i7 goto label14;
+
+     label13:
+        return 0;
+
+     label14:
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(1);
+
+        z8 = interfaceinvoke r2.<java.util.Map: boolean containsValue(java.lang.Object)>($r7);
+
+        r48 = null;
+
+        if z8 == 0 goto label16;
+
+        $i4 = interfaceinvoke r44.<java.util.List: int size()>();
+
+        r48 = newarray (byte[])[$i4];
+
+        i11 = 0;
+
+     label15:
+        $i5 = interfaceinvoke r44.<java.util.List: int size()>();
+
+        if i11 >= $i5 goto label16;
+
+        $r16 = interfaceinvoke r44.<java.util.List: java.lang.Object get(int)>(i11);
+
+        $r17 = (android.content.pm.Signature) $r16;
+
+        $r18 = virtualinvoke $r17.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        $r19 = staticinvoke <androidx.core.content.pm.PackageInfoCompat: byte[] computeSHA256Digest(byte[])>($r18);
+
+        r48[i11] = $r19;
+
+        i11 = i11 + 1;
+
+        goto label15;
+
+     label16:
+        r49 = interfaceinvoke r3.<java.util.Set: java.util.Iterator iterator()>();
+
+        $z3 = interfaceinvoke r49.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label21;
+
+        $r8 = interfaceinvoke r49.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (byte[]) $r8;
+
+        $r9 = interfaceinvoke r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r4);
+
+        r5 = (java.lang.Integer) $r9;
+
+        $i3 = virtualinvoke r5.<java.lang.Integer: int intValue()>();
+
+        lookupswitch($i3)
+        {
+            case 0: goto label17;
+            case 1: goto label18;
+            default: goto label19;
+        };
+
+     label17:
+        $r10 = new android.content.pm.Signature;
+
+        specialinvoke $r10.<android.content.pm.Signature: void <init>(byte[])>(r4);
+
+        r6 = $r10;
+
+        $z5 = interfaceinvoke r44.<java.util.List: boolean contains(java.lang.Object)>(r6);
+
+        if $z5 != 0 goto label20;
+
+        return 0;
+
+     label18:
+        $z4 = staticinvoke <androidx.core.content.pm.PackageInfoCompat: boolean byteArrayContains(byte[][],byte[])>(r48, r4);
+
+        if $z4 != 0 goto label20;
+
+        return 0;
+
+     label19:
+        $r11 = new java.lang.IllegalArgumentException;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unsupported certificate type ");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r5);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r11.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r15);
+
+        throw $r11;
+
+     label20:
+        return 1;
+
+     label21:
+        return 0;
+    }
+
+    private static boolean byteArrayContains(byte[][], byte[])
+    {
+        byte[][] r0, r2;
+        byte[] r1, r3;
+        int i0, i1;
+        boolean $z0;
+
+        r0 := @parameter0: byte[][];
+
+        r1 := @parameter1: byte[];
+
+        r2 = r0;
+
+        i0 = lengthof r2;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label3;
+
+        r3 = r2[i1];
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>(r1, r3);
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+    private static byte[] computeSHA256Digest(byte[])
+    {
+        byte[] r0, $r3;
+        java.lang.Throwable r1, $r4, r7;
+        java.security.MessageDigest $r2;
+        java.lang.RuntimeException r6;
+
+        r0 := @parameter0: byte[];
+
+     label1:
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA256");
+
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>(r0);
+
+     label2:
+        return $r3;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+        r6 = new java.lang.RuntimeException;
+
+        specialinvoke r6.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>("Device doesn\'t support SHA256 cert checking", r1);
+
+        r7 = (java.lang.Throwable) r6;
+
+        throw r7;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    private void <init>()
+    {
+        androidx.core.content.pm.PackageInfoCompat r0;
+
+        r0 := @this: androidx.core.content.pm.PackageInfoCompat;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

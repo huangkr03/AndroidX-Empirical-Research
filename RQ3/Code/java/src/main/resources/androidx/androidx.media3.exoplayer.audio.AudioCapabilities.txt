@@ -1,0 +1,827 @@
+androidx.media3.exoplayer.audio.AudioCapabilities
+<androidx.media3.exoplayer.audio.AudioCapabilities: int DEFAULT_MAX_CHANNEL_COUNT>
+<androidx.media3.exoplayer.audio.AudioCapabilities: int DEFAULT_SAMPLE_RATE_HZ>
+<androidx.media3.exoplayer.audio.AudioCapabilities: androidx.media3.exoplayer.audio.AudioCapabilities DEFAULT_AUDIO_CAPABILITIES>
+<androidx.media3.exoplayer.audio.AudioCapabilities: androidx.media3.exoplayer.audio.AudioCapabilities EXTERNAL_SURROUND_SOUND_CAPABILITIES>
+<androidx.media3.exoplayer.audio.AudioCapabilities: com.google.common.collect.ImmutableMap ALL_SURROUND_ENCODINGS_AND_MAX_CHANNELS>
+<androidx.media3.exoplayer.audio.AudioCapabilities: java.lang.String EXTERNAL_SURROUND_SOUND_KEY>
+<androidx.media3.exoplayer.audio.AudioCapabilities: int[] supportedEncodings>
+<androidx.media3.exoplayer.audio.AudioCapabilities: int maxChannelCount>
+    public static androidx.media3.exoplayer.audio.AudioCapabilities getCapabilities(android.content.Context)
+    {
+        android.content.Context r0;
+        android.content.Intent r1;
+        android.content.IntentFilter $r2;
+        androidx.media3.exoplayer.audio.AudioCapabilities $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r2 = new android.content.IntentFilter;
+
+        specialinvoke $r2.<android.content.IntentFilter: void <init>(java.lang.String)>("android.media.action.HDMI_AUDIO_PLUG");
+
+        r1 = virtualinvoke r0.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>(null, $r2);
+
+        $r3 = staticinvoke <androidx.media3.exoplayer.audio.AudioCapabilities: androidx.media3.exoplayer.audio.AudioCapabilities getCapabilities(android.content.Context,android.content.Intent)>(r0, r1);
+
+        return $r3;
+    }
+
+    static androidx.media3.exoplayer.audio.AudioCapabilities getCapabilities(android.content.Context, android.content.Intent)
+    {
+        android.content.Context r0;
+        android.content.Intent r1;
+        boolean $z0, $z1, $z2;
+        int $i0, $i1, $i2, $i3;
+        androidx.media3.exoplayer.audio.AudioCapabilities $r2, $r3, $r5, $r8;
+        int[] $r4, $r6;
+        android.content.ContentResolver $r7;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.Intent;
+
+        $z0 = staticinvoke <androidx.media3.exoplayer.audio.AudioCapabilities: boolean deviceMaySetExternalSurroundSoundGlobalSetting()>();
+
+        if $z0 == 0 goto label1;
+
+        $r7 = virtualinvoke r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $i3 = staticinvoke <android.provider.Settings$Global: int getInt(android.content.ContentResolver,java.lang.String,int)>($r7, "external_surround_sound_enabled", 0);
+
+        if $i3 != 1 goto label1;
+
+        $r8 = <androidx.media3.exoplayer.audio.AudioCapabilities: androidx.media3.exoplayer.audio.AudioCapabilities EXTERNAL_SURROUND_SOUND_CAPABILITIES>;
+
+        return $r8;
+
+     label1:
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 29 goto label3;
+
+        $z1 = staticinvoke <androidx.media3.common.util.Util: boolean isTv(android.content.Context)>(r0);
+
+        if $z1 != 0 goto label2;
+
+        $z2 = staticinvoke <androidx.media3.common.util.Util: boolean isAutomotive(android.content.Context)>(r0);
+
+        if $z2 == 0 goto label3;
+
+     label2:
+        $r5 = new androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        $r6 = staticinvoke <androidx.media3.exoplayer.audio.AudioCapabilities$Api29: int[] getDirectPlaybackSupportedEncodings()>();
+
+        specialinvoke $r5.<androidx.media3.exoplayer.audio.AudioCapabilities: void <init>(int[],int)>($r6, 8);
+
+        return $r5;
+
+     label3:
+        if r1 == null goto label4;
+
+        $i1 = virtualinvoke r1.<android.content.Intent: int getIntExtra(java.lang.String,int)>("android.media.extra.AUDIO_PLUG_STATE", 0);
+
+        if $i1 != 0 goto label5;
+
+     label4:
+        $r2 = <androidx.media3.exoplayer.audio.AudioCapabilities: androidx.media3.exoplayer.audio.AudioCapabilities DEFAULT_AUDIO_CAPABILITIES>;
+
+        return $r2;
+
+     label5:
+        $r3 = new androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        $r4 = virtualinvoke r1.<android.content.Intent: int[] getIntArrayExtra(java.lang.String)>("android.media.extra.ENCODINGS");
+
+        $i2 = virtualinvoke r1.<android.content.Intent: int getIntExtra(java.lang.String,int)>("android.media.extra.MAX_CHANNEL_COUNT", 8);
+
+        specialinvoke $r3.<androidx.media3.exoplayer.audio.AudioCapabilities: void <init>(int[],int)>($r4, $i2);
+
+        return $r3;
+    }
+
+    static android.net.Uri getExternalSurroundSoundGlobalSettingUri()
+    {
+        boolean $z0;
+        android.net.Uri $r0;
+
+        $z0 = staticinvoke <androidx.media3.exoplayer.audio.AudioCapabilities: boolean deviceMaySetExternalSurroundSoundGlobalSetting()>();
+
+        if $z0 == 0 goto label1;
+
+        $r0 = staticinvoke <android.provider.Settings$Global: android.net.Uri getUriFor(java.lang.String)>("external_surround_sound_enabled");
+
+        goto label2;
+
+     label1:
+        $r0 = null;
+
+     label2:
+        return $r0;
+    }
+
+    public void <init>(int[], int)
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities r0;
+        int[] r1, $r2, $r3, $r4;
+        int i0, $i1;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        r1 := @parameter0: int[];
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        if r1 == null goto label1;
+
+        $i1 = lengthof r1;
+
+        $r3 = staticinvoke <java.util.Arrays: int[] copyOf(int[],int)>(r1, $i1);
+
+        r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int[] supportedEncodings> = $r3;
+
+        $r4 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int[] supportedEncodings>;
+
+        staticinvoke <java.util.Arrays: void sort(int[])>($r4);
+
+        goto label2;
+
+     label1:
+        $r2 = newarray (int)[0];
+
+        r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int[] supportedEncodings> = $r2;
+
+     label2:
+        r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int maxChannelCount> = i0;
+
+        return;
+    }
+
+    public boolean supportsEncoding(int)
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities r0;
+        int i0, $i1;
+        int[] $r1;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int[] supportedEncodings>;
+
+        $i1 = staticinvoke <java.util.Arrays: int binarySearch(int[],int)>($r1, i0);
+
+        if $i1 < 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public int getMaxChannelCount()
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities r0;
+        int $i0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        $i0 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int maxChannelCount>;
+
+        return $i0;
+    }
+
+    public boolean isPassthroughPlaybackSupported(androidx.media3.common.Format)
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities r0;
+        androidx.media3.common.Format r1;
+        android.util.Pair $r2;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        r1 := @parameter0: androidx.media3.common.Format;
+
+        $r2 = virtualinvoke r0.<androidx.media3.exoplayer.audio.AudioCapabilities: android.util.Pair getEncodingAndChannelConfigForPassthrough(androidx.media3.common.Format)>(r1);
+
+        if $r2 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public android.util.Pair getEncodingAndChannelConfigForPassthrough(androidx.media3.common.Format)
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities r0;
+        androidx.media3.common.Format r1;
+        java.lang.String $r2, $r4, $r5;
+        java.lang.Object $r3;
+        com.google.common.collect.ImmutableMap $r6;
+        java.lang.Integer $r7, $r8, $r9;
+        boolean $z0, $z1, $z2, $z3;
+        int $i0, $i1, $i2, i3, $i4, i5, i6, i7;
+        android.util.Pair $r10;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        r1 := @parameter0: androidx.media3.common.Format;
+
+        $r2 = r1.<androidx.media3.common.Format: java.lang.String sampleMimeType>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r5 = (java.lang.String) $r3;
+
+        $r4 = r1.<androidx.media3.common.Format: java.lang.String codecs>;
+
+        i3 = staticinvoke <androidx.media3.common.MimeTypes: int getEncoding(java.lang.String,java.lang.String)>($r5, $r4);
+
+        $r6 = <androidx.media3.exoplayer.audio.AudioCapabilities: com.google.common.collect.ImmutableMap ALL_SURROUND_ENCODINGS_AND_MAX_CHANNELS>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i3);
+
+        $z0 = virtualinvoke $r6.<com.google.common.collect.ImmutableMap: boolean containsKey(java.lang.Object)>($r7);
+
+        if $z0 != 0 goto label01;
+
+        return null;
+
+     label01:
+        if i3 != 18 goto label02;
+
+        $z2 = virtualinvoke r0.<androidx.media3.exoplayer.audio.AudioCapabilities: boolean supportsEncoding(int)>(18);
+
+        if $z2 != 0 goto label02;
+
+        i3 = 6;
+
+        goto label03;
+
+     label02:
+        if i3 != 8 goto label03;
+
+        $z1 = virtualinvoke r0.<androidx.media3.exoplayer.audio.AudioCapabilities: boolean supportsEncoding(int)>(8);
+
+        if $z1 != 0 goto label03;
+
+        i3 = 7;
+
+     label03:
+        $z3 = virtualinvoke r0.<androidx.media3.exoplayer.audio.AudioCapabilities: boolean supportsEncoding(int)>(i3);
+
+        if $z3 != 0 goto label04;
+
+        return null;
+
+     label04:
+        $i0 = r1.<androidx.media3.common.Format: int channelCount>;
+
+        if $i0 == -1 goto label05;
+
+        if i3 != 18 goto label08;
+
+     label05:
+        $i1 = r1.<androidx.media3.common.Format: int sampleRate>;
+
+        if $i1 == -1 goto label06;
+
+        $i4 = r1.<androidx.media3.common.Format: int sampleRate>;
+
+        goto label07;
+
+     label06:
+        $i4 = 48000;
+
+     label07:
+        i5 = $i4;
+
+        i6 = staticinvoke <androidx.media3.exoplayer.audio.AudioCapabilities: int getMaxSupportedChannelCountForPassthrough(int,int)>(i3, i5);
+
+        goto label09;
+
+     label08:
+        i6 = r1.<androidx.media3.common.Format: int channelCount>;
+
+        $i2 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int maxChannelCount>;
+
+        if i6 <= $i2 goto label09;
+
+        return null;
+
+     label09:
+        i7 = staticinvoke <androidx.media3.exoplayer.audio.AudioCapabilities: int getChannelConfigForPassthrough(int)>(i6);
+
+        if i7 != 0 goto label10;
+
+        return null;
+
+     label10:
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i3);
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i7);
+
+        $r10 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r8, $r9);
+
+        return $r10;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1, $z2;
+        int[] $r3, $r4;
+        int $i0, $i1;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r0 != r1 goto label1;
+
+        return 1;
+
+     label1:
+        $z0 = r1 instanceof androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        r2 = (androidx.media3.exoplayer.audio.AudioCapabilities) r1;
+
+        $r4 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int[] supportedEncodings>;
+
+        $r3 = r2.<androidx.media3.exoplayer.audio.AudioCapabilities: int[] supportedEncodings>;
+
+        $z1 = staticinvoke <java.util.Arrays: boolean equals(int[],int[])>($r4, $r3);
+
+        if $z1 == 0 goto label3;
+
+        $i1 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int maxChannelCount>;
+
+        $i0 = r2.<androidx.media3.exoplayer.audio.AudioCapabilities: int maxChannelCount>;
+
+        if $i1 != $i0 goto label3;
+
+        $z2 = 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        return $z2;
+    }
+
+    public int hashCode()
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities r0;
+        int[] $r1;
+        int $i0, $i1, $i2, $i3;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        $i0 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int maxChannelCount>;
+
+        $r1 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int[] supportedEncodings>;
+
+        $i1 = staticinvoke <java.util.Arrays: int hashCode(int[])>($r1);
+
+        $i2 = 31 * $i1;
+
+        $i3 = $i0 + $i2;
+
+        return $i3;
+    }
+
+    public java.lang.String toString()
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities r0;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r7, $r8;
+        int $i0;
+        int[] $r5;
+        java.lang.String $r6, $r9;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("AudioCapabilities[maxChannelCount=");
+
+        $i0 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int maxChannelCount>;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", supportedEncodings=");
+
+        $r5 = r0.<androidx.media3.exoplayer.audio.AudioCapabilities: int[] supportedEncodings>;
+
+        $r6 = staticinvoke <java.util.Arrays: java.lang.String toString(int[])>($r5);
+
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r9;
+    }
+
+    private static boolean deviceMaySetExternalSurroundSoundGlobalSetting()
+    {
+        int $i0;
+        java.lang.String $r0, $r1, $r2, $r3;
+        boolean $z0, $z1, $z2;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 17 goto label2;
+
+        $r1 = "Amazon";
+
+        $r0 = <androidx.media3.common.util.Util: java.lang.String MANUFACTURER>;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r0);
+
+        if $z0 != 0 goto label1;
+
+        $r3 = "Xiaomi";
+
+        $r2 = <androidx.media3.common.util.Util: java.lang.String MANUFACTURER>;
+
+        $z1 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        return $z2;
+    }
+
+    private static int getMaxSupportedChannelCountForPassthrough(int, int)
+    {
+        int i0, i1, $i2, $i3, $i4;
+        com.google.common.collect.ImmutableMap $r0;
+        java.lang.Integer $r1, $r2, $r4, $r6;
+        java.lang.Object $r3, $r5;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $i2 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i2 < 29 goto label1;
+
+        $i4 = staticinvoke <androidx.media3.exoplayer.audio.AudioCapabilities$Api29: int getMaxSupportedChannelCountForPassthrough(int,int)>(i0, i1);
+
+        return $i4;
+
+     label1:
+        $r0 = <androidx.media3.exoplayer.audio.AudioCapabilities: com.google.common.collect.ImmutableMap ALL_SURROUND_ENCODINGS_AND_MAX_CHANNELS>;
+
+        $r1 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+        $r3 = virtualinvoke $r0.<com.google.common.collect.ImmutableMap: java.lang.Object getOrDefault(java.lang.Object,java.lang.Object)>($r1, $r2);
+
+        $r4 = (java.lang.Integer) $r3;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        $r6 = (java.lang.Integer) $r5;
+
+        $i3 = virtualinvoke $r6.<java.lang.Integer: int intValue()>();
+
+        return $i3;
+    }
+
+    private static int getChannelConfigForPassthrough(int)
+    {
+        int $i0, i1, $i2, $i3;
+        java.lang.String $r0, $r1;
+        boolean $z0;
+
+        i1 := @parameter0: int;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 > 28 goto label3;
+
+        if i1 != 7 goto label1;
+
+        i1 = 8;
+
+        goto label3;
+
+     label1:
+        if i1 == 3 goto label2;
+
+        if i1 == 4 goto label2;
+
+        if i1 != 5 goto label3;
+
+     label2:
+        i1 = 6;
+
+     label3:
+        $i2 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i2 > 26 goto label4;
+
+        $r1 = "fugu";
+
+        $r0 = <androidx.media3.common.util.Util: java.lang.String DEVICE>;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r0);
+
+        if $z0 == 0 goto label4;
+
+        if i1 != 1 goto label4;
+
+        i1 = 2;
+
+     label4:
+        $i3 = staticinvoke <androidx.media3.common.util.Util: int getAudioTrackChannelConfig(int)>(i1);
+
+        return $i3;
+    }
+
+    static com.google.common.collect.ImmutableMap access$000()
+    {
+        com.google.common.collect.ImmutableMap $r0;
+
+        $r0 = <androidx.media3.exoplayer.audio.AudioCapabilities: com.google.common.collect.ImmutableMap ALL_SURROUND_ENCODINGS_AND_MAX_CHANNELS>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities $r0, $r2;
+        int[] $r1, $r3;
+        com.google.common.collect.ImmutableMap$Builder $r4, $r7, $r10, $r13, $r16, $r19, $r22, $r25;
+        java.lang.Integer $r5, $r6, $r8, $r9, $r11, $r12, $r14, $r15, $r17, $r18, $r20, $r21, $r23, $r24;
+        com.google.common.collect.ImmutableMap $r26;
+
+        $r0 = new androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 2;
+
+        specialinvoke $r0.<androidx.media3.exoplayer.audio.AudioCapabilities: void <init>(int[],int)>($r1, 8);
+
+        <androidx.media3.exoplayer.audio.AudioCapabilities: androidx.media3.exoplayer.audio.AudioCapabilities DEFAULT_AUDIO_CAPABILITIES> = $r0;
+
+        $r2 = new androidx.media3.exoplayer.audio.AudioCapabilities;
+
+        $r3 = newarray (int)[3];
+
+        $r3[0] = 2;
+
+        $r3[1] = 5;
+
+        $r3[2] = 6;
+
+        specialinvoke $r2.<androidx.media3.exoplayer.audio.AudioCapabilities: void <init>(int[],int)>($r3, 8);
+
+        <androidx.media3.exoplayer.audio.AudioCapabilities: androidx.media3.exoplayer.audio.AudioCapabilities EXTERNAL_SURROUND_SOUND_CAPABILITIES> = $r2;
+
+        $r4 = new com.google.common.collect.ImmutableMap$Builder;
+
+        specialinvoke $r4.<com.google.common.collect.ImmutableMap$Builder: void <init>()>();
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(5);
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(6);
+
+        $r7 = virtualinvoke $r4.<com.google.common.collect.ImmutableMap$Builder: com.google.common.collect.ImmutableMap$Builder put(java.lang.Object,java.lang.Object)>($r5, $r6);
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(17);
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(6);
+
+        $r10 = virtualinvoke $r7.<com.google.common.collect.ImmutableMap$Builder: com.google.common.collect.ImmutableMap$Builder put(java.lang.Object,java.lang.Object)>($r8, $r9);
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(7);
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(6);
+
+        $r13 = virtualinvoke $r10.<com.google.common.collect.ImmutableMap$Builder: com.google.common.collect.ImmutableMap$Builder put(java.lang.Object,java.lang.Object)>($r11, $r12);
+
+        $r14 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(18);
+
+        $r15 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(6);
+
+        $r16 = virtualinvoke $r13.<com.google.common.collect.ImmutableMap$Builder: com.google.common.collect.ImmutableMap$Builder put(java.lang.Object,java.lang.Object)>($r14, $r15);
+
+        $r17 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(6);
+
+        $r18 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(8);
+
+        $r19 = virtualinvoke $r16.<com.google.common.collect.ImmutableMap$Builder: com.google.common.collect.ImmutableMap$Builder put(java.lang.Object,java.lang.Object)>($r17, $r18);
+
+        $r20 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(8);
+
+        $r21 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(8);
+
+        $r22 = virtualinvoke $r19.<com.google.common.collect.ImmutableMap$Builder: com.google.common.collect.ImmutableMap$Builder put(java.lang.Object,java.lang.Object)>($r20, $r21);
+
+        $r23 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(14);
+
+        $r24 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(8);
+
+        $r25 = virtualinvoke $r22.<com.google.common.collect.ImmutableMap$Builder: com.google.common.collect.ImmutableMap$Builder put(java.lang.Object,java.lang.Object)>($r23, $r24);
+
+        $r26 = virtualinvoke $r25.<com.google.common.collect.ImmutableMap$Builder: com.google.common.collect.ImmutableMap buildOrThrow()>();
+
+        <androidx.media3.exoplayer.audio.AudioCapabilities: com.google.common.collect.ImmutableMap ALL_SURROUND_ENCODINGS_AND_MAX_CHANNELS> = $r26;
+
+        return;
+    }
+
+androidx.media3.exoplayer.audio.AudioCapabilities$Api29
+<androidx.media3.exoplayer.audio.AudioCapabilities$Api29: android.media.AudioAttributes DEFAULT_AUDIO_ATTRIBUTES>
+    private void <init>()
+    {
+        androidx.media3.exoplayer.audio.AudioCapabilities$Api29 r0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.AudioCapabilities$Api29;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int[] getDirectPlaybackSupportedEncodings()
+    {
+        com.google.common.collect.ImmutableList$Builder r0;
+        com.google.common.collect.UnmodifiableIterator r1;
+        int i0;
+        com.google.common.collect.ImmutableMap $r2;
+        com.google.common.collect.ImmutableSet $r3;
+        boolean $z0, $z1;
+        java.lang.Integer $r4, $r9, $r16;
+        com.google.common.collect.ImmutableList $r6;
+        int[] $r7;
+        java.lang.Object $r8;
+        android.media.AudioFormat$Builder $r10, $r11, $r12, $r13;
+        android.media.AudioFormat $r14;
+        android.media.AudioAttributes $r15;
+
+        r0 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList$Builder builder()>();
+
+        $r2 = staticinvoke <androidx.media3.exoplayer.audio.AudioCapabilities: com.google.common.collect.ImmutableMap access$000()>();
+
+        $r3 = virtualinvoke $r2.<com.google.common.collect.ImmutableMap: com.google.common.collect.ImmutableSet keySet()>();
+
+        r1 = virtualinvoke $r3.<com.google.common.collect.ImmutableSet: com.google.common.collect.UnmodifiableIterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r8 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (java.lang.Integer) $r8;
+
+        i0 = virtualinvoke $r9.<java.lang.Integer: int intValue()>();
+
+        $r10 = new android.media.AudioFormat$Builder;
+
+        specialinvoke $r10.<android.media.AudioFormat$Builder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<android.media.AudioFormat$Builder: android.media.AudioFormat$Builder setChannelMask(int)>(12);
+
+        $r12 = virtualinvoke $r11.<android.media.AudioFormat$Builder: android.media.AudioFormat$Builder setEncoding(int)>(i0);
+
+        $r13 = virtualinvoke $r12.<android.media.AudioFormat$Builder: android.media.AudioFormat$Builder setSampleRate(int)>(48000);
+
+        $r14 = virtualinvoke $r13.<android.media.AudioFormat$Builder: android.media.AudioFormat build()>();
+
+        $r15 = <androidx.media3.exoplayer.audio.AudioCapabilities$Api29: android.media.AudioAttributes DEFAULT_AUDIO_ATTRIBUTES>;
+
+        $z1 = staticinvoke <android.media.AudioTrack: boolean isDirectPlaybackSupported(android.media.AudioFormat,android.media.AudioAttributes)>($r14, $r15);
+
+        if $z1 == 0 goto label2;
+
+        $r16 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        virtualinvoke r0.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList$Builder add(java.lang.Object)>($r16);
+
+     label2:
+        goto label1;
+
+     label3:
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(2);
+
+        virtualinvoke r0.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList$Builder add(java.lang.Object)>($r4);
+
+        $r6 = virtualinvoke r0.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList build()>();
+
+        $r7 = staticinvoke <com.google.common.primitives.Ints: int[] toArray(java.util.Collection)>($r6);
+
+        return $r7;
+    }
+
+    public static int getMaxSupportedChannelCountForPassthrough(int, int)
+    {
+        int i0, i1, $i2, i3;
+        android.media.AudioFormat r0;
+        android.media.AudioFormat$Builder $r1, $r2, $r3, $r4;
+        android.media.AudioAttributes $r5;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i3 = 8;
+
+     label1:
+        if i3 <= 0 goto label3;
+
+        $r1 = new android.media.AudioFormat$Builder;
+
+        specialinvoke $r1.<android.media.AudioFormat$Builder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<android.media.AudioFormat$Builder: android.media.AudioFormat$Builder setEncoding(int)>(i0);
+
+        $r3 = virtualinvoke $r2.<android.media.AudioFormat$Builder: android.media.AudioFormat$Builder setSampleRate(int)>(i1);
+
+        $i2 = staticinvoke <androidx.media3.common.util.Util: int getAudioTrackChannelConfig(int)>(i3);
+
+        $r4 = virtualinvoke $r3.<android.media.AudioFormat$Builder: android.media.AudioFormat$Builder setChannelMask(int)>($i2);
+
+        r0 = virtualinvoke $r4.<android.media.AudioFormat$Builder: android.media.AudioFormat build()>();
+
+        $r5 = <androidx.media3.exoplayer.audio.AudioCapabilities$Api29: android.media.AudioAttributes DEFAULT_AUDIO_ATTRIBUTES>;
+
+        $z0 = staticinvoke <android.media.AudioTrack: boolean isDirectPlaybackSupported(android.media.AudioFormat,android.media.AudioAttributes)>(r0, $r5);
+
+        if $z0 == 0 goto label2;
+
+        return i3;
+
+     label2:
+        i3 = i3 + -1;
+
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+    static void <clinit>()
+    {
+        android.media.AudioAttributes$Builder $r0, $r1, $r2, $r3;
+        android.media.AudioAttributes $r4;
+
+        $r0 = new android.media.AudioAttributes$Builder;
+
+        specialinvoke $r0.<android.media.AudioAttributes$Builder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<android.media.AudioAttributes$Builder: android.media.AudioAttributes$Builder setUsage(int)>(1);
+
+        $r2 = virtualinvoke $r1.<android.media.AudioAttributes$Builder: android.media.AudioAttributes$Builder setContentType(int)>(3);
+
+        $r3 = virtualinvoke $r2.<android.media.AudioAttributes$Builder: android.media.AudioAttributes$Builder setFlags(int)>(0);
+
+        $r4 = virtualinvoke $r3.<android.media.AudioAttributes$Builder: android.media.AudioAttributes build()>();
+
+        <androidx.media3.exoplayer.audio.AudioCapabilities$Api29: android.media.AudioAttributes DEFAULT_AUDIO_ATTRIBUTES> = $r4;
+
+        return;
+    }
+

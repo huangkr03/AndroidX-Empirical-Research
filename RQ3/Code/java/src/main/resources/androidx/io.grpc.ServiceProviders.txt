@@ -1,0 +1,300 @@
+io.grpc.ServiceProviders
+    private static java.lang.Object createForHardCoded(java.lang.Class, java.lang.Class)
+    {
+        java.lang.Class $r0, $r1;
+        java.lang.Class[] $r2;
+        java.lang.reflect.Constructor $r3;
+        java.lang.Object[] $r4;
+        java.lang.Object $r5;
+        java.lang.Throwable $r6, $r9;
+        java.util.ServiceConfigurationError $r7;
+        java.lang.String $r8;
+
+        $r0 := @parameter0: java.lang.Class;
+
+        $r1 := @parameter1: java.lang.Class;
+
+     label1:
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>($r0);
+
+     label2:
+        $r2 = newarray (java.lang.Class)[0];
+
+     label3:
+        $r3 = virtualinvoke $r0.<java.lang.Class: java.lang.reflect.Constructor getConstructor(java.lang.Class[])>($r2);
+
+     label4:
+        $r4 = newarray (java.lang.Object)[0];
+
+     label5:
+        $r5 = virtualinvoke $r3.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r4);
+
+     label6:
+        return $r5;
+
+     label7:
+        $r6 := @caughtexception;
+
+        $r7 = new java.util.ServiceConfigurationError;
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r8 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r4[0] = $r8;
+
+        $r4[1] = $r6;
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Provider %s could not be instantiated %s", $r4);
+
+        specialinvoke $r7.<java.util.ServiceConfigurationError: void <init>(java.lang.String,java.lang.Throwable)>($r8, $r6);
+
+        throw $r7;
+
+     label8:
+        $r9 := @caughtexception;
+
+        return null;
+
+        catch java.lang.ClassCastException from label1 to label2 with label8;
+        catch java.lang.ClassCastException from label3 to label4 with label8;
+        catch java.lang.ClassCastException from label5 to label6 with label8;
+        catch java.lang.Throwable from label1 to label2 with label7;
+        catch java.lang.Throwable from label3 to label4 with label7;
+        catch java.lang.Throwable from label5 to label6 with label7;
+    }
+
+    static java.lang.Iterable getCandidatesViaHardCoded(java.lang.Class, java.lang.Iterable)
+    {
+        java.lang.Class $r0, $r5;
+        java.util.ArrayList $r1, r6;
+        java.lang.Iterable $r2;
+        java.util.Iterator $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        java.util.List r7;
+
+        $r0 := @parameter0: java.lang.Class;
+
+        $r2 := @parameter1: java.lang.Iterable;
+
+        r6 = new java.util.ArrayList;
+
+        $r1 = r6;
+
+        specialinvoke r6.<java.util.ArrayList: void <init>()>();
+
+        $r3 = interfaceinvoke $r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.lang.Class) $r4;
+
+        $r4 = staticinvoke <io.grpc.ServiceProviders: java.lang.Object createForHardCoded(java.lang.Class,java.lang.Class)>($r0, $r5);
+
+        if $r4 == null goto label1;
+
+        r7 = (java.util.List) $r1;
+
+        interfaceinvoke r7.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        goto label1;
+
+     label2:
+        $r2 = (java.lang.Iterable) $r1;
+
+        return $r2;
+    }
+
+    public static java.lang.Iterable getCandidatesViaServiceLoader(java.lang.Class, java.lang.ClassLoader)
+    {
+        java.lang.Class $r0;
+        java.lang.ClassLoader $r1;
+        java.util.ServiceLoader $r2;
+        java.util.Iterator $r3;
+        boolean $z0;
+        java.lang.Iterable r4;
+
+        $r0 := @parameter0: java.lang.Class;
+
+        $r1 := @parameter1: java.lang.ClassLoader;
+
+        $r2 = staticinvoke <java.util.ServiceLoader: java.util.ServiceLoader load(java.lang.Class,java.lang.ClassLoader)>($r0, $r1);
+
+        r4 = (java.lang.Iterable) $r2;
+
+        $r3 = interfaceinvoke r4.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = staticinvoke <java.util.ServiceLoader: java.util.ServiceLoader load(java.lang.Class)>($r0);
+
+        r4 = (java.lang.Iterable) $r2;
+
+        return r4;
+
+     label1:
+        r4 = (java.lang.Iterable) $r2;
+
+        return r4;
+    }
+
+    static boolean isAndroid(java.lang.ClassLoader)
+    {
+        java.lang.ClassLoader $r0;
+
+        $r0 := @parameter0: java.lang.ClassLoader;
+
+        staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String,boolean,java.lang.ClassLoader)>("android.app.Application", 0, $r0);
+
+        return 1;
+    }
+
+    public static java.util.List loadAll(java.lang.Class, java.lang.Iterable, java.lang.ClassLoader, io.grpc.ServiceProviders$PriorityAccessor)
+    {
+        io.grpc.ServiceProviders$PriorityAccessor $r0;
+        java.lang.Class $r1;
+        java.lang.Iterable $r2;
+        java.lang.ClassLoader $r3;
+        boolean $z0;
+        java.util.ArrayList $r4, r9;
+        java.util.Iterator $r5;
+        java.lang.Object $r6;
+        java.util.Comparator $r7;
+        java.util.List $r8;
+        io.grpc.ServiceProviders$1 r10;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        $r2 := @parameter1: java.lang.Iterable;
+
+        $r3 := @parameter2: java.lang.ClassLoader;
+
+        $r0 := @parameter3: io.grpc.ServiceProviders$PriorityAccessor;
+
+        $z0 = staticinvoke <io.grpc.ServiceProviders: boolean isAndroid(java.lang.ClassLoader)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = staticinvoke <io.grpc.ServiceProviders: java.lang.Iterable getCandidatesViaHardCoded(java.lang.Class,java.lang.Iterable)>($r1, $r2);
+
+        goto label2;
+
+     label1:
+        $r2 = staticinvoke <io.grpc.ServiceProviders: java.lang.Iterable getCandidatesViaServiceLoader(java.lang.Class,java.lang.ClassLoader)>($r1, $r3);
+
+     label2:
+        r9 = new java.util.ArrayList;
+
+        $r4 = r9;
+
+        specialinvoke r9.<java.util.ArrayList: void <init>()>();
+
+        $r5 = interfaceinvoke $r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $z0 = interfaceinvoke $r0.<io.grpc.ServiceProviders$PriorityAccessor: boolean isAvailable(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label3;
+
+        $r8 = (java.util.List) $r4;
+
+        interfaceinvoke $r8.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        goto label3;
+
+     label4:
+        r10 = new io.grpc.ServiceProviders$1;
+
+        specialinvoke r10.<io.grpc.ServiceProviders$1: void <init>(io.grpc.ServiceProviders$PriorityAccessor)>($r0);
+
+        $r7 = staticinvoke <java.util.Collections: java.util.Comparator reverseOrder(java.util.Comparator)>(r10);
+
+        $r8 = (java.util.List) $r4;
+
+        staticinvoke <java.util.Collections: void sort(java.util.List,java.util.Comparator)>($r8, $r7);
+
+        $r8 = (java.util.List) $r4;
+
+        $r8 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r8);
+
+        return $r8;
+    }
+
+io.grpc.ServiceProviders$1
+<io.grpc.ServiceProviders$1: io.grpc.ServiceProviders$PriorityAccessor val$priorityAccessor>
+    void <init>(io.grpc.ServiceProviders$PriorityAccessor)
+    {
+        io.grpc.ServiceProviders$1 $r0;
+        io.grpc.ServiceProviders$PriorityAccessor $r1;
+
+        $r0 := @this: io.grpc.ServiceProviders$1;
+
+        $r1 := @parameter0: io.grpc.ServiceProviders$PriorityAccessor;
+
+        $r0.<io.grpc.ServiceProviders$1: io.grpc.ServiceProviders$PriorityAccessor val$priorityAccessor> = $r1;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public int compare(java.lang.Object, java.lang.Object)
+    {
+        io.grpc.ServiceProviders$1 $r0;
+        java.lang.Object $r1, $r2;
+        io.grpc.ServiceProviders$PriorityAccessor $r3;
+        int $i0, $i1;
+        java.lang.Class $r4;
+        java.lang.String $r5, $r6;
+
+        $r0 := @this: io.grpc.ServiceProviders$1;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 := @parameter1: java.lang.Object;
+
+        $r3 = $r0.<io.grpc.ServiceProviders$1: io.grpc.ServiceProviders$PriorityAccessor val$priorityAccessor>;
+
+        $i0 = interfaceinvoke $r3.<io.grpc.ServiceProviders$PriorityAccessor: int getPriority(java.lang.Object)>($r1);
+
+        $r3 = $r0.<io.grpc.ServiceProviders$1: io.grpc.ServiceProviders$PriorityAccessor val$priorityAccessor>;
+
+        $i1 = interfaceinvoke $r3.<io.grpc.ServiceProviders$PriorityAccessor: int getPriority(java.lang.Object)>($r2);
+
+        $i0 = $i0 - $i1;
+
+        if $i0 == 0 goto label1;
+
+        return $i0;
+
+     label1:
+        $r4 = virtualinvoke $r1.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.Class: java.lang.String getName()>();
+
+        $r4 = virtualinvoke $r2.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r6 = virtualinvoke $r4.<java.lang.Class: java.lang.String getName()>();
+
+        $i0 = virtualinvoke $r5.<java.lang.String: int compareTo(java.lang.String)>($r6);
+
+        return $i0;
+    }
+
+io.grpc.ServiceProviders$PriorityAccessor
+<io.grpc.ServiceProviders$PriorityAccessor: int getPriority(java.lang.Object)>
+<io.grpc.ServiceProviders$PriorityAccessor: boolean isAvailable(java.lang.Object)>

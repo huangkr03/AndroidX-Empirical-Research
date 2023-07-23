@@ -1,0 +1,587 @@
+io.grpc.NameResolverRegistry
+<io.grpc.NameResolverRegistry: io.grpc.NameResolverRegistry instance>
+<io.grpc.NameResolverRegistry: java.util.logging.Logger logger>
+<io.grpc.NameResolverRegistry: java.util.LinkedHashSet allProviders>
+<io.grpc.NameResolverRegistry: java.lang.String defaultScheme>
+<io.grpc.NameResolverRegistry: com.google.common.collect.ImmutableMap effectiveProviders>
+<io.grpc.NameResolverRegistry: io.grpc.NameResolver$Factory factory>
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+
+        $r0 = class "Lio/grpc/NameResolverRegistry;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.NameResolverRegistry: java.util.logging.Logger logger> = $r2;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        io.grpc.NameResolverRegistry $r0;
+        com.google.common.collect.ImmutableMap $r1;
+        io.grpc.NameResolverRegistry$NameResolverFactory $r2;
+        java.util.LinkedHashSet $r3;
+
+        $r0 := @this: io.grpc.NameResolverRegistry;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new io.grpc.NameResolverRegistry$NameResolverFactory;
+
+        specialinvoke $r2.<io.grpc.NameResolverRegistry$NameResolverFactory: void <init>(io.grpc.NameResolverRegistry,io.grpc.NameResolverRegistry$1)>($r0, null);
+
+        $r0.<io.grpc.NameResolverRegistry: io.grpc.NameResolver$Factory factory> = $r2;
+
+        $r0.<io.grpc.NameResolverRegistry: java.lang.String defaultScheme> = "unknown";
+
+        $r3 = new java.util.LinkedHashSet;
+
+        specialinvoke $r3.<java.util.LinkedHashSet: void <init>()>();
+
+        $r0.<io.grpc.NameResolverRegistry: java.util.LinkedHashSet allProviders> = $r3;
+
+        $r1 = staticinvoke <com.google.common.collect.ImmutableMap: com.google.common.collect.ImmutableMap of()>();
+
+        $r0.<io.grpc.NameResolverRegistry: com.google.common.collect.ImmutableMap effectiveProviders> = $r1;
+
+        return;
+    }
+
+    static java.lang.String access$200(io.grpc.NameResolverRegistry)
+    {
+        io.grpc.NameResolverRegistry $r0;
+        java.lang.String r1;
+
+        $r0 := @parameter0: io.grpc.NameResolverRegistry;
+
+        r1 = $r0.<io.grpc.NameResolverRegistry: java.lang.String defaultScheme>;
+
+        return r1;
+    }
+
+    private void addProvider(io.grpc.NameResolverProvider)
+    {
+        io.grpc.NameResolverRegistry $r0;
+        boolean $z0;
+        io.grpc.NameResolverProvider $r1;
+        java.util.LinkedHashSet $r2;
+        java.lang.Throwable $r3;
+
+        $r0 := @this: io.grpc.NameResolverRegistry;
+
+        $r1 := @parameter0: io.grpc.NameResolverProvider;
+
+        entermonitor $r0;
+
+     label1:
+        $z0 = virtualinvoke $r1.<io.grpc.NameResolverProvider: boolean isAvailable()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "isAvailable() returned false");
+
+        $r2 = $r0.<io.grpc.NameResolverRegistry: java.util.LinkedHashSet allProviders>;
+
+        virtualinvoke $r2.<java.util.LinkedHashSet: boolean add(java.lang.Object)>($r1);
+
+     label2:
+        exitmonitor $r0;
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public static io.grpc.NameResolverRegistry getDefaultRegistry()
+    {
+        io.grpc.NameResolverRegistry $r0, r13;
+        java.util.List $r1;
+        java.lang.Class $r2;
+        java.lang.ClassLoader $r3;
+        boolean $z0;
+        java.util.logging.Logger $r4;
+        java.util.logging.Level $r5;
+        java.util.Iterator $r6;
+        java.lang.Object $r7;
+        io.grpc.NameResolverProvider $r8;
+        java.lang.StringBuilder $r9, r14;
+        java.lang.String $r10;
+        java.lang.Throwable $r11;
+        io.grpc.NameResolverRegistry$NameResolverPriorityAccessor r12;
+        java.lang.Iterable r15;
+
+        entermonitor class "Lio/grpc/NameResolverRegistry;";
+
+     label1:
+        $r0 = <io.grpc.NameResolverRegistry: io.grpc.NameResolverRegistry instance>;
+
+        if $r0 != null goto label5;
+
+        $r1 = staticinvoke <io.grpc.NameResolverRegistry: java.util.List getHardCodedClasses()>();
+
+        $r2 = class "Lio/grpc/NameResolverProvider;";
+
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        r12 = new io.grpc.NameResolverRegistry$NameResolverPriorityAccessor;
+
+        specialinvoke r12.<io.grpc.NameResolverRegistry$NameResolverPriorityAccessor: void <init>(io.grpc.NameResolverRegistry$1)>(null);
+
+        r15 = (java.lang.Iterable) $r1;
+
+        $r1 = staticinvoke <io.grpc.ServiceProviders: java.util.List loadAll(java.lang.Class,java.lang.Iterable,java.lang.ClassLoader,io.grpc.ServiceProviders$PriorityAccessor)>(class "Lio/grpc/NameResolverProvider;", r15, $r3, r12);
+
+        $z0 = interfaceinvoke $r1.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = <io.grpc.NameResolverRegistry: java.util.logging.Logger logger>;
+
+        $r5 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        virtualinvoke $r4.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String)>($r5, "io.grpc.NameResolverRegistry", "getDefaultRegistry", "No NameResolverProviders found via ServiceLoader, including for DNS. This is probably due to a broken build. If using ProGuard, check your configuration");
+
+     label2:
+        r13 = new io.grpc.NameResolverRegistry;
+
+        specialinvoke r13.<io.grpc.NameResolverRegistry: void <init>()>();
+
+        <io.grpc.NameResolverRegistry: io.grpc.NameResolverRegistry instance> = r13;
+
+        $r6 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (io.grpc.NameResolverProvider) $r7;
+
+        $r4 = <io.grpc.NameResolverRegistry: java.util.logging.Logger logger>;
+
+        $r5 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        r14 = new java.lang.StringBuilder;
+
+        specialinvoke r14.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Service loader found ");
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r8);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String)>($r5, "io.grpc.NameResolverRegistry", "getDefaultRegistry", $r10);
+
+        $z0 = virtualinvoke $r8.<io.grpc.NameResolverProvider: boolean isAvailable()>();
+
+        if $z0 == 0 goto label3;
+
+        $r0 = <io.grpc.NameResolverRegistry: io.grpc.NameResolverRegistry instance>;
+
+        specialinvoke $r0.<io.grpc.NameResolverRegistry: void addProvider(io.grpc.NameResolverProvider)>($r8);
+
+        goto label3;
+
+     label4:
+        $r0 = <io.grpc.NameResolverRegistry: io.grpc.NameResolverRegistry instance>;
+
+        specialinvoke $r0.<io.grpc.NameResolverRegistry: void refreshProviders()>();
+
+     label5:
+        $r0 = <io.grpc.NameResolverRegistry: io.grpc.NameResolverRegistry instance>;
+
+     label6:
+        exitmonitor class "Lio/grpc/NameResolverRegistry;";
+
+        return $r0;
+
+     label7:
+        $r11 := @caughtexception;
+
+        exitmonitor class "Lio/grpc/NameResolverRegistry;";
+
+        goto label8;
+
+     label8:
+        throw $r11;
+
+        catch java.lang.Throwable from label1 to label6 with label7;
+    }
+
+    static java.util.List getHardCodedClasses()
+    {
+        java.util.logging.Logger $r0;
+        java.util.logging.Level $r1;
+        java.util.ArrayList $r2, r6;
+        java.lang.Class $r3;
+        java.lang.Throwable $r4;
+        java.util.List $r5;
+
+        r6 = new java.util.ArrayList;
+
+        $r2 = r6;
+
+        specialinvoke r6.<java.util.ArrayList: void <init>()>();
+
+        $r3 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("io.grpc.internal.DnsNameResolverProvider");
+
+     label1:
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r3);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r0 = <io.grpc.NameResolverRegistry: java.util.logging.Logger logger>;
+
+        $r1 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        virtualinvoke $r0.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r1, "io.grpc.NameResolverRegistry", "getHardCodedClasses", "Unable to find DNS NameResolver", $r4);
+
+     label4:
+        $r5 = (java.util.List) $r2;
+
+        $r5 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r5);
+
+        return $r5;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label3;
+    }
+
+    private void refreshProviders()
+    {
+        io.grpc.NameResolverRegistry $r0;
+        java.util.HashMap $r1, r11;
+        java.util.LinkedHashSet $r2;
+        java.util.Iterator $r3;
+        java.lang.String $r4, $r7;
+        int $i0, $i1, $i2;
+        boolean $z0;
+        java.lang.Object $r5;
+        io.grpc.NameResolverProvider $r6, $r8;
+        com.google.common.collect.ImmutableMap $r9;
+        java.lang.Throwable $r10;
+        java.util.Map r12;
+
+        $r0 := @this: io.grpc.NameResolverRegistry;
+
+        entermonitor $r0;
+
+     label1:
+        r11 = new java.util.HashMap;
+
+        $r1 = r11;
+
+        specialinvoke r11.<java.util.HashMap: void <init>()>();
+
+        $r2 = $r0.<io.grpc.NameResolverRegistry: java.util.LinkedHashSet allProviders>;
+
+        $r3 = virtualinvoke $r2.<java.util.LinkedHashSet: java.util.Iterator iterator()>();
+
+        $r4 = "unknown";
+
+        $i0 = -2147483648;
+
+     label2:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r5 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (io.grpc.NameResolverProvider) $r5;
+
+        $r7 = virtualinvoke $r6.<io.grpc.NameResolverProvider: java.lang.String getScheme()>();
+
+        r12 = (java.util.Map) $r1;
+
+        $r5 = interfaceinvoke r12.<java.util.Map: java.lang.Object get(java.lang.Object)>($r7);
+
+        $r8 = (io.grpc.NameResolverProvider) $r5;
+
+        if $r8 == null goto label3;
+
+        $i1 = virtualinvoke $r8.<io.grpc.NameResolverProvider: int priority()>();
+
+        $i2 = virtualinvoke $r6.<io.grpc.NameResolverProvider: int priority()>();
+
+        if $i1 >= $i2 goto label4;
+
+     label3:
+        r12 = (java.util.Map) $r1;
+
+        interfaceinvoke r12.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r7, $r6);
+
+     label4:
+        $i1 = virtualinvoke $r6.<io.grpc.NameResolverProvider: int priority()>();
+
+        if $i0 >= $i1 goto label5;
+
+        $i0 = virtualinvoke $r6.<io.grpc.NameResolverProvider: int priority()>();
+
+        $r4 = virtualinvoke $r6.<io.grpc.NameResolverProvider: java.lang.String getScheme()>();
+
+        goto label5;
+
+     label5:
+        goto label2;
+
+     label6:
+        r12 = (java.util.Map) $r1;
+
+        $r9 = staticinvoke <com.google.common.collect.ImmutableMap: com.google.common.collect.ImmutableMap copyOf(java.util.Map)>(r12);
+
+        $r0.<io.grpc.NameResolverRegistry: com.google.common.collect.ImmutableMap effectiveProviders> = $r9;
+
+        $r0.<io.grpc.NameResolverRegistry: java.lang.String defaultScheme> = $r4;
+
+     label7:
+        exitmonitor $r0;
+
+        return;
+
+     label8:
+        $r10 := @caughtexception;
+
+        exitmonitor $r0;
+
+        goto label9;
+
+     label9:
+        throw $r10;
+
+        catch java.lang.Throwable from label1 to label7 with label8;
+    }
+
+    public io.grpc.NameResolver$Factory asFactory()
+    {
+        io.grpc.NameResolverRegistry $r0;
+        io.grpc.NameResolver$Factory r1;
+
+        $r0 := @this: io.grpc.NameResolverRegistry;
+
+        r1 = $r0.<io.grpc.NameResolverRegistry: io.grpc.NameResolver$Factory factory>;
+
+        return r1;
+    }
+
+    java.util.Map providers()
+    {
+        io.grpc.NameResolverRegistry $r0;
+        com.google.common.collect.ImmutableMap r1;
+
+        $r0 := @this: io.grpc.NameResolverRegistry;
+
+        entermonitor $r0;
+
+        r1 = $r0.<io.grpc.NameResolverRegistry: com.google.common.collect.ImmutableMap effectiveProviders>;
+
+        exitmonitor $r0;
+
+        return r1;
+    }
+
+io.grpc.NameResolverRegistry$1
+io.grpc.NameResolverRegistry$NameResolverFactory
+<io.grpc.NameResolverRegistry$NameResolverFactory: io.grpc.NameResolverRegistry this$0>
+    private void <init>(io.grpc.NameResolverRegistry)
+    {
+        io.grpc.NameResolverRegistry$NameResolverFactory $r0;
+        io.grpc.NameResolverRegistry $r1;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverFactory;
+
+        $r1 := @parameter0: io.grpc.NameResolverRegistry;
+
+        $r0.<io.grpc.NameResolverRegistry$NameResolverFactory: io.grpc.NameResolverRegistry this$0> = $r1;
+
+        specialinvoke $r0.<io.grpc.NameResolver$Factory: void <init>()>();
+
+        return;
+    }
+
+    void <init>(io.grpc.NameResolverRegistry, io.grpc.NameResolverRegistry$1)
+    {
+        io.grpc.NameResolverRegistry$NameResolverFactory $r0;
+        io.grpc.NameResolverRegistry $r1;
+        io.grpc.NameResolverRegistry$1 $r2;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverFactory;
+
+        $r1 := @parameter0: io.grpc.NameResolverRegistry;
+
+        $r2 := @parameter1: io.grpc.NameResolverRegistry$1;
+
+        specialinvoke $r0.<io.grpc.NameResolverRegistry$NameResolverFactory: void <init>(io.grpc.NameResolverRegistry)>($r1);
+
+        return;
+    }
+
+    public java.lang.String getDefaultScheme()
+    {
+        io.grpc.NameResolverRegistry$NameResolverFactory $r0;
+        io.grpc.NameResolverRegistry $r1, $r3;
+        java.lang.String $r2;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverFactory;
+
+        $r1 = $r0.<io.grpc.NameResolverRegistry$NameResolverFactory: io.grpc.NameResolverRegistry this$0>;
+
+        entermonitor $r1;
+
+        $r3 = $r0.<io.grpc.NameResolverRegistry$NameResolverFactory: io.grpc.NameResolverRegistry this$0>;
+
+        $r2 = staticinvoke <io.grpc.NameResolverRegistry: java.lang.String access$200(io.grpc.NameResolverRegistry)>($r3);
+
+        exitmonitor $r1;
+
+        return $r2;
+    }
+
+    public io.grpc.NameResolver newNameResolver(java.net.URI, io.grpc.NameResolver$Args)
+    {
+        io.grpc.NameResolverRegistry$NameResolverFactory $r0;
+        io.grpc.NameResolver$Args $r1;
+        java.net.URI $r2;
+        io.grpc.NameResolverRegistry $r3;
+        java.util.Map $r4;
+        java.lang.String $r5;
+        java.lang.Object $r6;
+        io.grpc.NameResolverProvider $r7;
+        io.grpc.NameResolver $r8;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverFactory;
+
+        $r2 := @parameter0: java.net.URI;
+
+        $r1 := @parameter1: io.grpc.NameResolver$Args;
+
+        $r3 = $r0.<io.grpc.NameResolverRegistry$NameResolverFactory: io.grpc.NameResolverRegistry this$0>;
+
+        $r4 = virtualinvoke $r3.<io.grpc.NameResolverRegistry: java.util.Map providers()>();
+
+        $r5 = virtualinvoke $r2.<java.net.URI: java.lang.String getScheme()>();
+
+        $r6 = interfaceinvoke $r4.<java.util.Map: java.lang.Object get(java.lang.Object)>($r5);
+
+        $r7 = (io.grpc.NameResolverProvider) $r6;
+
+        if $r7 != null goto label1;
+
+        return null;
+
+     label1:
+        $r8 = virtualinvoke $r7.<io.grpc.NameResolverProvider: io.grpc.NameResolver newNameResolver(java.net.URI,io.grpc.NameResolver$Args)>($r2, $r1);
+
+        return $r8;
+    }
+
+io.grpc.NameResolverRegistry$NameResolverPriorityAccessor
+    private void <init>()
+    {
+        io.grpc.NameResolverRegistry$NameResolverPriorityAccessor $r0;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverPriorityAccessor;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    void <init>(io.grpc.NameResolverRegistry$1)
+    {
+        io.grpc.NameResolverRegistry$NameResolverPriorityAccessor $r0;
+        io.grpc.NameResolverRegistry$1 $r1;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverPriorityAccessor;
+
+        $r1 := @parameter0: io.grpc.NameResolverRegistry$1;
+
+        specialinvoke $r0.<io.grpc.NameResolverRegistry$NameResolverPriorityAccessor: void <init>()>();
+
+        return;
+    }
+
+    public int getPriority(io.grpc.NameResolverProvider)
+    {
+        io.grpc.NameResolverRegistry$NameResolverPriorityAccessor $r0;
+        int $i0;
+        io.grpc.NameResolverProvider $r1;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverPriorityAccessor;
+
+        $r1 := @parameter0: io.grpc.NameResolverProvider;
+
+        $i0 = virtualinvoke $r1.<io.grpc.NameResolverProvider: int priority()>();
+
+        return $i0;
+    }
+
+    public volatile int getPriority(java.lang.Object)
+    {
+        io.grpc.NameResolverRegistry$NameResolverPriorityAccessor $r0;
+        int $i0;
+        java.lang.Object $r1;
+        io.grpc.NameResolverProvider $r2;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverPriorityAccessor;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = (io.grpc.NameResolverProvider) $r1;
+
+        $i0 = virtualinvoke $r0.<io.grpc.NameResolverRegistry$NameResolverPriorityAccessor: int getPriority(io.grpc.NameResolverProvider)>($r2);
+
+        return $i0;
+    }
+
+    public boolean isAvailable(io.grpc.NameResolverProvider)
+    {
+        io.grpc.NameResolverRegistry$NameResolverPriorityAccessor $r0;
+        boolean $z0;
+        io.grpc.NameResolverProvider $r1;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverPriorityAccessor;
+
+        $r1 := @parameter0: io.grpc.NameResolverProvider;
+
+        $z0 = virtualinvoke $r1.<io.grpc.NameResolverProvider: boolean isAvailable()>();
+
+        return $z0;
+    }
+
+    public volatile boolean isAvailable(java.lang.Object)
+    {
+        io.grpc.NameResolverRegistry$NameResolverPriorityAccessor $r0;
+        boolean $z0;
+        java.lang.Object $r1;
+        io.grpc.NameResolverProvider $r2;
+
+        $r0 := @this: io.grpc.NameResolverRegistry$NameResolverPriorityAccessor;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = (io.grpc.NameResolverProvider) $r1;
+
+        $z0 = virtualinvoke $r0.<io.grpc.NameResolverRegistry$NameResolverPriorityAccessor: boolean isAvailable(io.grpc.NameResolverProvider)>($r2);
+
+        return $z0;
+    }
+

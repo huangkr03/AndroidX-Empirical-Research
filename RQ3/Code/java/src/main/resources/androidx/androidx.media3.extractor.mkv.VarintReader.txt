@@ -1,0 +1,269 @@
+androidx.media3.extractor.mkv.VarintReader
+<androidx.media3.extractor.mkv.VarintReader: int STATE_BEGIN_READING>
+<androidx.media3.extractor.mkv.VarintReader: int STATE_READ_CONTENTS>
+<androidx.media3.extractor.mkv.VarintReader: long[] VARINT_LENGTH_MASKS>
+<androidx.media3.extractor.mkv.VarintReader: byte[] scratch>
+<androidx.media3.extractor.mkv.VarintReader: int state>
+<androidx.media3.extractor.mkv.VarintReader: int length>
+    public void <init>()
+    {
+        androidx.media3.extractor.mkv.VarintReader r0;
+        byte[] $r1;
+
+        r0 := @this: androidx.media3.extractor.mkv.VarintReader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = newarray (byte)[8];
+
+        r0.<androidx.media3.extractor.mkv.VarintReader: byte[] scratch> = $r1;
+
+        return;
+    }
+
+    public void reset()
+    {
+        androidx.media3.extractor.mkv.VarintReader r0;
+
+        r0 := @this: androidx.media3.extractor.mkv.VarintReader;
+
+        r0.<androidx.media3.extractor.mkv.VarintReader: int state> = 0;
+
+        r0.<androidx.media3.extractor.mkv.VarintReader: int length> = 0;
+
+        return;
+    }
+
+    public long readUnsignedVarint(androidx.media3.extractor.ExtractorInput, boolean, boolean, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.mkv.VarintReader r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        boolean z0, z1, $z2;
+        int i0, $i2, $i3, $i4, $i5, $i7, $i8, $i10, $i11;
+        short s1;
+        byte[] $r2, $r3, $r4, $r5;
+        long $l6;
+        byte $b9;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @this: androidx.media3.extractor.mkv.VarintReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        z0 := @parameter1: boolean;
+
+        z1 := @parameter2: boolean;
+
+        i0 := @parameter3: int;
+
+        $i2 = r0.<androidx.media3.extractor.mkv.VarintReader: int state>;
+
+        if $i2 != 0 goto label3;
+
+        $r4 = r0.<androidx.media3.extractor.mkv.VarintReader: byte[] scratch>;
+
+        $z2 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: boolean readFully(byte[],int,int,boolean)>($r4, 0, 1, z0);
+
+        if $z2 != 0 goto label1;
+
+        return -1L;
+
+     label1:
+        $r5 = r0.<androidx.media3.extractor.mkv.VarintReader: byte[] scratch>;
+
+        $b9 = $r5[0];
+
+        s1 = $b9 & 255;
+
+        $i10 = staticinvoke <androidx.media3.extractor.mkv.VarintReader: int parseUnsignedVarintLength(int)>(s1);
+
+        r0.<androidx.media3.extractor.mkv.VarintReader: int length> = $i10;
+
+        $i11 = r0.<androidx.media3.extractor.mkv.VarintReader: int length>;
+
+        if $i11 != -1 goto label2;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>("No valid varint length mask found");
+
+        throw $r6;
+
+     label2:
+        r0.<androidx.media3.extractor.mkv.VarintReader: int state> = 1;
+
+     label3:
+        $i3 = r0.<androidx.media3.extractor.mkv.VarintReader: int length>;
+
+        if $i3 <= i0 goto label4;
+
+        r0.<androidx.media3.extractor.mkv.VarintReader: int state> = 0;
+
+        return -2L;
+
+     label4:
+        $i4 = r0.<androidx.media3.extractor.mkv.VarintReader: int length>;
+
+        if $i4 == 1 goto label5;
+
+        $r3 = r0.<androidx.media3.extractor.mkv.VarintReader: byte[] scratch>;
+
+        $i7 = r0.<androidx.media3.extractor.mkv.VarintReader: int length>;
+
+        $i8 = $i7 - 1;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r3, 1, $i8);
+
+     label5:
+        r0.<androidx.media3.extractor.mkv.VarintReader: int state> = 0;
+
+        $r2 = r0.<androidx.media3.extractor.mkv.VarintReader: byte[] scratch>;
+
+        $i5 = r0.<androidx.media3.extractor.mkv.VarintReader: int length>;
+
+        $l6 = staticinvoke <androidx.media3.extractor.mkv.VarintReader: long assembleVarint(byte[],int,boolean)>($r2, $i5, z1);
+
+        return $l6;
+    }
+
+    public int getLastLength()
+    {
+        androidx.media3.extractor.mkv.VarintReader r0;
+        int $i0;
+
+        r0 := @this: androidx.media3.extractor.mkv.VarintReader;
+
+        $i0 = r0.<androidx.media3.extractor.mkv.VarintReader: int length>;
+
+        return $i0;
+    }
+
+    public static int parseUnsignedVarintLength(int)
+    {
+        int i0, $i1, i6, i7;
+        long[] $r0, $r1;
+        long $l2, $l3, $l4;
+        byte $b5;
+
+        i0 := @parameter0: int;
+
+        i6 = -1;
+
+        i7 = 0;
+
+     label1:
+        $r0 = <androidx.media3.extractor.mkv.VarintReader: long[] VARINT_LENGTH_MASKS>;
+
+        $i1 = lengthof $r0;
+
+        if i7 >= $i1 goto label3;
+
+        $r1 = <androidx.media3.extractor.mkv.VarintReader: long[] VARINT_LENGTH_MASKS>;
+
+        $l3 = $r1[i7];
+
+        $l2 = (long) i0;
+
+        $l4 = $l3 & $l2;
+
+        $b5 = $l4 cmp 0L;
+
+        if $b5 == 0 goto label2;
+
+        i6 = i7 + 1;
+
+        goto label3;
+
+     label2:
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label3:
+        return i6;
+    }
+
+    public static long assembleVarint(byte[], int, boolean)
+    {
+        byte[] r0;
+        int i0, $i7, i11;
+        boolean z0;
+        byte $b1, $b3;
+        long $l2, $l4, $l5, $l6, $l8, $l9, l10;
+        long[] $r1;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        z0 := @parameter2: boolean;
+
+        $b1 = r0[0];
+
+        $l2 = (long) $b1;
+
+        l10 = $l2 & 255L;
+
+        if z0 == 0 goto label1;
+
+        $r1 = <androidx.media3.extractor.mkv.VarintReader: long[] VARINT_LENGTH_MASKS>;
+
+        $i7 = i0 - 1;
+
+        $l8 = $r1[$i7];
+
+        $l9 = $l8 ^ -1L;
+
+        l10 = l10 & $l9;
+
+     label1:
+        i11 = 1;
+
+     label2:
+        if i11 >= i0 goto label3;
+
+        $l6 = l10 << 8;
+
+        $b3 = r0[i11];
+
+        $l4 = (long) $b3;
+
+        $l5 = $l4 & 255L;
+
+        l10 = $l6 | $l5;
+
+        i11 = i11 + 1;
+
+        goto label2;
+
+     label3:
+        return l10;
+    }
+
+    static void <clinit>()
+    {
+        long[] $r0;
+
+        $r0 = newarray (long)[8];
+
+        $r0[0] = 128L;
+
+        $r0[1] = 64L;
+
+        $r0[2] = 32L;
+
+        $r0[3] = 16L;
+
+        $r0[4] = 8L;
+
+        $r0[5] = 4L;
+
+        $r0[6] = 2L;
+
+        $r0[7] = 1L;
+
+        <androidx.media3.extractor.mkv.VarintReader: long[] VARINT_LENGTH_MASKS> = $r0;
+
+        return;
+    }
+

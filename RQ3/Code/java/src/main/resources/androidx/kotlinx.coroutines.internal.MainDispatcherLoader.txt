@@ -1,0 +1,182 @@
+kotlinx.coroutines.internal.MainDispatcherLoader
+<kotlinx.coroutines.internal.MainDispatcherLoader: boolean FAST_SERVICE_LOADER_ENABLED>
+<kotlinx.coroutines.internal.MainDispatcherLoader: kotlinx.coroutines.internal.MainDispatcherLoader INSTANCE>
+<kotlinx.coroutines.internal.MainDispatcherLoader: kotlinx.coroutines.MainCoroutineDispatcher dispatcher>
+    static void <clinit>()
+    {
+        kotlinx.coroutines.internal.MainDispatcherLoader $r0;
+        boolean $z0;
+        kotlinx.coroutines.MainCoroutineDispatcher $r1;
+
+        $r0 = new kotlinx.coroutines.internal.MainDispatcherLoader;
+
+        specialinvoke $r0.<kotlinx.coroutines.internal.MainDispatcherLoader: void <init>()>();
+
+        <kotlinx.coroutines.internal.MainDispatcherLoader: kotlinx.coroutines.internal.MainDispatcherLoader INSTANCE> = $r0;
+
+        $z0 = staticinvoke <kotlinx.coroutines.internal.SystemPropsKt: boolean systemProp(java.lang.String,boolean)>("kotlinx.coroutines.fast.service.loader", 1);
+
+        <kotlinx.coroutines.internal.MainDispatcherLoader: boolean FAST_SERVICE_LOADER_ENABLED> = $z0;
+
+        $r1 = specialinvoke $r0.<kotlinx.coroutines.internal.MainDispatcherLoader: kotlinx.coroutines.MainCoroutineDispatcher loadMainDispatcher()>();
+
+        <kotlinx.coroutines.internal.MainDispatcherLoader: kotlinx.coroutines.MainCoroutineDispatcher dispatcher> = $r1;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        kotlinx.coroutines.internal.MainDispatcherLoader $r0;
+
+        $r0 := @this: kotlinx.coroutines.internal.MainDispatcherLoader;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private final kotlinx.coroutines.MainCoroutineDispatcher loadMainDispatcher()
+    {
+        kotlinx.coroutines.internal.MainDispatcherLoader $r0;
+        boolean $z0;
+        kotlinx.coroutines.internal.FastServiceLoader $r1;
+        java.util.List $r2;
+        java.lang.Class $r3;
+        java.lang.ClassLoader $r4;
+        java.util.ServiceLoader $r5;
+        java.util.Iterator $r6;
+        kotlin.sequences.Sequence $r7;
+        java.lang.Object $r8, $r9;
+        kotlinx.coroutines.internal.MainDispatcherFactory $r10;
+        int $i0, $i1;
+        kotlinx.coroutines.MainCoroutineDispatcher $r11;
+        kotlinx.coroutines.internal.MissingMainCoroutineDispatcher $r12;
+        java.lang.Throwable $r13;
+        java.lang.Iterable r14;
+
+        $r0 := @this: kotlinx.coroutines.internal.MainDispatcherLoader;
+
+        $z0 = <kotlinx.coroutines.internal.MainDispatcherLoader: boolean FAST_SERVICE_LOADER_ENABLED>;
+
+        if $z0 == 0 goto label03;
+
+        $r1 = <kotlinx.coroutines.internal.FastServiceLoader: kotlinx.coroutines.internal.FastServiceLoader INSTANCE>;
+
+     label01:
+        $r2 = virtualinvoke $r1.<kotlinx.coroutines.internal.FastServiceLoader: java.util.List loadMainDispatcherFactory$third_party_kotlin_kotlinx_coroutines_kotlinx_coroutines()>();
+
+     label02:
+        goto label08;
+
+     label03:
+        $r3 = class "Lkotlinx/coroutines/internal/MainDispatcherFactory;";
+
+     label04:
+        $r4 = virtualinvoke $r3.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+     label05:
+        $r5 = staticinvoke <java.util.ServiceLoader: java.util.ServiceLoader load(java.lang.Class,java.lang.ClassLoader)>(class "Lkotlinx/coroutines/internal/MainDispatcherFactory;", $r4);
+
+     label06:
+        $r6 = virtualinvoke $r5.<java.util.ServiceLoader: java.util.Iterator iterator()>();
+
+     label07:
+        $r7 = staticinvoke <kotlin.sequences.SequencesKt: kotlin.sequences.Sequence asSequence(java.util.Iterator)>($r6);
+
+        $r2 = staticinvoke <kotlin.sequences.SequencesKt: java.util.List toList(kotlin.sequences.Sequence)>($r7);
+
+     label08:
+        r14 = (java.lang.Iterable) $r2;
+
+     label09:
+        $r6 = interfaceinvoke r14.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+     label10:
+        if $z0 != 0 goto label11;
+
+        $r8 = null;
+
+        goto label22;
+
+     label11:
+        $r9 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+     label12:
+        $r8 = $r9;
+
+     label13:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+     label14:
+        if $z0 == 0 goto label22;
+
+        $r10 = (kotlinx.coroutines.internal.MainDispatcherFactory) $r9;
+
+     label15:
+        $i0 = interfaceinvoke $r10.<kotlinx.coroutines.internal.MainDispatcherFactory: int getLoadPriority()>();
+
+     label16:
+        $r9 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+     label17:
+        $r10 = (kotlinx.coroutines.internal.MainDispatcherFactory) $r9;
+
+     label18:
+        $i1 = interfaceinvoke $r10.<kotlinx.coroutines.internal.MainDispatcherFactory: int getLoadPriority()>();
+
+     label19:
+        if $i0 >= $i1 goto label20;
+
+        $r8 = $r9;
+
+        $i0 = $i1;
+
+        goto label20;
+
+     label20:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+     label21:
+        if $z0 == 0 goto label22;
+
+        goto label16;
+
+     label22:
+        $r10 = (kotlinx.coroutines.internal.MainDispatcherFactory) $r8;
+
+        if $r10 == null goto label23;
+
+        $r11 = staticinvoke <kotlinx.coroutines.internal.MainDispatchersKt: kotlinx.coroutines.MainCoroutineDispatcher tryCreateDispatcher(kotlinx.coroutines.internal.MainDispatcherFactory,java.util.List)>($r10, $r2);
+
+        if $r11 != null goto label25;
+
+     label23:
+        $r12 = staticinvoke <kotlinx.coroutines.internal.MainDispatchersKt: kotlinx.coroutines.internal.MissingMainCoroutineDispatcher createMissingDispatcher$default(java.lang.Throwable,java.lang.String,int,java.lang.Object)>(null, null, 3, null);
+
+        return $r12;
+
+     label24:
+        $r13 := @caughtexception;
+
+        $r12 = staticinvoke <kotlinx.coroutines.internal.MainDispatchersKt: kotlinx.coroutines.internal.MissingMainCoroutineDispatcher createMissingDispatcher$default(java.lang.Throwable,java.lang.String,int,java.lang.Object)>($r13, null, 2, null);
+
+        return $r12;
+
+     label25:
+        return $r11;
+
+        catch java.lang.Throwable from label01 to label02 with label24;
+        catch java.lang.Throwable from label04 to label05 with label24;
+        catch java.lang.Throwable from label06 to label07 with label24;
+        catch java.lang.Throwable from label09 to label10 with label24;
+        catch java.lang.Throwable from label11 to label12 with label24;
+        catch java.lang.Throwable from label13 to label14 with label24;
+        catch java.lang.Throwable from label15 to label16 with label24;
+        catch java.lang.Throwable from label16 to label17 with label24;
+        catch java.lang.Throwable from label18 to label19 with label24;
+        catch java.lang.Throwable from label20 to label21 with label24;
+    }
+

@@ -1,0 +1,1012 @@
+androidx.test.services.storage.provider.AbstractFileContentProvider
+<androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>
+<androidx.test.services.storage.provider.AbstractFileContentProvider: androidx.test.services.storage.provider.AbstractFileContentProvider$Access access>
+<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        java.lang.Class $r1;
+
+        $r1 = class "Landroidx/test/services/storage/provider/AbstractFileContentProvider;";
+
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+    void <init>(java.io.File, androidx.test.services.storage.provider.AbstractFileContentProvider$Access)
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        java.io.File $r1;
+        androidx.test.services.storage.provider.AbstractFileContentProvider$Access $r2;
+        java.lang.Object $r3;
+        java.lang.Throwable $r4;
+        java.lang.RuntimeException r5;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 := @parameter1: androidx.test.services.storage.provider.AbstractFileContentProvider$Access;
+
+        specialinvoke $r0.<android.content.ContentProvider: void <init>()>();
+
+        $r3 = staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r1 = (java.io.File) $r3;
+
+     label1:
+        $r1 = virtualinvoke $r1.<java.io.File: java.io.File getCanonicalFile()>();
+
+     label2:
+        $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory> = $r1;
+
+        $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: androidx.test.services.storage.provider.AbstractFileContentProvider$Access access> = $r2;
+
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r5 = new java.lang.RuntimeException;
+
+        specialinvoke r5.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r4);
+
+        $r4 = (java.lang.Throwable) r5;
+
+        throw $r4;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    private void deleteRecursively(java.io.File)
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        java.io.File $r1, $r2;
+        int $i0, $i1;
+        boolean $z0;
+        java.io.File[] $r3;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $r1 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = virtualinvoke $r1.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r2 = $r3[$i1];
+
+        specialinvoke $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: void deleteRecursively(java.io.File)>($r2);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        virtualinvoke $r1.<java.io.File: boolean delete()>();
+
+        return;
+    }
+
+    private java.io.File fromUri(android.net.Uri) throws java.io.FileNotFoundException
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        android.net.Uri $r1;
+        java.io.File $r2, $r3, $r5;
+        java.lang.String $r4;
+        boolean $z0;
+        java.lang.SecurityException $r6;
+        java.lang.Object[] $r7;
+        java.lang.Throwable $r8;
+        java.io.FileNotFoundException $r9;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        $r2 = new java.io.File;
+
+        $r3 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+     label1:
+        $r4 = virtualinvoke $r1.<android.net.Uri: java.lang.String getPath()>();
+
+        specialinvoke $r2.<java.io.File: void <init>(java.io.File,java.lang.String)>($r3, $r4);
+
+        $r2 = virtualinvoke $r2.<java.io.File: java.io.File getCanonicalFile()>();
+
+     label2:
+        $r3 = virtualinvoke $r2.<java.io.File: java.io.File getAbsoluteFile()>();
+
+     label3:
+        if $r3 == null goto label5;
+
+        $r5 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+        $z0 = virtualinvoke $r3.<java.io.File: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label4;
+
+        return $r2;
+
+     label4:
+        $r3 = virtualinvoke $r3.<java.io.File: java.io.File getParentFile()>();
+
+        goto label3;
+
+     label5:
+        $r6 = new java.lang.SecurityException;
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r7[0] = $r1;
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("URI \'%s\' refers to a file not managed by this provider", $r7);
+
+        specialinvoke $r6.<java.lang.SecurityException: void <init>(java.lang.String)>($r4);
+
+        throw $r6;
+
+     label6:
+        $r8 := @caughtexception;
+
+        $r9 = new java.io.FileNotFoundException;
+
+        $r7 = newarray (java.lang.Object)[2];
+
+        $r7[0] = null;
+
+        $r4 = virtualinvoke $r8.<java.io.IOException: java.lang.String getMessage()>();
+
+        $r7[1] = $r4;
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("\'%s\': error resolving to canonical path - %s", $r7);
+
+        specialinvoke $r9.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r4);
+
+        goto label7;
+
+     label7:
+        throw $r9;
+
+        catch java.io.IOException from label1 to label2 with label6;
+    }
+
+    public int delete(android.net.Uri, java.lang.String, java.lang.String[])
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        java.io.File $r1, $r7;
+        android.net.Uri $r2;
+        java.lang.String $r3, $r5;
+        java.lang.String[] $r4;
+        java.lang.StringBuilder $r6, r10;
+        boolean $z0;
+        java.io.File[] $r8;
+        int $i0, $i1;
+        java.lang.Throwable $r9;
+        androidx.test.services.storage.provider.StorageContentProviderException r11;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $r2 := @parameter0: android.net.Uri;
+
+        $r3 := @parameter1: java.lang.String;
+
+        $r4 := @parameter2: java.lang.String[];
+
+        $r3 = <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        r10 = new java.lang.StringBuilder;
+
+        specialinvoke r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Deleting hosted file ");
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r3, $r5);
+
+     label01:
+        $r1 = specialinvoke $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File fromUri(android.net.Uri)>($r2);
+
+     label02:
+        $r7 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+     label03:
+        $z0 = virtualinvoke $r7.<java.io.File: boolean equals(java.lang.Object)>($r1);
+
+     label04:
+        if $z0 == 0 goto label11;
+
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+     label05:
+        $r8 = virtualinvoke $r1.<java.io.File: java.io.File[] listFiles()>();
+
+     label06:
+        $i0 = lengthof $r8;
+
+        $i1 = 0;
+
+     label07:
+        if $i1 >= $i0 goto label10;
+
+        $r1 = $r8[$i1];
+
+     label08:
+        specialinvoke $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: void deleteRecursively(java.io.File)>($r1);
+
+     label09:
+        $i1 = $i1 + 1;
+
+        goto label07;
+
+     label10:
+        return 0;
+
+     label11:
+        r11 = new androidx.test.services.storage.provider.StorageContentProviderException;
+
+     label12:
+        specialinvoke r11.<androidx.test.services.storage.provider.StorageContentProviderException: void <init>(java.lang.String)>("Deleting file/directory other than the entire hosted directory is not supported!");
+
+     label13:
+        $r9 = (java.lang.Throwable) r11;
+
+     label14:
+        throw $r9;
+
+     label15:
+        $r9 := @caughtexception;
+
+        $r3 = <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>($r3, "Could not find file for query.", $r9);
+
+        r11 = new androidx.test.services.storage.provider.StorageContentProviderException;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        r10 = new java.lang.StringBuilder;
+
+        specialinvoke r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Hosted file ");
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" was not found!");
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r11.<androidx.test.services.storage.provider.StorageContentProviderException: void <init>(java.lang.String,java.lang.Throwable)>($r3, $r9);
+
+        goto label16;
+
+     label16:
+        $r9 = (java.lang.Throwable) r11;
+
+        throw $r9;
+
+        catch java.io.FileNotFoundException from label01 to label02 with label15;
+        catch java.io.FileNotFoundException from label03 to label04 with label15;
+        catch java.io.FileNotFoundException from label05 to label06 with label15;
+        catch java.io.FileNotFoundException from label08 to label09 with label15;
+        catch java.io.FileNotFoundException from label12 to label13 with label15;
+        catch java.io.FileNotFoundException from label14 to label15 with label15;
+    }
+
+    public java.lang.String getType(android.net.Uri)
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        android.net.Uri $r1;
+        java.lang.String $r2;
+        android.webkit.MimeTypeMap $r3;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r2 = virtualinvoke $r1.<android.net.Uri: java.lang.String toString()>();
+
+        $r2 = staticinvoke <android.webkit.MimeTypeMap: java.lang.String getFileExtensionFromUrl(java.lang.String)>($r2);
+
+        $r3 = staticinvoke <android.webkit.MimeTypeMap: android.webkit.MimeTypeMap getSingleton()>();
+
+        $r2 = virtualinvoke $r3.<android.webkit.MimeTypeMap: java.lang.String getMimeTypeFromExtension(java.lang.String)>($r2);
+
+        return $r2;
+    }
+
+    public android.net.Uri insert(android.net.Uri, android.content.ContentValues)
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        android.net.Uri $r1;
+        android.content.ContentValues $r2;
+        java.lang.UnsupportedOperationException $r3;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        $r2 := @parameter1: android.content.ContentValues;
+
+        $r3 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r3.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>("Insertion is not allowed.");
+
+        throw $r3;
+    }
+
+    public boolean onCreate()
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        boolean $z0;
+        java.io.File $r1;
+        java.lang.String $r2, $r3;
+        java.lang.StringBuilder $r4;
+        androidx.test.services.storage.provider.AbstractFileContentProvider$Access $r5, $r6;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $z0 = virtualinvoke $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: boolean onCreateHook()>();
+
+        if $z0 == 0 goto label4;
+
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label1;
+
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean mkdirs()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>;
+
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r1);
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cannot create hosted directory: ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, $r3);
+
+        return 0;
+
+     label1:
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean isDirectory()>();
+
+        if $z0 != 0 goto label2;
+
+        $r2 = <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>;
+
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r1);
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Hosted directory not a directory: ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, $r3);
+
+        return 0;
+
+     label2:
+        $r5 = <androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access READ_WRITE>;
+
+        $r6 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: androidx.test.services.storage.provider.AbstractFileContentProvider$Access access>;
+
+        if $r5 != $r6 goto label3;
+
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean canWrite()>();
+
+        if $z0 != 0 goto label3;
+
+        $r2 = <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>;
+
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r1);
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Hosted directory is not writable and write was requested: ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, $r3);
+
+        return 0;
+
+     label3:
+        return 1;
+
+     label4:
+        $r2 = <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>;
+
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File hostedDirectory>;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r1);
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Subclass claims hosted directory not ready: ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, $r3);
+
+        return 0;
+    }
+
+<androidx.test.services.storage.provider.AbstractFileContentProvider: boolean onCreateHook()>
+    public android.os.ParcelFileDescriptor openFile(android.net.Uri, java.lang.String) throws java.io.FileNotFoundException
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        androidx.test.services.storage.provider.AbstractFileContentProvider$Access $r1, $r5;
+        android.net.Uri $r2;
+        java.lang.String $r3, $r4, $r13;
+        boolean $z0, $z1;
+        java.lang.SecurityException $r6;
+        java.lang.Object[] $r7;
+        java.io.File $r8, $r9;
+        java.io.FileNotFoundException $r10;
+        java.lang.StringBuilder $r11;
+        java.lang.Throwable $r12;
+        android.os.ParcelFileDescriptor $r14;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $r2 := @parameter0: android.net.Uri;
+
+        $r3 := @parameter1: java.lang.String;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        $r4 = virtualinvoke $r3.<java.lang.String: java.lang.String toLowerCase()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean contains(java.lang.CharSequence)>("w");
+
+        if $z0 != 0 goto label02;
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean contains(java.lang.CharSequence)>("t");
+
+        if $z0 == 0 goto label01;
+
+        goto label02;
+
+     label01:
+        $z0 = 0;
+
+        goto label03;
+
+     label02:
+        $z0 = 1;
+
+     label03:
+        $r5 = <androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access READ_ONLY>;
+
+        $r1 = $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: androidx.test.services.storage.provider.AbstractFileContentProvider$Access access>;
+
+        if $r5 != $r1 goto label05;
+
+        if $z0 != 0 goto label04;
+
+        goto label05;
+
+     label04:
+        $r6 = new java.lang.SecurityException;
+
+        $r7 = newarray (java.lang.Object)[2];
+
+        $r7[0] = $r2;
+
+        $r7[1] = $r4;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Location \'%s\' is read only (Requested mode: \'%s\')", $r7);
+
+        specialinvoke $r6.<java.lang.SecurityException: void <init>(java.lang.String)>($r3);
+
+        throw $r6;
+
+     label05:
+        $r8 = specialinvoke $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File fromUri(android.net.Uri)>($r2);
+
+        $z1 = virtualinvoke $r8.<java.io.File: boolean exists()>();
+
+        if $z1 != 0 goto label17;
+
+        if $z0 == 0 goto label17;
+
+     label06:
+        $r9 = virtualinvoke $r8.<java.io.File: java.io.File getParentFile()>();
+
+        virtualinvoke $r9.<java.io.File: boolean mkdirs()>();
+
+        $r9 = virtualinvoke $r8.<java.io.File: java.io.File getParentFile()>();
+
+        $z0 = virtualinvoke $r9.<java.io.File: boolean exists()>();
+
+     label07:
+        if $z0 == 0 goto label13;
+
+     label08:
+        $z0 = virtualinvoke $r8.<java.io.File: boolean createNewFile()>();
+
+     label09:
+        if $z0 == 0 goto label10;
+
+        goto label17;
+
+     label10:
+        $r10 = new java.io.FileNotFoundException;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        $r11 = new java.lang.StringBuilder;
+
+     label11:
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Could not create file: ");
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r10.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r3);
+
+     label12:
+        throw $r10;
+
+     label13:
+        $r10 = new java.io.FileNotFoundException;
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r7[0] = $r2;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("No parent directory for \'%s\'", $r7);
+
+     label14:
+        specialinvoke $r10.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r3);
+
+     label15:
+        throw $r10;
+
+     label16:
+        $r12 := @caughtexception;
+
+        $r10 = new java.io.FileNotFoundException;
+
+        $r7 = newarray (java.lang.Object)[2];
+
+        $r7[0] = $r2;
+
+        $r3 = virtualinvoke $r12.<java.io.IOException: java.lang.String getMessage()>();
+
+        $r7[1] = $r3;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Could not access file: %s Exception: %s", $r7);
+
+        specialinvoke $r10.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r3);
+
+        throw $r10;
+
+     label17:
+        $r4 = <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>;
+
+        $r7 = newarray (java.lang.Object)[2];
+
+        $r7[0] = $r8;
+
+        $z0 = virtualinvoke $r8.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label18;
+
+        $r13 = "found";
+
+        goto label19;
+
+     label18:
+        $r13 = "not found";
+
+     label19:
+        $r7[1] = $r13;
+
+        $r13 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("file \'%s\': %s", $r7);
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r4, $r13);
+
+        $r14 = virtualinvoke $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: android.os.ParcelFileDescriptor openFileHelper(android.net.Uri,java.lang.String)>($r2, $r3);
+
+        return $r14;
+
+        catch java.io.IOException from label06 to label07 with label16;
+        catch java.io.IOException from label08 to label09 with label16;
+        catch java.io.IOException from label11 to label12 with label16;
+        catch java.io.IOException from label14 to label15 with label16;
+    }
+
+    public android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String)
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        android.net.Uri $r1;
+        java.lang.String[] $r2, $r4;
+        java.lang.String $r3, $r5;
+        java.io.File $r6;
+        java.io.File[] $r7, $r12;
+        int $i0, $i1, $i2;
+        android.database.MatrixCursor $r8, r17;
+        android.database.MatrixCursor$RowBuilder $r9;
+        java.lang.StringBuilder $r10, r18;
+        boolean $z0;
+        androidx.test.services.storage.file.HostedFile$FileType $r11;
+        java.lang.Integer $r13;
+        long $l3;
+        java.lang.Long $r14;
+        java.lang.Object[] $r15;
+        java.lang.Throwable $r16;
+        java.lang.RuntimeException r19;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        $r2 := @parameter1: java.lang.String[];
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String[];
+
+        $r5 := @parameter4: java.lang.String;
+
+     label01:
+        $r6 = specialinvoke $r0.<androidx.test.services.storage.provider.AbstractFileContentProvider: java.io.File fromUri(android.net.Uri)>($r1);
+
+     label02:
+        $r7 = virtualinvoke $r6.<java.io.File: java.io.File[] listFiles()>();
+
+        $r2 = staticinvoke <androidx.test.services.storage.file.HostedFile$HostedFileColumn: java.lang.String[] getColumnNames()>();
+
+        $i0 = 0;
+
+        if $r7 == null goto label07;
+
+        r17 = new android.database.MatrixCursor;
+
+        $r8 = r17;
+
+        $i1 = lengthof $r7;
+
+        specialinvoke r17.<android.database.MatrixCursor: void <init>(java.lang.String[],int)>($r2, $i1);
+
+        $i1 = lengthof $r7;
+
+     label03:
+        if $i0 >= $i1 goto label06;
+
+        $r6 = $r7[$i0];
+
+        $r9 = virtualinvoke $r8.<android.database.MatrixCursor: android.database.MatrixCursor$RowBuilder newRow()>();
+
+        $r3 = virtualinvoke $r1.<android.net.Uri: java.lang.String getPath()>();
+
+        $r5 = virtualinvoke $r6.<java.io.File: java.lang.String getName()>();
+
+        $r5 = staticinvoke <android.net.Uri: java.lang.String encode(java.lang.String)>($r5);
+
+        r18 = new java.lang.StringBuilder;
+
+        specialinvoke r18.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/");
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r3 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r3);
+
+        $z0 = virtualinvoke $r6.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label04;
+
+        $r11 = <androidx.test.services.storage.file.HostedFile$FileType: androidx.test.services.storage.file.HostedFile$FileType DIRECTORY>;
+
+        $r3 = virtualinvoke $r11.<androidx.test.services.storage.file.HostedFile$FileType: java.lang.String getTypeCode()>();
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r3);
+
+        $r12 = virtualinvoke $r6.<java.io.File: java.io.File[] listFiles()>();
+
+        $i2 = lengthof $r12;
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r13);
+
+        goto label05;
+
+     label04:
+        $r11 = <androidx.test.services.storage.file.HostedFile$FileType: androidx.test.services.storage.file.HostedFile$FileType FILE>;
+
+        $r3 = virtualinvoke $r11.<androidx.test.services.storage.file.HostedFile$FileType: java.lang.String getTypeCode()>();
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r3);
+
+        $l3 = virtualinvoke $r6.<java.io.File: long length()>();
+
+        $r14 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r14);
+
+     label05:
+        $r3 = virtualinvoke $r6.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.io.File: java.lang.String getName()>();
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r3);
+
+        $l3 = virtualinvoke $r6.<java.io.File: long length()>();
+
+        $r14 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r14);
+
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label06:
+        return $r8;
+
+     label07:
+        $z0 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label08;
+
+        r17 = new android.database.MatrixCursor;
+
+        $r8 = r17;
+
+        specialinvoke r17.<android.database.MatrixCursor: void <init>(java.lang.String[],int)>($r2, 1);
+
+        $r9 = virtualinvoke $r8.<android.database.MatrixCursor: android.database.MatrixCursor$RowBuilder newRow()>();
+
+        $r3 = virtualinvoke $r1.<android.net.Uri: java.lang.String getPath()>();
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r3);
+
+        $r11 = <androidx.test.services.storage.file.HostedFile$FileType: androidx.test.services.storage.file.HostedFile$FileType FILE>;
+
+        $r3 = virtualinvoke $r11.<androidx.test.services.storage.file.HostedFile$FileType: java.lang.String getTypeCode()>();
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r3);
+
+        $l3 = virtualinvoke $r6.<java.io.File: long length()>();
+
+        $r14 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r14);
+
+        $r3 = virtualinvoke $r6.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.io.File: java.lang.String getName()>();
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r3);
+
+        $l3 = virtualinvoke $r6.<java.io.File: long length()>();
+
+        $r14 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        virtualinvoke $r9.<android.database.MatrixCursor$RowBuilder: android.database.MatrixCursor$RowBuilder add(java.lang.Object)>($r14);
+
+        return $r8;
+
+     label08:
+        $r3 = <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>;
+
+        $r15 = newarray (java.lang.Object)[2];
+
+        $r5 = virtualinvoke $r6.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r15[0] = $r5;
+
+        $r15[1] = $r1;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%s: does not exist. Mapped from uri: \'%s\'", $r15);
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r3, $r5);
+
+        r17 = new android.database.MatrixCursor;
+
+        specialinvoke r17.<android.database.MatrixCursor: void <init>(java.lang.String[],int)>($r2, 0);
+
+        return r17;
+
+     label09:
+        $r16 := @caughtexception;
+
+        $r3 = <androidx.test.services.storage.provider.AbstractFileContentProvider: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>($r3, "could not find file for query.", $r16);
+
+        r19 = new java.lang.RuntimeException;
+
+        specialinvoke r19.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r16);
+
+        goto label10;
+
+     label10:
+        $r16 = (java.lang.Throwable) r19;
+
+        throw $r16;
+
+        catch java.io.FileNotFoundException from label01 to label02 with label09;
+    }
+
+    public void shutdown()
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        return;
+    }
+
+    public int update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[])
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider $r0;
+        android.content.ContentValues $r1;
+        java.lang.String $r2;
+        java.lang.String[] $r3;
+        android.net.Uri $r4;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider;
+
+        $r4 := @parameter0: android.net.Uri;
+
+        $r1 := @parameter1: android.content.ContentValues;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.String[];
+
+        return 0;
+    }
+
+androidx.test.services.storage.provider.AbstractFileContentProvider$Access
+<androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access[] $VALUES>
+<androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access READ_ONLY>
+<androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access READ_WRITE>
+    private static androidx.test.services.storage.provider.AbstractFileContentProvider$Access[] $values()
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider$Access[] $r0;
+        androidx.test.services.storage.provider.AbstractFileContentProvider$Access $r1;
+
+        $r0 = newarray (androidx.test.services.storage.provider.AbstractFileContentProvider$Access)[2];
+
+        $r1 = <androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access READ_ONLY>;
+
+        $r0[0] = $r1;
+
+        $r1 = <androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access READ_WRITE>;
+
+        $r0[1] = $r1;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider$Access[] $r0;
+        androidx.test.services.storage.provider.AbstractFileContentProvider$Access $r1;
+
+        $r1 = new androidx.test.services.storage.provider.AbstractFileContentProvider$Access;
+
+        specialinvoke $r1.<androidx.test.services.storage.provider.AbstractFileContentProvider$Access: void <init>(java.lang.String,int)>("READ_ONLY", 0);
+
+        <androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access READ_ONLY> = $r1;
+
+        $r1 = new androidx.test.services.storage.provider.AbstractFileContentProvider$Access;
+
+        specialinvoke $r1.<androidx.test.services.storage.provider.AbstractFileContentProvider$Access: void <init>(java.lang.String,int)>("READ_WRITE", 1);
+
+        <androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access READ_WRITE> = $r1;
+
+        $r0 = staticinvoke <androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access[] $values()>();
+
+        <androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access[] $VALUES> = $r0;
+
+        return;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.test.services.storage.provider.AbstractFileContentProvider$Access $r0;
+        java.lang.String $r1;
+        int $i0;
+
+        $r0 := @this: androidx.test.services.storage.provider.AbstractFileContentProvider$Access;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke $r0.<java.lang.Enum: void <init>(java.lang.String,int)>($r1, $i0);
+
+        return;
+    }
+
+    public static androidx.test.services.storage.provider.AbstractFileContentProvider$Access[] values()
+    {
+        java.lang.Object $r0;
+        androidx.test.services.storage.provider.AbstractFileContentProvider$Access[] $r1;
+
+        $r1 = <androidx.test.services.storage.provider.AbstractFileContentProvider$Access: androidx.test.services.storage.provider.AbstractFileContentProvider$Access[] $VALUES>;
+
+        $r0 = virtualinvoke $r1.<java.lang.Object: java.lang.Object clone()>();
+
+        $r1 = (androidx.test.services.storage.provider.AbstractFileContentProvider$Access[]) $r0;
+
+        return $r1;
+    }
+

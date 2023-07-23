@@ -1,0 +1,3834 @@
+androidx.camera.video.VideoCapture
+<androidx.camera.video.VideoCapture: java.lang.String TAG>
+<androidx.camera.video.VideoCapture: java.lang.String SURFACE_UPDATE_KEY>
+<androidx.camera.video.VideoCapture: androidx.camera.video.VideoCapture$Defaults DEFAULT_CONFIG>
+<androidx.camera.video.VideoCapture: boolean HAS_PREVIEW_STRETCH_QUIRK>
+<androidx.camera.video.VideoCapture: boolean HAS_PREVIEW_DELAY_QUIRK>
+<androidx.camera.video.VideoCapture: boolean HAS_IMAGE_CAPTURE_QUIRK>
+<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>
+<androidx.camera.video.VideoCapture: androidx.camera.video.StreamInfo mStreamInfo>
+<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder>
+<androidx.camera.video.VideoCapture: com.google.common.util.concurrent.ListenableFuture mSurfaceUpdateFuture>
+<androidx.camera.video.VideoCapture: androidx.camera.core.SurfaceRequest mSurfaceRequest>
+<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput$SourceState mSourceState>
+<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorInternal mSurfaceProcessor>
+<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode>
+<androidx.camera.video.VideoCapture: androidx.camera.video.internal.encoder.VideoEncoderInfo mVideoEncoderInfo>
+<androidx.camera.video.VideoCapture: androidx.camera.core.impl.Observable$Observer mStreamInfoObserver>
+    public static androidx.camera.video.VideoCapture withOutput(androidx.camera.video.VideoOutput)
+    {
+        androidx.camera.video.VideoOutput r0, $r3;
+        androidx.camera.video.VideoCapture$Builder $r1;
+        java.lang.Object $r2;
+        androidx.camera.video.VideoCapture $r4;
+
+        r0 := @parameter0: androidx.camera.video.VideoOutput;
+
+        $r1 = new androidx.camera.video.VideoCapture$Builder;
+
+        $r2 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r0);
+
+        $r3 = (androidx.camera.video.VideoOutput) $r2;
+
+        specialinvoke $r1.<androidx.camera.video.VideoCapture$Builder: void <init>(androidx.camera.video.VideoOutput)>($r3);
+
+        $r4 = virtualinvoke $r1.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture build()>();
+
+        return $r4;
+    }
+
+    void <init>(androidx.camera.video.impl.VideoCaptureConfig)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.video.impl.VideoCaptureConfig r1;
+        androidx.camera.video.StreamInfo $r2;
+        androidx.camera.core.impl.SessionConfig$Builder $r3;
+        androidx.camera.video.VideoOutput$SourceState $r4;
+        androidx.camera.video.VideoCapture$1 $r5;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.video.impl.VideoCaptureConfig;
+
+        specialinvoke r0.<androidx.camera.core.UseCase: void <init>(androidx.camera.core.impl.UseCaseConfig)>(r1);
+
+        $r2 = <androidx.camera.video.StreamInfo: androidx.camera.video.StreamInfo STREAM_INFO_ANY_INACTIVE>;
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.video.StreamInfo mStreamInfo> = $r2;
+
+        $r3 = new androidx.camera.core.impl.SessionConfig$Builder;
+
+        specialinvoke $r3.<androidx.camera.core.impl.SessionConfig$Builder: void <init>()>();
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder> = $r3;
+
+        r0.<androidx.camera.video.VideoCapture: com.google.common.util.concurrent.ListenableFuture mSurfaceUpdateFuture> = null;
+
+        $r4 = <androidx.camera.video.VideoOutput$SourceState: androidx.camera.video.VideoOutput$SourceState INACTIVE>;
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput$SourceState mSourceState> = $r4;
+
+        $r5 = new androidx.camera.video.VideoCapture$1;
+
+        specialinvoke $r5.<androidx.camera.video.VideoCapture$1: void <init>(androidx.camera.video.VideoCapture)>(r0);
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.Observable$Observer mStreamInfoObserver> = $r5;
+
+        return;
+    }
+
+    public androidx.camera.video.VideoOutput getOutput()
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.UseCaseConfig $r1;
+        androidx.camera.video.impl.VideoCaptureConfig $r2;
+        androidx.camera.video.VideoOutput $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        $r2 = (androidx.camera.video.impl.VideoCaptureConfig) $r1;
+
+        $r3 = virtualinvoke $r2.<androidx.camera.video.impl.VideoCaptureConfig: androidx.camera.video.VideoOutput getVideoOutput()>();
+
+        return $r3;
+    }
+
+    public int getTargetRotation()
+    {
+        androidx.camera.video.VideoCapture r0;
+        int $i0;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        $i0 = virtualinvoke r0.<androidx.camera.video.VideoCapture: int getTargetRotationInternal()>();
+
+        return $i0;
+    }
+
+    public void setTargetRotation(int)
+    {
+        androidx.camera.video.VideoCapture r0;
+        int i0;
+        boolean $z0;
+        android.util.Size $r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        i0 := @parameter0: int;
+
+        $z0 = virtualinvoke r0.<androidx.camera.video.VideoCapture: boolean setTargetRotationInternal(int)>(i0);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture: android.util.Size getAttachedSurfaceResolution()>();
+
+        specialinvoke r0.<androidx.camera.video.VideoCapture: void sendTransformationInfoIfReady(android.util.Size)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void onStateAttached()
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.video.VideoOutput $r1;
+        androidx.camera.core.impl.Observable $r2;
+        java.util.concurrent.ScheduledExecutorService $r3;
+        androidx.camera.core.impl.Observable$Observer $r4;
+        androidx.camera.video.VideoOutput$SourceState $r5;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        specialinvoke r0.<androidx.camera.core.UseCase: void onStateAttached()>();
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput getOutput()>();
+
+        $r2 = interfaceinvoke $r1.<androidx.camera.video.VideoOutput: androidx.camera.core.impl.Observable getStreamInfo()>();
+
+        $r3 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.ScheduledExecutorService mainThreadExecutor()>();
+
+        $r4 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.Observable$Observer mStreamInfoObserver>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.Observable: void addObserver(java.util.concurrent.Executor,androidx.camera.core.impl.Observable$Observer)>($r3, $r4);
+
+        $r5 = <androidx.camera.video.VideoOutput$SourceState: androidx.camera.video.VideoOutput$SourceState ACTIVE_NON_STREAMING>;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void setSourceState(androidx.camera.video.VideoOutput$SourceState)>($r5);
+
+        return;
+    }
+
+    protected android.util.Size onSuggestedResolutionUpdated(android.util.Size)
+    {
+        androidx.camera.video.VideoCapture r0;
+        android.util.Size r1, r6, r24;
+        java.lang.String r2, $r10, $r15;
+        androidx.camera.video.impl.VideoCaptureConfig r3;
+        java.util.List r4;
+        android.util.Size[] r5, r21;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8, i9;
+        java.lang.StringBuilder $r7, $r8, $r9, $r12, $r13, $r14;
+        androidx.camera.core.impl.UseCaseConfig $r11;
+        boolean $z0, $z1;
+        java.lang.Object $r16, $r17, $r19, $r20, $r28;
+        java.lang.Integer $r18;
+        java.util.Iterator r22;
+        android.util.Pair r23;
+        androidx.camera.video.VideoOutput $r25;
+        androidx.camera.core.impl.Observable $r26;
+        androidx.camera.video.StreamInfo $r27, $r29, $r33;
+        androidx.camera.core.processing.SurfaceProcessorNode $r30;
+        androidx.camera.core.impl.SessionConfig$Builder $r31, $r32, $r34;
+        androidx.camera.core.impl.SessionConfig $r35;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("suggestedResolution = ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r10);
+
+        r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture: java.lang.String getCameraId()>();
+
+        $r11 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        r3 = (androidx.camera.video.impl.VideoCaptureConfig) $r11;
+
+        r21 = null;
+
+        r4 = virtualinvoke r3.<androidx.camera.video.impl.VideoCaptureConfig: java.util.List getSupportedResolutions(java.util.List)>(null);
+
+        if r4 == null goto label3;
+
+        r22 = interfaceinvoke r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r22.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r16 = interfaceinvoke r22.<java.util.Iterator: java.lang.Object next()>();
+
+        r23 = (android.util.Pair) $r16;
+
+        $r17 = r23.<android.util.Pair: java.lang.Object first>;
+
+        $r18 = (java.lang.Integer) $r17;
+
+        $i6 = virtualinvoke $r18.<java.lang.Integer: int intValue()>();
+
+        $i7 = virtualinvoke r0.<androidx.camera.video.VideoCapture: int getImageFormat()>();
+
+        if $i6 != $i7 goto label2;
+
+        $r19 = r23.<android.util.Pair: java.lang.Object second>;
+
+        if $r19 == null goto label2;
+
+        $r20 = r23.<android.util.Pair: java.lang.Object second>;
+
+        r21 = (android.util.Size[]) $r20;
+
+        goto label3;
+
+     label2:
+        goto label1;
+
+     label3:
+        r24 = r1;
+
+        if r21 == null goto label7;
+
+        $i1 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        $i2 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        i8 = $i1 * $i2;
+
+        r5 = r21;
+
+        i0 = lengthof r5;
+
+        i9 = 0;
+
+     label4:
+        if i9 >= i0 goto label7;
+
+        r6 = r5[i9];
+
+        $z0 = staticinvoke <java.util.Objects: boolean equals(java.lang.Object,java.lang.Object)>(r6, r1);
+
+        if $z0 == 0 goto label5;
+
+        goto label7;
+
+     label5:
+        $i3 = virtualinvoke r6.<android.util.Size: int getWidth()>();
+
+        $i4 = virtualinvoke r6.<android.util.Size: int getHeight()>();
+
+        $i5 = $i3 * $i4;
+
+        if $i5 >= i8 goto label6;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Find a higher priority resolution: ");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r6);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r15);
+
+        r24 = r6;
+
+        goto label7;
+
+     label6:
+        i9 = i9 + 1;
+
+        goto label4;
+
+     label7:
+        $r25 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput getOutput()>();
+
+        $r26 = interfaceinvoke $r25.<androidx.camera.video.VideoOutput: androidx.camera.core.impl.Observable getStreamInfo()>();
+
+        $r27 = <androidx.camera.video.StreamInfo: androidx.camera.video.StreamInfo STREAM_INFO_ANY_INACTIVE>;
+
+        $r28 = staticinvoke <androidx.camera.video.VideoCapture: java.lang.Object fetchObservableValue(androidx.camera.core.impl.Observable,java.lang.Object)>($r26, $r27);
+
+        $r29 = (androidx.camera.video.StreamInfo) $r28;
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.video.StreamInfo mStreamInfo> = $r29;
+
+        $r30 = specialinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode createNodeIfNeeded()>();
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode> = $r30;
+
+        $r31 = specialinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder createPipeline(java.lang.String,androidx.camera.video.impl.VideoCaptureConfig,android.util.Size)>(r2, r3, r24);
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder> = $r31;
+
+        $r32 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder>;
+
+        $r33 = r0.<androidx.camera.video.VideoCapture: androidx.camera.video.StreamInfo mStreamInfo>;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void applyStreamInfoToSessionConfigBuilder(androidx.camera.core.impl.SessionConfig$Builder,androidx.camera.video.StreamInfo)>($r32, $r33);
+
+        $r34 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder>;
+
+        $r35 = virtualinvoke $r34.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig build()>();
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void updateSessionConfig(androidx.camera.core.impl.SessionConfig)>($r35);
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void notifyActive()>();
+
+        return r24;
+    }
+
+    public void setViewPortCropRect(android.graphics.Rect)
+    {
+        androidx.camera.video.VideoCapture r0;
+        android.graphics.Rect r1;
+        android.util.Size $r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: android.graphics.Rect;
+
+        specialinvoke r0.<androidx.camera.core.UseCase: void setViewPortCropRect(android.graphics.Rect)>(r1);
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture: android.util.Size getAttachedSurfaceResolution()>();
+
+        specialinvoke r0.<androidx.camera.video.VideoCapture: void sendTransformationInfoIfReady(android.util.Size)>($r2);
+
+        return;
+    }
+
+    public void setProcessor(androidx.camera.core.processing.SurfaceProcessorInternal)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.processing.SurfaceProcessorInternal r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.core.processing.SurfaceProcessorInternal;
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorInternal mSurfaceProcessor> = r1;
+
+        return;
+    }
+
+    public void onDetached()
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.processing.SurfaceProcessorNode $r1, $r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        specialinvoke r0.<androidx.camera.video.VideoCapture: void clearPipeline()>();
+
+        $r1 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode>;
+
+        virtualinvoke $r2.<androidx.camera.core.processing.SurfaceProcessorNode: void release()>();
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode> = null;
+
+     label1:
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.video.internal.encoder.VideoEncoderInfo mVideoEncoderInfo> = null;
+
+        return;
+    }
+
+    public void onStateDetached()
+    {
+        androidx.camera.video.VideoCapture r0;
+        boolean $z0, $z1;
+        androidx.camera.video.VideoOutput$SourceState $r1;
+        androidx.camera.video.VideoOutput $r2;
+        androidx.camera.core.impl.Observable $r3;
+        androidx.camera.core.impl.Observable$Observer $r4;
+        com.google.common.util.concurrent.ListenableFuture $r5, $r6;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        $z0 = staticinvoke <androidx.camera.core.impl.utils.Threads: boolean isMainThread()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z0, "VideoCapture can only be detached on the main thread.");
+
+        $r1 = <androidx.camera.video.VideoOutput$SourceState: androidx.camera.video.VideoOutput$SourceState INACTIVE>;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void setSourceState(androidx.camera.video.VideoOutput$SourceState)>($r1);
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput getOutput()>();
+
+        $r3 = interfaceinvoke $r2.<androidx.camera.video.VideoOutput: androidx.camera.core.impl.Observable getStreamInfo()>();
+
+        $r4 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.Observable$Observer mStreamInfoObserver>;
+
+        interfaceinvoke $r3.<androidx.camera.core.impl.Observable: void removeObserver(androidx.camera.core.impl.Observable$Observer)>($r4);
+
+        $r5 = r0.<androidx.camera.video.VideoCapture: com.google.common.util.concurrent.ListenableFuture mSurfaceUpdateFuture>;
+
+        if $r5 == null goto label1;
+
+        $r6 = r0.<androidx.camera.video.VideoCapture: com.google.common.util.concurrent.ListenableFuture mSurfaceUpdateFuture>;
+
+        $z1 = interfaceinvoke $r6.<com.google.common.util.concurrent.ListenableFuture: boolean cancel(boolean)>(0);
+
+        if $z1 == 0 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", "VideoCapture is detached from the camera. Surface update cancelled.");
+
+     label1:
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        androidx.camera.video.VideoCapture r0;
+        java.lang.StringBuilder $r1, $r2, $r4;
+        java.lang.String $r3, $r5;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("VideoCapture:");
+
+        $r3 = virtualinvoke r0.<androidx.camera.video.VideoCapture: java.lang.String getName()>();
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    public androidx.camera.core.impl.UseCaseConfig getDefaultConfig(boolean, androidx.camera.core.impl.UseCaseConfigFactory)
+    {
+        androidx.camera.video.VideoCapture r0;
+        boolean z0;
+        androidx.camera.core.impl.UseCaseConfigFactory r1;
+        androidx.camera.core.impl.UseCaseConfigFactory$CaptureType $r2;
+        androidx.camera.core.impl.UseCaseConfig$Builder $r3;
+        androidx.camera.video.VideoCapture$Defaults $r4;
+        androidx.camera.video.impl.VideoCaptureConfig $r5;
+        androidx.camera.core.impl.Config r6, r8;
+        androidx.camera.core.impl.UseCaseConfig $r7;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        z0 := @parameter0: boolean;
+
+        r1 := @parameter1: androidx.camera.core.impl.UseCaseConfigFactory;
+
+        $r2 = <androidx.camera.core.impl.UseCaseConfigFactory$CaptureType: androidx.camera.core.impl.UseCaseConfigFactory$CaptureType VIDEO_CAPTURE>;
+
+        r6 = interfaceinvoke r1.<androidx.camera.core.impl.UseCaseConfigFactory: androidx.camera.core.impl.Config getConfig(androidx.camera.core.impl.UseCaseConfigFactory$CaptureType,int)>($r2, 1);
+
+        if z0 == 0 goto label1;
+
+        $r4 = <androidx.camera.video.VideoCapture: androidx.camera.video.VideoCapture$Defaults DEFAULT_CONFIG>;
+
+        $r5 = virtualinvoke $r4.<androidx.camera.video.VideoCapture$Defaults: androidx.camera.video.impl.VideoCaptureConfig getConfig()>();
+
+        r8 = (androidx.camera.core.impl.Config) $r5;
+
+        r6 = staticinvoke <androidx.camera.core.impl.Config: androidx.camera.core.impl.Config mergeConfigs(androidx.camera.core.impl.Config,androidx.camera.core.impl.Config)>(r6, r8);
+
+     label1:
+        if r6 != null goto label2;
+
+        $r7 = null;
+
+        goto label3;
+
+     label2:
+        $r3 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.UseCaseConfig$Builder getUseCaseConfigBuilder(androidx.camera.core.impl.Config)>(r6);
+
+        $r7 = interfaceinvoke $r3.<androidx.camera.core.impl.UseCaseConfig$Builder: androidx.camera.core.impl.UseCaseConfig getUseCaseConfig()>();
+
+     label3:
+        return $r7;
+    }
+
+    protected androidx.camera.core.impl.UseCaseConfig onMergeConfig(androidx.camera.core.impl.CameraInfoInternal, androidx.camera.core.impl.UseCaseConfig$Builder)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.CameraInfoInternal r1;
+        androidx.camera.core.impl.UseCaseConfig$Builder r2;
+        androidx.camera.core.impl.UseCaseConfig $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.core.impl.CameraInfoInternal;
+
+        r2 := @parameter1: androidx.camera.core.impl.UseCaseConfig$Builder;
+
+        specialinvoke r0.<androidx.camera.video.VideoCapture: void updateSupportedResolutionsByQuality(androidx.camera.core.impl.CameraInfoInternal,androidx.camera.core.impl.UseCaseConfig$Builder)>(r1, r2);
+
+        $r3 = interfaceinvoke r2.<androidx.camera.core.impl.UseCaseConfig$Builder: androidx.camera.core.impl.UseCaseConfig getUseCaseConfig()>();
+
+        return $r3;
+    }
+
+    public androidx.camera.core.impl.UseCaseConfig$Builder getUseCaseConfigBuilder(androidx.camera.core.impl.Config)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.Config r1;
+        androidx.camera.video.VideoCapture$Builder $r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.core.impl.Config;
+
+        $r2 = staticinvoke <androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder fromConfig(androidx.camera.core.impl.Config)>(r1);
+
+        return $r2;
+    }
+
+    private void sendTransformationInfoIfReady(android.util.Size)
+    {
+        androidx.camera.video.VideoCapture r0;
+        android.util.Size r1;
+        androidx.camera.core.impl.CameraInternal r2;
+        androidx.camera.core.SurfaceRequest r3;
+        android.graphics.Rect r4;
+        int i0, i1;
+        androidx.camera.core.processing.SettableSurface r5;
+        androidx.camera.core.processing.SurfaceProcessorNode $r6;
+        androidx.camera.core.SurfaceRequest$TransformationInfo $r7;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: android.util.Size;
+
+        r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.CameraInternal getCamera()>();
+
+        r3 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.SurfaceRequest mSurfaceRequest>;
+
+        r4 = specialinvoke r0.<androidx.camera.video.VideoCapture: android.graphics.Rect getCropRect(android.util.Size)>(r1);
+
+        if r2 == null goto label2;
+
+        if r3 == null goto label2;
+
+        if r4 == null goto label2;
+
+        i0 = virtualinvoke r0.<androidx.camera.video.VideoCapture: int getRelativeRotation(androidx.camera.core.impl.CameraInternal)>(r2);
+
+        i1 = virtualinvoke r0.<androidx.camera.video.VideoCapture: int getAppTargetRotation()>();
+
+        $r6 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode>;
+
+        if $r6 == null goto label1;
+
+        r5 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SettableSurface getCameraSettableSurface()>();
+
+        virtualinvoke r5.<androidx.camera.core.processing.SettableSurface: void setRotationDegrees(int)>(i0);
+
+        goto label2;
+
+     label1:
+        $r7 = staticinvoke <androidx.camera.core.SurfaceRequest$TransformationInfo: androidx.camera.core.SurfaceRequest$TransformationInfo of(android.graphics.Rect,int,int)>(r4, i0, i1);
+
+        virtualinvoke r3.<androidx.camera.core.SurfaceRequest: void updateTransformationInfo(androidx.camera.core.SurfaceRequest$TransformationInfo)>($r7);
+
+     label2:
+        return;
+    }
+
+    androidx.camera.core.processing.SettableSurface getCameraSettableSurface()
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.processing.SurfaceProcessorNode $r1;
+        androidx.camera.core.impl.DeferrableSurface $r3;
+        java.lang.Object $r4;
+        androidx.camera.core.processing.SettableSurface $r5;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        $r1 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode>;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r3 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        $r4 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r3);
+
+        $r5 = (androidx.camera.core.processing.SettableSurface) $r4;
+
+        return $r5;
+    }
+
+    private android.graphics.Rect getCropRect(android.util.Size)
+    {
+        androidx.camera.video.VideoCapture r0;
+        android.util.Size r1;
+        android.graphics.Rect $r2, $r3, $r4;
+        int $i0, $i1;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture: android.graphics.Rect getViewPortCropRect()>();
+
+        if $r2 == null goto label1;
+
+        $r4 = virtualinvoke r0.<androidx.camera.video.VideoCapture: android.graphics.Rect getViewPortCropRect()>();
+
+        return $r4;
+
+     label1:
+        if r1 == null goto label2;
+
+        $r3 = new android.graphics.Rect;
+
+        $i0 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        $i1 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        specialinvoke $r3.<android.graphics.Rect: void <init>(int,int,int,int)>(0, 0, $i0, $i1);
+
+        return $r3;
+
+     label2:
+        return null;
+    }
+
+    private androidx.camera.core.impl.SessionConfig$Builder createPipeline(java.lang.String, androidx.camera.video.impl.VideoCaptureConfig, android.util.Size)
+    {
+        androidx.camera.video.VideoCapture r0;
+        java.lang.String r1;
+        androidx.camera.video.impl.VideoCaptureConfig r2;
+        android.util.Size r3;
+        androidx.camera.core.impl.CameraInternal r4, $r10;
+        android.util.Range r5, $r12, $r13;
+        androidx.camera.core.processing.SettableSurface r6, r9, $r31;
+        androidx.camera.core.processing.SurfaceEdge r7, r8;
+        java.lang.Object $r11, $r14, $r26, $r28, $r36;
+        androidx.camera.core.processing.SurfaceProcessorNode $r15, $r34;
+        androidx.camera.core.SurfaceRequest $r16, $r17, $r20, $r37;
+        androidx.camera.core.impl.DeferrableSurface $r18, $r21;
+        androidx.camera.video.VideoOutput $r19;
+        androidx.camera.core.impl.SessionConfig$ErrorListener $r22;
+        boolean $z0, $z1, $z2;
+        androidx.camera.video.MediaSpec $r25, r38;
+        android.graphics.Rect $r27, r39, r41;
+        androidx.camera.core.impl.CameraInfoInternal $r29;
+        androidx.core.util.Supplier $r30;
+        android.graphics.Matrix $r32;
+        int $i0;
+        java.util.List $r33, $r35;
+        androidx.camera.core.impl.Timebase r40;
+        androidx.camera.core.impl.SessionConfig$Builder r42;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.camera.video.impl.VideoCaptureConfig;
+
+        r3 := @parameter2: android.util.Size;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        $r10 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.CameraInternal getCamera()>();
+
+        $r11 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r10);
+
+        r4 = (androidx.camera.core.impl.CameraInternal) $r11;
+
+        $r12 = <androidx.camera.video.VideoCapture$Defaults: android.util.Range DEFAULT_FPS_RANGE>;
+
+        $r13 = virtualinvoke r2.<androidx.camera.video.impl.VideoCaptureConfig: android.util.Range getTargetFramerate(android.util.Range)>($r12);
+
+        $r14 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r13);
+
+        r5 = (android.util.Range) $r14;
+
+        $r15 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode>;
+
+        if $r15 == null goto label1;
+
+        $r25 = specialinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.video.MediaSpec getMediaSpec()>();
+
+        $r26 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r25);
+
+        r38 = (androidx.camera.video.MediaSpec) $r26;
+
+        $r27 = specialinvoke r0.<androidx.camera.video.VideoCapture: android.graphics.Rect getCropRect(android.util.Size)>(r3);
+
+        $r28 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r27);
+
+        r39 = (android.graphics.Rect) $r28;
+
+        $r29 = interfaceinvoke r4.<androidx.camera.core.impl.CameraInternal: androidx.camera.core.impl.CameraInfoInternal getCameraInfoInternal()>();
+
+        r40 = interfaceinvoke $r29.<androidx.camera.core.impl.CameraInfoInternal: androidx.camera.core.impl.Timebase getTimebase()>();
+
+        $r30 = dynamicinvoke "get" <androidx.core.util.Supplier (androidx.camera.video.VideoCapture,androidx.camera.video.impl.VideoCaptureConfig,androidx.camera.core.impl.CameraInternal,androidx.camera.core.impl.Timebase,androidx.camera.video.MediaSpec,android.util.Size,android.util.Range)>(r0, r2, r4, r40, r38, r3, r5) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.VideoCapture: androidx.camera.video.internal.encoder.VideoEncoderInfo lambda$createPipeline$0(androidx.camera.video.impl.VideoCaptureConfig,androidx.camera.core.impl.CameraInternal,androidx.camera.core.impl.Timebase,androidx.camera.video.MediaSpec,android.util.Size,android.util.Range)>, methodtype: androidx.camera.video.internal.encoder.VideoEncoderInfo __METHODTYPE__());
+
+        r41 = specialinvoke r0.<androidx.camera.video.VideoCapture: android.graphics.Rect adjustCropRectIfNeeded(android.graphics.Rect,android.util.Size,androidx.core.util.Supplier)>(r39, r3, $r30);
+
+        $r31 = new androidx.camera.core.processing.SettableSurface;
+
+        $r32 = virtualinvoke r0.<androidx.camera.video.VideoCapture: android.graphics.Matrix getSensorToBufferTransformMatrix()>();
+
+        $i0 = virtualinvoke r0.<androidx.camera.video.VideoCapture: int getRelativeRotation(androidx.camera.core.impl.CameraInternal)>(r4);
+
+        specialinvoke $r31.<androidx.camera.core.processing.SettableSurface: void <init>(int,android.util.Size,int,android.graphics.Matrix,boolean,android.graphics.Rect,int,boolean)>(2, r3, 34, $r32, 1, r41, $i0, 0);
+
+        r6 = $r31;
+
+        $r33 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>(r6);
+
+        r7 = staticinvoke <androidx.camera.core.processing.SurfaceEdge: androidx.camera.core.processing.SurfaceEdge create(java.util.List)>($r33);
+
+        $r34 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode>;
+
+        r8 = virtualinvoke $r34.<androidx.camera.core.processing.SurfaceProcessorNode: androidx.camera.core.processing.SurfaceEdge transform(androidx.camera.core.processing.SurfaceEdge)>(r7);
+
+        $r35 = virtualinvoke r8.<androidx.camera.core.processing.SurfaceEdge: java.util.List getSurfaces()>();
+
+        $r36 = interfaceinvoke $r35.<java.util.List: java.lang.Object get(int)>(0);
+
+        r9 = (androidx.camera.core.processing.SettableSurface) $r36;
+
+        $r37 = virtualinvoke r9.<androidx.camera.core.processing.SettableSurface: androidx.camera.core.SurfaceRequest createSurfaceRequest(androidx.camera.core.impl.CameraInternal,android.util.Range)>(r4, r5);
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.SurfaceRequest mSurfaceRequest> = $r37;
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface> = r6;
+
+        goto label2;
+
+     label1:
+        $r16 = new androidx.camera.core.SurfaceRequest;
+
+        specialinvoke $r16.<androidx.camera.core.SurfaceRequest: void <init>(android.util.Size,androidx.camera.core.impl.CameraInternal,boolean,android.util.Range)>(r3, r4, 0, r5);
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.SurfaceRequest mSurfaceRequest> = $r16;
+
+        $r17 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.SurfaceRequest mSurfaceRequest>;
+
+        $r18 = virtualinvoke $r17.<androidx.camera.core.SurfaceRequest: androidx.camera.core.impl.DeferrableSurface getDeferrableSurface()>();
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface> = $r18;
+
+        r40 = <androidx.camera.core.impl.Timebase: androidx.camera.core.impl.Timebase UPTIME>;
+
+     label2:
+        $r19 = virtualinvoke r2.<androidx.camera.video.impl.VideoCaptureConfig: androidx.camera.video.VideoOutput getVideoOutput()>();
+
+        $r20 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.SurfaceRequest mSurfaceRequest>;
+
+        interfaceinvoke $r19.<androidx.camera.video.VideoOutput: void onSurfaceRequested(androidx.camera.core.SurfaceRequest,androidx.camera.core.impl.Timebase)>($r20, r40);
+
+        specialinvoke r0.<androidx.camera.video.VideoCapture: void sendTransformationInfoIfReady(android.util.Size)>(r3);
+
+        $r21 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        virtualinvoke $r21.<androidx.camera.core.impl.DeferrableSurface: void setContainerClass(java.lang.Class)>(class "Landroid/media/MediaCodec;");
+
+        r42 = staticinvoke <androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder createFrom(androidx.camera.core.impl.UseCaseConfig)>(r2);
+
+        $r22 = dynamicinvoke "onError" <androidx.camera.core.impl.SessionConfig$ErrorListener (androidx.camera.video.VideoCapture,java.lang.String,androidx.camera.video.impl.VideoCaptureConfig,android.util.Size)>(r0, r1, r2, r3) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(androidx.camera.core.impl.SessionConfig,androidx.camera.core.impl.SessionConfig$SessionError), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.VideoCapture: void lambda$createPipeline$1(java.lang.String,androidx.camera.video.impl.VideoCaptureConfig,android.util.Size,androidx.camera.core.impl.SessionConfig,androidx.camera.core.impl.SessionConfig$SessionError)>, methodtype: void __METHODTYPE__(androidx.camera.core.impl.SessionConfig,androidx.camera.core.impl.SessionConfig$SessionError));
+
+        virtualinvoke r42.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder addErrorListener(androidx.camera.core.impl.SessionConfig$ErrorListener)>($r22);
+
+        $z0 = <androidx.camera.video.VideoCapture: boolean HAS_PREVIEW_STRETCH_QUIRK>;
+
+        if $z0 != 0 goto label3;
+
+        $z1 = <androidx.camera.video.VideoCapture: boolean HAS_PREVIEW_DELAY_QUIRK>;
+
+        if $z1 != 0 goto label3;
+
+        $z2 = <androidx.camera.video.VideoCapture: boolean HAS_IMAGE_CAPTURE_QUIRK>;
+
+        if $z2 == 0 goto label4;
+
+     label3:
+        virtualinvoke r42.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder setTemplateType(int)>(1);
+
+     label4:
+        return r42;
+    }
+
+    private void clearPipeline()
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.DeferrableSurface $r1, $r3;
+        androidx.camera.video.StreamInfo $r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        $r1 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        if $r1 == null goto label1;
+
+        $r3 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        virtualinvoke $r3.<androidx.camera.core.impl.DeferrableSurface: void close()>();
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface> = null;
+
+     label1:
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.SurfaceRequest mSurfaceRequest> = null;
+
+        $r2 = <androidx.camera.video.StreamInfo: androidx.camera.video.StreamInfo STREAM_INFO_ANY_INACTIVE>;
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.video.StreamInfo mStreamInfo> = $r2;
+
+        return;
+    }
+
+    void resetPipeline(java.lang.String, androidx.camera.video.impl.VideoCaptureConfig, android.util.Size)
+    {
+        androidx.camera.video.VideoCapture r0;
+        java.lang.String r1;
+        androidx.camera.video.impl.VideoCaptureConfig r2;
+        android.util.Size r3;
+        boolean $z0;
+        androidx.camera.core.impl.SessionConfig$Builder $r4, $r6, $r7;
+        androidx.camera.video.StreamInfo $r5;
+        androidx.camera.core.impl.SessionConfig $r8;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.camera.video.impl.VideoCaptureConfig;
+
+        r3 := @parameter2: android.util.Size;
+
+        specialinvoke r0.<androidx.camera.video.VideoCapture: void clearPipeline()>();
+
+        $z0 = virtualinvoke r0.<androidx.camera.video.VideoCapture: boolean isCurrentCamera(java.lang.String)>(r1);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = specialinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder createPipeline(java.lang.String,androidx.camera.video.impl.VideoCaptureConfig,android.util.Size)>(r1, r2, r3);
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder> = $r4;
+
+        $r6 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder>;
+
+        $r5 = r0.<androidx.camera.video.VideoCapture: androidx.camera.video.StreamInfo mStreamInfo>;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void applyStreamInfoToSessionConfigBuilder(androidx.camera.core.impl.SessionConfig$Builder,androidx.camera.video.StreamInfo)>($r6, $r5);
+
+        $r7 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder>;
+
+        $r8 = virtualinvoke $r7.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig build()>();
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void updateSessionConfig(androidx.camera.core.impl.SessionConfig)>($r8);
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void notifyReset()>();
+
+     label1:
+        return;
+    }
+
+    private androidx.camera.video.MediaSpec getMediaSpec()
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.video.VideoOutput $r1;
+        androidx.camera.core.impl.Observable $r2;
+        java.lang.Object $r3;
+        androidx.camera.video.MediaSpec $r4;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput getOutput()>();
+
+        $r2 = interfaceinvoke $r1.<androidx.camera.video.VideoOutput: androidx.camera.core.impl.Observable getMediaSpec()>();
+
+        $r3 = staticinvoke <androidx.camera.video.VideoCapture: java.lang.Object fetchObservableValue(androidx.camera.core.impl.Observable,java.lang.Object)>($r2, null);
+
+        $r4 = (androidx.camera.video.MediaSpec) $r3;
+
+        return $r4;
+    }
+
+    void applyStreamInfoToSessionConfigBuilder(androidx.camera.core.impl.SessionConfig$Builder, androidx.camera.video.StreamInfo)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.SessionConfig$Builder r1;
+        androidx.camera.video.StreamInfo r2;
+        boolean z0, z1, $z2, $z3;
+        int $i0;
+        androidx.camera.video.StreamInfo$StreamState $r3, $r4;
+        androidx.camera.core.impl.DeferrableSurface $r6, $r8;
+        java.lang.IllegalStateException $r10;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig$Builder;
+
+        r2 := @parameter1: androidx.camera.video.StreamInfo;
+
+        $i0 = virtualinvoke r2.<androidx.camera.video.StreamInfo: int getId()>();
+
+        if $i0 != -1 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        z0 = $z2;
+
+        $r3 = virtualinvoke r2.<androidx.camera.video.StreamInfo: androidx.camera.video.StreamInfo$StreamState getStreamState()>();
+
+        $r4 = <androidx.camera.video.StreamInfo$StreamState: androidx.camera.video.StreamInfo$StreamState ACTIVE>;
+
+        if $r3 != $r4 goto label3;
+
+        $z3 = 1;
+
+        goto label4;
+
+     label3:
+        $z3 = 0;
+
+     label4:
+        z1 = $z3;
+
+        if z0 == 0 goto label5;
+
+        if z1 == 0 goto label5;
+
+        $r10 = new java.lang.IllegalStateException;
+
+        specialinvoke $r10.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Unexpected stream state, stream is error but active");
+
+        throw $r10;
+
+     label5:
+        virtualinvoke r1.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder clearSurfaces()>();
+
+        if z0 != 0 goto label7;
+
+        if z1 == 0 goto label6;
+
+        $r8 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        virtualinvoke r1.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder addSurface(androidx.camera.core.impl.DeferrableSurface)>($r8);
+
+        goto label7;
+
+     label6:
+        $r6 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.DeferrableSurface mDeferrableSurface>;
+
+        virtualinvoke r1.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder addNonRepeatingSurface(androidx.camera.core.impl.DeferrableSurface)>($r6);
+
+     label7:
+        specialinvoke r0.<androidx.camera.video.VideoCapture: void setupSurfaceUpdateNotifier(androidx.camera.core.impl.SessionConfig$Builder,boolean)>(r1, z1);
+
+        return;
+    }
+
+    private androidx.camera.core.processing.SurfaceProcessorNode createNodeIfNeeded()
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.processing.SurfaceProcessorInternal $r1, $r7, r11;
+        androidx.camera.core.impl.CameraInternal $r3, $r5;
+        androidx.camera.core.SurfaceOutput$GlTransformOptions $r4;
+        boolean $z0, $z1;
+        java.lang.Object $r6, $r8;
+        androidx.camera.core.processing.DefaultSurfaceProcessor r9;
+        androidx.camera.core.processing.SurfaceProcessorNode r10;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        $r1 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorInternal mSurfaceProcessor>;
+
+        if $r1 != null goto label1;
+
+        $z0 = <androidx.camera.video.VideoCapture: boolean HAS_PREVIEW_DELAY_QUIRK>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = <androidx.camera.video.VideoCapture: boolean HAS_IMAGE_CAPTURE_QUIRK>;
+
+        if $z1 == 0 goto label4;
+
+     label1:
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", "SurfaceEffect is enabled.");
+
+        r10 = new androidx.camera.core.processing.SurfaceProcessorNode;
+
+        $r5 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.CameraInternal getCamera()>();
+
+        $r6 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r5);
+
+        $r3 = (androidx.camera.core.impl.CameraInternal) $r6;
+
+        $r4 = <androidx.camera.core.SurfaceOutput$GlTransformOptions: androidx.camera.core.SurfaceOutput$GlTransformOptions APPLY_CROP_ROTATE_AND_MIRRORING>;
+
+        $r7 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorInternal mSurfaceProcessor>;
+
+        if $r7 == null goto label2;
+
+        $r8 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorInternal mSurfaceProcessor>;
+
+        goto label3;
+
+     label2:
+        r9 = new androidx.camera.core.processing.DefaultSurfaceProcessor;
+
+        $r8 = r9;
+
+        specialinvoke r9.<androidx.camera.core.processing.DefaultSurfaceProcessor: void <init>()>();
+
+     label3:
+        r11 = (androidx.camera.core.processing.SurfaceProcessorInternal) $r8;
+
+        specialinvoke r10.<androidx.camera.core.processing.SurfaceProcessorNode: void <init>(androidx.camera.core.impl.CameraInternal,androidx.camera.core.SurfaceOutput$GlTransformOptions,androidx.camera.core.processing.SurfaceProcessorInternal)>($r3, $r4, r11);
+
+        return r10;
+
+     label4:
+        return null;
+    }
+
+    androidx.camera.core.processing.SurfaceProcessorNode getNode()
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.processing.SurfaceProcessorNode $r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        $r1 = r0.<androidx.camera.video.VideoCapture: androidx.camera.core.processing.SurfaceProcessorNode mNode>;
+
+        return $r1;
+    }
+
+    private android.graphics.Rect adjustCropRectIfNeeded(android.graphics.Rect, android.util.Size, androidx.core.util.Supplier)
+    {
+        androidx.camera.video.VideoCapture r0;
+        android.graphics.Rect r1, $r6;
+        android.util.Size r2;
+        androidx.core.util.Supplier r3;
+        androidx.camera.video.internal.encoder.VideoEncoderInfo r4;
+        boolean $z0;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: android.graphics.Rect;
+
+        r2 := @parameter1: android.util.Size;
+
+        r3 := @parameter2: androidx.core.util.Supplier;
+
+        $z0 = staticinvoke <androidx.camera.video.VideoCapture: boolean isCropNeeded(android.graphics.Rect,android.util.Size)>(r1, r2);
+
+        if $z0 != 0 goto label1;
+
+        return r1;
+
+     label1:
+        $r5 = interfaceinvoke r3.<androidx.core.util.Supplier: java.lang.Object get()>();
+
+        r4 = (androidx.camera.video.internal.encoder.VideoEncoderInfo) $r5;
+
+        if r4 != null goto label2;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("VideoCapture", "Crop is needed but can\'t find the encoder info to adjust the cropRect");
+
+        return r1;
+
+     label2:
+        $r6 = staticinvoke <androidx.camera.video.VideoCapture: android.graphics.Rect adjustCropRectToValidSize(android.graphics.Rect,android.util.Size,androidx.camera.video.internal.encoder.VideoEncoderInfo)>(r1, r2, r4);
+
+        return $r6;
+    }
+
+    private static android.graphics.Rect adjustCropRectToValidSize(android.graphics.Rect, android.util.Size, androidx.camera.video.internal.encoder.VideoEncoderInfo)
+    {
+        android.graphics.Rect r0, r8, $r28;
+        android.util.Size r1, r7;
+        androidx.camera.video.internal.encoder.VideoEncoderInfo r2;
+        int i0, i1, i2, i3, i4, i5, i6, i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19, $i20, $i21, $i22, $i23, $i24, $i25, $i26, $i27, $i28, $i29, $i30, $i31, $i32, $i33, $i34, $i35, $i36, $i37, $i38, $i39, $i40, $i41, $i42, $i43;
+        android.util.Range r3, r4, $r13, $r14;
+        java.util.HashSet r5, $r16;
+        java.util.ArrayList r6, $r17;
+        java.lang.Object[] $r9, $r29;
+        java.lang.String $r10, $r15, $r21, $r26, $r30, $r31, $r32;
+        java.lang.Integer $r11, $r12;
+        boolean $z0, $z1;
+        java.lang.StringBuilder $r18, $r19, $r20, $r23, $r24, $r25;
+        java.util.Comparator $r22;
+        java.lang.Object $r27;
+
+        r0 := @parameter0: android.graphics.Rect;
+
+        r1 := @parameter1: android.util.Size;
+
+        r2 := @parameter2: androidx.camera.video.internal.encoder.VideoEncoderInfo;
+
+        $r9 = newarray (java.lang.Object)[5];
+
+        $r10 = staticinvoke <androidx.camera.core.impl.utils.TransformUtils: java.lang.String rectToString(android.graphics.Rect)>(r0);
+
+        $r9[0] = $r10;
+
+        $i8 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: int getWidthAlignment()>();
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i8);
+
+        $r9[1] = $r11;
+
+        $i9 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: int getHeightAlignment()>();
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i9);
+
+        $r9[2] = $r12;
+
+        $r13 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: android.util.Range getSupportedWidths()>();
+
+        $r9[3] = $r13;
+
+        $r14 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: android.util.Range getSupportedHeights()>();
+
+        $r9[4] = $r14;
+
+        $r15 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Adjust cropRect %s by width/height alignment %d/%d and supported widths %s / supported heights %s", $r9);
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r15);
+
+        i0 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: int getWidthAlignment()>();
+
+        i1 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: int getHeightAlignment()>();
+
+        r3 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: android.util.Range getSupportedWidths()>();
+
+        r4 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: android.util.Range getSupportedHeights()>();
+
+        $i10 = virtualinvoke r0.<android.graphics.Rect: int width()>();
+
+        i2 = staticinvoke <androidx.camera.video.VideoCapture: int alignDown(int,int,android.util.Range)>($i10, i0, r3);
+
+        $i11 = virtualinvoke r0.<android.graphics.Rect: int width()>();
+
+        i3 = staticinvoke <androidx.camera.video.VideoCapture: int alignUp(int,int,android.util.Range)>($i11, i0, r3);
+
+        $i12 = virtualinvoke r0.<android.graphics.Rect: int height()>();
+
+        i4 = staticinvoke <androidx.camera.video.VideoCapture: int alignDown(int,int,android.util.Range)>($i12, i1, r4);
+
+        $i13 = virtualinvoke r0.<android.graphics.Rect: int height()>();
+
+        i5 = staticinvoke <androidx.camera.video.VideoCapture: int alignUp(int,int,android.util.Range)>($i13, i1, r4);
+
+        $r16 = new java.util.HashSet;
+
+        specialinvoke $r16.<java.util.HashSet: void <init>()>();
+
+        r5 = $r16;
+
+        staticinvoke <androidx.camera.video.VideoCapture: void addBySupportedSize(java.util.Set,int,int,android.util.Size,androidx.camera.video.internal.encoder.VideoEncoderInfo)>(r5, i2, i4, r1, r2);
+
+        staticinvoke <androidx.camera.video.VideoCapture: void addBySupportedSize(java.util.Set,int,int,android.util.Size,androidx.camera.video.internal.encoder.VideoEncoderInfo)>(r5, i2, i5, r1, r2);
+
+        staticinvoke <androidx.camera.video.VideoCapture: void addBySupportedSize(java.util.Set,int,int,android.util.Size,androidx.camera.video.internal.encoder.VideoEncoderInfo)>(r5, i3, i4, r1, r2);
+
+        staticinvoke <androidx.camera.video.VideoCapture: void addBySupportedSize(java.util.Set,int,int,android.util.Size,androidx.camera.video.internal.encoder.VideoEncoderInfo)>(r5, i3, i5, r1, r2);
+
+        $z0 = interfaceinvoke r5.<java.util.Set: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("VideoCapture", "Can\'t find valid cropped size");
+
+        return r0;
+
+     label1:
+        $r17 = new java.util.ArrayList;
+
+        specialinvoke $r17.<java.util.ArrayList: void <init>(java.util.Collection)>(r5);
+
+        r6 = $r17;
+
+        $r18 = new java.lang.StringBuilder;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>()>();
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("candidatesList = ");
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r6);
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r21);
+
+        $r22 = dynamicinvoke "compare" <java.util.Comparator (android.graphics.Rect)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: int __METHODTYPE__(java.lang.Object,java.lang.Object), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.video.VideoCapture: int lambda$adjustCropRectToValidSize$2(android.graphics.Rect,android.util.Size,android.util.Size)>, methodtype: int __METHODTYPE__(android.util.Size,android.util.Size));
+
+        staticinvoke <java.util.Collections: void sort(java.util.List,java.util.Comparator)>(r6, $r22);
+
+        $r23 = new java.lang.StringBuilder;
+
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("sorted candidatesList = ");
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r6);
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r26);
+
+        $r27 = interfaceinvoke r6.<java.util.List: java.lang.Object get(int)>(0);
+
+        r7 = (android.util.Size) $r27;
+
+        i6 = virtualinvoke r7.<android.util.Size: int getWidth()>();
+
+        i7 = virtualinvoke r7.<android.util.Size: int getHeight()>();
+
+        $i14 = virtualinvoke r0.<android.graphics.Rect: int width()>();
+
+        if i6 != $i14 goto label2;
+
+        $i41 = virtualinvoke r0.<android.graphics.Rect: int height()>();
+
+        if i7 != $i41 goto label2;
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", "No need to adjust cropRect because crop size is valid.");
+
+        return r0;
+
+     label2:
+        $i15 = i6 % 2;
+
+        if $i15 != 0 goto label3;
+
+        $i38 = i7 % 2;
+
+        if $i38 != 0 goto label3;
+
+        $i39 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        if i6 > $i39 goto label3;
+
+        $i40 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        if i7 > $i40 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean)>($z1);
+
+        $r28 = new android.graphics.Rect;
+
+        specialinvoke $r28.<android.graphics.Rect: void <init>(android.graphics.Rect)>(r0);
+
+        r8 = $r28;
+
+        $i42 = virtualinvoke r0.<android.graphics.Rect: int width()>();
+
+        if i6 == $i42 goto label5;
+
+        $i27 = virtualinvoke r0.<android.graphics.Rect: int centerX()>();
+
+        $i28 = i6 / 2;
+
+        $i29 = $i27 - $i28;
+
+        $i30 = staticinvoke <java.lang.Math: int max(int,int)>(0, $i29);
+
+        r8.<android.graphics.Rect: int left> = $i30;
+
+        $i31 = r8.<android.graphics.Rect: int left>;
+
+        $i32 = $i31 + i6;
+
+        r8.<android.graphics.Rect: int right> = $i32;
+
+        $i33 = r8.<android.graphics.Rect: int right>;
+
+        $i34 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        if $i33 <= $i34 goto label5;
+
+        $i35 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        r8.<android.graphics.Rect: int right> = $i35;
+
+        $i36 = r8.<android.graphics.Rect: int right>;
+
+        $i37 = $i36 - i6;
+
+        r8.<android.graphics.Rect: int left> = $i37;
+
+     label5:
+        $i43 = virtualinvoke r0.<android.graphics.Rect: int height()>();
+
+        if i7 == $i43 goto label6;
+
+        $i16 = virtualinvoke r0.<android.graphics.Rect: int centerY()>();
+
+        $i17 = i7 / 2;
+
+        $i18 = $i16 - $i17;
+
+        $i19 = staticinvoke <java.lang.Math: int max(int,int)>(0, $i18);
+
+        r8.<android.graphics.Rect: int top> = $i19;
+
+        $i20 = r8.<android.graphics.Rect: int top>;
+
+        $i21 = $i20 + i7;
+
+        r8.<android.graphics.Rect: int bottom> = $i21;
+
+        $i22 = r8.<android.graphics.Rect: int bottom>;
+
+        $i23 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        if $i22 <= $i23 goto label6;
+
+        $i24 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        r8.<android.graphics.Rect: int bottom> = $i24;
+
+        $i25 = r8.<android.graphics.Rect: int bottom>;
+
+        $i26 = $i25 - i7;
+
+        r8.<android.graphics.Rect: int top> = $i26;
+
+     label6:
+        $r29 = newarray (java.lang.Object)[2];
+
+        $r30 = staticinvoke <androidx.camera.core.impl.utils.TransformUtils: java.lang.String rectToString(android.graphics.Rect)>(r0);
+
+        $r29[0] = $r30;
+
+        $r31 = staticinvoke <androidx.camera.core.impl.utils.TransformUtils: java.lang.String rectToString(android.graphics.Rect)>(r8);
+
+        $r29[1] = $r31;
+
+        $r32 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Adjust cropRect from %s to %s", $r29);
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r32);
+
+        return r8;
+    }
+
+    private static void addBySupportedSize(java.util.Set, int, int, android.util.Size, androidx.camera.video.internal.encoder.VideoEncoderInfo)
+    {
+        java.util.Set r0;
+        int i0, i1, $i2, $i3, $i4, $i5;
+        android.util.Size r1, $r3, $r7;
+        androidx.camera.video.internal.encoder.VideoEncoderInfo r2;
+        java.lang.Integer $r4, $r6, $r8, $r10;
+        java.lang.Comparable $r5, $r9;
+        java.lang.Throwable $r11, $r16, r22, r24;
+        java.lang.StringBuilder $r12, $r13, $r14, $r17, $r18, $r19;
+        java.lang.String $r15, $r20;
+        android.util.Range r21, r23;
+
+        r0 := @parameter0: java.util.Set;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r1 := @parameter3: android.util.Size;
+
+        r2 := @parameter4: androidx.camera.video.internal.encoder.VideoEncoderInfo;
+
+        $i2 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        if i0 > $i2 goto label1;
+
+        $i3 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        if i1 <= $i3 goto label2;
+
+     label1:
+        return;
+
+     label2:
+        r21 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: android.util.Range getSupportedHeightsFor(int)>(i0);
+
+        $r3 = new android.util.Size;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r5 = virtualinvoke r21.<android.util.Range: java.lang.Comparable clamp(java.lang.Comparable)>($r4);
+
+        $r6 = (java.lang.Integer) $r5;
+
+        $i4 = virtualinvoke $r6.<java.lang.Integer: int intValue()>();
+
+        specialinvoke $r3.<android.util.Size: void <init>(int,int)>(i0, $i4);
+
+        interfaceinvoke r0.<java.util.Set: boolean add(java.lang.Object)>($r3);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r16 := @caughtexception;
+
+        r22 = $r16;
+
+        $r17 = new java.lang.StringBuilder;
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("No supportedHeights for width: ");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String,java.lang.Throwable)>("VideoCapture", $r20, r22);
+
+     label5:
+        r23 = interfaceinvoke r2.<androidx.camera.video.internal.encoder.VideoEncoderInfo: android.util.Range getSupportedWidthsFor(int)>(i1);
+
+        $r7 = new android.util.Size;
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r9 = virtualinvoke r23.<android.util.Range: java.lang.Comparable clamp(java.lang.Comparable)>($r8);
+
+        $r10 = (java.lang.Integer) $r9;
+
+        $i5 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        specialinvoke $r7.<android.util.Size: void <init>(int,int)>($i5, i1);
+
+        interfaceinvoke r0.<java.util.Set: boolean add(java.lang.Object)>($r7);
+
+     label6:
+        goto label8;
+
+     label7:
+        $r11 := @caughtexception;
+
+        r24 = $r11;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("No supportedWidths for height: ");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String,java.lang.Throwable)>("VideoCapture", $r15, r24);
+
+     label8:
+        return;
+
+        catch java.lang.IllegalArgumentException from label2 to label3 with label4;
+        catch java.lang.IllegalArgumentException from label5 to label6 with label7;
+    }
+
+    private static boolean isCropNeeded(android.graphics.Rect, android.util.Size)
+    {
+        android.graphics.Rect r0;
+        android.util.Size r1;
+        int $i0, $i1, $i2, $i3;
+        boolean $z0;
+
+        r0 := @parameter0: android.graphics.Rect;
+
+        r1 := @parameter1: android.util.Size;
+
+        $i0 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        $i1 = virtualinvoke r0.<android.graphics.Rect: int width()>();
+
+        if $i0 != $i1 goto label1;
+
+        $i2 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        $i3 = virtualinvoke r0.<android.graphics.Rect: int height()>();
+
+        if $i2 == $i3 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    private static int alignDown(int, int, android.util.Range)
+    {
+        int i0, i1, $i2;
+        android.util.Range r0;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r0 := @parameter2: android.util.Range;
+
+        $i2 = staticinvoke <androidx.camera.video.VideoCapture: int align(boolean,int,int,android.util.Range)>(1, i0, i1, r0);
+
+        return $i2;
+    }
+
+    private static int alignUp(int, int, android.util.Range)
+    {
+        int i0, i1, $i2;
+        android.util.Range r0;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r0 := @parameter2: android.util.Range;
+
+        $i2 = staticinvoke <androidx.camera.video.VideoCapture: int align(boolean,int,int,android.util.Range)>(0, i0, i1, r0);
+
+        return $i2;
+    }
+
+    private static int align(boolean, int, int, android.util.Range)
+    {
+        boolean z0;
+        int i0, i1, i2, $i3, i4, $i5;
+        android.util.Range r0;
+        java.lang.Integer $r1, $r3;
+        java.lang.Comparable $r2;
+
+        z0 := @parameter0: boolean;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r0 := @parameter3: android.util.Range;
+
+        i2 = i0 % i1;
+
+        if i2 != 0 goto label1;
+
+        i4 = i0;
+
+        goto label3;
+
+     label1:
+        if z0 == 0 goto label2;
+
+        i4 = i0 - i2;
+
+        goto label3;
+
+     label2:
+        $i3 = i1 - i2;
+
+        i4 = i0 + $i3;
+
+     label3:
+        $r1 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i4);
+
+        $r2 = virtualinvoke r0.<android.util.Range: java.lang.Comparable clamp(java.lang.Comparable)>($r1);
+
+        $r3 = (java.lang.Integer) $r2;
+
+        $i5 = virtualinvoke $r3.<java.lang.Integer: int intValue()>();
+
+        return $i5;
+    }
+
+    private androidx.camera.video.internal.encoder.VideoEncoderInfo getVideoEncoderInfo(androidx.arch.core.util.Function, androidx.camera.video.VideoCapabilities, androidx.camera.core.impl.Timebase, androidx.camera.video.MediaSpec, android.util.Size, android.util.Range)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.arch.core.util.Function r1;
+        androidx.camera.video.VideoCapabilities r2;
+        androidx.camera.core.impl.Timebase r3;
+        androidx.camera.video.MediaSpec r4;
+        android.util.Size r5;
+        android.util.Range r6;
+        androidx.camera.video.internal.encoder.VideoEncoderInfo $r7, $r8, r9, r10;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.arch.core.util.Function;
+
+        r2 := @parameter1: androidx.camera.video.VideoCapabilities;
+
+        r3 := @parameter2: androidx.camera.core.impl.Timebase;
+
+        r4 := @parameter3: androidx.camera.video.MediaSpec;
+
+        r5 := @parameter4: android.util.Size;
+
+        r6 := @parameter5: android.util.Range;
+
+        $r7 = r0.<androidx.camera.video.VideoCapture: androidx.camera.video.internal.encoder.VideoEncoderInfo mVideoEncoderInfo>;
+
+        if $r7 == null goto label1;
+
+        $r8 = r0.<androidx.camera.video.VideoCapture: androidx.camera.video.internal.encoder.VideoEncoderInfo mVideoEncoderInfo>;
+
+        return $r8;
+
+     label1:
+        r9 = staticinvoke <androidx.camera.video.VideoCapture: androidx.camera.video.internal.encoder.VideoEncoderInfo resolveVideoEncoderInfo(androidx.arch.core.util.Function,androidx.camera.video.VideoCapabilities,androidx.camera.core.impl.Timebase,androidx.camera.video.MediaSpec,android.util.Size,android.util.Range)>(r1, r2, r3, r4, r5, r6);
+
+        if r9 != null goto label2;
+
+        return null;
+
+     label2:
+        r10 = staticinvoke <androidx.camera.video.internal.workaround.VideoEncoderInfoWrapper: androidx.camera.video.internal.encoder.VideoEncoderInfo 'from'(androidx.camera.video.internal.encoder.VideoEncoderInfo,android.util.Size)>(r9, r5);
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.video.internal.encoder.VideoEncoderInfo mVideoEncoderInfo> = r10;
+
+        return r10;
+    }
+
+    private static androidx.camera.video.internal.encoder.VideoEncoderInfo resolveVideoEncoderInfo(androidx.arch.core.util.Function, androidx.camera.video.VideoCapabilities, androidx.camera.core.impl.Timebase, androidx.camera.video.MediaSpec, android.util.Size, android.util.Range)
+    {
+        androidx.arch.core.util.Function r0;
+        androidx.camera.video.VideoCapabilities r1;
+        androidx.camera.core.impl.Timebase r2;
+        androidx.camera.video.MediaSpec r3;
+        android.util.Size r4;
+        android.util.Range r5;
+        androidx.camera.core.impl.CamcorderProfileProxy r6;
+        androidx.camera.video.internal.config.MimeInfo r7;
+        androidx.camera.video.internal.encoder.VideoEncoderConfig r8;
+        androidx.camera.video.VideoSpec $r9;
+        java.lang.Object $r10;
+        androidx.camera.video.internal.encoder.VideoEncoderInfo $r11;
+
+        r0 := @parameter0: androidx.arch.core.util.Function;
+
+        r1 := @parameter1: androidx.camera.video.VideoCapabilities;
+
+        r2 := @parameter2: androidx.camera.core.impl.Timebase;
+
+        r3 := @parameter3: androidx.camera.video.MediaSpec;
+
+        r4 := @parameter4: android.util.Size;
+
+        r5 := @parameter5: android.util.Range;
+
+        r6 = virtualinvoke r1.<androidx.camera.video.VideoCapabilities: androidx.camera.core.impl.CamcorderProfileProxy findHighestSupportedCamcorderProfileFor(android.util.Size)>(r4);
+
+        r7 = staticinvoke <androidx.camera.video.internal.config.VideoConfigUtil: androidx.camera.video.internal.config.MimeInfo resolveVideoMimeInfo(androidx.camera.video.MediaSpec,androidx.camera.core.impl.CamcorderProfileProxy)>(r3, r6);
+
+        $r9 = virtualinvoke r3.<androidx.camera.video.MediaSpec: androidx.camera.video.VideoSpec getVideoSpec()>();
+
+        r8 = staticinvoke <androidx.camera.video.internal.config.VideoConfigUtil: androidx.camera.video.internal.encoder.VideoEncoderConfig resolveVideoEncoderConfig(androidx.camera.video.internal.config.MimeInfo,androidx.camera.core.impl.Timebase,androidx.camera.video.VideoSpec,android.util.Size,android.util.Range)>(r7, r2, $r9, r4, r5);
+
+        $r10 = interfaceinvoke r0.<androidx.arch.core.util.Function: java.lang.Object apply(java.lang.Object)>(r8);
+
+        $r11 = (androidx.camera.video.internal.encoder.VideoEncoderInfo) $r10;
+
+        return $r11;
+    }
+
+    private void setupSurfaceUpdateNotifier(androidx.camera.core.impl.SessionConfig$Builder, boolean)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.SessionConfig$Builder r1;
+        boolean z0, $z1;
+        com.google.common.util.concurrent.ListenableFuture r2, $r3, $r4, $r6;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Resolver $r5;
+        androidx.camera.video.VideoCapture$3 $r7;
+        java.util.concurrent.ScheduledExecutorService $r8;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig$Builder;
+
+        z0 := @parameter1: boolean;
+
+        $r3 = r0.<androidx.camera.video.VideoCapture: com.google.common.util.concurrent.ListenableFuture mSurfaceUpdateFuture>;
+
+        if $r3 == null goto label1;
+
+        $r4 = r0.<androidx.camera.video.VideoCapture: com.google.common.util.concurrent.ListenableFuture mSurfaceUpdateFuture>;
+
+        $z1 = interfaceinvoke $r4.<com.google.common.util.concurrent.ListenableFuture: boolean cancel(boolean)>(0);
+
+        if $z1 == 0 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", "A newer surface update is requested. Previous surface update cancelled.");
+
+     label1:
+        $r5 = dynamicinvoke "attachCompleter" <androidx.concurrent.futures.CallbackToFutureAdapter$Resolver (androidx.camera.video.VideoCapture,androidx.camera.core.impl.SessionConfig$Builder)>(r0, r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.VideoCapture: java.lang.Object lambda$setupSurfaceUpdateNotifier$4(androidx.camera.core.impl.SessionConfig$Builder,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer));
+
+        $r6 = staticinvoke <androidx.concurrent.futures.CallbackToFutureAdapter: com.google.common.util.concurrent.ListenableFuture getFuture(androidx.concurrent.futures.CallbackToFutureAdapter$Resolver)>($r5);
+
+        r0.<androidx.camera.video.VideoCapture: com.google.common.util.concurrent.ListenableFuture mSurfaceUpdateFuture> = $r6;
+
+        r2 = $r6;
+
+        $r7 = new androidx.camera.video.VideoCapture$3;
+
+        specialinvoke $r7.<androidx.camera.video.VideoCapture$3: void <init>(androidx.camera.video.VideoCapture,com.google.common.util.concurrent.ListenableFuture,boolean)>(r0, r2, z0);
+
+        $r8 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.ScheduledExecutorService mainThreadExecutor()>();
+
+        staticinvoke <androidx.camera.core.impl.utils.futures.Futures: void addCallback(com.google.common.util.concurrent.ListenableFuture,androidx.camera.core.impl.utils.futures.FutureCallback,java.util.concurrent.Executor)>(r2, $r7, $r8);
+
+        return;
+    }
+
+    private void updateSupportedResolutionsByQuality(androidx.camera.core.impl.CameraInfoInternal, androidx.camera.core.impl.UseCaseConfig$Builder) throws java.lang.IllegalArgumentException
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.CameraInfoInternal r1;
+        androidx.camera.core.impl.UseCaseConfig$Builder r2;
+        androidx.camera.video.MediaSpec r3;
+        java.util.List r4, r6, $r32, r37;
+        androidx.camera.video.QualitySelector r5;
+        java.util.Iterator r7;
+        androidx.camera.video.Quality r8;
+        boolean $z0, $z1, $z2, $z3, $z5, $z6;
+        androidx.camera.video.VideoSpec $r9;
+        java.lang.StringBuilder $r10, $r11, $r12, $r13, $r14, $r17, $r18, $r19, $r21, $r22, $r23;
+        java.lang.String $r15, $r20, $r24;
+        java.util.ArrayList $r16, r36;
+        androidx.camera.core.impl.MutableConfig $r25;
+        androidx.camera.core.impl.Config$Option $r26;
+        int $i0;
+        java.lang.Integer $r27;
+        android.util.Size[] $r28, $r30;
+        java.lang.Object[] $r29;
+        android.util.Pair $r31;
+        java.lang.Object $r33;
+        android.util.Size $r34;
+        java.lang.IllegalArgumentException $r35;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.core.impl.CameraInfoInternal;
+
+        r2 := @parameter1: androidx.camera.core.impl.UseCaseConfig$Builder;
+
+        r3 = specialinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.video.MediaSpec getMediaSpec()>();
+
+        if r3 == null goto label1;
+
+        $z5 = 1;
+
+        goto label2;
+
+     label1:
+        $z5 = 0;
+
+     label2:
+        staticinvoke <androidx.core.util.Preconditions: void checkArgument(boolean,java.lang.Object)>($z5, "Unable to update target resolution by null MediaSpec.");
+
+        r4 = staticinvoke <androidx.camera.video.QualitySelector: java.util.List getSupportedQualities(androidx.camera.core.CameraInfo)>(r1);
+
+        $z0 = interfaceinvoke r4.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label3;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("VideoCapture", "Can\'t find any supported quality on the device.");
+
+        return;
+
+     label3:
+        $r9 = virtualinvoke r3.<androidx.camera.video.MediaSpec: androidx.camera.video.VideoSpec getVideoSpec()>();
+
+        r5 = virtualinvoke $r9.<androidx.camera.video.VideoSpec: androidx.camera.video.QualitySelector getQualitySelector()>();
+
+        r6 = virtualinvoke r5.<androidx.camera.video.QualitySelector: java.util.List getPrioritizedQualities(androidx.camera.core.CameraInfo)>(r1);
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Found selectedQualities ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r6);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" by ");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r5);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r15);
+
+        $z1 = interfaceinvoke r6.<java.util.List: boolean isEmpty()>();
+
+        if $z1 == 0 goto label4;
+
+        $r35 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r35.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Unable to find supported quality by QualitySelector");
+
+        throw $r35;
+
+     label4:
+        $r16 = new java.util.ArrayList;
+
+        specialinvoke $r16.<java.util.ArrayList: void <init>()>();
+
+        r36 = $r16;
+
+        r7 = interfaceinvoke r6.<java.util.List: java.util.Iterator iterator()>();
+
+     label5:
+        $z2 = interfaceinvoke r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label6;
+
+        $r33 = interfaceinvoke r7.<java.util.Iterator: java.lang.Object next()>();
+
+        r8 = (androidx.camera.video.Quality) $r33;
+
+        $r34 = staticinvoke <androidx.camera.video.QualitySelector: android.util.Size getResolution(androidx.camera.core.CameraInfo,androidx.camera.video.Quality)>(r1, r8);
+
+        interfaceinvoke r36.<java.util.List: boolean add(java.lang.Object)>($r34);
+
+        goto label5;
+
+     label6:
+        $r17 = new java.lang.StringBuilder;
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Set supported resolutions = ");
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r36);
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r20);
+
+        r37 = staticinvoke <androidx.camera.video.VideoCapture: java.util.List filterOutResolutions(java.util.List)>(r36);
+
+        $r21 = new java.lang.StringBuilder;
+
+        specialinvoke $r21.<java.lang.StringBuilder: void <init>()>();
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("supportedResolutions after filter out ");
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r37);
+
+        $r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r24);
+
+        $z3 = interfaceinvoke r6.<java.util.List: boolean isEmpty()>();
+
+        if $z3 != 0 goto label7;
+
+        $z6 = 1;
+
+        goto label8;
+
+     label7:
+        $z6 = 0;
+
+     label8:
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z6, "No supportedResolutions after filter out");
+
+        $r25 = interfaceinvoke r2.<androidx.camera.core.impl.UseCaseConfig$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r26 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_SUPPORTED_RESOLUTIONS>;
+
+        $i0 = virtualinvoke r0.<androidx.camera.video.VideoCapture: int getImageFormat()>();
+
+        $r27 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r28 = newarray (android.util.Size)[0];
+
+        $r29 = interfaceinvoke r37.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r28);
+
+        $r30 = (android.util.Size[]) $r29;
+
+        $r31 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r27, $r30);
+
+        $r32 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>($r31);
+
+        interfaceinvoke $r25.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r26, $r32);
+
+        return;
+    }
+
+    static java.util.List filterOutResolutions(java.util.List)
+    {
+        java.util.List r0;
+        java.util.ArrayList r1, $r4;
+        java.util.Iterator r2;
+        android.util.Size r3;
+        int i0, $i1, i2;
+        boolean $z0;
+        java.lang.Object $r5;
+
+        r0 := @parameter0: java.util.List;
+
+        $r4 = new java.util.ArrayList;
+
+        $i1 = interfaceinvoke r0.<java.util.List: int size()>();
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(int)>($i1);
+
+        r1 = $r4;
+
+        i2 = 2147483647;
+
+        r2 = interfaceinvoke r0.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (android.util.Size) $r5;
+
+        i0 = staticinvoke <androidx.camera.video.VideoCapture: int getArea(android.util.Size)>(r3);
+
+        if i0 >= i2 goto label2;
+
+        i2 = i0;
+
+        virtualinvoke r1.<java.util.ArrayList: boolean add(java.lang.Object)>(r3);
+
+     label2:
+        goto label1;
+
+     label3:
+        return r1;
+    }
+
+    private static int getArea(android.util.Size)
+    {
+        android.util.Size r0;
+        int $i0, $i1, $i2;
+
+        r0 := @parameter0: android.util.Size;
+
+        $i0 = virtualinvoke r0.<android.util.Size: int getWidth()>();
+
+        $i1 = virtualinvoke r0.<android.util.Size: int getHeight()>();
+
+        $i2 = $i0 * $i1;
+
+        return $i2;
+    }
+
+    private static java.lang.Object fetchObservableValue(androidx.camera.core.impl.Observable, java.lang.Object)
+    {
+        androidx.camera.core.impl.Observable r0;
+        java.lang.Object r1, $r4;
+        com.google.common.util.concurrent.ListenableFuture r2;
+        java.lang.Throwable r3, $r5;
+        boolean $z0;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @parameter0: androidx.camera.core.impl.Observable;
+
+        r1 := @parameter1: java.lang.Object;
+
+        r2 = interfaceinvoke r0.<androidx.camera.core.impl.Observable: com.google.common.util.concurrent.ListenableFuture fetchData()>();
+
+        $z0 = interfaceinvoke r2.<com.google.common.util.concurrent.ListenableFuture: boolean isDone()>();
+
+        if $z0 != 0 goto label1;
+
+        return r1;
+
+     label1:
+        $r4 = interfaceinvoke r2.<com.google.common.util.concurrent.ListenableFuture: java.lang.Object get()>();
+
+     label2:
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r3 = $r5;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>(r3);
+
+        throw $r6;
+
+        catch java.util.concurrent.ExecutionException from label1 to label2 with label3;
+        catch java.lang.InterruptedException from label1 to label2 with label3;
+    }
+
+    void setSourceState(androidx.camera.video.VideoOutput$SourceState)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.video.VideoOutput$SourceState r1, r2;
+        androidx.camera.video.VideoOutput $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.video.VideoOutput$SourceState;
+
+        r2 = r0.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput$SourceState mSourceState>;
+
+        if r1 == r2 goto label1;
+
+        r0.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput$SourceState mSourceState> = r1;
+
+        $r3 = virtualinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput getOutput()>();
+
+        interfaceinvoke $r3.<androidx.camera.video.VideoOutput: void onSourceStateChanged(androidx.camera.video.VideoOutput$SourceState)>(r1);
+
+     label1:
+        return;
+    }
+
+    private java.lang.Object lambda$setupSurfaceUpdateNotifier$4(androidx.camera.core.impl.SessionConfig$Builder, androidx.concurrent.futures.CallbackToFutureAdapter$Completer) throws java.lang.Exception
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.SessionConfig$Builder r1;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r2;
+        java.util.concurrent.atomic.AtomicBoolean r3, $r7;
+        androidx.camera.video.VideoCapture$2 r4, $r8;
+        int $i0, $i1;
+        java.lang.Integer $r5, $r13;
+        java.lang.Runnable $r9;
+        java.util.concurrent.Executor $r10;
+        java.lang.Object[] $r12;
+        java.lang.String $r14;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig$Builder;
+
+        r2 := @parameter1: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        $i0 = virtualinvoke r2.<java.lang.Object: int hashCode()>();
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        virtualinvoke r1.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder addTag(java.lang.String,java.lang.Object)>("androidx.camera.video.VideoCapture.streamUpdate", $r5);
+
+        $r7 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r7.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r3 = $r7;
+
+        $r8 = new androidx.camera.video.VideoCapture$2;
+
+        specialinvoke $r8.<androidx.camera.video.VideoCapture$2: void <init>(androidx.camera.video.VideoCapture,java.util.concurrent.atomic.AtomicBoolean,androidx.concurrent.futures.CallbackToFutureAdapter$Completer,androidx.camera.core.impl.SessionConfig$Builder)>(r0, r3, r2, r1);
+
+        r4 = $r8;
+
+        $r9 = dynamicinvoke "run" <java.lang.Runnable (java.util.concurrent.atomic.AtomicBoolean,androidx.camera.core.impl.SessionConfig$Builder,androidx.camera.core.impl.CameraCaptureCallback)>(r3, r1, r4) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.video.VideoCapture: void lambda$setupSurfaceUpdateNotifier$3(java.util.concurrent.atomic.AtomicBoolean,androidx.camera.core.impl.SessionConfig$Builder,androidx.camera.core.impl.CameraCaptureCallback)>, methodtype: void __METHODTYPE__());
+
+        $r10 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.Executor directExecutor()>();
+
+        virtualinvoke r2.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: void addCancellationListener(java.lang.Runnable,java.util.concurrent.Executor)>($r9, $r10);
+
+        virtualinvoke r1.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig$Builder addRepeatingCameraCaptureCallback(androidx.camera.core.impl.CameraCaptureCallback)>(r4);
+
+        $r12 = newarray (java.lang.Object)[2];
+
+        $r12[0] = "androidx.camera.video.VideoCapture.streamUpdate";
+
+        $i1 = virtualinvoke r2.<java.lang.Object: int hashCode()>();
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r12[1] = $r13;
+
+        $r14 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%s[0x%x]", $r12);
+
+        return $r14;
+    }
+
+    private static void lambda$setupSurfaceUpdateNotifier$3(java.util.concurrent.atomic.AtomicBoolean, androidx.camera.core.impl.SessionConfig$Builder, androidx.camera.core.impl.CameraCaptureCallback)
+    {
+        java.util.concurrent.atomic.AtomicBoolean r0;
+        androidx.camera.core.impl.SessionConfig$Builder r1;
+        androidx.camera.core.impl.CameraCaptureCallback r2;
+        boolean $z0;
+
+        r0 := @parameter0: java.util.concurrent.atomic.AtomicBoolean;
+
+        r1 := @parameter1: androidx.camera.core.impl.SessionConfig$Builder;
+
+        r2 := @parameter2: androidx.camera.core.impl.CameraCaptureCallback;
+
+        $z0 = staticinvoke <androidx.camera.core.impl.utils.Threads: boolean isMainThread()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z0, "Surface update cancellation should only occur on main thread.");
+
+        virtualinvoke r0.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(1);
+
+        virtualinvoke r1.<androidx.camera.core.impl.SessionConfig$Builder: boolean removeCameraCaptureCallback(androidx.camera.core.impl.CameraCaptureCallback)>(r2);
+
+        return;
+    }
+
+    private static int lambda$adjustCropRectToValidSize$2(android.graphics.Rect, android.util.Size, android.util.Size)
+    {
+        android.graphics.Rect r0;
+        android.util.Size r1, r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18;
+
+        r0 := @parameter0: android.graphics.Rect;
+
+        r1 := @parameter1: android.util.Size;
+
+        r2 := @parameter2: android.util.Size;
+
+        $i0 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        $i1 = virtualinvoke r0.<android.graphics.Rect: int width()>();
+
+        $i2 = $i0 - $i1;
+
+        $i3 = staticinvoke <java.lang.Math: int abs(int)>($i2);
+
+        $i4 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        $i5 = virtualinvoke r0.<android.graphics.Rect: int height()>();
+
+        $i6 = $i4 - $i5;
+
+        $i7 = staticinvoke <java.lang.Math: int abs(int)>($i6);
+
+        $i8 = $i3 + $i7;
+
+        $i9 = virtualinvoke r2.<android.util.Size: int getWidth()>();
+
+        $i10 = virtualinvoke r0.<android.graphics.Rect: int width()>();
+
+        $i11 = $i9 - $i10;
+
+        $i12 = staticinvoke <java.lang.Math: int abs(int)>($i11);
+
+        $i13 = virtualinvoke r2.<android.util.Size: int getHeight()>();
+
+        $i14 = virtualinvoke r0.<android.graphics.Rect: int height()>();
+
+        $i15 = $i13 - $i14;
+
+        $i16 = staticinvoke <java.lang.Math: int abs(int)>($i15);
+
+        $i17 = $i12 + $i16;
+
+        $i18 = $i8 - $i17;
+
+        return $i18;
+    }
+
+    private void lambda$createPipeline$1(java.lang.String, androidx.camera.video.impl.VideoCaptureConfig, android.util.Size, androidx.camera.core.impl.SessionConfig, androidx.camera.core.impl.SessionConfig$SessionError)
+    {
+        androidx.camera.video.VideoCapture r0;
+        java.lang.String r1;
+        androidx.camera.video.impl.VideoCaptureConfig r2;
+        android.util.Size r3;
+        androidx.camera.core.impl.SessionConfig r4;
+        androidx.camera.core.impl.SessionConfig$SessionError r5;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: androidx.camera.video.impl.VideoCaptureConfig;
+
+        r3 := @parameter2: android.util.Size;
+
+        r4 := @parameter3: androidx.camera.core.impl.SessionConfig;
+
+        r5 := @parameter4: androidx.camera.core.impl.SessionConfig$SessionError;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void resetPipeline(java.lang.String,androidx.camera.video.impl.VideoCaptureConfig,android.util.Size)>(r1, r2, r3);
+
+        return;
+    }
+
+    private androidx.camera.video.internal.encoder.VideoEncoderInfo lambda$createPipeline$0(androidx.camera.video.impl.VideoCaptureConfig, androidx.camera.core.impl.CameraInternal, androidx.camera.core.impl.Timebase, androidx.camera.video.MediaSpec, android.util.Size, android.util.Range)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.video.impl.VideoCaptureConfig r1;
+        androidx.camera.core.impl.CameraInternal r2;
+        androidx.camera.core.impl.Timebase r3;
+        androidx.camera.video.MediaSpec r4;
+        android.util.Size r5;
+        android.util.Range r6;
+        androidx.arch.core.util.Function $r7;
+        androidx.camera.core.CameraInfo $r8;
+        androidx.camera.video.VideoCapabilities $r9;
+        androidx.camera.video.internal.encoder.VideoEncoderInfo $r10;
+
+        r0 := @this: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter0: androidx.camera.video.impl.VideoCaptureConfig;
+
+        r2 := @parameter1: androidx.camera.core.impl.CameraInternal;
+
+        r3 := @parameter2: androidx.camera.core.impl.Timebase;
+
+        r4 := @parameter3: androidx.camera.video.MediaSpec;
+
+        r5 := @parameter4: android.util.Size;
+
+        r6 := @parameter5: android.util.Range;
+
+        $r7 = virtualinvoke r1.<androidx.camera.video.impl.VideoCaptureConfig: androidx.arch.core.util.Function getVideoEncoderInfoFinder()>();
+
+        $r8 = interfaceinvoke r2.<androidx.camera.core.impl.CameraInternal: androidx.camera.core.CameraInfo getCameraInfo()>();
+
+        $r9 = staticinvoke <androidx.camera.video.VideoCapabilities: androidx.camera.video.VideoCapabilities 'from'(androidx.camera.core.CameraInfo)>($r8);
+
+        $r10 = specialinvoke r0.<androidx.camera.video.VideoCapture: androidx.camera.video.internal.encoder.VideoEncoderInfo getVideoEncoderInfo(androidx.arch.core.util.Function,androidx.camera.video.VideoCapabilities,androidx.camera.core.impl.Timebase,androidx.camera.video.MediaSpec,android.util.Size,android.util.Range)>($r7, $r9, r3, r4, r5, r6);
+
+        return $r10;
+    }
+
+    static java.lang.String access$000(androidx.camera.video.VideoCapture)
+    {
+        androidx.camera.video.VideoCapture r0;
+        java.lang.String $r1;
+
+        r0 := @parameter0: androidx.camera.video.VideoCapture;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture: java.lang.String getCameraId()>();
+
+        return $r1;
+    }
+
+    static void access$100(androidx.camera.video.VideoCapture, androidx.camera.core.impl.SessionConfig)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.SessionConfig r1;
+
+        r0 := @parameter0: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter1: androidx.camera.core.impl.SessionConfig;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void updateSessionConfig(androidx.camera.core.impl.SessionConfig)>(r1);
+
+        return;
+    }
+
+    static void access$200(androidx.camera.video.VideoCapture)
+    {
+        androidx.camera.video.VideoCapture r0;
+
+        r0 := @parameter0: androidx.camera.video.VideoCapture;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void notifyReset()>();
+
+        return;
+    }
+
+    static void access$300(androidx.camera.video.VideoCapture, androidx.camera.core.impl.SessionConfig)
+    {
+        androidx.camera.video.VideoCapture r0;
+        androidx.camera.core.impl.SessionConfig r1;
+
+        r0 := @parameter0: androidx.camera.video.VideoCapture;
+
+        r1 := @parameter1: androidx.camera.core.impl.SessionConfig;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void updateSessionConfig(androidx.camera.core.impl.SessionConfig)>(r1);
+
+        return;
+    }
+
+    static void access$400(androidx.camera.video.VideoCapture)
+    {
+        androidx.camera.video.VideoCapture r0;
+
+        r0 := @parameter0: androidx.camera.video.VideoCapture;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture: void notifyUpdated()>();
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.video.VideoCapture$Defaults $r0;
+        androidx.camera.core.impl.Quirk $r1, $r2, $r3;
+        boolean $z0, $z1, $z2;
+
+        $r0 = new androidx.camera.video.VideoCapture$Defaults;
+
+        specialinvoke $r0.<androidx.camera.video.VideoCapture$Defaults: void <init>()>();
+
+        <androidx.camera.video.VideoCapture: androidx.camera.video.VideoCapture$Defaults DEFAULT_CONFIG> = $r0;
+
+        $r1 = staticinvoke <androidx.camera.video.internal.compat.quirk.DeviceQuirks: androidx.camera.core.impl.Quirk get(java.lang.Class)>(class "Landroidx/camera/video/internal/compat/quirk/PreviewStretchWhenVideoCaptureIsBoundQuirk;");
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        <androidx.camera.video.VideoCapture: boolean HAS_PREVIEW_STRETCH_QUIRK> = $z0;
+
+        $r2 = staticinvoke <androidx.camera.video.internal.compat.quirk.DeviceQuirks: androidx.camera.core.impl.Quirk get(java.lang.Class)>(class "Landroidx/camera/video/internal/compat/quirk/PreviewDelayWhenVideoCaptureIsBoundQuirk;");
+
+        if $r2 == null goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        <androidx.camera.video.VideoCapture: boolean HAS_PREVIEW_DELAY_QUIRK> = $z1;
+
+        $r3 = staticinvoke <androidx.camera.video.internal.compat.quirk.DeviceQuirks: androidx.camera.core.impl.Quirk get(java.lang.Class)>(class "Landroidx/camera/video/internal/compat/quirk/ImageCaptureFailedWhenVideoCaptureIsBoundQuirk;");
+
+        if $r3 == null goto label5;
+
+        $z2 = 1;
+
+        goto label6;
+
+     label5:
+        $z2 = 0;
+
+     label6:
+        <androidx.camera.video.VideoCapture: boolean HAS_IMAGE_CAPTURE_QUIRK> = $z2;
+
+        return;
+    }
+
+androidx.camera.video.VideoCapture$1
+<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>
+    void <init>(androidx.camera.video.VideoCapture)
+    {
+        androidx.camera.video.VideoCapture$1 r0;
+        androidx.camera.video.VideoCapture r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$1;
+
+        r1 := @parameter0: androidx.camera.video.VideoCapture;
+
+        r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onNewData(androidx.camera.video.StreamInfo)
+    {
+        androidx.camera.video.VideoCapture$1 r0;
+        androidx.camera.video.StreamInfo r1, r2, $r9;
+        androidx.camera.video.VideoCapture $r3, $r8, $r14, $r15, $r20, $r22, $r23, $r25, $r27, $r28, $r30, $r31, $r33, $r35, $r38, $r39, $r41, $r43;
+        androidx.camera.video.VideoOutput$SourceState $r4, $r5;
+        java.lang.StringBuilder $r6, $r7, $r10, $r11, $r12;
+        java.lang.String $r13, $r40;
+        java.util.Set $r16, $r36;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        java.lang.Integer $r17, $r37;
+        boolean $z0, $z1;
+        androidx.camera.video.StreamInfo$StreamState $r18, $r19;
+        androidx.camera.core.impl.SessionConfig$Builder $r21, $r24, $r29, $r32;
+        androidx.camera.core.impl.SessionConfig $r26, $r34;
+        androidx.camera.core.impl.UseCaseConfig $r42;
+        androidx.camera.video.impl.VideoCaptureConfig $r44;
+        android.util.Size $r45, $r47;
+        java.lang.Object $r46;
+        java.lang.IllegalArgumentException $r48;
+
+        r0 := @this: androidx.camera.video.VideoCapture$1;
+
+        r1 := @parameter0: androidx.camera.video.StreamInfo;
+
+        if r1 != null goto label1;
+
+        $r48 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r48.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("StreamInfo can\'t be null");
+
+        throw $r48;
+
+     label1:
+        $r3 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r5 = $r3.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput$SourceState mSourceState>;
+
+        $r4 = <androidx.camera.video.VideoOutput$SourceState: androidx.camera.video.VideoOutput$SourceState INACTIVE>;
+
+        if $r5 != $r4 goto label2;
+
+        return;
+
+     label2:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Stream info update: old: ");
+
+        $r8 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r9 = $r8.<androidx.camera.video.VideoCapture: androidx.camera.video.StreamInfo mStreamInfo>;
+
+        $r10 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r9);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" new: ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("VideoCapture", $r13);
+
+        $r14 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        r2 = $r14.<androidx.camera.video.VideoCapture: androidx.camera.video.StreamInfo mStreamInfo>;
+
+        $r15 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r15.<androidx.camera.video.VideoCapture: androidx.camera.video.StreamInfo mStreamInfo> = r1;
+
+        $r16 = <androidx.camera.video.StreamInfo: java.util.Set NON_SURFACE_STREAM_ID>;
+
+        $i0 = virtualinvoke r2.<androidx.camera.video.StreamInfo: int getId()>();
+
+        $r17 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $z0 = interfaceinvoke $r16.<java.util.Set: boolean contains(java.lang.Object)>($r17);
+
+        if $z0 != 0 goto label3;
+
+        $r36 = <androidx.camera.video.StreamInfo: java.util.Set NON_SURFACE_STREAM_ID>;
+
+        $i4 = virtualinvoke r1.<androidx.camera.video.StreamInfo: int getId()>();
+
+        $r37 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i4);
+
+        $z1 = interfaceinvoke $r36.<java.util.Set: boolean contains(java.lang.Object)>($r37);
+
+        if $z1 != 0 goto label3;
+
+        $i5 = virtualinvoke r2.<androidx.camera.video.StreamInfo: int getId()>();
+
+        $i6 = virtualinvoke r1.<androidx.camera.video.StreamInfo: int getId()>();
+
+        if $i5 == $i6 goto label3;
+
+        $r39 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r38 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r40 = staticinvoke <androidx.camera.video.VideoCapture: java.lang.String access$000(androidx.camera.video.VideoCapture)>($r38);
+
+        $r41 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r42 = virtualinvoke $r41.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.UseCaseConfig getCurrentConfig()>();
+
+        $r44 = (androidx.camera.video.impl.VideoCaptureConfig) $r42;
+
+        $r43 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r45 = virtualinvoke $r43.<androidx.camera.video.VideoCapture: android.util.Size getAttachedSurfaceResolution()>();
+
+        $r46 = staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r45);
+
+        $r47 = (android.util.Size) $r46;
+
+        virtualinvoke $r39.<androidx.camera.video.VideoCapture: void resetPipeline(java.lang.String,androidx.camera.video.impl.VideoCaptureConfig,android.util.Size)>($r40, $r44, $r47);
+
+        goto label7;
+
+     label3:
+        $i7 = virtualinvoke r2.<androidx.camera.video.StreamInfo: int getId()>();
+
+        if $i7 == -1 goto label4;
+
+        $i3 = virtualinvoke r1.<androidx.camera.video.StreamInfo: int getId()>();
+
+        if $i3 == -1 goto label5;
+
+     label4:
+        $i1 = virtualinvoke r2.<androidx.camera.video.StreamInfo: int getId()>();
+
+        if $i1 != -1 goto label6;
+
+        $i2 = virtualinvoke r1.<androidx.camera.video.StreamInfo: int getId()>();
+
+        if $i2 == -1 goto label6;
+
+     label5:
+        $r30 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r28 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r29 = $r28.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder>;
+
+        virtualinvoke $r30.<androidx.camera.video.VideoCapture: void applyStreamInfoToSessionConfigBuilder(androidx.camera.core.impl.SessionConfig$Builder,androidx.camera.video.StreamInfo)>($r29, r1);
+
+        $r33 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r31 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r32 = $r31.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder>;
+
+        $r34 = virtualinvoke $r32.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig build()>();
+
+        staticinvoke <androidx.camera.video.VideoCapture: void access$100(androidx.camera.video.VideoCapture,androidx.camera.core.impl.SessionConfig)>($r33, $r34);
+
+        $r35 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        staticinvoke <androidx.camera.video.VideoCapture: void access$200(androidx.camera.video.VideoCapture)>($r35);
+
+        goto label7;
+
+     label6:
+        $r18 = virtualinvoke r2.<androidx.camera.video.StreamInfo: androidx.camera.video.StreamInfo$StreamState getStreamState()>();
+
+        $r19 = virtualinvoke r1.<androidx.camera.video.StreamInfo: androidx.camera.video.StreamInfo$StreamState getStreamState()>();
+
+        if $r18 == $r19 goto label7;
+
+        $r22 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r20 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r21 = $r20.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder>;
+
+        virtualinvoke $r22.<androidx.camera.video.VideoCapture: void applyStreamInfoToSessionConfigBuilder(androidx.camera.core.impl.SessionConfig$Builder,androidx.camera.video.StreamInfo)>($r21, r1);
+
+        $r25 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r23 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        $r24 = $r23.<androidx.camera.video.VideoCapture: androidx.camera.core.impl.SessionConfig$Builder mSessionConfigBuilder>;
+
+        $r26 = virtualinvoke $r24.<androidx.camera.core.impl.SessionConfig$Builder: androidx.camera.core.impl.SessionConfig build()>();
+
+        staticinvoke <androidx.camera.video.VideoCapture: void access$300(androidx.camera.video.VideoCapture,androidx.camera.core.impl.SessionConfig)>($r25, $r26);
+
+        $r27 = r0.<androidx.camera.video.VideoCapture$1: androidx.camera.video.VideoCapture this$0>;
+
+        staticinvoke <androidx.camera.video.VideoCapture: void access$400(androidx.camera.video.VideoCapture)>($r27);
+
+     label7:
+        return;
+    }
+
+    public void onError(java.lang.Throwable)
+    {
+        androidx.camera.video.VideoCapture$1 r0;
+        java.lang.Throwable r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$1;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String,java.lang.Throwable)>("VideoCapture", "Receive onError from StreamState observer", r1);
+
+        return;
+    }
+
+    public volatile void onNewData(java.lang.Object)
+    {
+        androidx.camera.video.VideoCapture$1 r0;
+        java.lang.Object r1;
+        androidx.camera.video.StreamInfo $r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (androidx.camera.video.StreamInfo) r1;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture$1: void onNewData(androidx.camera.video.StreamInfo)>($r2);
+
+        return;
+    }
+
+androidx.camera.video.VideoCapture$2
+<androidx.camera.video.VideoCapture$2: java.util.concurrent.atomic.AtomicBoolean val$surfaceUpdateComplete>
+<androidx.camera.video.VideoCapture$2: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer>
+<androidx.camera.video.VideoCapture$2: androidx.camera.core.impl.SessionConfig$Builder val$sessionConfigBuilder>
+<androidx.camera.video.VideoCapture$2: androidx.camera.video.VideoCapture this$0>
+    void <init>(androidx.camera.video.VideoCapture, java.util.concurrent.atomic.AtomicBoolean, androidx.concurrent.futures.CallbackToFutureAdapter$Completer, androidx.camera.core.impl.SessionConfig$Builder)
+    {
+        androidx.camera.video.VideoCapture$2 r0;
+        androidx.camera.video.VideoCapture r1;
+        java.util.concurrent.atomic.AtomicBoolean r2;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r3;
+        androidx.camera.core.impl.SessionConfig$Builder r4;
+
+        r0 := @this: androidx.camera.video.VideoCapture$2;
+
+        r1 := @parameter0: androidx.camera.video.VideoCapture;
+
+        r2 := @parameter1: java.util.concurrent.atomic.AtomicBoolean;
+
+        r3 := @parameter2: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        r4 := @parameter3: androidx.camera.core.impl.SessionConfig$Builder;
+
+        r0.<androidx.camera.video.VideoCapture$2: androidx.camera.video.VideoCapture this$0> = r1;
+
+        r0.<androidx.camera.video.VideoCapture$2: java.util.concurrent.atomic.AtomicBoolean val$surfaceUpdateComplete> = r2;
+
+        r0.<androidx.camera.video.VideoCapture$2: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer> = r3;
+
+        r0.<androidx.camera.video.VideoCapture$2: androidx.camera.core.impl.SessionConfig$Builder val$sessionConfigBuilder> = r4;
+
+        specialinvoke r0.<androidx.camera.core.impl.CameraCaptureCallback: void <init>()>();
+
+        return;
+    }
+
+    public void onCaptureCompleted(androidx.camera.core.impl.CameraCaptureResult)
+    {
+        androidx.camera.video.VideoCapture$2 r0;
+        androidx.camera.core.impl.CameraCaptureResult r1;
+        java.lang.Object r2;
+        java.util.concurrent.atomic.AtomicBoolean $r3, $r8;
+        boolean $z0, $z1, $z2;
+        androidx.camera.core.impl.TagBundle $r4;
+        java.lang.Integer $r5;
+        int $i0, $i1;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer $r6, $r7;
+        java.util.concurrent.ScheduledExecutorService $r9;
+        androidx.camera.core.impl.SessionConfig$Builder $r10;
+        java.lang.Runnable $r11;
+
+        r0 := @this: androidx.camera.video.VideoCapture$2;
+
+        r1 := @parameter0: androidx.camera.core.impl.CameraCaptureResult;
+
+        specialinvoke r0.<androidx.camera.core.impl.CameraCaptureCallback: void onCaptureCompleted(androidx.camera.core.impl.CameraCaptureResult)>(r1);
+
+        $r3 = r0.<androidx.camera.video.VideoCapture$2: java.util.concurrent.atomic.AtomicBoolean val$surfaceUpdateComplete>;
+
+        $z0 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z0 != 0 goto label1;
+
+        $r4 = interfaceinvoke r1.<androidx.camera.core.impl.CameraCaptureResult: androidx.camera.core.impl.TagBundle getTagBundle()>();
+
+        r2 = virtualinvoke $r4.<androidx.camera.core.impl.TagBundle: java.lang.Object getTag(java.lang.String)>("androidx.camera.video.VideoCapture.streamUpdate");
+
+        if r2 == null goto label1;
+
+        $r5 = (java.lang.Integer) r2;
+
+        $i0 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+        $r6 = r0.<androidx.camera.video.VideoCapture$2: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer>;
+
+        $i1 = virtualinvoke $r6.<java.lang.Object: int hashCode()>();
+
+        if $i0 != $i1 goto label1;
+
+        $r7 = r0.<androidx.camera.video.VideoCapture$2: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer>;
+
+        $z1 = virtualinvoke $r7.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+        if $z1 == 0 goto label1;
+
+        $r8 = r0.<androidx.camera.video.VideoCapture$2: java.util.concurrent.atomic.AtomicBoolean val$surfaceUpdateComplete>;
+
+        $z2 = virtualinvoke $r8.<java.util.concurrent.atomic.AtomicBoolean: boolean getAndSet(boolean)>(1);
+
+        if $z2 != 0 goto label1;
+
+        $r9 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.ScheduledExecutorService mainThreadExecutor()>();
+
+        $r10 = r0.<androidx.camera.video.VideoCapture$2: androidx.camera.core.impl.SessionConfig$Builder val$sessionConfigBuilder>;
+
+        $r11 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.video.VideoCapture$2,androidx.camera.core.impl.SessionConfig$Builder)>(r0, $r10) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.video.VideoCapture$2: void lambda$onCaptureCompleted$0(androidx.camera.core.impl.SessionConfig$Builder)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r9.<java.util.concurrent.ScheduledExecutorService: void execute(java.lang.Runnable)>($r11);
+
+     label1:
+        return;
+    }
+
+    private void lambda$onCaptureCompleted$0(androidx.camera.core.impl.SessionConfig$Builder)
+    {
+        androidx.camera.video.VideoCapture$2 r0;
+        androidx.camera.core.impl.SessionConfig$Builder r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$2;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig$Builder;
+
+        virtualinvoke r1.<androidx.camera.core.impl.SessionConfig$Builder: boolean removeCameraCaptureCallback(androidx.camera.core.impl.CameraCaptureCallback)>(r0);
+
+        return;
+    }
+
+androidx.camera.video.VideoCapture$3
+<androidx.camera.video.VideoCapture$3: com.google.common.util.concurrent.ListenableFuture val$surfaceUpdateFuture>
+<androidx.camera.video.VideoCapture$3: boolean val$isStreamActive>
+<androidx.camera.video.VideoCapture$3: androidx.camera.video.VideoCapture this$0>
+    void <init>(androidx.camera.video.VideoCapture, com.google.common.util.concurrent.ListenableFuture, boolean)
+    {
+        androidx.camera.video.VideoCapture$3 r0;
+        androidx.camera.video.VideoCapture r1;
+        com.google.common.util.concurrent.ListenableFuture r2;
+        boolean z0;
+
+        r0 := @this: androidx.camera.video.VideoCapture$3;
+
+        r1 := @parameter0: androidx.camera.video.VideoCapture;
+
+        r2 := @parameter1: com.google.common.util.concurrent.ListenableFuture;
+
+        z0 := @parameter2: boolean;
+
+        r0.<androidx.camera.video.VideoCapture$3: androidx.camera.video.VideoCapture this$0> = r1;
+
+        r0.<androidx.camera.video.VideoCapture$3: com.google.common.util.concurrent.ListenableFuture val$surfaceUpdateFuture> = r2;
+
+        r0.<androidx.camera.video.VideoCapture$3: boolean val$isStreamActive> = z0;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onSuccess(java.lang.Void)
+    {
+        androidx.camera.video.VideoCapture$3 r0;
+        java.lang.Void r1;
+        androidx.camera.video.VideoCapture $r2, $r5, $r8;
+        com.google.common.util.concurrent.ListenableFuture $r3, $r4;
+        androidx.camera.video.VideoOutput$SourceState $r6, $r7, $r9;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.video.VideoCapture$3;
+
+        r1 := @parameter0: java.lang.Void;
+
+        $r4 = r0.<androidx.camera.video.VideoCapture$3: com.google.common.util.concurrent.ListenableFuture val$surfaceUpdateFuture>;
+
+        $r2 = r0.<androidx.camera.video.VideoCapture$3: androidx.camera.video.VideoCapture this$0>;
+
+        $r3 = $r2.<androidx.camera.video.VideoCapture: com.google.common.util.concurrent.ListenableFuture mSurfaceUpdateFuture>;
+
+        if $r4 != $r3 goto label3;
+
+        $r5 = r0.<androidx.camera.video.VideoCapture$3: androidx.camera.video.VideoCapture this$0>;
+
+        $r7 = $r5.<androidx.camera.video.VideoCapture: androidx.camera.video.VideoOutput$SourceState mSourceState>;
+
+        $r6 = <androidx.camera.video.VideoOutput$SourceState: androidx.camera.video.VideoOutput$SourceState INACTIVE>;
+
+        if $r7 == $r6 goto label3;
+
+        $r8 = r0.<androidx.camera.video.VideoCapture$3: androidx.camera.video.VideoCapture this$0>;
+
+        $z0 = r0.<androidx.camera.video.VideoCapture$3: boolean val$isStreamActive>;
+
+        if $z0 == 0 goto label1;
+
+        $r9 = <androidx.camera.video.VideoOutput$SourceState: androidx.camera.video.VideoOutput$SourceState ACTIVE_STREAMING>;
+
+        goto label2;
+
+     label1:
+        $r9 = <androidx.camera.video.VideoOutput$SourceState: androidx.camera.video.VideoOutput$SourceState ACTIVE_NON_STREAMING>;
+
+     label2:
+        virtualinvoke $r8.<androidx.camera.video.VideoCapture: void setSourceState(androidx.camera.video.VideoOutput$SourceState)>($r9);
+
+     label3:
+        return;
+    }
+
+    public void onFailure(java.lang.Throwable)
+    {
+        androidx.camera.video.VideoCapture$3 r0;
+        java.lang.Throwable r1;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.video.VideoCapture$3;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = r1 instanceof java.util.concurrent.CancellationException;
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("VideoCapture", "Surface update completed with unexpected exception", r1);
+
+     label1:
+        return;
+    }
+
+    public volatile void onSuccess(java.lang.Object)
+    {
+        androidx.camera.video.VideoCapture$3 r0;
+        java.lang.Object r1;
+        java.lang.Void $r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture$3;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Void) r1;
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture$3: void onSuccess(java.lang.Void)>($r2);
+
+        return;
+    }
+
+androidx.camera.video.VideoCapture$Builder
+<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableOptionsBundle mMutableConfig>
+    void <init>(androidx.camera.video.VideoOutput)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.video.VideoOutput r1;
+        androidx.camera.core.impl.MutableOptionsBundle $r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.video.VideoOutput;
+
+        $r2 = staticinvoke <androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableOptionsBundle createInitialBundle(androidx.camera.video.VideoOutput)>(r1);
+
+        specialinvoke r0.<androidx.camera.video.VideoCapture$Builder: void <init>(androidx.camera.core.impl.MutableOptionsBundle)>($r2);
+
+        return;
+    }
+
+    private void <init>(androidx.camera.core.impl.MutableOptionsBundle)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.core.impl.MutableOptionsBundle r1, $r4;
+        java.lang.Class r2, $r7;
+        androidx.camera.core.impl.Config$Option $r3, $r5;
+        boolean $z0, $z1;
+        java.lang.Object $r6;
+        java.lang.IllegalArgumentException $r9, $r16;
+        java.lang.StringBuilder $r10, $r11, $r12, $r13, $r14;
+        java.lang.String $r15;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.MutableOptionsBundle;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableOptionsBundle mMutableConfig> = r1;
+
+        $r4 = r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableOptionsBundle mMutableConfig>;
+
+        $r3 = <androidx.camera.video.impl.VideoCaptureConfig: androidx.camera.core.impl.Config$Option OPTION_VIDEO_OUTPUT>;
+
+        $z0 = virtualinvoke $r4.<androidx.camera.core.impl.MutableOptionsBundle: boolean containsOption(androidx.camera.core.impl.Config$Option)>($r3);
+
+        if $z0 != 0 goto label1;
+
+        $r16 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r16.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("VideoOutput is required");
+
+        throw $r16;
+
+     label1:
+        $r5 = <androidx.camera.core.internal.TargetConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_CLASS>;
+
+        $r6 = virtualinvoke r1.<androidx.camera.core.impl.MutableOptionsBundle: java.lang.Object retrieveOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r5, null);
+
+        r2 = (java.lang.Class) $r6;
+
+        if r2 == null goto label2;
+
+        $z1 = virtualinvoke r2.<java.lang.Object: boolean equals(java.lang.Object)>(class "Landroidx/camera/video/VideoCapture;");
+
+        if $z1 != 0 goto label2;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid target class configuration for ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": ");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r15);
+
+        throw $r9;
+
+     label2:
+        $r7 = (java.lang.Class) class "Landroidx/camera/video/VideoCapture;";
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setTargetClass(java.lang.Class)>($r7);
+
+        return;
+    }
+
+    static androidx.camera.video.VideoCapture$Builder fromConfig(androidx.camera.core.impl.Config)
+    {
+        androidx.camera.core.impl.Config r0;
+        androidx.camera.video.VideoCapture$Builder $r1;
+        androidx.camera.core.impl.MutableOptionsBundle $r2;
+
+        r0 := @parameter0: androidx.camera.core.impl.Config;
+
+        $r1 = new androidx.camera.video.VideoCapture$Builder;
+
+        $r2 = staticinvoke <androidx.camera.core.impl.MutableOptionsBundle: androidx.camera.core.impl.MutableOptionsBundle 'from'(androidx.camera.core.impl.Config)>(r0);
+
+        specialinvoke $r1.<androidx.camera.video.VideoCapture$Builder: void <init>(androidx.camera.core.impl.MutableOptionsBundle)>($r2);
+
+        return $r1;
+    }
+
+    public static androidx.camera.video.VideoCapture$Builder fromConfig(androidx.camera.video.impl.VideoCaptureConfig)
+    {
+        androidx.camera.video.impl.VideoCaptureConfig r0;
+        androidx.camera.core.impl.MutableOptionsBundle $r2;
+        androidx.camera.video.VideoCapture$Builder r3;
+        androidx.camera.core.impl.Config r4;
+
+        r0 := @parameter0: androidx.camera.video.impl.VideoCaptureConfig;
+
+        r3 = new androidx.camera.video.VideoCapture$Builder;
+
+        r4 = (androidx.camera.core.impl.Config) r0;
+
+        $r2 = staticinvoke <androidx.camera.core.impl.MutableOptionsBundle: androidx.camera.core.impl.MutableOptionsBundle 'from'(androidx.camera.core.impl.Config)>(r4);
+
+        specialinvoke r3.<androidx.camera.video.VideoCapture$Builder: void <init>(androidx.camera.core.impl.MutableOptionsBundle)>($r2);
+
+        return r3;
+    }
+
+    private static androidx.camera.core.impl.MutableOptionsBundle createInitialBundle(androidx.camera.video.VideoOutput)
+    {
+        androidx.camera.video.VideoOutput r0;
+        androidx.camera.core.impl.MutableOptionsBundle r1;
+        androidx.camera.core.impl.Config$Option $r2;
+
+        r0 := @parameter0: androidx.camera.video.VideoOutput;
+
+        r1 = staticinvoke <androidx.camera.core.impl.MutableOptionsBundle: androidx.camera.core.impl.MutableOptionsBundle create()>();
+
+        $r2 = <androidx.camera.video.impl.VideoCaptureConfig: androidx.camera.core.impl.Config$Option OPTION_VIDEO_OUTPUT>;
+
+        virtualinvoke r1.<androidx.camera.core.impl.MutableOptionsBundle: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, r0);
+
+        return r1;
+    }
+
+    public androidx.camera.core.impl.MutableConfig getMutableConfig()
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.core.impl.MutableOptionsBundle $r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        $r1 = r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableOptionsBundle mMutableConfig>;
+
+        return $r1;
+    }
+
+    public androidx.camera.video.impl.VideoCaptureConfig getUseCaseConfig()
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.video.impl.VideoCaptureConfig $r1;
+        androidx.camera.core.impl.MutableOptionsBundle $r2;
+        androidx.camera.core.impl.OptionsBundle $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        $r1 = new androidx.camera.video.impl.VideoCaptureConfig;
+
+        $r2 = r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableOptionsBundle mMutableConfig>;
+
+        $r3 = staticinvoke <androidx.camera.core.impl.OptionsBundle: androidx.camera.core.impl.OptionsBundle 'from'(androidx.camera.core.impl.Config)>($r2);
+
+        specialinvoke $r1.<androidx.camera.video.impl.VideoCaptureConfig: void <init>(androidx.camera.core.impl.OptionsBundle)>($r3);
+
+        return $r1;
+    }
+
+    androidx.camera.video.VideoCapture$Builder setVideoEncoderInfoFinder(androidx.arch.core.util.Function)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.arch.core.util.Function r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.arch.core.util.Function;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.video.impl.VideoCaptureConfig: androidx.camera.core.impl.Config$Option OPTION_VIDEO_ENCODER_INFO_FINDER>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture build()
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.video.VideoCapture $r1;
+        androidx.camera.video.impl.VideoCaptureConfig $r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        $r1 = new androidx.camera.video.VideoCapture;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.impl.VideoCaptureConfig getUseCaseConfig()>();
+
+        specialinvoke $r1.<androidx.camera.video.VideoCapture: void <init>(androidx.camera.video.impl.VideoCaptureConfig)>($r2);
+
+        return $r1;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setTargetClass(java.lang.Class)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        java.lang.Class r1;
+        java.lang.String r2, $r9;
+        androidx.camera.core.impl.MutableConfig $r3, $r5;
+        androidx.camera.core.impl.Config$Option $r4, $r6;
+        java.lang.Object $r7;
+        java.lang.StringBuilder $r8, $r10, $r11, $r13;
+        java.util.UUID $r12;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: java.lang.Class;
+
+        $r3 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r4 = <androidx.camera.core.internal.TargetConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_CLASS>;
+
+        interfaceinvoke $r3.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r4, r1);
+
+        $r5 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r6 = <androidx.camera.core.internal.TargetConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_NAME>;
+
+        $r7 = interfaceinvoke $r5.<androidx.camera.core.impl.MutableConfig: java.lang.Object retrieveOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r6, null);
+
+        if null != $r7 goto label1;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke r1.<java.lang.Class: java.lang.String getCanonicalName()>();
+
+        $r10 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-");
+
+        $r12 = staticinvoke <java.util.UUID: java.util.UUID randomUUID()>();
+
+        $r13 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r12);
+
+        r2 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setTargetName(java.lang.String)>(r2);
+
+     label1:
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setTargetName(java.lang.String)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        java.lang.String r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.internal.TargetConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_NAME>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setTargetAspectRatio(int)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        int i0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_ASPECT_RATIO>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setTargetRotation(int)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        int i0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_TARGET_ROTATION>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setTargetResolution(android.util.Size)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        android.util.Size r1;
+        java.lang.UnsupportedOperationException $r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r2.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>("setTargetResolution is not supported.");
+
+        throw $r2;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setDefaultResolution(android.util.Size)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        android.util.Size r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_DEFAULT_RESOLUTION>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setMaxResolution(android.util.Size)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        android.util.Size r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_MAX_RESOLUTION>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setSupportedResolutions(java.util.List)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        java.util.List r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: java.util.List;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.ImageOutputConfig: androidx.camera.core.impl.Config$Option OPTION_SUPPORTED_RESOLUTIONS>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setBackgroundExecutor(java.util.concurrent.Executor)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        java.util.concurrent.Executor r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.internal.ThreadConfig: androidx.camera.core.impl.Config$Option OPTION_BACKGROUND_EXECUTOR>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setDefaultSessionConfig(androidx.camera.core.impl.SessionConfig)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.core.impl.SessionConfig r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_DEFAULT_SESSION_CONFIG>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setDefaultCaptureConfig(androidx.camera.core.impl.CaptureConfig)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.core.impl.CaptureConfig r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.CaptureConfig;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_DEFAULT_CAPTURE_CONFIG>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setSessionOptionUnpacker(androidx.camera.core.impl.SessionConfig$OptionUnpacker)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.core.impl.SessionConfig$OptionUnpacker r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig$OptionUnpacker;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_SESSION_CONFIG_UNPACKER>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setCaptureOptionUnpacker(androidx.camera.core.impl.CaptureConfig$OptionUnpacker)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.core.impl.CaptureConfig$OptionUnpacker r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.CaptureConfig$OptionUnpacker;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_CAPTURE_CONFIG_UNPACKER>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setSurfaceOccupancyPriority(int)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        int i0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_SURFACE_OCCUPANCY_PRIORITY>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setCameraSelector(androidx.camera.core.CameraSelector)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.core.CameraSelector r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_CAMERA_SELECTOR>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setUseCaseEventCallback(androidx.camera.core.UseCase$EventCallback)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.core.UseCase$EventCallback r1;
+        androidx.camera.core.impl.MutableConfig $r2;
+        androidx.camera.core.impl.Config$Option $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.UseCase$EventCallback;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r3 = <androidx.camera.core.internal.UseCaseEventConfig: androidx.camera.core.impl.Config$Option OPTION_USE_CASE_EVENT_CALLBACK>;
+
+        interfaceinvoke $r2.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r3, r1);
+
+        return r0;
+    }
+
+    public androidx.camera.video.VideoCapture$Builder setZslDisabled(boolean)
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        boolean z0;
+        androidx.camera.core.impl.MutableConfig $r1;
+        androidx.camera.core.impl.Config$Option $r2;
+        java.lang.Boolean $r3;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.core.impl.MutableConfig getMutableConfig()>();
+
+        $r2 = <androidx.camera.core.impl.UseCaseConfig: androidx.camera.core.impl.Config$Option OPTION_ZSL_DISABLED>;
+
+        $r3 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(z0);
+
+        interfaceinvoke $r1.<androidx.camera.core.impl.MutableConfig: void insertOption(androidx.camera.core.impl.Config$Option,java.lang.Object)>($r2, $r3);
+
+        return r0;
+    }
+
+    public volatile androidx.camera.core.impl.UseCaseConfig getUseCaseConfig()
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.video.impl.VideoCaptureConfig $r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.impl.VideoCaptureConfig getUseCaseConfig()>();
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setZslDisabled(boolean)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r1;
+        boolean z0;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setZslDisabled(boolean)>(z0);
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setCameraSelector(androidx.camera.core.CameraSelector)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        androidx.camera.core.CameraSelector r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setCameraSelector(androidx.camera.core.CameraSelector)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setSurfaceOccupancyPriority(int)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r1;
+        int i0;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setSurfaceOccupancyPriority(int)>(i0);
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setCaptureOptionUnpacker(androidx.camera.core.impl.CaptureConfig$OptionUnpacker)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        androidx.camera.core.impl.CaptureConfig$OptionUnpacker r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.CaptureConfig$OptionUnpacker;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setCaptureOptionUnpacker(androidx.camera.core.impl.CaptureConfig$OptionUnpacker)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setSessionOptionUnpacker(androidx.camera.core.impl.SessionConfig$OptionUnpacker)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        androidx.camera.core.impl.SessionConfig$OptionUnpacker r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig$OptionUnpacker;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setSessionOptionUnpacker(androidx.camera.core.impl.SessionConfig$OptionUnpacker)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setDefaultCaptureConfig(androidx.camera.core.impl.CaptureConfig)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        androidx.camera.core.impl.CaptureConfig r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.CaptureConfig;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setDefaultCaptureConfig(androidx.camera.core.impl.CaptureConfig)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setDefaultSessionConfig(androidx.camera.core.impl.SessionConfig)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        androidx.camera.core.impl.SessionConfig r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setDefaultSessionConfig(androidx.camera.core.impl.SessionConfig)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setTargetName(java.lang.String)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        java.lang.String r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setTargetName(java.lang.String)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setTargetClass(java.lang.Class)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        java.lang.Class r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: java.lang.Class;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setTargetClass(java.lang.Class)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object build()
+    {
+        androidx.camera.video.VideoCapture$Builder r0;
+        androidx.camera.video.VideoCapture $r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture build()>();
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setUseCaseEventCallback(androidx.camera.core.UseCase$EventCallback)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        androidx.camera.core.UseCase$EventCallback r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: androidx.camera.core.UseCase$EventCallback;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setUseCaseEventCallback(androidx.camera.core.UseCase$EventCallback)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setSupportedResolutions(java.util.List)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        java.util.List r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: java.util.List;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setSupportedResolutions(java.util.List)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setMaxResolution(android.util.Size)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        android.util.Size r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setMaxResolution(android.util.Size)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setDefaultResolution(android.util.Size)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        android.util.Size r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setDefaultResolution(android.util.Size)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setTargetResolution(android.util.Size)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        android.util.Size r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setTargetResolution(android.util.Size)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object setTargetRotation(int)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r1;
+        int i0;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setTargetRotation(int)>(i0);
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setTargetAspectRatio(int)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r1;
+        int i0;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        i0 := @parameter0: int;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setTargetAspectRatio(int)>(i0);
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object setBackgroundExecutor(java.util.concurrent.Executor)
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r2;
+        java.util.concurrent.Executor r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Builder;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        $r2 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setBackgroundExecutor(java.util.concurrent.Executor)>(r1);
+
+        return $r2;
+    }
+
+androidx.camera.video.VideoCapture$Defaults
+<androidx.camera.video.VideoCapture$Defaults: int DEFAULT_SURFACE_OCCUPANCY_PRIORITY>
+<androidx.camera.video.VideoCapture$Defaults: androidx.camera.video.VideoOutput DEFAULT_VIDEO_OUTPUT>
+<androidx.camera.video.VideoCapture$Defaults: androidx.camera.video.impl.VideoCaptureConfig DEFAULT_CONFIG>
+<androidx.camera.video.VideoCapture$Defaults: androidx.arch.core.util.Function DEFAULT_VIDEO_ENCODER_INFO_FINDER>
+<androidx.camera.video.VideoCapture$Defaults: android.util.Range DEFAULT_FPS_RANGE>
+    public void <init>()
+    {
+        androidx.camera.video.VideoCapture$Defaults r0;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Defaults;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public androidx.camera.video.impl.VideoCaptureConfig getConfig()
+    {
+        androidx.camera.video.VideoCapture$Defaults r0;
+        androidx.camera.video.impl.VideoCaptureConfig $r1;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Defaults;
+
+        $r1 = <androidx.camera.video.VideoCapture$Defaults: androidx.camera.video.impl.VideoCaptureConfig DEFAULT_CONFIG>;
+
+        return $r1;
+    }
+
+    public volatile androidx.camera.core.impl.Config getConfig()
+    {
+        androidx.camera.video.VideoCapture$Defaults r0;
+        androidx.camera.video.impl.VideoCaptureConfig $r1;
+        androidx.camera.core.impl.Config r2;
+
+        r0 := @this: androidx.camera.video.VideoCapture$Defaults;
+
+        $r1 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Defaults: androidx.camera.video.impl.VideoCaptureConfig getConfig()>();
+
+        r2 = (androidx.camera.core.impl.Config) $r1;
+
+        return r2;
+    }
+
+    private static androidx.camera.video.internal.encoder.VideoEncoderInfo lambda$static$0(androidx.camera.video.internal.encoder.VideoEncoderConfig)
+    {
+        androidx.camera.video.internal.encoder.VideoEncoderConfig r0;
+        androidx.camera.video.internal.encoder.VideoEncoderInfoImpl $r1;
+
+        r0 := @parameter0: androidx.camera.video.internal.encoder.VideoEncoderConfig;
+
+        $r1 = staticinvoke <androidx.camera.video.internal.encoder.VideoEncoderInfoImpl: androidx.camera.video.internal.encoder.VideoEncoderInfoImpl 'from'(androidx.camera.video.internal.encoder.VideoEncoderConfig)>(r0);
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.video.VideoCapture$Builder r0, $r6, $r8;
+        androidx.camera.video.VideoOutput $r1, $r7;
+        androidx.arch.core.util.Function $r2, $r9;
+        android.util.Range $r3;
+        java.lang.Integer $r4, $r5;
+        androidx.camera.video.impl.VideoCaptureConfig $r10;
+
+        $r1 = dynamicinvoke "onSurfaceRequested" <androidx.camera.video.VideoOutput ()>() <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(androidx.camera.core.SurfaceRequest), methodhandle: "REF_INVOKE_VIRTUAL" <androidx.camera.core.SurfaceRequest: boolean willNotProvideSurface()>, methodtype: void __METHODTYPE__(androidx.camera.core.SurfaceRequest));
+
+        <androidx.camera.video.VideoCapture$Defaults: androidx.camera.video.VideoOutput DEFAULT_VIDEO_OUTPUT> = $r1;
+
+        $r2 = dynamicinvoke "apply" <androidx.arch.core.util.Function ()>() <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(java.lang.Object), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.video.VideoCapture$Defaults: androidx.camera.video.internal.encoder.VideoEncoderInfo lambda$static$0(androidx.camera.video.internal.encoder.VideoEncoderConfig)>, methodtype: androidx.camera.video.internal.encoder.VideoEncoderInfo __METHODTYPE__(androidx.camera.video.internal.encoder.VideoEncoderConfig));
+
+        <androidx.camera.video.VideoCapture$Defaults: androidx.arch.core.util.Function DEFAULT_VIDEO_ENCODER_INFO_FINDER> = $r2;
+
+        $r3 = new android.util.Range;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(30);
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(30);
+
+        specialinvoke $r3.<android.util.Range: void <init>(java.lang.Comparable,java.lang.Comparable)>($r4, $r5);
+
+        <androidx.camera.video.VideoCapture$Defaults: android.util.Range DEFAULT_FPS_RANGE> = $r3;
+
+        $r6 = new androidx.camera.video.VideoCapture$Builder;
+
+        $r7 = <androidx.camera.video.VideoCapture$Defaults: androidx.camera.video.VideoOutput DEFAULT_VIDEO_OUTPUT>;
+
+        specialinvoke $r6.<androidx.camera.video.VideoCapture$Builder: void <init>(androidx.camera.video.VideoOutput)>($r7);
+
+        $r8 = virtualinvoke $r6.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setSurfaceOccupancyPriority(int)>(5);
+
+        $r9 = <androidx.camera.video.VideoCapture$Defaults: androidx.arch.core.util.Function DEFAULT_VIDEO_ENCODER_INFO_FINDER>;
+
+        r0 = virtualinvoke $r8.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.VideoCapture$Builder setVideoEncoderInfoFinder(androidx.arch.core.util.Function)>($r9);
+
+        $r10 = virtualinvoke r0.<androidx.camera.video.VideoCapture$Builder: androidx.camera.video.impl.VideoCaptureConfig getUseCaseConfig()>();
+
+        <androidx.camera.video.VideoCapture$Defaults: androidx.camera.video.impl.VideoCaptureConfig DEFAULT_CONFIG> = $r10;
+
+        return;
+    }
+

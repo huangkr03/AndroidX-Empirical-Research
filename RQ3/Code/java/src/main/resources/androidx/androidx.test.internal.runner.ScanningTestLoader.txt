@@ -1,0 +1,132 @@
+androidx.test.internal.runner.ScanningTestLoader
+<androidx.test.internal.runner.ScanningTestLoader: java.lang.ClassLoader classLoader>
+<androidx.test.internal.runner.ScanningTestLoader: org.junit.runners.model.RunnerBuilder runnerBuilder>
+    void <init>(java.lang.ClassLoader, org.junit.runners.model.RunnerBuilder)
+    {
+        androidx.test.internal.runner.ScanningTestLoader $r0;
+        java.lang.ClassLoader $r1;
+        org.junit.runners.model.RunnerBuilder $r2;
+
+        $r0 := @this: androidx.test.internal.runner.ScanningTestLoader;
+
+        $r1 := @parameter0: java.lang.ClassLoader;
+
+        $r2 := @parameter1: org.junit.runners.model.RunnerBuilder;
+
+        specialinvoke $r0.<androidx.test.internal.runner.TestLoader: void <init>()>();
+
+        $r0.<androidx.test.internal.runner.ScanningTestLoader: java.lang.ClassLoader classLoader> = $r1;
+
+        $r0.<androidx.test.internal.runner.ScanningTestLoader: org.junit.runners.model.RunnerBuilder runnerBuilder> = $r2;
+
+        return;
+    }
+
+    private static transient void logDebug(java.lang.String, java.lang.Object[])
+    {
+        java.lang.Object[] $r0;
+        java.lang.String $r1;
+        boolean $z0;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: java.lang.Object[];
+
+        $z0 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("ScanningTestLoader", 3);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r1, $r0);
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("ScanningTestLoader", $r1);
+
+     label1:
+        return;
+    }
+
+    protected org.junit.runner.Runner doCreateRunner(java.lang.String)
+    {
+        androidx.test.internal.runner.ScanningTestLoader $r0;
+        java.lang.String $r1, $r5;
+        java.lang.ClassLoader $r2;
+        java.lang.Class $r3;
+        int $i0;
+        boolean $z0;
+        java.lang.Object[] $r4;
+        org.junit.runners.model.RunnerBuilder $r6;
+        org.junit.runner.Runner $r7;
+        java.lang.Throwable $r8;
+
+        $r0 := @this: androidx.test.internal.runner.ScanningTestLoader;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<androidx.test.internal.runner.ScanningTestLoader: java.lang.ClassLoader classLoader>;
+
+        $r3 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String,boolean,java.lang.ClassLoader)>($r1, 0, $r2);
+
+     label01:
+        $i0 = virtualinvoke $r3.<java.lang.Class: int getModifiers()>();
+
+     label02:
+        $z0 = staticinvoke <java.lang.reflect.Modifier: boolean isAbstract(int)>($i0);
+
+        if $z0 == 0 goto label05;
+
+        $r4 = newarray (java.lang.Object)[1];
+
+     label03:
+        $r5 = virtualinvoke $r3.<java.lang.Class: java.lang.String getName()>();
+
+     label04:
+        $r4[0] = $r5;
+
+        staticinvoke <androidx.test.internal.runner.ScanningTestLoader: void logDebug(java.lang.String,java.lang.Object[])>("Skipping abstract class %s: not a test", $r4);
+
+        return null;
+
+     label05:
+        $r6 = $r0.<androidx.test.internal.runner.ScanningTestLoader: org.junit.runners.model.RunnerBuilder runnerBuilder>;
+
+     label06:
+        $r7 = virtualinvoke $r6.<org.junit.runners.model.RunnerBuilder: org.junit.runner.Runner runnerForClass(java.lang.Class)>($r3);
+
+     label07:
+        $z0 = $r7 instanceof androidx.test.internal.runner.EmptyTestRunner;
+
+        if $z0 == 0 goto label10;
+
+        $r4 = newarray (java.lang.Object)[1];
+
+     label08:
+        $r5 = virtualinvoke $r3.<java.lang.Class: java.lang.String getName()>();
+
+     label09:
+        $r4[0] = $r5;
+
+        staticinvoke <androidx.test.internal.runner.ScanningTestLoader: void logDebug(java.lang.String,java.lang.Object[])>("Skipping class %s: class with no test methods", $r4);
+
+        return null;
+
+     label10:
+        return $r7;
+
+     label11:
+        $r8 := @caughtexception;
+
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r4[0] = $r1;
+
+        $r1 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Could not load class: %s", $r4);
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ScanningTestLoader", $r1, $r8);
+
+        return null;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.lang.Throwable from label03 to label04 with label11;
+        catch java.lang.Throwable from label06 to label07 with label11;
+        catch java.lang.Throwable from label08 to label09 with label11;
+    }
+

@@ -1,0 +1,735 @@
+androidx.media3.extractor.DefaultExtractorInput
+<androidx.media3.extractor.DefaultExtractorInput: int PEEK_MIN_FREE_SPACE_AFTER_RESIZE>
+<androidx.media3.extractor.DefaultExtractorInput: int PEEK_MAX_FREE_SPACE>
+<androidx.media3.extractor.DefaultExtractorInput: int SCRATCH_SPACE_SIZE>
+<androidx.media3.extractor.DefaultExtractorInput: byte[] scratchSpace>
+<androidx.media3.extractor.DefaultExtractorInput: androidx.media3.common.DataReader dataReader>
+<androidx.media3.extractor.DefaultExtractorInput: long streamLength>
+<androidx.media3.extractor.DefaultExtractorInput: long position>
+<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>
+<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>
+<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>
+    public void <init>(androidx.media3.common.DataReader, long, long)
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        androidx.media3.common.DataReader r1;
+        long l0, l1;
+        byte[] $r2, $r3;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r1 := @parameter0: androidx.media3.common.DataReader;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: androidx.media3.common.DataReader dataReader> = r1;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: long position> = l0;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: long streamLength> = l1;
+
+        $r2 = newarray (byte)[65536];
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer> = $r2;
+
+        $r3 = newarray (byte)[4096];
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] scratchSpace> = $r3;
+
+        return;
+    }
+
+    public int read(byte[], int, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        byte[] r1;
+        int i0, i1, i2;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        i2 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int readFromPeekBuffer(byte[],int,int)>(r1, i0, i1);
+
+        if i2 != 0 goto label1;
+
+        i2 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int readFromUpstream(byte[],int,int,int,boolean)>(r1, i0, i1, 0, 1);
+
+     label1:
+        specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: void commitBytesRead(int)>(i2);
+
+        return i2;
+    }
+
+    public boolean readFully(byte[], int, int, boolean) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        byte[] r1;
+        int i0, i1, i2;
+        boolean z0, $z1;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        z0 := @parameter3: boolean;
+
+        i2 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int readFromPeekBuffer(byte[],int,int)>(r1, i0, i1);
+
+     label1:
+        if i2 >= i1 goto label2;
+
+        if i2 == -1 goto label2;
+
+        i2 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int readFromUpstream(byte[],int,int,int,boolean)>(r1, i0, i1, i2, z0);
+
+        goto label1;
+
+     label2:
+        specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: void commitBytesRead(int)>(i2);
+
+        if i2 == -1 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        return $z1;
+    }
+
+    public void readFully(byte[], int, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        byte[] r1;
+        int i0, i1;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        virtualinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: boolean readFully(byte[],int,int,boolean)>(r1, i0, i1, 0);
+
+        return;
+    }
+
+    public int skip(int) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int i0, $i1, $i2, i3;
+        byte[] $r1, $r2;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        i0 := @parameter0: int;
+
+        i3 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int skipFromPeekBuffer(int)>(i0);
+
+        if i3 != 0 goto label1;
+
+        $r2 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] scratchSpace>;
+
+        $r1 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] scratchSpace>;
+
+        $i1 = lengthof $r1;
+
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>(i0, $i1);
+
+        i3 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int readFromUpstream(byte[],int,int,int,boolean)>($r2, 0, $i2, 0, 1);
+
+     label1:
+        specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: void commitBytesRead(int)>(i3);
+
+        return i3;
+    }
+
+    public boolean skipFully(int, boolean) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int i0, i1, $i2, $i3, $i4, i5;
+        boolean z0, $z1;
+        byte[] $r1, $r2;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        i0 := @parameter0: int;
+
+        z0 := @parameter1: boolean;
+
+        i5 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int skipFromPeekBuffer(int)>(i0);
+
+     label1:
+        if i5 >= i0 goto label2;
+
+        if i5 == -1 goto label2;
+
+        $r1 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] scratchSpace>;
+
+        $i2 = lengthof $r1;
+
+        $i3 = i5 + $i2;
+
+        i1 = staticinvoke <java.lang.Math: int min(int,int)>(i0, $i3);
+
+        $r2 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] scratchSpace>;
+
+        $i4 = neg i5;
+
+        i5 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int readFromUpstream(byte[],int,int,int,boolean)>($r2, $i4, i1, i5, z0);
+
+        goto label1;
+
+     label2:
+        specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: void commitBytesRead(int)>(i5);
+
+        if i5 == -1 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        return $z1;
+    }
+
+    public void skipFully(int) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int i0;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        i0 := @parameter0: int;
+
+        virtualinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: boolean skipFully(int,boolean)>(i0, 0);
+
+        return;
+    }
+
+    public int peek(byte[], int, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        byte[] r1, $r2, $r3;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, i11;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: void ensureSpaceForPeek(int)>(i1);
+
+        $i4 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        $i3 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        i2 = $i4 - $i3;
+
+        if i2 != 0 goto label2;
+
+        $r3 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $i8 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        i11 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int readFromUpstream(byte[],int,int,int,boolean)>($r3, $i8, i1, 0, 1);
+
+        if i11 != -1 goto label1;
+
+        return -1;
+
+     label1:
+        $i9 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        $i10 = $i9 + i11;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength> = $i10;
+
+        goto label3;
+
+     label2:
+        i11 = staticinvoke <java.lang.Math: int min(int,int)>(i1, i2);
+
+     label3:
+        $r2 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $i5 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, $i5, r1, i0, i11);
+
+        $i6 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        $i7 = $i6 + i11;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition> = $i7;
+
+        return i11;
+    }
+
+    public boolean peekFully(byte[], int, int, boolean) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        byte[] r1, $r2;
+        int i0, i1, $i2, $i3;
+        boolean z0, $z1;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        z0 := @parameter3: boolean;
+
+        $z1 = virtualinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: boolean advancePeekPosition(int,boolean)>(i1, z0);
+
+        if $z1 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r2 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $i2 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        $i3 = $i2 - i1;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, $i3, r1, i0, i1);
+
+        return 1;
+    }
+
+    public void peekFully(byte[], int, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        byte[] r1;
+        int i0, i1;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        virtualinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: boolean peekFully(byte[],int,int,boolean)>(r1, i0, i1, 0);
+
+        return;
+    }
+
+    public boolean advancePeekPosition(int, boolean) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8;
+        boolean z0;
+        byte[] $r1;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        i0 := @parameter0: int;
+
+        z0 := @parameter1: boolean;
+
+        specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: void ensureSpaceForPeek(int)>(i0);
+
+        $i2 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        $i1 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        i8 = $i2 - $i1;
+
+     label1:
+        if i8 >= i0 goto label3;
+
+        $r1 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $i5 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        i8 = specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: int readFromUpstream(byte[],int,int,int,boolean)>($r1, $i5, i0, i8, z0);
+
+        if i8 != -1 goto label2;
+
+        return 0;
+
+     label2:
+        $i6 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        $i7 = $i6 + i8;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength> = $i7;
+
+        goto label1;
+
+     label3:
+        $i3 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        $i4 = $i3 + i0;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition> = $i4;
+
+        return 1;
+    }
+
+    public void advancePeekPosition(int) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int i0;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        i0 := @parameter0: int;
+
+        virtualinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: boolean advancePeekPosition(int,boolean)>(i0, 0);
+
+        return;
+    }
+
+    public void resetPeekPosition()
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition> = 0;
+
+        return;
+    }
+
+    public long getPeekPosition()
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int $i0;
+        long $l1, $l2, $l3;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        $l2 = r0.<androidx.media3.extractor.DefaultExtractorInput: long position>;
+
+        $i0 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        $l1 = (long) $i0;
+
+        $l3 = $l2 + $l1;
+
+        return $l3;
+    }
+
+    public long getPosition()
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        $l0 = r0.<androidx.media3.extractor.DefaultExtractorInput: long position>;
+
+        return $l0;
+    }
+
+    public long getLength()
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        $l0 = r0.<androidx.media3.extractor.DefaultExtractorInput: long streamLength>;
+
+        return $l0;
+    }
+
+    public void setRetryPosition(long, java.lang.Throwable) throws java.lang.Throwable
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        long l0;
+        java.lang.Throwable r1;
+        byte $b1;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: java.lang.Throwable;
+
+        $b1 = l0 cmp 0L;
+
+        if $b1 < 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean)>($z0);
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: long position> = l0;
+
+        throw r1;
+    }
+
+    private void ensureSpaceForPeek(int)
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8;
+        byte[] $r1, $r2, $r3, $r4;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        i0 := @parameter0: int;
+
+        $i3 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition>;
+
+        i1 = $i3 + i0;
+
+        $r1 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $i4 = lengthof $r1;
+
+        if i1 <= $i4 goto label1;
+
+        $r2 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $i5 = lengthof $r2;
+
+        $i8 = $i5 * 2;
+
+        $i7 = i1 + 65536;
+
+        $i6 = i1 + 524288;
+
+        i2 = staticinvoke <androidx.media3.common.util.Util: int constrainValue(int,int,int)>($i8, $i7, $i6);
+
+        $r3 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $r4 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r3, i2);
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer> = $r4;
+
+     label1:
+        return;
+    }
+
+    private int skipFromPeekBuffer(int)
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int i0, i1, $i2;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        i0 := @parameter0: int;
+
+        $i2 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        i1 = staticinvoke <java.lang.Math: int min(int,int)>($i2, i0);
+
+        specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: void updatePeekBuffer(int)>(i1);
+
+        return i1;
+    }
+
+    private int readFromPeekBuffer(byte[], int, int)
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        byte[] r1, $r2;
+        int i0, i1, i2, $i3, $i4;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $i3 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        if $i3 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $i4 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        i2 = staticinvoke <java.lang.Math: int min(int,int)>($i4, i1);
+
+        $r2 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, 0, r1, i0, i2);
+
+        specialinvoke r0.<androidx.media3.extractor.DefaultExtractorInput: void updatePeekBuffer(int)>(i2);
+
+        return i2;
+    }
+
+    private void updatePeekBuffer(int)
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+        byte[] $r1, $r2, r3;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        i0 := @parameter0: int;
+
+        $i1 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        $i2 = $i1 - i0;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength> = $i2;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferPosition> = 0;
+
+        r3 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $i5 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        $r1 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $i3 = lengthof $r1;
+
+        $i4 = $i3 - 524288;
+
+        if $i5 >= $i4 goto label1;
+
+        $i7 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        $i8 = $i7 + 65536;
+
+        r3 = newarray (byte)[$i8];
+
+     label1:
+        $r2 = r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer>;
+
+        $i6 = r0.<androidx.media3.extractor.DefaultExtractorInput: int peekBufferLength>;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, i0, r3, 0, $i6);
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: byte[] peekBuffer> = r3;
+
+        return;
+    }
+
+    private int readFromUpstream(byte[], int, int, int, boolean) throws java.io.IOException
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        byte[] r1;
+        int i0, i1, i2, i3, $i4, $i5, $i6;
+        boolean z0, $z1;
+        androidx.media3.common.DataReader $r2;
+        java.io.EOFException $r3;
+        java.io.InterruptedIOException $r4;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        i2 := @parameter3: int;
+
+        z0 := @parameter4: boolean;
+
+        $z1 = staticinvoke <java.lang.Thread: boolean interrupted()>();
+
+        if $z1 == 0 goto label1;
+
+        $r4 = new java.io.InterruptedIOException;
+
+        specialinvoke $r4.<java.io.InterruptedIOException: void <init>()>();
+
+        throw $r4;
+
+     label1:
+        $r2 = r0.<androidx.media3.extractor.DefaultExtractorInput: androidx.media3.common.DataReader dataReader>;
+
+        $i5 = i0 + i2;
+
+        $i4 = i1 - i2;
+
+        i3 = interfaceinvoke $r2.<androidx.media3.common.DataReader: int read(byte[],int,int)>(r1, $i5, $i4);
+
+        if i3 != -1 goto label3;
+
+        if i2 != 0 goto label2;
+
+        if z0 == 0 goto label2;
+
+        return -1;
+
+     label2:
+        $r3 = new java.io.EOFException;
+
+        specialinvoke $r3.<java.io.EOFException: void <init>()>();
+
+        throw $r3;
+
+     label3:
+        $i6 = i2 + i3;
+
+        return $i6;
+    }
+
+    private void commitBytesRead(int)
+    {
+        androidx.media3.extractor.DefaultExtractorInput r0;
+        int i0;
+        long $l1, $l2, $l3;
+
+        r0 := @this: androidx.media3.extractor.DefaultExtractorInput;
+
+        i0 := @parameter0: int;
+
+        if i0 == -1 goto label1;
+
+        $l2 = r0.<androidx.media3.extractor.DefaultExtractorInput: long position>;
+
+        $l1 = (long) i0;
+
+        $l3 = $l2 + $l1;
+
+        r0.<androidx.media3.extractor.DefaultExtractorInput: long position> = $l3;
+
+     label1:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        staticinvoke <androidx.media3.common.MediaLibraryInfo: void registerModule(java.lang.String)>("media3.extractor");
+
+        return;
+    }
+

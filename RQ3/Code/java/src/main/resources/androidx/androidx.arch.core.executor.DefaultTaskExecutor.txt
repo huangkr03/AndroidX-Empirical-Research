@@ -1,0 +1,333 @@
+androidx.arch.core.executor.DefaultTaskExecutor
+<androidx.arch.core.executor.DefaultTaskExecutor: java.lang.Object mLock>
+<androidx.arch.core.executor.DefaultTaskExecutor: java.util.concurrent.ExecutorService mDiskIO>
+<androidx.arch.core.executor.DefaultTaskExecutor: android.os.Handler mMainHandler>
+    public void <init>()
+    {
+        androidx.arch.core.executor.DefaultTaskExecutor r0;
+        java.lang.Object $r1;
+        androidx.arch.core.executor.DefaultTaskExecutor$1 $r2;
+        java.util.concurrent.ExecutorService $r3;
+
+        r0 := @this: androidx.arch.core.executor.DefaultTaskExecutor;
+
+        specialinvoke r0.<androidx.arch.core.executor.TaskExecutor: void <init>()>();
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.arch.core.executor.DefaultTaskExecutor: java.lang.Object mLock> = $r1;
+
+        $r2 = new androidx.arch.core.executor.DefaultTaskExecutor$1;
+
+        specialinvoke $r2.<androidx.arch.core.executor.DefaultTaskExecutor$1: void <init>(androidx.arch.core.executor.DefaultTaskExecutor)>(r0);
+
+        $r3 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ExecutorService newFixedThreadPool(int,java.util.concurrent.ThreadFactory)>(4, $r2);
+
+        r0.<androidx.arch.core.executor.DefaultTaskExecutor: java.util.concurrent.ExecutorService mDiskIO> = $r3;
+
+        return;
+    }
+
+    public void executeOnDiskIO(java.lang.Runnable)
+    {
+        androidx.arch.core.executor.DefaultTaskExecutor r0;
+        java.lang.Runnable r1;
+        java.util.concurrent.ExecutorService $r2;
+
+        r0 := @this: androidx.arch.core.executor.DefaultTaskExecutor;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = r0.<androidx.arch.core.executor.DefaultTaskExecutor: java.util.concurrent.ExecutorService mDiskIO>;
+
+        interfaceinvoke $r2.<java.util.concurrent.ExecutorService: void execute(java.lang.Runnable)>(r1);
+
+        return;
+    }
+
+    public void postToMainThread(java.lang.Runnable)
+    {
+        androidx.arch.core.executor.DefaultTaskExecutor r0;
+        java.lang.Runnable r1;
+        java.lang.Object r2, $r6;
+        java.lang.Throwable r3, $r10;
+        android.os.Handler $r4, $r5, $r7, $r9;
+        android.os.Looper $r8;
+
+        r0 := @this: androidx.arch.core.executor.DefaultTaskExecutor;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        $r4 = r0.<androidx.arch.core.executor.DefaultTaskExecutor: android.os.Handler mMainHandler>;
+
+        if $r4 != null goto label6;
+
+        $r6 = r0.<androidx.arch.core.executor.DefaultTaskExecutor: java.lang.Object mLock>;
+
+        r2 = $r6;
+
+        entermonitor $r6;
+
+     label1:
+        $r7 = r0.<androidx.arch.core.executor.DefaultTaskExecutor: android.os.Handler mMainHandler>;
+
+        if $r7 != null goto label2;
+
+        $r8 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        $r9 = staticinvoke <androidx.arch.core.executor.DefaultTaskExecutor: android.os.Handler createAsync(android.os.Looper)>($r8);
+
+        r0.<androidx.arch.core.executor.DefaultTaskExecutor: android.os.Handler mMainHandler> = $r9;
+
+     label2:
+        exitmonitor r2;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r10 := @caughtexception;
+
+        r3 = $r10;
+
+        exitmonitor r2;
+
+     label5:
+        throw r3;
+
+     label6:
+        $r5 = r0.<androidx.arch.core.executor.DefaultTaskExecutor: android.os.Handler mMainHandler>;
+
+        virtualinvoke $r5.<android.os.Handler: boolean post(java.lang.Runnable)>(r1);
+
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public boolean isMainThread()
+    {
+        androidx.arch.core.executor.DefaultTaskExecutor r0;
+        android.os.Looper $r1;
+        java.lang.Thread $r2, $r3;
+        boolean $z0;
+
+        r0 := @this: androidx.arch.core.executor.DefaultTaskExecutor;
+
+        $r1 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        $r2 = virtualinvoke $r1.<android.os.Looper: java.lang.Thread getThread()>();
+
+        $r3 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        if $r2 != $r3 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private static android.os.Handler createAsync(android.os.Looper)
+    {
+        android.os.Looper r0;
+        int $i0, $i1;
+        java.lang.Class[] $r1;
+        java.lang.Class $r2, $r3;
+        java.lang.reflect.Constructor $r4;
+        java.lang.Object[] $r5;
+        java.lang.Boolean $r6;
+        java.lang.Object $r7;
+        android.os.Handler $r8, $r9, $r14, $r19;
+        java.lang.Throwable $r10, $r11, $r12, $r13, r15, r16, r17, r18;
+
+        r0 := @parameter0: android.os.Looper;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label1;
+
+        $r9 = staticinvoke <androidx.arch.core.executor.DefaultTaskExecutor$Api28Impl: android.os.Handler createAsync(android.os.Looper)>(r0);
+
+        return $r9;
+
+     label1:
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 17 goto label8;
+
+     label2:
+        $r3 = class "Landroid/os/Handler;";
+
+        $r1 = newarray (java.lang.Class)[3];
+
+        $r1[0] = class "Landroid/os/Looper;";
+
+        $r1[1] = class "Landroid/os/Handler$Callback;";
+
+        $r2 = <java.lang.Boolean: java.lang.Class TYPE>;
+
+        $r1[2] = $r2;
+
+        $r4 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Constructor getDeclaredConstructor(java.lang.Class[])>($r1);
+
+        $r5 = newarray (java.lang.Object)[3];
+
+        $r5[0] = r0;
+
+        $r5[1] = null;
+
+        $r6 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(1);
+
+        $r5[2] = $r6;
+
+        $r7 = virtualinvoke $r4.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r5);
+
+        $r8 = (android.os.Handler) $r7;
+
+     label3:
+        return $r8;
+
+     label4:
+        $r11 := @caughtexception;
+
+        r15 = $r11;
+
+        goto label8;
+
+     label5:
+        $r12 := @caughtexception;
+
+        r16 = $r12;
+
+        goto label8;
+
+     label6:
+        $r10 := @caughtexception;
+
+        r17 = $r10;
+
+        goto label8;
+
+     label7:
+        $r13 := @caughtexception;
+
+        r18 = $r13;
+
+        $r14 = new android.os.Handler;
+
+        specialinvoke $r14.<android.os.Handler: void <init>(android.os.Looper)>(r0);
+
+        return $r14;
+
+     label8:
+        $r19 = new android.os.Handler;
+
+        specialinvoke $r19.<android.os.Handler: void <init>(android.os.Looper)>(r0);
+
+        return $r19;
+
+        catch java.lang.IllegalAccessException from label2 to label3 with label4;
+        catch java.lang.InstantiationException from label2 to label3 with label5;
+        catch java.lang.NoSuchMethodException from label2 to label3 with label6;
+        catch java.lang.reflect.InvocationTargetException from label2 to label3 with label7;
+    }
+
+androidx.arch.core.executor.DefaultTaskExecutor$1
+<androidx.arch.core.executor.DefaultTaskExecutor$1: java.lang.String THREAD_NAME_STEM>
+<androidx.arch.core.executor.DefaultTaskExecutor$1: java.util.concurrent.atomic.AtomicInteger mThreadId>
+<androidx.arch.core.executor.DefaultTaskExecutor$1: androidx.arch.core.executor.DefaultTaskExecutor this$0>
+    void <init>(androidx.arch.core.executor.DefaultTaskExecutor)
+    {
+        androidx.arch.core.executor.DefaultTaskExecutor$1 r0;
+        androidx.arch.core.executor.DefaultTaskExecutor r1;
+        java.util.concurrent.atomic.AtomicInteger $r2;
+
+        r0 := @this: androidx.arch.core.executor.DefaultTaskExecutor$1;
+
+        r1 := @parameter0: androidx.arch.core.executor.DefaultTaskExecutor;
+
+        r0.<androidx.arch.core.executor.DefaultTaskExecutor$1: androidx.arch.core.executor.DefaultTaskExecutor this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicInteger: void <init>(int)>(0);
+
+        r0.<androidx.arch.core.executor.DefaultTaskExecutor$1: java.util.concurrent.atomic.AtomicInteger mThreadId> = $r2;
+
+        return;
+    }
+
+    public java.lang.Thread newThread(java.lang.Runnable)
+    {
+        androidx.arch.core.executor.DefaultTaskExecutor$1 r0;
+        java.lang.Runnable r1;
+        java.lang.Thread r2, $r3;
+        java.lang.StringBuilder $r4, $r5, $r7;
+        java.util.concurrent.atomic.AtomicInteger $r6;
+        int $i0;
+        java.lang.String $r8;
+
+        r0 := @this: androidx.arch.core.executor.DefaultTaskExecutor$1;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        $r3 = new java.lang.Thread;
+
+        specialinvoke $r3.<java.lang.Thread: void <init>(java.lang.Runnable)>(r1);
+
+        r2 = $r3;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("arch_disk_io_");
+
+        $r6 = r0.<androidx.arch.core.executor.DefaultTaskExecutor$1: java.util.concurrent.atomic.AtomicInteger mThreadId>;
+
+        $i0 = virtualinvoke $r6.<java.util.concurrent.atomic.AtomicInteger: int getAndIncrement()>();
+
+        $r7 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r2.<java.lang.Thread: void setName(java.lang.String)>($r8);
+
+        return r2;
+    }
+
+androidx.arch.core.executor.DefaultTaskExecutor$Api28Impl
+    private void <init>()
+    {
+        androidx.arch.core.executor.DefaultTaskExecutor$Api28Impl r0;
+
+        r0 := @this: androidx.arch.core.executor.DefaultTaskExecutor$Api28Impl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static android.os.Handler createAsync(android.os.Looper)
+    {
+        android.os.Looper r0;
+        android.os.Handler $r1;
+
+        r0 := @parameter0: android.os.Looper;
+
+        $r1 = staticinvoke <android.os.Handler: android.os.Handler createAsync(android.os.Looper)>(r0);
+
+        return $r1;
+    }
+

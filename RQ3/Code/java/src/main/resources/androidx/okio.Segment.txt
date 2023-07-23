@@ -1,0 +1,461 @@
+okio.Segment
+<okio.Segment: okio.Segment$Companion Companion>
+<okio.Segment: byte[] data>
+<okio.Segment: int limit>
+<okio.Segment: okio.Segment next>
+<okio.Segment: boolean owner>
+<okio.Segment: int pos>
+<okio.Segment: okio.Segment prev>
+<okio.Segment: boolean shared>
+    static void <clinit>()
+    {
+        okio.Segment$Companion $r0;
+
+        $r0 = new okio.Segment$Companion;
+
+        specialinvoke $r0.<okio.Segment$Companion: void <init>(kotlin.jvm.internal.DefaultConstructorMarker)>(null);
+
+        <okio.Segment: okio.Segment$Companion Companion> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        okio.Segment $r0;
+        byte[] $r1;
+
+        $r0 := @this: okio.Segment;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r1 = newarray (byte)[8192];
+
+        $r0.<okio.Segment: byte[] data> = $r1;
+
+        $r0.<okio.Segment: boolean owner> = 1;
+
+        $r0.<okio.Segment: boolean shared> = 0;
+
+        return;
+    }
+
+    public void <init>(byte[], int, int, boolean, boolean)
+    {
+        okio.Segment $r0;
+        byte[] $r1;
+        int $i0, $i1;
+        boolean $z0, $z1;
+
+        $r0 := @this: okio.Segment;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $z0 := @parameter3: boolean;
+
+        $z1 := @parameter4: boolean;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "data");
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<okio.Segment: byte[] data> = $r1;
+
+        $r0.<okio.Segment: int pos> = $i0;
+
+        $r0.<okio.Segment: int limit> = $i1;
+
+        $r0.<okio.Segment: boolean shared> = $z0;
+
+        $r0.<okio.Segment: boolean owner> = $z1;
+
+        return;
+    }
+
+    public final void compact()
+    {
+        okio.Segment $r0, $r2;
+        java.lang.String $r1;
+        int $i0, $i1, $i2;
+        boolean $z0;
+        java.lang.IllegalStateException $r3;
+
+        $r0 := @this: okio.Segment;
+
+        $r2 = $r0.<okio.Segment: okio.Segment prev>;
+
+        $i0 = 0;
+
+        if $r2 == $r0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        if $z0 == 0 goto label7;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $z0 = $r2.<okio.Segment: boolean owner>;
+
+        if $z0 != 0 goto label3;
+
+        return;
+
+     label3:
+        $i1 = $r0.<okio.Segment: int limit>;
+
+        $i2 = $r0.<okio.Segment: int pos>;
+
+        $i1 = $i1 - $i2;
+
+        $r2 = $r0.<okio.Segment: okio.Segment prev>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $i2 = $r2.<okio.Segment: int limit>;
+
+        $i2 = 8192 - $i2;
+
+        $r2 = $r0.<okio.Segment: okio.Segment prev>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $z0 = $r2.<okio.Segment: boolean shared>;
+
+        if $z0 == 0 goto label4;
+
+        goto label5;
+
+     label4:
+        $r2 = $r0.<okio.Segment: okio.Segment prev>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $i0 = $r2.<okio.Segment: int pos>;
+
+     label5:
+        $i0 = $i2 + $i0;
+
+        if $i1 <= $i0 goto label6;
+
+        return;
+
+     label6:
+        $r2 = $r0.<okio.Segment: okio.Segment prev>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        virtualinvoke $r0.<okio.Segment: void writeTo(okio.Segment,int)>($r2, $i1);
+
+        virtualinvoke $r0.<okio.Segment: okio.Segment pop()>();
+
+        staticinvoke <okio.SegmentPool: void recycle(okio.Segment)>($r0);
+
+        return;
+
+     label7:
+        $r3 = new java.lang.IllegalStateException;
+
+        $r1 = "cannot compact";
+
+        $r1 = virtualinvoke $r1.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r1);
+
+        throw $r3;
+    }
+
+    public final okio.Segment pop()
+    {
+        okio.Segment $r0, $r1, $r2, $r3;
+
+        $r0 := @this: okio.Segment;
+
+        $r1 = $r0.<okio.Segment: okio.Segment next>;
+
+        if $r1 == $r0 goto label1;
+
+        goto label2;
+
+     label1:
+        $r1 = null;
+
+     label2:
+        $r2 = $r0.<okio.Segment: okio.Segment prev>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $r3 = $r0.<okio.Segment: okio.Segment next>;
+
+        $r2.<okio.Segment: okio.Segment next> = $r3;
+
+        $r2 = $r0.<okio.Segment: okio.Segment next>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $r3 = $r0.<okio.Segment: okio.Segment prev>;
+
+        $r2.<okio.Segment: okio.Segment prev> = $r3;
+
+        $r0.<okio.Segment: okio.Segment next> = null;
+
+        $r0.<okio.Segment: okio.Segment prev> = null;
+
+        return $r1;
+    }
+
+    public final okio.Segment push(okio.Segment)
+    {
+        okio.Segment $r0, $r1, $r2;
+
+        $r0 := @this: okio.Segment;
+
+        $r1 := @parameter0: okio.Segment;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "segment");
+
+        $r1.<okio.Segment: okio.Segment prev> = $r0;
+
+        $r2 = $r0.<okio.Segment: okio.Segment next>;
+
+        $r1.<okio.Segment: okio.Segment next> = $r2;
+
+        $r2 = $r0.<okio.Segment: okio.Segment next>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r2);
+
+        $r2.<okio.Segment: okio.Segment prev> = $r1;
+
+        $r0.<okio.Segment: okio.Segment next> = $r1;
+
+        return $r1;
+    }
+
+    public final okio.Segment sharedCopy()
+    {
+        okio.Segment $r0, $r2;
+        byte[] $r1;
+        int $i0, $i1;
+
+        $r0 := @this: okio.Segment;
+
+        $r0.<okio.Segment: boolean shared> = 1;
+
+        $r2 = new okio.Segment;
+
+        $r1 = $r0.<okio.Segment: byte[] data>;
+
+        $i0 = $r0.<okio.Segment: int pos>;
+
+        $i1 = $r0.<okio.Segment: int limit>;
+
+        specialinvoke $r2.<okio.Segment: void <init>(byte[],int,int,boolean,boolean)>($r1, $i0, $i1, 1, 0);
+
+        return $r2;
+    }
+
+    public final okio.Segment split(int)
+    {
+        okio.Segment $r0, $r2, $r3;
+        byte[] $r1, $r4;
+        int $i0, $i1, $i2;
+        boolean $z0;
+        java.lang.IllegalArgumentException $r5;
+        java.lang.String $r6;
+
+        $r0 := @this: okio.Segment;
+
+        $i2 := @parameter0: int;
+
+        if $i2 <= 0 goto label1;
+
+        $i0 = $r0.<okio.Segment: int limit>;
+
+        $i1 = $r0.<okio.Segment: int pos>;
+
+        $i0 = $i0 - $i1;
+
+        if $i2 > $i0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        if $z0 == 0 goto label5;
+
+        if $i2 < 1024 goto label3;
+
+        $r2 = virtualinvoke $r0.<okio.Segment: okio.Segment sharedCopy()>();
+
+        goto label4;
+
+     label3:
+        $r3 = staticinvoke <okio.SegmentPool: okio.Segment take()>();
+
+        $r2 = $r3;
+
+        $r4 = $r0.<okio.Segment: byte[] data>;
+
+        $r1 = $r3.<okio.Segment: byte[] data>;
+
+        $i0 = $r0.<okio.Segment: int pos>;
+
+        $i1 = $i0 + $i2;
+
+        staticinvoke <kotlin.collections.ArraysKt: byte[] copyInto$default(byte[],byte[],int,int,int,int,java.lang.Object)>($r4, $r1, 0, $i0, $i1, 2, null);
+
+     label4:
+        $i0 = $r2.<okio.Segment: int pos>;
+
+        $i0 = $i0 + $i2;
+
+        $r2.<okio.Segment: int limit> = $i0;
+
+        $i0 = $r0.<okio.Segment: int pos>;
+
+        $i2 = $i0 + $i2;
+
+        $r0.<okio.Segment: int pos> = $i2;
+
+        $r0 = $r0.<okio.Segment: okio.Segment prev>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r0);
+
+        virtualinvoke $r0.<okio.Segment: okio.Segment push(okio.Segment)>($r2);
+
+        return $r2;
+
+     label5:
+        $r5 = new java.lang.IllegalArgumentException;
+
+        $r6 = "byteCount out of range";
+
+        $r6 = virtualinvoke $r6.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r6);
+
+        throw $r5;
+    }
+
+    public final void writeTo(okio.Segment, int)
+    {
+        okio.Segment $r0, $r2;
+        int $i0, $i1, $i2, $i3;
+        java.lang.String $r1;
+        boolean $z0;
+        byte[] $r3, $r5;
+        java.lang.IllegalArgumentException $r4;
+        java.lang.IllegalStateException $r6;
+
+        $r0 := @this: okio.Segment;
+
+        $r2 := @parameter0: okio.Segment;
+
+        $i1 := @parameter1: int;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r2, "sink");
+
+        $z0 = $r2.<okio.Segment: boolean owner>;
+
+        if $z0 == 0 goto label4;
+
+        $i0 = $r2.<okio.Segment: int limit>;
+
+        $i2 = $i0 + $i1;
+
+        if $i2 <= 8192 goto label3;
+
+        $z0 = $r2.<okio.Segment: boolean shared>;
+
+        if $z0 != 0 goto label2;
+
+        $i3 = $i0 + $i1;
+
+        $i2 = $r2.<okio.Segment: int pos>;
+
+        $i3 = $i3 - $i2;
+
+        if $i3 > 8192 goto label1;
+
+        $r3 = $r2.<okio.Segment: byte[] data>;
+
+        staticinvoke <kotlin.collections.ArraysKt: byte[] copyInto$default(byte[],byte[],int,int,int,int,java.lang.Object)>($r3, $r3, 0, $i2, $i0, 2, null);
+
+        $i0 = $r2.<okio.Segment: int limit>;
+
+        $i2 = $r2.<okio.Segment: int pos>;
+
+        $i0 = $i0 - $i2;
+
+        $r2.<okio.Segment: int limit> = $i0;
+
+        $r2.<okio.Segment: int pos> = 0;
+
+        goto label3;
+
+     label1:
+        $r4 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>()>();
+
+        throw $r4;
+
+     label2:
+        $r4 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>()>();
+
+        throw $r4;
+
+     label3:
+        $r3 = $r0.<okio.Segment: byte[] data>;
+
+        $r5 = $r2.<okio.Segment: byte[] data>;
+
+        $i0 = $r2.<okio.Segment: int limit>;
+
+        $i2 = $r0.<okio.Segment: int pos>;
+
+        $i3 = $i2 + $i1;
+
+        staticinvoke <kotlin.collections.ArraysKt: byte[] copyInto(byte[],byte[],int,int,int)>($r3, $r5, $i0, $i2, $i3);
+
+        $i0 = $r2.<okio.Segment: int limit>;
+
+        $i0 = $i0 + $i1;
+
+        $r2.<okio.Segment: int limit> = $i0;
+
+        $i0 = $r0.<okio.Segment: int pos>;
+
+        $i1 = $i0 + $i1;
+
+        $r0.<okio.Segment: int pos> = $i1;
+
+        return;
+
+     label4:
+        $r6 = new java.lang.IllegalStateException;
+
+        $r1 = "only owner can write";
+
+        $r1 = virtualinvoke $r1.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r1);
+
+        throw $r6;
+    }
+

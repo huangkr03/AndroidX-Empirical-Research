@@ -1,0 +1,130 @@
+androidx.health.connect.client.impl.converters.response.ProtoToChangesResponseKt
+    public static final androidx.health.connect.client.response.ChangesResponse toChangesResponse(androidx.health.platform.client.proto.ResponseProto$GetChangesResponse)
+    {
+        androidx.health.platform.client.proto.ResponseProto$GetChangesResponse r0;
+        androidx.health.connect.client.response.ChangesResponse $r1;
+        java.util.List $r2, $r3;
+        java.lang.String $r4;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: androidx.health.platform.client.proto.ResponseProto$GetChangesResponse;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "proto");
+
+        $r1 = new androidx.health.connect.client.response.ChangesResponse;
+
+        $r2 = virtualinvoke r0.<androidx.health.platform.client.proto.ResponseProto$GetChangesResponse: java.util.List getChangesList()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r2, "proto.changesList");
+
+        $r3 = staticinvoke <androidx.health.connect.client.impl.converters.response.ProtoToChangesResponseKt: java.util.List extractChanges(java.util.List)>($r2);
+
+        $r4 = virtualinvoke r0.<androidx.health.platform.client.proto.ResponseProto$GetChangesResponse: java.lang.String getNextChangesToken()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r4, "proto.nextChangesToken");
+
+        $z0 = virtualinvoke r0.<androidx.health.platform.client.proto.ResponseProto$GetChangesResponse: boolean getHasMore()>();
+
+        $z1 = virtualinvoke r0.<androidx.health.platform.client.proto.ResponseProto$GetChangesResponse: boolean getChangesTokenExpired()>();
+
+        specialinvoke $r1.<androidx.health.connect.client.response.ChangesResponse: void <init>(java.util.List,java.lang.String,boolean,boolean)>($r3, $r4, $z0, $z1);
+
+        return $r1;
+    }
+
+    private static final java.util.List extractChanges(java.util.List)
+    {
+        java.util.List r0, $r9;
+        java.util.Collection r1;
+        java.lang.Iterable $r2;
+        java.util.Iterator r3;
+        java.lang.Object r4, r5;
+        androidx.health.platform.client.proto.ChangeProto$DataChange r6;
+        androidx.health.connect.client.changes.Change r7, $r15;
+        java.util.ArrayList $r8;
+        boolean $z6, $z7, $z9;
+        androidx.health.connect.client.changes.UpsertionChange $r10;
+        androidx.health.platform.client.proto.DataProto$DataPoint $r11;
+        androidx.health.connect.client.records.Record $r12;
+        androidx.health.connect.client.changes.DeletionChange $r13;
+        java.lang.String $r14;
+
+        r0 := @parameter0: java.util.List;
+
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        r1 = (java.util.Collection) $r8;
+
+        $r2 = (java.lang.Iterable) r0;
+
+        r3 = interfaceinvoke $r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z9 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z9 == 0 goto label6;
+
+        r4 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = r4;
+
+        r6 = (androidx.health.platform.client.proto.ChangeProto$DataChange) r5;
+
+        $z6 = virtualinvoke r6.<androidx.health.platform.client.proto.ChangeProto$DataChange: boolean hasDeleteUid()>();
+
+        if $z6 == 0 goto label2;
+
+        $r13 = new androidx.health.connect.client.changes.DeletionChange;
+
+        $r14 = virtualinvoke r6.<androidx.health.platform.client.proto.ChangeProto$DataChange: java.lang.String getDeleteUid()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r14, "it.deleteUid");
+
+        specialinvoke $r13.<androidx.health.connect.client.changes.DeletionChange: void <init>(java.lang.String)>($r14);
+
+        $r15 = (androidx.health.connect.client.changes.Change) $r13;
+
+        goto label4;
+
+     label2:
+        $z7 = virtualinvoke r6.<androidx.health.platform.client.proto.ChangeProto$DataChange: boolean hasUpsertDataPoint()>();
+
+        if $z7 == 0 goto label3;
+
+        $r10 = new androidx.health.connect.client.changes.UpsertionChange;
+
+        $r11 = virtualinvoke r6.<androidx.health.platform.client.proto.ChangeProto$DataChange: androidx.health.platform.client.proto.DataProto$DataPoint getUpsertDataPoint()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r11, "it.upsertDataPoint");
+
+        $r12 = staticinvoke <androidx.health.connect.client.impl.converters.records.ProtoToRecordConvertersKt: androidx.health.connect.client.records.Record toRecord(androidx.health.platform.client.proto.DataProto$DataPoint)>($r11);
+
+        specialinvoke $r10.<androidx.health.connect.client.changes.UpsertionChange: void <init>(androidx.health.connect.client.records.Record)>($r12);
+
+        $r15 = (androidx.health.connect.client.changes.Change) $r10;
+
+        goto label4;
+
+     label3:
+        $r15 = null;
+
+     label4:
+        if $r15 == null goto label5;
+
+        r7 = $r15;
+
+        interfaceinvoke r1.<java.util.Collection: boolean add(java.lang.Object)>(r7);
+
+        goto label1;
+
+     label5:
+        goto label1;
+
+     label6:
+        $r9 = (java.util.List) r1;
+
+        return $r9;
+    }
+

@@ -1,0 +1,376 @@
+androidx.media3.transformer.SpeedChangingAudioProcessor
+<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.transformer.SpeedProvider speedProvider>
+<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>
+<androidx.media3.transformer.SpeedChangingAudioProcessor: float currentSpeed>
+<androidx.media3.transformer.SpeedChangingAudioProcessor: long bytesRead>
+<androidx.media3.transformer.SpeedChangingAudioProcessor: boolean endOfStreamQueuedToSonic>
+    public void <init>(androidx.media3.transformer.SpeedProvider)
+    {
+        androidx.media3.transformer.SpeedChangingAudioProcessor r0;
+        androidx.media3.transformer.SpeedProvider r1;
+        androidx.media3.exoplayer.audio.SonicAudioProcessor $r2;
+
+        r0 := @this: androidx.media3.transformer.SpeedChangingAudioProcessor;
+
+        r1 := @parameter0: androidx.media3.transformer.SpeedProvider;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.BaseAudioProcessor: void <init>()>();
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.transformer.SpeedProvider speedProvider> = r1;
+
+        $r2 = new androidx.media3.exoplayer.audio.SonicAudioProcessor;
+
+        specialinvoke $r2.<androidx.media3.exoplayer.audio.SonicAudioProcessor: void <init>()>();
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor> = $r2;
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: float currentSpeed> = 1.0F;
+
+        return;
+    }
+
+    public androidx.media3.common.audio.AudioProcessor$AudioFormat onConfigure(androidx.media3.common.audio.AudioProcessor$AudioFormat) throws androidx.media3.common.audio.AudioProcessor$UnhandledAudioFormatException
+    {
+        androidx.media3.transformer.SpeedChangingAudioProcessor r0;
+        androidx.media3.common.audio.AudioProcessor$AudioFormat r1, $r3;
+        androidx.media3.exoplayer.audio.SonicAudioProcessor $r2;
+
+        r0 := @this: androidx.media3.transformer.SpeedChangingAudioProcessor;
+
+        r1 := @parameter0: androidx.media3.common.audio.AudioProcessor$AudioFormat;
+
+        $r2 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        $r3 = virtualinvoke $r2.<androidx.media3.exoplayer.audio.SonicAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat configure(androidx.media3.common.audio.AudioProcessor$AudioFormat)>(r1);
+
+        return $r3;
+    }
+
+    public void queueInput(java.nio.ByteBuffer)
+    {
+        androidx.media3.transformer.SpeedChangingAudioProcessor r0;
+        java.nio.ByteBuffer r1, r2;
+        long l0, l2, $l5, $l6, $l7, $l8, $l13, $l14, $l15, $l19, $l20, $l21, $l22, $l23, l34, $l35, $l37, $l38, $l39;
+        float f0, $f1;
+        int i1, $i3, $i4, $i10, $i11, $i12, $i17, $i18, $i24, $i25, $i26, $i27, $i28, $i29, $i30, i32, i33, $i36;
+        androidx.media3.common.audio.AudioProcessor$AudioFormat $r3, $r4, $r11, $r12, $r13, $r14, $r15;
+        androidx.media3.transformer.SpeedProvider $r5, $r19;
+        byte $b9, $b16, $b31;
+        boolean $z0, $z1;
+        androidx.media3.exoplayer.audio.SonicAudioProcessor $r9, $r10, $r17, $r18;
+
+        r0 := @this: androidx.media3.transformer.SpeedChangingAudioProcessor;
+
+        r1 := @parameter0: java.nio.ByteBuffer;
+
+        $l8 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: long bytesRead>;
+
+        $r3 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i3 = $r3.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int sampleRate>;
+
+        $l6 = (long) $i3;
+
+        $r4 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i4 = $r4.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int bytesPerFrame>;
+
+        $l5 = (long) $i4;
+
+        $l7 = $l6 * $l5;
+
+        l0 = staticinvoke <androidx.media3.common.util.Util: long scaleLargeTimestamp(long,long,long)>($l8, 1000000L, $l7);
+
+        $r5 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.transformer.SpeedProvider speedProvider>;
+
+        f0 = interfaceinvoke $r5.<androidx.media3.transformer.SpeedProvider: float getSpeed(long)>(l0);
+
+        $f1 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: float currentSpeed>;
+
+        $b9 = f0 cmpl $f1;
+
+        if $b9 == 0 goto label2;
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: float currentSpeed> = f0;
+
+        $z1 = specialinvoke r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: boolean isUsingSonic()>();
+
+        if $z1 == 0 goto label1;
+
+        $r17 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        virtualinvoke $r17.<androidx.media3.exoplayer.audio.SonicAudioProcessor: void setSpeed(float)>(f0);
+
+        $r18 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        virtualinvoke $r18.<androidx.media3.exoplayer.audio.SonicAudioProcessor: void setPitch(float)>(f0);
+
+     label1:
+        virtualinvoke r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: void flush()>();
+
+     label2:
+        i1 = virtualinvoke r1.<java.nio.ByteBuffer: int limit()>();
+
+        $r19 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.transformer.SpeedProvider speedProvider>;
+
+        l2 = interfaceinvoke $r19.<androidx.media3.transformer.SpeedProvider: long getNextSpeedChangeTimeUs(long)>(l0);
+
+        $b31 = l2 cmp -9223372036854775807L;
+
+        if $b31 == 0 goto label4;
+
+        $l22 = l2 - l0;
+
+        $r11 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i17 = $r11.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int sampleRate>;
+
+        $l20 = (long) $i17;
+
+        $r12 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i18 = $r12.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int bytesPerFrame>;
+
+        $l19 = (long) $i18;
+
+        $l21 = $l20 * $l19;
+
+        $l23 = staticinvoke <androidx.media3.common.util.Util: long scaleLargeTimestamp(long,long,long)>($l22, $l21, 1000000L);
+
+        i32 = (int) $l23;
+
+        $r13 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i26 = $r13.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int bytesPerFrame>;
+
+        $r14 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i24 = $r14.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int bytesPerFrame>;
+
+        $i25 = i32 % $i24;
+
+        i33 = $i26 - $i25;
+
+        $r15 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i27 = $r15.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int bytesPerFrame>;
+
+        if i33 == $i27 goto label3;
+
+        i32 = i32 + i33;
+
+     label3:
+        $i28 = virtualinvoke r1.<java.nio.ByteBuffer: int position()>();
+
+        $i29 = $i28 + i32;
+
+        $i30 = staticinvoke <java.lang.Math: int min(int,int)>(i1, $i29);
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer limit(int)>($i30);
+
+        goto label5;
+
+     label4:
+        i32 = -1;
+
+     label5:
+        $i10 = virtualinvoke r1.<java.nio.ByteBuffer: int position()>();
+
+        l34 = (long) $i10;
+
+        $z0 = specialinvoke r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: boolean isUsingSonic()>();
+
+        if $z0 == 0 goto label6;
+
+        $r9 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        virtualinvoke $r9.<androidx.media3.exoplayer.audio.SonicAudioProcessor: void queueInput(java.nio.ByteBuffer)>(r1);
+
+        if i32 == -1 goto label7;
+
+        $i12 = virtualinvoke r1.<java.nio.ByteBuffer: int position()>();
+
+        $l13 = (long) $i12;
+
+        $l15 = $l13 - l34;
+
+        $l14 = (long) i32;
+
+        $b16 = $l15 cmp $l14;
+
+        if $b16 != 0 goto label7;
+
+        $r10 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        virtualinvoke $r10.<androidx.media3.exoplayer.audio.SonicAudioProcessor: void queueEndOfStream()>();
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: boolean endOfStreamQueuedToSonic> = 1;
+
+        goto label7;
+
+     label6:
+        $i11 = virtualinvoke r1.<java.nio.ByteBuffer: int remaining()>();
+
+        r2 = virtualinvoke r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: java.nio.ByteBuffer replaceOutputBuffer(int)>($i11);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(java.nio.ByteBuffer)>(r1);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.Buffer flip()>();
+
+     label7:
+        $l35 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: long bytesRead>;
+
+        $i36 = virtualinvoke r1.<java.nio.ByteBuffer: int position()>();
+
+        $l37 = (long) $i36;
+
+        $l38 = $l37 - l34;
+
+        $l39 = $l35 + $l38;
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: long bytesRead> = $l39;
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer limit(int)>(i1);
+
+        return;
+    }
+
+    protected void onQueueEndOfStream()
+    {
+        androidx.media3.transformer.SpeedChangingAudioProcessor r0;
+        boolean $z0;
+        androidx.media3.exoplayer.audio.SonicAudioProcessor $r1;
+
+        r0 := @this: androidx.media3.transformer.SpeedChangingAudioProcessor;
+
+        $z0 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: boolean endOfStreamQueuedToSonic>;
+
+        if $z0 != 0 goto label1;
+
+        $r1 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        virtualinvoke $r1.<androidx.media3.exoplayer.audio.SonicAudioProcessor: void queueEndOfStream()>();
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: boolean endOfStreamQueuedToSonic> = 1;
+
+     label1:
+        return;
+    }
+
+    public java.nio.ByteBuffer getOutput()
+    {
+        androidx.media3.transformer.SpeedChangingAudioProcessor r0;
+        boolean $z0;
+        androidx.media3.exoplayer.audio.SonicAudioProcessor $r1;
+        java.nio.ByteBuffer $r2;
+
+        r0 := @this: androidx.media3.transformer.SpeedChangingAudioProcessor;
+
+        $z0 = specialinvoke r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: boolean isUsingSonic()>();
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        $r2 = virtualinvoke $r1.<androidx.media3.exoplayer.audio.SonicAudioProcessor: java.nio.ByteBuffer getOutput()>();
+
+        goto label2;
+
+     label1:
+        $r2 = specialinvoke r0.<androidx.media3.exoplayer.audio.BaseAudioProcessor: java.nio.ByteBuffer getOutput()>();
+
+     label2:
+        return $r2;
+    }
+
+    public boolean isEnded()
+    {
+        androidx.media3.transformer.SpeedChangingAudioProcessor r0;
+        boolean $z0, $z1, $z2;
+        androidx.media3.exoplayer.audio.SonicAudioProcessor $r1;
+
+        r0 := @this: androidx.media3.transformer.SpeedChangingAudioProcessor;
+
+        $z0 = specialinvoke r0.<androidx.media3.exoplayer.audio.BaseAudioProcessor: boolean isEnded()>();
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        $z1 = virtualinvoke $r1.<androidx.media3.exoplayer.audio.SonicAudioProcessor: boolean isEnded()>();
+
+        if $z1 == 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+
+    protected void onFlush()
+    {
+        androidx.media3.transformer.SpeedChangingAudioProcessor r0;
+        androidx.media3.exoplayer.audio.SonicAudioProcessor $r1;
+
+        r0 := @this: androidx.media3.transformer.SpeedChangingAudioProcessor;
+
+        $r1 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        virtualinvoke $r1.<androidx.media3.exoplayer.audio.SonicAudioProcessor: void flush()>();
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: boolean endOfStreamQueuedToSonic> = 0;
+
+        return;
+    }
+
+    protected void onReset()
+    {
+        androidx.media3.transformer.SpeedChangingAudioProcessor r0;
+        androidx.media3.exoplayer.audio.SonicAudioProcessor $r1;
+
+        r0 := @this: androidx.media3.transformer.SpeedChangingAudioProcessor;
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: float currentSpeed> = 1.0F;
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: long bytesRead> = 0L;
+
+        $r1 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: androidx.media3.exoplayer.audio.SonicAudioProcessor sonicAudioProcessor>;
+
+        virtualinvoke $r1.<androidx.media3.exoplayer.audio.SonicAudioProcessor: void reset()>();
+
+        r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: boolean endOfStreamQueuedToSonic> = 0;
+
+        return;
+    }
+
+    private boolean isUsingSonic()
+    {
+        androidx.media3.transformer.SpeedChangingAudioProcessor r0;
+        float $f0;
+        byte $b0;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.transformer.SpeedChangingAudioProcessor;
+
+        $f0 = r0.<androidx.media3.transformer.SpeedChangingAudioProcessor: float currentSpeed>;
+
+        $b0 = $f0 cmpl 1.0F;
+
+        if $b0 == 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+

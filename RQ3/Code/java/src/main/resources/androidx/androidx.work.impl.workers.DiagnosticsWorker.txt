@@ -1,0 +1,179 @@
+androidx.work.impl.workers.DiagnosticsWorker
+    public void <init>(android.content.Context, androidx.work.WorkerParameters)
+    {
+        androidx.work.impl.workers.DiagnosticsWorker r0;
+        android.content.Context r1;
+        androidx.work.WorkerParameters r2;
+
+        r0 := @this: androidx.work.impl.workers.DiagnosticsWorker;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.work.WorkerParameters;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "context");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r2, "parameters");
+
+        specialinvoke r0.<androidx.work.Worker: void <init>(android.content.Context,androidx.work.WorkerParameters)>(r1, r2);
+
+        return;
+    }
+
+    public androidx.work.ListenableWorker$Result doWork()
+    {
+        androidx.work.impl.workers.DiagnosticsWorker r0;
+        androidx.work.impl.WorkManagerImpl r1, $r11;
+        androidx.work.impl.WorkDatabase r2, $r12;
+        androidx.work.impl.model.WorkSpecDao r3;
+        androidx.work.impl.model.WorkNameDao r4;
+        androidx.work.impl.model.WorkTagDao r5;
+        androidx.work.impl.model.SystemIdInfoDao r6;
+        long l0, $l1, $l2;
+        java.util.List r7, r8, r9;
+        android.content.Context $r10;
+        java.util.concurrent.TimeUnit $r13;
+        java.util.Collection $r14, $r15, $r16;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        androidx.work.ListenableWorker$Result $r17;
+        androidx.work.Logger $r18, $r20, $r23, $r25, $r28, $r30;
+        java.lang.String $r19, $r21, $r22, $r24, $r26, $r27, $r29, $r31, $r32;
+
+        r0 := @this: androidx.work.impl.workers.DiagnosticsWorker;
+
+        $r10 = virtualinvoke r0.<androidx.work.impl.workers.DiagnosticsWorker: android.content.Context getApplicationContext()>();
+
+        $r11 = staticinvoke <androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkManagerImpl getInstance(android.content.Context)>($r10);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r11, "getInstance(applicationContext)");
+
+        r1 = $r11;
+
+        $r12 = virtualinvoke r1.<androidx.work.impl.WorkManagerImpl: androidx.work.impl.WorkDatabase getWorkDatabase()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r12, "workManager.workDatabase");
+
+        r2 = $r12;
+
+        r3 = virtualinvoke r2.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkSpecDao workSpecDao()>();
+
+        r4 = virtualinvoke r2.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkNameDao workNameDao()>();
+
+        r5 = virtualinvoke r2.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.WorkTagDao workTagDao()>();
+
+        r6 = virtualinvoke r2.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.SystemIdInfoDao systemIdInfoDao()>();
+
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r13 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit DAYS>;
+
+        $l2 = virtualinvoke $r13.<java.util.concurrent.TimeUnit: long toMillis(long)>(1L);
+
+        l0 = $l1 - $l2;
+
+        r7 = interfaceinvoke r3.<androidx.work.impl.model.WorkSpecDao: java.util.List getRecentlyCompletedWork(long)>(l0);
+
+        r8 = interfaceinvoke r3.<androidx.work.impl.model.WorkSpecDao: java.util.List getRunningWork()>();
+
+        r9 = interfaceinvoke r3.<androidx.work.impl.model.WorkSpecDao: java.util.List getAllEligibleWorkSpecsForScheduling(int)>(200);
+
+        $r14 = (java.util.Collection) r7;
+
+        $z0 = interfaceinvoke $r14.<java.util.Collection: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $z3 = 1;
+
+        goto label2;
+
+     label1:
+        $z3 = 0;
+
+     label2:
+        if $z3 == 0 goto label3;
+
+        $r28 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r29 = staticinvoke <androidx.work.impl.workers.DiagnosticsWorkerKt: java.lang.String access$getTAG$p()>();
+
+        virtualinvoke $r28.<androidx.work.Logger: void info(java.lang.String,java.lang.String)>($r29, "Recently completed work:\n\n");
+
+        $r30 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r31 = staticinvoke <androidx.work.impl.workers.DiagnosticsWorkerKt: java.lang.String access$getTAG$p()>();
+
+        $r32 = staticinvoke <androidx.work.impl.workers.DiagnosticsWorkerKt: java.lang.String access$workSpecRows(androidx.work.impl.model.WorkNameDao,androidx.work.impl.model.WorkTagDao,androidx.work.impl.model.SystemIdInfoDao,java.util.List)>(r4, r5, r6, r7);
+
+        virtualinvoke $r30.<androidx.work.Logger: void info(java.lang.String,java.lang.String)>($r31, $r32);
+
+     label3:
+        $r15 = (java.util.Collection) r8;
+
+        $z1 = interfaceinvoke $r15.<java.util.Collection: boolean isEmpty()>();
+
+        if $z1 != 0 goto label4;
+
+        $z4 = 1;
+
+        goto label5;
+
+     label4:
+        $z4 = 0;
+
+     label5:
+        if $z4 == 0 goto label6;
+
+        $r23 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r24 = staticinvoke <androidx.work.impl.workers.DiagnosticsWorkerKt: java.lang.String access$getTAG$p()>();
+
+        virtualinvoke $r23.<androidx.work.Logger: void info(java.lang.String,java.lang.String)>($r24, "Running work:\n\n");
+
+        $r25 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r26 = staticinvoke <androidx.work.impl.workers.DiagnosticsWorkerKt: java.lang.String access$getTAG$p()>();
+
+        $r27 = staticinvoke <androidx.work.impl.workers.DiagnosticsWorkerKt: java.lang.String access$workSpecRows(androidx.work.impl.model.WorkNameDao,androidx.work.impl.model.WorkTagDao,androidx.work.impl.model.SystemIdInfoDao,java.util.List)>(r4, r5, r6, r8);
+
+        virtualinvoke $r25.<androidx.work.Logger: void info(java.lang.String,java.lang.String)>($r26, $r27);
+
+     label6:
+        $r16 = (java.util.Collection) r9;
+
+        $z2 = interfaceinvoke $r16.<java.util.Collection: boolean isEmpty()>();
+
+        if $z2 != 0 goto label7;
+
+        $z5 = 1;
+
+        goto label8;
+
+     label7:
+        $z5 = 0;
+
+     label8:
+        if $z5 == 0 goto label9;
+
+        $r18 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r19 = staticinvoke <androidx.work.impl.workers.DiagnosticsWorkerKt: java.lang.String access$getTAG$p()>();
+
+        virtualinvoke $r18.<androidx.work.Logger: void info(java.lang.String,java.lang.String)>($r19, "Enqueued work:\n\n");
+
+        $r20 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r21 = staticinvoke <androidx.work.impl.workers.DiagnosticsWorkerKt: java.lang.String access$getTAG$p()>();
+
+        $r22 = staticinvoke <androidx.work.impl.workers.DiagnosticsWorkerKt: java.lang.String access$workSpecRows(androidx.work.impl.model.WorkNameDao,androidx.work.impl.model.WorkTagDao,androidx.work.impl.model.SystemIdInfoDao,java.util.List)>(r4, r5, r6, r9);
+
+        virtualinvoke $r20.<androidx.work.Logger: void info(java.lang.String,java.lang.String)>($r21, $r22);
+
+     label9:
+        $r17 = staticinvoke <androidx.work.ListenableWorker$Result: androidx.work.ListenableWorker$Result success()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r17, "success()");
+
+        return $r17;
+    }
+

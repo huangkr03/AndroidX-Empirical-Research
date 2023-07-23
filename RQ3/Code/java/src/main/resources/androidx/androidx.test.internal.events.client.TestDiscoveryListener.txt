@@ -1,0 +1,243 @@
+androidx.test.internal.events.client.TestDiscoveryListener
+<androidx.test.internal.events.client.TestDiscoveryListener: java.lang.String TAG>
+<androidx.test.internal.events.client.TestDiscoveryListener: androidx.test.internal.events.client.TestDiscoveryEventService testDiscoveryEventService>
+<androidx.test.internal.events.client.TestDiscoveryListener: java.util.concurrent.atomic.AtomicBoolean discoveryStarted>
+    public void <init>(androidx.test.internal.events.client.TestDiscoveryEventService)
+    {
+        androidx.test.internal.events.client.TestDiscoveryListener r0;
+        androidx.test.internal.events.client.TestDiscoveryEventService r1, $r4;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: androidx.test.internal.events.client.TestDiscoveryListener;
+
+        r1 := @parameter0: androidx.test.internal.events.client.TestDiscoveryEventService;
+
+        specialinvoke r0.<org.junit.runner.notification.RunListener: void <init>()>();
+
+        $r2 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(0);
+
+        r0.<androidx.test.internal.events.client.TestDiscoveryListener: java.util.concurrent.atomic.AtomicBoolean discoveryStarted> = $r2;
+
+        $r3 = staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r1, "testDiscoveryEventService can\'t be null");
+
+        $r4 = (androidx.test.internal.events.client.TestDiscoveryEventService) $r3;
+
+        r0.<androidx.test.internal.events.client.TestDiscoveryListener: androidx.test.internal.events.client.TestDiscoveryEventService testDiscoveryEventService> = $r4;
+
+        return;
+    }
+
+    private void reportDiscoveryError(org.junit.runner.notification.Failure) throws androidx.test.internal.events.client.TestEventClientException
+    {
+        androidx.test.internal.events.client.TestDiscoveryListener r0;
+        org.junit.runner.notification.Failure r1;
+        androidx.test.services.events.discovery.TestDiscoveryErrorEvent $r2;
+        androidx.test.internal.events.client.TestDiscoveryEventService $r3;
+        androidx.test.services.events.ErrorInfo $r4;
+        androidx.test.services.events.TimeStamp $r5;
+
+        r0 := @this: androidx.test.internal.events.client.TestDiscoveryListener;
+
+        r1 := @parameter0: org.junit.runner.notification.Failure;
+
+        $r3 = r0.<androidx.test.internal.events.client.TestDiscoveryListener: androidx.test.internal.events.client.TestDiscoveryEventService testDiscoveryEventService>;
+
+        $r2 = new androidx.test.services.events.discovery.TestDiscoveryErrorEvent;
+
+        $r4 = staticinvoke <androidx.test.services.events.ErrorInfo: androidx.test.services.events.ErrorInfo createFromFailure(org.junit.runner.notification.Failure)>(r1);
+
+        $r5 = staticinvoke <androidx.test.services.events.TimeStamp: androidx.test.services.events.TimeStamp now()>();
+
+        specialinvoke $r2.<androidx.test.services.events.discovery.TestDiscoveryErrorEvent: void <init>(androidx.test.services.events.ErrorInfo,androidx.test.services.events.TimeStamp)>($r4, $r5);
+
+        interfaceinvoke $r3.<androidx.test.internal.events.client.TestDiscoveryEventService: void send(androidx.test.services.events.discovery.TestDiscoveryEvent)>($r2);
+
+        return;
+    }
+
+    private void reportTestRunStarted() throws androidx.test.internal.events.client.TestEventClientException
+    {
+        androidx.test.internal.events.client.TestDiscoveryListener r0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        boolean $z0;
+        androidx.test.services.events.discovery.TestDiscoveryStartedEvent $r2;
+        androidx.test.internal.events.client.TestDiscoveryEventService $r3;
+
+        r0 := @this: androidx.test.internal.events.client.TestDiscoveryListener;
+
+        $r1 = r0.<androidx.test.internal.events.client.TestDiscoveryListener: java.util.concurrent.atomic.AtomicBoolean discoveryStarted>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: boolean getAndSet(boolean)>(1);
+
+        if $z0 != 0 goto label1;
+
+        $r3 = r0.<androidx.test.internal.events.client.TestDiscoveryListener: androidx.test.internal.events.client.TestDiscoveryEventService testDiscoveryEventService>;
+
+        $r2 = new androidx.test.services.events.discovery.TestDiscoveryStartedEvent;
+
+        specialinvoke $r2.<androidx.test.services.events.discovery.TestDiscoveryStartedEvent: void <init>()>();
+
+        interfaceinvoke $r3.<androidx.test.internal.events.client.TestDiscoveryEventService: void send(androidx.test.services.events.discovery.TestDiscoveryEvent)>($r2);
+
+     label1:
+        return;
+    }
+
+    public void testFailure(org.junit.runner.notification.Failure)
+    {
+        androidx.test.internal.events.client.TestDiscoveryListener r0;
+        org.junit.runner.notification.Failure r1;
+
+        r0 := @this: androidx.test.internal.events.client.TestDiscoveryListener;
+
+        r1 := @parameter0: org.junit.runner.notification.Failure;
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestDiscoveryListener: void reportDiscoveryError(org.junit.runner.notification.Failure)>(r1);
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public void testFinished(org.junit.runner.Description)
+    {
+        androidx.test.internal.events.client.TestDiscoveryListener r0;
+        org.junit.runner.Description r1;
+        java.lang.String r2, r3, $r7, $r14;
+        boolean $z0;
+        androidx.test.services.events.discovery.TestFoundEvent $r4;
+        androidx.test.internal.events.client.TestDiscoveryEventService $r5;
+        androidx.test.services.events.TestCaseInfo $r6;
+        java.lang.StringBuilder $r8, $r9, $r10, $r11, $r12, $r13;
+
+        r0 := @this: androidx.test.internal.events.client.TestDiscoveryListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        $z0 = staticinvoke <androidx.test.internal.events.client.JUnitValidator: boolean validateDescription(org.junit.runner.Description)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        $r7 = virtualinvoke r1.<org.junit.runner.Description: java.lang.String getClassName()>();
+
+        r3 = virtualinvoke r1.<org.junit.runner.Description: java.lang.String getMethodName()>();
+
+        r2 = $r7;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("JUnit reported ");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("#");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("; discarding as bogus.");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TestDiscoveryListener", $r14);
+
+        return;
+
+     label1:
+        $r5 = r0.<androidx.test.internal.events.client.TestDiscoveryListener: androidx.test.internal.events.client.TestDiscoveryEventService testDiscoveryEventService>;
+
+        $r4 = new androidx.test.services.events.discovery.TestFoundEvent;
+
+        $r6 = staticinvoke <androidx.test.services.events.ParcelableConverter: androidx.test.services.events.TestCaseInfo getTestCaseFromDescription(org.junit.runner.Description)>(r1);
+
+        specialinvoke $r4.<androidx.test.services.events.discovery.TestFoundEvent: void <init>(androidx.test.services.events.TestCaseInfo)>($r6);
+
+        interfaceinvoke $r5.<androidx.test.internal.events.client.TestDiscoveryEventService: void send(androidx.test.services.events.discovery.TestDiscoveryEvent)>($r4);
+
+        goto label2;
+
+     label2:
+        return;
+    }
+
+    public void testRunFinished(org.junit.runner.Result)
+    {
+        androidx.test.internal.events.client.TestDiscoveryListener r0;
+        org.junit.runner.Result r1;
+        androidx.test.services.events.discovery.TestDiscoveryFinishedEvent $r2;
+        androidx.test.internal.events.client.TestDiscoveryEventService $r3;
+
+        r0 := @this: androidx.test.internal.events.client.TestDiscoveryListener;
+
+        r1 := @parameter0: org.junit.runner.Result;
+
+        $r3 = r0.<androidx.test.internal.events.client.TestDiscoveryListener: androidx.test.internal.events.client.TestDiscoveryEventService testDiscoveryEventService>;
+
+        $r2 = new androidx.test.services.events.discovery.TestDiscoveryFinishedEvent;
+
+        specialinvoke $r2.<androidx.test.services.events.discovery.TestDiscoveryFinishedEvent: void <init>()>();
+
+        interfaceinvoke $r3.<androidx.test.internal.events.client.TestDiscoveryEventService: void send(androidx.test.services.events.discovery.TestDiscoveryEvent)>($r2);
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public void testRunStarted(org.junit.runner.Description)
+    {
+        androidx.test.internal.events.client.TestDiscoveryListener r0;
+        org.junit.runner.Description r1;
+
+        r0 := @this: androidx.test.internal.events.client.TestDiscoveryListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestDiscoveryListener: void reportTestRunStarted()>();
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public boolean reportProcessCrash(java.lang.Throwable)
+    {
+        androidx.test.internal.events.client.TestDiscoveryListener r0;
+        java.lang.Throwable r1;
+        org.junit.runner.notification.Failure $r2;
+        org.junit.runner.Description $r3;
+        androidx.test.services.events.discovery.TestDiscoveryFinishedEvent $r4;
+        androidx.test.internal.events.client.TestDiscoveryEventService $r5;
+
+        r0 := @this: androidx.test.internal.events.client.TestDiscoveryListener;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestDiscoveryListener: void reportTestRunStarted()>();
+
+        $r2 = new org.junit.runner.notification.Failure;
+
+        $r3 = <org.junit.runner.Description: org.junit.runner.Description EMPTY>;
+
+        specialinvoke $r2.<org.junit.runner.notification.Failure: void <init>(org.junit.runner.Description,java.lang.Throwable)>($r3, r1);
+
+        specialinvoke r0.<androidx.test.internal.events.client.TestDiscoveryListener: void reportDiscoveryError(org.junit.runner.notification.Failure)>($r2);
+
+        $r5 = r0.<androidx.test.internal.events.client.TestDiscoveryListener: androidx.test.internal.events.client.TestDiscoveryEventService testDiscoveryEventService>;
+
+        $r4 = new androidx.test.services.events.discovery.TestDiscoveryFinishedEvent;
+
+        specialinvoke $r4.<androidx.test.services.events.discovery.TestDiscoveryFinishedEvent: void <init>()>();
+
+        interfaceinvoke $r5.<androidx.test.internal.events.client.TestDiscoveryEventService: void send(androidx.test.services.events.discovery.TestDiscoveryEvent)>($r4);
+
+        return 1;
+    }
+

@@ -1,0 +1,147 @@
+androidx.test.jank.internal.FrameStatsMonitorBase
+<androidx.test.jank.internal.FrameStatsMonitorBase: java.lang.String TAG>
+<androidx.test.jank.internal.FrameStatsMonitorBase: double MAX_ERROR>
+<androidx.test.jank.internal.FrameStatsMonitorBase: double PAUSE_THRESHOLD>
+<androidx.test.jank.internal.FrameStatsMonitorBase: java.util.ArrayList mJankyFrames>
+<androidx.test.jank.internal.FrameStatsMonitorBase: java.util.ArrayList mFps>
+<androidx.test.jank.internal.FrameStatsMonitorBase: java.util.ArrayList mLongestNormalizedFrames>
+    void <init>()
+    {
+        androidx.test.jank.internal.FrameStatsMonitorBase r0;
+        java.util.ArrayList $r1, $r2, $r3;
+
+        r0 := @this: androidx.test.jank.internal.FrameStatsMonitorBase;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        r0.<androidx.test.jank.internal.FrameStatsMonitorBase: java.util.ArrayList mJankyFrames> = $r1;
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        r0.<androidx.test.jank.internal.FrameStatsMonitorBase: java.util.ArrayList mFps> = $r2;
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        r0.<androidx.test.jank.internal.FrameStatsMonitorBase: java.util.ArrayList mLongestNormalizedFrames> = $r3;
+
+        return;
+    }
+
+    protected void analyze(android.view.FrameStats)
+    {
+        androidx.test.jank.internal.FrameStatsMonitorBase r0;
+        android.view.FrameStats r1;
+        long l0, l1, $l3, $l5, $l7;
+        double d0, $d1, $d2, $d3, $d4, d5, d6, $d7, d8;
+        int $i2, $i6, i11, i12, i13;
+        java.util.ArrayList $r2, $r4, $r6;
+        java.lang.Integer $r3;
+        java.lang.Double $r5, $r7;
+        byte $b4, $b8, $b9;
+
+        r0 := @this: androidx.test.jank.internal.FrameStatsMonitorBase;
+
+        r1 := @parameter0: android.view.FrameStats;
+
+        i11 = virtualinvoke r1.<android.view.FrameStats: int getFrameCount()>();
+
+        l0 = virtualinvoke r1.<android.view.FrameStats: long getRefreshPeriodNano()>();
+
+        i12 = 0;
+
+        d5 = 0.0;
+
+        d6 = 0.0;
+
+        i13 = 2;
+
+     label1:
+        if i13 >= i11 goto label5;
+
+        $l3 = virtualinvoke r1.<android.view.FrameStats: long getFramePresentedTimeNano(int)>(i13);
+
+        $b4 = $l3 cmp -1L;
+
+        if $b4 != 0 goto label2;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("JankTestHelper", "Skipping fenced frame.");
+
+        i11 = i13;
+
+        goto label5;
+
+     label2:
+        $l5 = virtualinvoke r1.<android.view.FrameStats: long getFramePresentedTimeNano(int)>(i13);
+
+        $i6 = i13 - 1;
+
+        $l7 = virtualinvoke r1.<android.view.FrameStats: long getFramePresentedTimeNano(int)>($i6);
+
+        l1 = $l5 - $l7;
+
+        $d4 = (double) l1;
+
+        $d3 = (double) l0;
+
+        d0 = $d4 / $d3;
+
+        $b8 = d0 cmpg 15.0;
+
+        if $b8 >= 0 goto label4;
+
+        $b9 = d0 cmpl 1.5;
+
+        if $b9 <= 0 goto label3;
+
+        i12 = i12 + 1;
+
+     label3:
+        d5 = staticinvoke <java.lang.Math: double max(double,double)>(d5, d0);
+
+     label4:
+        $d7 = (double) l1;
+
+        d6 = d6 + $d7;
+
+        i13 = i13 + 1;
+
+        goto label1;
+
+     label5:
+        $i2 = i11 - 2;
+
+        $d1 = (double) $i2;
+
+        $d2 = $d1 / d6;
+
+        d8 = $d2 * 1.0E9;
+
+        $r2 = r0.<androidx.test.jank.internal.FrameStatsMonitorBase: java.util.ArrayList mJankyFrames>;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i12);
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r3);
+
+        $r4 = r0.<androidx.test.jank.internal.FrameStatsMonitorBase: java.util.ArrayList mFps>;
+
+        $r5 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d8);
+
+        virtualinvoke $r4.<java.util.ArrayList: boolean add(java.lang.Object)>($r5);
+
+        $r6 = r0.<androidx.test.jank.internal.FrameStatsMonitorBase: java.util.ArrayList mLongestNormalizedFrames>;
+
+        $r7 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d5);
+
+        virtualinvoke $r6.<java.util.ArrayList: boolean add(java.lang.Object)>($r7);
+
+        return;
+    }
+

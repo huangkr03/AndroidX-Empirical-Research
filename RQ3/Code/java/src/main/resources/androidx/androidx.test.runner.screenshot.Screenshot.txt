@@ -1,0 +1,402 @@
+androidx.test.runner.screenshot.Screenshot
+<androidx.test.runner.screenshot.Screenshot: int androidRuntimeVersion>
+<androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.UiAutomationWrapper uiWrapper>
+<androidx.test.runner.screenshot.Screenshot: java.util.Set screenCaptureProcessorSet>
+<androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.TakeScreenshotCallable$Factory takeScreenshotCallableFactory>
+    private static android.graphics.Bitmap captureUiAutomatorImpl()
+    {
+        androidx.test.runner.screenshot.UiAutomationWrapper $r0;
+        android.graphics.Bitmap $r1;
+
+        $r0 = <androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.UiAutomationWrapper uiWrapper>;
+
+        $r1 = virtualinvoke $r0.<androidx.test.runner.screenshot.UiAutomationWrapper: android.graphics.Bitmap takeScreenshot()>();
+
+        return $r1;
+    }
+
+    private static android.graphics.Bitmap captureViewBasedImpl(android.view.View) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException
+    {
+        android.view.View r0;
+        java.util.concurrent.Callable r1;
+        java.util.concurrent.FutureTask r2, r11;
+        androidx.test.runner.screenshot.TakeScreenshotCallable$Factory $r4;
+        android.os.Looper $r6, $r7;
+        android.app.Instrumentation $r8;
+        java.lang.Object $r9;
+        android.graphics.Bitmap $r10;
+        java.lang.Runnable r12;
+
+        r0 := @parameter0: android.view.View;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r0, "Taking view based screenshot requires using either takeScreenshot(view) or takeScreenshot(activity) where view and activity are non-null.");
+
+        $r4 = <androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.TakeScreenshotCallable$Factory takeScreenshotCallableFactory>;
+
+        r1 = virtualinvoke $r4.<androidx.test.runner.screenshot.TakeScreenshotCallable$Factory: java.util.concurrent.Callable create(android.view.View)>(r0);
+
+        r11 = new java.util.concurrent.FutureTask;
+
+        specialinvoke r11.<java.util.concurrent.FutureTask: void <init>(java.util.concurrent.Callable)>(r1);
+
+        r2 = r11;
+
+        $r6 = staticinvoke <android.os.Looper: android.os.Looper myLooper()>();
+
+        $r7 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        if $r6 != $r7 goto label1;
+
+        virtualinvoke r2.<java.util.concurrent.FutureTask: void run()>();
+
+        goto label2;
+
+     label1:
+        $r8 = staticinvoke <androidx.test.InstrumentationRegistry: android.app.Instrumentation getInstrumentation()>();
+
+        r12 = (java.lang.Runnable) r2;
+
+        virtualinvoke $r8.<android.app.Instrumentation: void runOnMainSync(java.lang.Runnable)>(r12);
+
+     label2:
+        $r9 = virtualinvoke r2.<java.util.concurrent.FutureTask: java.lang.Object get()>();
+
+        $r10 = (android.graphics.Bitmap) $r9;
+
+        return $r10;
+    }
+
+    public static androidx.test.runner.screenshot.ScreenCapture capture() throws androidx.test.runner.screenshot.Screenshot$ScreenShotException
+    {
+        androidx.test.runner.screenshot.ScreenCapture $r0;
+        java.lang.Throwable $r1, $r3, $r5, $r7, r9, r10, r11, r12, r17, r18, r19;
+        java.lang.IllegalStateException r13;
+        androidx.test.runner.screenshot.Screenshot$ScreenShotException r14, r15, r16;
+
+     label1:
+        $r0 = staticinvoke <androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.ScreenCapture captureImpl(android.view.View)>(null);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        r9 = $r1;
+
+        r13 = new java.lang.IllegalStateException;
+
+        specialinvoke r13.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>(r9);
+
+        throw r13;
+
+     label4:
+        $r5 := @caughtexception;
+
+        r10 = $r5;
+
+        r14 = new androidx.test.runner.screenshot.Screenshot$ScreenShotException;
+
+        specialinvoke r14.<androidx.test.runner.screenshot.Screenshot$ScreenShotException: void <init>(java.lang.Throwable)>(r10);
+
+        r17 = (java.lang.Throwable) r14;
+
+        throw r17;
+
+     label5:
+        $r3 := @caughtexception;
+
+        r11 = $r3;
+
+        r15 = new androidx.test.runner.screenshot.Screenshot$ScreenShotException;
+
+        specialinvoke r15.<androidx.test.runner.screenshot.Screenshot$ScreenShotException: void <init>(java.lang.Throwable)>(r11);
+
+        r18 = (java.lang.Throwable) r15;
+
+        throw r18;
+
+     label6:
+        $r7 := @caughtexception;
+
+        r12 = $r7;
+
+        r16 = new androidx.test.runner.screenshot.Screenshot$ScreenShotException;
+
+        specialinvoke r16.<androidx.test.runner.screenshot.Screenshot$ScreenShotException: void <init>(java.lang.Throwable)>(r12);
+
+        r19 = (java.lang.Throwable) r16;
+
+        throw r19;
+
+        catch java.lang.NullPointerException from label1 to label2 with label3;
+        catch java.io.IOException from label1 to label2 with label4;
+        catch java.lang.InterruptedException from label1 to label2 with label5;
+        catch java.util.concurrent.ExecutionException from label1 to label2 with label6;
+    }
+
+    public static androidx.test.runner.screenshot.ScreenCapture capture(android.app.Activity) throws androidx.test.runner.screenshot.Screenshot$ScreenShotException
+    {
+        android.app.Activity r0;
+        android.view.Window $r2;
+        android.view.View $r3, $r4;
+        androidx.test.runner.screenshot.ScreenCapture $r5;
+        java.lang.Throwable $r6, $r8, $r10, r12, r13, r14, r18, r19, r20;
+        androidx.test.runner.screenshot.Screenshot$ScreenShotException r15, r16, r17;
+
+        r0 := @parameter0: android.app.Activity;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r0, "activity cannot be null!");
+
+     label1:
+        $r2 = virtualinvoke r0.<android.app.Activity: android.view.Window getWindow()>();
+
+        $r3 = virtualinvoke $r2.<android.view.Window: android.view.View getDecorView()>();
+
+        $r4 = virtualinvoke $r3.<android.view.View: android.view.View getRootView()>();
+
+        $r5 = staticinvoke <androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.ScreenCapture captureImpl(android.view.View)>($r4);
+
+     label2:
+        return $r5;
+
+     label3:
+        $r10 := @caughtexception;
+
+        r12 = $r10;
+
+        r15 = new androidx.test.runner.screenshot.Screenshot$ScreenShotException;
+
+        specialinvoke r15.<androidx.test.runner.screenshot.Screenshot$ScreenShotException: void <init>(java.lang.Throwable)>(r12);
+
+        r18 = (java.lang.Throwable) r15;
+
+        throw r18;
+
+     label4:
+        $r6 := @caughtexception;
+
+        r13 = $r6;
+
+        r16 = new androidx.test.runner.screenshot.Screenshot$ScreenShotException;
+
+        specialinvoke r16.<androidx.test.runner.screenshot.Screenshot$ScreenShotException: void <init>(java.lang.Throwable)>(r13);
+
+        r19 = (java.lang.Throwable) r16;
+
+        throw r19;
+
+     label5:
+        $r8 := @caughtexception;
+
+        r14 = $r8;
+
+        r17 = new androidx.test.runner.screenshot.Screenshot$ScreenShotException;
+
+        specialinvoke r17.<androidx.test.runner.screenshot.Screenshot$ScreenShotException: void <init>(java.lang.Throwable)>(r14);
+
+        r20 = (java.lang.Throwable) r17;
+
+        throw r20;
+
+        catch java.io.IOException from label1 to label2 with label3;
+        catch java.lang.InterruptedException from label1 to label2 with label4;
+        catch java.util.concurrent.ExecutionException from label1 to label2 with label5;
+    }
+
+    public static androidx.test.runner.screenshot.ScreenCapture capture(android.view.View) throws androidx.test.runner.screenshot.Screenshot$ScreenShotException
+    {
+        android.view.View r0;
+        androidx.test.runner.screenshot.ScreenCapture $r2;
+        java.lang.Throwable $r3, $r5, $r7, r9, r10, r11, r15, r16, r17;
+        androidx.test.runner.screenshot.Screenshot$ScreenShotException r12, r13, r14;
+
+        r0 := @parameter0: android.view.View;
+
+        staticinvoke <androidx.test.internal.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r0, "view cannot be null!");
+
+     label1:
+        $r2 = staticinvoke <androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.ScreenCapture captureImpl(android.view.View)>(r0);
+
+     label2:
+        return $r2;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r9 = $r7;
+
+        r12 = new androidx.test.runner.screenshot.Screenshot$ScreenShotException;
+
+        specialinvoke r12.<androidx.test.runner.screenshot.Screenshot$ScreenShotException: void <init>(java.lang.Throwable)>(r9);
+
+        r15 = (java.lang.Throwable) r12;
+
+        throw r15;
+
+     label4:
+        $r5 := @caughtexception;
+
+        r10 = $r5;
+
+        r13 = new androidx.test.runner.screenshot.Screenshot$ScreenShotException;
+
+        specialinvoke r13.<androidx.test.runner.screenshot.Screenshot$ScreenShotException: void <init>(java.lang.Throwable)>(r10);
+
+        r16 = (java.lang.Throwable) r13;
+
+        throw r16;
+
+     label5:
+        $r3 := @caughtexception;
+
+        r11 = $r3;
+
+        r14 = new androidx.test.runner.screenshot.Screenshot$ScreenShotException;
+
+        specialinvoke r14.<androidx.test.runner.screenshot.Screenshot$ScreenShotException: void <init>(java.lang.Throwable)>(r11);
+
+        r17 = (java.lang.Throwable) r14;
+
+        throw r17;
+
+        catch java.io.IOException from label1 to label2 with label3;
+        catch java.lang.InterruptedException from label1 to label2 with label4;
+        catch java.util.concurrent.ExecutionException from label1 to label2 with label5;
+    }
+
+    private static androidx.test.runner.screenshot.ScreenCapture captureImpl(android.view.View) throws java.io.IOException, java.lang.InterruptedException, java.util.concurrent.ExecutionException
+    {
+        android.view.View r0;
+        int $i0;
+        android.graphics.Bitmap r1;
+        androidx.test.runner.screenshot.ScreenCapture $r2, $r4;
+        java.util.Set $r3;
+
+        r0 := @parameter0: android.view.View;
+
+        if r0 != null goto label1;
+
+        $i0 = <androidx.test.runner.screenshot.Screenshot: int androidRuntimeVersion>;
+
+        if $i0 < 18 goto label1;
+
+        r1 = staticinvoke <androidx.test.runner.screenshot.Screenshot: android.graphics.Bitmap captureUiAutomatorImpl()>();
+
+        goto label2;
+
+     label1:
+        r1 = staticinvoke <androidx.test.runner.screenshot.Screenshot: android.graphics.Bitmap captureViewBasedImpl(android.view.View)>(r0);
+
+     label2:
+        $r2 = new androidx.test.runner.screenshot.ScreenCapture;
+
+        specialinvoke $r2.<androidx.test.runner.screenshot.ScreenCapture: void <init>(android.graphics.Bitmap)>(r1);
+
+        $r3 = <androidx.test.runner.screenshot.Screenshot: java.util.Set screenCaptureProcessorSet>;
+
+        $r4 = virtualinvoke $r2.<androidx.test.runner.screenshot.ScreenCapture: androidx.test.runner.screenshot.ScreenCapture setProcessors(java.util.Set)>($r3);
+
+        return $r4;
+    }
+
+    static void <clinit>()
+    {
+        int $i0;
+        androidx.test.runner.screenshot.UiAutomationWrapper $r0;
+        java.util.HashSet $r1;
+        androidx.test.runner.screenshot.TakeScreenshotCallable$Factory $r2;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        <androidx.test.runner.screenshot.Screenshot: int androidRuntimeVersion> = $i0;
+
+        $r0 = new androidx.test.runner.screenshot.UiAutomationWrapper;
+
+        specialinvoke $r0.<androidx.test.runner.screenshot.UiAutomationWrapper: void <init>()>();
+
+        <androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.UiAutomationWrapper uiWrapper> = $r0;
+
+        $r1 = new java.util.HashSet;
+
+        specialinvoke $r1.<java.util.HashSet: void <init>()>();
+
+        <androidx.test.runner.screenshot.Screenshot: java.util.Set screenCaptureProcessorSet> = $r1;
+
+        $r2 = new androidx.test.runner.screenshot.TakeScreenshotCallable$Factory;
+
+        specialinvoke $r2.<androidx.test.runner.screenshot.TakeScreenshotCallable$Factory: void <init>()>();
+
+        <androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.TakeScreenshotCallable$Factory takeScreenshotCallableFactory> = $r2;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        androidx.test.runner.screenshot.Screenshot r0;
+
+        r0 := @this: androidx.test.runner.screenshot.Screenshot;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void addScreenCaptureProcessors(java.util.Set)
+    {
+        java.util.Set r0, $r1;
+
+        r0 := @parameter0: java.util.Set;
+
+        $r1 = <androidx.test.runner.screenshot.Screenshot: java.util.Set screenCaptureProcessorSet>;
+
+        interfaceinvoke $r1.<java.util.Set: boolean addAll(java.util.Collection)>(r0);
+
+        return;
+    }
+
+    static void setAndroidRuntimeVersion(int)
+    {
+        int i0;
+
+        i0 := @parameter0: int;
+
+        <androidx.test.runner.screenshot.Screenshot: int androidRuntimeVersion> = i0;
+
+        return;
+    }
+
+    public static void setScreenshotProcessors(java.util.Set)
+    {
+        java.util.Set r0;
+
+        r0 := @parameter0: java.util.Set;
+
+        <androidx.test.runner.screenshot.Screenshot: java.util.Set screenCaptureProcessorSet> = r0;
+
+        return;
+    }
+
+    static void setTakeScreenshotCallableFactory(androidx.test.runner.screenshot.TakeScreenshotCallable$Factory)
+    {
+        androidx.test.runner.screenshot.TakeScreenshotCallable$Factory r0;
+
+        r0 := @parameter0: androidx.test.runner.screenshot.TakeScreenshotCallable$Factory;
+
+        <androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.TakeScreenshotCallable$Factory takeScreenshotCallableFactory> = r0;
+
+        return;
+    }
+
+    static void setUiAutomationWrapper(androidx.test.runner.screenshot.UiAutomationWrapper)
+    {
+        androidx.test.runner.screenshot.UiAutomationWrapper r0;
+
+        r0 := @parameter0: androidx.test.runner.screenshot.UiAutomationWrapper;
+
+        <androidx.test.runner.screenshot.Screenshot: androidx.test.runner.screenshot.UiAutomationWrapper uiWrapper> = r0;
+
+        return;
+    }
+

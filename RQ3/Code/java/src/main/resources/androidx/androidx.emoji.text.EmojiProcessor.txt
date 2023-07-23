@@ -1,0 +1,1524 @@
+androidx.emoji.text.EmojiProcessor
+<androidx.emoji.text.EmojiProcessor: int ACTION_ADVANCE_BOTH>
+<androidx.emoji.text.EmojiProcessor: int ACTION_ADVANCE_END>
+<androidx.emoji.text.EmojiProcessor: int ACTION_FLUSH>
+<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.EmojiCompat$SpanFactory mSpanFactory>
+<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.MetadataRepo mMetadataRepo>
+<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.EmojiProcessor$GlyphChecker mGlyphChecker>
+<androidx.emoji.text.EmojiProcessor: boolean mUseEmojiAsDefaultStyle>
+<androidx.emoji.text.EmojiProcessor: int[] mEmojiAsDefaultStyleExceptions>
+    void <init>(androidx.emoji.text.MetadataRepo, androidx.emoji.text.EmojiCompat$SpanFactory, boolean, int[])
+    {
+        androidx.emoji.text.EmojiProcessor r0;
+        androidx.emoji.text.MetadataRepo r1;
+        androidx.emoji.text.EmojiCompat$SpanFactory r2;
+        boolean z0;
+        int[] r3;
+        androidx.emoji.text.EmojiProcessor$GlyphChecker $r4;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor;
+
+        r1 := @parameter0: androidx.emoji.text.MetadataRepo;
+
+        r2 := @parameter1: androidx.emoji.text.EmojiCompat$SpanFactory;
+
+        z0 := @parameter2: boolean;
+
+        r3 := @parameter3: int[];
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new androidx.emoji.text.EmojiProcessor$GlyphChecker;
+
+        specialinvoke $r4.<androidx.emoji.text.EmojiProcessor$GlyphChecker: void <init>()>();
+
+        r0.<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.EmojiProcessor$GlyphChecker mGlyphChecker> = $r4;
+
+        r0.<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.EmojiCompat$SpanFactory mSpanFactory> = r2;
+
+        r0.<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.MetadataRepo mMetadataRepo> = r1;
+
+        r0.<androidx.emoji.text.EmojiProcessor: boolean mUseEmojiAsDefaultStyle> = z0;
+
+        r0.<androidx.emoji.text.EmojiProcessor: int[] mEmojiAsDefaultStyleExceptions> = r3;
+
+        return;
+    }
+
+    androidx.emoji.text.EmojiMetadata getEmojiMetadata(java.lang.CharSequence)
+    {
+        androidx.emoji.text.EmojiProcessor r0;
+        java.lang.CharSequence r1;
+        androidx.emoji.text.EmojiProcessor$ProcessorSm r2, $r3;
+        int i0, i1, i2, $i3, i4;
+        androidx.emoji.text.MetadataRepo $r4;
+        androidx.emoji.text.MetadataRepo$Node $r5;
+        int[] $r6;
+        boolean $z0, $z1;
+        androidx.emoji.text.EmojiMetadata $r7;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        $r3 = new androidx.emoji.text.EmojiProcessor$ProcessorSm;
+
+        $r4 = r0.<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.MetadataRepo mMetadataRepo>;
+
+        $r5 = virtualinvoke $r4.<androidx.emoji.text.MetadataRepo: androidx.emoji.text.MetadataRepo$Node getRootNode()>();
+
+        $z0 = r0.<androidx.emoji.text.EmojiProcessor: boolean mUseEmojiAsDefaultStyle>;
+
+        $r6 = r0.<androidx.emoji.text.EmojiProcessor: int[] mEmojiAsDefaultStyleExceptions>;
+
+        specialinvoke $r3.<androidx.emoji.text.EmojiProcessor$ProcessorSm: void <init>(androidx.emoji.text.MetadataRepo$Node,boolean,int[])>($r5, $z0, $r6);
+
+        r2 = $r3;
+
+        i0 = interfaceinvoke r1.<java.lang.CharSequence: int length()>();
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i0 goto label3;
+
+        i1 = staticinvoke <java.lang.Character: int codePointAt(java.lang.CharSequence,int)>(r1, i4);
+
+        i2 = virtualinvoke r2.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int check(int)>(i1);
+
+        if i2 == 2 goto label2;
+
+        return null;
+
+     label2:
+        $i3 = staticinvoke <java.lang.Character: int charCount(int)>(i1);
+
+        i4 = i4 + $i3;
+
+        goto label1;
+
+     label3:
+        $z1 = virtualinvoke r2.<androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean isInFlushableState()>();
+
+        if $z1 == 0 goto label4;
+
+        $r7 = virtualinvoke r2.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.EmojiMetadata getCurrentMetadata()>();
+
+        return $r7;
+
+     label4:
+        return null;
+    }
+
+    java.lang.CharSequence process(java.lang.CharSequence, int, int, int, boolean)
+    {
+        androidx.emoji.text.EmojiProcessor r0;
+        java.lang.CharSequence r1, r22, r42;
+        boolean z0, z1, $z2, $z3, $z4, $z5, $z6, $z7;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21;
+        java.lang.Throwable r2, $r17;
+        androidx.emoji.widget.SpannableBuilder $r3, $r4, $r16, $r18;
+        androidx.emoji.text.EmojiMetadata $r5, $r7, $r8, $r10;
+        java.lang.Object[] $r11, $r13;
+        androidx.emoji.text.EmojiSpan[] $r12, r20;
+        android.text.Spanned $r14;
+        java.lang.Object r19, $r28, r29;
+        androidx.emoji.text.EmojiSpan r21;
+        androidx.emoji.text.MetadataRepo $r24;
+        androidx.emoji.text.MetadataRepo$Node $r25;
+        int[] $r26;
+        androidx.emoji.text.EmojiProcessor$ProcessorSm r27, r31;
+        android.text.SpannableString r30, r32, r33;
+        android.text.Spannable r34, r35, r36, r37, r38, r39, r40, r41;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        i10 := @parameter1: int;
+
+        i11 := @parameter2: int;
+
+        i12 := @parameter3: int;
+
+        z0 := @parameter4: boolean;
+
+        z1 = r1 instanceof androidx.emoji.widget.SpannableBuilder;
+
+        if z1 == 0 goto label01;
+
+        $r16 = (androidx.emoji.widget.SpannableBuilder) r1;
+
+        virtualinvoke $r16.<androidx.emoji.widget.SpannableBuilder: void beginBatchEdit()>();
+
+     label01:
+        r19 = null;
+
+        if z1 != 0 goto label02;
+
+        $z5 = r1 instanceof android.text.Spannable;
+
+        if $z5 == 0 goto label03;
+
+     label02:
+        r19 = (android.text.Spannable) r1;
+
+        goto label04;
+
+     label03:
+        $z6 = r1 instanceof android.text.Spanned;
+
+        if $z6 == 0 goto label04;
+
+        $r14 = (android.text.Spanned) r1;
+
+        $i9 = i10 - 1;
+
+        $i8 = i11 + 1;
+
+        i13 = interfaceinvoke $r14.<android.text.Spanned: int nextSpanTransition(int,int,java.lang.Class)>($i9, $i8, class "Landroidx/emoji/text/EmojiSpan;");
+
+        if i13 > i11 goto label04;
+
+        r30 = new android.text.SpannableString;
+
+        specialinvoke r30.<android.text.SpannableString: void <init>(java.lang.CharSequence)>(r1);
+
+        r19 = r30;
+
+     label04:
+        if r19 == null goto label07;
+
+        r34 = (android.text.Spannable) r19;
+
+        $r13 = interfaceinvoke r34.<android.text.Spannable: java.lang.Object[] getSpans(int,int,java.lang.Class)>(i10, i11, class "Landroidx/emoji/text/EmojiSpan;");
+
+        r20 = (androidx.emoji.text.EmojiSpan[]) $r13;
+
+        if r20 == null goto label07;
+
+        $i7 = lengthof r20;
+
+        if $i7 <= 0 goto label07;
+
+        i14 = lengthof r20;
+
+        i15 = 0;
+
+     label05:
+        if i15 >= i14 goto label07;
+
+        r21 = r20[i15];
+
+        r35 = (android.text.Spannable) r19;
+
+        i16 = interfaceinvoke r35.<android.text.Spannable: int getSpanStart(java.lang.Object)>(r21);
+
+        r36 = (android.text.Spannable) r19;
+
+        i0 = interfaceinvoke r36.<android.text.Spannable: int getSpanEnd(java.lang.Object)>(r21);
+
+        if i16 == i11 goto label06;
+
+        r37 = (android.text.Spannable) r19;
+
+        interfaceinvoke r37.<android.text.Spannable: void removeSpan(java.lang.Object)>(r21);
+
+     label06:
+        i10 = staticinvoke <java.lang.Math: int min(int,int)>(i16, i10);
+
+        i11 = staticinvoke <java.lang.Math: int max(int,int)>(i0, i11);
+
+        i15 = i15 + 1;
+
+        goto label05;
+
+     label07:
+        if i10 == i11 goto label08;
+
+        $i1 = interfaceinvoke r1.<java.lang.CharSequence: int length()>();
+
+        if i10 < $i1 goto label11;
+
+     label08:
+        r22 = r1;
+
+     label09:
+        if z1 == 0 goto label10;
+
+        $r3 = (androidx.emoji.widget.SpannableBuilder) r1;
+
+        virtualinvoke $r3.<androidx.emoji.widget.SpannableBuilder: void endBatchEdit()>();
+
+     label10:
+        return r22;
+
+     label11:
+        if i12 == 2147483647 goto label12;
+
+        if r19 == null goto label12;
+
+        r38 = (android.text.Spannable) r19;
+
+        $i5 = interfaceinvoke r38.<android.text.Spannable: int length()>();
+
+        r39 = (android.text.Spannable) r19;
+
+        $r11 = interfaceinvoke r39.<android.text.Spannable: java.lang.Object[] getSpans(int,int,java.lang.Class)>(0, $i5, class "Landroidx/emoji/text/EmojiSpan;");
+
+        $r12 = (androidx.emoji.text.EmojiSpan[]) $r11;
+
+        $i6 = lengthof $r12;
+
+        i12 = i12 - $i6;
+
+     label12:
+        i17 = 0;
+
+        r31 = new androidx.emoji.text.EmojiProcessor$ProcessorSm;
+
+        $r24 = r0.<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.MetadataRepo mMetadataRepo>;
+
+        $r25 = virtualinvoke $r24.<androidx.emoji.text.MetadataRepo: androidx.emoji.text.MetadataRepo$Node getRootNode()>();
+
+        $z7 = r0.<androidx.emoji.text.EmojiProcessor: boolean mUseEmojiAsDefaultStyle>;
+
+        $r26 = r0.<androidx.emoji.text.EmojiProcessor: int[] mEmojiAsDefaultStyleExceptions>;
+
+        specialinvoke r31.<androidx.emoji.text.EmojiProcessor$ProcessorSm: void <init>(androidx.emoji.text.MetadataRepo$Node,boolean,int[])>($r25, $z7, $r26);
+
+        r27 = r31;
+
+        i18 = i10;
+
+        i19 = staticinvoke <java.lang.Character: int codePointAt(java.lang.CharSequence,int)>(r1, i18);
+
+     label13:
+        if i18 >= i11 goto label21;
+
+        if i17 >= i12 goto label21;
+
+        i20 = virtualinvoke r27.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int check(int)>(i19);
+
+        tableswitch(i20)
+        {
+            case 1: goto label14;
+            case 2: goto label15;
+            case 3: goto label16;
+            default: goto label20;
+        };
+
+     label14:
+        $i3 = staticinvoke <java.lang.Character: int codePointAt(java.lang.CharSequence,int)>(r1, i10);
+
+        $i4 = staticinvoke <java.lang.Character: int charCount(int)>($i3);
+
+        i10 = i10 + $i4;
+
+        i18 = i10;
+
+        if i18 >= i11 goto label20;
+
+        i19 = staticinvoke <java.lang.Character: int codePointAt(java.lang.CharSequence,int)>(r1, i18);
+
+        goto label20;
+
+     label15:
+        $i2 = staticinvoke <java.lang.Character: int charCount(int)>(i19);
+
+        i18 = i18 + $i2;
+
+        if i18 >= i11 goto label20;
+
+        i19 = staticinvoke <java.lang.Character: int codePointAt(java.lang.CharSequence,int)>(r1, i18);
+
+        goto label20;
+
+     label16:
+        if z0 != 0 goto label17;
+
+        $r10 = virtualinvoke r27.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.EmojiMetadata getFlushMetadata()>();
+
+        $z4 = specialinvoke r0.<androidx.emoji.text.EmojiProcessor: boolean hasGlyph(java.lang.CharSequence,int,int,androidx.emoji.text.EmojiMetadata)>(r1, i10, i18, $r10);
+
+        if $z4 != 0 goto label19;
+
+     label17:
+        if r19 != null goto label18;
+
+        r32 = new android.text.SpannableString;
+
+        specialinvoke r32.<android.text.SpannableString: void <init>(java.lang.CharSequence)>(r1);
+
+        r19 = r32;
+
+     label18:
+        $r8 = virtualinvoke r27.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.EmojiMetadata getFlushMetadata()>();
+
+        r40 = (android.text.Spannable) r19;
+
+        specialinvoke r0.<androidx.emoji.text.EmojiProcessor: void addEmoji(android.text.Spannable,androidx.emoji.text.EmojiMetadata,int,int)>(r40, $r8, i10, i18);
+
+        i17 = i17 + 1;
+
+     label19:
+        i10 = i18;
+
+     label20:
+        goto label13;
+
+     label21:
+        $z2 = virtualinvoke r27.<androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean isInFlushableState()>();
+
+        if $z2 == 0 goto label24;
+
+        if i17 >= i12 goto label24;
+
+        if z0 != 0 goto label22;
+
+        $r7 = virtualinvoke r27.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.EmojiMetadata getCurrentMetadata()>();
+
+        $z3 = specialinvoke r0.<androidx.emoji.text.EmojiProcessor: boolean hasGlyph(java.lang.CharSequence,int,int,androidx.emoji.text.EmojiMetadata)>(r1, i10, i18, $r7);
+
+        if $z3 != 0 goto label24;
+
+     label22:
+        if r19 != null goto label23;
+
+        r33 = new android.text.SpannableString;
+
+        specialinvoke r33.<android.text.SpannableString: void <init>(java.lang.CharSequence)>(r1);
+
+        r19 = r33;
+
+     label23:
+        $r5 = virtualinvoke r27.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.EmojiMetadata getCurrentMetadata()>();
+
+        r41 = (android.text.Spannable) r19;
+
+        specialinvoke r0.<androidx.emoji.text.EmojiProcessor: void addEmoji(android.text.Spannable,androidx.emoji.text.EmojiMetadata,int,int)>(r41, $r5, i10, i18);
+
+        i21 = i17 + 1;
+
+     label24:
+        if r19 != null goto label25;
+
+        $r28 = r1;
+
+        goto label26;
+
+     label25:
+        $r28 = r19;
+
+     label26:
+        r29 = $r28;
+
+     label27:
+        if z1 == 0 goto label28;
+
+        $r4 = (androidx.emoji.widget.SpannableBuilder) r1;
+
+        virtualinvoke $r4.<androidx.emoji.widget.SpannableBuilder: void endBatchEdit()>();
+
+     label28:
+        r42 = (java.lang.CharSequence) r29;
+
+        return r42;
+
+     label29:
+        $r17 := @caughtexception;
+
+        r2 = $r17;
+
+     label30:
+        if z1 == 0 goto label31;
+
+        $r18 = (androidx.emoji.widget.SpannableBuilder) r1;
+
+        virtualinvoke $r18.<androidx.emoji.widget.SpannableBuilder: void endBatchEdit()>();
+
+     label31:
+        throw r2;
+
+        catch java.lang.Throwable from label01 to label09 with label29;
+        catch java.lang.Throwable from label11 to label27 with label29;
+        catch java.lang.Throwable from label29 to label30 with label29;
+    }
+
+    static boolean handleOnKeyDown(android.text.Editable, int, android.view.KeyEvent)
+    {
+        android.text.Editable r0;
+        int i0;
+        android.view.KeyEvent r1;
+        boolean z0;
+
+        r0 := @parameter0: android.text.Editable;
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: android.view.KeyEvent;
+
+        lookupswitch(i0)
+        {
+            case 67: goto label1;
+            case 112: goto label2;
+            default: goto label3;
+        };
+
+     label1:
+        z0 = staticinvoke <androidx.emoji.text.EmojiProcessor: boolean delete(android.text.Editable,android.view.KeyEvent,boolean)>(r0, r1, 0);
+
+        goto label4;
+
+     label2:
+        z0 = staticinvoke <androidx.emoji.text.EmojiProcessor: boolean delete(android.text.Editable,android.view.KeyEvent,boolean)>(r0, r1, 1);
+
+        goto label4;
+
+     label3:
+        z0 = 0;
+
+     label4:
+        if z0 == 0 goto label5;
+
+        staticinvoke <android.text.method.MetaKeyKeyListener: void adjustMetaAfterKeypress(android.text.Spannable)>(r0);
+
+        return 1;
+
+     label5:
+        return 0;
+    }
+
+    private static boolean delete(android.text.Editable, android.view.KeyEvent, boolean)
+    {
+        android.text.Editable r0;
+        android.view.KeyEvent r1;
+        boolean z0, $z1, $z2;
+        int i0, i1, i2, i3, i4, $i5, i6;
+        androidx.emoji.text.EmojiSpan[] r2;
+        androidx.emoji.text.EmojiSpan r3;
+        java.lang.Object[] $r4;
+
+        r0 := @parameter0: android.text.Editable;
+
+        r1 := @parameter1: android.view.KeyEvent;
+
+        z0 := @parameter2: boolean;
+
+        $z1 = staticinvoke <androidx.emoji.text.EmojiProcessor: boolean hasModifiers(android.view.KeyEvent)>(r1);
+
+        if $z1 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        i0 = staticinvoke <android.text.Selection: int getSelectionStart(java.lang.CharSequence)>(r0);
+
+        i1 = staticinvoke <android.text.Selection: int getSelectionEnd(java.lang.CharSequence)>(r0);
+
+        $z2 = staticinvoke <androidx.emoji.text.EmojiProcessor: boolean hasInvalidSelection(int,int)>(i0, i1);
+
+        if $z2 == 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r4 = interfaceinvoke r0.<android.text.Editable: java.lang.Object[] getSpans(int,int,java.lang.Class)>(i0, i1, class "Landroidx/emoji/text/EmojiSpan;");
+
+        r2 = (androidx.emoji.text.EmojiSpan[]) $r4;
+
+        if r2 == null goto label8;
+
+        $i5 = lengthof r2;
+
+        if $i5 <= 0 goto label8;
+
+        i2 = lengthof r2;
+
+        i6 = 0;
+
+     label3:
+        if i6 >= i2 goto label8;
+
+        r3 = r2[i6];
+
+        i3 = interfaceinvoke r0.<android.text.Editable: int getSpanStart(java.lang.Object)>(r3);
+
+        i4 = interfaceinvoke r0.<android.text.Editable: int getSpanEnd(java.lang.Object)>(r3);
+
+        if z0 == 0 goto label4;
+
+        if i3 == i0 goto label6;
+
+     label4:
+        if z0 != 0 goto label5;
+
+        if i4 == i0 goto label6;
+
+     label5:
+        if i0 <= i3 goto label7;
+
+        if i0 >= i4 goto label7;
+
+     label6:
+        interfaceinvoke r0.<android.text.Editable: android.text.Editable delete(int,int)>(i3, i4);
+
+        return 1;
+
+     label7:
+        i6 = i6 + 1;
+
+        goto label3;
+
+     label8:
+        return 0;
+    }
+
+    static boolean handleDeleteSurroundingText(android.view.inputmethod.InputConnection, android.text.Editable, int, int, boolean)
+    {
+        android.view.inputmethod.InputConnection r0;
+        android.text.Editable r1;
+        int i0, i1, i2, i3, i4, i5, i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, i14, i15, i16, i17, i18;
+        boolean z0, $z1;
+        androidx.emoji.text.EmojiSpan[] r2;
+        androidx.emoji.text.EmojiSpan r3;
+        java.lang.Object[] $r4;
+
+        r0 := @parameter0: android.view.inputmethod.InputConnection;
+
+        r1 := @parameter1: android.text.Editable;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        z0 := @parameter4: boolean;
+
+        if r1 == null goto label01;
+
+        if r0 != null goto label02;
+
+     label01:
+        return 0;
+
+     label02:
+        if i0 < 0 goto label03;
+
+        if i1 >= 0 goto label04;
+
+     label03:
+        return 0;
+
+     label04:
+        i2 = staticinvoke <android.text.Selection: int getSelectionStart(java.lang.CharSequence)>(r1);
+
+        i3 = staticinvoke <android.text.Selection: int getSelectionEnd(java.lang.CharSequence)>(r1);
+
+        $z1 = staticinvoke <androidx.emoji.text.EmojiProcessor: boolean hasInvalidSelection(int,int)>(i2, i3);
+
+        if $z1 == 0 goto label05;
+
+        return 0;
+
+     label05:
+        if z0 == 0 goto label07;
+
+        $i12 = staticinvoke <java.lang.Math: int max(int,int)>(i0, 0);
+
+        i14 = staticinvoke <androidx.emoji.text.EmojiProcessor$CodepointIndexFinder: int findIndexBackward(java.lang.CharSequence,int,int)>(r1, i2, $i12);
+
+        $i13 = staticinvoke <java.lang.Math: int max(int,int)>(i1, 0);
+
+        i15 = staticinvoke <androidx.emoji.text.EmojiProcessor$CodepointIndexFinder: int findIndexForward(java.lang.CharSequence,int,int)>(r1, i3, $i13);
+
+        if i14 == -1 goto label06;
+
+        if i15 != -1 goto label08;
+
+     label06:
+        return 0;
+
+     label07:
+        $i7 = i2 - i0;
+
+        i14 = staticinvoke <java.lang.Math: int max(int,int)>($i7, 0);
+
+        $i8 = i3 + i1;
+
+        $i9 = interfaceinvoke r1.<android.text.Editable: int length()>();
+
+        i15 = staticinvoke <java.lang.Math: int min(int,int)>($i8, $i9);
+
+     label08:
+        $r4 = interfaceinvoke r1.<android.text.Editable: java.lang.Object[] getSpans(int,int,java.lang.Class)>(i14, i15, class "Landroidx/emoji/text/EmojiSpan;");
+
+        r2 = (androidx.emoji.text.EmojiSpan[]) $r4;
+
+        if r2 == null goto label11;
+
+        $i10 = lengthof r2;
+
+        if $i10 <= 0 goto label11;
+
+        i4 = lengthof r2;
+
+        i16 = 0;
+
+     label09:
+        if i16 >= i4 goto label10;
+
+        r3 = r2[i16];
+
+        i5 = interfaceinvoke r1.<android.text.Editable: int getSpanStart(java.lang.Object)>(r3);
+
+        i6 = interfaceinvoke r1.<android.text.Editable: int getSpanEnd(java.lang.Object)>(r3);
+
+        i14 = staticinvoke <java.lang.Math: int min(int,int)>(i5, i14);
+
+        i15 = staticinvoke <java.lang.Math: int max(int,int)>(i6, i15);
+
+        i16 = i16 + 1;
+
+        goto label09;
+
+     label10:
+        i17 = staticinvoke <java.lang.Math: int max(int,int)>(i14, 0);
+
+        $i11 = interfaceinvoke r1.<android.text.Editable: int length()>();
+
+        i18 = staticinvoke <java.lang.Math: int min(int,int)>(i15, $i11);
+
+        interfaceinvoke r0.<android.view.inputmethod.InputConnection: boolean beginBatchEdit()>();
+
+        interfaceinvoke r1.<android.text.Editable: android.text.Editable delete(int,int)>(i17, i18);
+
+        interfaceinvoke r0.<android.view.inputmethod.InputConnection: boolean endBatchEdit()>();
+
+        return 1;
+
+     label11:
+        return 0;
+    }
+
+    private static boolean hasInvalidSelection(int, int)
+    {
+        int i0, i1;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        if i0 == -1 goto label1;
+
+        if i1 == -1 goto label1;
+
+        if i0 == i1 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    private static boolean hasModifiers(android.view.KeyEvent)
+    {
+        android.view.KeyEvent r0;
+        int $i0;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: android.view.KeyEvent;
+
+        $i0 = virtualinvoke r0.<android.view.KeyEvent: int getMetaState()>();
+
+        $z0 = staticinvoke <android.view.KeyEvent: boolean metaStateHasNoModifiers(int)>($i0);
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    private void addEmoji(android.text.Spannable, androidx.emoji.text.EmojiMetadata, int, int)
+    {
+        androidx.emoji.text.EmojiProcessor r0;
+        android.text.Spannable r1;
+        androidx.emoji.text.EmojiMetadata r2;
+        int i0, i1;
+        androidx.emoji.text.EmojiSpan r3;
+        androidx.emoji.text.EmojiCompat$SpanFactory $r4;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor;
+
+        r1 := @parameter0: android.text.Spannable;
+
+        r2 := @parameter1: androidx.emoji.text.EmojiMetadata;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        $r4 = r0.<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.EmojiCompat$SpanFactory mSpanFactory>;
+
+        r3 = virtualinvoke $r4.<androidx.emoji.text.EmojiCompat$SpanFactory: androidx.emoji.text.EmojiSpan createSpan(androidx.emoji.text.EmojiMetadata)>(r2);
+
+        interfaceinvoke r1.<android.text.Spannable: void setSpan(java.lang.Object,int,int,int)>(r3, i0, i1, 33);
+
+        return;
+    }
+
+    private boolean hasGlyph(java.lang.CharSequence, int, int, androidx.emoji.text.EmojiMetadata)
+    {
+        androidx.emoji.text.EmojiProcessor r0;
+        java.lang.CharSequence r1;
+        int i0, i1, $i2, $i3, $i4, $i6;
+        androidx.emoji.text.EmojiMetadata r2;
+        boolean z0, $z1;
+        androidx.emoji.text.EmojiProcessor$GlyphChecker $r3;
+        short $s5;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: androidx.emoji.text.EmojiMetadata;
+
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 >= 23 goto label1;
+
+        $s5 = virtualinvoke r2.<androidx.emoji.text.EmojiMetadata: short getSdkAdded()>();
+
+        $i6 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $s5 <= $i6 goto label1;
+
+        return 0;
+
+     label1:
+        $i3 = virtualinvoke r2.<androidx.emoji.text.EmojiMetadata: int getHasGlyph()>();
+
+        if $i3 != 0 goto label2;
+
+        $r3 = r0.<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.EmojiProcessor$GlyphChecker mGlyphChecker>;
+
+        z0 = virtualinvoke $r3.<androidx.emoji.text.EmojiProcessor$GlyphChecker: boolean hasGlyph(java.lang.CharSequence,int,int)>(r1, i0, i1);
+
+        virtualinvoke r2.<androidx.emoji.text.EmojiMetadata: void setHasGlyph(boolean)>(z0);
+
+     label2:
+        $i4 = virtualinvoke r2.<androidx.emoji.text.EmojiMetadata: int getHasGlyph()>();
+
+        if $i4 != 2 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        return $z1;
+    }
+
+    void setGlyphChecker(androidx.emoji.text.EmojiProcessor$GlyphChecker)
+    {
+        androidx.emoji.text.EmojiProcessor r0;
+        androidx.emoji.text.EmojiProcessor$GlyphChecker r1;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor;
+
+        r1 := @parameter0: androidx.emoji.text.EmojiProcessor$GlyphChecker;
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        r0.<androidx.emoji.text.EmojiProcessor: androidx.emoji.text.EmojiProcessor$GlyphChecker mGlyphChecker> = r1;
+
+        return;
+    }
+
+androidx.emoji.text.EmojiProcessor$CodepointIndexFinder
+<androidx.emoji.text.EmojiProcessor$CodepointIndexFinder: int INVALID_INDEX>
+    private void <init>()
+    {
+        androidx.emoji.text.EmojiProcessor$CodepointIndexFinder r0;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$CodepointIndexFinder;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static int findIndexBackward(java.lang.CharSequence, int, int)
+    {
+        java.lang.CharSequence r0;
+        int i0, i1, i2, i4, i5;
+        char c3;
+        boolean $z0, $z1, $z2, z3;
+
+        r0 := @parameter0: java.lang.CharSequence;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        i4 = i0;
+
+        z3 = 0;
+
+        i2 = interfaceinvoke r0.<java.lang.CharSequence: int length()>();
+
+        if i4 < 0 goto label01;
+
+        if i2 >= i4 goto label02;
+
+     label01:
+        return -1;
+
+     label02:
+        if i1 >= 0 goto label03;
+
+        return -1;
+
+     label03:
+        i5 = i1;
+
+     label04:
+        if i5 != 0 goto label05;
+
+        return i4;
+
+     label05:
+        i4 = i4 + -1;
+
+        if i4 >= 0 goto label07;
+
+        if z3 == 0 goto label06;
+
+        return -1;
+
+     label06:
+        return 0;
+
+     label07:
+        c3 = interfaceinvoke r0.<java.lang.CharSequence: char charAt(int)>(i4);
+
+        if z3 == 0 goto label09;
+
+        $z2 = staticinvoke <java.lang.Character: boolean isHighSurrogate(char)>(c3);
+
+        if $z2 != 0 goto label08;
+
+        return -1;
+
+     label08:
+        z3 = 0;
+
+        i5 = i5 + -1;
+
+        goto label04;
+
+     label09:
+        $z0 = staticinvoke <java.lang.Character: boolean isSurrogate(char)>(c3);
+
+        if $z0 != 0 goto label10;
+
+        i5 = i5 + -1;
+
+        goto label04;
+
+     label10:
+        $z1 = staticinvoke <java.lang.Character: boolean isHighSurrogate(char)>(c3);
+
+        if $z1 == 0 goto label11;
+
+        return -1;
+
+     label11:
+        z3 = 1;
+
+        goto label04;
+    }
+
+    static int findIndexForward(java.lang.CharSequence, int, int)
+    {
+        java.lang.CharSequence r0;
+        int i0, i1, i2, i4, i5;
+        char c3;
+        boolean $z0, $z1, $z2, z3;
+
+        r0 := @parameter0: java.lang.CharSequence;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        i4 = i0;
+
+        z3 = 0;
+
+        i2 = interfaceinvoke r0.<java.lang.CharSequence: int length()>();
+
+        if i4 < 0 goto label01;
+
+        if i2 >= i4 goto label02;
+
+     label01:
+        return -1;
+
+     label02:
+        if i1 >= 0 goto label03;
+
+        return -1;
+
+     label03:
+        i5 = i1;
+
+     label04:
+        if i5 != 0 goto label05;
+
+        return i4;
+
+     label05:
+        if i4 < i2 goto label07;
+
+        if z3 == 0 goto label06;
+
+        return -1;
+
+     label06:
+        return i2;
+
+     label07:
+        c3 = interfaceinvoke r0.<java.lang.CharSequence: char charAt(int)>(i4);
+
+        if z3 == 0 goto label09;
+
+        $z2 = staticinvoke <java.lang.Character: boolean isLowSurrogate(char)>(c3);
+
+        if $z2 != 0 goto label08;
+
+        return -1;
+
+     label08:
+        i5 = i5 + -1;
+
+        z3 = 0;
+
+        i4 = i4 + 1;
+
+        goto label04;
+
+     label09:
+        $z0 = staticinvoke <java.lang.Character: boolean isSurrogate(char)>(c3);
+
+        if $z0 != 0 goto label10;
+
+        i5 = i5 + -1;
+
+        i4 = i4 + 1;
+
+        goto label04;
+
+     label10:
+        $z1 = staticinvoke <java.lang.Character: boolean isLowSurrogate(char)>(c3);
+
+        if $z1 == 0 goto label11;
+
+        return -1;
+
+     label11:
+        z3 = 1;
+
+        i4 = i4 + 1;
+
+        goto label04;
+    }
+
+androidx.emoji.text.EmojiProcessor$GlyphChecker
+<androidx.emoji.text.EmojiProcessor$GlyphChecker: int PAINT_TEXT_SIZE>
+<androidx.emoji.text.EmojiProcessor$GlyphChecker: java.lang.ThreadLocal sStringBuilder>
+<androidx.emoji.text.EmojiProcessor$GlyphChecker: android.text.TextPaint mTextPaint>
+    void <init>()
+    {
+        androidx.emoji.text.EmojiProcessor$GlyphChecker r0;
+        android.text.TextPaint $r1, $r2;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$GlyphChecker;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new android.text.TextPaint;
+
+        specialinvoke $r1.<android.text.TextPaint: void <init>()>();
+
+        r0.<androidx.emoji.text.EmojiProcessor$GlyphChecker: android.text.TextPaint mTextPaint> = $r1;
+
+        $r2 = r0.<androidx.emoji.text.EmojiProcessor$GlyphChecker: android.text.TextPaint mTextPaint>;
+
+        virtualinvoke $r2.<android.text.TextPaint: void setTextSize(float)>(10.0F);
+
+        return;
+    }
+
+    public boolean hasGlyph(java.lang.CharSequence, int, int)
+    {
+        androidx.emoji.text.EmojiProcessor$GlyphChecker r0;
+        java.lang.CharSequence r1;
+        int i0, i2;
+        java.lang.StringBuilder r2;
+        android.text.TextPaint $r3;
+        java.lang.String $r4;
+        boolean $z0;
+        char $c1;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$GlyphChecker;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        i2 := @parameter1: int;
+
+        i0 := @parameter2: int;
+
+        r2 = staticinvoke <androidx.emoji.text.EmojiProcessor$GlyphChecker: java.lang.StringBuilder getStringBuilder()>();
+
+        virtualinvoke r2.<java.lang.StringBuilder: void setLength(int)>(0);
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        $c1 = interfaceinvoke r1.<java.lang.CharSequence: char charAt(int)>(i2);
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c1);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = r0.<androidx.emoji.text.EmojiProcessor$GlyphChecker: android.text.TextPaint mTextPaint>;
+
+        $r4 = virtualinvoke r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z0 = staticinvoke <androidx.core.graphics.PaintCompat: boolean hasGlyph(android.graphics.Paint,java.lang.String)>($r3, $r4);
+
+        return $z0;
+    }
+
+    private static java.lang.StringBuilder getStringBuilder()
+    {
+        java.lang.ThreadLocal $r0, $r2, $r6;
+        java.lang.Object $r1, $r3;
+        java.lang.StringBuilder $r4, $r5;
+
+        $r0 = <androidx.emoji.text.EmojiProcessor$GlyphChecker: java.lang.ThreadLocal sStringBuilder>;
+
+        $r1 = virtualinvoke $r0.<java.lang.ThreadLocal: java.lang.Object get()>();
+
+        if $r1 != null goto label1;
+
+        $r6 = <androidx.emoji.text.EmojiProcessor$GlyphChecker: java.lang.ThreadLocal sStringBuilder>;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r6.<java.lang.ThreadLocal: void set(java.lang.Object)>($r5);
+
+     label1:
+        $r2 = <androidx.emoji.text.EmojiProcessor$GlyphChecker: java.lang.ThreadLocal sStringBuilder>;
+
+        $r3 = virtualinvoke $r2.<java.lang.ThreadLocal: java.lang.Object get()>();
+
+        $r4 = (java.lang.StringBuilder) $r3;
+
+        return $r4;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.ThreadLocal $r0;
+
+        $r0 = new java.lang.ThreadLocal;
+
+        specialinvoke $r0.<java.lang.ThreadLocal: void <init>()>();
+
+        <androidx.emoji.text.EmojiProcessor$GlyphChecker: java.lang.ThreadLocal sStringBuilder> = $r0;
+
+        return;
+    }
+
+androidx.emoji.text.EmojiProcessor$ProcessorSm
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: int STATE_DEFAULT>
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: int STATE_WALKING>
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mState>
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mRootNode>
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode>
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mFlushNode>
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mLastCodepoint>
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mCurrentDepth>
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean mUseEmojiAsDefaultStyle>
+<androidx.emoji.text.EmojiProcessor$ProcessorSm: int[] mEmojiAsDefaultStyleExceptions>
+    void <init>(androidx.emoji.text.MetadataRepo$Node, boolean, int[])
+    {
+        androidx.emoji.text.EmojiProcessor$ProcessorSm r0;
+        androidx.emoji.text.MetadataRepo$Node r1;
+        boolean z0;
+        int[] r2;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$ProcessorSm;
+
+        r1 := @parameter0: androidx.emoji.text.MetadataRepo$Node;
+
+        z0 := @parameter1: boolean;
+
+        r2 := @parameter2: int[];
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mState> = 1;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mRootNode> = r1;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode> = r1;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean mUseEmojiAsDefaultStyle> = z0;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int[] mEmojiAsDefaultStyleExceptions> = r2;
+
+        return;
+    }
+
+    int check(int)
+    {
+        androidx.emoji.text.EmojiProcessor$ProcessorSm r0;
+        int i0, $i1, $i2, $i5, $i6, i7;
+        androidx.emoji.text.MetadataRepo$Node r1, $r2, $r3, $r5, $r6;
+        boolean $z0, $z1, $z2;
+        androidx.emoji.text.EmojiMetadata $r4;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$ProcessorSm;
+
+        i0 := @parameter0: int;
+
+        $r2 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode>;
+
+        r1 = virtualinvoke $r2.<androidx.emoji.text.MetadataRepo$Node: androidx.emoji.text.MetadataRepo$Node get(int)>(i0);
+
+        $i1 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mState>;
+
+        lookupswitch($i1)
+        {
+            case 1: goto label08;
+            case 2: goto label01;
+            default: goto label08;
+        };
+
+     label01:
+        if r1 == null goto label02;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode> = r1;
+
+        $i5 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mCurrentDepth>;
+
+        $i6 = $i5 + 1;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mCurrentDepth> = $i6;
+
+        i7 = 2;
+
+        goto label10;
+
+     label02:
+        $z0 = staticinvoke <androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean isTextStyle(int)>(i0);
+
+        if $z0 == 0 goto label03;
+
+        i7 = specialinvoke r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int reset()>();
+
+        goto label10;
+
+     label03:
+        $z1 = staticinvoke <androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean isEmojiStyle(int)>(i0);
+
+        if $z1 == 0 goto label04;
+
+        i7 = 2;
+
+        goto label10;
+
+     label04:
+        $r3 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode>;
+
+        $r4 = virtualinvoke $r3.<androidx.emoji.text.MetadataRepo$Node: androidx.emoji.text.EmojiMetadata getData()>();
+
+        if $r4 == null goto label07;
+
+        $i2 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mCurrentDepth>;
+
+        if $i2 != 1 goto label06;
+
+        $z2 = specialinvoke r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean shouldUseEmojiPresentationStyleForSingleCodepoint()>();
+
+        if $z2 == 0 goto label05;
+
+        $r6 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode>;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mFlushNode> = $r6;
+
+        i7 = 3;
+
+        specialinvoke r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int reset()>();
+
+        goto label10;
+
+     label05:
+        i7 = specialinvoke r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int reset()>();
+
+        goto label10;
+
+     label06:
+        $r5 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode>;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mFlushNode> = $r5;
+
+        i7 = 3;
+
+        specialinvoke r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int reset()>();
+
+        goto label10;
+
+     label07:
+        i7 = specialinvoke r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int reset()>();
+
+        goto label10;
+
+     label08:
+        if r1 != null goto label09;
+
+        i7 = specialinvoke r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int reset()>();
+
+        goto label10;
+
+     label09:
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mState> = 2;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode> = r1;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mCurrentDepth> = 1;
+
+        i7 = 2;
+
+     label10:
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mLastCodepoint> = i0;
+
+        return i7;
+    }
+
+    private int reset()
+    {
+        androidx.emoji.text.EmojiProcessor$ProcessorSm r0;
+        androidx.emoji.text.MetadataRepo$Node $r1;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$ProcessorSm;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mState> = 1;
+
+        $r1 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mRootNode>;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode> = $r1;
+
+        r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mCurrentDepth> = 0;
+
+        return 1;
+    }
+
+    androidx.emoji.text.EmojiMetadata getFlushMetadata()
+    {
+        androidx.emoji.text.EmojiProcessor$ProcessorSm r0;
+        androidx.emoji.text.MetadataRepo$Node $r1;
+        androidx.emoji.text.EmojiMetadata $r2;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$ProcessorSm;
+
+        $r1 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mFlushNode>;
+
+        $r2 = virtualinvoke $r1.<androidx.emoji.text.MetadataRepo$Node: androidx.emoji.text.EmojiMetadata getData()>();
+
+        return $r2;
+    }
+
+    androidx.emoji.text.EmojiMetadata getCurrentMetadata()
+    {
+        androidx.emoji.text.EmojiProcessor$ProcessorSm r0;
+        androidx.emoji.text.MetadataRepo$Node $r1;
+        androidx.emoji.text.EmojiMetadata $r2;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$ProcessorSm;
+
+        $r1 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode>;
+
+        $r2 = virtualinvoke $r1.<androidx.emoji.text.MetadataRepo$Node: androidx.emoji.text.EmojiMetadata getData()>();
+
+        return $r2;
+    }
+
+    boolean isInFlushableState()
+    {
+        androidx.emoji.text.EmojiProcessor$ProcessorSm r0;
+        int $i0, $i1;
+        androidx.emoji.text.MetadataRepo$Node $r1;
+        androidx.emoji.text.EmojiMetadata $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$ProcessorSm;
+
+        $i0 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mState>;
+
+        if $i0 != 2 goto label2;
+
+        $r1 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode>;
+
+        $r2 = virtualinvoke $r1.<androidx.emoji.text.MetadataRepo$Node: androidx.emoji.text.EmojiMetadata getData()>();
+
+        if $r2 == null goto label2;
+
+        $i1 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mCurrentDepth>;
+
+        if $i1 > 1 goto label1;
+
+        $z0 = specialinvoke r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean shouldUseEmojiPresentationStyleForSingleCodepoint()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    private boolean shouldUseEmojiPresentationStyleForSingleCodepoint()
+    {
+        androidx.emoji.text.EmojiProcessor$ProcessorSm r0;
+        int i0, i1, $i2;
+        androidx.emoji.text.MetadataRepo$Node $r1, $r4;
+        androidx.emoji.text.EmojiMetadata $r2, $r5;
+        boolean $z0, $z1, $z2;
+        int[] $r3, $r6;
+
+        r0 := @this: androidx.emoji.text.EmojiProcessor$ProcessorSm;
+
+        $r1 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode>;
+
+        $r2 = virtualinvoke $r1.<androidx.emoji.text.MetadataRepo$Node: androidx.emoji.text.EmojiMetadata getData()>();
+
+        $z0 = virtualinvoke $r2.<androidx.emoji.text.EmojiMetadata: boolean isDefaultEmoji()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        $i2 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int mLastCodepoint>;
+
+        $z1 = staticinvoke <androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean isEmojiStyle(int)>($i2);
+
+        if $z1 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        $z2 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: boolean mUseEmojiAsDefaultStyle>;
+
+        if $z2 == 0 goto label4;
+
+        $r3 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int[] mEmojiAsDefaultStyleExceptions>;
+
+        if $r3 != null goto label3;
+
+        return 1;
+
+     label3:
+        $r4 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: androidx.emoji.text.MetadataRepo$Node mCurrentNode>;
+
+        $r5 = virtualinvoke $r4.<androidx.emoji.text.MetadataRepo$Node: androidx.emoji.text.EmojiMetadata getData()>();
+
+        i0 = virtualinvoke $r5.<androidx.emoji.text.EmojiMetadata: int getCodepointAt(int)>(0);
+
+        $r6 = r0.<androidx.emoji.text.EmojiProcessor$ProcessorSm: int[] mEmojiAsDefaultStyleExceptions>;
+
+        i1 = staticinvoke <java.util.Arrays: int binarySearch(int[],int)>($r6, i0);
+
+        if i1 >= 0 goto label4;
+
+        return 1;
+
+     label4:
+        return 0;
+    }
+
+    private static boolean isEmojiStyle(int)
+    {
+        int i0;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        if i0 != 65039 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private static boolean isTextStyle(int)
+    {
+        int i0;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        if i0 != 65038 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+

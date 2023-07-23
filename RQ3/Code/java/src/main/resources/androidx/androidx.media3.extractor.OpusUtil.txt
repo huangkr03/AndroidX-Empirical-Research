@@ -1,0 +1,264 @@
+androidx.media3.extractor.OpusUtil
+<androidx.media3.extractor.OpusUtil: int SAMPLE_RATE>
+<androidx.media3.extractor.OpusUtil: int MAX_BYTES_PER_SECOND>
+<androidx.media3.extractor.OpusUtil: int DEFAULT_SEEK_PRE_ROLL_SAMPLES>
+<androidx.media3.extractor.OpusUtil: int FULL_CODEC_INITIALIZATION_DATA_BUFFER_COUNT>
+    private void <init>()
+    {
+        androidx.media3.extractor.OpusUtil r0;
+
+        r0 := @this: androidx.media3.extractor.OpusUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int getChannelCount(byte[])
+    {
+        byte[] r0;
+        byte $b0;
+        short $s1;
+
+        r0 := @parameter0: byte[];
+
+        $b0 = r0[9];
+
+        $s1 = $b0 & 255;
+
+        return $s1;
+    }
+
+    public static java.util.List buildInitializationData(byte[])
+    {
+        byte[] r0, $r3, $r4;
+        int i0;
+        long l1, l2, $l3;
+        java.util.ArrayList r1, $r2;
+
+        r0 := @parameter0: byte[];
+
+        i0 = staticinvoke <androidx.media3.extractor.OpusUtil: int getPreSkipSamples(byte[])>(r0);
+
+        $l3 = (long) i0;
+
+        l1 = staticinvoke <androidx.media3.extractor.OpusUtil: long sampleCountToNanoseconds(long)>($l3);
+
+        l2 = staticinvoke <androidx.media3.extractor.OpusUtil: long sampleCountToNanoseconds(long)>(3840L);
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>(int)>(3);
+
+        r1 = $r2;
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>(r0);
+
+        $r3 = staticinvoke <androidx.media3.extractor.OpusUtil: byte[] buildNativeOrderByteArray(long)>(l1);
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+        $r4 = staticinvoke <androidx.media3.extractor.OpusUtil: byte[] buildNativeOrderByteArray(long)>(l2);
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        return r1;
+    }
+
+    public static int parsePacketAudioSampleCount(java.nio.ByteBuffer)
+    {
+        java.nio.ByteBuffer r0;
+        long l0, $l3, $l4;
+        byte $b1, $b6;
+        int $i2, $i5;
+
+        r0 := @parameter0: java.nio.ByteBuffer;
+
+        $b1 = virtualinvoke r0.<java.nio.ByteBuffer: byte get(int)>(0);
+
+        $i2 = virtualinvoke r0.<java.nio.ByteBuffer: int limit()>();
+
+        if $i2 <= 1 goto label1;
+
+        $b6 = virtualinvoke r0.<java.nio.ByteBuffer: byte get(int)>(1);
+
+        goto label2;
+
+     label1:
+        $b6 = 0;
+
+     label2:
+        l0 = staticinvoke <androidx.media3.extractor.OpusUtil: long getPacketDurationUs(byte,byte)>($b1, $b6);
+
+        $l3 = l0 * 48000L;
+
+        $l4 = $l3 / 1000000L;
+
+        $i5 = (int) $l4;
+
+        return $i5;
+    }
+
+    public static long getPacketDurationUs(byte[])
+    {
+        byte[] r0;
+        int $i0;
+        byte $b1, $b3;
+        long $l2;
+
+        r0 := @parameter0: byte[];
+
+        $b1 = r0[0];
+
+        $i0 = lengthof r0;
+
+        if $i0 <= 1 goto label1;
+
+        $b3 = r0[1];
+
+        goto label2;
+
+     label1:
+        $b3 = 0;
+
+     label2:
+        $l2 = staticinvoke <androidx.media3.extractor.OpusUtil: long getPacketDurationUs(byte,byte)>($b1, $b3);
+
+        return $l2;
+    }
+
+    private static long getPacketDurationUs(byte, byte)
+    {
+        byte b0, b1, b7;
+        short s2, s3, s4, $s5, $s6;
+        int i8;
+        long $l9, $l10, $l11;
+
+        b0 := @parameter0: byte;
+
+        b1 := @parameter1: byte;
+
+        s2 = b0 & 255;
+
+        $s5 = s2 & 3;
+
+        tableswitch($s5)
+        {
+            case 0: goto label1;
+            case 1: goto label2;
+            case 2: goto label2;
+            default: goto label3;
+        };
+
+     label1:
+        b7 = 1;
+
+        goto label4;
+
+     label2:
+        b7 = 2;
+
+        goto label4;
+
+     label3:
+        b7 = b1 & 63;
+
+     label4:
+        s3 = s2 >> 3;
+
+        s4 = s3 & 3;
+
+        if s3 < 16 goto label5;
+
+        i8 = 2500 << s4;
+
+        goto label8;
+
+     label5:
+        if s3 < 12 goto label6;
+
+        $s6 = s4 & 1;
+
+        i8 = 10000 << $s6;
+
+        goto label8;
+
+     label6:
+        if s4 != 3 goto label7;
+
+        i8 = 60000;
+
+        goto label8;
+
+     label7:
+        i8 = 10000 << s4;
+
+     label8:
+        $l9 = (long) b7;
+
+        $l10 = (long) i8;
+
+        $l11 = $l9 * $l10;
+
+        return $l11;
+    }
+
+    private static int getPreSkipSamples(byte[])
+    {
+        byte[] r0;
+        byte $b0, $b2;
+        short $s1, $s3;
+        int $i4, $i5;
+
+        r0 := @parameter0: byte[];
+
+        $b0 = r0[11];
+
+        $s1 = $b0 & 255;
+
+        $i4 = $s1 << 8;
+
+        $b2 = r0[10];
+
+        $s3 = $b2 & 255;
+
+        $i5 = $i4 | $s3;
+
+        return $i5;
+    }
+
+    private static byte[] buildNativeOrderByteArray(long)
+    {
+        long l0;
+        java.nio.ByteBuffer $r0, $r2, $r3;
+        java.nio.ByteOrder $r1;
+        byte[] $r4;
+
+        l0 := @parameter0: long;
+
+        $r0 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocate(int)>(8);
+
+        $r1 = staticinvoke <java.nio.ByteOrder: java.nio.ByteOrder nativeOrder()>();
+
+        $r2 = virtualinvoke $r0.<java.nio.ByteBuffer: java.nio.ByteBuffer order(java.nio.ByteOrder)>($r1);
+
+        $r3 = virtualinvoke $r2.<java.nio.ByteBuffer: java.nio.ByteBuffer putLong(long)>(l0);
+
+        $r4 = virtualinvoke $r3.<java.nio.ByteBuffer: byte[] array()>();
+
+        return $r4;
+    }
+
+    private static long sampleCountToNanoseconds(long)
+    {
+        long l0, $l1, $l2;
+
+        l0 := @parameter0: long;
+
+        $l1 = l0 * 1000000000L;
+
+        $l2 = $l1 / 48000L;
+
+        return $l2;
+    }
+

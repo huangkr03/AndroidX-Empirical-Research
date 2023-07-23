@@ -1,0 +1,115 @@
+androidx.camera.core.internal.compat.workaround.SurfaceSorter
+<androidx.camera.core.internal.compat.workaround.SurfaceSorter: int PRIORITY_PREVIEW_SURFACE>
+<androidx.camera.core.internal.compat.workaround.SurfaceSorter: int PRIORITY_OTHERS>
+<androidx.camera.core.internal.compat.workaround.SurfaceSorter: int PRIORITY_MEDIA_CODEC_SURFACE>
+<androidx.camera.core.internal.compat.workaround.SurfaceSorter: boolean mHasQuirk>
+    public void <init>()
+    {
+        androidx.camera.core.internal.compat.workaround.SurfaceSorter r0;
+        androidx.camera.core.impl.Quirk $r1;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.core.internal.compat.workaround.SurfaceSorter;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = staticinvoke <androidx.camera.core.internal.compat.quirk.DeviceQuirks: androidx.camera.core.impl.Quirk get(java.lang.Class)>(class "Landroidx/camera/core/internal/compat/quirk/SurfaceOrderQuirk;");
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        r0.<androidx.camera.core.internal.compat.workaround.SurfaceSorter: boolean mHasQuirk> = $z0;
+
+        return;
+    }
+
+    public void sort(java.util.List)
+    {
+        androidx.camera.core.internal.compat.workaround.SurfaceSorter r0;
+        java.util.List r1;
+        boolean $z0;
+        java.util.Comparator $r2;
+
+        r0 := @this: androidx.camera.core.internal.compat.workaround.SurfaceSorter;
+
+        r1 := @parameter0: java.util.List;
+
+        $z0 = r0.<androidx.camera.core.internal.compat.workaround.SurfaceSorter: boolean mHasQuirk>;
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = dynamicinvoke "compare" <java.util.Comparator (androidx.camera.core.internal.compat.workaround.SurfaceSorter)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: int __METHODTYPE__(java.lang.Object,java.lang.Object), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.core.internal.compat.workaround.SurfaceSorter: int lambda$sort$0(androidx.camera.core.impl.SessionConfig$OutputConfig,androidx.camera.core.impl.SessionConfig$OutputConfig)>, methodtype: int __METHODTYPE__(androidx.camera.core.impl.SessionConfig$OutputConfig,androidx.camera.core.impl.SessionConfig$OutputConfig));
+
+        staticinvoke <java.util.Collections: void sort(java.util.List,java.util.Comparator)>(r1, $r2);
+
+        return;
+    }
+
+    private int getSurfacePriority(androidx.camera.core.impl.DeferrableSurface)
+    {
+        androidx.camera.core.internal.compat.workaround.SurfaceSorter r0;
+        androidx.camera.core.impl.DeferrableSurface r1;
+        java.lang.Class $r2, $r3, $r4;
+
+        r0 := @this: androidx.camera.core.internal.compat.workaround.SurfaceSorter;
+
+        r1 := @parameter0: androidx.camera.core.impl.DeferrableSurface;
+
+        $r2 = virtualinvoke r1.<androidx.camera.core.impl.DeferrableSurface: java.lang.Class getContainerClass()>();
+
+        if $r2 == class "Landroid/media/MediaCodec;" goto label1;
+
+        $r3 = virtualinvoke r1.<androidx.camera.core.impl.DeferrableSurface: java.lang.Class getContainerClass()>();
+
+        if $r3 != class "Landroidx/camera/core/VideoCapture;" goto label2;
+
+     label1:
+        return 2;
+
+     label2:
+        $r4 = virtualinvoke r1.<androidx.camera.core.impl.DeferrableSurface: java.lang.Class getContainerClass()>();
+
+        if $r4 != class "Landroidx/camera/core/Preview;" goto label3;
+
+        return 0;
+
+     label3:
+        return 1;
+    }
+
+    private int lambda$sort$0(androidx.camera.core.impl.SessionConfig$OutputConfig, androidx.camera.core.impl.SessionConfig$OutputConfig)
+    {
+        androidx.camera.core.internal.compat.workaround.SurfaceSorter r0;
+        androidx.camera.core.impl.SessionConfig$OutputConfig r1, r2;
+        int i0, i1, $i2;
+        androidx.camera.core.impl.DeferrableSurface $r3, $r4;
+
+        r0 := @this: androidx.camera.core.internal.compat.workaround.SurfaceSorter;
+
+        r1 := @parameter0: androidx.camera.core.impl.SessionConfig$OutputConfig;
+
+        r2 := @parameter1: androidx.camera.core.impl.SessionConfig$OutputConfig;
+
+        $r3 = virtualinvoke r1.<androidx.camera.core.impl.SessionConfig$OutputConfig: androidx.camera.core.impl.DeferrableSurface getSurface()>();
+
+        i0 = specialinvoke r0.<androidx.camera.core.internal.compat.workaround.SurfaceSorter: int getSurfacePriority(androidx.camera.core.impl.DeferrableSurface)>($r3);
+
+        $r4 = virtualinvoke r2.<androidx.camera.core.impl.SessionConfig$OutputConfig: androidx.camera.core.impl.DeferrableSurface getSurface()>();
+
+        i1 = specialinvoke r0.<androidx.camera.core.internal.compat.workaround.SurfaceSorter: int getSurfacePriority(androidx.camera.core.impl.DeferrableSurface)>($r4);
+
+        $i2 = i0 - i1;
+
+        return $i2;
+    }
+

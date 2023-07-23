@@ -1,0 +1,654 @@
+androidx.media3.datasource.cache.CacheDataSink
+<androidx.media3.datasource.cache.CacheDataSink: long DEFAULT_FRAGMENT_SIZE>
+<androidx.media3.datasource.cache.CacheDataSink: int DEFAULT_BUFFER_SIZE>
+<androidx.media3.datasource.cache.CacheDataSink: long MIN_RECOMMENDED_FRAGMENT_SIZE>
+<androidx.media3.datasource.cache.CacheDataSink: java.lang.String TAG>
+<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.Cache cache>
+<androidx.media3.datasource.cache.CacheDataSink: long fragmentSize>
+<androidx.media3.datasource.cache.CacheDataSink: int bufferSize>
+<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.DataSpec dataSpec>
+<androidx.media3.datasource.cache.CacheDataSink: long dataSpecFragmentSize>
+<androidx.media3.datasource.cache.CacheDataSink: java.io.File file>
+<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream>
+<androidx.media3.datasource.cache.CacheDataSink: long outputStreamBytesWritten>
+<androidx.media3.datasource.cache.CacheDataSink: long dataSpecBytesWritten>
+<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.ReusableBufferedOutputStream bufferedOutputStream>
+    public void <init>(androidx.media3.datasource.cache.Cache, long)
+    {
+        androidx.media3.datasource.cache.CacheDataSink r0;
+        androidx.media3.datasource.cache.Cache r1;
+        long l0;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.Cache;
+
+        l0 := @parameter1: long;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.CacheDataSink: void <init>(androidx.media3.datasource.cache.Cache,long,int)>(r1, l0, 20480);
+
+        return;
+    }
+
+    public void <init>(androidx.media3.datasource.cache.Cache, long, int)
+    {
+        androidx.media3.datasource.cache.CacheDataSink r0;
+        androidx.media3.datasource.cache.Cache r1, $r4;
+        long l0, $l7;
+        int i1;
+        byte $b2, $b3, $b4, $b5, $b6;
+        boolean $z0;
+        java.lang.Object $r3;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.Cache;
+
+        l0 := @parameter1: long;
+
+        i1 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $b2 = l0 cmp 0L;
+
+        if $b2 > 0 goto label1;
+
+        $b5 = l0 cmp -1L;
+
+        if $b5 != 0 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean,java.lang.Object)>($z0, "fragmentSize must be positive or C.LENGTH_UNSET.");
+
+        $b3 = l0 cmp -1L;
+
+        if $b3 == 0 goto label4;
+
+        $b4 = l0 cmp 2097152L;
+
+        if $b4 >= 0 goto label4;
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("CacheDataSink", "fragmentSize is below the minimum recommended value of 2097152. This may cause poor cache performance.");
+
+     label4:
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r4 = (androidx.media3.datasource.cache.Cache) $r3;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.Cache cache> = $r4;
+
+        $b6 = l0 cmp -1L;
+
+        if $b6 != 0 goto label5;
+
+        $l7 = 9223372036854775807L;
+
+        goto label6;
+
+     label5:
+        $l7 = l0;
+
+     label6:
+        r0.<androidx.media3.datasource.cache.CacheDataSink: long fragmentSize> = $l7;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: int bufferSize> = i1;
+
+        return;
+    }
+
+    public void open(androidx.media3.datasource.DataSpec) throws androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException
+    {
+        androidx.media3.datasource.cache.CacheDataSink r0;
+        androidx.media3.datasource.DataSpec r1;
+        java.lang.Throwable r2, $r6, r9;
+        java.lang.String $r3;
+        long $l0, $l2;
+        byte $b1;
+        boolean $z0, $z1;
+        androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException r8;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink;
+
+        r1 := @parameter0: androidx.media3.datasource.DataSpec;
+
+        $r3 = r1.<androidx.media3.datasource.DataSpec: java.lang.String key>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        $l0 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $b1 = $l0 cmp -1L;
+
+        if $b1 != 0 goto label1;
+
+        $z1 = virtualinvoke r1.<androidx.media3.datasource.DataSpec: boolean isFlagSet(int)>(2);
+
+        if $z1 == 0 goto label1;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.DataSpec dataSpec> = null;
+
+        return;
+
+     label1:
+        r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.DataSpec dataSpec> = r1;
+
+        $z0 = virtualinvoke r1.<androidx.media3.datasource.DataSpec: boolean isFlagSet(int)>(4);
+
+        if $z0 == 0 goto label2;
+
+        $l2 = r0.<androidx.media3.datasource.cache.CacheDataSink: long fragmentSize>;
+
+        goto label3;
+
+     label2:
+        $l2 = 9223372036854775807L;
+
+     label3:
+        r0.<androidx.media3.datasource.cache.CacheDataSink: long dataSpecFragmentSize> = $l2;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: long dataSpecBytesWritten> = 0L;
+
+     label4:
+        specialinvoke r0.<androidx.media3.datasource.cache.CacheDataSink: void openNextOutputStream(androidx.media3.datasource.DataSpec)>(r1);
+
+     label5:
+        goto label7;
+
+     label6:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        r8 = new androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException;
+
+        specialinvoke r8.<androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException: void <init>(java.io.IOException)>(r2);
+
+        r9 = (java.lang.Throwable) r8;
+
+        throw r9;
+
+     label7:
+        return;
+
+        catch java.io.IOException from label4 to label5 with label6;
+    }
+
+    public void write(byte[], int, int) throws androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException
+    {
+        androidx.media3.datasource.cache.CacheDataSink r0;
+        byte[] r1;
+        int i0, i1, i2, $i6, $i12, i19;
+        androidx.media3.datasource.DataSpec r2;
+        long $l3, $l4, $l7, $l8, $l9, $l10, $l11, $l13, $l14, $l15, $l16, $l17, $l18;
+        byte $b5;
+        java.io.OutputStream $r3, $r5;
+        java.lang.Object $r4;
+        java.lang.Throwable $r8, r10, r12;
+        androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException r11;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r2 = r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.DataSpec dataSpec>;
+
+        if r2 != null goto label1;
+
+        return;
+
+     label1:
+        i19 = 0;
+
+     label2:
+        if i19 >= i1 goto label4;
+
+        $l4 = r0.<androidx.media3.datasource.cache.CacheDataSink: long outputStreamBytesWritten>;
+
+        $l3 = r0.<androidx.media3.datasource.cache.CacheDataSink: long dataSpecFragmentSize>;
+
+        $b5 = $l4 cmp $l3;
+
+        if $b5 != 0 goto label3;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.CacheDataSink: void closeCurrentOutputStream()>();
+
+        specialinvoke r0.<androidx.media3.datasource.cache.CacheDataSink: void openNextOutputStream(androidx.media3.datasource.DataSpec)>(r2);
+
+     label3:
+        $i6 = i1 - i19;
+
+        $l10 = (long) $i6;
+
+        $l8 = r0.<androidx.media3.datasource.cache.CacheDataSink: long dataSpecFragmentSize>;
+
+        $l7 = r0.<androidx.media3.datasource.cache.CacheDataSink: long outputStreamBytesWritten>;
+
+        $l9 = $l8 - $l7;
+
+        $l11 = staticinvoke <java.lang.Math: long min(long,long)>($l10, $l9);
+
+        i2 = (int) $l11;
+
+        $r3 = r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream>;
+
+        $r4 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r3);
+
+        $r5 = (java.io.OutputStream) $r4;
+
+        $i12 = i0 + i19;
+
+        virtualinvoke $r5.<java.io.OutputStream: void write(byte[],int,int)>(r1, $i12, i2);
+
+        i19 = i19 + i2;
+
+        $l14 = r0.<androidx.media3.datasource.cache.CacheDataSink: long outputStreamBytesWritten>;
+
+        $l13 = (long) i2;
+
+        $l15 = $l14 + $l13;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: long outputStreamBytesWritten> = $l15;
+
+        $l17 = r0.<androidx.media3.datasource.cache.CacheDataSink: long dataSpecBytesWritten>;
+
+        $l16 = (long) i2;
+
+        $l18 = $l17 + $l16;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: long dataSpecBytesWritten> = $l18;
+
+        goto label2;
+
+     label4:
+        goto label6;
+
+     label5:
+        $r8 := @caughtexception;
+
+        r10 = $r8;
+
+        r11 = new androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException;
+
+        specialinvoke r11.<androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException: void <init>(java.io.IOException)>(r10);
+
+        r12 = (java.lang.Throwable) r11;
+
+        throw r12;
+
+     label6:
+        return;
+
+        catch java.io.IOException from label1 to label4 with label5;
+    }
+
+    public void close() throws androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException
+    {
+        androidx.media3.datasource.cache.CacheDataSink r0;
+        java.lang.Throwable r1, $r3, r6;
+        androidx.media3.datasource.DataSpec $r2;
+        androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException r5;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink;
+
+        $r2 = r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.DataSpec dataSpec>;
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        specialinvoke r0.<androidx.media3.datasource.cache.CacheDataSink: void closeCurrentOutputStream()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+        r1 = $r3;
+
+        r5 = new androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException;
+
+        specialinvoke r5.<androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException: void <init>(java.io.IOException)>(r1);
+
+        r6 = (java.lang.Throwable) r5;
+
+        throw r6;
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    private void openNextOutputStream(androidx.media3.datasource.DataSpec) throws java.io.IOException
+    {
+        androidx.media3.datasource.cache.CacheDataSink r0;
+        androidx.media3.datasource.DataSpec r1;
+        long l0, $l1, $l3, $l4, $l5, $l6, $l7, $l8, $l9, $l12;
+        java.io.FileOutputStream r2, r14;
+        byte $b2;
+        java.lang.String $r3, $r6;
+        androidx.media3.datasource.cache.Cache $r4;
+        java.lang.Object $r5;
+        java.io.File $r7, $r9;
+        int $i10, $i11;
+        androidx.media3.datasource.cache.ReusableBufferedOutputStream $r10, $r11, $r12, r15;
+        java.io.OutputStream r16;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink;
+
+        r1 := @parameter0: androidx.media3.datasource.DataSpec;
+
+        $l1 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $b2 = $l1 cmp -1L;
+
+        if $b2 != 0 goto label1;
+
+        $l12 = -1L;
+
+        goto label2;
+
+     label1:
+        $l4 = r1.<androidx.media3.datasource.DataSpec: long length>;
+
+        $l3 = r0.<androidx.media3.datasource.cache.CacheDataSink: long dataSpecBytesWritten>;
+
+        $l6 = $l4 - $l3;
+
+        $l5 = r0.<androidx.media3.datasource.cache.CacheDataSink: long dataSpecFragmentSize>;
+
+        $l12 = staticinvoke <java.lang.Math: long min(long,long)>($l6, $l5);
+
+     label2:
+        l0 = $l12;
+
+        $r4 = r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.Cache cache>;
+
+        $r3 = r1.<androidx.media3.datasource.DataSpec: java.lang.String key>;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r3);
+
+        $r6 = (java.lang.String) $r5;
+
+        $l8 = r1.<androidx.media3.datasource.DataSpec: long position>;
+
+        $l7 = r0.<androidx.media3.datasource.cache.CacheDataSink: long dataSpecBytesWritten>;
+
+        $l9 = $l8 + $l7;
+
+        $r7 = interfaceinvoke $r4.<androidx.media3.datasource.cache.Cache: java.io.File startFile(java.lang.String,long,long)>($r6, $l9, l0);
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.File file> = $r7;
+
+        r14 = new java.io.FileOutputStream;
+
+        $r9 = r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.File file>;
+
+        specialinvoke r14.<java.io.FileOutputStream: void <init>(java.io.File)>($r9);
+
+        r2 = r14;
+
+        $i10 = r0.<androidx.media3.datasource.cache.CacheDataSink: int bufferSize>;
+
+        if $i10 <= 0 goto label5;
+
+        $r10 = r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.ReusableBufferedOutputStream bufferedOutputStream>;
+
+        if $r10 != null goto label3;
+
+        r15 = new androidx.media3.datasource.cache.ReusableBufferedOutputStream;
+
+        $i11 = r0.<androidx.media3.datasource.cache.CacheDataSink: int bufferSize>;
+
+        specialinvoke r15.<androidx.media3.datasource.cache.ReusableBufferedOutputStream: void <init>(java.io.OutputStream,int)>(r2, $i11);
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.ReusableBufferedOutputStream bufferedOutputStream> = r15;
+
+        goto label4;
+
+     label3:
+        $r11 = r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.ReusableBufferedOutputStream bufferedOutputStream>;
+
+        virtualinvoke $r11.<androidx.media3.datasource.cache.ReusableBufferedOutputStream: void reset(java.io.OutputStream)>(r2);
+
+     label4:
+        $r12 = r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.ReusableBufferedOutputStream bufferedOutputStream>;
+
+        r16 = (java.io.OutputStream) $r12;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream> = r16;
+
+        goto label6;
+
+     label5:
+        r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream> = r2;
+
+     label6:
+        r0.<androidx.media3.datasource.cache.CacheDataSink: long outputStreamBytesWritten> = 0L;
+
+        return;
+    }
+
+    private void closeCurrentOutputStream() throws java.io.IOException
+    {
+        androidx.media3.datasource.cache.CacheDataSink r0;
+        java.io.File r1, r3, $r7, $r12;
+        java.lang.Throwable r2, $r10;
+        java.io.OutputStream $r4, $r5, $r6, $r11;
+        java.lang.Object $r8, $r13;
+        long $l0, $l1;
+        androidx.media3.datasource.cache.Cache $r9, $r14;
+        boolean z2, z3;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink;
+
+        $r4 = r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream>;
+
+        if $r4 != null goto label1;
+
+        return;
+
+     label1:
+        z2 = 0;
+
+     label2:
+        $r5 = r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream>;
+
+        virtualinvoke $r5.<java.io.OutputStream: void flush()>();
+
+        z3 = 1;
+
+     label3:
+        $r6 = r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream>;
+
+        staticinvoke <androidx.media3.common.util.Util: void closeQuietly(java.io.Closeable)>($r6);
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream> = null;
+
+        $r7 = r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.File file>;
+
+        $r8 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r7);
+
+        r1 = (java.io.File) $r8;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.File file> = null;
+
+        if z3 == 0 goto label4;
+
+        $r9 = r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.Cache cache>;
+
+        $l0 = r0.<androidx.media3.datasource.cache.CacheDataSink: long outputStreamBytesWritten>;
+
+        interfaceinvoke $r9.<androidx.media3.datasource.cache.Cache: void commitFile(java.io.File,long)>(r1, $l0);
+
+        goto label5;
+
+     label4:
+        virtualinvoke r1.<java.io.File: boolean delete()>();
+
+     label5:
+        goto label9;
+
+     label6:
+        $r10 := @caughtexception;
+
+        r2 = $r10;
+
+        $r11 = r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream>;
+
+        staticinvoke <androidx.media3.common.util.Util: void closeQuietly(java.io.Closeable)>($r11);
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.OutputStream outputStream> = null;
+
+        $r12 = r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.File file>;
+
+        $r13 = staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r12);
+
+        r3 = (java.io.File) $r13;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink: java.io.File file> = null;
+
+        if z2 == 0 goto label7;
+
+        $r14 = r0.<androidx.media3.datasource.cache.CacheDataSink: androidx.media3.datasource.cache.Cache cache>;
+
+        $l1 = r0.<androidx.media3.datasource.cache.CacheDataSink: long outputStreamBytesWritten>;
+
+        interfaceinvoke $r14.<androidx.media3.datasource.cache.Cache: void commitFile(java.io.File,long)>(r3, $l1);
+
+        goto label8;
+
+     label7:
+        virtualinvoke r3.<java.io.File: boolean delete()>();
+
+     label8:
+        throw r2;
+
+     label9:
+        return;
+
+        catch java.lang.Throwable from label2 to label3 with label6;
+    }
+
+androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException
+    public void <init>(java.io.IOException)
+    {
+        androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException r0;
+        java.io.IOException r1;
+        java.lang.Throwable r2;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink$CacheDataSinkException;
+
+        r1 := @parameter0: java.io.IOException;
+
+        r2 = (java.lang.Throwable) r1;
+
+        specialinvoke r0.<androidx.media3.datasource.cache.Cache$CacheException: void <init>(java.lang.Throwable)>(r2);
+
+        return;
+    }
+
+androidx.media3.datasource.cache.CacheDataSink$Factory
+<androidx.media3.datasource.cache.CacheDataSink$Factory: androidx.media3.datasource.cache.Cache cache>
+<androidx.media3.datasource.cache.CacheDataSink$Factory: long fragmentSize>
+<androidx.media3.datasource.cache.CacheDataSink$Factory: int bufferSize>
+    public void <init>()
+    {
+        androidx.media3.datasource.cache.CacheDataSink$Factory r0;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink$Factory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink$Factory: long fragmentSize> = 5242880L;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink$Factory: int bufferSize> = 20480;
+
+        return;
+    }
+
+    public androidx.media3.datasource.cache.CacheDataSink$Factory setCache(androidx.media3.datasource.cache.Cache)
+    {
+        androidx.media3.datasource.cache.CacheDataSink$Factory r0;
+        androidx.media3.datasource.cache.Cache r1;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink$Factory;
+
+        r1 := @parameter0: androidx.media3.datasource.cache.Cache;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink$Factory: androidx.media3.datasource.cache.Cache cache> = r1;
+
+        return r0;
+    }
+
+    public androidx.media3.datasource.cache.CacheDataSink$Factory setFragmentSize(long)
+    {
+        androidx.media3.datasource.cache.CacheDataSink$Factory r0;
+        long l0;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink$Factory;
+
+        l0 := @parameter0: long;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink$Factory: long fragmentSize> = l0;
+
+        return r0;
+    }
+
+    public androidx.media3.datasource.cache.CacheDataSink$Factory setBufferSize(int)
+    {
+        androidx.media3.datasource.cache.CacheDataSink$Factory r0;
+        int i0;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink$Factory;
+
+        i0 := @parameter0: int;
+
+        r0.<androidx.media3.datasource.cache.CacheDataSink$Factory: int bufferSize> = i0;
+
+        return r0;
+    }
+
+    public androidx.media3.datasource.DataSink createDataSink()
+    {
+        androidx.media3.datasource.cache.CacheDataSink$Factory r0;
+        androidx.media3.datasource.cache.CacheDataSink $r1;
+        androidx.media3.datasource.cache.Cache $r2, $r4;
+        java.lang.Object $r3;
+        int $i0;
+        long $l1;
+
+        r0 := @this: androidx.media3.datasource.cache.CacheDataSink$Factory;
+
+        $r1 = new androidx.media3.datasource.cache.CacheDataSink;
+
+        $r2 = r0.<androidx.media3.datasource.cache.CacheDataSink$Factory: androidx.media3.datasource.cache.Cache cache>;
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r4 = (androidx.media3.datasource.cache.Cache) $r3;
+
+        $l1 = r0.<androidx.media3.datasource.cache.CacheDataSink$Factory: long fragmentSize>;
+
+        $i0 = r0.<androidx.media3.datasource.cache.CacheDataSink$Factory: int bufferSize>;
+
+        specialinvoke $r1.<androidx.media3.datasource.cache.CacheDataSink: void <init>(androidx.media3.datasource.cache.Cache,long,int)>($r4, $l1, $i0);
+
+        return $r1;
+    }
+

@@ -1,0 +1,482 @@
+androidx.paging.FlattenedPageEventStorage
+<androidx.paging.FlattenedPageEventStorage: int placeholdersBefore>
+<androidx.paging.FlattenedPageEventStorage: int placeholdersAfter>
+<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages>
+<androidx.paging.FlattenedPageEventStorage: androidx.paging.MutableLoadStateCollection sourceStates>
+<androidx.paging.FlattenedPageEventStorage: androidx.paging.LoadStates mediatorStates>
+<androidx.paging.FlattenedPageEventStorage: boolean receivedFirstEvent>
+    public void <init>()
+    {
+        androidx.paging.FlattenedPageEventStorage r0;
+        kotlin.collections.ArrayDeque $r1;
+        androidx.paging.MutableLoadStateCollection $r2;
+
+        r0 := @this: androidx.paging.FlattenedPageEventStorage;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new kotlin.collections.ArrayDeque;
+
+        specialinvoke $r1.<kotlin.collections.ArrayDeque: void <init>()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages> = $r1;
+
+        $r2 = new androidx.paging.MutableLoadStateCollection;
+
+        specialinvoke $r2.<androidx.paging.MutableLoadStateCollection: void <init>()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: androidx.paging.MutableLoadStateCollection sourceStates> = $r2;
+
+        return;
+    }
+
+    public final void add(androidx.paging.PageEvent)
+    {
+        androidx.paging.FlattenedPageEventStorage r0;
+        androidx.paging.PageEvent r1, r2;
+        boolean $z0, $z1, $z2;
+        androidx.paging.PageEvent$LoadStateUpdate $r3;
+        androidx.paging.PageEvent$Drop $r4;
+        androidx.paging.PageEvent$Insert $r5;
+
+        r0 := @this: androidx.paging.FlattenedPageEventStorage;
+
+        r1 := @parameter0: androidx.paging.PageEvent;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "event");
+
+        r0.<androidx.paging.FlattenedPageEventStorage: boolean receivedFirstEvent> = 1;
+
+        r2 = r1;
+
+        $z0 = r2 instanceof androidx.paging.PageEvent$Insert;
+
+        if $z0 == 0 goto label1;
+
+        $r5 = (androidx.paging.PageEvent$Insert) r1;
+
+        specialinvoke r0.<androidx.paging.FlattenedPageEventStorage: void handleInsert(androidx.paging.PageEvent$Insert)>($r5);
+
+        goto label3;
+
+     label1:
+        $z1 = r2 instanceof androidx.paging.PageEvent$Drop;
+
+        if $z1 == 0 goto label2;
+
+        $r4 = (androidx.paging.PageEvent$Drop) r1;
+
+        specialinvoke r0.<androidx.paging.FlattenedPageEventStorage: void handlePageDrop(androidx.paging.PageEvent$Drop)>($r4);
+
+        goto label3;
+
+     label2:
+        $z2 = r2 instanceof androidx.paging.PageEvent$LoadStateUpdate;
+
+        if $z2 == 0 goto label3;
+
+        $r3 = (androidx.paging.PageEvent$LoadStateUpdate) r1;
+
+        specialinvoke r0.<androidx.paging.FlattenedPageEventStorage: void handleLoadStateUpdate(androidx.paging.PageEvent$LoadStateUpdate)>($r3);
+
+     label3:
+        return;
+    }
+
+    private final void handlePageDrop(androidx.paging.PageEvent$Drop)
+    {
+        androidx.paging.FlattenedPageEventStorage r0;
+        androidx.paging.PageEvent$Drop r1;
+        androidx.paging.LoadType r2, $r4;
+        int i0, $i1, $i2, $i3, i4, i5, i6, i7, i8, i9, i10, i11;
+        androidx.paging.MutableLoadStateCollection $r3;
+        androidx.paging.LoadState$NotLoading$Companion $r5;
+        androidx.paging.LoadState$NotLoading $r6;
+        androidx.paging.LoadState $r7;
+        int[] $r8;
+        kotlin.collections.ArrayDeque $r9, $r11;
+        java.lang.IllegalArgumentException $r13;
+        boolean z0, z1, z3, z4;
+
+        r0 := @this: androidx.paging.FlattenedPageEventStorage;
+
+        r1 := @parameter0: androidx.paging.PageEvent$Drop;
+
+        $r3 = r0.<androidx.paging.FlattenedPageEventStorage: androidx.paging.MutableLoadStateCollection sourceStates>;
+
+        $r4 = virtualinvoke r1.<androidx.paging.PageEvent$Drop: androidx.paging.LoadType getLoadType()>();
+
+        $r5 = <androidx.paging.LoadState$NotLoading: androidx.paging.LoadState$NotLoading$Companion Companion>;
+
+        $r6 = virtualinvoke $r5.<androidx.paging.LoadState$NotLoading$Companion: androidx.paging.LoadState$NotLoading getIncomplete$paging_common()>();
+
+        $r7 = (androidx.paging.LoadState) $r6;
+
+        virtualinvoke $r3.<androidx.paging.MutableLoadStateCollection: void set(androidx.paging.LoadType,androidx.paging.LoadState)>($r4, $r7);
+
+        r2 = virtualinvoke r1.<androidx.paging.PageEvent$Drop: androidx.paging.LoadType getLoadType()>();
+
+        $r8 = <androidx.paging.FlattenedPageEventStorage$WhenMappings: int[] $EnumSwitchMapping$0>;
+
+        $i1 = virtualinvoke r2.<androidx.paging.LoadType: int ordinal()>();
+
+        i0 = $r8[$i1];
+
+        tableswitch(i0)
+        {
+            case 1: goto label1;
+            case 2: goto label3;
+            default: goto label5;
+        };
+
+     label1:
+        $i3 = virtualinvoke r1.<androidx.paging.PageEvent$Drop: int getPlaceholdersRemaining()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: int placeholdersBefore> = $i3;
+
+        i4 = virtualinvoke r1.<androidx.paging.PageEvent$Drop: int getPageCount()>();
+
+        z0 = 0;
+
+        z1 = 0;
+
+        i5 = 0;
+
+        i6 = i4;
+
+     label2:
+        if i5 >= i6 goto label6;
+
+        i7 = i5;
+
+        $r11 = r0.<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages>;
+
+        virtualinvoke $r11.<kotlin.collections.ArrayDeque: java.lang.Object removeFirst()>();
+
+        i5 = i5 + 1;
+
+        goto label2;
+
+     label3:
+        $i2 = virtualinvoke r1.<androidx.paging.PageEvent$Drop: int getPlaceholdersRemaining()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: int placeholdersAfter> = $i2;
+
+        i8 = virtualinvoke r1.<androidx.paging.PageEvent$Drop: int getPageCount()>();
+
+        z3 = 0;
+
+        z4 = 0;
+
+        i9 = 0;
+
+        i10 = i8;
+
+     label4:
+        if i9 >= i10 goto label6;
+
+        i11 = i9;
+
+        $r9 = r0.<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages>;
+
+        virtualinvoke $r9.<kotlin.collections.ArrayDeque: java.lang.Object removeLast()>();
+
+        i9 = i9 + 1;
+
+        goto label4;
+
+     label5:
+        $r13 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r13.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Page drop type must be prepend or append");
+
+        throw $r13;
+
+     label6:
+        return;
+    }
+
+    private final void handleInsert(androidx.paging.PageEvent$Insert)
+    {
+        androidx.paging.FlattenedPageEventStorage r0;
+        androidx.paging.PageEvent$Insert r1;
+        androidx.paging.LoadType r2;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9;
+        java.lang.Iterable $r3;
+        java.util.Iterator r4;
+        androidx.paging.MutableLoadStateCollection $r5;
+        androidx.paging.LoadStates $r6, $r7;
+        int[] $r8;
+        kotlin.collections.ArrayDeque $r9, $r10, $r13, $r19;
+        java.util.List $r11, $r14, $r16, $r20;
+        java.util.Collection $r12, $r15;
+        kotlin.ranges.IntProgression $r17;
+        boolean $z4;
+        kotlin.collections.IntIterator $r18;
+        java.lang.Object $r21;
+
+        r0 := @this: androidx.paging.FlattenedPageEventStorage;
+
+        r1 := @parameter0: androidx.paging.PageEvent$Insert;
+
+        $r5 = r0.<androidx.paging.FlattenedPageEventStorage: androidx.paging.MutableLoadStateCollection sourceStates>;
+
+        $r6 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: androidx.paging.LoadStates getSourceLoadStates()>();
+
+        virtualinvoke $r5.<androidx.paging.MutableLoadStateCollection: void set(androidx.paging.LoadStates)>($r6);
+
+        $r7 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: androidx.paging.LoadStates getMediatorLoadStates()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: androidx.paging.LoadStates mediatorStates> = $r7;
+
+        r2 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: androidx.paging.LoadType getLoadType()>();
+
+        $r8 = <androidx.paging.FlattenedPageEventStorage$WhenMappings: int[] $EnumSwitchMapping$0>;
+
+        $i3 = virtualinvoke r2.<androidx.paging.LoadType: int ordinal()>();
+
+        i0 = $r8[$i3];
+
+        tableswitch(i0)
+        {
+            case 1: goto label2;
+            case 2: goto label5;
+            case 3: goto label1;
+            default: goto label6;
+        };
+
+     label1:
+        $r9 = r0.<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages>;
+
+        virtualinvoke $r9.<kotlin.collections.ArrayDeque: void clear()>();
+
+        $i4 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: int getPlaceholdersAfter()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: int placeholdersAfter> = $i4;
+
+        $i5 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: int getPlaceholdersBefore()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: int placeholdersBefore> = $i5;
+
+        $r10 = r0.<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages>;
+
+        $r11 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: java.util.List getPages()>();
+
+        $r12 = (java.util.Collection) $r11;
+
+        virtualinvoke $r10.<kotlin.collections.ArrayDeque: boolean addAll(java.util.Collection)>($r12);
+
+        goto label6;
+
+     label2:
+        $i7 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: int getPlaceholdersBefore()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: int placeholdersBefore> = $i7;
+
+        $r16 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: java.util.List getPages()>();
+
+        $i8 = interfaceinvoke $r16.<java.util.List: int size()>();
+
+        $i9 = $i8 - 1;
+
+        $r17 = staticinvoke <kotlin.ranges.RangesKt: kotlin.ranges.IntProgression downTo(int,int)>($i9, 0);
+
+        $r3 = (java.lang.Iterable) $r17;
+
+        r4 = interfaceinvoke $r3.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z4 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label4;
+
+        $r18 = (kotlin.collections.IntIterator) r4;
+
+        i1 = virtualinvoke $r18.<kotlin.collections.IntIterator: int nextInt()>();
+
+        i2 = i1;
+
+        $r19 = r0.<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages>;
+
+        $r20 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: java.util.List getPages()>();
+
+        $r21 = interfaceinvoke $r20.<java.util.List: java.lang.Object get(int)>(i2);
+
+        virtualinvoke $r19.<kotlin.collections.ArrayDeque: void addFirst(java.lang.Object)>($r21);
+
+        goto label3;
+
+     label4:
+        goto label6;
+
+     label5:
+        $i6 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: int getPlaceholdersAfter()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: int placeholdersAfter> = $i6;
+
+        $r13 = r0.<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages>;
+
+        $r14 = virtualinvoke r1.<androidx.paging.PageEvent$Insert: java.util.List getPages()>();
+
+        $r15 = (java.util.Collection) $r14;
+
+        virtualinvoke $r13.<kotlin.collections.ArrayDeque: boolean addAll(java.util.Collection)>($r15);
+
+     label6:
+        return;
+    }
+
+    private final void handleLoadStateUpdate(androidx.paging.PageEvent$LoadStateUpdate)
+    {
+        androidx.paging.FlattenedPageEventStorage r0;
+        androidx.paging.PageEvent$LoadStateUpdate r1;
+        androidx.paging.MutableLoadStateCollection $r2;
+        androidx.paging.LoadStates $r3, $r4;
+
+        r0 := @this: androidx.paging.FlattenedPageEventStorage;
+
+        r1 := @parameter0: androidx.paging.PageEvent$LoadStateUpdate;
+
+        $r2 = r0.<androidx.paging.FlattenedPageEventStorage: androidx.paging.MutableLoadStateCollection sourceStates>;
+
+        $r3 = virtualinvoke r1.<androidx.paging.PageEvent$LoadStateUpdate: androidx.paging.LoadStates getSource()>();
+
+        virtualinvoke $r2.<androidx.paging.MutableLoadStateCollection: void set(androidx.paging.LoadStates)>($r3);
+
+        $r4 = virtualinvoke r1.<androidx.paging.PageEvent$LoadStateUpdate: androidx.paging.LoadStates getMediator()>();
+
+        r0.<androidx.paging.FlattenedPageEventStorage: androidx.paging.LoadStates mediatorStates> = $r4;
+
+        return;
+    }
+
+    public final java.util.List getAsEvents()
+    {
+        androidx.paging.FlattenedPageEventStorage r0;
+        java.util.List r1, $r11, $r14;
+        java.util.Collection r2;
+        boolean z0, $z1, $z2, z5, $z6;
+        java.util.ArrayList $r3;
+        androidx.paging.MutableLoadStateCollection $r4;
+        kotlin.collections.ArrayDeque $r5, $r8;
+        androidx.paging.PageEvent$LoadStateUpdate $r6;
+        androidx.paging.LoadStates $r7, $r12, r15;
+        java.lang.Iterable $r9;
+        androidx.paging.PageEvent$Insert$Companion $r10;
+        int $i0, $i1;
+        androidx.paging.PageEvent$Insert $r13;
+
+        r0 := @this: androidx.paging.FlattenedPageEventStorage;
+
+        $z1 = r0.<androidx.paging.FlattenedPageEventStorage: boolean receivedFirstEvent>;
+
+        if $z1 != 0 goto label1;
+
+        $r14 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List emptyList()>();
+
+        return $r14;
+
+     label1:
+        z5 = 0;
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        r1 = (java.util.List) $r3;
+
+        $r4 = r0.<androidx.paging.FlattenedPageEventStorage: androidx.paging.MutableLoadStateCollection sourceStates>;
+
+        r15 = virtualinvoke $r4.<androidx.paging.MutableLoadStateCollection: androidx.paging.LoadStates snapshot()>();
+
+        $r5 = r0.<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages>;
+
+        r2 = (java.util.Collection) $r5;
+
+        z0 = 0;
+
+        $z2 = interfaceinvoke r2.<java.util.Collection: boolean isEmpty()>();
+
+        if $z2 != 0 goto label2;
+
+        $z6 = 1;
+
+        goto label3;
+
+     label2:
+        $z6 = 0;
+
+     label3:
+        if $z6 == 0 goto label4;
+
+        $r10 = <androidx.paging.PageEvent$Insert: androidx.paging.PageEvent$Insert$Companion Companion>;
+
+        $r8 = r0.<androidx.paging.FlattenedPageEventStorage: kotlin.collections.ArrayDeque pages>;
+
+        $r9 = (java.lang.Iterable) $r8;
+
+        $r11 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List toList(java.lang.Iterable)>($r9);
+
+        $i1 = r0.<androidx.paging.FlattenedPageEventStorage: int placeholdersBefore>;
+
+        $i0 = r0.<androidx.paging.FlattenedPageEventStorage: int placeholdersAfter>;
+
+        $r12 = r0.<androidx.paging.FlattenedPageEventStorage: androidx.paging.LoadStates mediatorStates>;
+
+        $r13 = virtualinvoke $r10.<androidx.paging.PageEvent$Insert$Companion: androidx.paging.PageEvent$Insert Refresh(java.util.List,int,int,androidx.paging.LoadStates,androidx.paging.LoadStates)>($r11, $i1, $i0, r15, $r12);
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>($r13);
+
+        goto label5;
+
+     label4:
+        $r6 = new androidx.paging.PageEvent$LoadStateUpdate;
+
+        $r7 = r0.<androidx.paging.FlattenedPageEventStorage: androidx.paging.LoadStates mediatorStates>;
+
+        specialinvoke $r6.<androidx.paging.PageEvent$LoadStateUpdate: void <init>(androidx.paging.LoadStates,androidx.paging.LoadStates)>(r15, $r7);
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+     label5:
+        return r1;
+    }
+
+androidx.paging.FlattenedPageEventStorage$WhenMappings
+<androidx.paging.FlattenedPageEventStorage$WhenMappings: int[] $EnumSwitchMapping$0>
+    static void <clinit>()
+    {
+        int[] r0;
+        androidx.paging.LoadType[] $r1;
+        int $i0, $i1, $i2, $i3;
+        androidx.paging.LoadType $r2, $r3, $r4;
+
+        $r1 = staticinvoke <androidx.paging.LoadType: androidx.paging.LoadType[] values()>();
+
+        $i0 = lengthof $r1;
+
+        r0 = newarray (int)[$i0];
+
+        $r2 = <androidx.paging.LoadType: androidx.paging.LoadType PREPEND>;
+
+        $i1 = virtualinvoke $r2.<androidx.paging.LoadType: int ordinal()>();
+
+        r0[$i1] = 1;
+
+        $r3 = <androidx.paging.LoadType: androidx.paging.LoadType APPEND>;
+
+        $i2 = virtualinvoke $r3.<androidx.paging.LoadType: int ordinal()>();
+
+        r0[$i2] = 2;
+
+        $r4 = <androidx.paging.LoadType: androidx.paging.LoadType REFRESH>;
+
+        $i3 = virtualinvoke $r4.<androidx.paging.LoadType: int ordinal()>();
+
+        r0[$i3] = 3;
+
+        <androidx.paging.FlattenedPageEventStorage$WhenMappings: int[] $EnumSwitchMapping$0> = r0;
+
+        return;
+    }
+

@@ -1,0 +1,496 @@
+androidx.core.app.NavUtils
+<androidx.core.app.NavUtils: java.lang.String TAG>
+<androidx.core.app.NavUtils: java.lang.String PARENT_ACTIVITY>
+    public static boolean shouldUpRecreateTask(android.app.Activity, android.content.Intent)
+    {
+        android.app.Activity r0;
+        android.content.Intent r1, $r3;
+        java.lang.String r2;
+        int $i0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: android.app.Activity;
+
+        r1 := @parameter1: android.content.Intent;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 16 goto label1;
+
+        $z1 = staticinvoke <androidx.core.app.NavUtils$Api16Impl: boolean shouldUpRecreateTask(android.app.Activity,android.content.Intent)>(r0, r1);
+
+        return $z1;
+
+     label1:
+        $r3 = virtualinvoke r0.<android.app.Activity: android.content.Intent getIntent()>();
+
+        r2 = virtualinvoke $r3.<android.content.Intent: java.lang.String getAction()>();
+
+        if r2 == null goto label2;
+
+        $z0 = virtualinvoke r2.<java.lang.String: boolean equals(java.lang.Object)>("android.intent.action.MAIN");
+
+        if $z0 != 0 goto label2;
+
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        return $z2;
+    }
+
+    public static void navigateUpFromSameTask(android.app.Activity)
+    {
+        android.app.Activity r0;
+        android.content.Intent r1;
+        java.lang.IllegalArgumentException $r2;
+        java.lang.StringBuilder $r3, $r4, $r7, $r8;
+        java.lang.Class $r5;
+        java.lang.String $r6, $r9;
+
+        r0 := @parameter0: android.app.Activity;
+
+        r1 = staticinvoke <androidx.core.app.NavUtils: android.content.Intent getParentActivityIntent(android.app.Activity)>(r0);
+
+        if r1 != null goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Activity ");
+
+        $r5 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" does not have a parent activity name specified. (Did you forget to add the android.support.PARENT_ACTIVITY <meta-data>  element in your manifest?)");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r9);
+
+        throw $r2;
+
+     label1:
+        staticinvoke <androidx.core.app.NavUtils: void navigateUpTo(android.app.Activity,android.content.Intent)>(r0, r1);
+
+        return;
+    }
+
+    public static void navigateUpTo(android.app.Activity, android.content.Intent)
+    {
+        android.app.Activity r0;
+        android.content.Intent r1;
+        int $i0;
+
+        r0 := @parameter0: android.app.Activity;
+
+        r1 := @parameter1: android.content.Intent;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 16 goto label1;
+
+        staticinvoke <androidx.core.app.NavUtils$Api16Impl: boolean navigateUpTo(android.app.Activity,android.content.Intent)>(r0, r1);
+
+        goto label2;
+
+     label1:
+        virtualinvoke r1.<android.content.Intent: android.content.Intent addFlags(int)>(67108864);
+
+        virtualinvoke r0.<android.app.Activity: void startActivity(android.content.Intent)>(r1);
+
+        virtualinvoke r0.<android.app.Activity: void finish()>();
+
+     label2:
+        return;
+    }
+
+    public static android.content.Intent getParentActivityIntent(android.app.Activity)
+    {
+        android.app.Activity r0;
+        android.content.ComponentName r1, r15;
+        int $i0;
+        java.lang.Throwable $r4, r14;
+        java.lang.StringBuilder $r6, $r7, $r8, r17;
+        java.lang.String $r9, r11, r12;
+        android.content.Intent r10, $r13, r16;
+        android.content.Context r18, r19;
+
+        r0 := @parameter0: android.app.Activity;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 16 goto label1;
+
+        r10 = staticinvoke <androidx.core.app.NavUtils$Api16Impl: android.content.Intent getParentActivityIntent(android.app.Activity)>(r0);
+
+        if r10 == null goto label1;
+
+        return r10;
+
+     label1:
+        r11 = staticinvoke <androidx.core.app.NavUtils: java.lang.String getParentActivityName(android.app.Activity)>(r0);
+
+        if r11 != null goto label2;
+
+        return null;
+
+     label2:
+        r15 = new android.content.ComponentName;
+
+        r18 = (android.content.Context) r0;
+
+        specialinvoke r15.<android.content.ComponentName: void <init>(android.content.Context,java.lang.String)>(r18, r11);
+
+        r1 = r15;
+
+     label3:
+        r19 = (android.content.Context) r0;
+
+        r12 = staticinvoke <androidx.core.app.NavUtils: java.lang.String getParentActivityName(android.content.Context,android.content.ComponentName)>(r19, r1);
+
+        if r12 != null goto label4;
+
+        $r13 = staticinvoke <android.content.Intent: android.content.Intent makeMainActivity(android.content.ComponentName)>(r1);
+
+        goto label5;
+
+     label4:
+        r16 = new android.content.Intent;
+
+        specialinvoke r16.<android.content.Intent: void <init>()>();
+
+        $r13 = virtualinvoke r16.<android.content.Intent: android.content.Intent setComponent(android.content.ComponentName)>(r1);
+
+     label5:
+        return $r13;
+
+     label6:
+        $r4 := @caughtexception;
+
+        r14 = $r4;
+
+        r17 = new java.lang.StringBuilder;
+
+        specialinvoke r17.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("getParentActivityIntent: bad parentActivityName \'");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r11);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\' in manifest");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("NavUtils", $r9);
+
+        return null;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label3 to label5 with label6;
+    }
+
+    public static android.content.Intent getParentActivityIntent(android.content.Context, java.lang.Class) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        android.content.Context r0;
+        java.lang.Class r1;
+        java.lang.String r2, r4;
+        android.content.ComponentName r3, $r6, $r7;
+        android.content.Intent r5, $r8, $r9;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.lang.Class;
+
+        $r6 = new android.content.ComponentName;
+
+        specialinvoke $r6.<android.content.ComponentName: void <init>(android.content.Context,java.lang.Class)>(r0, r1);
+
+        r2 = staticinvoke <androidx.core.app.NavUtils: java.lang.String getParentActivityName(android.content.Context,android.content.ComponentName)>(r0, $r6);
+
+        if r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r7 = new android.content.ComponentName;
+
+        specialinvoke $r7.<android.content.ComponentName: void <init>(android.content.Context,java.lang.String)>(r0, r2);
+
+        r3 = $r7;
+
+        r4 = staticinvoke <androidx.core.app.NavUtils: java.lang.String getParentActivityName(android.content.Context,android.content.ComponentName)>(r0, r3);
+
+        if r4 != null goto label2;
+
+        $r9 = staticinvoke <android.content.Intent: android.content.Intent makeMainActivity(android.content.ComponentName)>(r3);
+
+        goto label3;
+
+     label2:
+        $r8 = new android.content.Intent;
+
+        specialinvoke $r8.<android.content.Intent: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<android.content.Intent: android.content.Intent setComponent(android.content.ComponentName)>(r3);
+
+     label3:
+        r5 = $r9;
+
+        return r5;
+    }
+
+    public static android.content.Intent getParentActivityIntent(android.content.Context, android.content.ComponentName) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        android.content.Context r0;
+        android.content.ComponentName r1, r3, $r6;
+        java.lang.String r2, r4, $r7;
+        android.content.Intent r5, $r8, $r9;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.ComponentName;
+
+        r2 = staticinvoke <androidx.core.app.NavUtils: java.lang.String getParentActivityName(android.content.Context,android.content.ComponentName)>(r0, r1);
+
+        if r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r6 = new android.content.ComponentName;
+
+        $r7 = virtualinvoke r1.<android.content.ComponentName: java.lang.String getPackageName()>();
+
+        specialinvoke $r6.<android.content.ComponentName: void <init>(java.lang.String,java.lang.String)>($r7, r2);
+
+        r3 = $r6;
+
+        r4 = staticinvoke <androidx.core.app.NavUtils: java.lang.String getParentActivityName(android.content.Context,android.content.ComponentName)>(r0, r3);
+
+        if r4 != null goto label2;
+
+        $r9 = staticinvoke <android.content.Intent: android.content.Intent makeMainActivity(android.content.ComponentName)>(r3);
+
+        goto label3;
+
+     label2:
+        $r8 = new android.content.Intent;
+
+        specialinvoke $r8.<android.content.Intent: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<android.content.Intent: android.content.Intent setComponent(android.content.ComponentName)>(r3);
+
+     label3:
+        r5 = $r9;
+
+        return r5;
+    }
+
+    public static java.lang.String getParentActivityName(android.app.Activity)
+    {
+        android.app.Activity r0;
+        java.lang.Throwable r1, $r4;
+        android.content.ComponentName $r2;
+        java.lang.String $r3;
+        java.lang.IllegalArgumentException r6;
+        android.content.Context r7;
+
+        r0 := @parameter0: android.app.Activity;
+
+     label1:
+        $r2 = virtualinvoke r0.<android.app.Activity: android.content.ComponentName getComponentName()>();
+
+        r7 = (android.content.Context) r0;
+
+        $r3 = staticinvoke <androidx.core.app.NavUtils: java.lang.String getParentActivityName(android.content.Context,android.content.ComponentName)>(r7, $r2);
+
+     label2:
+        return $r3;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+        r6 = new java.lang.IllegalArgumentException;
+
+        specialinvoke r6.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>(r1);
+
+        throw r6;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    public static java.lang.String getParentActivityName(android.content.Context, android.content.ComponentName) throws android.content.pm.PackageManager$NameNotFoundException
+    {
+        android.content.Context r0;
+        android.content.ComponentName r1;
+        android.content.pm.PackageManager r2;
+        android.content.pm.ActivityInfo r3;
+        int $i0, $i1, $i2, i5, $i6;
+        android.os.Bundle $r4, $r5;
+        char $c3;
+        java.lang.StringBuilder $r6, $r8, $r9;
+        java.lang.String $r7, r10, r11;
+        short s4;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.ComponentName;
+
+        r2 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        s4 = 128;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 24 goto label1;
+
+        i5 = s4 | 512;
+
+        goto label2;
+
+     label1:
+        i5 = s4 | 512;
+
+     label2:
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 29 goto label3;
+
+        i5 = i5 | 269221888;
+
+        goto label4;
+
+     label3:
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 < 24 goto label4;
+
+        i5 = i5 | 786432;
+
+     label4:
+        r3 = virtualinvoke r2.<android.content.pm.PackageManager: android.content.pm.ActivityInfo getActivityInfo(android.content.ComponentName,int)>(r1, i5);
+
+        $i6 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i6 < 16 goto label5;
+
+        r10 = r3.<android.content.pm.ActivityInfo: java.lang.String parentActivityName>;
+
+        if r10 == null goto label5;
+
+        return r10;
+
+     label5:
+        $r4 = r3.<android.content.pm.ActivityInfo: android.os.Bundle metaData>;
+
+        if $r4 != null goto label6;
+
+        return null;
+
+     label6:
+        $r5 = r3.<android.content.pm.ActivityInfo: android.os.Bundle metaData>;
+
+        r11 = virtualinvoke $r5.<android.os.Bundle: java.lang.String getString(java.lang.String)>("android.support.PARENT_ACTIVITY");
+
+        if r11 != null goto label7;
+
+        return null;
+
+     label7:
+        $c3 = virtualinvoke r11.<java.lang.String: char charAt(int)>(0);
+
+        if $c3 != 46 goto label8;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r11);
+
+        r11 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label8:
+        return r11;
+    }
+
+    private void <init>()
+    {
+        androidx.core.app.NavUtils r0;
+
+        r0 := @this: androidx.core.app.NavUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+androidx.core.app.NavUtils$Api16Impl
+    private void <init>()
+    {
+        androidx.core.app.NavUtils$Api16Impl r0;
+
+        r0 := @this: androidx.core.app.NavUtils$Api16Impl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static boolean shouldUpRecreateTask(android.app.Activity, android.content.Intent)
+    {
+        android.app.Activity r0;
+        android.content.Intent r1;
+        boolean $z0;
+
+        r0 := @parameter0: android.app.Activity;
+
+        r1 := @parameter1: android.content.Intent;
+
+        $z0 = virtualinvoke r0.<android.app.Activity: boolean shouldUpRecreateTask(android.content.Intent)>(r1);
+
+        return $z0;
+    }
+
+    static boolean navigateUpTo(android.app.Activity, android.content.Intent)
+    {
+        android.app.Activity r0;
+        android.content.Intent r1;
+        boolean $z0;
+
+        r0 := @parameter0: android.app.Activity;
+
+        r1 := @parameter1: android.content.Intent;
+
+        $z0 = virtualinvoke r0.<android.app.Activity: boolean navigateUpTo(android.content.Intent)>(r1);
+
+        return $z0;
+    }
+
+    static android.content.Intent getParentActivityIntent(android.app.Activity)
+    {
+        android.app.Activity r0;
+        android.content.Intent $r1;
+
+        r0 := @parameter0: android.app.Activity;
+
+        $r1 = virtualinvoke r0.<android.app.Activity: android.content.Intent getParentActivityIntent()>();
+
+        return $r1;
+    }
+

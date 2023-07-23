@@ -1,0 +1,84 @@
+kotlinx.coroutines.CoroutineExceptionHandlerKt
+    public static final void handleCoroutineException(kotlin.coroutines.CoroutineContext, java.lang.Throwable)
+    {
+        kotlin.coroutines.CoroutineContext $r0;
+        java.lang.Throwable $r1, $r5;
+        kotlinx.coroutines.CoroutineExceptionHandler$Key $r2;
+        kotlin.coroutines.CoroutineContext$Element $r3;
+        kotlinx.coroutines.CoroutineExceptionHandler $r4;
+
+        $r0 := @parameter0: kotlin.coroutines.CoroutineContext;
+
+        $r1 := @parameter1: java.lang.Throwable;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r0, "context");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "exception");
+
+        $r2 = <kotlinx.coroutines.CoroutineExceptionHandler: kotlinx.coroutines.CoroutineExceptionHandler$Key Key>;
+
+     label1:
+        $r3 = interfaceinvoke $r0.<kotlin.coroutines.CoroutineContext: kotlin.coroutines.CoroutineContext$Element get(kotlin.coroutines.CoroutineContext$Key)>($r2);
+
+     label2:
+        $r4 = (kotlinx.coroutines.CoroutineExceptionHandler) $r3;
+
+        if $r4 == null goto label5;
+
+     label3:
+        interfaceinvoke $r4.<kotlinx.coroutines.CoroutineExceptionHandler: void handleException(kotlin.coroutines.CoroutineContext,java.lang.Throwable)>($r0, $r1);
+
+     label4:
+        return;
+
+     label5:
+        staticinvoke <kotlinx.coroutines.CoroutineExceptionHandlerImplKt: void handleCoroutineExceptionImpl(kotlin.coroutines.CoroutineContext,java.lang.Throwable)>($r0, $r1);
+
+        return;
+
+     label6:
+        $r5 := @caughtexception;
+
+        $r1 = staticinvoke <kotlinx.coroutines.CoroutineExceptionHandlerKt: java.lang.Throwable handlerException(java.lang.Throwable,java.lang.Throwable)>($r1, $r5);
+
+        staticinvoke <kotlinx.coroutines.CoroutineExceptionHandlerImplKt: void handleCoroutineExceptionImpl(kotlin.coroutines.CoroutineContext,java.lang.Throwable)>($r0, $r1);
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label3 to label4 with label6;
+    }
+
+    public static final java.lang.Throwable handlerException(java.lang.Throwable, java.lang.Throwable)
+    {
+        java.lang.Throwable $r0, $r1;
+        java.lang.RuntimeException $r2, r3;
+
+        $r0 := @parameter0: java.lang.Throwable;
+
+        $r1 := @parameter1: java.lang.Throwable;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r0, "originalException");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r1, "thrownException");
+
+        if $r0 != $r1 goto label1;
+
+        return $r0;
+
+     label1:
+        r3 = new java.lang.RuntimeException;
+
+        $r2 = r3;
+
+        specialinvoke r3.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>("Exception while trying to handle coroutine exception", $r1);
+
+        $r1 = (java.lang.Throwable) $r2;
+
+        staticinvoke <kotlin.ExceptionsKt: void addSuppressed(java.lang.Throwable,java.lang.Throwable)>($r1, $r0);
+
+        $r0 = (java.lang.Throwable) $r2;
+
+        return $r0;
+    }
+

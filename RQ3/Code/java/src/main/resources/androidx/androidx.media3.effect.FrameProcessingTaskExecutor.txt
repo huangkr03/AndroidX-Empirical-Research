@@ -1,0 +1,418 @@
+androidx.media3.effect.FrameProcessingTaskExecutor
+<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ExecutorService singleThreadExecutorService>
+<androidx.media3.effect.FrameProcessingTaskExecutor: androidx.media3.common.FrameProcessor$Listener listener>
+<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue futures>
+<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue highPriorityTasks>
+<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.atomic.AtomicBoolean shouldCancelTasks>
+    public void <init>(java.util.concurrent.ExecutorService, androidx.media3.common.FrameProcessor$Listener)
+    {
+        androidx.media3.effect.FrameProcessingTaskExecutor r0;
+        java.util.concurrent.ExecutorService r1;
+        androidx.media3.common.FrameProcessor$Listener r2;
+        java.util.concurrent.ConcurrentLinkedQueue $r3, $r4;
+        java.util.concurrent.atomic.AtomicBoolean $r5;
+
+        r0 := @this: androidx.media3.effect.FrameProcessingTaskExecutor;
+
+        r1 := @parameter0: java.util.concurrent.ExecutorService;
+
+        r2 := @parameter1: androidx.media3.common.FrameProcessor$Listener;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ExecutorService singleThreadExecutorService> = r1;
+
+        r0.<androidx.media3.effect.FrameProcessingTaskExecutor: androidx.media3.common.FrameProcessor$Listener listener> = r2;
+
+        $r3 = new java.util.concurrent.ConcurrentLinkedQueue;
+
+        specialinvoke $r3.<java.util.concurrent.ConcurrentLinkedQueue: void <init>()>();
+
+        r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue futures> = $r3;
+
+        $r4 = new java.util.concurrent.ConcurrentLinkedQueue;
+
+        specialinvoke $r4.<java.util.concurrent.ConcurrentLinkedQueue: void <init>()>();
+
+        r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue highPriorityTasks> = $r4;
+
+        $r5 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r5.<java.util.concurrent.atomic.AtomicBoolean: void <init>()>();
+
+        r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.atomic.AtomicBoolean shouldCancelTasks> = $r5;
+
+        return;
+    }
+
+    public void submit(androidx.media3.effect.FrameProcessingTask)
+    {
+        androidx.media3.effect.FrameProcessingTaskExecutor r0;
+        androidx.media3.effect.FrameProcessingTask r1;
+        java.lang.Throwable r2, $r6;
+        java.util.concurrent.atomic.AtomicBoolean $r3;
+        boolean $z0;
+        java.util.concurrent.ConcurrentLinkedQueue $r4;
+        java.util.concurrent.Future $r5;
+
+        r0 := @this: androidx.media3.effect.FrameProcessingTaskExecutor;
+
+        r1 := @parameter0: androidx.media3.effect.FrameProcessingTask;
+
+        $r3 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.atomic.AtomicBoolean shouldCancelTasks>;
+
+        $z0 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r4 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue futures>;
+
+        $r5 = specialinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.Future wrapTaskAndSubmitToExecutorService(androidx.media3.effect.FrameProcessingTask)>(r1);
+
+        virtualinvoke $r4.<java.util.concurrent.ConcurrentLinkedQueue: boolean add(java.lang.Object)>($r5);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        specialinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: void handleException(java.lang.Exception)>(r2);
+
+     label4:
+        return;
+
+        catch java.util.concurrent.RejectedExecutionException from label1 to label2 with label3;
+    }
+
+    public void submitWithHighPriority(androidx.media3.effect.FrameProcessingTask)
+    {
+        androidx.media3.effect.FrameProcessingTaskExecutor r0;
+        androidx.media3.effect.FrameProcessingTask r1, $r4;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+        boolean $z0;
+        java.util.concurrent.ConcurrentLinkedQueue $r3;
+
+        r0 := @this: androidx.media3.effect.FrameProcessingTaskExecutor;
+
+        r1 := @parameter0: androidx.media3.effect.FrameProcessingTask;
+
+        $r2 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.atomic.AtomicBoolean shouldCancelTasks>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue highPriorityTasks>;
+
+        virtualinvoke $r3.<java.util.concurrent.ConcurrentLinkedQueue: boolean add(java.lang.Object)>(r1);
+
+        $r4 = dynamicinvoke "run" <androidx.media3.effect.FrameProcessingTask ()>() <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.media3.effect.FrameProcessingTaskExecutor: void lambda$submitWithHighPriority$0()>, methodtype: void __METHODTYPE__());
+
+        virtualinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: void submit(androidx.media3.effect.FrameProcessingTask)>($r4);
+
+        return;
+    }
+
+    public void release(androidx.media3.effect.FrameProcessingTask, long) throws java.lang.InterruptedException
+    {
+        androidx.media3.effect.FrameProcessingTaskExecutor r0;
+        androidx.media3.effect.FrameProcessingTask r1;
+        long l0;
+        java.util.concurrent.Future r2;
+        java.lang.Throwable r3, $r11;
+        java.util.concurrent.atomic.AtomicBoolean $r4;
+        java.util.concurrent.ExecutorService $r5, $r7;
+        java.util.concurrent.TimeUnit $r6;
+        boolean $z1;
+        androidx.media3.common.FrameProcessingException $r9, $r12;
+        androidx.media3.common.FrameProcessor$Listener $r10, $r13;
+
+        r0 := @this: androidx.media3.effect.FrameProcessingTaskExecutor;
+
+        r1 := @parameter0: androidx.media3.effect.FrameProcessingTask;
+
+        l0 := @parameter1: long;
+
+        $r4 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.atomic.AtomicBoolean shouldCancelTasks>;
+
+        virtualinvoke $r4.<java.util.concurrent.atomic.AtomicBoolean: boolean getAndSet(boolean)>(1);
+
+        specialinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: void cancelNonStartedTasks()>();
+
+        r2 = specialinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.Future wrapTaskAndSubmitToExecutorService(androidx.media3.effect.FrameProcessingTask)>(r1);
+
+        $r5 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ExecutorService singleThreadExecutorService>;
+
+        interfaceinvoke $r5.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+     label1:
+        $r7 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ExecutorService singleThreadExecutorService>;
+
+        $r6 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $z1 = interfaceinvoke $r7.<java.util.concurrent.ExecutorService: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>(l0, $r6);
+
+        if $z1 != 0 goto label2;
+
+        $r10 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: androidx.media3.common.FrameProcessor$Listener listener>;
+
+        $r9 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r9.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.String)>("Release timed out");
+
+        interfaceinvoke $r10.<androidx.media3.common.FrameProcessor$Listener: void onFrameProcessingError(androidx.media3.common.FrameProcessingException)>($r9);
+
+     label2:
+        interfaceinvoke r2.<java.util.concurrent.Future: java.lang.Object get()>();
+
+     label3:
+        goto label5;
+
+     label4:
+        $r11 := @caughtexception;
+
+        r3 = $r11;
+
+        $r13 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: androidx.media3.common.FrameProcessor$Listener listener>;
+
+        $r12 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r12.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.Throwable)>(r3);
+
+        interfaceinvoke $r13.<androidx.media3.common.FrameProcessor$Listener: void onFrameProcessingError(androidx.media3.common.FrameProcessingException)>($r12);
+
+     label5:
+        return;
+
+        catch java.util.concurrent.ExecutionException from label1 to label3 with label4;
+    }
+
+    private java.util.concurrent.Future wrapTaskAndSubmitToExecutorService(androidx.media3.effect.FrameProcessingTask)
+    {
+        androidx.media3.effect.FrameProcessingTaskExecutor r0;
+        androidx.media3.effect.FrameProcessingTask r1;
+        java.util.concurrent.ExecutorService $r2;
+        java.lang.Runnable $r3;
+        java.util.concurrent.Future $r4;
+
+        r0 := @this: androidx.media3.effect.FrameProcessingTaskExecutor;
+
+        r1 := @parameter0: androidx.media3.effect.FrameProcessingTask;
+
+        $r2 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ExecutorService singleThreadExecutorService>;
+
+        $r3 = dynamicinvoke "run" <java.lang.Runnable (androidx.media3.effect.FrameProcessingTaskExecutor,androidx.media3.effect.FrameProcessingTask)>(r0, r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.media3.effect.FrameProcessingTaskExecutor: void lambda$wrapTaskAndSubmitToExecutorService$1(androidx.media3.effect.FrameProcessingTask)>, methodtype: void __METHODTYPE__());
+
+        $r4 = interfaceinvoke $r2.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable)>($r3);
+
+        return $r4;
+    }
+
+    private void cancelNonStartedTasks()
+    {
+        androidx.media3.effect.FrameProcessingTaskExecutor r0;
+        java.util.concurrent.ConcurrentLinkedQueue $r1, $r2;
+        boolean $z0;
+        java.lang.Object $r3;
+        java.util.concurrent.Future $r4;
+
+        r0 := @this: androidx.media3.effect.FrameProcessingTaskExecutor;
+
+     label1:
+        $r1 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue futures>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.ConcurrentLinkedQueue: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $r2 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue futures>;
+
+        $r3 = virtualinvoke $r2.<java.util.concurrent.ConcurrentLinkedQueue: java.lang.Object remove()>();
+
+        $r4 = (java.util.concurrent.Future) $r3;
+
+        interfaceinvoke $r4.<java.util.concurrent.Future: boolean cancel(boolean)>(0);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void handleException(java.lang.Exception)
+    {
+        androidx.media3.effect.FrameProcessingTaskExecutor r0;
+        java.lang.Exception r1;
+        java.util.concurrent.atomic.AtomicBoolean $r2;
+        boolean $z0;
+        androidx.media3.common.FrameProcessor$Listener $r3;
+        androidx.media3.common.FrameProcessingException $r4;
+
+        r0 := @this: androidx.media3.effect.FrameProcessingTaskExecutor;
+
+        r1 := @parameter0: java.lang.Exception;
+
+        $r2 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.atomic.AtomicBoolean shouldCancelTasks>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicBoolean: boolean getAndSet(boolean)>(1);
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: androidx.media3.common.FrameProcessor$Listener listener>;
+
+        $r4 = staticinvoke <androidx.media3.common.FrameProcessingException: androidx.media3.common.FrameProcessingException 'from'(java.lang.Exception)>(r1);
+
+        interfaceinvoke $r3.<androidx.media3.common.FrameProcessor$Listener: void onFrameProcessingError(androidx.media3.common.FrameProcessingException)>($r4);
+
+        specialinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: void cancelNonStartedTasks()>();
+
+        return;
+    }
+
+    private void removeFinishedFutures()
+    {
+        androidx.media3.effect.FrameProcessingTaskExecutor r0;
+        java.util.concurrent.ConcurrentLinkedQueue $r1, $r4, $r12;
+        java.lang.Object $r2, $r5;
+        java.util.concurrent.Future $r3, $r6;
+        boolean $z0, $z1;
+        java.lang.Throwable $r8, $r10, r13, r14;
+        java.lang.IllegalStateException $r9;
+        java.lang.Thread $r11;
+
+        r0 := @this: androidx.media3.effect.FrameProcessingTaskExecutor;
+
+     label1:
+        $r12 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue futures>;
+
+        $z1 = virtualinvoke $r12.<java.util.concurrent.ConcurrentLinkedQueue: boolean isEmpty()>();
+
+        if $z1 != 0 goto label6;
+
+        $r1 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue futures>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.ConcurrentLinkedQueue: java.lang.Object element()>();
+
+        $r3 = (java.util.concurrent.Future) $r2;
+
+        $z0 = interfaceinvoke $r3.<java.util.concurrent.Future: boolean isDone()>();
+
+        if $z0 != 0 goto label2;
+
+        return;
+
+     label2:
+        $r4 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue futures>;
+
+        $r5 = virtualinvoke $r4.<java.util.concurrent.ConcurrentLinkedQueue: java.lang.Object remove()>();
+
+        $r6 = (java.util.concurrent.Future) $r5;
+
+        interfaceinvoke $r6.<java.util.concurrent.Future: java.lang.Object get()>();
+
+     label3:
+        goto label1;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r13 = $r8;
+
+        $r9 = new java.lang.IllegalStateException;
+
+        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Unexpected error", r13);
+
+        specialinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: void handleException(java.lang.Exception)>($r9);
+
+        goto label1;
+
+     label5:
+        $r10 := @caughtexception;
+
+        r14 = $r10;
+
+        $r11 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r11.<java.lang.Thread: void interrupt()>();
+
+        specialinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: void handleException(java.lang.Exception)>(r14);
+
+        goto label1;
+
+     label6:
+        return;
+
+        catch java.util.concurrent.ExecutionException from label2 to label3 with label4;
+        catch java.lang.InterruptedException from label2 to label3 with label5;
+    }
+
+    private void lambda$wrapTaskAndSubmitToExecutorService$1(androidx.media3.effect.FrameProcessingTask)
+    {
+        androidx.media3.effect.FrameProcessingTaskExecutor r0;
+        androidx.media3.effect.FrameProcessingTask r1, $r6;
+        java.lang.Throwable r2, $r7;
+        java.util.concurrent.ConcurrentLinkedQueue $r3, $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.media3.effect.FrameProcessingTaskExecutor;
+
+        r1 := @parameter0: androidx.media3.effect.FrameProcessingTask;
+
+     label1:
+        $r3 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue highPriorityTasks>;
+
+        $z0 = virtualinvoke $r3.<java.util.concurrent.ConcurrentLinkedQueue: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $r4 = r0.<androidx.media3.effect.FrameProcessingTaskExecutor: java.util.concurrent.ConcurrentLinkedQueue highPriorityTasks>;
+
+        $r5 = virtualinvoke $r4.<java.util.concurrent.ConcurrentLinkedQueue: java.lang.Object remove()>();
+
+        $r6 = (androidx.media3.effect.FrameProcessingTask) $r5;
+
+        interfaceinvoke $r6.<androidx.media3.effect.FrameProcessingTask: void run()>();
+
+        goto label1;
+
+     label2:
+        interfaceinvoke r1.<androidx.media3.effect.FrameProcessingTask: void run()>();
+
+        specialinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: void removeFinishedFutures()>();
+
+     label3:
+        goto label5;
+
+     label4:
+        $r7 := @caughtexception;
+
+        r2 = $r7;
+
+        specialinvoke r0.<androidx.media3.effect.FrameProcessingTaskExecutor: void handleException(java.lang.Exception)>(r2);
+
+     label5:
+        return;
+
+        catch androidx.media3.common.FrameProcessingException from label1 to label3 with label4;
+        catch androidx.media3.common.util.GlUtil$GlException from label1 to label3 with label4;
+        catch java.lang.RuntimeException from label1 to label3 with label4;
+    }
+
+    private static void lambda$submitWithHighPriority$0() throws androidx.media3.common.FrameProcessingException, androidx.media3.common.util.GlUtil$GlException
+    {
+        return;
+    }
+

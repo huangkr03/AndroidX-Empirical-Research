@@ -1,0 +1,673 @@
+androidx.media3.extractor.FlacFrameReader
+    public static boolean checkAndReadFrameHeader(androidx.media3.common.util.ParsableByteArray, androidx.media3.extractor.FlacStreamMetadata, int, androidx.media3.extractor.FlacFrameReader$SampleNumberHolder)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        androidx.media3.extractor.FlacStreamMetadata r1;
+        int i0, i1, i3, i4, i5, i6;
+        androidx.media3.extractor.FlacFrameReader$SampleNumberHolder r2;
+        long l2, $l7, $l8, $l10, $l11, $l13, $l14, $l15, $l16, $l17, $l18, $l19, $l20, $l21;
+        boolean z0, z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10;
+        byte $b9, $b12, $b22;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r1 := @parameter1: androidx.media3.extractor.FlacStreamMetadata;
+
+        i0 := @parameter2: int;
+
+        r2 := @parameter3: androidx.media3.extractor.FlacFrameReader$SampleNumberHolder;
+
+        i1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        l2 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: long readUnsignedInt()>();
+
+        $l8 = l2 >>> 16;
+
+        $l7 = (long) i0;
+
+        $b9 = $l8 cmp $l7;
+
+        if $b9 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        $l10 = l2 >>> 16;
+
+        $l11 = $l10 & 1L;
+
+        $b12 = $l11 cmp 1L;
+
+        if $b12 != 0 goto label2;
+
+        $z8 = 1;
+
+        goto label3;
+
+     label2:
+        $z8 = 0;
+
+     label3:
+        z0 = $z8;
+
+        $l13 = l2 >> 12;
+
+        $l14 = $l13 & 15L;
+
+        i3 = (int) $l14;
+
+        $l15 = l2 >> 8;
+
+        $l16 = $l15 & 15L;
+
+        i4 = (int) $l16;
+
+        $l17 = l2 >> 4;
+
+        $l18 = $l17 & 15L;
+
+        i5 = (int) $l18;
+
+        $l19 = l2 >> 1;
+
+        $l20 = $l19 & 7L;
+
+        i6 = (int) $l20;
+
+        $l21 = l2 & 1L;
+
+        $b22 = $l21 cmp 1L;
+
+        if $b22 != 0 goto label4;
+
+        $z9 = 1;
+
+        goto label5;
+
+     label4:
+        $z9 = 0;
+
+     label5:
+        z1 = $z9;
+
+        $z2 = staticinvoke <androidx.media3.extractor.FlacFrameReader: boolean checkChannelAssignment(int,androidx.media3.extractor.FlacStreamMetadata)>(i5, r1);
+
+        if $z2 == 0 goto label6;
+
+        $z3 = staticinvoke <androidx.media3.extractor.FlacFrameReader: boolean checkBitsPerSample(int,androidx.media3.extractor.FlacStreamMetadata)>(i6, r1);
+
+        if $z3 == 0 goto label6;
+
+        if z1 != 0 goto label6;
+
+        $z4 = staticinvoke <androidx.media3.extractor.FlacFrameReader: boolean checkAndReadFirstSampleNumber(androidx.media3.common.util.ParsableByteArray,androidx.media3.extractor.FlacStreamMetadata,boolean,androidx.media3.extractor.FlacFrameReader$SampleNumberHolder)>(r0, r1, z0, r2);
+
+        if $z4 == 0 goto label6;
+
+        $z5 = staticinvoke <androidx.media3.extractor.FlacFrameReader: boolean checkAndReadBlockSizeSamples(androidx.media3.common.util.ParsableByteArray,androidx.media3.extractor.FlacStreamMetadata,int)>(r0, r1, i3);
+
+        if $z5 == 0 goto label6;
+
+        $z6 = staticinvoke <androidx.media3.extractor.FlacFrameReader: boolean checkAndReadSampleRate(androidx.media3.common.util.ParsableByteArray,androidx.media3.extractor.FlacStreamMetadata,int)>(r0, r1, i4);
+
+        if $z6 == 0 goto label6;
+
+        $z7 = staticinvoke <androidx.media3.extractor.FlacFrameReader: boolean checkAndReadCrc(androidx.media3.common.util.ParsableByteArray,int)>(r0, i1);
+
+        if $z7 == 0 goto label6;
+
+        $z10 = 1;
+
+        goto label7;
+
+     label6:
+        $z10 = 0;
+
+     label7:
+        return $z10;
+    }
+
+    public static boolean checkFrameHeaderFromPeek(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.FlacStreamMetadata, int, androidx.media3.extractor.FlacFrameReader$SampleNumberHolder) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.extractor.FlacStreamMetadata r1;
+        int i0, i2, i3, $i8, $i11, $i14;
+        androidx.media3.extractor.FlacFrameReader$SampleNumberHolder r2;
+        long l1, $l9, $l10, $l12, $l13;
+        byte[] r3, $r6, $r7;
+        androidx.media3.common.util.ParsableByteArray r4, $r5;
+        byte $b4, $b6;
+        short $s5, $s7;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r1 := @parameter1: androidx.media3.extractor.FlacStreamMetadata;
+
+        i0 := @parameter2: int;
+
+        r2 := @parameter3: androidx.media3.extractor.FlacFrameReader$SampleNumberHolder;
+
+        l1 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getPeekPosition()>();
+
+        r3 = newarray (byte)[2];
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>(r3, 0, 2);
+
+        $b4 = r3[0];
+
+        $s5 = $b4 & 255;
+
+        $i8 = $s5 << 8;
+
+        $b6 = r3[1];
+
+        $s7 = $b6 & 255;
+
+        i2 = $i8 | $s7;
+
+        if i2 == i0 goto label1;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $l12 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l13 = l1 - $l12;
+
+        $i14 = (int) $l13;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>($i14);
+
+        return 0;
+
+     label1:
+        $r5 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r5.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(16);
+
+        r4 = $r5;
+
+        $r6 = virtualinvoke r4.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>(r3, 0, $r6, 0, 2);
+
+        $r7 = virtualinvoke r4.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        i3 = staticinvoke <androidx.media3.extractor.ExtractorUtil: int peekToLength(androidx.media3.extractor.ExtractorInput,byte[],int,int)>(r0, $r7, 2, 14);
+
+        virtualinvoke r4.<androidx.media3.common.util.ParsableByteArray: void setLimit(int)>(i3);
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        $l9 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l10 = l1 - $l9;
+
+        $i11 = (int) $l10;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>($i11);
+
+        $z0 = staticinvoke <androidx.media3.extractor.FlacFrameReader: boolean checkAndReadFrameHeader(androidx.media3.common.util.ParsableByteArray,androidx.media3.extractor.FlacStreamMetadata,int,androidx.media3.extractor.FlacFrameReader$SampleNumberHolder)>(r4, r1, i0, r2);
+
+        return $z0;
+    }
+
+    public static long getFirstSampleNumber(androidx.media3.extractor.ExtractorInput, androidx.media3.extractor.FlacStreamMetadata) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        androidx.media3.extractor.FlacStreamMetadata r1;
+        byte[] r2, $r6;
+        boolean z0, $z1, $z2;
+        byte b0, $b2, $b3, $b5;
+        androidx.media3.common.util.ParsableByteArray r3, r9;
+        int i1;
+        androidx.media3.extractor.FlacFrameReader$SampleNumberHolder r4, r10;
+        long $l4;
+        androidx.media3.common.ParserException $r8;
+        java.lang.Throwable r11;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        r1 := @parameter1: androidx.media3.extractor.FlacStreamMetadata;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(1);
+
+        r2 = newarray (byte)[1];
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>(r2, 0, 1);
+
+        $b2 = r2[0];
+
+        $b3 = $b2 & 1;
+
+        if $b3 != 1 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        z0 = $z2;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(2);
+
+        if z0 == 0 goto label3;
+
+        $b5 = 7;
+
+        goto label4;
+
+     label3:
+        $b5 = 6;
+
+     label4:
+        b0 = $b5;
+
+        r9 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke r9.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(b0);
+
+        r3 = r9;
+
+        $r6 = virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        i1 = staticinvoke <androidx.media3.extractor.ExtractorUtil: int peekToLength(androidx.media3.extractor.ExtractorInput,byte[],int,int)>(r0, $r6, 0, b0);
+
+        virtualinvoke r3.<androidx.media3.common.util.ParsableByteArray: void setLimit(int)>(i1);
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+        r10 = new androidx.media3.extractor.FlacFrameReader$SampleNumberHolder;
+
+        specialinvoke r10.<androidx.media3.extractor.FlacFrameReader$SampleNumberHolder: void <init>()>();
+
+        r4 = r10;
+
+        $z1 = staticinvoke <androidx.media3.extractor.FlacFrameReader: boolean checkAndReadFirstSampleNumber(androidx.media3.common.util.ParsableByteArray,androidx.media3.extractor.FlacStreamMetadata,boolean,androidx.media3.extractor.FlacFrameReader$SampleNumberHolder)>(r3, r1, z0, r4);
+
+        if $z1 != 0 goto label5;
+
+        $r8 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>(null, null);
+
+        r11 = (java.lang.Throwable) $r8;
+
+        throw r11;
+
+     label5:
+        $l4 = r4.<androidx.media3.extractor.FlacFrameReader$SampleNumberHolder: long sampleNumber>;
+
+        return $l4;
+    }
+
+    public static int readFrameBlockSizeSamplesFromKey(androidx.media3.common.util.ParsableByteArray, int)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i0 := @parameter1: int;
+
+        tableswitch(i0)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label2;
+            case 4: goto label2;
+            case 5: goto label2;
+            case 6: goto label3;
+            case 7: goto label4;
+            case 8: goto label5;
+            case 9: goto label5;
+            case 10: goto label5;
+            case 11: goto label5;
+            case 12: goto label5;
+            case 13: goto label5;
+            case 14: goto label5;
+            case 15: goto label5;
+            default: goto label6;
+        };
+
+     label1:
+        return 192;
+
+     label2:
+        $i7 = i0 - 2;
+
+        $i8 = 576 << $i7;
+
+        return $i8;
+
+     label3:
+        $i5 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i6 = $i5 + 1;
+
+        return $i6;
+
+     label4:
+        $i3 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        $i4 = $i3 + 1;
+
+        return $i4;
+
+     label5:
+        $i1 = i0 - 8;
+
+        $i2 = 256 << $i1;
+
+        return $i2;
+
+     label6:
+        return -1;
+    }
+
+    private static boolean checkChannelAssignment(int, androidx.media3.extractor.FlacStreamMetadata)
+    {
+        int i0, $i1, $i2, $i3;
+        androidx.media3.extractor.FlacStreamMetadata r0;
+        boolean $z0, $z1;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: androidx.media3.extractor.FlacStreamMetadata;
+
+        if i0 > 7 goto label3;
+
+        $i2 = r0.<androidx.media3.extractor.FlacStreamMetadata: int channels>;
+
+        $i3 = $i2 - 1;
+
+        if i0 != $i3 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+
+     label3:
+        if i0 > 10 goto label6;
+
+        $i1 = r0.<androidx.media3.extractor.FlacStreamMetadata: int channels>;
+
+        if $i1 != 2 goto label4;
+
+        $z1 = 1;
+
+        goto label5;
+
+     label4:
+        $z1 = 0;
+
+     label5:
+        return $z1;
+
+     label6:
+        return 0;
+    }
+
+    private static boolean checkBitsPerSample(int, androidx.media3.extractor.FlacStreamMetadata)
+    {
+        int i0, $i1;
+        androidx.media3.extractor.FlacStreamMetadata r0;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: androidx.media3.extractor.FlacStreamMetadata;
+
+        if i0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        $i1 = r0.<androidx.media3.extractor.FlacStreamMetadata: int bitsPerSampleLookupKey>;
+
+        if i0 != $i1 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    private static boolean checkAndReadFirstSampleNumber(androidx.media3.common.util.ParsableByteArray, androidx.media3.extractor.FlacStreamMetadata, boolean, androidx.media3.extractor.FlacFrameReader$SampleNumberHolder)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        androidx.media3.extractor.FlacStreamMetadata r1;
+        boolean z0;
+        androidx.media3.extractor.FlacFrameReader$SampleNumberHolder r2;
+        long l0, $l2, $l3;
+        java.lang.Throwable r3, $r5;
+        int $i1;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r1 := @parameter1: androidx.media3.extractor.FlacStreamMetadata;
+
+        z0 := @parameter2: boolean;
+
+        r2 := @parameter3: androidx.media3.extractor.FlacFrameReader$SampleNumberHolder;
+
+     label1:
+        l0 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: long readUtf8EncodedLong()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r3 = $r5;
+
+        return 0;
+
+     label4:
+        if z0 == 0 goto label5;
+
+        $l3 = l0;
+
+        goto label6;
+
+     label5:
+        $i1 = r1.<androidx.media3.extractor.FlacStreamMetadata: int maxBlockSizeSamples>;
+
+        $l2 = (long) $i1;
+
+        $l3 = l0 * $l2;
+
+     label6:
+        r2.<androidx.media3.extractor.FlacFrameReader$SampleNumberHolder: long sampleNumber> = $l3;
+
+        return 1;
+
+        catch java.lang.NumberFormatException from label1 to label2 with label3;
+    }
+
+    private static boolean checkAndReadBlockSizeSamples(androidx.media3.common.util.ParsableByteArray, androidx.media3.extractor.FlacStreamMetadata, int)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        androidx.media3.extractor.FlacStreamMetadata r1;
+        int i0, i1, $i2;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r1 := @parameter1: androidx.media3.extractor.FlacStreamMetadata;
+
+        i0 := @parameter2: int;
+
+        i1 = staticinvoke <androidx.media3.extractor.FlacFrameReader: int readFrameBlockSizeSamplesFromKey(androidx.media3.common.util.ParsableByteArray,int)>(r0, i0);
+
+        if i1 == -1 goto label1;
+
+        $i2 = r1.<androidx.media3.extractor.FlacStreamMetadata: int maxBlockSizeSamples>;
+
+        if i1 > $i2 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private static boolean checkAndReadSampleRate(androidx.media3.common.util.ParsableByteArray, androidx.media3.extractor.FlacStreamMetadata, int)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        androidx.media3.extractor.FlacStreamMetadata r1;
+        int i0, i1, $i2, $i3, $i4, i5;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r1 := @parameter1: androidx.media3.extractor.FlacStreamMetadata;
+
+        i0 := @parameter2: int;
+
+        i1 = r1.<androidx.media3.extractor.FlacStreamMetadata: int sampleRate>;
+
+        if i0 != 0 goto label01;
+
+        return 1;
+
+     label01:
+        if i0 > 11 goto label04;
+
+        $i4 = r1.<androidx.media3.extractor.FlacStreamMetadata: int sampleRateLookupKey>;
+
+        if i0 != $i4 goto label02;
+
+        $z0 = 1;
+
+        goto label03;
+
+     label02:
+        $z0 = 0;
+
+     label03:
+        return $z0;
+
+     label04:
+        if i0 != 12 goto label07;
+
+        $i2 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        $i3 = $i2 * 1000;
+
+        if $i3 != i1 goto label05;
+
+        $z1 = 1;
+
+        goto label06;
+
+     label05:
+        $z1 = 0;
+
+     label06:
+        return $z1;
+
+     label07:
+        if i0 > 14 goto label11;
+
+        i5 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        if i0 != 14 goto label08;
+
+        i5 = i5 * 10;
+
+     label08:
+        if i5 != i1 goto label09;
+
+        $z2 = 1;
+
+        goto label10;
+
+     label09:
+        $z2 = 0;
+
+     label10:
+        return $z2;
+
+     label11:
+        return 0;
+    }
+
+    private static boolean checkAndReadCrc(androidx.media3.common.util.ParsableByteArray, int)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0, i1, i2, i3, $i4;
+        byte[] $r1;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i0 := @parameter1: int;
+
+        i1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        i2 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        $r1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $i4 = i2 - 1;
+
+        i3 = staticinvoke <androidx.media3.common.util.Util: int crc8(byte[],int,int,int)>($r1, i0, $i4, 0);
+
+        if i1 != i3 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.extractor.FlacFrameReader r0;
+
+        r0 := @this: androidx.media3.extractor.FlacFrameReader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+androidx.media3.extractor.FlacFrameReader$SampleNumberHolder
+<androidx.media3.extractor.FlacFrameReader$SampleNumberHolder: long sampleNumber>
+    public void <init>()
+    {
+        androidx.media3.extractor.FlacFrameReader$SampleNumberHolder r0;
+
+        r0 := @this: androidx.media3.extractor.FlacFrameReader$SampleNumberHolder;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+

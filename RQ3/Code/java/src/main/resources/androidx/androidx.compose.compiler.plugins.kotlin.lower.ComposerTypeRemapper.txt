@@ -1,0 +1,971 @@
+androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper
+<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid deepCopy>
+<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: java.util.List scopeStack>
+<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.backend.common.extensions.IrPluginContext context>
+<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.util.SymbolRemapper symbolRemapper>
+<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.util.TypeTranslator typeTranslator>
+<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.descriptors.ClassDescriptor composerTypeDescriptor>
+    public final org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid getDeepCopy()
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid $r1;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        $r1 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid deepCopy>;
+
+        if $r1 != null goto label1;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void throwUninitializedPropertyAccessException(java.lang.String)>("deepCopy");
+
+     label1:
+        return $r1;
+    }
+
+    public final void setDeepCopy(org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid r1;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        r1 := @parameter0: org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "<set-?>");
+
+        r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid deepCopy> = r1;
+
+        return;
+    }
+
+    public void enterScope(org.jetbrains.kotlin.ir.declarations.IrTypeParametersContainer)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.declarations.IrTypeParametersContainer r1;
+        java.util.List $r2;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        r1 := @parameter0: org.jetbrains.kotlin.ir.declarations.IrTypeParametersContainer;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "irTypeParametersContainer");
+
+        $r2 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: java.util.List scopeStack>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(r1);
+
+        return;
+    }
+
+    public void leaveScope()
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        java.util.List $r1;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        $r1 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: java.util.List scopeStack>;
+
+        staticinvoke <org.jetbrains.kotlin.backend.common.UtilsKt: java.lang.Object pop(java.util.List)>($r1);
+
+        return;
+    }
+
+    private final boolean isComposable(org.jetbrains.kotlin.ir.types.IrType)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.types.IrType $r1;
+        java.util.List $r2;
+        androidx.compose.compiler.plugins.kotlin.ComposeFqNames $r3;
+        org.jetbrains.kotlin.name.FqName $r4;
+        boolean $z0;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        $r1 := @parameter0: org.jetbrains.kotlin.ir.types.IrType;
+
+        $r2 = interfaceinvoke $r1.<org.jetbrains.kotlin.ir.types.IrType: java.util.List getAnnotations()>();
+
+        $r3 = <androidx.compose.compiler.plugins.kotlin.ComposeFqNames: androidx.compose.compiler.plugins.kotlin.ComposeFqNames INSTANCE>;
+
+        $r4 = virtualinvoke $r3.<androidx.compose.compiler.plugins.kotlin.ComposeFqNames: org.jetbrains.kotlin.name.FqName getComposable()>();
+
+        $z0 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: boolean hasAnnotation(java.util.List,org.jetbrains.kotlin.name.FqName)>($r2, $r4);
+
+        return $z0;
+    }
+
+    private final org.jetbrains.kotlin.descriptors.ClassifierDescriptor getAnnotationClass(org.jetbrains.kotlin.ir.expressions.IrConstructorCall)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.expressions.IrConstructorCall $r1;
+        org.jetbrains.kotlin.ir.symbols.IrConstructorSymbol $r2;
+        org.jetbrains.kotlin.descriptors.FunctionDescriptor $r3;
+        org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor $r4;
+        org.jetbrains.kotlin.types.KotlinType $r5;
+        org.jetbrains.kotlin.types.TypeConstructor $r6;
+        org.jetbrains.kotlin.descriptors.ClassifierDescriptor $r7;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        $r1 := @parameter0: org.jetbrains.kotlin.ir.expressions.IrConstructorCall;
+
+        $r2 = interfaceinvoke $r1.<org.jetbrains.kotlin.ir.expressions.IrConstructorCall: org.jetbrains.kotlin.ir.symbols.IrConstructorSymbol getSymbol()>();
+
+        $r3 = interfaceinvoke $r2.<org.jetbrains.kotlin.ir.symbols.IrConstructorSymbol: org.jetbrains.kotlin.descriptors.FunctionDescriptor getDescriptor()>();
+
+        $r4 = (org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor) $r3;
+
+        $r5 = interfaceinvoke $r4.<org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor: org.jetbrains.kotlin.types.KotlinType getReturnType()>();
+
+        $r6 = virtualinvoke $r5.<org.jetbrains.kotlin.types.KotlinType: org.jetbrains.kotlin.types.TypeConstructor getConstructor()>();
+
+        $r7 = interfaceinvoke $r6.<org.jetbrains.kotlin.types.TypeConstructor: org.jetbrains.kotlin.descriptors.ClassifierDescriptor getDeclarationDescriptor()>();
+
+        return $r7;
+    }
+
+    private final boolean hasAnnotation(java.util.List, org.jetbrains.kotlin.name.FqName)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        java.util.List $r1;
+        org.jetbrains.kotlin.name.FqName r2, $r10;
+        java.lang.Iterable $r3;
+        java.util.Iterator r4;
+        java.lang.Object r5;
+        org.jetbrains.kotlin.ir.expressions.IrConstructorCall r6;
+        boolean $z2, $z3, $z4, $z5, $z6;
+        org.jetbrains.kotlin.descriptors.ClassifierDescriptor $r7;
+        org.jetbrains.kotlin.descriptors.DeclarationDescriptor $r8;
+        java.util.Collection $r9;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        $r1 := @parameter0: java.util.List;
+
+        r2 := @parameter1: org.jetbrains.kotlin.name.FqName;
+
+        $r3 = (java.lang.Iterable) $r1;
+
+        $z2 = $r3 instanceof java.util.Collection;
+
+        if $z2 == 0 goto label1;
+
+        $r9 = (java.util.Collection) $r3;
+
+        $z4 = interfaceinvoke $r9.<java.util.Collection: boolean isEmpty()>();
+
+        if $z4 == 0 goto label1;
+
+        $z5 = 0;
+
+        goto label6;
+
+     label1:
+        r4 = interfaceinvoke $r3.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z6 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label5;
+
+        r5 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.jetbrains.kotlin.ir.expressions.IrConstructorCall) r5;
+
+        $r7 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.descriptors.ClassifierDescriptor getAnnotationClass(org.jetbrains.kotlin.ir.expressions.IrConstructorCall)>(r6);
+
+        if $r7 == null goto label3;
+
+        $r8 = (org.jetbrains.kotlin.descriptors.DeclarationDescriptor) $r7;
+
+        $r10 = staticinvoke <org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilsKt: org.jetbrains.kotlin.name.FqName fqNameOrNull(org.jetbrains.kotlin.descriptors.DeclarationDescriptor)>($r8);
+
+        goto label4;
+
+     label3:
+        $r10 = null;
+
+     label4:
+        $z3 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r10, r2);
+
+        if $z3 == 0 goto label2;
+
+        $z5 = 1;
+
+        goto label6;
+
+     label5:
+        $z5 = 0;
+
+     label6:
+        return $z5;
+    }
+
+    private final org.jetbrains.kotlin.ir.types.IrType toIrType(org.jetbrains.kotlin.types.KotlinType)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.types.KotlinType $r1;
+        org.jetbrains.kotlin.ir.util.TypeTranslator $r2;
+        org.jetbrains.kotlin.ir.types.IrType $r3;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        $r1 := @parameter0: org.jetbrains.kotlin.types.KotlinType;
+
+        $r2 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.util.TypeTranslator typeTranslator>;
+
+        $r3 = virtualinvoke $r2.<org.jetbrains.kotlin.ir.util.TypeTranslator: org.jetbrains.kotlin.ir.types.IrType translateType(org.jetbrains.kotlin.types.KotlinType)>($r1);
+
+        return $r3;
+    }
+
+    private final boolean isFunction(org.jetbrains.kotlin.ir.types.IrType)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.types.IrType $r1;
+        org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol r2, $r4;
+        java.lang.String r3, $r7;
+        org.jetbrains.kotlin.descriptors.ClassifierDescriptor $r5, $r8;
+        org.jetbrains.kotlin.name.Name $r6;
+        boolean $z0;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        $r1 := @parameter0: org.jetbrains.kotlin.ir.types.IrType;
+
+        $r4 = staticinvoke <org.jetbrains.kotlin.ir.types.IrTypesKt: org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol getClassifierOrNull(org.jetbrains.kotlin.ir.types.IrType)>($r1);
+
+        if $r4 == null goto label1;
+
+        goto label2;
+
+     label1:
+        return 0;
+
+     label2:
+        r2 = $r4;
+
+        $r5 = interfaceinvoke r2.<org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol: org.jetbrains.kotlin.descriptors.ClassifierDescriptor getDescriptor()>();
+
+        $r6 = interfaceinvoke $r5.<org.jetbrains.kotlin.descriptors.ClassifierDescriptor: org.jetbrains.kotlin.name.Name getName()>();
+
+        $r7 = virtualinvoke $r6.<org.jetbrains.kotlin.name.Name: java.lang.String asString()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r7, "classifier.descriptor.name.asString()");
+
+        r3 = $r7;
+
+        $z0 = staticinvoke <kotlin.text.StringsKt: boolean startsWith$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)>(r3, "Function", 0, 2, null);
+
+        if $z0 != 0 goto label3;
+
+        return 0;
+
+     label3:
+        $r8 = interfaceinvoke r2.<org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol: org.jetbrains.kotlin.descriptors.ClassifierDescriptor getDescriptor()>();
+
+        interfaceinvoke $r8.<org.jetbrains.kotlin.descriptors.ClassifierDescriptor: org.jetbrains.kotlin.name.Name getName()>();
+
+        return 1;
+    }
+
+    public org.jetbrains.kotlin.ir.types.IrType remapType(org.jetbrains.kotlin.ir.types.IrType)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.types.IrType r1, $r13, $r41, $r50, $r53, $r55;
+        java.util.List r2, r5, r6, $r19, $r22, $r37, r56, r62, r63, $r64, r74, r75, r82, r84, r91;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11;
+        java.util.Collection r3, $r21, $r23, r58, r60, $r68, r72, $r78, $r87, r90;
+        org.jetbrains.kotlin.ir.expressions.IrConstructorCall r4, $r46, $r81;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, z8, z9, $z10, $z11, z12;
+        org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol r7, $r33, $r34, r66, r76, r85;
+        org.jetbrains.kotlin.ir.types.IrSimpleType $r8, $r35, $r52, $r54;
+        org.jetbrains.kotlin.descriptors.ClassDescriptor $r9, $r31;
+        org.jetbrains.kotlin.types.SimpleType $r10;
+        org.jetbrains.kotlin.types.KotlinType $r11, $r12;
+        org.jetbrains.kotlin.types.Variance $r14, $r51;
+        org.jetbrains.kotlin.ir.types.IrTypeProjection $r15, r61;
+        kotlin.ranges.IntRange $r16;
+        java.util.ArrayList $r17, $r36, $r38, $r39;
+        java.lang.Iterable $r18, $r20, $r57, $r65, r67, r77, $r83, r86;
+        java.lang.Object $r24, r70, r80, r89;
+        org.jetbrains.kotlin.backend.common.extensions.IrPluginContext $r25, $r28, $r48;
+        org.jetbrains.kotlin.ir.util.SymbolRemapper $r26;
+        org.jetbrains.kotlin.ir.util.ReferenceSymbolTable $r27;
+        org.jetbrains.kotlin.ir.descriptors.IrBuiltIns $r29, $r49;
+        org.jetbrains.kotlin.builtins.KotlinBuiltIns $r30;
+        org.jetbrains.kotlin.ir.symbols.IrClassSymbol $r32;
+        org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl $r40;
+        org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid $r42;
+        org.jetbrains.kotlin.ir.visitors.IrElementTransformer $r43;
+        org.jetbrains.kotlin.ir.expressions.IrExpression $r44;
+        java.lang.NullPointerException $r45;
+        kotlin.collections.IntIterator $r47;
+        java.util.Iterator $r59, r69, r79, r88;
+        org.jetbrains.kotlin.ir.types.IrTypeArgument $r71, r73;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        r1 := @parameter0: org.jetbrains.kotlin.ir.types.IrType;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "type");
+
+        $z1 = r1 instanceof org.jetbrains.kotlin.ir.types.IrSimpleType;
+
+        if $z1 != 0 goto label01;
+
+        return r1;
+
+     label01:
+        $z2 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: boolean isFunction(org.jetbrains.kotlin.ir.types.IrType)>(r1);
+
+        if $z2 != 0 goto label02;
+
+        $r54 = (org.jetbrains.kotlin.ir.types.IrSimpleType) r1;
+
+        $r55 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.types.IrType underlyingRemapType(org.jetbrains.kotlin.ir.types.IrSimpleType)>($r54);
+
+        return $r55;
+
+     label02:
+        $z3 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: boolean isComposable(org.jetbrains.kotlin.ir.types.IrType)>(r1);
+
+        if $z3 != 0 goto label03;
+
+        $r52 = (org.jetbrains.kotlin.ir.types.IrSimpleType) r1;
+
+        $r53 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.types.IrType underlyingRemapType(org.jetbrains.kotlin.ir.types.IrSimpleType)>($r52);
+
+        return $r53;
+
+     label03:
+        $r8 = (org.jetbrains.kotlin.ir.types.IrSimpleType) r1;
+
+        r2 = interfaceinvoke $r8.<org.jetbrains.kotlin.ir.types.IrSimpleType: java.util.List getArguments()>();
+
+        $i2 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        i0 = $i2 - 1;
+
+        $r9 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.descriptors.ClassDescriptor composerTypeDescriptor>;
+
+        $r10 = interfaceinvoke $r9.<org.jetbrains.kotlin.descriptors.ClassDescriptor: org.jetbrains.kotlin.types.SimpleType getDefaultType()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r10, "composerTypeDescriptor.defaultType");
+
+        $r11 = (org.jetbrains.kotlin.types.KotlinType) $r10;
+
+        $r12 = staticinvoke <org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt: org.jetbrains.kotlin.types.KotlinType replaceArgumentsWithStarProjections(org.jetbrains.kotlin.types.KotlinType)>($r11);
+
+        $r13 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.types.IrType toIrType(org.jetbrains.kotlin.types.KotlinType)>($r12);
+
+        $r14 = <org.jetbrains.kotlin.types.Variance: org.jetbrains.kotlin.types.Variance INVARIANT>;
+
+        $r15 = staticinvoke <org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImplKt: org.jetbrains.kotlin.ir.types.IrTypeProjection makeTypeProjection(org.jetbrains.kotlin.ir.types.IrType,org.jetbrains.kotlin.types.Variance)>($r13, $r14);
+
+        r56 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List listOf(java.lang.Object)>($r15);
+
+        i1 = staticinvoke <androidx.compose.compiler.plugins.kotlin.lower.ComposableFunctionBodyTransformerKt: int changedParamCount(int,int)>(i0, 1);
+
+        $r16 = staticinvoke <kotlin.ranges.RangesKt: kotlin.ranges.IntRange until(int,int)>(0, i1);
+
+        $r57 = (java.lang.Iterable) $r16;
+
+        r3 = (java.util.Collection) r56;
+
+        $r17 = new java.util.ArrayList;
+
+        $i3 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r57, 10);
+
+        specialinvoke $r17.<java.util.ArrayList: void <init>(int)>($i3);
+
+        r58 = (java.util.Collection) $r17;
+
+        $r59 = interfaceinvoke $r57.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label04:
+        $z4 = interfaceinvoke $r59.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label05;
+
+        $r47 = (kotlin.collections.IntIterator) $r59;
+
+        virtualinvoke $r47.<kotlin.collections.IntIterator: int nextInt()>();
+
+        r60 = r58;
+
+        $r48 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.backend.common.extensions.IrPluginContext context>;
+
+        $r49 = interfaceinvoke $r48.<org.jetbrains.kotlin.backend.common.extensions.IrPluginContext: org.jetbrains.kotlin.ir.descriptors.IrBuiltIns getIrBuiltIns()>();
+
+        $r50 = virtualinvoke $r49.<org.jetbrains.kotlin.ir.descriptors.IrBuiltIns: org.jetbrains.kotlin.ir.types.IrType getIntType()>();
+
+        $r51 = <org.jetbrains.kotlin.types.Variance: org.jetbrains.kotlin.types.Variance INVARIANT>;
+
+        r61 = staticinvoke <org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImplKt: org.jetbrains.kotlin.ir.types.IrTypeProjection makeTypeProjection(org.jetbrains.kotlin.ir.types.IrType,org.jetbrains.kotlin.types.Variance)>($r50, $r51);
+
+        interfaceinvoke r60.<java.util.Collection: boolean add(java.lang.Object)>(r61);
+
+        goto label04;
+
+     label05:
+        r62 = (java.util.List) r58;
+
+        $r18 = (java.lang.Iterable) r62;
+
+        r63 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List plus(java.util.Collection,java.lang.Iterable)>(r3, $r18);
+
+        $i4 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        $i5 = $i4 - 1;
+
+        $r19 = interfaceinvoke r2.<java.util.List: java.util.List subList(int,int)>(0, $i5);
+
+        $r21 = (java.util.Collection) $r19;
+
+        $r20 = (java.lang.Iterable) r63;
+
+        $r22 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List plus(java.util.Collection,java.lang.Iterable)>($r21, $r20);
+
+        $r23 = (java.util.Collection) $r22;
+
+        $r24 = staticinvoke <kotlin.collections.CollectionsKt: java.lang.Object last(java.util.List)>(r2);
+
+        $r64 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List plus(java.util.Collection,java.lang.Object)>($r23, $r24);
+
+        $r26 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.util.SymbolRemapper symbolRemapper>;
+
+        $r25 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.backend.common.extensions.IrPluginContext context>;
+
+        $r27 = interfaceinvoke $r25.<org.jetbrains.kotlin.backend.common.extensions.IrPluginContext: org.jetbrains.kotlin.ir.util.ReferenceSymbolTable getSymbolTable()>();
+
+        $r28 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.backend.common.extensions.IrPluginContext context>;
+
+        $r29 = interfaceinvoke $r28.<org.jetbrains.kotlin.backend.common.extensions.IrPluginContext: org.jetbrains.kotlin.ir.descriptors.IrBuiltIns getIrBuiltIns()>();
+
+        $r30 = virtualinvoke $r29.<org.jetbrains.kotlin.ir.descriptors.IrBuiltIns: org.jetbrains.kotlin.builtins.KotlinBuiltIns getBuiltIns()>();
+
+        $i6 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        $i7 = $i6 - 1;
+
+        $i8 = interfaceinvoke r63.<java.util.List: int size()>();
+
+        $i9 = $i7 + $i8;
+
+        $r31 = virtualinvoke $r30.<org.jetbrains.kotlin.builtins.KotlinBuiltIns: org.jetbrains.kotlin.descriptors.ClassDescriptor getFunction(int)>($i9);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r31, "context\n                \u2026ize - 1 + extraArgs.size)");
+
+        $r32 = interfaceinvoke $r27.<org.jetbrains.kotlin.ir.util.ReferenceSymbolTable: org.jetbrains.kotlin.ir.symbols.IrClassSymbol referenceClass(org.jetbrains.kotlin.descriptors.ClassDescriptor)>($r31);
+
+        $r33 = (org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol) $r32;
+
+        $r34 = interfaceinvoke $r26.<org.jetbrains.kotlin.ir.util.SymbolRemapper: org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol getReferencedClassifier(org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol)>($r33);
+
+        $r35 = (org.jetbrains.kotlin.ir.types.IrSimpleType) r1;
+
+        $r65 = (java.lang.Iterable) $r64;
+
+        z8 = interfaceinvoke $r35.<org.jetbrains.kotlin.ir.types.IrSimpleType: boolean getHasQuestionMark()>();
+
+        r66 = $r34;
+
+        r67 = $r65;
+
+        $r36 = new java.util.ArrayList;
+
+        $i10 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r65, 10);
+
+        specialinvoke $r36.<java.util.ArrayList: void <init>(int)>($i10);
+
+        $r68 = (java.util.Collection) $r36;
+
+        r69 = interfaceinvoke r67.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label06:
+        $z5 = interfaceinvoke r69.<java.util.Iterator: boolean hasNext()>();
+
+        if $z5 == 0 goto label07;
+
+        r70 = interfaceinvoke r69.<java.util.Iterator: java.lang.Object next()>();
+
+        $r71 = (org.jetbrains.kotlin.ir.types.IrTypeArgument) r70;
+
+        r72 = $r68;
+
+        r73 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.types.IrTypeArgument remapTypeArgument(org.jetbrains.kotlin.ir.types.IrTypeArgument)>($r71);
+
+        interfaceinvoke r72.<java.util.Collection: boolean add(java.lang.Object)>(r73);
+
+        goto label06;
+
+     label07:
+        r74 = (java.util.List) $r68;
+
+        $r37 = interfaceinvoke r1.<org.jetbrains.kotlin.ir.types.IrType: java.util.List getAnnotations()>();
+
+        r75 = r74;
+
+        z9 = z8;
+
+        r76 = r66;
+
+        r77 = (java.lang.Iterable) $r37;
+
+        $r38 = new java.util.ArrayList;
+
+        specialinvoke $r38.<java.util.ArrayList: void <init>()>();
+
+        $r78 = (java.util.Collection) $r38;
+
+        r79 = interfaceinvoke r77.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label08:
+        $z10 = interfaceinvoke r79.<java.util.Iterator: boolean hasNext()>();
+
+        if $z10 == 0 goto label11;
+
+        r80 = interfaceinvoke r79.<java.util.Iterator: java.lang.Object next()>();
+
+        $r81 = (org.jetbrains.kotlin.ir.expressions.IrConstructorCall) r80;
+
+        $z7 = staticinvoke <androidx.compose.compiler.plugins.kotlin.lower.ComposableTypeRemapperKt: boolean access$isComposableAnnotation(org.jetbrains.kotlin.ir.expressions.IrConstructorCall)>($r81);
+
+        if $z7 != 0 goto label09;
+
+        $z11 = 1;
+
+        goto label10;
+
+     label09:
+        $z11 = 0;
+
+     label10:
+        if $z11 == 0 goto label08;
+
+        interfaceinvoke $r78.<java.util.Collection: boolean add(java.lang.Object)>(r80);
+
+        goto label08;
+
+     label11:
+        r82 = (java.util.List) $r78;
+
+        $r83 = (java.lang.Iterable) r82;
+
+        r84 = r75;
+
+        z12 = z9;
+
+        r85 = r76;
+
+        r86 = $r83;
+
+        $r39 = new java.util.ArrayList;
+
+        $i11 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r83, 10);
+
+        specialinvoke $r39.<java.util.ArrayList: void <init>(int)>($i11);
+
+        $r87 = (java.util.Collection) $r39;
+
+        r88 = interfaceinvoke r86.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label12:
+        $z6 = interfaceinvoke r88.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label15;
+
+        r89 = interfaceinvoke r88.<java.util.Iterator: java.lang.Object next()>();
+
+        r90 = $r87;
+
+        $r46 = (org.jetbrains.kotlin.ir.expressions.IrConstructorCall) r89;
+
+        $r42 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid deepCopy>;
+
+        if $r42 != null goto label13;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void throwUninitializedPropertyAccessException(java.lang.String)>("deepCopy");
+
+     label13:
+        $r43 = (org.jetbrains.kotlin.ir.visitors.IrElementTransformer) $r42;
+
+        $r44 = interfaceinvoke $r46.<org.jetbrains.kotlin.ir.expressions.IrConstructorCall: org.jetbrains.kotlin.ir.expressions.IrExpression transform(org.jetbrains.kotlin.ir.visitors.IrElementTransformer,java.lang.Object)>($r43, null);
+
+        if $r44 != null goto label14;
+
+        $r45 = new java.lang.NullPointerException;
+
+        specialinvoke $r45.<java.lang.NullPointerException: void <init>(java.lang.String)>("null cannot be cast to non-null type org.jetbrains.kotlin.ir.expressions.IrConstructorCall");
+
+        throw $r45;
+
+     label14:
+        r4 = (org.jetbrains.kotlin.ir.expressions.IrConstructorCall) $r44;
+
+        interfaceinvoke r90.<java.util.Collection: boolean add(java.lang.Object)>(r4);
+
+        goto label12;
+
+     label15:
+        r91 = (java.util.List) $r87;
+
+        r5 = r91;
+
+        r6 = r84;
+
+        z0 = z12;
+
+        r7 = r85;
+
+        $r40 = new org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl;
+
+        specialinvoke $r40.<org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl: void <init>(org.jetbrains.kotlin.types.KotlinType,org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol,boolean,java.util.List,java.util.List,org.jetbrains.kotlin.ir.types.IrTypeAbbreviation)>(null, r7, z0, r6, r5, null);
+
+        $r41 = (org.jetbrains.kotlin.ir.types.IrType) $r40;
+
+        return $r41;
+    }
+
+    private final org.jetbrains.kotlin.ir.types.IrType underlyingRemapType(org.jetbrains.kotlin.ir.types.IrSimpleType)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.types.IrSimpleType r1;
+        org.jetbrains.kotlin.ir.expressions.IrConstructorCall r2, r40;
+        org.jetbrains.kotlin.ir.types.IrTypeAbbreviation r3, $r14;
+        java.util.List r4, r5, $r10, $r12, r33, r35, r42;
+        boolean z0, $z1, $z2, $z3, z5, z6;
+        org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol r6, $r8, $r9, r26, r36;
+        org.jetbrains.kotlin.ir.util.SymbolRemapper $r7;
+        java.util.ArrayList $r11, $r13;
+        int $i0, $i1;
+        org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl $r15;
+        org.jetbrains.kotlin.ir.types.IrType $r16;
+        org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid $r20;
+        org.jetbrains.kotlin.ir.visitors.IrElementTransformer $r21;
+        org.jetbrains.kotlin.ir.expressions.IrExpression $r22;
+        java.lang.NullPointerException $r23;
+        java.lang.Iterable $r25, $r34;
+        java.util.Collection r27, r31, r37, r41;
+        java.util.Iterator r28, r38;
+        java.lang.Object r29, r39;
+        org.jetbrains.kotlin.ir.types.IrTypeArgument r30, r32;
+        org.jetbrains.kotlin.ir.types.impl.IrTypeAbbreviationImpl $r43;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        r1 := @parameter0: org.jetbrains.kotlin.ir.types.IrSimpleType;
+
+        $r7 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.util.SymbolRemapper symbolRemapper>;
+
+        $r8 = interfaceinvoke r1.<org.jetbrains.kotlin.ir.types.IrSimpleType: org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol getClassifier()>();
+
+        $r9 = interfaceinvoke $r7.<org.jetbrains.kotlin.ir.util.SymbolRemapper: org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol getReferencedClassifier(org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol)>($r8);
+
+        $z1 = interfaceinvoke r1.<org.jetbrains.kotlin.ir.types.IrSimpleType: boolean getHasQuestionMark()>();
+
+        $r10 = interfaceinvoke r1.<org.jetbrains.kotlin.ir.types.IrSimpleType: java.util.List getArguments()>();
+
+        $r25 = (java.lang.Iterable) $r10;
+
+        z5 = $z1;
+
+        r26 = $r9;
+
+        $r11 = new java.util.ArrayList;
+
+        $i0 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r25, 10);
+
+        specialinvoke $r11.<java.util.ArrayList: void <init>(int)>($i0);
+
+        r27 = (java.util.Collection) $r11;
+
+        r28 = interfaceinvoke $r25.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z2 = interfaceinvoke r28.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label2;
+
+        r29 = interfaceinvoke r28.<java.util.Iterator: java.lang.Object next()>();
+
+        r30 = (org.jetbrains.kotlin.ir.types.IrTypeArgument) r29;
+
+        r31 = r27;
+
+        r32 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.types.IrTypeArgument remapTypeArgument(org.jetbrains.kotlin.ir.types.IrTypeArgument)>(r30);
+
+        interfaceinvoke r31.<java.util.Collection: boolean add(java.lang.Object)>(r32);
+
+        goto label1;
+
+     label2:
+        r33 = (java.util.List) r27;
+
+        $r12 = interfaceinvoke r1.<org.jetbrains.kotlin.ir.types.IrSimpleType: java.util.List getAnnotations()>();
+
+        $r34 = (java.lang.Iterable) $r12;
+
+        r35 = r33;
+
+        z6 = z5;
+
+        r36 = r26;
+
+        $r13 = new java.util.ArrayList;
+
+        $i1 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r34, 10);
+
+        specialinvoke $r13.<java.util.ArrayList: void <init>(int)>($i1);
+
+        r37 = (java.util.Collection) $r13;
+
+        r38 = interfaceinvoke $r34.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z3 = interfaceinvoke r38.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label6;
+
+        r39 = interfaceinvoke r38.<java.util.Iterator: java.lang.Object next()>();
+
+        r40 = (org.jetbrains.kotlin.ir.expressions.IrConstructorCall) r39;
+
+        r41 = r37;
+
+        $r20 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid deepCopy>;
+
+        if $r20 != null goto label4;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void throwUninitializedPropertyAccessException(java.lang.String)>("deepCopy");
+
+     label4:
+        $r21 = (org.jetbrains.kotlin.ir.visitors.IrElementTransformer) $r20;
+
+        $r22 = interfaceinvoke r40.<org.jetbrains.kotlin.ir.expressions.IrConstructorCall: org.jetbrains.kotlin.ir.expressions.IrExpression transform(org.jetbrains.kotlin.ir.visitors.IrElementTransformer,java.lang.Object)>($r21, null);
+
+        if $r22 != null goto label5;
+
+        $r23 = new java.lang.NullPointerException;
+
+        specialinvoke $r23.<java.lang.NullPointerException: void <init>(java.lang.String)>("null cannot be cast to non-null type org.jetbrains.kotlin.ir.expressions.IrConstructorCall");
+
+        throw $r23;
+
+     label5:
+        r2 = (org.jetbrains.kotlin.ir.expressions.IrConstructorCall) $r22;
+
+        interfaceinvoke r41.<java.util.Collection: boolean add(java.lang.Object)>(r2);
+
+        goto label3;
+
+     label6:
+        r42 = (java.util.List) r37;
+
+        $r14 = interfaceinvoke r1.<org.jetbrains.kotlin.ir.types.IrSimpleType: org.jetbrains.kotlin.ir.types.IrTypeAbbreviation getAbbreviation()>();
+
+        if $r14 == null goto label7;
+
+        $r43 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.types.impl.IrTypeAbbreviationImpl remapTypeAbbreviation(org.jetbrains.kotlin.ir.types.IrTypeAbbreviation)>($r14);
+
+        goto label8;
+
+     label7:
+        $r43 = null;
+
+     label8:
+        r3 = (org.jetbrains.kotlin.ir.types.IrTypeAbbreviation) $r43;
+
+        r4 = r42;
+
+        r5 = r35;
+
+        z0 = z6;
+
+        r6 = r36;
+
+        $r15 = new org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl;
+
+        specialinvoke $r15.<org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImpl: void <init>(org.jetbrains.kotlin.types.KotlinType,org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol,boolean,java.util.List,java.util.List,org.jetbrains.kotlin.ir.types.IrTypeAbbreviation)>(null, r6, z0, r5, r4, r3);
+
+        $r16 = (org.jetbrains.kotlin.ir.types.IrType) $r15;
+
+        return $r16;
+    }
+
+    private final org.jetbrains.kotlin.ir.types.IrTypeArgument remapTypeArgument(org.jetbrains.kotlin.ir.types.IrTypeArgument)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.types.IrTypeArgument r1, $r8;
+        boolean $z0;
+        org.jetbrains.kotlin.ir.types.IrTypeProjection $r2, $r5, $r7;
+        org.jetbrains.kotlin.ir.types.IrType $r3, $r4;
+        org.jetbrains.kotlin.types.Variance $r6;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        r1 := @parameter0: org.jetbrains.kotlin.ir.types.IrTypeArgument;
+
+        $z0 = r1 instanceof org.jetbrains.kotlin.ir.types.IrTypeProjection;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = (org.jetbrains.kotlin.ir.types.IrTypeProjection) r1;
+
+        $r3 = interfaceinvoke $r2.<org.jetbrains.kotlin.ir.types.IrTypeProjection: org.jetbrains.kotlin.ir.types.IrType getType()>();
+
+        $r4 = virtualinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.types.IrType remapType(org.jetbrains.kotlin.ir.types.IrType)>($r3);
+
+        $r5 = (org.jetbrains.kotlin.ir.types.IrTypeProjection) r1;
+
+        $r6 = interfaceinvoke $r5.<org.jetbrains.kotlin.ir.types.IrTypeProjection: org.jetbrains.kotlin.types.Variance getVariance()>();
+
+        $r7 = staticinvoke <org.jetbrains.kotlin.ir.types.impl.IrSimpleTypeImplKt: org.jetbrains.kotlin.ir.types.IrTypeProjection makeTypeProjection(org.jetbrains.kotlin.ir.types.IrType,org.jetbrains.kotlin.types.Variance)>($r4, $r6);
+
+        $r8 = (org.jetbrains.kotlin.ir.types.IrTypeArgument) $r7;
+
+        goto label2;
+
+     label1:
+        $r8 = r1;
+
+     label2:
+        return $r8;
+    }
+
+    private final org.jetbrains.kotlin.ir.types.impl.IrTypeAbbreviationImpl remapTypeAbbreviation(org.jetbrains.kotlin.ir.types.IrTypeAbbreviation)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.ir.types.IrTypeAbbreviation $r1;
+        java.lang.Iterable $r2;
+        boolean z0, z4, $z5, $z6;
+        org.jetbrains.kotlin.ir.symbols.IrTypeAliasSymbol r3, r11, $r13, $r14;
+        java.util.Collection r4, r18;
+        java.util.Iterator r5;
+        java.lang.Object r6;
+        org.jetbrains.kotlin.ir.types.IrTypeArgument r7, r8;
+        java.util.List r9, r10, $r15, r19;
+        org.jetbrains.kotlin.ir.util.SymbolRemapper $r12;
+        java.util.ArrayList $r16;
+        int $i0;
+        org.jetbrains.kotlin.ir.types.impl.IrTypeAbbreviationImpl $r17;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        $r1 := @parameter0: org.jetbrains.kotlin.ir.types.IrTypeAbbreviation;
+
+        $r12 = r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.util.SymbolRemapper symbolRemapper>;
+
+        $r13 = interfaceinvoke $r1.<org.jetbrains.kotlin.ir.types.IrTypeAbbreviation: org.jetbrains.kotlin.ir.symbols.IrTypeAliasSymbol getTypeAlias()>();
+
+        $r14 = interfaceinvoke $r12.<org.jetbrains.kotlin.ir.util.SymbolRemapper: org.jetbrains.kotlin.ir.symbols.IrTypeAliasSymbol getReferencedTypeAlias(org.jetbrains.kotlin.ir.symbols.IrTypeAliasSymbol)>($r13);
+
+        $z5 = interfaceinvoke $r1.<org.jetbrains.kotlin.ir.types.IrTypeAbbreviation: boolean getHasQuestionMark()>();
+
+        $r15 = interfaceinvoke $r1.<org.jetbrains.kotlin.ir.types.IrTypeAbbreviation: java.util.List getArguments()>();
+
+        $r2 = (java.lang.Iterable) $r15;
+
+        z0 = $z5;
+
+        r3 = $r14;
+
+        $r16 = new java.util.ArrayList;
+
+        $i0 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r2, 10);
+
+        specialinvoke $r16.<java.util.ArrayList: void <init>(int)>($i0);
+
+        r4 = (java.util.Collection) $r16;
+
+        r5 = interfaceinvoke $r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z6 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label2;
+
+        r6 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r7 = (org.jetbrains.kotlin.ir.types.IrTypeArgument) r6;
+
+        r18 = r4;
+
+        r8 = specialinvoke r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.types.IrTypeArgument remapTypeArgument(org.jetbrains.kotlin.ir.types.IrTypeArgument)>(r7);
+
+        interfaceinvoke r18.<java.util.Collection: boolean add(java.lang.Object)>(r8);
+
+        goto label1;
+
+     label2:
+        r19 = (java.util.List) r4;
+
+        r9 = interfaceinvoke $r1.<org.jetbrains.kotlin.ir.types.IrTypeAbbreviation: java.util.List getAnnotations()>();
+
+        r10 = r19;
+
+        z4 = z0;
+
+        r11 = r3;
+
+        $r17 = new org.jetbrains.kotlin.ir.types.impl.IrTypeAbbreviationImpl;
+
+        specialinvoke $r17.<org.jetbrains.kotlin.ir.types.impl.IrTypeAbbreviationImpl: void <init>(org.jetbrains.kotlin.ir.symbols.IrTypeAliasSymbol,boolean,java.util.List,java.util.List)>(r11, z4, r10, r9);
+
+        return $r17;
+    }
+
+    public void <init>(org.jetbrains.kotlin.backend.common.extensions.IrPluginContext, org.jetbrains.kotlin.ir.util.SymbolRemapper, org.jetbrains.kotlin.ir.util.TypeTranslator, org.jetbrains.kotlin.descriptors.ClassDescriptor)
+    {
+        androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper r0;
+        org.jetbrains.kotlin.backend.common.extensions.IrPluginContext r1;
+        org.jetbrains.kotlin.ir.util.SymbolRemapper r2;
+        org.jetbrains.kotlin.ir.util.TypeTranslator r3;
+        org.jetbrains.kotlin.descriptors.ClassDescriptor r4;
+        boolean z0;
+        java.util.ArrayList $r5;
+        java.util.List $r6;
+
+        r0 := @this: androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper;
+
+        r1 := @parameter0: org.jetbrains.kotlin.backend.common.extensions.IrPluginContext;
+
+        r2 := @parameter1: org.jetbrains.kotlin.ir.util.SymbolRemapper;
+
+        r3 := @parameter2: org.jetbrains.kotlin.ir.util.TypeTranslator;
+
+        r4 := @parameter3: org.jetbrains.kotlin.descriptors.ClassDescriptor;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "context");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r2, "symbolRemapper");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r3, "typeTranslator");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r4, "composerTypeDescriptor");
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.backend.common.extensions.IrPluginContext context> = r1;
+
+        r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.util.SymbolRemapper symbolRemapper> = r2;
+
+        r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.ir.util.TypeTranslator typeTranslator> = r3;
+
+        r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: org.jetbrains.kotlin.descriptors.ClassDescriptor composerTypeDescriptor> = r4;
+
+        z0 = 0;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        $r6 = (java.util.List) $r5;
+
+        r0.<androidx.compose.compiler.plugins.kotlin.lower.ComposerTypeRemapper: java.util.List scopeStack> = $r6;
+
+        return;
+    }
+

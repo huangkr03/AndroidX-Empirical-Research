@@ -1,0 +1,163 @@
+android.support.v4.content.PermissionChecker
+<android.support.v4.content.PermissionChecker: int PERMISSION_GRANTED>
+<android.support.v4.content.PermissionChecker: int PERMISSION_DENIED>
+<android.support.v4.content.PermissionChecker: int PERMISSION_DENIED_APP_OP>
+    private void <init>()
+    {
+        android.support.v4.content.PermissionChecker r0;
+
+        r0 := @this: android.support.v4.content.PermissionChecker;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int checkPermission(android.content.Context, java.lang.String, int, int, java.lang.String)
+    {
+        android.content.Context r0;
+        java.lang.String r1, r2, r5;
+        int i0, i1, $i2, $i3, $i4;
+        java.lang.String[] r3;
+        android.content.pm.PackageManager $r4;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.lang.String;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        r5 := @parameter4: java.lang.String;
+
+        $i2 = virtualinvoke r0.<android.content.Context: int checkPermission(java.lang.String,int,int)>(r1, i0, i1);
+
+        if $i2 != -1 goto label1;
+
+        return -1;
+
+     label1:
+        r2 = staticinvoke <android.support.v4.app.AppOpsManagerCompat: java.lang.String permissionToOp(java.lang.String)>(r1);
+
+        if r2 != null goto label2;
+
+        return 0;
+
+     label2:
+        if r5 != null goto label5;
+
+        $r4 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        r3 = virtualinvoke $r4.<android.content.pm.PackageManager: java.lang.String[] getPackagesForUid(int)>(i1);
+
+        if r3 == null goto label3;
+
+        $i4 = lengthof r3;
+
+        if $i4 > 0 goto label4;
+
+     label3:
+        return -1;
+
+     label4:
+        r5 = r3[0];
+
+     label5:
+        $i3 = staticinvoke <android.support.v4.app.AppOpsManagerCompat: int noteProxyOpNoThrow(android.content.Context,java.lang.String,java.lang.String)>(r0, r2, r5);
+
+        if $i3 == 0 goto label6;
+
+        return -2;
+
+     label6:
+        return 0;
+    }
+
+    public static int checkSelfPermission(android.content.Context, java.lang.String)
+    {
+        android.content.Context r0;
+        java.lang.String r1, $r2;
+        int $i0, $i1, $i2;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.lang.String;
+
+        $i0 = staticinvoke <android.os.Process: int myPid()>();
+
+        $i1 = staticinvoke <android.os.Process: int myUid()>();
+
+        $r2 = virtualinvoke r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        $i2 = staticinvoke <android.support.v4.content.PermissionChecker: int checkPermission(android.content.Context,java.lang.String,int,int,java.lang.String)>(r0, r1, $i0, $i1, $r2);
+
+        return $i2;
+    }
+
+    public static int checkCallingPermission(android.content.Context, java.lang.String, java.lang.String)
+    {
+        android.content.Context r0;
+        java.lang.String r1, r2;
+        int $i0, $i1, $i2, $i3, $i4;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.lang.String;
+
+        $i0 = staticinvoke <android.os.Binder: int getCallingPid()>();
+
+        $i1 = staticinvoke <android.os.Process: int myPid()>();
+
+        if $i0 != $i1 goto label1;
+
+        return -1;
+
+     label1:
+        $i2 = staticinvoke <android.os.Binder: int getCallingPid()>();
+
+        $i3 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        $i4 = staticinvoke <android.support.v4.content.PermissionChecker: int checkPermission(android.content.Context,java.lang.String,int,int,java.lang.String)>(r0, r1, $i2, $i3, r2);
+
+        return $i4;
+    }
+
+    public static int checkCallingOrSelfPermission(android.content.Context, java.lang.String)
+    {
+        android.content.Context r0;
+        java.lang.String r1, r2, $r3;
+        int $i0, $i1, $i2, $i3, $i4;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.lang.String;
+
+        $i0 = staticinvoke <android.os.Binder: int getCallingPid()>();
+
+        $i1 = staticinvoke <android.os.Process: int myPid()>();
+
+        if $i0 != $i1 goto label1;
+
+        $r3 = virtualinvoke r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        goto label2;
+
+     label1:
+        $r3 = null;
+
+     label2:
+        r2 = $r3;
+
+        $i2 = staticinvoke <android.os.Binder: int getCallingPid()>();
+
+        $i3 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        $i4 = staticinvoke <android.support.v4.content.PermissionChecker: int checkPermission(android.content.Context,java.lang.String,int,int,java.lang.String)>(r0, r1, $i2, $i3, r2);
+
+        return $i4;
+    }
+
+android.support.v4.content.PermissionChecker$PermissionResult

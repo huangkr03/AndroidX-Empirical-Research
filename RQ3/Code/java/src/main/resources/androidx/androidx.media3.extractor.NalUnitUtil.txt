@@ -1,0 +1,2164 @@
+androidx.media3.extractor.NalUnitUtil
+<androidx.media3.extractor.NalUnitUtil: java.lang.String TAG>
+<androidx.media3.extractor.NalUnitUtil: int NAL_UNIT_TYPE_NON_IDR>
+<androidx.media3.extractor.NalUnitUtil: int NAL_UNIT_TYPE_PARTITION_A>
+<androidx.media3.extractor.NalUnitUtil: int NAL_UNIT_TYPE_IDR>
+<androidx.media3.extractor.NalUnitUtil: int NAL_UNIT_TYPE_SEI>
+<androidx.media3.extractor.NalUnitUtil: int NAL_UNIT_TYPE_SPS>
+<androidx.media3.extractor.NalUnitUtil: int NAL_UNIT_TYPE_PPS>
+<androidx.media3.extractor.NalUnitUtil: int NAL_UNIT_TYPE_AUD>
+<androidx.media3.extractor.NalUnitUtil: byte[] NAL_START_CODE>
+<androidx.media3.extractor.NalUnitUtil: int EXTENDED_SAR>
+<androidx.media3.extractor.NalUnitUtil: float[] ASPECT_RATIO_IDC_VALUES>
+<androidx.media3.extractor.NalUnitUtil: int H264_NAL_UNIT_TYPE_SEI>
+<androidx.media3.extractor.NalUnitUtil: int H264_NAL_UNIT_TYPE_SPS>
+<androidx.media3.extractor.NalUnitUtil: int H265_NAL_UNIT_TYPE_PREFIX_SEI>
+<androidx.media3.extractor.NalUnitUtil: java.lang.Object scratchEscapePositionsLock>
+<androidx.media3.extractor.NalUnitUtil: int[] scratchEscapePositions>
+    public static int unescapeStream(byte[], int)
+    {
+        byte[] r0;
+        int i0, i1, i2, i3, $i4, $i5, $i6, $i7, $i8, i9, i10, i11, i12, i13, i14, i15, i16;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r10;
+        int[] $r4, $r5, $r6, $r7, $r8, $r9;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        $r3 = <androidx.media3.extractor.NalUnitUtil: java.lang.Object scratchEscapePositionsLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        i9 = 0;
+
+        i10 = 0;
+
+     label2:
+        if i9 >= i0 goto label4;
+
+        i9 = staticinvoke <androidx.media3.extractor.NalUnitUtil: int findNextUnescapeIndex(byte[],int,int)>(r0, i9, i0);
+
+        if i9 >= i0 goto label2;
+
+        $r5 = <androidx.media3.extractor.NalUnitUtil: int[] scratchEscapePositions>;
+
+        $i5 = lengthof $r5;
+
+        if $i5 > i10 goto label3;
+
+        $r8 = <androidx.media3.extractor.NalUnitUtil: int[] scratchEscapePositions>;
+
+        $r7 = <androidx.media3.extractor.NalUnitUtil: int[] scratchEscapePositions>;
+
+        $i7 = lengthof $r7;
+
+        $i8 = $i7 * 2;
+
+        $r9 = staticinvoke <java.util.Arrays: int[] copyOf(int[],int)>($r8, $i8);
+
+        <androidx.media3.extractor.NalUnitUtil: int[] scratchEscapePositions> = $r9;
+
+     label3:
+        $r6 = <androidx.media3.extractor.NalUnitUtil: int[] scratchEscapePositions>;
+
+        $i6 = i10;
+
+        i10 = i10 + 1;
+
+        $r6[$i6] = i9;
+
+        i9 = i9 + 3;
+
+        goto label2;
+
+     label4:
+        i1 = i0 - i10;
+
+        i11 = 0;
+
+        i12 = 0;
+
+        i13 = 0;
+
+     label5:
+        if i13 >= i10 goto label6;
+
+        $r4 = <androidx.media3.extractor.NalUnitUtil: int[] scratchEscapePositions>;
+
+        i2 = $r4[i13];
+
+        i3 = i2 - i11;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>(r0, i11, r0, i12, i3);
+
+        i14 = i12 + i3;
+
+        i15 = i14 + 1;
+
+        r0[i14] = 0;
+
+        i12 = i15 + 1;
+
+        r0[i15] = 0;
+
+        $i4 = i3 + 3;
+
+        i11 = i11 + $i4;
+
+        i13 = i13 + 1;
+
+        goto label5;
+
+     label6:
+        i16 = i1 - i12;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>(r0, i11, r0, i12, i16);
+
+        exitmonitor r1;
+
+     label7:
+        return i1;
+
+     label8:
+        $r10 := @caughtexception;
+
+        r2 = $r10;
+
+        exitmonitor r1;
+
+     label9:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label7 with label8;
+        catch java.lang.Throwable from label8 to label9 with label8;
+    }
+
+    public static void discardToSps(java.nio.ByteBuffer)
+    {
+        java.nio.ByteBuffer r0, r1;
+        int i0, $i2, $i4, $i7, i8, i9;
+        short s1;
+        byte $b3, $b5, $b6;
+
+        r0 := @parameter0: java.nio.ByteBuffer;
+
+        i0 = virtualinvoke r0.<java.nio.ByteBuffer: int position()>();
+
+        i8 = 0;
+
+        i9 = 0;
+
+     label1:
+        $i2 = i9 + 1;
+
+        if $i2 >= i0 goto label5;
+
+        $b3 = virtualinvoke r0.<java.nio.ByteBuffer: byte get(int)>(i9);
+
+        s1 = $b3 & 255;
+
+        if i8 != 3 goto label2;
+
+        if s1 != 1 goto label3;
+
+        $i4 = i9 + 1;
+
+        $b5 = virtualinvoke r0.<java.nio.ByteBuffer: byte get(int)>($i4);
+
+        $b6 = $b5 & 31;
+
+        if $b6 != 7 goto label3;
+
+        r1 = virtualinvoke r0.<java.nio.ByteBuffer: java.nio.ByteBuffer duplicate()>();
+
+        $i7 = i9 - 3;
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer position(int)>($i7);
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer limit(int)>(i0);
+
+        virtualinvoke r0.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(0);
+
+        virtualinvoke r0.<java.nio.ByteBuffer: java.nio.ByteBuffer put(java.nio.ByteBuffer)>(r1);
+
+        return;
+
+     label2:
+        if s1 != 0 goto label3;
+
+        i8 = i8 + 1;
+
+     label3:
+        if s1 == 0 goto label4;
+
+        i8 = 0;
+
+     label4:
+        i9 = i9 + 1;
+
+        goto label1;
+
+     label5:
+        virtualinvoke r0.<java.nio.ByteBuffer: java.nio.Buffer clear()>();
+
+        return;
+    }
+
+    public static boolean isNalUnitSei(java.lang.String, byte)
+    {
+        java.lang.String r0, $r1, $r2;
+        byte b0, $b1, $b2, $b3;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: java.lang.String;
+
+        b0 := @parameter1: byte;
+
+        $r1 = "video/avc";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>(r0);
+
+        if $z0 == 0 goto label1;
+
+        $b3 = b0 & 31;
+
+        if $b3 == 6 goto label2;
+
+     label1:
+        $r2 = "video/hevc";
+
+        $z1 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>(r0);
+
+        if $z1 == 0 goto label3;
+
+        $b1 = b0 & 126;
+
+        $b2 = $b1 >> 1;
+
+        if $b2 != 39 goto label3;
+
+     label2:
+        $z2 = 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        return $z2;
+    }
+
+    public static int getNalUnitType(byte[], int)
+    {
+        byte[] r0;
+        int i0, $i1;
+        byte $b2, $b3;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        $i1 = i0 + 3;
+
+        $b2 = r0[$i1];
+
+        $b3 = $b2 & 31;
+
+        return $b3;
+    }
+
+    public static int getH265NalUnitType(byte[], int)
+    {
+        byte[] r0;
+        int i0, $i1;
+        byte $b2, $b3, $b4;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        $i1 = i0 + 3;
+
+        $b2 = r0[$i1];
+
+        $b3 = $b2 & 126;
+
+        $b4 = $b3 >> 1;
+
+        return $b4;
+    }
+
+    public static androidx.media3.extractor.NalUnitUtil$SpsData parseSpsNalUnit(byte[], int, int)
+    {
+        byte[] r0;
+        int i0, i1, $i2;
+        androidx.media3.extractor.NalUnitUtil$SpsData $r1;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $i2 = i0 + 1;
+
+        $r1 = staticinvoke <androidx.media3.extractor.NalUnitUtil: androidx.media3.extractor.NalUnitUtil$SpsData parseSpsNalUnitPayload(byte[],int,int)>(r0, $i2, i1);
+
+        return $r1;
+    }
+
+    public static androidx.media3.extractor.NalUnitUtil$SpsData parseSpsNalUnitPayload(byte[], int, int)
+    {
+        byte[] r0;
+        int i0, i1, i2, i3, i4, i5, i6, i7, $i12, $i13, $i14, $i21, $i25, i26, i29, $i31, i32, i33, i34, i36, i37, $i38, $i39, i40, i42, i43, i44, i45, i46, i47, i50, $i54, $i55, $i56, $i57, i58, i59, i60;
+        androidx.media3.extractor.ParsableNalUnitBitArray r1, $r2;
+        boolean z0, z1, z2, z3, z4, z5, z6, z7;
+        byte b8, b9, $b23, $b27, b28, $b30, $b41, b48, $b49, $b51, $b52, $b53;
+        float[] $r3, $r8;
+        java.lang.StringBuilder $r4, $r5, $r6;
+        java.lang.String $r7;
+        float $f0, $f1, f2;
+        long $l22, l35;
+        androidx.media3.extractor.NalUnitUtil$SpsData $r10;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $r2 = new androidx.media3.extractor.ParsableNalUnitBitArray;
+
+        specialinvoke $r2.<androidx.media3.extractor.ParsableNalUnitBitArray: void <init>(byte[],int,int)>(r0, i0, i1);
+
+        r1 = $r2;
+
+        i2 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(8);
+
+        i3 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(8);
+
+        i4 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(8);
+
+        i5 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i26 = 1;
+
+        z2 = 0;
+
+        if i2 == 100 goto label01;
+
+        if i2 == 110 goto label01;
+
+        if i2 == 122 goto label01;
+
+        if i2 == 244 goto label01;
+
+        if i2 == 44 goto label01;
+
+        if i2 == 83 goto label01;
+
+        if i2 == 86 goto label01;
+
+        if i2 == 118 goto label01;
+
+        if i2 == 128 goto label01;
+
+        if i2 != 138 goto label09;
+
+     label01:
+        i26 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        if i26 != 3 goto label02;
+
+        z2 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+     label02:
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+        z3 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if z3 == 0 goto label09;
+
+        if i26 == 3 goto label03;
+
+        $b27 = 8;
+
+        goto label04;
+
+     label03:
+        $b27 = 12;
+
+     label04:
+        b28 = $b27;
+
+        i29 = 0;
+
+     label05:
+        if i29 >= b28 goto label09;
+
+        z4 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if z4 == 0 goto label08;
+
+        if i29 >= 6 goto label06;
+
+        $b30 = 16;
+
+        goto label07;
+
+     label06:
+        $b30 = 64;
+
+     label07:
+        staticinvoke <androidx.media3.extractor.NalUnitUtil: void skipScalingList(androidx.media3.extractor.ParsableNalUnitBitArray,int)>(r1, $b30);
+
+     label08:
+        i29 = i29 + 1;
+
+        goto label05;
+
+     label09:
+        $i31 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i32 = $i31 + 4;
+
+        i33 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i34 = 0;
+
+        z5 = 0;
+
+        if i33 != 0 goto label10;
+
+        $i25 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i34 = $i25 + 4;
+
+        goto label12;
+
+     label10:
+        if i33 != 1 goto label12;
+
+        z5 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readSignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readSignedExpGolombCodedInt()>();
+
+        $i21 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        l35 = (long) $i21;
+
+        i36 = 0;
+
+     label11:
+        $l22 = (long) i36;
+
+        $b23 = $l22 cmp l35;
+
+        if $b23 >= 0 goto label12;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i36 = i36 + 1;
+
+        goto label11;
+
+     label12:
+        i37 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+        $i38 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i6 = $i38 + 1;
+
+        $i39 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i40 = $i39 + 1;
+
+        z0 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if z0 == 0 goto label13;
+
+        $b41 = 1;
+
+        goto label14;
+
+     label13:
+        $b41 = 0;
+
+     label14:
+        $i12 = 2 - $b41;
+
+        i7 = $i12 * i40;
+
+        if z0 != 0 goto label15;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+     label15:
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+        i42 = i6 * 16;
+
+        i43 = i7 * 16;
+
+        z1 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if z1 == 0 goto label26;
+
+        i44 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i45 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i46 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i47 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        if i26 != 0 goto label18;
+
+        b48 = 1;
+
+        if z0 == 0 goto label16;
+
+        $b49 = 1;
+
+        goto label17;
+
+     label16:
+        $b49 = 0;
+
+     label17:
+        i50 = 2 - $b49;
+
+        goto label25;
+
+     label18:
+        if i26 != 3 goto label19;
+
+        $b51 = 1;
+
+        goto label20;
+
+     label19:
+        $b51 = 2;
+
+     label20:
+        b8 = $b51;
+
+        if i26 != 1 goto label21;
+
+        $b52 = 2;
+
+        goto label22;
+
+     label21:
+        $b52 = 1;
+
+     label22:
+        b9 = $b52;
+
+        b48 = b8;
+
+        if z0 == 0 goto label23;
+
+        $b53 = 1;
+
+        goto label24;
+
+     label23:
+        $b53 = 0;
+
+     label24:
+        $i14 = 2 - $b53;
+
+        i50 = b9 * $i14;
+
+     label25:
+        $i54 = i44 + i45;
+
+        $i55 = $i54 * b48;
+
+        i42 = i42 - $i55;
+
+        $i56 = i46 + i47;
+
+        $i57 = $i56 * i50;
+
+        i43 = i43 - $i57;
+
+     label26:
+        f2 = 1.0F;
+
+        z6 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if z6 == 0 goto label30;
+
+        z7 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if z7 == 0 goto label30;
+
+        i58 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(8);
+
+        if i58 != 255 goto label28;
+
+        i59 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(16);
+
+        i60 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(16);
+
+        if i59 == 0 goto label27;
+
+        if i60 == 0 goto label27;
+
+        $f1 = (float) i59;
+
+        $f0 = (float) i60;
+
+        f2 = $f1 / $f0;
+
+     label27:
+        goto label30;
+
+     label28:
+        $r3 = <androidx.media3.extractor.NalUnitUtil: float[] ASPECT_RATIO_IDC_VALUES>;
+
+        $i13 = lengthof $r3;
+
+        if i58 >= $i13 goto label29;
+
+        $r8 = <androidx.media3.extractor.NalUnitUtil: float[] ASPECT_RATIO_IDC_VALUES>;
+
+        f2 = $r8[i58];
+
+        goto label30;
+
+     label29:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unexpected aspect_ratio_idc value: ");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i58);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("NalUnitUtil", $r7);
+
+     label30:
+        $r10 = new androidx.media3.extractor.NalUnitUtil$SpsData;
+
+        specialinvoke $r10.<androidx.media3.extractor.NalUnitUtil$SpsData: void <init>(int,int,int,int,int,int,int,float,boolean,boolean,int,int,int,boolean)>(i2, i3, i4, i5, i37, i42, i43, f2, z2, z0, i32, i33, i34, z5);
+
+        return $r10;
+    }
+
+    public static androidx.media3.extractor.NalUnitUtil$H265SpsData parseH265SpsNalUnit(byte[], int, int)
+    {
+        byte[] r0;
+        int i0, i1, $i2;
+        androidx.media3.extractor.NalUnitUtil$H265SpsData $r1;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $i2 = i0 + 2;
+
+        $r1 = staticinvoke <androidx.media3.extractor.NalUnitUtil: androidx.media3.extractor.NalUnitUtil$H265SpsData parseH265SpsNalUnitPayload(byte[],int,int)>(r0, $i2, i1);
+
+        return $r1;
+    }
+
+    public static androidx.media3.extractor.NalUnitUtil$H265SpsData parseH265SpsNalUnitPayload(byte[], int, int)
+    {
+        byte[] r0;
+        int i0, i1, i2, i3, i4, i5, $i6, $i17, $i18, $i19, $i25, $i26, $i27, $i28, $i29, $i30, $i31, $i32, i33, i34, i35, i36, i37, i38, i39, i40, i41, i42, i43, i44, i45, i50, $i51, i52, i53, i54, i55, i56, i57;
+        androidx.media3.extractor.ParsableNalUnitBitArray r1, $r2;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, $z11, $z12, z13, $z14, $z15, $z16;
+        float[] $r3, $r8;
+        java.lang.StringBuilder $r4, $r5, $r6;
+        java.lang.String $r7;
+        float $f0, $f1, f2;
+        int[] r9;
+        byte $b46, b47, $b48, b49;
+        androidx.media3.extractor.NalUnitUtil$H265SpsData $r10;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $r2 = new androidx.media3.extractor.ParsableNalUnitBitArray;
+
+        specialinvoke $r2.<androidx.media3.extractor.ParsableNalUnitBitArray: void <init>(byte[],int,int)>(r0, i0, i1);
+
+        r1 = $r2;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBits(int)>(4);
+
+        i2 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(3);
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+        i3 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(2);
+
+        z0 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        i4 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(5);
+
+        i33 = 0;
+
+        i34 = 0;
+
+     label01:
+        if i34 >= 32 goto label03;
+
+        $z11 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z11 == 0 goto label02;
+
+        $i32 = 1 << i34;
+
+        i33 = i33 | $i32;
+
+     label02:
+        i34 = i34 + 1;
+
+        goto label01;
+
+     label03:
+        r9 = newarray (int)[6];
+
+        i35 = 0;
+
+     label04:
+        $i6 = lengthof r9;
+
+        if i35 >= $i6 goto label05;
+
+        $i31 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(8);
+
+        r9[i35] = $i31;
+
+        i35 = i35 + 1;
+
+        goto label04;
+
+     label05:
+        i36 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(8);
+
+        i37 = 0;
+
+        i38 = 0;
+
+     label06:
+        if i38 >= i2 goto label09;
+
+        $z9 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z9 == 0 goto label07;
+
+        i37 = i37 + 89;
+
+     label07:
+        $z10 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z10 == 0 goto label08;
+
+        i37 = i37 + 8;
+
+     label08:
+        i38 = i38 + 1;
+
+        goto label06;
+
+     label09:
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBits(int)>(i37);
+
+        if i2 <= 0 goto label10;
+
+        $i29 = 8 - i2;
+
+        $i30 = 2 * $i29;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBits(int)>($i30);
+
+     label10:
+        i39 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i5 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        if i5 != 3 goto label11;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+     label11:
+        i40 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i41 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        $z1 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z1 == 0 goto label17;
+
+        i42 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i43 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i44 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i45 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        if i5 == 1 goto label12;
+
+        if i5 != 2 goto label13;
+
+     label12:
+        $b46 = 2;
+
+        goto label14;
+
+     label13:
+        $b46 = 1;
+
+     label14:
+        b47 = $b46;
+
+        if i5 != 1 goto label15;
+
+        $b48 = 2;
+
+        goto label16;
+
+     label15:
+        $b48 = 1;
+
+     label16:
+        b49 = $b48;
+
+        $i25 = i42 + i43;
+
+        $i26 = b47 * $i25;
+
+        i40 = i40 - $i26;
+
+        $i27 = i44 + i45;
+
+        $i28 = b49 * $i27;
+
+        i41 = i41 - $i28;
+
+     label17:
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i50 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        $z12 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z12 == 0 goto label18;
+
+        $i51 = 0;
+
+        goto label19;
+
+     label18:
+        $i51 = i2;
+
+     label19:
+        i52 = $i51;
+
+     label20:
+        if i52 > i2 goto label21;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i52 = i52 + 1;
+
+        goto label20;
+
+     label21:
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        z13 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if z13 == 0 goto label22;
+
+        $z8 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z8 == 0 goto label22;
+
+        staticinvoke <androidx.media3.extractor.NalUnitUtil: void skipH265ScalingList(androidx.media3.extractor.ParsableNalUnitBitArray)>(r1);
+
+     label22:
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBits(int)>(2);
+
+        $z14 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z14 == 0 goto label23;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBits(int)>(8);
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+     label23:
+        staticinvoke <androidx.media3.extractor.NalUnitUtil: void skipShortTermReferencePictureSets(androidx.media3.extractor.ParsableNalUnitBitArray)>(r1);
+
+        $z2 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z2 == 0 goto label25;
+
+        i53 = 0;
+
+     label24:
+        $i18 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        if i53 >= $i18 goto label25;
+
+        i54 = i50 + 4;
+
+        $i19 = i54 + 1;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBits(int)>($i19);
+
+        i53 = i53 + 1;
+
+        goto label24;
+
+     label25:
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBits(int)>(2);
+
+        f2 = 1.0F;
+
+        $z3 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z3 == 0 goto label33;
+
+        $z4 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z4 == 0 goto label29;
+
+        i55 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(8);
+
+        if i55 != 255 goto label27;
+
+        i56 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(16);
+
+        i57 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readBits(int)>(16);
+
+        if i56 == 0 goto label26;
+
+        if i57 == 0 goto label26;
+
+        $f1 = (float) i56;
+
+        $f0 = (float) i57;
+
+        f2 = $f1 / $f0;
+
+     label26:
+        goto label29;
+
+     label27:
+        $r3 = <androidx.media3.extractor.NalUnitUtil: float[] ASPECT_RATIO_IDC_VALUES>;
+
+        $i17 = lengthof $r3;
+
+        if i55 >= $i17 goto label28;
+
+        $r8 = <androidx.media3.extractor.NalUnitUtil: float[] ASPECT_RATIO_IDC_VALUES>;
+
+        f2 = $r8[i55];
+
+        goto label29;
+
+     label28:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unexpected aspect_ratio_idc value: ");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i55);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("NalUnitUtil", $r7);
+
+     label29:
+        $z15 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z15 == 0 goto label30;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+     label30:
+        $z5 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z5 == 0 goto label31;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBits(int)>(4);
+
+        $z7 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z7 == 0 goto label31;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBits(int)>(24);
+
+     label31:
+        $z16 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z16 == 0 goto label32;
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+     label32:
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+        $z6 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z6 == 0 goto label33;
+
+        i41 = i41 * 2;
+
+     label33:
+        $r10 = new androidx.media3.extractor.NalUnitUtil$H265SpsData;
+
+        specialinvoke $r10.<androidx.media3.extractor.NalUnitUtil$H265SpsData: void <init>(int,boolean,int,int,int[],int,int,int,int,float)>(i3, z0, i4, i33, r9, i36, i39, i40, i41, f2);
+
+        return $r10;
+    }
+
+    public static androidx.media3.extractor.NalUnitUtil$PpsData parsePpsNalUnit(byte[], int, int)
+    {
+        byte[] r0;
+        int i0, i1, $i2;
+        androidx.media3.extractor.NalUnitUtil$PpsData $r1;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $i2 = i0 + 1;
+
+        $r1 = staticinvoke <androidx.media3.extractor.NalUnitUtil: androidx.media3.extractor.NalUnitUtil$PpsData parsePpsNalUnitPayload(byte[],int,int)>(r0, $i2, i1);
+
+        return $r1;
+    }
+
+    public static androidx.media3.extractor.NalUnitUtil$PpsData parsePpsNalUnitPayload(byte[], int, int)
+    {
+        byte[] r0;
+        int i0, i1, i2, i3;
+        androidx.media3.extractor.ParsableNalUnitBitArray r1, $r2;
+        boolean z0;
+        androidx.media3.extractor.NalUnitUtil$PpsData $r3;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $r2 = new androidx.media3.extractor.ParsableNalUnitBitArray;
+
+        specialinvoke $r2.<androidx.media3.extractor.ParsableNalUnitBitArray: void <init>(byte[],int,int)>(r0, i0, i1);
+
+        r1 = $r2;
+
+        i2 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i3 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+        z0 = virtualinvoke r1.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        $r3 = new androidx.media3.extractor.NalUnitUtil$PpsData;
+
+        specialinvoke $r3.<androidx.media3.extractor.NalUnitUtil$PpsData: void <init>(int,int,boolean)>(i2, i3, z0);
+
+        return $r3;
+    }
+
+    public static int findNalUnit(byte[], int, int, boolean[])
+    {
+        byte[] r0;
+        int i0, i1, i2, i3, $i5, $i7, $i9, $i11, $i13, $i15, $i17, $i19, $i21, $i25, $i27, $i30, $i32, $i34, $i36, $i37, i38, $i41;
+        boolean[] r1;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9;
+        byte $b6, $b8, $b10, $b12, $b14, $b16, $b18, $b20, $b22, $b23, $b26, $b28, $b29, $b31, $b33, $b35, $b42;
+        short $s24;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r1 := @parameter3: boolean[];
+
+        i2 = i1 - i0;
+
+        if i2 < 0 goto label01;
+
+        $z6 = 1;
+
+        goto label02;
+
+     label01:
+        $z6 = 0;
+
+     label02:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean)>($z6);
+
+        if i2 != 0 goto label03;
+
+        return i1;
+
+     label03:
+        $z0 = r1[0];
+
+        if $z0 == 0 goto label04;
+
+        staticinvoke <androidx.media3.extractor.NalUnitUtil: void clearPrefixFlags(boolean[])>(r1);
+
+        $i37 = i0 - 3;
+
+        return $i37;
+
+     label04:
+        if i2 <= 1 goto label05;
+
+        $z5 = r1[1];
+
+        if $z5 == 0 goto label05;
+
+        $b35 = r0[i0];
+
+        if $b35 != 1 goto label05;
+
+        staticinvoke <androidx.media3.extractor.NalUnitUtil: void clearPrefixFlags(boolean[])>(r1);
+
+        $i36 = i0 - 2;
+
+        return $i36;
+
+     label05:
+        if i2 <= 2 goto label06;
+
+        $z4 = r1[2];
+
+        if $z4 == 0 goto label06;
+
+        $b31 = r0[i0];
+
+        if $b31 != 0 goto label06;
+
+        $i32 = i0 + 1;
+
+        $b33 = r0[$i32];
+
+        if $b33 != 1 goto label06;
+
+        staticinvoke <androidx.media3.extractor.NalUnitUtil: void clearPrefixFlags(boolean[])>(r1);
+
+        $i34 = i0 - 1;
+
+        return $i34;
+
+     label06:
+        i3 = i1 - 1;
+
+        i38 = i0 + 2;
+
+     label07:
+        if i38 >= i3 goto label11;
+
+        $b23 = r0[i38];
+
+        $s24 = $b23 & 254;
+
+        if $s24 == 0 goto label08;
+
+        goto label10;
+
+     label08:
+        $i25 = i38 - 2;
+
+        $b26 = r0[$i25];
+
+        if $b26 != 0 goto label09;
+
+        $i27 = i38 - 1;
+
+        $b28 = r0[$i27];
+
+        if $b28 != 0 goto label09;
+
+        $b29 = r0[i38];
+
+        if $b29 != 1 goto label09;
+
+        staticinvoke <androidx.media3.extractor.NalUnitUtil: void clearPrefixFlags(boolean[])>(r1);
+
+        $i30 = i38 - 2;
+
+        return $i30;
+
+     label09:
+        i38 = i38 + -2;
+
+     label10:
+        i38 = i38 + 3;
+
+        goto label07;
+
+     label11:
+        if i2 <= 2 goto label13;
+
+        $i17 = i1 - 3;
+
+        $b18 = r0[$i17];
+
+        if $b18 != 0 goto label12;
+
+        $i19 = i1 - 2;
+
+        $b20 = r0[$i19];
+
+        if $b20 != 0 goto label12;
+
+        $i21 = i1 - 1;
+
+        $b22 = r0[$i21];
+
+        if $b22 != 1 goto label12;
+
+        $z7 = 1;
+
+        goto label17;
+
+     label12:
+        $z7 = 0;
+
+        goto label17;
+
+     label13:
+        if i2 != 2 goto label15;
+
+        $z3 = r1[2];
+
+        if $z3 == 0 goto label14;
+
+        $i13 = i1 - 2;
+
+        $b14 = r0[$i13];
+
+        if $b14 != 0 goto label14;
+
+        $i15 = i1 - 1;
+
+        $b16 = r0[$i15];
+
+        if $b16 != 1 goto label14;
+
+        $z7 = 1;
+
+        goto label17;
+
+     label14:
+        $z7 = 0;
+
+        goto label17;
+
+     label15:
+        $z1 = r1[1];
+
+        if $z1 == 0 goto label16;
+
+        $i11 = i1 - 1;
+
+        $b12 = r0[$i11];
+
+        if $b12 != 1 goto label16;
+
+        $z7 = 1;
+
+        goto label17;
+
+     label16:
+        $z7 = 0;
+
+     label17:
+        r1[0] = $z7;
+
+        if i2 <= 1 goto label19;
+
+        $i7 = i1 - 2;
+
+        $b8 = r0[$i7];
+
+        if $b8 != 0 goto label18;
+
+        $i9 = i1 - 1;
+
+        $b10 = r0[$i9];
+
+        if $b10 != 0 goto label18;
+
+        $z8 = 1;
+
+        goto label21;
+
+     label18:
+        $z8 = 0;
+
+        goto label21;
+
+     label19:
+        $z2 = r1[2];
+
+        if $z2 == 0 goto label20;
+
+        $i5 = i1 - 1;
+
+        $b6 = r0[$i5];
+
+        if $b6 != 0 goto label20;
+
+        $z8 = 1;
+
+        goto label21;
+
+     label20:
+        $z8 = 0;
+
+     label21:
+        r1[1] = $z8;
+
+        $i41 = i1 - 1;
+
+        $b42 = r0[$i41];
+
+        if $b42 != 0 goto label22;
+
+        $z9 = 1;
+
+        goto label23;
+
+     label22:
+        $z9 = 0;
+
+     label23:
+        r1[2] = $z9;
+
+        return i1;
+    }
+
+    public static void clearPrefixFlags(boolean[])
+    {
+        boolean[] r0;
+
+        r0 := @parameter0: boolean[];
+
+        r0[0] = 0;
+
+        r0[1] = 0;
+
+        r0[2] = 0;
+
+        return;
+    }
+
+    private static int findNextUnescapeIndex(byte[], int, int)
+    {
+        byte[] r0;
+        int i0, i1, $i2, $i4, $i6, i8;
+        byte $b3, $b5, $b7;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        i8 = i0;
+
+     label1:
+        $i2 = i1 - 2;
+
+        if i8 >= $i2 goto label3;
+
+        $b3 = r0[i8];
+
+        if $b3 != 0 goto label2;
+
+        $i4 = i8 + 1;
+
+        $b5 = r0[$i4];
+
+        if $b5 != 0 goto label2;
+
+        $i6 = i8 + 2;
+
+        $b7 = r0[$i6];
+
+        if $b7 != 3 goto label2;
+
+        return i8;
+
+     label2:
+        i8 = i8 + 1;
+
+        goto label1;
+
+     label3:
+        return i1;
+    }
+
+    private static void skipScalingList(androidx.media3.extractor.ParsableNalUnitBitArray, int)
+    {
+        androidx.media3.extractor.ParsableNalUnitBitArray r0;
+        int i0, i1, $i2, $i3, i4, i5, i6, $i7;
+
+        r0 := @parameter0: androidx.media3.extractor.ParsableNalUnitBitArray;
+
+        i0 := @parameter1: int;
+
+        i4 = 8;
+
+        i5 = 8;
+
+        i6 = 0;
+
+     label1:
+        if i6 >= i0 goto label5;
+
+        if i5 == 0 goto label2;
+
+        i1 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readSignedExpGolombCodedInt()>();
+
+        $i2 = i4 + i1;
+
+        $i3 = $i2 + 256;
+
+        i5 = $i3 % 256;
+
+     label2:
+        if i5 != 0 goto label3;
+
+        $i7 = i4;
+
+        goto label4;
+
+     label3:
+        $i7 = i5;
+
+     label4:
+        i4 = $i7;
+
+        i6 = i6 + 1;
+
+        goto label1;
+
+     label5:
+        return;
+    }
+
+    private static void skipH265ScalingList(androidx.media3.extractor.ParsableNalUnitBitArray)
+    {
+        androidx.media3.extractor.ParsableNalUnitBitArray r0;
+        int i0, $i1, $i2, $i3, $i4, i8, i9, i10;
+        boolean $z0;
+        byte $b11;
+
+        r0 := @parameter0: androidx.media3.extractor.ParsableNalUnitBitArray;
+
+        i8 = 0;
+
+     label01:
+        if i8 >= 4 goto label10;
+
+        i9 = 0;
+
+     label02:
+        if i9 >= 6 goto label09;
+
+        $z0 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z0 != 0 goto label03;
+
+        virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        goto label06;
+
+     label03:
+        $i1 = i8 << 1;
+
+        $i2 = 4 + $i1;
+
+        $i3 = 1 << $i2;
+
+        i0 = staticinvoke <java.lang.Math: int min(int,int)>(64, $i3);
+
+        if i8 <= 1 goto label04;
+
+        virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readSignedExpGolombCodedInt()>();
+
+     label04:
+        i10 = 0;
+
+     label05:
+        if i10 >= i0 goto label06;
+
+        virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readSignedExpGolombCodedInt()>();
+
+        i10 = i10 + 1;
+
+        goto label05;
+
+     label06:
+        $i4 = i9;
+
+        if i8 != 3 goto label07;
+
+        $b11 = 3;
+
+        goto label08;
+
+     label07:
+        $b11 = 1;
+
+     label08:
+        i9 = $i4 + $b11;
+
+        goto label02;
+
+     label09:
+        i8 = i8 + 1;
+
+        goto label01;
+
+     label10:
+        return;
+    }
+
+    private static void skipShortTermReferencePictureSets(androidx.media3.extractor.ParsableNalUnitBitArray)
+    {
+        androidx.media3.extractor.ParsableNalUnitBitArray r0;
+        int i0, i2, i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19, $i20, $i21, $i22, $i23, $i24, $i25, i26, i27, i28, i29, i31, i32, i33, i34, i35, i36, i37, i38, i39, i40, i41, i42, i43, i44, i45;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, $z11;
+        byte b1, $b30;
+        boolean[] r1;
+        int[] r2, r3, r4, r5, r6, r7;
+
+        r0 := @parameter0: androidx.media3.extractor.ParsableNalUnitBitArray;
+
+        i0 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i26 = -1;
+
+        i27 = -1;
+
+        r2 = newarray (int)[0];
+
+        r3 = newarray (int)[0];
+
+        i28 = 0;
+
+     label01:
+        if i28 >= i0 goto label29;
+
+        if i28 == 0 goto label02;
+
+        $z10 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z10 == 0 goto label02;
+
+        $z11 = 1;
+
+        goto label03;
+
+     label02:
+        $z11 = 0;
+
+     label03:
+        z0 = $z11;
+
+        if z0 == 0 goto label24;
+
+        i29 = i26 + i27;
+
+        $z1 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z1 == 0 goto label04;
+
+        $b30 = 1;
+
+        goto label05;
+
+     label04:
+        $b30 = 0;
+
+     label05:
+        b1 = $b30;
+
+        $i8 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i2 = $i8 + 1;
+
+        $i9 = 2 * b1;
+
+        $i10 = 1 - $i9;
+
+        i3 = $i10 * i2;
+
+        $i11 = i29 + 1;
+
+        r1 = newarray (boolean)[$i11];
+
+        i31 = 0;
+
+     label06:
+        if i31 > i29 goto label09;
+
+        $z8 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        if $z8 != 0 goto label07;
+
+        $z9 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: boolean readBit()>();
+
+        r1[i31] = $z9;
+
+        goto label08;
+
+     label07:
+        r1[i31] = 1;
+
+     label08:
+        i31 = i31 + 1;
+
+        goto label06;
+
+     label09:
+        i32 = 0;
+
+        $i12 = i29 + 1;
+
+        r4 = newarray (int)[$i12];
+
+        $i13 = i29 + 1;
+
+        r5 = newarray (int)[$i13];
+
+        i33 = i27 - 1;
+
+     label10:
+        if i33 < 0 goto label12;
+
+        $i23 = r3[i33];
+
+        i34 = $i23 + i3;
+
+        if i34 >= 0 goto label11;
+
+        $i24 = i26 + i33;
+
+        $z7 = r1[$i24];
+
+        if $z7 == 0 goto label11;
+
+        $i25 = i32;
+
+        i32 = i32 + 1;
+
+        r4[$i25] = i34;
+
+     label11:
+        i33 = i33 + -1;
+
+        goto label10;
+
+     label12:
+        if i3 >= 0 goto label13;
+
+        $z6 = r1[i29];
+
+        if $z6 == 0 goto label13;
+
+        $i22 = i32;
+
+        i32 = i32 + 1;
+
+        r4[$i22] = i3;
+
+     label13:
+        i35 = 0;
+
+     label14:
+        if i35 >= i26 goto label16;
+
+        $i20 = r2[i35];
+
+        i36 = $i20 + i3;
+
+        if i36 >= 0 goto label15;
+
+        $z5 = r1[i35];
+
+        if $z5 == 0 goto label15;
+
+        $i21 = i32;
+
+        i32 = i32 + 1;
+
+        r4[$i21] = i36;
+
+     label15:
+        i35 = i35 + 1;
+
+        goto label14;
+
+     label16:
+        i37 = i32;
+
+        r6 = staticinvoke <java.util.Arrays: int[] copyOf(int[],int)>(r4, i37);
+
+        i38 = 0;
+
+        i39 = i26 - 1;
+
+     label17:
+        if i39 < 0 goto label19;
+
+        $i18 = r2[i39];
+
+        i40 = $i18 + i3;
+
+        if i40 <= 0 goto label18;
+
+        $z4 = r1[i39];
+
+        if $z4 == 0 goto label18;
+
+        $i19 = i38;
+
+        i38 = i38 + 1;
+
+        r5[$i19] = i40;
+
+     label18:
+        i39 = i39 + -1;
+
+        goto label17;
+
+     label19:
+        if i3 <= 0 goto label20;
+
+        $z3 = r1[i29];
+
+        if $z3 == 0 goto label20;
+
+        $i17 = i38;
+
+        i38 = i38 + 1;
+
+        r5[$i17] = i3;
+
+     label20:
+        i41 = 0;
+
+     label21:
+        if i41 >= i27 goto label23;
+
+        $i14 = r3[i41];
+
+        i42 = $i14 + i3;
+
+        if i42 <= 0 goto label22;
+
+        $i15 = i26 + i41;
+
+        $z2 = r1[$i15];
+
+        if $z2 == 0 goto label22;
+
+        $i16 = i38;
+
+        i38 = i38 + 1;
+
+        r5[$i16] = i42;
+
+     label22:
+        i41 = i41 + 1;
+
+        goto label21;
+
+     label23:
+        i43 = i38;
+
+        r7 = staticinvoke <java.util.Arrays: int[] copyOf(int[],int)>(r5, i43);
+
+        goto label28;
+
+     label24:
+        i37 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        i43 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        r6 = newarray (int)[i37];
+
+        i44 = 0;
+
+     label25:
+        if i44 >= i37 goto label26;
+
+        $i6 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        $i7 = $i6 + 1;
+
+        r6[i44] = $i7;
+
+        virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+        i44 = i44 + 1;
+
+        goto label25;
+
+     label26:
+        r7 = newarray (int)[i43];
+
+        i45 = 0;
+
+     label27:
+        if i45 >= i43 goto label28;
+
+        $i4 = virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: int readUnsignedExpGolombCodedInt()>();
+
+        $i5 = $i4 + 1;
+
+        r7[i45] = $i5;
+
+        virtualinvoke r0.<androidx.media3.extractor.ParsableNalUnitBitArray: void skipBit()>();
+
+        i45 = i45 + 1;
+
+        goto label27;
+
+     label28:
+        i26 = i37;
+
+        i27 = i43;
+
+        r2 = r6;
+
+        r3 = r7;
+
+        i28 = i28 + 1;
+
+        goto label01;
+
+     label29:
+        return;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.extractor.NalUnitUtil r0;
+
+        r0 := @this: androidx.media3.extractor.NalUnitUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        byte[] $r0;
+        float[] $r1;
+        java.lang.Object $r2;
+        int[] $r3;
+
+        $r0 = newarray (byte)[4];
+
+        $r0[0] = 0;
+
+        $r0[1] = 0;
+
+        $r0[2] = 0;
+
+        $r0[3] = 1;
+
+        <androidx.media3.extractor.NalUnitUtil: byte[] NAL_START_CODE> = $r0;
+
+        $r1 = newarray (float)[17];
+
+        $r1[0] = 1.0F;
+
+        $r1[1] = 1.0F;
+
+        $r1[2] = 1.0909091F;
+
+        $r1[3] = 0.90909094F;
+
+        $r1[4] = 1.4545455F;
+
+        $r1[5] = 1.2121212F;
+
+        $r1[6] = 2.1818182F;
+
+        $r1[7] = 1.8181819F;
+
+        $r1[8] = 2.909091F;
+
+        $r1[9] = 2.4242425F;
+
+        $r1[10] = 1.6363636F;
+
+        $r1[11] = 1.3636364F;
+
+        $r1[12] = 1.939394F;
+
+        $r1[13] = 1.6161616F;
+
+        $r1[14] = 1.3333334F;
+
+        $r1[15] = 1.5F;
+
+        $r1[16] = 2.0F;
+
+        <androidx.media3.extractor.NalUnitUtil: float[] ASPECT_RATIO_IDC_VALUES> = $r1;
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        <androidx.media3.extractor.NalUnitUtil: java.lang.Object scratchEscapePositionsLock> = $r2;
+
+        $r3 = newarray (int)[10];
+
+        <androidx.media3.extractor.NalUnitUtil: int[] scratchEscapePositions> = $r3;
+
+        return;
+    }
+
+androidx.media3.extractor.NalUnitUtil$H265SpsData
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: int generalProfileSpace>
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: boolean generalTierFlag>
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: int generalProfileIdc>
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: int generalProfileCompatibilityFlags>
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: int[] constraintBytes>
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: int generalLevelIdc>
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: int seqParameterSetId>
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: int width>
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: int height>
+<androidx.media3.extractor.NalUnitUtil$H265SpsData: float pixelWidthHeightRatio>
+    public void <init>(int, boolean, int, int, int[], int, int, int, int, float)
+    {
+        androidx.media3.extractor.NalUnitUtil$H265SpsData r0;
+        int i0, i1, i2, i3, i4, i5, i6;
+        boolean z0;
+        int[] r1;
+        float f0;
+
+        r0 := @this: androidx.media3.extractor.NalUnitUtil$H265SpsData;
+
+        i0 := @parameter0: int;
+
+        z0 := @parameter1: boolean;
+
+        i1 := @parameter2: int;
+
+        i2 := @parameter3: int;
+
+        r1 := @parameter4: int[];
+
+        i3 := @parameter5: int;
+
+        i4 := @parameter6: int;
+
+        i5 := @parameter7: int;
+
+        i6 := @parameter8: int;
+
+        f0 := @parameter9: float;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: int generalProfileSpace> = i0;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: boolean generalTierFlag> = z0;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: int generalProfileIdc> = i1;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: int generalProfileCompatibilityFlags> = i2;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: int[] constraintBytes> = r1;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: int generalLevelIdc> = i3;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: int seqParameterSetId> = i4;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: int width> = i5;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: int height> = i6;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$H265SpsData: float pixelWidthHeightRatio> = f0;
+
+        return;
+    }
+
+androidx.media3.extractor.NalUnitUtil$PpsData
+<androidx.media3.extractor.NalUnitUtil$PpsData: int picParameterSetId>
+<androidx.media3.extractor.NalUnitUtil$PpsData: int seqParameterSetId>
+<androidx.media3.extractor.NalUnitUtil$PpsData: boolean bottomFieldPicOrderInFramePresentFlag>
+    public void <init>(int, int, boolean)
+    {
+        androidx.media3.extractor.NalUnitUtil$PpsData r0;
+        int i0, i1;
+        boolean z0;
+
+        r0 := @this: androidx.media3.extractor.NalUnitUtil$PpsData;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        z0 := @parameter2: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.NalUnitUtil$PpsData: int picParameterSetId> = i0;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$PpsData: int seqParameterSetId> = i1;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$PpsData: boolean bottomFieldPicOrderInFramePresentFlag> = z0;
+
+        return;
+    }
+
+androidx.media3.extractor.NalUnitUtil$SpsData
+<androidx.media3.extractor.NalUnitUtil$SpsData: int profileIdc>
+<androidx.media3.extractor.NalUnitUtil$SpsData: int constraintsFlagsAndReservedZero2Bits>
+<androidx.media3.extractor.NalUnitUtil$SpsData: int levelIdc>
+<androidx.media3.extractor.NalUnitUtil$SpsData: int seqParameterSetId>
+<androidx.media3.extractor.NalUnitUtil$SpsData: int maxNumRefFrames>
+<androidx.media3.extractor.NalUnitUtil$SpsData: int width>
+<androidx.media3.extractor.NalUnitUtil$SpsData: int height>
+<androidx.media3.extractor.NalUnitUtil$SpsData: float pixelWidthHeightRatio>
+<androidx.media3.extractor.NalUnitUtil$SpsData: boolean separateColorPlaneFlag>
+<androidx.media3.extractor.NalUnitUtil$SpsData: boolean frameMbsOnlyFlag>
+<androidx.media3.extractor.NalUnitUtil$SpsData: int frameNumLength>
+<androidx.media3.extractor.NalUnitUtil$SpsData: int picOrderCountType>
+<androidx.media3.extractor.NalUnitUtil$SpsData: int picOrderCntLsbLength>
+<androidx.media3.extractor.NalUnitUtil$SpsData: boolean deltaPicOrderAlwaysZeroFlag>
+    public void <init>(int, int, int, int, int, int, int, float, boolean, boolean, int, int, int, boolean)
+    {
+        androidx.media3.extractor.NalUnitUtil$SpsData r0;
+        int i0, i1, i2, i3, i4, i5, i6, i7, i8, i9;
+        float f0;
+        boolean z0, z1, z2;
+
+        r0 := @this: androidx.media3.extractor.NalUnitUtil$SpsData;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        i3 := @parameter3: int;
+
+        i4 := @parameter4: int;
+
+        i5 := @parameter5: int;
+
+        i6 := @parameter6: int;
+
+        f0 := @parameter7: float;
+
+        z0 := @parameter8: boolean;
+
+        z1 := @parameter9: boolean;
+
+        i7 := @parameter10: int;
+
+        i8 := @parameter11: int;
+
+        i9 := @parameter12: int;
+
+        z2 := @parameter13: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int profileIdc> = i0;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int constraintsFlagsAndReservedZero2Bits> = i1;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int levelIdc> = i2;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int seqParameterSetId> = i3;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int maxNumRefFrames> = i4;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int width> = i5;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int height> = i6;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: float pixelWidthHeightRatio> = f0;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: boolean separateColorPlaneFlag> = z0;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: boolean frameMbsOnlyFlag> = z1;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int frameNumLength> = i7;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int picOrderCountType> = i8;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: int picOrderCntLsbLength> = i9;
+
+        r0.<androidx.media3.extractor.NalUnitUtil$SpsData: boolean deltaPicOrderAlwaysZeroFlag> = z2;
+
+        return;
+    }
+

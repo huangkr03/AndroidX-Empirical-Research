@@ -1,0 +1,114 @@
+androidx.work.impl.CleanupCallback
+<androidx.work.impl.CleanupCallback: androidx.work.impl.CleanupCallback INSTANCE>
+    private void <init>()
+    {
+        androidx.work.impl.CleanupCallback r0;
+
+        r0 := @this: androidx.work.impl.CleanupCallback;
+
+        specialinvoke r0.<androidx.room.RoomDatabase$Callback: void <init>()>();
+
+        return;
+    }
+
+    private final java.lang.String getPruneSQL()
+    {
+        androidx.work.impl.CleanupCallback r0;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4;
+        long $l0;
+        java.lang.String $r5;
+
+        r0 := @this: androidx.work.impl.CleanupCallback;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("DELETE FROM workspec WHERE state IN (2, 3, 5) AND (last_enqueue_time + minimum_retention_duration) < ");
+
+        $l0 = virtualinvoke r0.<androidx.work.impl.CleanupCallback: long getPruneDate()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" AND (SELECT COUNT(*)=0 FROM dependency WHERE     prerequisite_id=id AND     work_spec_id NOT IN         (SELECT id FROM workspec WHERE state IN (2, 3, 5)))");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    public final long getPruneDate()
+    {
+        androidx.work.impl.CleanupCallback r0;
+        long $l0, $l1, $l2;
+
+        r0 := @this: androidx.work.impl.CleanupCallback;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l1 = staticinvoke <androidx.work.impl.WorkDatabaseKt: long access$getPRUNE_THRESHOLD_MILLIS$p()>();
+
+        $l2 = $l0 - $l1;
+
+        return $l2;
+    }
+
+    public void onOpen(androidx.sqlite.db.SupportSQLiteDatabase)
+    {
+        androidx.work.impl.CleanupCallback r0;
+        androidx.sqlite.db.SupportSQLiteDatabase r1;
+        java.lang.Throwable r2, $r4;
+        java.lang.String $r3;
+
+        r0 := @this: androidx.work.impl.CleanupCallback;
+
+        r1 := @parameter0: androidx.sqlite.db.SupportSQLiteDatabase;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "db");
+
+        specialinvoke r0.<androidx.room.RoomDatabase$Callback: void onOpen(androidx.sqlite.db.SupportSQLiteDatabase)>(r1);
+
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void beginTransaction()>();
+
+     label1:
+        $r3 = specialinvoke r0.<androidx.work.impl.CleanupCallback: java.lang.String getPruneSQL()>();
+
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void execSQL(java.lang.String)>($r3);
+
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void setTransactionSuccessful()>();
+
+     label2:
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void endTransaction()>();
+
+        goto label5;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r2 = $r4;
+
+     label4:
+        interfaceinvoke r1.<androidx.sqlite.db.SupportSQLiteDatabase: void endTransaction()>();
+
+        throw r2;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    static void <clinit>()
+    {
+        androidx.work.impl.CleanupCallback $r0;
+
+        $r0 = new androidx.work.impl.CleanupCallback;
+
+        specialinvoke $r0.<androidx.work.impl.CleanupCallback: void <init>()>();
+
+        <androidx.work.impl.CleanupCallback: androidx.work.impl.CleanupCallback INSTANCE> = $r0;
+
+        return;
+    }
+

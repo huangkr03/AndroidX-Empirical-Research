@@ -1,0 +1,307 @@
+com.google.common.io.ByteStreams
+<com.google.common.io.ByteStreams: java.io.OutputStream NULL_OUTPUT_STREAM>
+    static void <clinit>()
+    {
+        com.google.common.io.ByteStreams$1 $r0;
+
+        $r0 = new com.google.common.io.ByteStreams$1;
+
+        specialinvoke $r0.<com.google.common.io.ByteStreams$1: void <init>()>();
+
+        <com.google.common.io.ByteStreams: java.io.OutputStream NULL_OUTPUT_STREAM> = $r0;
+
+        return;
+    }
+
+    private static byte[] combineBuffers(java.util.Queue, int)
+    {
+        int $i0, $i1, $i2, $i3;
+        java.util.Queue $r0;
+        boolean $z0;
+        byte[] $r1, $r3;
+        java.lang.Object $r2;
+
+        $r0 := @parameter0: java.util.Queue;
+
+        $i0 := @parameter1: int;
+
+        $z0 = interfaceinvoke $r0.<java.util.Queue: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r1 = newarray (byte)[0];
+
+        return $r1;
+
+     label1:
+        $r2 = interfaceinvoke $r0.<java.util.Queue: java.lang.Object remove()>();
+
+        $r1 = (byte[]) $r2;
+
+        $i2 = lengthof $r1;
+
+        if $i2 != $i0 goto label2;
+
+        return $r1;
+
+     label2:
+        $i2 = lengthof $r1;
+
+        $i2 = $i0 - $i2;
+
+        $r1 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r1, $i0);
+
+     label3:
+        if $i2 <= 0 goto label4;
+
+        $r2 = interfaceinvoke $r0.<java.util.Queue: java.lang.Object remove()>();
+
+        $r3 = (byte[]) $r2;
+
+        $i1 = lengthof $r3;
+
+        $i3 = staticinvoke <java.lang.Math: int min(int,int)>($i2, $i1);
+
+        $i1 = $i0 - $i2;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r3, 0, $r1, $i1, $i3);
+
+        $i2 = $i2 - $i3;
+
+        goto label3;
+
+     label4:
+        return $r1;
+    }
+
+    public static long copy(java.io.InputStream, java.io.OutputStream) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        java.io.OutputStream $r1;
+        byte[] $r2;
+        long $l0, $l2;
+        int $i1;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r1 := @parameter1: java.io.OutputStream;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r0);
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r2 = staticinvoke <com.google.common.io.ByteStreams: byte[] createBuffer()>();
+
+        $l0 = 0L;
+
+     label1:
+        $i1 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r2);
+
+        if $i1 != -1 goto label2;
+
+        return $l0;
+
+     label2:
+        virtualinvoke $r1.<java.io.OutputStream: void write(byte[],int,int)>($r2, 0, $i1);
+
+        $l2 = (long) $i1;
+
+        $l0 = $l0 + $l2;
+
+        goto label1;
+    }
+
+    static byte[] createBuffer()
+    {
+        byte[] $r0;
+
+        $r0 = newarray (byte)[8192];
+
+        return $r0;
+    }
+
+    public static byte[] toByteArray(java.io.InputStream) throws java.io.IOException
+    {
+        byte[] $r0;
+        java.io.InputStream $r1;
+        java.util.ArrayDeque r2;
+        java.util.Queue r3;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        r2 = new java.util.ArrayDeque;
+
+        specialinvoke r2.<java.util.ArrayDeque: void <init>(int)>(20);
+
+        r3 = (java.util.Queue) r2;
+
+        $r0 = staticinvoke <com.google.common.io.ByteStreams: byte[] toByteArrayInternal(java.io.InputStream,java.util.Queue,int)>($r1, r3, 0);
+
+        return $r0;
+    }
+
+    private static byte[] toByteArrayInternal(java.io.InputStream, java.util.Queue, int) throws java.io.IOException
+    {
+        byte[] $r0;
+        java.io.InputStream $r1;
+        java.util.Queue $r2;
+        int $i0, $i1, $i2, $i3, $i4;
+        byte $b5;
+        java.lang.OutOfMemoryError $r3;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $r2 := @parameter1: java.util.Queue;
+
+        $i0 := @parameter2: int;
+
+        $i1 = staticinvoke <java.lang.Integer: int highestOneBit(int)>($i0);
+
+        $i1 = $i1 + $i1;
+
+        $i1 = staticinvoke <java.lang.Math: int max(int,int)>(128, $i1);
+
+        $i1 = staticinvoke <java.lang.Math: int min(int,int)>(8192, $i1);
+
+     label1:
+        if $i0 >= 2147483639 goto label7;
+
+        $i2 = 2147483639 - $i0;
+
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i2);
+
+        $r0 = newarray (byte)[$i2];
+
+        interfaceinvoke $r2.<java.util.Queue: boolean add(java.lang.Object)>($r0);
+
+        $i3 = 0;
+
+     label2:
+        if $i3 >= $i2 goto label4;
+
+        $i4 = $i2 - $i3;
+
+        $i4 = virtualinvoke $r1.<java.io.InputStream: int read(byte[],int,int)>($r0, $i3, $i4);
+
+        if $i4 != -1 goto label3;
+
+        $r0 = staticinvoke <com.google.common.io.ByteStreams: byte[] combineBuffers(java.util.Queue,int)>($r2, $i0);
+
+        return $r0;
+
+     label3:
+        $i3 = $i3 + $i4;
+
+        $i0 = $i0 + $i4;
+
+        goto label2;
+
+     label4:
+        if $i1 >= 4096 goto label5;
+
+        $b5 = 4;
+
+        goto label6;
+
+     label5:
+        $b5 = 2;
+
+     label6:
+        $i1 = staticinvoke <com.google.common.math.IntMath: int saturatedMultiply(int,int)>($i1, $b5);
+
+        goto label1;
+
+     label7:
+        $i0 = virtualinvoke $r1.<java.io.InputStream: int read()>();
+
+        if $i0 != -1 goto label8;
+
+        $r0 = staticinvoke <com.google.common.io.ByteStreams: byte[] combineBuffers(java.util.Queue,int)>($r2, 2147483639);
+
+        return $r0;
+
+     label8:
+        $r3 = new java.lang.OutOfMemoryError;
+
+        specialinvoke $r3.<java.lang.OutOfMemoryError: void <init>(java.lang.String)>("input is too large to fit in a byte array");
+
+        goto label9;
+
+     label9:
+        throw $r3;
+    }
+
+com.google.common.io.ByteStreams$1
+    void <init>()
+    {
+        com.google.common.io.ByteStreams$1 $r0;
+
+        $r0 := @this: com.google.common.io.ByteStreams$1;
+
+        specialinvoke $r0.<java.io.OutputStream: void <init>()>();
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        com.google.common.io.ByteStreams$1 $r0;
+
+        $r0 := @this: com.google.common.io.ByteStreams$1;
+
+        return "ByteStreams.nullOutputStream()";
+    }
+
+    public void write(int)
+    {
+        com.google.common.io.ByteStreams$1 $r0;
+        int $i0;
+
+        $r0 := @this: com.google.common.io.ByteStreams$1;
+
+        $i0 := @parameter0: int;
+
+        return;
+    }
+
+    public void write(byte[])
+    {
+        com.google.common.io.ByteStreams$1 $r0;
+        byte[] $r1;
+
+        $r0 := @this: com.google.common.io.ByteStreams$1;
+
+        $r1 := @parameter0: byte[];
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public void write(byte[], int, int)
+    {
+        com.google.common.io.ByteStreams$1 $r0;
+        int $i0, $i1, $i2;
+        byte[] $r1;
+
+        $r0 := @this: com.google.common.io.ByteStreams$1;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $i1 = $i1 + $i0;
+
+        $i2 = lengthof $r1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkPositionIndexes(int,int,int)>($i0, $i1, $i2);
+
+        return;
+    }
+

@@ -1,0 +1,241 @@
+androidx.work.impl.utils.ProcessUtils
+<androidx.work.impl.utils.ProcessUtils: java.lang.String TAG>
+    public static final boolean isDefaultProcess(android.content.Context, androidx.work.Configuration)
+    {
+        android.content.Context r0;
+        androidx.work.Configuration r1;
+        java.lang.String r2, $r4, $r6, $r7;
+        java.lang.CharSequence r3;
+        android.content.pm.ApplicationInfo $r5;
+        int $i0;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.Configuration;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "context");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "configuration");
+
+        r2 = staticinvoke <androidx.work.impl.utils.ProcessUtils: java.lang.String getProcessName(android.content.Context)>(r0);
+
+        $r4 = virtualinvoke r1.<androidx.work.Configuration: java.lang.String getDefaultProcessName()>();
+
+        r3 = (java.lang.CharSequence) $r4;
+
+        if r3 == null goto label1;
+
+        $i0 = interfaceinvoke r3.<java.lang.CharSequence: int length()>();
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        if $z0 != 0 goto label4;
+
+        $r7 = virtualinvoke r1.<androidx.work.Configuration: java.lang.String getDefaultProcessName()>();
+
+        $z1 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>(r2, $r7);
+
+        goto label5;
+
+     label4:
+        $r5 = virtualinvoke r0.<android.content.Context: android.content.pm.ApplicationInfo getApplicationInfo()>();
+
+        $r6 = $r5.<android.content.pm.ApplicationInfo: java.lang.String processName>;
+
+        $z1 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>(r2, $r6);
+
+     label5:
+        return $z1;
+    }
+
+    private static final java.lang.String getProcessName(android.content.Context)
+    {
+        android.content.Context r0;
+        java.lang.reflect.Method r1, r25, r27;
+        java.lang.Iterable r2;
+        java.util.Iterator r3;
+        java.lang.Object r4, $r11, $r13, $r26, r28, $r31;
+        android.app.ActivityManager$RunningAppProcessInfo r5, $r15;
+        int $i0, $i1, $i2, i3;
+        java.lang.Class $r6, r24;
+        java.lang.ClassLoader $r7;
+        java.lang.Class[] $r8, $r9, $r17;
+        java.lang.Object[] $r10, $r12, $r18;
+        boolean $z1, $z2, $z3;
+        java.util.List $r14;
+        java.lang.String $r16, $r20, $r23, $r32;
+        androidx.work.impl.utils.Api28Impl $r19;
+        java.lang.Throwable $r21, r29;
+        androidx.work.Logger $r22;
+        android.app.ActivityManager r30;
+
+        r0 := @parameter0: android.content.Context;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 28 goto label01;
+
+        $r19 = <androidx.work.impl.utils.Api28Impl: androidx.work.impl.utils.Api28Impl INSTANCE>;
+
+        $r20 = virtualinvoke $r19.<androidx.work.impl.utils.Api28Impl: java.lang.String getProcessName()>();
+
+        return $r20;
+
+     label01:
+        $r6 = class "Landroidx/work/WorkManager;";
+
+        $r7 = virtualinvoke $r6.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        r24 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String,boolean,java.lang.ClassLoader)>("android.app.ActivityThread", 0, $r7);
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 18 goto label02;
+
+        $r17 = newarray (java.lang.Class)[0];
+
+        r25 = virtualinvoke r24.<java.lang.Class: java.lang.reflect.Method getDeclaredMethod(java.lang.String,java.lang.Class[])>("currentProcessName", $r17);
+
+        virtualinvoke r25.<java.lang.reflect.Method: void setAccessible(boolean)>(1);
+
+        $r18 = newarray (java.lang.Object)[0];
+
+        $r26 = virtualinvoke r25.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>(null, $r18);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r26);
+
+        goto label03;
+
+     label02:
+        $r8 = newarray (java.lang.Class)[0];
+
+        r27 = virtualinvoke r24.<java.lang.Class: java.lang.reflect.Method getDeclaredMethod(java.lang.String,java.lang.Class[])>("currentActivityThread", $r8);
+
+        virtualinvoke r27.<java.lang.reflect.Method: void setAccessible(boolean)>(1);
+
+        $r9 = newarray (java.lang.Class)[0];
+
+        r1 = virtualinvoke r24.<java.lang.Class: java.lang.reflect.Method getDeclaredMethod(java.lang.String,java.lang.Class[])>("getProcessName", $r9);
+
+        virtualinvoke r1.<java.lang.reflect.Method: void setAccessible(boolean)>(1);
+
+        $r10 = newarray (java.lang.Object)[0];
+
+        $r11 = virtualinvoke r27.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>(null, $r10);
+
+        $r12 = newarray (java.lang.Object)[0];
+
+        $r26 = virtualinvoke r1.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r11, $r12);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>($r26);
+
+     label03:
+        r28 = $r26;
+
+        $z1 = r28 instanceof java.lang.String;
+
+        if $z1 == 0 goto label05;
+
+        $r16 = (java.lang.String) r28;
+
+        return $r16;
+
+     label04:
+        $r21 := @caughtexception;
+
+        r29 = $r21;
+
+        $r22 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r23 = <androidx.work.impl.utils.ProcessUtils: java.lang.String TAG>;
+
+        virtualinvoke $r22.<androidx.work.Logger: void debug(java.lang.String,java.lang.String,java.lang.Throwable)>($r23, "Unable to check ActivityThread for processName", r29);
+
+     label05:
+        i3 = staticinvoke <android.os.Process: int myPid()>();
+
+        $r13 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object,java.lang.String)>($r13, "null cannot be cast to non-null type android.app.ActivityManager");
+
+        r30 = (android.app.ActivityManager) $r13;
+
+        $r14 = virtualinvoke r30.<android.app.ActivityManager: java.util.List getRunningAppProcesses()>();
+
+        if $r14 == null goto label11;
+
+        r2 = (java.lang.Iterable) $r14;
+
+        r3 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label06:
+        $z2 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label09;
+
+        r4 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (android.app.ActivityManager$RunningAppProcessInfo) r4;
+
+        $i2 = r5.<android.app.ActivityManager$RunningAppProcessInfo: int pid>;
+
+        if $i2 != i3 goto label07;
+
+        $z3 = 1;
+
+        goto label08;
+
+     label07:
+        $z3 = 0;
+
+     label08:
+        if $z3 == 0 goto label06;
+
+        $r31 = r4;
+
+        goto label10;
+
+     label09:
+        $r31 = null;
+
+     label10:
+        $r15 = (android.app.ActivityManager$RunningAppProcessInfo) $r31;
+
+        if $r15 == null goto label11;
+
+        $r32 = $r15.<android.app.ActivityManager$RunningAppProcessInfo: java.lang.String processName>;
+
+        goto label12;
+
+     label11:
+        $r32 = null;
+
+     label12:
+        return $r32;
+
+        catch java.lang.Throwable from label01 to label04 with label04;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("ProcessUtils");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r0, "tagWithPrefix(\"ProcessUtils\")");
+
+        <androidx.work.impl.utils.ProcessUtils: java.lang.String TAG> = $r0;
+
+        return;
+    }
+

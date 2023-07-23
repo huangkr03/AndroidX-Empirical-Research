@@ -1,0 +1,918 @@
+androidx.javascriptengine.JavaScriptSandbox
+<androidx.javascriptengine.JavaScriptSandbox: java.lang.String TAG>
+<androidx.javascriptengine.JavaScriptSandbox: java.lang.String JS_SANDBOX_SERVICE_NAME>
+<androidx.javascriptengine.JavaScriptSandbox: java.util.concurrent.atomic.AtomicBoolean sIsReadyToConnect>
+<androidx.javascriptengine.JavaScriptSandbox: java.lang.Object mLock>
+<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.CloseGuardHelper mGuard>
+<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>
+<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup mConnection>
+<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mActiveIsolateSet>
+<androidx.javascriptengine.JavaScriptSandbox: java.lang.String JS_FEATURE_ISOLATE_TERMINATION>
+<androidx.javascriptengine.JavaScriptSandbox: java.lang.String JS_FEATURE_PROMISE_RETURN>
+<androidx.javascriptengine.JavaScriptSandbox: java.lang.String JS_FEATURE_PROVIDE_CONSUME_ARRAY_BUFFER>
+<androidx.javascriptengine.JavaScriptSandbox: java.lang.String JS_FEATURE_WASM_COMPILATION>
+<androidx.javascriptengine.JavaScriptSandbox: java.lang.String JS_FEATURE_ISOLATE_MAX_HEAP_SIZE>
+<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mClientSideFeatureSet>
+    public static com.google.common.util.concurrent.ListenableFuture createConnectedInstanceAsync(android.content.Context)
+    {
+        android.content.Context r0;
+        android.content.pm.PackageInfo r1;
+        android.content.ComponentName r2, r8;
+        int i0;
+        boolean $z0;
+        java.lang.String $r4;
+        com.google.common.util.concurrent.ListenableFuture $r5;
+        androidx.javascriptengine.SandboxUnsupportedException r7;
+        java.lang.Throwable r9;
+
+        r0 := @parameter0: android.content.Context;
+
+        $z0 = staticinvoke <androidx.javascriptengine.JavaScriptSandbox: boolean isSupported()>();
+
+        if $z0 != 0 goto label1;
+
+        r7 = new androidx.javascriptengine.SandboxUnsupportedException;
+
+        specialinvoke r7.<androidx.javascriptengine.SandboxUnsupportedException: void <init>(java.lang.String)>("The system does not support JavaScriptSandbox");
+
+        r9 = (java.lang.Throwable) r7;
+
+        throw r9;
+
+     label1:
+        r1 = staticinvoke <android.webkit.WebView: android.content.pm.PackageInfo getCurrentWebViewPackage()>();
+
+        r8 = new android.content.ComponentName;
+
+        $r4 = r1.<android.content.pm.PackageInfo: java.lang.String packageName>;
+
+        specialinvoke r8.<android.content.ComponentName: void <init>(java.lang.String,java.lang.String)>($r4, "org.chromium.android_webview.js_sandbox.service.JsSandboxService0");
+
+        r2 = r8;
+
+        i0 = -2147483647;
+
+        $r5 = staticinvoke <androidx.javascriptengine.JavaScriptSandbox: com.google.common.util.concurrent.ListenableFuture bindToServiceWithCallback(android.content.Context,android.content.ComponentName,int)>(r0, r2, i0);
+
+        return $r5;
+    }
+
+    public static com.google.common.util.concurrent.ListenableFuture createConnectedInstanceForTestingAsync(android.content.Context)
+    {
+        android.content.Context r0;
+        android.content.ComponentName r1, $r2;
+        byte b0;
+        com.google.common.util.concurrent.ListenableFuture $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r2 = new android.content.ComponentName;
+
+        specialinvoke $r2.<android.content.ComponentName: void <init>(android.content.Context,java.lang.String)>(r0, "org.chromium.android_webview.js_sandbox.service.JsSandboxService0");
+
+        r1 = $r2;
+
+        b0 = 1;
+
+        $r3 = staticinvoke <androidx.javascriptengine.JavaScriptSandbox: com.google.common.util.concurrent.ListenableFuture bindToServiceWithCallback(android.content.Context,android.content.ComponentName,int)>(r0, r1, b0);
+
+        return $r3;
+    }
+
+    public static boolean isSupported()
+    {
+        android.content.pm.PackageInfo r0;
+        long l0;
+        byte $b1, $b2, $b3;
+        boolean $z0;
+
+        r0 = staticinvoke <android.webkit.WebView: android.content.pm.PackageInfo getCurrentWebViewPackage()>();
+
+        if r0 != null goto label1;
+
+        return 0;
+
+     label1:
+        l0 = staticinvoke <androidx.core.content.pm.PackageInfoCompat: long getLongVersionCode(android.content.pm.PackageInfo)>(r0);
+
+        $b1 = l0 cmp 497600000L;
+
+        if $b1 >= 0 goto label2;
+
+        $b2 = 495102400L cmp l0;
+
+        if $b2 > 0 goto label3;
+
+        $b3 = l0 cmp 495200000L;
+
+        if $b3 >= 0 goto label3;
+
+     label2:
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        return $z0;
+    }
+
+    private static com.google.common.util.concurrent.ListenableFuture bindToServiceWithCallback(android.content.Context, android.content.ComponentName, int)
+    {
+        android.content.Context r0;
+        android.content.ComponentName r1;
+        int i0;
+        android.content.Intent r2, $r3;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Resolver $r5;
+        com.google.common.util.concurrent.ListenableFuture $r6;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.ComponentName;
+
+        i0 := @parameter2: int;
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>()>();
+
+        r2 = $r3;
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent setComponent(android.content.ComponentName)>(r1);
+
+        $r5 = dynamicinvoke "attachCompleter" <androidx.concurrent.futures.CallbackToFutureAdapter$Resolver (android.content.Context,android.content.Intent,int)>(r0, r2, i0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer), methodhandle: "REF_INVOKE_STATIC" <androidx.javascriptengine.JavaScriptSandbox: java.lang.Object lambda$bindToServiceWithCallback$1(android.content.Context,android.content.Intent,int,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer));
+
+        $r6 = staticinvoke <androidx.concurrent.futures.CallbackToFutureAdapter: com.google.common.util.concurrent.ListenableFuture getFuture(androidx.concurrent.futures.CallbackToFutureAdapter$Resolver)>($r5);
+
+        return $r6;
+    }
+
+    void <init>(androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup, org.chromium.android_webview.js_sandbox.common.IJsSandboxService)
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup r1;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxService r2;
+        java.lang.Object $r3;
+        androidx.javascriptengine.CloseGuardHelper $r4, $r6;
+        java.util.HashSet $r5;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+        r1 := @parameter0: androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup;
+
+        r2 := @parameter1: org.chromium.android_webview.js_sandbox.common.IJsSandboxService;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new java.lang.Object;
+
+        specialinvoke $r3.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.javascriptengine.JavaScriptSandbox: java.lang.Object mLock> = $r3;
+
+        $r4 = staticinvoke <androidx.javascriptengine.CloseGuardHelper: androidx.javascriptengine.CloseGuardHelper create()>();
+
+        r0.<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.CloseGuardHelper mGuard> = $r4;
+
+        $r5 = new java.util.HashSet;
+
+        specialinvoke $r5.<java.util.HashSet: void <init>()>();
+
+        r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mActiveIsolateSet> = $r5;
+
+        r0.<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup mConnection> = r1;
+
+        r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService> = r2;
+
+        $r6 = r0.<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.CloseGuardHelper mGuard>;
+
+        virtualinvoke $r6.<androidx.javascriptengine.CloseGuardHelper: void open(java.lang.String)>("close");
+
+        return;
+    }
+
+    public androidx.javascriptengine.JavaScriptIsolate createIsolate()
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        java.lang.Object r1, $r5;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate r2;
+        java.lang.Throwable r3, r4, $r10, $r11, r15;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxService $r6, $r7;
+        androidx.javascriptengine.JavaScriptIsolate $r8;
+        java.lang.IllegalStateException r13;
+        java.lang.RuntimeException r14;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+        $r5 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.lang.Object mLock>;
+
+        r1 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>;
+
+        if $r6 != null goto label2;
+
+        r13 = new java.lang.IllegalStateException;
+
+        specialinvoke r13.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Attempting to createIsolate on a service that isn\'t connected");
+
+        throw r13;
+
+     label2:
+        $r7 = r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>;
+
+        r2 = interfaceinvoke $r7.<org.chromium.android_webview.js_sandbox.common.IJsSandboxService: org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate createIsolate()>();
+
+     label3:
+        goto label5;
+
+     label4:
+        $r11 := @caughtexception;
+
+        r3 = $r11;
+
+        r14 = new java.lang.RuntimeException;
+
+        specialinvoke r14.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r3);
+
+        r15 = (java.lang.Throwable) r14;
+
+        throw r15;
+
+     label5:
+        $r8 = specialinvoke r0.<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.JavaScriptIsolate createJsIsolateLocked(org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate)>(r2);
+
+        exitmonitor r1;
+
+     label6:
+        return $r8;
+
+     label7:
+        $r10 := @caughtexception;
+
+        r4 = $r10;
+
+        exitmonitor r1;
+
+     label8:
+        throw r4;
+
+        catch android.os.RemoteException from label2 to label3 with label4;
+        catch java.lang.Throwable from label1 to label6 with label7;
+        catch java.lang.Throwable from label7 to label8 with label7;
+    }
+
+    public androidx.javascriptengine.JavaScriptIsolate createIsolate(androidx.javascriptengine.IsolateStartupParameters)
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        androidx.javascriptengine.IsolateStartupParameters r1;
+        java.lang.Object r2, $r5;
+        java.lang.Throwable r3, r4, $r12, $r13, r19, r20;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxService $r6, $r7, $r10;
+        long $l0, $l2;
+        byte $b1;
+        androidx.javascriptengine.JavaScriptIsolate $r8;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate r15;
+        java.lang.IllegalStateException r16;
+        java.lang.RuntimeException r17, r18;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+        r1 := @parameter0: androidx.javascriptengine.IsolateStartupParameters;
+
+        $r5 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.lang.Object mLock>;
+
+        r2 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>;
+
+        if $r6 != null goto label2;
+
+        r16 = new java.lang.IllegalStateException;
+
+        specialinvoke r16.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Attempting to createIsolate on a service that isn\'t connected");
+
+        throw r16;
+
+     label2:
+        $l0 = virtualinvoke r1.<androidx.javascriptengine.IsolateStartupParameters: long getMaxHeapSizeBytes()>();
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label3;
+
+        $r10 = r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>;
+
+        r15 = interfaceinvoke $r10.<org.chromium.android_webview.js_sandbox.common.IJsSandboxService: org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate createIsolate()>();
+
+        goto label4;
+
+     label3:
+        $r7 = r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>;
+
+        $l2 = virtualinvoke r1.<androidx.javascriptengine.IsolateStartupParameters: long getMaxHeapSizeBytes()>();
+
+        r15 = interfaceinvoke $r7.<org.chromium.android_webview.js_sandbox.common.IJsSandboxService: org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate createIsolateWithMaxHeapSizeBytes(long)>($l2);
+
+        if r15 != null goto label4;
+
+        r17 = new java.lang.RuntimeException;
+
+        specialinvoke r17.<java.lang.RuntimeException: void <init>(java.lang.String)>("Service implementation doesn\'t support setting maximum heap size");
+
+        r19 = (java.lang.Throwable) r17;
+
+        throw r19;
+
+     label4:
+        goto label6;
+
+     label5:
+        $r13 := @caughtexception;
+
+        r3 = $r13;
+
+        r18 = new java.lang.RuntimeException;
+
+        specialinvoke r18.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r3);
+
+        r20 = (java.lang.Throwable) r18;
+
+        throw r20;
+
+     label6:
+        $r8 = specialinvoke r0.<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.JavaScriptIsolate createJsIsolateLocked(org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate)>(r15);
+
+        exitmonitor r2;
+
+     label7:
+        return $r8;
+
+     label8:
+        $r12 := @caughtexception;
+
+        r4 = $r12;
+
+        exitmonitor r2;
+
+     label9:
+        throw r4;
+
+        catch android.os.RemoteException from label2 to label4 with label5;
+        catch java.lang.Throwable from label1 to label7 with label8;
+        catch java.lang.Throwable from label8 to label9 with label8;
+    }
+
+    private void populateClientFeatureSet()
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        java.util.List r1;
+        java.lang.Throwable r2, $r10, r14;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxService $r3;
+        boolean $z0, $z1, $z2;
+        java.util.HashSet $r5, $r6, $r7, $r8, $r9, r13;
+        java.lang.RuntimeException r12;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+     label1:
+        $r3 = r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>;
+
+        r1 = interfaceinvoke $r3.<org.chromium.android_webview.js_sandbox.common.IJsSandboxService: java.util.List getSupportedFeatures()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r10 := @caughtexception;
+
+        r2 = $r10;
+
+        r12 = new java.lang.RuntimeException;
+
+        specialinvoke r12.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r2);
+
+        r14 = (java.lang.Throwable) r12;
+
+        throw r14;
+
+     label4:
+        r13 = new java.util.HashSet;
+
+        specialinvoke r13.<java.util.HashSet: void <init>()>();
+
+        r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mClientSideFeatureSet> = r13;
+
+        $z0 = interfaceinvoke r1.<java.util.List: boolean contains(java.lang.Object)>("ISOLATE_TERMINATION");
+
+        if $z0 == 0 goto label5;
+
+        $r9 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mClientSideFeatureSet>;
+
+        virtualinvoke $r9.<java.util.HashSet: boolean add(java.lang.Object)>("JS_FEATURE_ISOLATE_TERMINATION");
+
+     label5:
+        $z1 = interfaceinvoke r1.<java.util.List: boolean contains(java.lang.Object)>("WASM_FROM_ARRAY_BUFFER");
+
+        if $z1 == 0 goto label6;
+
+        $r6 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mClientSideFeatureSet>;
+
+        virtualinvoke $r6.<java.util.HashSet: boolean add(java.lang.Object)>("JS_FEATURE_PROMISE_RETURN");
+
+        $r7 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mClientSideFeatureSet>;
+
+        virtualinvoke $r7.<java.util.HashSet: boolean add(java.lang.Object)>("JS_FEATURE_PROVIDE_CONSUME_ARRAY_BUFFER");
+
+        $r8 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mClientSideFeatureSet>;
+
+        virtualinvoke $r8.<java.util.HashSet: boolean add(java.lang.Object)>("JS_FEATURE_WASM_COMPILATION");
+
+     label6:
+        $z2 = interfaceinvoke r1.<java.util.List: boolean contains(java.lang.Object)>("ISOLATE_MAX_HEAP_SIZE_LIMIT");
+
+        if $z2 == 0 goto label7;
+
+        $r5 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mClientSideFeatureSet>;
+
+        virtualinvoke $r5.<java.util.HashSet: boolean add(java.lang.Object)>("JS_FEATURE_ISOLATE_MAX_HEAP_SIZE");
+
+     label7:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    private androidx.javascriptengine.JavaScriptIsolate createJsIsolateLocked(org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate)
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate r1;
+        androidx.javascriptengine.JavaScriptIsolate r2, $r3;
+        java.util.HashSet $r4;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+        r1 := @parameter0: org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate;
+
+        $r3 = new androidx.javascriptengine.JavaScriptIsolate;
+
+        specialinvoke $r3.<androidx.javascriptengine.JavaScriptIsolate: void <init>(org.chromium.android_webview.js_sandbox.common.IJsSandboxIsolate,androidx.javascriptengine.JavaScriptSandbox)>(r1, r0);
+
+        r2 = $r3;
+
+        $r4 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mActiveIsolateSet>;
+
+        virtualinvoke $r4.<java.util.HashSet: boolean add(java.lang.Object)>(r2);
+
+        return r2;
+    }
+
+    public boolean isFeatureSupported(java.lang.String)
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        java.lang.String r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r9;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxService $r5;
+        java.util.HashSet $r6, $r7;
+        boolean $z0;
+        java.lang.IllegalStateException $r8;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r4 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>;
+
+        if $r5 != null goto label2;
+
+        $r8 = new java.lang.IllegalStateException;
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Attempting to check features on a service that isn\'t connected");
+
+        throw $r8;
+
+     label2:
+        $r6 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mClientSideFeatureSet>;
+
+        if $r6 != null goto label3;
+
+        specialinvoke r0.<androidx.javascriptengine.JavaScriptSandbox: void populateClientFeatureSet()>();
+
+     label3:
+        $r7 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mClientSideFeatureSet>;
+
+        $z0 = virtualinvoke $r7.<java.util.HashSet: boolean contains(java.lang.Object)>(r1);
+
+        exitmonitor r2;
+
+     label4:
+        return $z0;
+
+     label5:
+        $r9 := @caughtexception;
+
+        r3 = $r9;
+
+        exitmonitor r2;
+
+     label6:
+        throw r3;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    void removeFromIsolateSet(androidx.javascriptengine.JavaScriptIsolate)
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        androidx.javascriptengine.JavaScriptIsolate r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r7;
+        java.util.HashSet $r5, $r6;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+        r1 := @parameter0: androidx.javascriptengine.JavaScriptIsolate;
+
+        $r4 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mActiveIsolateSet>;
+
+        if $r5 == null goto label2;
+
+        $r6 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mActiveIsolateSet>;
+
+        virtualinvoke $r6.<java.util.HashSet: boolean remove(java.lang.Object)>(r1);
+
+     label2:
+        exitmonitor r2;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r2;
+
+     label5:
+        throw r3;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void close()
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        androidx.javascriptengine.SandboxDeadException $r1;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+        $r1 = new androidx.javascriptengine.SandboxDeadException;
+
+        specialinvoke $r1.<androidx.javascriptengine.SandboxDeadException: void <init>()>();
+
+        virtualinvoke r0.<androidx.javascriptengine.JavaScriptSandbox: void doClose(java.lang.Exception)>($r1);
+
+        return;
+    }
+
+    void doClose(java.lang.Exception)
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        java.lang.Exception r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r10;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxService $r5;
+        androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup $r6, $r7;
+        android.content.Context $r8;
+        java.util.concurrent.atomic.AtomicBoolean $r9;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+        r1 := @parameter0: java.lang.Exception;
+
+        $r4 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>;
+
+        if $r5 != null goto label3;
+
+        exitmonitor r2;
+
+     label2:
+        return;
+
+     label3:
+        specialinvoke r0.<androidx.javascriptengine.JavaScriptSandbox: void cancelPendingEvaluationsLocked(java.lang.Exception)>(r1);
+
+        $r6 = r0.<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup mConnection>;
+
+        $r8 = $r6.<androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup: android.content.Context mContext>;
+
+        $r7 = r0.<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup mConnection>;
+
+        virtualinvoke $r8.<android.content.Context: void unbindService(android.content.ServiceConnection)>($r7);
+
+        $r9 = <androidx.javascriptengine.JavaScriptSandbox: java.util.concurrent.atomic.AtomicBoolean sIsReadyToConnect>;
+
+        virtualinvoke $r9.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(1);
+
+        r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService> = null;
+
+        exitmonitor r2;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r10 := @caughtexception;
+
+        r3 = $r10;
+
+        exitmonitor r2;
+
+     label6:
+        throw r3;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    private void cancelPendingEvaluationsLocked(java.lang.Exception)
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        java.lang.Exception r1;
+        java.util.Iterator r2;
+        androidx.javascriptengine.JavaScriptIsolate r3;
+        java.util.HashSet $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+        r1 := @parameter0: java.lang.Exception;
+
+        $r4 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mActiveIsolateSet>;
+
+        r2 = virtualinvoke $r4.<java.util.HashSet: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.javascriptengine.JavaScriptIsolate) $r5;
+
+        virtualinvoke r3.<androidx.javascriptengine.JavaScriptIsolate: void cancelAllPendingEvaluations(java.lang.Exception)>(r1);
+
+        goto label1;
+
+     label2:
+        r0.<androidx.javascriptengine.JavaScriptSandbox: java.util.HashSet mActiveIsolateSet> = null;
+
+        return;
+    }
+
+    protected void finalize() throws java.lang.Throwable
+    {
+        androidx.javascriptengine.JavaScriptSandbox r0;
+        java.lang.Object r1, $r5;
+        java.lang.Throwable r2, r3, $r8, $r9;
+        androidx.javascriptengine.CloseGuardHelper $r4, $r7;
+        org.chromium.android_webview.js_sandbox.common.IJsSandboxService $r6;
+
+        r0 := @this: androidx.javascriptengine.JavaScriptSandbox;
+
+     label01:
+        $r4 = r0.<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.CloseGuardHelper mGuard>;
+
+        if $r4 == null goto label02;
+
+        $r7 = r0.<androidx.javascriptengine.JavaScriptSandbox: androidx.javascriptengine.CloseGuardHelper mGuard>;
+
+        virtualinvoke $r7.<androidx.javascriptengine.CloseGuardHelper: void warnIfOpen()>();
+
+     label02:
+        $r5 = r0.<androidx.javascriptengine.JavaScriptSandbox: java.lang.Object mLock>;
+
+        r1 = $r5;
+
+        entermonitor $r5;
+
+     label03:
+        $r6 = r0.<androidx.javascriptengine.JavaScriptSandbox: org.chromium.android_webview.js_sandbox.common.IJsSandboxService mJsSandboxService>;
+
+        if $r6 == null goto label04;
+
+        virtualinvoke r0.<androidx.javascriptengine.JavaScriptSandbox: void close()>();
+
+     label04:
+        exitmonitor r1;
+
+     label05:
+        goto label08;
+
+     label06:
+        $r9 := @caughtexception;
+
+        r2 = $r9;
+
+        exitmonitor r1;
+
+     label07:
+        throw r2;
+
+     label08:
+        specialinvoke r0.<java.lang.Object: void finalize()>();
+
+        goto label10;
+
+     label09:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+        specialinvoke r0.<java.lang.Object: void finalize()>();
+
+        throw r3;
+
+     label10:
+        return;
+
+        catch java.lang.Throwable from label03 to label05 with label06;
+        catch java.lang.Throwable from label06 to label07 with label06;
+        catch java.lang.Throwable from label01 to label08 with label09;
+    }
+
+    private static java.lang.Object lambda$bindToServiceWithCallback$1(android.content.Context, android.content.Intent, int, androidx.concurrent.futures.CallbackToFutureAdapter$Completer) throws java.lang.Exception
+    {
+        android.content.Context r0;
+        android.content.Intent r1;
+        int i0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r2;
+        androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup r3, r18;
+        java.util.concurrent.Executor r4;
+        java.util.concurrent.atomic.AtomicBoolean $r6, $r8, $r16;
+        boolean $z0, z4;
+        java.lang.StringBuilder $r11, $r12, r19;
+        java.lang.String $r13;
+        java.lang.Runnable $r14;
+        java.lang.Throwable $r15, r17, r22;
+        java.lang.RuntimeException r20;
+        java.lang.IllegalStateException r21;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.Intent;
+
+        i0 := @parameter2: int;
+
+        r2 := @parameter3: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        r18 = new androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup;
+
+        specialinvoke r18.<androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup: void <init>(android.content.Context,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>(r0, r2);
+
+        r3 = r18;
+
+        $r6 = <androidx.javascriptengine.JavaScriptSandbox: java.util.concurrent.atomic.AtomicBoolean sIsReadyToConnect>;
+
+        $z0 = virtualinvoke $r6.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(1, 0);
+
+        if $z0 == 0 goto label5;
+
+     label1:
+        z4 = virtualinvoke r0.<android.content.Context: boolean bindService(android.content.Intent,android.content.ServiceConnection,int)>(r1, r3, i0);
+
+        if z4 == 0 goto label2;
+
+        r4 = staticinvoke <androidx.core.content.ContextCompat: java.util.concurrent.Executor getMainExecutor(android.content.Context)>(r0);
+
+        $r14 = dynamicinvoke "run" <java.lang.Runnable (android.content.Context,androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup)>(r0, r3) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.javascriptengine.JavaScriptSandbox: void lambda$bindToServiceWithCallback$0(android.content.Context,androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup)>, methodtype: void __METHODTYPE__());
+
+        virtualinvoke r2.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: void addCancellationListener(java.lang.Runnable,java.util.concurrent.Executor)>($r14, r4);
+
+        goto label3;
+
+     label2:
+        virtualinvoke r0.<android.content.Context: void unbindService(android.content.ServiceConnection)>(r3);
+
+        $r8 = <androidx.javascriptengine.JavaScriptSandbox: java.util.concurrent.atomic.AtomicBoolean sIsReadyToConnect>;
+
+        virtualinvoke $r8.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(1);
+
+        r20 = new java.lang.RuntimeException;
+
+        r19 = new java.lang.StringBuilder;
+
+        specialinvoke r19.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("bindService() returned false ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r20.<java.lang.RuntimeException: void <init>(java.lang.String)>($r13);
+
+        r22 = (java.lang.Throwable) r20;
+
+        virtualinvoke r2.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean setException(java.lang.Throwable)>(r22);
+
+     label3:
+        goto label6;
+
+     label4:
+        $r15 := @caughtexception;
+
+        r17 = $r15;
+
+        virtualinvoke r0.<android.content.Context: void unbindService(android.content.ServiceConnection)>(r3);
+
+        $r16 = <androidx.javascriptengine.JavaScriptSandbox: java.util.concurrent.atomic.AtomicBoolean sIsReadyToConnect>;
+
+        virtualinvoke $r16.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(1);
+
+        virtualinvoke r2.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean setException(java.lang.Throwable)>(r17);
+
+        goto label6;
+
+     label5:
+        r21 = new java.lang.IllegalStateException;
+
+        specialinvoke r21.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Binding to already bound service");
+
+        virtualinvoke r2.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean setException(java.lang.Throwable)>(r21);
+
+     label6:
+        return "JavaScriptSandbox Future";
+
+        catch java.lang.SecurityException from label1 to label3 with label4;
+    }
+
+    private static void lambda$bindToServiceWithCallback$0(android.content.Context, androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup)
+    {
+        android.content.Context r0;
+        androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup r1;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.javascriptengine.JavaScriptSandbox$ConnectionSetup;
+
+        virtualinvoke r0.<android.content.Context: void unbindService(android.content.ServiceConnection)>(r1);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicBoolean $r0;
+
+        $r0 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        specialinvoke $r0.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(1);
+
+        <androidx.javascriptengine.JavaScriptSandbox: java.util.concurrent.atomic.AtomicBoolean sIsReadyToConnect> = $r0;
+
+        return;
+    }
+

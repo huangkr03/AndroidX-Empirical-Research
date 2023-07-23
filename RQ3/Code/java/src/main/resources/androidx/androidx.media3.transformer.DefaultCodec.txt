@@ -1,0 +1,1311 @@
+androidx.media3.transformer.DefaultCodec
+<androidx.media3.transformer.DefaultCodec: java.lang.String TAG>
+<androidx.media3.transformer.DefaultCodec: int MEDIA_CODEC_PCM_ENCODING>
+<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>
+<androidx.media3.transformer.DefaultCodec: android.media.MediaFormat configurationMediaFormat>
+<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format configurationFormat>
+<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>
+<androidx.media3.transformer.DefaultCodec: android.view.Surface inputSurface>
+<androidx.media3.transformer.DefaultCodec: boolean decoderNeedsFrameDroppingWorkaround>
+<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format outputFormat>
+<androidx.media3.transformer.DefaultCodec: java.nio.ByteBuffer outputBuffer>
+<androidx.media3.transformer.DefaultCodec: int inputBufferIndex>
+<androidx.media3.transformer.DefaultCodec: int outputBufferIndex>
+<androidx.media3.transformer.DefaultCodec: boolean inputStreamEnded>
+<androidx.media3.transformer.DefaultCodec: boolean outputStreamEnded>
+    public void <init>(android.content.Context, androidx.media3.common.Format, android.media.MediaFormat, java.lang.String, boolean, android.view.Surface) throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        android.content.Context r1;
+        androidx.media3.common.Format r2;
+        android.media.MediaFormat r3, $r10;
+        java.lang.String r4, $r7, $r9;
+        boolean z0, z1, $z2, $z3, $z4, $z5, z6;
+        android.view.Surface r5, r14;
+        java.lang.Object $r8;
+        int $i0, $i1;
+        java.lang.Throwable $r11, r15, r17;
+        androidx.media3.transformer.TransformationException $r12;
+        android.media.MediaCodec r13;
+        android.media.MediaCodec$BufferInfo r16;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.media3.common.Format;
+
+        r3 := @parameter2: android.media.MediaFormat;
+
+        r4 := @parameter3: java.lang.String;
+
+        z0 := @parameter4: boolean;
+
+        r5 := @parameter5: android.view.Surface;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format configurationFormat> = r2;
+
+        r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaFormat configurationMediaFormat> = r3;
+
+        r16 = new android.media.MediaCodec$BufferInfo;
+
+        specialinvoke r16.<android.media.MediaCodec$BufferInfo: void <init>()>();
+
+        r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo> = r16;
+
+        r0.<androidx.media3.transformer.DefaultCodec: int inputBufferIndex> = -1;
+
+        r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex> = -1;
+
+        $r7 = r2.<androidx.media3.common.Format: java.lang.String sampleMimeType>;
+
+        $r8 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r7);
+
+        $r9 = (java.lang.String) $r8;
+
+        z1 = staticinvoke <androidx.media3.common.MimeTypes: boolean isVideo(java.lang.String)>($r9);
+
+        r13 = null;
+
+        r14 = null;
+
+     label01:
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 29 goto label02;
+
+        $z4 = staticinvoke <androidx.media3.transformer.DefaultCodec$Api29: boolean isSdrToneMappingEnabled(android.media.MediaFormat)>(r3);
+
+        if $z4 == 0 goto label02;
+
+        $z5 = 1;
+
+        goto label03;
+
+     label02:
+        $z5 = 0;
+
+     label03:
+        z6 = $z5;
+
+        r13 = staticinvoke <android.media.MediaCodec: android.media.MediaCodec createByCodecName(java.lang.String)>(r4);
+
+        staticinvoke <androidx.media3.transformer.DefaultCodec: void configureCodec(android.media.MediaCodec,android.media.MediaFormat,boolean,android.view.Surface)>(r13, r3, z0, r5);
+
+        $i1 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i1 < 29 goto label04;
+
+        if z6 == 0 goto label04;
+
+        $r10 = virtualinvoke r13.<android.media.MediaCodec: android.media.MediaFormat getInputFormat()>();
+
+        $z3 = staticinvoke <androidx.media3.transformer.DefaultCodec$Api29: boolean isSdrToneMappingEnabled(android.media.MediaFormat)>($r10);
+
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z3, "Tone-mapping requested but not supported by the decoder.");
+
+     label04:
+        if z1 == 0 goto label05;
+
+        if z0 != 0 goto label05;
+
+        r14 = virtualinvoke r13.<android.media.MediaCodec: android.view.Surface createInputSurface()>();
+
+     label05:
+        staticinvoke <androidx.media3.transformer.DefaultCodec: void startCodec(android.media.MediaCodec)>(r13);
+
+     label06:
+        goto label10;
+
+     label07:
+        $r11 := @caughtexception;
+
+        r15 = $r11;
+
+        if r14 == null goto label08;
+
+        virtualinvoke r14.<android.view.Surface: void release()>();
+
+     label08:
+        if r13 == null goto label09;
+
+        virtualinvoke r13.<android.media.MediaCodec: void release()>();
+
+     label09:
+        $r12 = staticinvoke <androidx.media3.transformer.DefaultCodec: androidx.media3.transformer.TransformationException createInitializationTransformationException(java.lang.Exception,android.media.MediaFormat,boolean,boolean,java.lang.String)>(r15, r3, z1, z0, r4);
+
+        r17 = (java.lang.Throwable) $r12;
+
+        throw r17;
+
+     label10:
+        r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec> = r13;
+
+        r0.<androidx.media3.transformer.DefaultCodec: android.view.Surface inputSurface> = r14;
+
+        $z2 = staticinvoke <androidx.media3.transformer.DefaultCodec: boolean decoderNeedsFrameDroppingWorkaround(android.content.Context)>(r1);
+
+        r0.<androidx.media3.transformer.DefaultCodec: boolean decoderNeedsFrameDroppingWorkaround> = $z2;
+
+        return;
+
+        catch java.lang.Exception from label01 to label06 with label07;
+    }
+
+    public androidx.media3.common.Format getConfigurationFormat()
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        androidx.media3.common.Format $r1;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        $r1 = r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format configurationFormat>;
+
+        return $r1;
+    }
+
+    public android.view.Surface getInputSurface()
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        android.view.Surface $r1, $r3;
+        java.lang.Object $r2;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        $r1 = r0.<androidx.media3.transformer.DefaultCodec: android.view.Surface inputSurface>;
+
+        $r2 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r1);
+
+        $r3 = (android.view.Surface) $r2;
+
+        return $r3;
+    }
+
+    public int getMaxPendingFrameCount()
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        boolean $z0, $z1;
+        java.lang.String $r1, $r2;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        $z0 = r0.<androidx.media3.transformer.DefaultCodec: boolean decoderNeedsFrameDroppingWorkaround>;
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        $r1 = virtualinvoke r0.<androidx.media3.transformer.DefaultCodec: java.lang.String getName()>();
+
+        $r2 = staticinvoke <com.google.common.base.Ascii: java.lang.String toUpperCase(java.lang.String)>($r1);
+
+        $z1 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>("OMX.");
+
+        if $z1 == 0 goto label2;
+
+        return 5;
+
+     label2:
+        return 2147483647;
+    }
+
+    public boolean maybeDequeueInputBuffer(androidx.media3.decoder.DecoderInputBuffer) throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        androidx.media3.decoder.DecoderInputBuffer r1;
+        boolean $z0;
+        int $i0, $i1, $i2, $i3;
+        java.nio.ByteBuffer $r2, $r6;
+        android.media.MediaCodec $r4, $r5;
+        java.lang.Throwable $r7, $r9, r11, r12, r13, r14;
+        androidx.media3.transformer.TransformationException $r8, $r10;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        r1 := @parameter0: androidx.media3.decoder.DecoderInputBuffer;
+
+        $z0 = r0.<androidx.media3.transformer.DefaultCodec: boolean inputStreamEnded>;
+
+        if $z0 == 0 goto label01;
+
+        return 0;
+
+     label01:
+        $i0 = r0.<androidx.media3.transformer.DefaultCodec: int inputBufferIndex>;
+
+        if $i0 >= 0 goto label10;
+
+     label02:
+        $r4 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $i1 = virtualinvoke $r4.<android.media.MediaCodec: int dequeueInputBuffer(long)>(0L);
+
+        r0.<androidx.media3.transformer.DefaultCodec: int inputBufferIndex> = $i1;
+
+     label03:
+        goto label05;
+
+     label04:
+        $r9 := @caughtexception;
+
+        r11 = $r9;
+
+        $r10 = specialinvoke r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.transformer.TransformationException createTransformationException(java.lang.Exception)>(r11);
+
+        r13 = (java.lang.Throwable) $r10;
+
+        throw r13;
+
+     label05:
+        $i2 = r0.<androidx.media3.transformer.DefaultCodec: int inputBufferIndex>;
+
+        if $i2 >= 0 goto label06;
+
+        return 0;
+
+     label06:
+        $r5 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $i3 = r0.<androidx.media3.transformer.DefaultCodec: int inputBufferIndex>;
+
+        $r6 = virtualinvoke $r5.<android.media.MediaCodec: java.nio.ByteBuffer getInputBuffer(int)>($i3);
+
+        r1.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data> = $r6;
+
+     label07:
+        goto label09;
+
+     label08:
+        $r7 := @caughtexception;
+
+        r12 = $r7;
+
+        $r8 = specialinvoke r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.transformer.TransformationException createTransformationException(java.lang.Exception)>(r12);
+
+        r14 = (java.lang.Throwable) $r8;
+
+        throw r14;
+
+     label09:
+        virtualinvoke r1.<androidx.media3.decoder.DecoderInputBuffer: void clear()>();
+
+     label10:
+        $r2 = r1.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        return 1;
+
+        catch java.lang.RuntimeException from label02 to label03 with label04;
+        catch java.lang.RuntimeException from label06 to label07 with label08;
+    }
+
+    public void queueInputBuffer(androidx.media3.decoder.DecoderInputBuffer) throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        androidx.media3.decoder.DecoderInputBuffer r1;
+        java.lang.Throwable r2, $r8, r10;
+        boolean $z0, $z1, $z2, $z3;
+        java.nio.ByteBuffer $r3, $r5, $r6, $r7;
+        long $l0;
+        int $i1, i2, i3;
+        android.media.MediaCodec $r4;
+        androidx.media3.transformer.TransformationException $r9;
+        byte b4;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        r1 := @parameter0: androidx.media3.decoder.DecoderInputBuffer;
+
+        $z0 = r0.<androidx.media3.transformer.DefaultCodec: boolean inputStreamEnded>;
+
+        if $z0 != 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean,java.lang.Object)>($z2, "Input buffer can not be queued after the input stream has ended.");
+
+        i2 = 0;
+
+        i3 = 0;
+
+        $r3 = r1.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        if $r3 == null goto label3;
+
+        $r5 = r1.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        $z1 = virtualinvoke $r5.<java.nio.ByteBuffer: boolean hasRemaining()>();
+
+        if $z1 == 0 goto label3;
+
+        $r6 = r1.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        i2 = virtualinvoke $r6.<java.nio.ByteBuffer: int position()>();
+
+        $r7 = r1.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        i3 = virtualinvoke $r7.<java.nio.ByteBuffer: int remaining()>();
+
+     label3:
+        b4 = 0;
+
+        $z3 = virtualinvoke r1.<androidx.media3.decoder.DecoderInputBuffer: boolean isEndOfStream()>();
+
+        if $z3 == 0 goto label4;
+
+        r0.<androidx.media3.transformer.DefaultCodec: boolean inputStreamEnded> = 1;
+
+        b4 = 4;
+
+     label4:
+        $r4 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $i1 = r0.<androidx.media3.transformer.DefaultCodec: int inputBufferIndex>;
+
+        $l0 = r1.<androidx.media3.decoder.DecoderInputBuffer: long timeUs>;
+
+        virtualinvoke $r4.<android.media.MediaCodec: void queueInputBuffer(int,int,int,long,int)>($i1, i2, i3, $l0, b4);
+
+     label5:
+        goto label7;
+
+     label6:
+        $r8 := @caughtexception;
+
+        r2 = $r8;
+
+        $r9 = specialinvoke r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.transformer.TransformationException createTransformationException(java.lang.Exception)>(r2);
+
+        r10 = (java.lang.Throwable) $r9;
+
+        throw r10;
+
+     label7:
+        r0.<androidx.media3.transformer.DefaultCodec: int inputBufferIndex> = -1;
+
+        r1.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data> = null;
+
+        return;
+
+        catch java.lang.RuntimeException from label4 to label5 with label6;
+    }
+
+    public void signalEndOfInputStream() throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        java.lang.Throwable r1, $r3, r5;
+        android.media.MediaCodec $r2;
+        androidx.media3.transformer.TransformationException $r4;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+     label1:
+        $r2 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        virtualinvoke $r2.<android.media.MediaCodec: void signalEndOfInputStream()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+        r1 = $r3;
+
+        $r4 = specialinvoke r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.transformer.TransformationException createTransformationException(java.lang.Exception)>(r1);
+
+        r5 = (java.lang.Throwable) $r4;
+
+        throw r5;
+
+     label4:
+        return;
+
+        catch java.lang.RuntimeException from label1 to label2 with label3;
+    }
+
+    public androidx.media3.common.Format getOutputFormat() throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        androidx.media3.common.Format $r1;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        specialinvoke r0.<androidx.media3.transformer.DefaultCodec: boolean maybeDequeueOutputBuffer(boolean)>(0);
+
+        $r1 = r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format outputFormat>;
+
+        return $r1;
+    }
+
+    public java.nio.ByteBuffer getOutputBuffer() throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        boolean $z0;
+        java.nio.ByteBuffer $r1;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        $z0 = specialinvoke r0.<androidx.media3.transformer.DefaultCodec: boolean maybeDequeueOutputBuffer(boolean)>(1);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<androidx.media3.transformer.DefaultCodec: java.nio.ByteBuffer outputBuffer>;
+
+        goto label2;
+
+     label1:
+        $r1 = null;
+
+     label2:
+        return $r1;
+    }
+
+    public android.media.MediaCodec$BufferInfo getOutputBufferInfo() throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        boolean $z0;
+        android.media.MediaCodec$BufferInfo $r1;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        $z0 = specialinvoke r0.<androidx.media3.transformer.DefaultCodec: boolean maybeDequeueOutputBuffer(boolean)>(0);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>;
+
+        goto label2;
+
+     label1:
+        $r1 = null;
+
+     label2:
+        return $r1;
+    }
+
+    public void releaseOutputBuffer(boolean) throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        boolean z0;
+        java.lang.Throwable r1, $r7, r9;
+        int $i0, $i1;
+        android.media.MediaCodec $r2, $r4;
+        android.media.MediaCodec$BufferInfo $r3, $r6;
+        java.lang.Object $r5;
+        long $l2, $l3;
+        androidx.media3.transformer.TransformationException $r8;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        z0 := @parameter0: boolean;
+
+        r0.<androidx.media3.transformer.DefaultCodec: java.nio.ByteBuffer outputBuffer> = null;
+
+     label1:
+        if z0 == 0 goto label2;
+
+        $r4 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $i1 = r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex>;
+
+        $r3 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r3);
+
+        $r6 = (android.media.MediaCodec$BufferInfo) $r5;
+
+        $l2 = $r6.<android.media.MediaCodec$BufferInfo: long presentationTimeUs>;
+
+        $l3 = $l2 * 1000L;
+
+        virtualinvoke $r4.<android.media.MediaCodec: void releaseOutputBuffer(int,long)>($i1, $l3);
+
+        goto label3;
+
+     label2:
+        $r2 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $i0 = r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex>;
+
+        virtualinvoke $r2.<android.media.MediaCodec: void releaseOutputBuffer(int,boolean)>($i0, 0);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r7 := @caughtexception;
+
+        r1 = $r7;
+
+        $r8 = specialinvoke r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.transformer.TransformationException createTransformationException(java.lang.Exception)>(r1);
+
+        r9 = (java.lang.Throwable) $r8;
+
+        throw r9;
+
+     label5:
+        r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex> = -1;
+
+        return;
+
+        catch java.lang.RuntimeException from label1 to label3 with label4;
+    }
+
+    public boolean isEnded()
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        boolean $z0, $z1;
+        int $i0;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        $z0 = r0.<androidx.media3.transformer.DefaultCodec: boolean outputStreamEnded>;
+
+        if $z0 == 0 goto label1;
+
+        $i0 = r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex>;
+
+        if $i0 != -1 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    public void release()
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        android.view.Surface $r1, $r3;
+        android.media.MediaCodec $r2;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        r0.<androidx.media3.transformer.DefaultCodec: java.nio.ByteBuffer outputBuffer> = null;
+
+        $r1 = r0.<androidx.media3.transformer.DefaultCodec: android.view.Surface inputSurface>;
+
+        if $r1 == null goto label1;
+
+        $r3 = r0.<androidx.media3.transformer.DefaultCodec: android.view.Surface inputSurface>;
+
+        virtualinvoke $r3.<android.view.Surface: void release()>();
+
+     label1:
+        $r2 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        virtualinvoke $r2.<android.media.MediaCodec: void release()>();
+
+        return;
+    }
+
+    public java.lang.String getName()
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        int $i0;
+        android.media.MediaCodec $r1, $r2;
+        java.lang.String $r3;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 29 goto label1;
+
+        $r2 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $r3 = staticinvoke <androidx.media3.transformer.DefaultCodec$Api29: java.lang.String getCanonicalName(android.media.MediaCodec)>($r2);
+
+        goto label2;
+
+     label1:
+        $r1 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $r3 = virtualinvoke $r1.<android.media.MediaCodec: java.lang.String getName()>();
+
+     label2:
+        return $r3;
+    }
+
+    android.media.MediaFormat getConfigurationMediaFormat()
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        android.media.MediaFormat $r1;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        $r1 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaFormat configurationMediaFormat>;
+
+        return $r1;
+    }
+
+    private boolean maybeDequeueOutputBuffer(boolean) throws androidx.media3.transformer.TransformationException
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        boolean z0, $z1, $z2, $z3, $z4, z5;
+        androidx.media3.common.ColorInfo r1, $r23, $r29, $r38;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14;
+        android.media.MediaCodec$BufferInfo $r2, $r4, $r5, $r10, $r13, $r14, $r17;
+        android.media.MediaCodec $r3, $r6, $r18;
+        java.nio.ByteBuffer $r7, $r9, $r11, $r15;
+        java.lang.Object $r8;
+        android.media.MediaFormat $r19, $r32;
+        androidx.media3.common.Format $r20, $r21, $r22, $r28;
+        java.lang.StringBuilder $r25, $r26, $r27, $r30, r40;
+        java.lang.String $r31;
+        java.lang.Throwable $r33, $r35, r37, r39, r41, r42;
+        androidx.media3.transformer.TransformationException $r34, $r36;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        z0 := @parameter0: boolean;
+
+        $i0 = r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex>;
+
+        if $i0 < 0 goto label01;
+
+        return 1;
+
+     label01:
+        $z1 = r0.<androidx.media3.transformer.DefaultCodec: boolean outputStreamEnded>;
+
+        if $z1 == 0 goto label02;
+
+        return 0;
+
+     label02:
+        $r3 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $r2 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>;
+
+        $i1 = virtualinvoke $r3.<android.media.MediaCodec: int dequeueOutputBuffer(android.media.MediaCodec$BufferInfo,long)>($r2, 0L);
+
+        r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex> = $i1;
+
+     label03:
+        goto label05;
+
+     label04:
+        $r33 := @caughtexception;
+
+        r37 = $r33;
+
+        $r34 = specialinvoke r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.transformer.TransformationException createTransformationException(java.lang.Exception)>(r37);
+
+        r41 = (java.lang.Throwable) $r34;
+
+        throw r41;
+
+     label05:
+        $i2 = r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex>;
+
+        if $i2 >= 0 goto label11;
+
+        $i13 = r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex>;
+
+        if $i13 != -2 goto label10;
+
+        $r18 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $r19 = virtualinvoke $r18.<android.media.MediaCodec: android.media.MediaFormat getOutputFormat()>();
+
+        $r20 = staticinvoke <androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format convertToFormat(android.media.MediaFormat)>($r19);
+
+        r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format outputFormat> = $r20;
+
+        $i14 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i14 < 29 goto label06;
+
+        $r32 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaFormat configurationMediaFormat>;
+
+        $z3 = staticinvoke <androidx.media3.transformer.DefaultCodec$Api29: boolean isSdrToneMappingEnabled(android.media.MediaFormat)>($r32);
+
+        if $z3 == 0 goto label06;
+
+        $z4 = 1;
+
+        goto label07;
+
+     label06:
+        $z4 = 0;
+
+     label07:
+        z5 = $z4;
+
+        if z5 == 0 goto label08;
+
+        $r38 = <androidx.media3.common.ColorInfo: androidx.media3.common.ColorInfo SDR_BT709_LIMITED>;
+
+        goto label09;
+
+     label08:
+        $r21 = r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format configurationFormat>;
+
+        $r38 = $r21.<androidx.media3.common.Format: androidx.media3.common.ColorInfo colorInfo>;
+
+     label09:
+        r1 = $r38;
+
+        $r22 = r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format outputFormat>;
+
+        $r23 = $r22.<androidx.media3.common.Format: androidx.media3.common.ColorInfo colorInfo>;
+
+        $z2 = staticinvoke <androidx.media3.transformer.DefaultCodec: boolean areColorTransfersEqual(androidx.media3.common.ColorInfo,androidx.media3.common.ColorInfo)>(r1, $r23);
+
+        if $z2 != 0 goto label10;
+
+        r40 = new java.lang.StringBuilder;
+
+        specialinvoke r40.<java.lang.StringBuilder: void <init>()>();
+
+        $r25 = virtualinvoke r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Codec output color format does not match configured color format. Expected: ");
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r27 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Actual: ");
+
+        $r28 = r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format outputFormat>;
+
+        $r29 = $r28.<androidx.media3.common.Format: androidx.media3.common.ColorInfo colorInfo>;
+
+        $r30 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r29);
+
+        $r31 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("DefaultCodec", $r31);
+
+     label10:
+        return 0;
+
+     label11:
+        $r4 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>;
+
+        $i3 = $r4.<android.media.MediaCodec$BufferInfo: int flags>;
+
+        $i4 = $i3 & 4;
+
+        if $i4 == 0 goto label12;
+
+        r0.<androidx.media3.transformer.DefaultCodec: boolean outputStreamEnded> = 1;
+
+        $r17 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>;
+
+        $i12 = $r17.<android.media.MediaCodec$BufferInfo: int size>;
+
+        if $i12 != 0 goto label12;
+
+        virtualinvoke r0.<androidx.media3.transformer.DefaultCodec: void releaseOutputBuffer(boolean)>(0);
+
+        return 0;
+
+     label12:
+        $r5 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>;
+
+        $i5 = $r5.<android.media.MediaCodec$BufferInfo: int flags>;
+
+        $i6 = $i5 & 2;
+
+        if $i6 == 0 goto label13;
+
+        virtualinvoke r0.<androidx.media3.transformer.DefaultCodec: void releaseOutputBuffer(boolean)>(0);
+
+        return 0;
+
+     label13:
+        if z0 == 0 goto label18;
+
+     label14:
+        $r6 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $i7 = r0.<androidx.media3.transformer.DefaultCodec: int outputBufferIndex>;
+
+        $r7 = virtualinvoke $r6.<android.media.MediaCodec: java.nio.ByteBuffer getOutputBuffer(int)>($i7);
+
+        $r8 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r7);
+
+        $r9 = (java.nio.ByteBuffer) $r8;
+
+        r0.<androidx.media3.transformer.DefaultCodec: java.nio.ByteBuffer outputBuffer> = $r9;
+
+     label15:
+        goto label17;
+
+     label16:
+        $r35 := @caughtexception;
+
+        r39 = $r35;
+
+        $r36 = specialinvoke r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.transformer.TransformationException createTransformationException(java.lang.Exception)>(r39);
+
+        r42 = (java.lang.Throwable) $r36;
+
+        throw r42;
+
+     label17:
+        $r11 = r0.<androidx.media3.transformer.DefaultCodec: java.nio.ByteBuffer outputBuffer>;
+
+        $r10 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>;
+
+        $i8 = $r10.<android.media.MediaCodec$BufferInfo: int offset>;
+
+        virtualinvoke $r11.<java.nio.ByteBuffer: java.nio.Buffer position(int)>($i8);
+
+        $r15 = r0.<androidx.media3.transformer.DefaultCodec: java.nio.ByteBuffer outputBuffer>;
+
+        $r13 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>;
+
+        $i10 = $r13.<android.media.MediaCodec$BufferInfo: int offset>;
+
+        $r14 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec$BufferInfo outputBufferInfo>;
+
+        $i9 = $r14.<android.media.MediaCodec$BufferInfo: int size>;
+
+        $i11 = $i10 + $i9;
+
+        virtualinvoke $r15.<java.nio.ByteBuffer: java.nio.Buffer limit(int)>($i11);
+
+     label18:
+        return 1;
+
+        catch java.lang.RuntimeException from label02 to label03 with label04;
+        catch java.lang.RuntimeException from label14 to label15 with label16;
+    }
+
+    private androidx.media3.transformer.TransformationException createTransformationException(java.lang.Exception)
+    {
+        androidx.media3.transformer.DefaultCodec r0;
+        java.lang.Exception r1;
+        boolean z0, z1, $z2, $z5;
+        android.media.MediaCodec $r2;
+        android.media.MediaCodecInfo $r3;
+        androidx.media3.common.Format $r4;
+        java.lang.String $r5, $r7;
+        android.media.MediaFormat $r6;
+        androidx.media3.transformer.TransformationException $r8;
+        short $s0;
+        java.lang.Throwable r10;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec;
+
+        r1 := @parameter0: java.lang.Exception;
+
+        $r2 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaCodec mediaCodec>;
+
+        $r3 = virtualinvoke $r2.<android.media.MediaCodec: android.media.MediaCodecInfo getCodecInfo()>();
+
+        $z2 = virtualinvoke $r3.<android.media.MediaCodecInfo: boolean isEncoder()>();
+
+        if $z2 != 0 goto label1;
+
+        $z5 = 1;
+
+        goto label2;
+
+     label1:
+        $z5 = 0;
+
+     label2:
+        z0 = $z5;
+
+        $r4 = r0.<androidx.media3.transformer.DefaultCodec: androidx.media3.common.Format configurationFormat>;
+
+        $r5 = $r4.<androidx.media3.common.Format: java.lang.String sampleMimeType>;
+
+        z1 = staticinvoke <androidx.media3.common.MimeTypes: boolean isVideo(java.lang.String)>($r5);
+
+        $r6 = r0.<androidx.media3.transformer.DefaultCodec: android.media.MediaFormat configurationMediaFormat>;
+
+        $r7 = virtualinvoke r0.<androidx.media3.transformer.DefaultCodec: java.lang.String getName()>();
+
+        if z0 == 0 goto label3;
+
+        $s0 = 3002;
+
+        goto label4;
+
+     label3:
+        $s0 = 4002;
+
+     label4:
+        r10 = (java.lang.Throwable) r1;
+
+        $r8 = staticinvoke <androidx.media3.transformer.TransformationException: androidx.media3.transformer.TransformationException createForCodec(java.lang.Throwable,boolean,boolean,android.media.MediaFormat,java.lang.String,int)>(r10, z1, z0, $r6, $r7, $s0);
+
+        return $r8;
+    }
+
+    private static boolean areColorTransfersEqual(androidx.media3.common.ColorInfo, androidx.media3.common.ColorInfo)
+    {
+        androidx.media3.common.ColorInfo r0, r1;
+        int $i0, $i1, i2, i3;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.common.ColorInfo;
+
+        r1 := @parameter1: androidx.media3.common.ColorInfo;
+
+        i2 = 3;
+
+        if r0 == null goto label1;
+
+        $i1 = r0.<androidx.media3.common.ColorInfo: int colorTransfer>;
+
+        if $i1 == -1 goto label1;
+
+        i2 = r0.<androidx.media3.common.ColorInfo: int colorTransfer>;
+
+     label1:
+        i3 = 3;
+
+        if r1 == null goto label2;
+
+        $i0 = r1.<androidx.media3.common.ColorInfo: int colorTransfer>;
+
+        if $i0 == -1 goto label2;
+
+        i3 = r1.<androidx.media3.common.ColorInfo: int colorTransfer>;
+
+     label2:
+        if i2 != i3 goto label3;
+
+        $z0 = 1;
+
+        goto label4;
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        return $z0;
+    }
+
+    private static androidx.media3.transformer.TransformationException createInitializationTransformationException(java.lang.Exception, android.media.MediaFormat, boolean, boolean, java.lang.String)
+    {
+        java.lang.Exception r0;
+        android.media.MediaFormat r1;
+        boolean z0, z1, $z2, $z5, $z6;
+        java.lang.String r2;
+        androidx.media3.transformer.TransformationException $r3, $r7, $r8;
+        short $s0, $s1;
+        java.lang.Throwable r12, r13;
+
+        r0 := @parameter0: java.lang.Exception;
+
+        r1 := @parameter1: android.media.MediaFormat;
+
+        z0 := @parameter2: boolean;
+
+        z1 := @parameter3: boolean;
+
+        r2 := @parameter4: java.lang.String;
+
+        $z2 = r0 instanceof java.io.IOException;
+
+        if $z2 != 0 goto label1;
+
+        $z5 = r0 instanceof android.media.MediaCodec$CodecException;
+
+        if $z5 == 0 goto label4;
+
+     label1:
+        if z1 == 0 goto label2;
+
+        $s0 = 3001;
+
+        goto label3;
+
+     label2:
+        $s0 = 4001;
+
+     label3:
+        r12 = (java.lang.Throwable) r0;
+
+        $r3 = staticinvoke <androidx.media3.transformer.TransformationException: androidx.media3.transformer.TransformationException createForCodec(java.lang.Throwable,boolean,boolean,android.media.MediaFormat,java.lang.String,int)>(r12, z0, z1, r1, r2, $s0);
+
+        return $r3;
+
+     label4:
+        $z6 = r0 instanceof java.lang.IllegalArgumentException;
+
+        if $z6 == 0 goto label7;
+
+        if z1 == 0 goto label5;
+
+        $s1 = 3003;
+
+        goto label6;
+
+     label5:
+        $s1 = 4003;
+
+     label6:
+        r13 = (java.lang.Throwable) r0;
+
+        $r8 = staticinvoke <androidx.media3.transformer.TransformationException: androidx.media3.transformer.TransformationException createForCodec(java.lang.Throwable,boolean,boolean,android.media.MediaFormat,java.lang.String,int)>(r13, z0, z1, r1, r2, $s1);
+
+        return $r8;
+
+     label7:
+        $r7 = staticinvoke <androidx.media3.transformer.TransformationException: androidx.media3.transformer.TransformationException createForUnexpected(java.lang.Exception)>(r0);
+
+        return $r7;
+    }
+
+    private static androidx.media3.common.Format convertToFormat(android.media.MediaFormat)
+    {
+        android.media.MediaFormat r0;
+        com.google.common.collect.ImmutableList$Builder r1, $r2;
+        java.lang.StringBuilder $r3, $r4, $r5;
+        java.lang.String $r6, r21;
+        int $i0, $i1, $i2, $i3, $i4, i5;
+        androidx.media3.common.Format$Builder $r9, $r10, $r12, $r13, $r15, $r16, r22;
+        com.google.common.collect.ImmutableList $r11;
+        boolean $z0, $z1;
+        androidx.media3.common.ColorInfo $r17;
+        java.nio.ByteBuffer r19;
+        byte[] r20;
+        androidx.media3.common.Format $r23;
+
+        r0 := @parameter0: android.media.MediaFormat;
+
+        $r2 = new com.google.common.collect.ImmutableList$Builder;
+
+        specialinvoke $r2.<com.google.common.collect.ImmutableList$Builder: void <init>()>();
+
+        r1 = $r2;
+
+        i5 = 0;
+
+     label1:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("csd-");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i5);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r19 = virtualinvoke r0.<android.media.MediaFormat: java.nio.ByteBuffer getByteBuffer(java.lang.String)>($r6);
+
+        if r19 != null goto label2;
+
+        goto label3;
+
+     label2:
+        $i0 = virtualinvoke r19.<java.nio.ByteBuffer: int remaining()>();
+
+        r20 = newarray (byte)[$i0];
+
+        virtualinvoke r19.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[])>(r20);
+
+        virtualinvoke r1.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList$Builder add(java.lang.Object)>(r20);
+
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label3:
+        r21 = virtualinvoke r0.<android.media.MediaFormat: java.lang.String getString(java.lang.String)>("mime");
+
+        $r9 = new androidx.media3.common.Format$Builder;
+
+        specialinvoke $r9.<androidx.media3.common.Format$Builder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleMimeType(java.lang.String)>(r21);
+
+        $r11 = virtualinvoke r1.<com.google.common.collect.ImmutableList$Builder: com.google.common.collect.ImmutableList build()>();
+
+        r22 = virtualinvoke $r10.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setInitializationData(java.util.List)>($r11);
+
+        $z0 = staticinvoke <androidx.media3.common.MimeTypes: boolean isVideo(java.lang.String)>(r21);
+
+        if $z0 == 0 goto label4;
+
+        $i3 = virtualinvoke r0.<android.media.MediaFormat: int getInteger(java.lang.String)>("width");
+
+        $r15 = virtualinvoke r22.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setWidth(int)>($i3);
+
+        $i4 = virtualinvoke r0.<android.media.MediaFormat: int getInteger(java.lang.String)>("height");
+
+        $r16 = virtualinvoke $r15.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setHeight(int)>($i4);
+
+        $r17 = staticinvoke <androidx.media3.common.util.MediaFormatUtil: androidx.media3.common.ColorInfo getColorInfo(android.media.MediaFormat)>(r0);
+
+        virtualinvoke $r16.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setColorInfo(androidx.media3.common.ColorInfo)>($r17);
+
+        goto label5;
+
+     label4:
+        $z1 = staticinvoke <androidx.media3.common.MimeTypes: boolean isAudio(java.lang.String)>(r21);
+
+        if $z1 == 0 goto label5;
+
+        $i1 = virtualinvoke r0.<android.media.MediaFormat: int getInteger(java.lang.String)>("channel-count");
+
+        $r12 = virtualinvoke r22.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setChannelCount(int)>($i1);
+
+        $i2 = virtualinvoke r0.<android.media.MediaFormat: int getInteger(java.lang.String)>("sample-rate");
+
+        $r13 = virtualinvoke $r12.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleRate(int)>($i2);
+
+        virtualinvoke $r13.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setPcmEncoding(int)>(2);
+
+     label5:
+        $r23 = virtualinvoke r22.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        return $r23;
+    }
+
+    private static void configureCodec(android.media.MediaCodec, android.media.MediaFormat, boolean, android.view.Surface)
+    {
+        android.media.MediaCodec r0;
+        android.media.MediaFormat r1;
+        boolean z0;
+        android.view.Surface r2;
+        byte $b0;
+
+        r0 := @parameter0: android.media.MediaCodec;
+
+        r1 := @parameter1: android.media.MediaFormat;
+
+        z0 := @parameter2: boolean;
+
+        r2 := @parameter3: android.view.Surface;
+
+        staticinvoke <androidx.media3.common.util.TraceUtil: void beginSection(java.lang.String)>("configureCodec");
+
+        if z0 == 0 goto label1;
+
+        $b0 = 0;
+
+        goto label2;
+
+     label1:
+        $b0 = 1;
+
+     label2:
+        virtualinvoke r0.<android.media.MediaCodec: void configure(android.media.MediaFormat,android.view.Surface,android.media.MediaCrypto,int)>(r1, r2, null, $b0);
+
+        staticinvoke <androidx.media3.common.util.TraceUtil: void endSection()>();
+
+        return;
+    }
+
+    private static void startCodec(android.media.MediaCodec)
+    {
+        android.media.MediaCodec r0;
+
+        r0 := @parameter0: android.media.MediaCodec;
+
+        staticinvoke <androidx.media3.common.util.TraceUtil: void beginSection(java.lang.String)>("startCodec");
+
+        virtualinvoke r0.<android.media.MediaCodec: void start()>();
+
+        staticinvoke <androidx.media3.common.util.TraceUtil: void endSection()>();
+
+        return;
+    }
+
+    private static boolean decoderNeedsFrameDroppingWorkaround(android.content.Context)
+    {
+        android.content.Context r0, $r1;
+        int $i0, $i1;
+        android.content.pm.ApplicationInfo $r2;
+        boolean $z0;
+
+        r0 := @parameter0: android.content.Context;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 29 goto label1;
+
+        $r1 = virtualinvoke r0.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.pm.ApplicationInfo getApplicationInfo()>();
+
+        $i1 = $r2.<android.content.pm.ApplicationInfo: int targetSdkVersion>;
+
+        if $i1 >= 29 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+androidx.media3.transformer.DefaultCodec$Api29
+    private void <init>()
+    {
+        androidx.media3.transformer.DefaultCodec$Api29 r0;
+
+        r0 := @this: androidx.media3.transformer.DefaultCodec$Api29;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String getCanonicalName(android.media.MediaCodec)
+    {
+        android.media.MediaCodec r0;
+        java.lang.String $r1;
+
+        r0 := @parameter0: android.media.MediaCodec;
+
+        $r1 = virtualinvoke r0.<android.media.MediaCodec: java.lang.String getCanonicalName()>();
+
+        return $r1;
+    }
+
+    public static boolean isSdrToneMappingEnabled(android.media.MediaFormat)
+    {
+        android.media.MediaFormat r0;
+        int $i0, $i1;
+        boolean $z0;
+
+        r0 := @parameter0: android.media.MediaFormat;
+
+        $i0 = <androidx.media3.common.util.Util: int SDK_INT>;
+
+        if $i0 < 31 goto label1;
+
+        $i1 = virtualinvoke r0.<android.media.MediaFormat: int getInteger(java.lang.String,int)>("color-transfer-request", 0);
+
+        if $i1 != 3 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+

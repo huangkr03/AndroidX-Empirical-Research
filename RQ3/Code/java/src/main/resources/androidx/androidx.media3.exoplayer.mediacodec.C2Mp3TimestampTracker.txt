@@ -1,0 +1,179 @@
+androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker
+<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long DECODER_DELAY_FRAMES>
+<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: java.lang.String TAG>
+<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long anchorTimestampUs>
+<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long processedFrames>
+<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: boolean seenInvalidMpegAudioHeader>
+    void <init>()
+    {
+        androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker r0;
+
+        r0 := @this: androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void reset()
+    {
+        androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker r0;
+
+        r0 := @this: androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker;
+
+        r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long anchorTimestampUs> = 0L;
+
+        r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long processedFrames> = 0L;
+
+        r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: boolean seenInvalidMpegAudioHeader> = 0;
+
+        return;
+    }
+
+    public long updateAndGetPresentationTimeUs(androidx.media3.common.Format, androidx.media3.decoder.DecoderInputBuffer)
+    {
+        androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker r0;
+        androidx.media3.common.Format r1;
+        androidx.media3.decoder.DecoderInputBuffer r2;
+        java.nio.ByteBuffer r3, $r4;
+        long l0, $l1, $l4, $l5, $l6, $l7, $l8, $l9, $l12, $l13;
+        byte $b2, $b10;
+        boolean $z0;
+        java.lang.Object $r5;
+        int $i3, i14, i15, i16, i17;
+        short $s11;
+
+        r0 := @this: androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker;
+
+        r1 := @parameter0: androidx.media3.common.Format;
+
+        r2 := @parameter1: androidx.media3.decoder.DecoderInputBuffer;
+
+        $l1 = r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long processedFrames>;
+
+        $b2 = $l1 cmp 0L;
+
+        if $b2 != 0 goto label1;
+
+        $l13 = r2.<androidx.media3.decoder.DecoderInputBuffer: long timeUs>;
+
+        r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long anchorTimestampUs> = $l13;
+
+     label1:
+        $z0 = r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: boolean seenInvalidMpegAudioHeader>;
+
+        if $z0 == 0 goto label2;
+
+        $l12 = r2.<androidx.media3.decoder.DecoderInputBuffer: long timeUs>;
+
+        return $l12;
+
+     label2:
+        $r4 = r2.<androidx.media3.decoder.DecoderInputBuffer: java.nio.ByteBuffer data>;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r4);
+
+        r3 = (java.nio.ByteBuffer) $r5;
+
+        i14 = 0;
+
+        i15 = 0;
+
+     label3:
+        if i15 >= 4 goto label4;
+
+        i16 = i14 << 8;
+
+        $b10 = virtualinvoke r3.<java.nio.ByteBuffer: byte get(int)>(i15);
+
+        $s11 = $b10 & 255;
+
+        i14 = i16 | $s11;
+
+        i15 = i15 + 1;
+
+        goto label3;
+
+     label4:
+        i17 = staticinvoke <androidx.media3.extractor.MpegAudioUtil: int parseMpegAudioFrameSampleCount(int)>(i14);
+
+        if i17 != -1 goto label5;
+
+        r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: boolean seenInvalidMpegAudioHeader> = 1;
+
+        r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long processedFrames> = 0L;
+
+        $l8 = r2.<androidx.media3.decoder.DecoderInputBuffer: long timeUs>;
+
+        r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long anchorTimestampUs> = $l8;
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("C2Mp3TimestampTracker", "MPEG audio header is invalid.");
+
+        $l9 = r2.<androidx.media3.decoder.DecoderInputBuffer: long timeUs>;
+
+        return $l9;
+
+     label5:
+        $i3 = r1.<androidx.media3.common.Format: int sampleRate>;
+
+        $l4 = (long) $i3;
+
+        l0 = specialinvoke r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long getBufferTimestampUs(long)>($l4);
+
+        $l6 = r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long processedFrames>;
+
+        $l5 = (long) i17;
+
+        $l7 = $l6 + $l5;
+
+        r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long processedFrames> = $l7;
+
+        return l0;
+    }
+
+    public long getLastOutputBufferPresentationTimeUs(androidx.media3.common.Format)
+    {
+        androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker r0;
+        androidx.media3.common.Format r1;
+        int $i0;
+        long $l1, $l2;
+
+        r0 := @this: androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker;
+
+        r1 := @parameter0: androidx.media3.common.Format;
+
+        $i0 = r1.<androidx.media3.common.Format: int sampleRate>;
+
+        $l1 = (long) $i0;
+
+        $l2 = specialinvoke r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long getBufferTimestampUs(long)>($l1);
+
+        return $l2;
+    }
+
+    private long getBufferTimestampUs(long)
+    {
+        androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker r0;
+        long l0, $l1, $l2, $l3, $l4, $l5, $l6, $l7;
+
+        r0 := @this: androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker;
+
+        l0 := @parameter0: long;
+
+        $l5 = r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long anchorTimestampUs>;
+
+        $l1 = r0.<androidx.media3.exoplayer.mediacodec.C2Mp3TimestampTracker: long processedFrames>;
+
+        $l2 = $l1 - 529L;
+
+        $l3 = $l2 * 1000000L;
+
+        $l4 = $l3 / l0;
+
+        $l6 = staticinvoke <java.lang.Math: long max(long,long)>(0L, $l4);
+
+        $l7 = $l5 + $l6;
+
+        return $l7;
+    }
+

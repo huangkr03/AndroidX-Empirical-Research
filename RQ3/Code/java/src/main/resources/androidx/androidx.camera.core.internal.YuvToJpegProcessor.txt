@@ -1,0 +1,919 @@
+androidx.camera.core.internal.YuvToJpegProcessor
+<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.String TAG>
+<androidx.camera.core.internal.YuvToJpegProcessor: android.graphics.Rect UNINITIALIZED_RECT>
+<androidx.camera.core.internal.YuvToJpegProcessor: int mMaxImages>
+<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>
+<androidx.camera.core.internal.YuvToJpegProcessor: int mQuality>
+<androidx.camera.core.internal.YuvToJpegProcessor: int mRotationDegrees>
+<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed>
+<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages>
+<androidx.camera.core.internal.YuvToJpegProcessor: android.media.ImageWriter mImageWriter>
+<androidx.camera.core.internal.YuvToJpegProcessor: android.graphics.Rect mImageRect>
+<androidx.camera.core.internal.YuvToJpegProcessor: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mCloseCompleter>
+<androidx.camera.core.internal.YuvToJpegProcessor: com.google.common.util.concurrent.ListenableFuture mCloseFuture>
+    public void <init>(int, int)
+    {
+        androidx.camera.core.internal.YuvToJpegProcessor r0;
+        int i0, i1;
+        java.lang.Object $r1;
+        android.graphics.Rect $r2;
+
+        r0 := @this: androidx.camera.core.internal.YuvToJpegProcessor;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock> = $r1;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mRotationDegrees> = 0;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed> = 0;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages> = 0;
+
+        $r2 = <androidx.camera.core.internal.YuvToJpegProcessor: android.graphics.Rect UNINITIALIZED_RECT>;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: android.graphics.Rect mImageRect> = $r2;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mQuality> = i0;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mMaxImages> = i1;
+
+        return;
+    }
+
+    public void setJpegQuality(int)
+    {
+        androidx.camera.core.internal.YuvToJpegProcessor r0;
+        int i0;
+        java.lang.Object r1, $r2;
+
+        r0 := @this: androidx.camera.core.internal.YuvToJpegProcessor;
+
+        i0 := @parameter0: int;
+
+        $r2 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mQuality> = i0;
+
+        exitmonitor r1;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public void setRotationDegrees(int)
+    {
+        androidx.camera.core.internal.YuvToJpegProcessor r0;
+        int i0;
+        java.lang.Object r1, $r2;
+
+        r0 := @this: androidx.camera.core.internal.YuvToJpegProcessor;
+
+        i0 := @parameter0: int;
+
+        $r2 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r1 = $r2;
+
+        entermonitor $r2;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mRotationDegrees> = i0;
+
+        exitmonitor r1;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public void onOutputSurface(android.view.Surface, int)
+    {
+        androidx.camera.core.internal.YuvToJpegProcessor r0;
+        android.view.Surface r1;
+        int i0, $i1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r8;
+        boolean $z0, $z1;
+        android.media.ImageWriter $r5, $r6;
+        java.lang.IllegalStateException $r7;
+
+        r0 := @this: androidx.camera.core.internal.YuvToJpegProcessor;
+
+        r1 := @parameter0: android.view.Surface;
+
+        i0 := @parameter1: int;
+
+        if i0 != 256 goto label01;
+
+        $z1 = 1;
+
+        goto label02;
+
+     label01:
+        $z1 = 0;
+
+     label02:
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z1, "YuvToJpegProcessor only supports JPEG output format.");
+
+        $r4 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label03:
+        $z0 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed>;
+
+        if $z0 != 0 goto label05;
+
+        $r5 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: android.media.ImageWriter mImageWriter>;
+
+        if $r5 == null goto label04;
+
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Output surface already set.");
+
+        throw $r7;
+
+     label04:
+        $i1 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mMaxImages>;
+
+        $r6 = staticinvoke <androidx.camera.core.internal.compat.ImageWriterCompat: android.media.ImageWriter newInstance(android.view.Surface,int,int)>(r1, $i1, i0);
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: android.media.ImageWriter mImageWriter> = $r6;
+
+        goto label06;
+
+     label05:
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("YuvToJpegProcessor", "Cannot set output surface. Processor is closed.");
+
+     label06:
+        exitmonitor r2;
+
+     label07:
+        goto label10;
+
+     label08:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+        exitmonitor r2;
+
+     label09:
+        throw r3;
+
+     label10:
+        return;
+
+        catch java.lang.Throwable from label03 to label07 with label08;
+        catch java.lang.Throwable from label08 to label09 with label08;
+    }
+
+    public void process(androidx.camera.core.impl.ImageProxyBundle)
+    {
+        androidx.camera.core.internal.YuvToJpegProcessor r0;
+        androidx.camera.core.impl.ImageProxyBundle r1;
+        java.util.List r2;
+        com.google.common.util.concurrent.ListenableFuture r3;
+        android.media.ImageWriter r4;
+        android.graphics.Rect r5;
+        boolean z0, z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, z11, $z12, $z13, z14, $z15, z16, $z17;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19;
+        androidx.camera.core.impl.utils.ExifOutputStream r6, $r22;
+        java.lang.Throwable r7, $r27, $r31, r43;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r8, r37, r42, r46;
+        java.lang.Object r9, $r14, $r16, $r17, $r18, $r25, $r26, $r28, $r32, r33, r36, r41, r45;
+        java.lang.StringBuilder $r10, $r11, $r12;
+        java.lang.String $r13;
+        java.lang.Integer $r15;
+        android.graphics.YuvImage $r19, r39;
+        android.media.Image$Plane[] $r20, $r29;
+        android.media.Image$Plane $r21, $r30;
+        androidx.camera.core.internal.ByteBufferOutputStream $r23;
+        androidx.camera.core.impl.utils.ExifData $r24;
+        androidx.camera.core.ImageProxy r34;
+        android.media.Image r35;
+        byte[] r38;
+        java.nio.ByteBuffer r40, r44;
+        java.lang.NullPointerException r47, r48;
+
+        r0 := @this: androidx.camera.core.internal.YuvToJpegProcessor;
+
+        r1 := @parameter0: androidx.camera.core.impl.ImageProxyBundle;
+
+        r2 = interfaceinvoke r1.<androidx.camera.core.impl.ImageProxyBundle: java.util.List getCaptureIds()>();
+
+        $i3 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        if $i3 != 1 goto label01;
+
+        $z8 = 1;
+
+        goto label02;
+
+     label01:
+        $z8 = 0;
+
+     label02:
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Processing image bundle have single capture id, but found ");
+
+        $i4 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i4);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkArgument(boolean,java.lang.Object)>($z8, $r13);
+
+        $r14 = interfaceinvoke r2.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r15 = (java.lang.Integer) $r14;
+
+        $i5 = virtualinvoke $r15.<java.lang.Integer: int intValue()>();
+
+        r3 = interfaceinvoke r1.<androidx.camera.core.impl.ImageProxyBundle: com.google.common.util.concurrent.ListenableFuture getImageProxy(int)>($i5);
+
+        $z2 = interfaceinvoke r3.<com.google.common.util.concurrent.ListenableFuture: boolean isDone()>();
+
+        staticinvoke <androidx.core.util.Preconditions: void checkArgument(boolean)>($z2);
+
+        $r16 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r33 = $r16;
+
+        entermonitor $r16;
+
+        r4 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: android.media.ImageWriter mImageWriter>;
+
+        $z3 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed>;
+
+        if $z3 != 0 goto label03;
+
+        $z9 = 1;
+
+        goto label04;
+
+     label03:
+        $z9 = 0;
+
+     label04:
+        z0 = $z9;
+
+        r5 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: android.graphics.Rect mImageRect>;
+
+        if z0 == 0 goto label05;
+
+        $i14 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages>;
+
+        $i15 = $i14 + 1;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages> = $i15;
+
+     label05:
+        i0 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mQuality>;
+
+        i1 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mRotationDegrees>;
+
+        exitmonitor r33;
+
+        goto label06;
+
+     label06:
+        r34 = null;
+
+        r35 = null;
+
+     label07:
+        $r17 = interfaceinvoke r3.<com.google.common.util.concurrent.ListenableFuture: java.lang.Object get()>();
+
+        r34 = (androidx.camera.core.ImageProxy) $r17;
+
+        if z0 != 0 goto label15;
+
+        staticinvoke <androidx.camera.core.Logger: void w(java.lang.String,java.lang.String)>("YuvToJpegProcessor", "Image enqueued for processing on closed processor.");
+
+        interfaceinvoke r34.<androidx.camera.core.ImageProxy: void close()>();
+
+     label08:
+        $r26 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r36 = $r26;
+
+        entermonitor $r26;
+
+        if z0 == 0 goto label09;
+
+        $i12 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages>;
+
+        $i13 = $i12 - 1;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages> = $i13;
+
+        if $i12 != 0 goto label09;
+
+        $z5 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed>;
+
+        if $z5 == 0 goto label09;
+
+        $z10 = 1;
+
+        goto label10;
+
+     label09:
+        $z10 = 0;
+
+     label10:
+        z11 = $z10;
+
+        r37 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mCloseCompleter>;
+
+        exitmonitor r36;
+
+        goto label11;
+
+     label11:
+        if null == null goto label12;
+
+        virtualinvoke r35.<android.media.Image: void close()>();
+
+     label12:
+        if null == null goto label13;
+
+        r47 = new java.lang.NullPointerException;
+
+        specialinvoke r47.<java.lang.NullPointerException: void <init>(java.lang.String)>("This statement would have triggered an Exception: interfaceinvoke imageProxy#6.<androidx.camera.core.ImageProxy: void close()>()");
+
+        throw r47;
+
+     label13:
+        if z11 == 0 goto label14;
+
+        virtualinvoke r4.<android.media.ImageWriter: void close()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("YuvToJpegProcessor", "Closed after completion of last image processed.");
+
+        if r37 == null goto label14;
+
+        virtualinvoke r37.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+     label14:
+        return;
+
+     label15:
+        r35 = virtualinvoke r4.<android.media.ImageWriter: android.media.Image dequeueInputImage()>();
+
+        $r18 = interfaceinvoke r3.<com.google.common.util.concurrent.ListenableFuture: java.lang.Object get()>();
+
+        r34 = (androidx.camera.core.ImageProxy) $r18;
+
+        $i6 = interfaceinvoke r34.<androidx.camera.core.ImageProxy: int getFormat()>();
+
+        if $i6 != 35 goto label16;
+
+        $z12 = 1;
+
+        goto label17;
+
+     label16:
+        $z12 = 0;
+
+     label17:
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean,java.lang.String)>($z12, "Input image is not expected YUV_420_888 image format");
+
+        r38 = staticinvoke <androidx.camera.core.internal.utils.ImageUtil: byte[] yuv_420_888toNv21(androidx.camera.core.ImageProxy)>(r34);
+
+        $r19 = new android.graphics.YuvImage;
+
+        $i7 = interfaceinvoke r34.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        $i8 = interfaceinvoke r34.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        specialinvoke $r19.<android.graphics.YuvImage: void <init>(byte[],int,int,int,int[])>(r38, 17, $i7, $i8, null);
+
+        r39 = $r19;
+
+        $r20 = virtualinvoke r35.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r21 = $r20[0];
+
+        r40 = virtualinvoke $r21.<android.media.Image$Plane: java.nio.ByteBuffer getBuffer()>();
+
+        i2 = virtualinvoke r40.<java.nio.ByteBuffer: int position()>();
+
+        $r22 = new androidx.camera.core.impl.utils.ExifOutputStream;
+
+        $r23 = new androidx.camera.core.internal.ByteBufferOutputStream;
+
+        specialinvoke $r23.<androidx.camera.core.internal.ByteBufferOutputStream: void <init>(java.nio.ByteBuffer)>(r40);
+
+        $r24 = staticinvoke <androidx.camera.core.impl.utils.ExifData: androidx.camera.core.impl.utils.ExifData create(androidx.camera.core.ImageProxy,int)>(r34, i1);
+
+        specialinvoke $r22.<androidx.camera.core.impl.utils.ExifOutputStream: void <init>(java.io.OutputStream,androidx.camera.core.impl.utils.ExifData)>($r23, $r24);
+
+        r6 = $r22;
+
+        virtualinvoke r39.<android.graphics.YuvImage: boolean compressToJpeg(android.graphics.Rect,int,java.io.OutputStream)>(r5, i0, r6);
+
+        interfaceinvoke r34.<androidx.camera.core.ImageProxy: void close()>();
+
+        r34 = null;
+
+        $i9 = virtualinvoke r40.<java.nio.ByteBuffer: int position()>();
+
+        virtualinvoke r40.<java.nio.ByteBuffer: java.nio.Buffer limit(int)>($i9);
+
+        virtualinvoke r40.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(i2);
+
+        virtualinvoke r4.<android.media.ImageWriter: void queueInputImage(android.media.Image)>(r35);
+
+     label18:
+        $r25 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r41 = $r25;
+
+        entermonitor $r25;
+
+        if z0 == 0 goto label19;
+
+        $i10 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages>;
+
+        $i11 = $i10 - 1;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages> = $i11;
+
+        if $i10 != 0 goto label19;
+
+        $z4 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed>;
+
+        if $z4 == 0 goto label19;
+
+        $z13 = 1;
+
+        goto label20;
+
+     label19:
+        $z13 = 0;
+
+     label20:
+        z14 = $z13;
+
+        r42 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mCloseCompleter>;
+
+        exitmonitor r41;
+
+        goto label21;
+
+     label21:
+        if null == null goto label22;
+
+        r48 = new java.lang.NullPointerException;
+
+        specialinvoke r48.<java.lang.NullPointerException: void <init>(java.lang.String)>("This statement would have triggered an Exception: virtualinvoke jpegImage#25.<android.media.Image: void close()>()");
+
+        throw r48;
+
+     label22:
+        if null == null goto label23;
+
+        interfaceinvoke r34.<androidx.camera.core.ImageProxy: void close()>();
+
+     label23:
+        if z14 == 0 goto label24;
+
+        virtualinvoke r4.<android.media.ImageWriter: void close()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("YuvToJpegProcessor", "Closed after completion of last image processed.");
+
+        if r42 == null goto label24;
+
+        virtualinvoke r42.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+     label24:
+        goto label41;
+
+     label25:
+        $r27 := @caughtexception;
+
+        r43 = $r27;
+
+        if z0 == 0 goto label26;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("YuvToJpegProcessor", "Failed to process YUV -> JPEG", r43);
+
+        r35 = virtualinvoke r4.<android.media.ImageWriter: android.media.Image dequeueInputImage()>();
+
+        $r29 = virtualinvoke r35.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r30 = $r29[0];
+
+        r44 = virtualinvoke $r30.<android.media.Image$Plane: java.nio.ByteBuffer getBuffer()>();
+
+        virtualinvoke r44.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        virtualinvoke r44.<java.nio.ByteBuffer: java.nio.Buffer limit(int)>(0);
+
+        virtualinvoke r4.<android.media.ImageWriter: void queueInputImage(android.media.Image)>(r35);
+
+     label26:
+        $r28 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r45 = $r28;
+
+        entermonitor $r28;
+
+        if z0 == 0 goto label27;
+
+        $i16 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages>;
+
+        $i17 = $i16 - 1;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages> = $i17;
+
+        if $i16 != 0 goto label27;
+
+        $z6 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed>;
+
+        if $z6 == 0 goto label27;
+
+        $z15 = 1;
+
+        goto label28;
+
+     label27:
+        $z15 = 0;
+
+     label28:
+        z16 = $z15;
+
+        r46 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mCloseCompleter>;
+
+        exitmonitor r45;
+
+        goto label29;
+
+     label29:
+        if r35 == null goto label30;
+
+        virtualinvoke r35.<android.media.Image: void close()>();
+
+     label30:
+        if r34 == null goto label31;
+
+        interfaceinvoke r34.<androidx.camera.core.ImageProxy: void close()>();
+
+     label31:
+        if z16 == 0 goto label32;
+
+        virtualinvoke r4.<android.media.ImageWriter: void close()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("YuvToJpegProcessor", "Closed after completion of last image processed.");
+
+        if r46 == null goto label32;
+
+        virtualinvoke r46.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+     label32:
+        goto label41;
+
+     label33:
+        $r31 := @caughtexception;
+
+        r7 = $r31;
+
+     label34:
+        $r32 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r9 = $r32;
+
+        entermonitor $r32;
+
+        if z0 == 0 goto label35;
+
+        $i18 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages>;
+
+        $i19 = $i18 - 1;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages> = $i19;
+
+        if $i18 != 0 goto label35;
+
+        $z7 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed>;
+
+        if $z7 == 0 goto label35;
+
+        $z17 = 1;
+
+        goto label36;
+
+     label35:
+        $z17 = 0;
+
+     label36:
+        z1 = $z17;
+
+        r8 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mCloseCompleter>;
+
+        exitmonitor r9;
+
+        goto label37;
+
+     label37:
+        if r35 == null goto label38;
+
+        virtualinvoke r35.<android.media.Image: void close()>();
+
+     label38:
+        if r34 == null goto label39;
+
+        interfaceinvoke r34.<androidx.camera.core.ImageProxy: void close()>();
+
+     label39:
+        if z1 == 0 goto label40;
+
+        virtualinvoke r4.<android.media.ImageWriter: void close()>();
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("YuvToJpegProcessor", "Closed after completion of last image processed.");
+
+        if r8 == null goto label40;
+
+        virtualinvoke r8.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+     label40:
+        throw r7;
+
+     label41:
+        return;
+
+        catch java.lang.Exception from label07 to label08 with label25;
+        catch java.lang.Exception from label15 to label18 with label25;
+        catch java.lang.Throwable from label07 to label08 with label33;
+        catch java.lang.Throwable from label15 to label18 with label33;
+        catch java.lang.Throwable from label25 to label26 with label33;
+        catch java.lang.Throwable from label33 to label34 with label33;
+    }
+
+    public void close()
+    {
+        androidx.camera.core.internal.YuvToJpegProcessor r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r6;
+        boolean $z0;
+        int $i0;
+        android.media.ImageWriter $r4, $r5;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r7;
+
+        r0 := @this: androidx.camera.core.internal.YuvToJpegProcessor;
+
+        r7 = null;
+
+        $r3 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label01:
+        $z0 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed>;
+
+        if $z0 == 0 goto label03;
+
+        exitmonitor r1;
+
+     label02:
+        return;
+
+     label03:
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed> = 1;
+
+        $i0 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages>;
+
+        if $i0 != 0 goto label04;
+
+        $r4 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: android.media.ImageWriter mImageWriter>;
+
+        if $r4 == null goto label04;
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("YuvToJpegProcessor", "No processing in progress. Closing immediately.");
+
+        $r5 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: android.media.ImageWriter mImageWriter>;
+
+        virtualinvoke $r5.<android.media.ImageWriter: void close()>();
+
+        r7 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mCloseCompleter>;
+
+        goto label05;
+
+     label04:
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("YuvToJpegProcessor", "close() called while processing. Will close after completion.");
+
+     label05:
+        exitmonitor r1;
+
+     label06:
+        goto label09;
+
+     label07:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label08:
+        throw r2;
+
+     label09:
+        if r7 == null goto label10;
+
+        virtualinvoke r7.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+     label10:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label07;
+        catch java.lang.Throwable from label03 to label06 with label07;
+        catch java.lang.Throwable from label07 to label08 with label07;
+    }
+
+    public com.google.common.util.concurrent.ListenableFuture getCloseFuture()
+    {
+        androidx.camera.core.internal.YuvToJpegProcessor r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r8;
+        boolean $z0;
+        com.google.common.util.concurrent.ListenableFuture $r4, $r5, $r7, r9;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Resolver $r6;
+        int $i0;
+
+        r0 := @this: androidx.camera.core.internal.YuvToJpegProcessor;
+
+        $r3 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $z0 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: boolean mClosed>;
+
+        if $z0 == 0 goto label2;
+
+        $i0 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: int mProcessingImages>;
+
+        if $i0 != 0 goto label2;
+
+        r9 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture immediateFuture(java.lang.Object)>(null);
+
+        goto label4;
+
+     label2:
+        $r4 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: com.google.common.util.concurrent.ListenableFuture mCloseFuture>;
+
+        if $r4 != null goto label3;
+
+        $r6 = dynamicinvoke "attachCompleter" <androidx.concurrent.futures.CallbackToFutureAdapter$Resolver (androidx.camera.core.internal.YuvToJpegProcessor)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object lambda$getCloseFuture$0(androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer));
+
+        $r7 = staticinvoke <androidx.concurrent.futures.CallbackToFutureAdapter: com.google.common.util.concurrent.ListenableFuture getFuture(androidx.concurrent.futures.CallbackToFutureAdapter$Resolver)>($r6);
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: com.google.common.util.concurrent.ListenableFuture mCloseFuture> = $r7;
+
+     label3:
+        $r5 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: com.google.common.util.concurrent.ListenableFuture mCloseFuture>;
+
+        r9 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture nonCancellationPropagating(com.google.common.util.concurrent.ListenableFuture)>($r5);
+
+     label4:
+        exitmonitor r1;
+
+     label5:
+        goto label8;
+
+     label6:
+        $r8 := @caughtexception;
+
+        r2 = $r8;
+
+        exitmonitor r1;
+
+     label7:
+        throw r2;
+
+     label8:
+        return r9;
+
+        catch java.lang.Throwable from label1 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+
+    public void onResolutionUpdate(android.util.Size)
+    {
+        androidx.camera.core.internal.YuvToJpegProcessor r0;
+        android.util.Size r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r6;
+        android.graphics.Rect $r5;
+        int $i0, $i1;
+
+        r0 := @this: androidx.camera.core.internal.YuvToJpegProcessor;
+
+        r1 := @parameter0: android.util.Size;
+
+        $r4 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = new android.graphics.Rect;
+
+        $i0 = virtualinvoke r1.<android.util.Size: int getWidth()>();
+
+        $i1 = virtualinvoke r1.<android.util.Size: int getHeight()>();
+
+        specialinvoke $r5.<android.graphics.Rect: void <init>(int,int,int,int)>(0, 0, $i0, $i1);
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: android.graphics.Rect mImageRect> = $r5;
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r3 = $r6;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private java.lang.Object lambda$getCloseFuture$0(androidx.concurrent.futures.CallbackToFutureAdapter$Completer) throws java.lang.Exception
+    {
+        androidx.camera.core.internal.YuvToJpegProcessor r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r1;
+        java.lang.Object r2, $r3;
+
+        r0 := @this: androidx.camera.core.internal.YuvToJpegProcessor;
+
+        r1 := @parameter0: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        $r3 = r0.<androidx.camera.core.internal.YuvToJpegProcessor: java.lang.Object mLock>;
+
+        r2 = $r3;
+
+        entermonitor $r3;
+
+        r0.<androidx.camera.core.internal.YuvToJpegProcessor: androidx.concurrent.futures.CallbackToFutureAdapter$Completer mCloseCompleter> = r1;
+
+        exitmonitor r2;
+
+        goto label1;
+
+     label1:
+        return "YuvToJpegProcessor-close";
+    }
+
+    static void <clinit>()
+    {
+        android.graphics.Rect $r0;
+
+        $r0 = new android.graphics.Rect;
+
+        specialinvoke $r0.<android.graphics.Rect: void <init>(int,int,int,int)>(0, 0, 0, 0);
+
+        <androidx.camera.core.internal.YuvToJpegProcessor: android.graphics.Rect UNINITIALIZED_RECT> = $r0;
+
+        return;
+    }
+

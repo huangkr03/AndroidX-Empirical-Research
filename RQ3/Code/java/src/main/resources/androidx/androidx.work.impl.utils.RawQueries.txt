@@ -1,0 +1,386 @@
+androidx.work.impl.utils.RawQueries
+    public static final androidx.sqlite.db.SupportSQLiteQuery toRawQuery(androidx.work.WorkQuery)
+    {
+        androidx.work.WorkQuery $r0;
+        java.util.List r1, $r5, $r7, $r9, $r11, $r24, $r26, $r33, $r35, $r37, $r44, $r48, r65, r72;
+        java.lang.StringBuilder r2, $r4, $r19, $r20, $r21, $r28, $r29, $r30, $r39, $r40, $r41, $r50, $r51, $r52;
+        java.util.ArrayList $r3, $r38, $r49;
+        java.util.Collection $r6, $r8, $r10, $r12, $r27, $r36, $r46, $r56, r60, r64, r67, r71, r73;
+        boolean $z0, $z1, $z2, $z3, $z6, $z9, $z12, $z16, $z20, $z21;
+        androidx.sqlite.db.SimpleSQLiteQuery $r14;
+        java.lang.String $r15, $r22, $r31, $r42, $r47, $r53, r58;
+        java.lang.Object[] $r16, $r17;
+        androidx.sqlite.db.SupportSQLiteQuery $r18;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        java.lang.Integer $r57;
+        java.lang.Iterable $r59, $r66;
+        java.util.Iterator r61, r68;
+        java.lang.Object r62, r69;
+        androidx.work.WorkInfo$State r63;
+        java.util.UUID r70;
+
+        $r0 := @parameter0: androidx.work.WorkQuery;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>($r0, "<this>");
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        r1 = (java.util.List) $r3;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("SELECT * FROM workspec");
+
+        r2 = $r4;
+
+        r58 = " WHERE";
+
+        $r5 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getStates()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r5, "states");
+
+        $r6 = (java.util.Collection) $r5;
+
+        $z0 = interfaceinvoke $r6.<java.util.Collection: boolean isEmpty()>();
+
+        if $z0 != 0 goto label01;
+
+        $z12 = 1;
+
+        goto label02;
+
+     label01:
+        $z12 = 0;
+
+     label02:
+        if $z12 == 0 goto label05;
+
+        $r48 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getStates()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r48, "states");
+
+        $r59 = (java.lang.Iterable) $r48;
+
+        $r49 = new java.util.ArrayList;
+
+        $i4 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r59, 10);
+
+        specialinvoke $r49.<java.util.ArrayList: void <init>(int)>($i4);
+
+        r60 = (java.util.Collection) $r49;
+
+        r61 = interfaceinvoke $r59.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label03:
+        $z9 = interfaceinvoke r61.<java.util.Iterator: boolean hasNext()>();
+
+        if $z9 == 0 goto label04;
+
+        r62 = interfaceinvoke r61.<java.util.Iterator: java.lang.Object next()>();
+
+        r63 = (androidx.work.WorkInfo$State) r62;
+
+        r64 = r60;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNull(java.lang.Object)>(r63);
+
+        $i6 = staticinvoke <androidx.work.impl.model.WorkTypeConverters: int stateToInt(androidx.work.WorkInfo$State)>(r63);
+
+        $r57 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i6);
+
+        interfaceinvoke r64.<java.util.Collection: boolean add(java.lang.Object)>($r57);
+
+        goto label03;
+
+     label04:
+        r65 = (java.util.List) r60;
+
+        $r50 = new java.lang.StringBuilder;
+
+        specialinvoke $r50.<java.lang.StringBuilder: void <init>()>();
+
+        $r51 = virtualinvoke $r50.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r58);
+
+        $r52 = virtualinvoke $r51.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" state IN (");
+
+        $r53 = virtualinvoke $r52.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r53);
+
+        $i5 = interfaceinvoke r65.<java.util.List: int size()>();
+
+        staticinvoke <androidx.work.impl.utils.RawQueries: void bindings(java.lang.StringBuilder,int)>(r2, $i5);
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r56 = (java.util.Collection) r65;
+
+        interfaceinvoke r1.<java.util.List: boolean addAll(java.util.Collection)>($r56);
+
+        r58 = " AND";
+
+     label05:
+        $r7 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getIds()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r7, "ids");
+
+        $r8 = (java.util.Collection) $r7;
+
+        $z1 = interfaceinvoke $r8.<java.util.Collection: boolean isEmpty()>();
+
+        if $z1 != 0 goto label06;
+
+        $z16 = 1;
+
+        goto label07;
+
+     label06:
+        $z16 = 0;
+
+     label07:
+        if $z16 == 0 goto label10;
+
+        $r37 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getIds()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r37, "ids");
+
+        $r66 = (java.lang.Iterable) $r37;
+
+        $r38 = new java.util.ArrayList;
+
+        $i2 = staticinvoke <kotlin.collections.CollectionsKt: int collectionSizeOrDefault(java.lang.Iterable,int)>($r66, 10);
+
+        specialinvoke $r38.<java.util.ArrayList: void <init>(int)>($i2);
+
+        r67 = (java.util.Collection) $r38;
+
+        r68 = interfaceinvoke $r66.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label08:
+        $z6 = interfaceinvoke r68.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label09;
+
+        r69 = interfaceinvoke r68.<java.util.Iterator: java.lang.Object next()>();
+
+        r70 = (java.util.UUID) r69;
+
+        r71 = r67;
+
+        $r47 = virtualinvoke r70.<java.util.UUID: java.lang.String toString()>();
+
+        interfaceinvoke r71.<java.util.Collection: boolean add(java.lang.Object)>($r47);
+
+        goto label08;
+
+     label09:
+        r72 = (java.util.List) r67;
+
+        $r39 = new java.lang.StringBuilder;
+
+        specialinvoke $r39.<java.lang.StringBuilder: void <init>()>();
+
+        $r40 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r58);
+
+        $r41 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" id IN (");
+
+        $r42 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r42);
+
+        $r44 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getIds()>();
+
+        $i3 = interfaceinvoke $r44.<java.util.List: int size()>();
+
+        staticinvoke <androidx.work.impl.utils.RawQueries: void bindings(java.lang.StringBuilder,int)>(r2, $i3);
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r46 = (java.util.Collection) r72;
+
+        interfaceinvoke r1.<java.util.List: boolean addAll(java.util.Collection)>($r46);
+
+        r58 = " AND";
+
+     label10:
+        $r9 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getTags()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r9, "tags");
+
+        $r10 = (java.util.Collection) $r9;
+
+        $z2 = interfaceinvoke $r10.<java.util.Collection: boolean isEmpty()>();
+
+        if $z2 != 0 goto label11;
+
+        $z20 = 1;
+
+        goto label12;
+
+     label11:
+        $z20 = 0;
+
+     label12:
+        if $z20 == 0 goto label13;
+
+        $r28 = new java.lang.StringBuilder;
+
+        specialinvoke $r28.<java.lang.StringBuilder: void <init>()>();
+
+        $r29 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r58);
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" id IN (SELECT work_spec_id FROM worktag WHERE tag IN (");
+
+        $r31 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r31);
+
+        $r33 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getTags()>();
+
+        $i1 = interfaceinvoke $r33.<java.util.List: int size()>();
+
+        staticinvoke <androidx.work.impl.utils.RawQueries: void bindings(java.lang.StringBuilder,int)>(r2, $i1);
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("))");
+
+        $r35 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getTags()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r35, "tags");
+
+        $r36 = (java.util.Collection) $r35;
+
+        interfaceinvoke r1.<java.util.List: boolean addAll(java.util.Collection)>($r36);
+
+        r58 = " AND";
+
+     label13:
+        $r11 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getUniqueWorkNames()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r11, "uniqueWorkNames");
+
+        $r12 = (java.util.Collection) $r11;
+
+        $z3 = interfaceinvoke $r12.<java.util.Collection: boolean isEmpty()>();
+
+        if $z3 != 0 goto label14;
+
+        $z21 = 1;
+
+        goto label15;
+
+     label14:
+        $z21 = 0;
+
+     label15:
+        if $z21 == 0 goto label16;
+
+        $r19 = new java.lang.StringBuilder;
+
+        specialinvoke $r19.<java.lang.StringBuilder: void <init>()>();
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r58);
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" id IN (SELECT work_spec_id FROM workname WHERE name IN (");
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r22);
+
+        $r24 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getUniqueWorkNames()>();
+
+        $i0 = interfaceinvoke $r24.<java.util.List: int size()>();
+
+        staticinvoke <androidx.work.impl.utils.RawQueries: void bindings(java.lang.StringBuilder,int)>(r2, $i0);
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("))");
+
+        $r26 = virtualinvoke $r0.<androidx.work.WorkQuery: java.util.List getUniqueWorkNames()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r26, "uniqueWorkNames");
+
+        $r27 = (java.util.Collection) $r26;
+
+        interfaceinvoke r1.<java.util.List: boolean addAll(java.util.Collection)>($r27);
+
+     label16:
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(";");
+
+        $r14 = new androidx.sqlite.db.SimpleSQLiteQuery;
+
+        $r15 = virtualinvoke r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r15, "builder.toString()");
+
+        r73 = (java.util.Collection) r1;
+
+        $r16 = newarray (java.lang.Object)[0];
+
+        $r17 = interfaceinvoke r73.<java.util.Collection: java.lang.Object[] toArray(java.lang.Object[])>($r16);
+
+        specialinvoke $r14.<androidx.sqlite.db.SimpleSQLiteQuery: void <init>(java.lang.String,java.lang.Object[])>($r15, $r17);
+
+        $r18 = (androidx.sqlite.db.SupportSQLiteQuery) $r14;
+
+        return $r18;
+    }
+
+    private static final void bindings(java.lang.StringBuilder, int)
+    {
+        java.lang.StringBuilder r0, r2;
+        int i0, i1, i2, i3;
+        java.util.ArrayList r1, r3, $r4;
+        java.util.List $r5;
+        java.lang.CharSequence $r6;
+        java.lang.Iterable $r7;
+        java.lang.String $r8;
+
+        r0 := @parameter0: java.lang.StringBuilder;
+
+        i0 := @parameter1: int;
+
+        if i0 > 0 goto label1;
+
+        return;
+
+     label1:
+        r2 = r0;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(int)>(i0);
+
+        r1 = $r4;
+
+        i3 = 0;
+
+     label2:
+        if i3 >= i0 goto label3;
+
+        i1 = i3;
+
+        i2 = i1;
+
+        r3 = r1;
+
+        virtualinvoke r3.<java.util.ArrayList: boolean add(java.lang.Object)>("?");
+
+        i3 = i3 + 1;
+
+        goto label2;
+
+     label3:
+        $r5 = (java.util.List) r1;
+
+        $r7 = (java.lang.Iterable) $r5;
+
+        $r6 = (java.lang.CharSequence) ",";
+
+        $r8 = staticinvoke <kotlin.collections.CollectionsKt: java.lang.String joinToString$default(java.lang.Iterable,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,int,java.lang.CharSequence,kotlin.jvm.functions.Function1,int,java.lang.Object)>($r7, $r6, null, null, 0, null, null, 62, null);
+
+        virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        return;
+    }
+

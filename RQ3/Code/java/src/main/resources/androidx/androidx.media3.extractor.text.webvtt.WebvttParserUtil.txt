@@ -1,0 +1,241 @@
+androidx.media3.extractor.text.webvtt.WebvttParserUtil
+<androidx.media3.extractor.text.webvtt.WebvttParserUtil: java.util.regex.Pattern COMMENT>
+<androidx.media3.extractor.text.webvtt.WebvttParserUtil: java.lang.String WEBVTT_HEADER>
+    private void <init>()
+    {
+        androidx.media3.extractor.text.webvtt.WebvttParserUtil r0;
+
+        r0 := @this: androidx.media3.extractor.text.webvtt.WebvttParserUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void validateWebvttHeaderLine(androidx.media3.common.util.ParsableByteArray) throws androidx.media3.common.ParserException
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0;
+        boolean $z0;
+        java.lang.StringBuilder $r2, $r4, r7;
+        java.lang.String $r3, $r5;
+        androidx.media3.common.ParserException $r6;
+        java.lang.Throwable r8;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i0 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        $z0 = staticinvoke <androidx.media3.extractor.text.webvtt.WebvttParserUtil: boolean isWebvttHeaderLine(androidx.media3.common.util.ParsableByteArray)>(r0);
+
+        if $z0 != 0 goto label1;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i0);
+
+        r7 = new java.lang.StringBuilder;
+
+        specialinvoke r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Expected WEBVTT. Got ");
+
+        $r3 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: java.lang.String readLine()>();
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>($r5, null);
+
+        r8 = (java.lang.Throwable) $r6;
+
+        throw r8;
+
+     label1:
+        return;
+    }
+
+    public static boolean isWebvttHeaderLine(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        java.lang.String r1;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: java.lang.String readLine()>();
+
+        if r1 == null goto label1;
+
+        $z0 = virtualinvoke r1.<java.lang.String: boolean startsWith(java.lang.String)>("WEBVTT");
+
+        if $z0 == 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    public static long parseTimestampUs(java.lang.String) throws java.lang.NumberFormatException
+    {
+        java.lang.String r0, r4, $r5, $r6;
+        java.lang.String[] r1, r2, r3;
+        int i0, $i1, i7;
+        long $l2, $l3, $l4, $l5, l6, l8;
+
+        r0 := @parameter0: java.lang.String;
+
+        l6 = 0L;
+
+        r1 = staticinvoke <androidx.media3.common.util.Util: java.lang.String[] splitAtFirst(java.lang.String,java.lang.String)>(r0, "\\.");
+
+        $r5 = r1[0];
+
+        r2 = staticinvoke <androidx.media3.common.util.Util: java.lang.String[] split(java.lang.String,java.lang.String)>($r5, ":");
+
+        r3 = r2;
+
+        i0 = lengthof r3;
+
+        i7 = 0;
+
+     label1:
+        if i7 >= i0 goto label2;
+
+        r4 = r3[i7];
+
+        $l4 = l6 * 60L;
+
+        $l5 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r4);
+
+        l6 = $l4 + $l5;
+
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label2:
+        l8 = l6 * 1000L;
+
+        $i1 = lengthof r1;
+
+        if $i1 != 2 goto label3;
+
+        $r6 = r1[1];
+
+        $l3 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r6);
+
+        l8 = l8 + $l3;
+
+     label3:
+        $l2 = l8 * 1000L;
+
+        return $l2;
+    }
+
+    public static float parsePercentage(java.lang.String) throws java.lang.NumberFormatException
+    {
+        java.lang.String r0, $r1;
+        boolean $z0;
+        int $i0, $i1;
+        float $f0, $f1;
+        java.lang.NumberFormatException $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke r0.<java.lang.String: boolean endsWith(java.lang.String)>("%");
+
+        if $z0 != 0 goto label1;
+
+        $r2 = new java.lang.NumberFormatException;
+
+        specialinvoke $r2.<java.lang.NumberFormatException: void <init>(java.lang.String)>("Percentages must end with %");
+
+        throw $r2;
+
+     label1:
+        $i0 = virtualinvoke r0.<java.lang.String: int length()>();
+
+        $i1 = $i0 - 1;
+
+        $r1 = virtualinvoke r0.<java.lang.String: java.lang.String substring(int,int)>(0, $i1);
+
+        $f0 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r1);
+
+        $f1 = $f0 / 100.0F;
+
+        return $f1;
+    }
+
+    public static java.util.regex.Matcher findNextCueHeader(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        java.util.regex.Matcher r1, $r3;
+        java.util.regex.Pattern $r2, $r4;
+        boolean $z0, $z1, $z2;
+        java.lang.String $r5, $r6, r7, r8;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+     label1:
+        $r6 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: java.lang.String readLine()>();
+
+        r7 = $r6;
+
+        if $r6 == null goto label5;
+
+        $r2 = <androidx.media3.extractor.text.webvtt.WebvttParserUtil: java.util.regex.Pattern COMMENT>;
+
+        $r3 = virtualinvoke $r2.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r7);
+
+        $z0 = virtualinvoke $r3.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z0 == 0 goto label3;
+
+     label2:
+        $r5 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: java.lang.String readLine()>();
+
+        r8 = $r5;
+
+        if $r5 == null goto label1;
+
+        $z2 = virtualinvoke r8.<java.lang.String: boolean isEmpty()>();
+
+        if $z2 != 0 goto label1;
+
+        goto label2;
+
+     label3:
+        $r4 = <androidx.media3.extractor.text.webvtt.WebvttCueParser: java.util.regex.Pattern CUE_HEADER_PATTERN>;
+
+        r1 = virtualinvoke $r4.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r7);
+
+        $z1 = virtualinvoke r1.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z1 == 0 goto label4;
+
+        return r1;
+
+     label4:
+        goto label1;
+
+     label5:
+        return null;
+    }
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("^NOTE([ \t].*)?$");
+
+        <androidx.media3.extractor.text.webvtt.WebvttParserUtil: java.util.regex.Pattern COMMENT> = $r0;
+
+        return;
+    }
+

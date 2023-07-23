@@ -1,0 +1,283 @@
+androidx.work.impl.background.systemalarm.Alarms
+<androidx.work.impl.background.systemalarm.Alarms: java.lang.String TAG>
+    public static void setAlarm(android.content.Context, androidx.work.impl.WorkDatabase, androidx.work.impl.model.WorkGenerationalId, long)
+    {
+        android.content.Context r0;
+        androidx.work.impl.WorkDatabase r1;
+        androidx.work.impl.model.WorkGenerationalId r2;
+        long l0;
+        androidx.work.impl.model.SystemIdInfoDao r3;
+        androidx.work.impl.model.SystemIdInfo r4, r6;
+        androidx.work.impl.utils.IdGenerator r5, $r7;
+        int i1, $i2, $i3;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.WorkDatabase;
+
+        r2 := @parameter2: androidx.work.impl.model.WorkGenerationalId;
+
+        l0 := @parameter3: long;
+
+        r3 = virtualinvoke r1.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.SystemIdInfoDao systemIdInfoDao()>();
+
+        r4 = interfaceinvoke r3.<androidx.work.impl.model.SystemIdInfoDao: androidx.work.impl.model.SystemIdInfo getSystemIdInfo(androidx.work.impl.model.WorkGenerationalId)>(r2);
+
+        if r4 == null goto label1;
+
+        $i2 = r4.<androidx.work.impl.model.SystemIdInfo: int systemId>;
+
+        staticinvoke <androidx.work.impl.background.systemalarm.Alarms: void cancelExactAlarm(android.content.Context,androidx.work.impl.model.WorkGenerationalId,int)>(r0, r2, $i2);
+
+        $i3 = r4.<androidx.work.impl.model.SystemIdInfo: int systemId>;
+
+        staticinvoke <androidx.work.impl.background.systemalarm.Alarms: void setExactAlarm(android.content.Context,androidx.work.impl.model.WorkGenerationalId,int,long)>(r0, r2, $i3, l0);
+
+        goto label2;
+
+     label1:
+        $r7 = new androidx.work.impl.utils.IdGenerator;
+
+        specialinvoke $r7.<androidx.work.impl.utils.IdGenerator: void <init>(androidx.work.impl.WorkDatabase)>(r1);
+
+        r5 = $r7;
+
+        i1 = virtualinvoke r5.<androidx.work.impl.utils.IdGenerator: int nextAlarmManagerId()>();
+
+        r6 = staticinvoke <androidx.work.impl.model.SystemIdInfoKt: androidx.work.impl.model.SystemIdInfo systemIdInfo(androidx.work.impl.model.WorkGenerationalId,int)>(r2, i1);
+
+        interfaceinvoke r3.<androidx.work.impl.model.SystemIdInfoDao: void insertSystemIdInfo(androidx.work.impl.model.SystemIdInfo)>(r6);
+
+        staticinvoke <androidx.work.impl.background.systemalarm.Alarms: void setExactAlarm(android.content.Context,androidx.work.impl.model.WorkGenerationalId,int,long)>(r0, r2, i1, l0);
+
+     label2:
+        return;
+    }
+
+    public static void cancelAlarm(android.content.Context, androidx.work.impl.WorkDatabase, androidx.work.impl.model.WorkGenerationalId)
+    {
+        android.content.Context r0;
+        androidx.work.impl.WorkDatabase r1;
+        androidx.work.impl.model.WorkGenerationalId r2;
+        androidx.work.impl.model.SystemIdInfoDao r3;
+        androidx.work.impl.model.SystemIdInfo r4;
+        int $i0;
+        androidx.work.Logger $r5;
+        java.lang.StringBuilder $r6, $r8, $r9, $r10;
+        java.lang.String $r7, $r11;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.WorkDatabase;
+
+        r2 := @parameter2: androidx.work.impl.model.WorkGenerationalId;
+
+        r3 = virtualinvoke r1.<androidx.work.impl.WorkDatabase: androidx.work.impl.model.SystemIdInfoDao systemIdInfoDao()>();
+
+        r4 = interfaceinvoke r3.<androidx.work.impl.model.SystemIdInfoDao: androidx.work.impl.model.SystemIdInfo getSystemIdInfo(androidx.work.impl.model.WorkGenerationalId)>(r2);
+
+        if r4 == null goto label1;
+
+        $i0 = r4.<androidx.work.impl.model.SystemIdInfo: int systemId>;
+
+        staticinvoke <androidx.work.impl.background.systemalarm.Alarms: void cancelExactAlarm(android.content.Context,androidx.work.impl.model.WorkGenerationalId,int)>(r0, r2, $i0);
+
+        $r5 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r7 = <androidx.work.impl.background.systemalarm.Alarms: java.lang.String TAG>;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Removing SystemIdInfo for workSpecId (");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r5.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r7, $r11);
+
+        interfaceinvoke r3.<androidx.work.impl.model.SystemIdInfoDao: void removeSystemIdInfo(androidx.work.impl.model.WorkGenerationalId)>(r2);
+
+     label1:
+        return;
+    }
+
+    private static void cancelExactAlarm(android.content.Context, androidx.work.impl.model.WorkGenerationalId, int)
+    {
+        android.content.Context r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        int i0, $i1, i2;
+        android.app.AlarmManager r2;
+        android.content.Intent r3;
+        android.app.PendingIntent r4;
+        java.lang.Object $r5;
+        androidx.work.Logger $r6;
+        java.lang.StringBuilder $r7, $r9, $r10, $r11, $r12, $r13;
+        java.lang.String $r8, $r14;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.model.WorkGenerationalId;
+
+        i0 := @parameter2: int;
+
+        $r5 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("alarm");
+
+        r2 = (android.app.AlarmManager) $r5;
+
+        r3 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: android.content.Intent createDelayMetIntent(android.content.Context,androidx.work.impl.model.WorkGenerationalId)>(r0, r1);
+
+        i2 = 536870912;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 23 goto label1;
+
+        i2 = i2 | 67108864;
+
+     label1:
+        r4 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getService(android.content.Context,int,android.content.Intent,int)>(r0, i0, r3, i2);
+
+        if r4 == null goto label2;
+
+        if r2 == null goto label2;
+
+        $r6 = staticinvoke <androidx.work.Logger: androidx.work.Logger get()>();
+
+        $r8 = <androidx.work.impl.background.systemalarm.Alarms: java.lang.String TAG>;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cancelling existing alarm with (workSpecId, systemId) (");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r6.<androidx.work.Logger: void debug(java.lang.String,java.lang.String)>($r8, $r14);
+
+        virtualinvoke r2.<android.app.AlarmManager: void cancel(android.app.PendingIntent)>(r4);
+
+     label2:
+        return;
+    }
+
+    private static void setExactAlarm(android.content.Context, androidx.work.impl.model.WorkGenerationalId, int, long)
+    {
+        android.content.Context r0;
+        androidx.work.impl.model.WorkGenerationalId r1;
+        int i0, $i2, $i3, i4;
+        long l1;
+        android.app.AlarmManager r2;
+        android.content.Intent r3;
+        android.app.PendingIntent r4;
+        java.lang.Object $r5;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.work.impl.model.WorkGenerationalId;
+
+        i0 := @parameter2: int;
+
+        l1 := @parameter3: long;
+
+        $r5 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("alarm");
+
+        r2 = (android.app.AlarmManager) $r5;
+
+        i4 = 134217728;
+
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 < 23 goto label1;
+
+        i4 = i4 | 67108864;
+
+     label1:
+        r3 = staticinvoke <androidx.work.impl.background.systemalarm.CommandHandler: android.content.Intent createDelayMetIntent(android.content.Context,androidx.work.impl.model.WorkGenerationalId)>(r0, r1);
+
+        r4 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getService(android.content.Context,int,android.content.Intent,int)>(r0, i0, r3, i4);
+
+        if r2 == null goto label3;
+
+        $i3 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i3 < 19 goto label2;
+
+        staticinvoke <androidx.work.impl.background.systemalarm.Alarms$Api19Impl: void setExact(android.app.AlarmManager,int,long,android.app.PendingIntent)>(r2, 0, l1, r4);
+
+        goto label3;
+
+     label2:
+        virtualinvoke r2.<android.app.AlarmManager: void set(int,long,android.app.PendingIntent)>(0, l1, r4);
+
+     label3:
+        return;
+    }
+
+    private void <init>()
+    {
+        androidx.work.impl.background.systemalarm.Alarms r0;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.Alarms;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+
+        $r0 = staticinvoke <androidx.work.Logger: java.lang.String tagWithPrefix(java.lang.String)>("Alarms");
+
+        <androidx.work.impl.background.systemalarm.Alarms: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+androidx.work.impl.background.systemalarm.Alarms$Api19Impl
+    private void <init>()
+    {
+        androidx.work.impl.background.systemalarm.Alarms$Api19Impl r0;
+
+        r0 := @this: androidx.work.impl.background.systemalarm.Alarms$Api19Impl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void setExact(android.app.AlarmManager, int, long, android.app.PendingIntent)
+    {
+        android.app.AlarmManager r0;
+        int i0;
+        long l1;
+        android.app.PendingIntent r1;
+
+        r0 := @parameter0: android.app.AlarmManager;
+
+        i0 := @parameter1: int;
+
+        l1 := @parameter2: long;
+
+        r1 := @parameter3: android.app.PendingIntent;
+
+        virtualinvoke r0.<android.app.AlarmManager: void setExact(int,long,android.app.PendingIntent)>(i0, l1, r1);
+
+        return;
+    }
+

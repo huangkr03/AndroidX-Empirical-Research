@@ -1,0 +1,1593 @@
+androidx.core.app.JobIntentService
+<androidx.core.app.JobIntentService: java.lang.String TAG>
+<androidx.core.app.JobIntentService: boolean DEBUG>
+<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CompatJobEngine mJobImpl>
+<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer mCompatWorkEnqueuer>
+<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CommandProcessor mCurProcessor>
+<androidx.core.app.JobIntentService: boolean mInterruptIfStopped>
+<androidx.core.app.JobIntentService: boolean mStopped>
+<androidx.core.app.JobIntentService: boolean mDestroyed>
+<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>
+<androidx.core.app.JobIntentService: java.lang.Object sLock>
+<androidx.core.app.JobIntentService: java.util.HashMap sClassWorkEnqueuer>
+    public void <init>()
+    {
+        androidx.core.app.JobIntentService r0;
+        int $i0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        specialinvoke r0.<android.app.Service: void <init>()>();
+
+        r0.<androidx.core.app.JobIntentService: boolean mInterruptIfStopped> = 0;
+
+        r0.<androidx.core.app.JobIntentService: boolean mStopped> = 0;
+
+        r0.<androidx.core.app.JobIntentService: boolean mDestroyed> = 0;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 26 goto label1;
+
+        r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue> = null;
+
+        goto label2;
+
+     label1:
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue> = $r1;
+
+     label2:
+        return;
+    }
+
+    public void onCreate()
+    {
+        androidx.core.app.JobIntentService r0;
+        android.content.ComponentName r1, r7;
+        int $i0;
+        java.lang.Class $r3;
+        androidx.core.app.JobIntentService$WorkEnqueuer $r4;
+        androidx.core.app.JobIntentService$JobServiceEngineImpl r6;
+        android.content.Context r8, r9;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        specialinvoke r0.<android.app.Service: void onCreate()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 26 goto label1;
+
+        r6 = new androidx.core.app.JobIntentService$JobServiceEngineImpl;
+
+        specialinvoke r6.<androidx.core.app.JobIntentService$JobServiceEngineImpl: void <init>(androidx.core.app.JobIntentService)>(r0);
+
+        r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CompatJobEngine mJobImpl> = r6;
+
+        r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer mCompatWorkEnqueuer> = null;
+
+        goto label2;
+
+     label1:
+        r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CompatJobEngine mJobImpl> = null;
+
+        r7 = new android.content.ComponentName;
+
+        $r3 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        r8 = (android.content.Context) r0;
+
+        specialinvoke r7.<android.content.ComponentName: void <init>(android.content.Context,java.lang.Class)>(r8, $r3);
+
+        r1 = r7;
+
+        r9 = (android.content.Context) r0;
+
+        $r4 = staticinvoke <androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer getWorkEnqueuer(android.content.Context,android.content.ComponentName,boolean,int)>(r9, r1, 0, 0);
+
+        r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer mCompatWorkEnqueuer> = $r4;
+
+     label2:
+        return;
+    }
+
+    public int onStartCommand(android.content.Intent, int, int)
+    {
+        androidx.core.app.JobIntentService r0;
+        android.content.Intent r1, $r11;
+        int i0, i1;
+        java.util.ArrayList r2, $r4, $r6, $r8;
+        java.lang.Throwable r3, $r10;
+        androidx.core.app.JobIntentService$WorkEnqueuer $r5;
+        androidx.core.app.JobIntentService$CompatWorkItem $r7;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        r1 := @parameter0: android.content.Intent;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $r4 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        if $r4 == null goto label8;
+
+        $r5 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer mCompatWorkEnqueuer>;
+
+        virtualinvoke $r5.<androidx.core.app.JobIntentService$WorkEnqueuer: void serviceStartReceived()>();
+
+        $r6 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        r2 = $r6;
+
+        entermonitor $r6;
+
+     label1:
+        $r8 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        $r7 = new androidx.core.app.JobIntentService$CompatWorkItem;
+
+        if r1 == null goto label2;
+
+        $r11 = r1;
+
+        goto label3;
+
+     label2:
+        $r11 = new android.content.Intent;
+
+        specialinvoke $r11.<android.content.Intent: void <init>()>();
+
+     label3:
+        specialinvoke $r7.<androidx.core.app.JobIntentService$CompatWorkItem: void <init>(androidx.core.app.JobIntentService,android.content.Intent,int)>(r0, $r11, i1);
+
+        virtualinvoke $r8.<java.util.ArrayList: boolean add(java.lang.Object)>($r7);
+
+        virtualinvoke r0.<androidx.core.app.JobIntentService: void ensureProcessorRunningLocked(boolean)>(1);
+
+        exitmonitor r2;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r10 := @caughtexception;
+
+        r3 = $r10;
+
+        exitmonitor r2;
+
+     label6:
+        throw r3;
+
+     label7:
+        return 3;
+
+     label8:
+        return 2;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        androidx.core.app.JobIntentService r0;
+        android.content.Intent r1;
+        android.os.IBinder r2;
+        androidx.core.app.JobIntentService$CompatJobEngine $r3, $r4;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        r1 := @parameter0: android.content.Intent;
+
+        $r3 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CompatJobEngine mJobImpl>;
+
+        if $r3 == null goto label1;
+
+        $r4 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CompatJobEngine mJobImpl>;
+
+        r2 = interfaceinvoke $r4.<androidx.core.app.JobIntentService$CompatJobEngine: android.os.IBinder compatGetBinder()>();
+
+        return r2;
+
+     label1:
+        return null;
+    }
+
+    public void onDestroy()
+    {
+        androidx.core.app.JobIntentService r0;
+        java.util.ArrayList r1, $r3, $r4;
+        java.lang.Throwable r2, $r6;
+        androidx.core.app.JobIntentService$WorkEnqueuer $r5;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        specialinvoke r0.<android.app.Service: void onDestroy()>();
+
+        $r3 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        if $r3 == null goto label5;
+
+        $r4 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        r1 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        r0.<androidx.core.app.JobIntentService: boolean mDestroyed> = 1;
+
+        $r5 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer mCompatWorkEnqueuer>;
+
+        virtualinvoke $r5.<androidx.core.app.JobIntentService$WorkEnqueuer: void serviceProcessingFinished()>();
+
+        exitmonitor r1;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public static void enqueueWork(android.content.Context, java.lang.Class, int, android.content.Intent)
+    {
+        android.content.Context r0;
+        java.lang.Class r1;
+        int i0;
+        android.content.Intent r2;
+        android.content.ComponentName $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: java.lang.Class;
+
+        i0 := @parameter2: int;
+
+        r2 := @parameter3: android.content.Intent;
+
+        $r3 = new android.content.ComponentName;
+
+        specialinvoke $r3.<android.content.ComponentName: void <init>(android.content.Context,java.lang.Class)>(r0, r1);
+
+        staticinvoke <androidx.core.app.JobIntentService: void enqueueWork(android.content.Context,android.content.ComponentName,int,android.content.Intent)>(r0, $r3, i0, r2);
+
+        return;
+    }
+
+    public static void enqueueWork(android.content.Context, android.content.ComponentName, int, android.content.Intent)
+    {
+        android.content.Context r0;
+        android.content.ComponentName r1;
+        int i0;
+        android.content.Intent r2;
+        java.lang.Object r3, $r6;
+        androidx.core.app.JobIntentService$WorkEnqueuer r4;
+        java.lang.Throwable r5, $r8;
+        java.lang.IllegalArgumentException $r7;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.ComponentName;
+
+        i0 := @parameter2: int;
+
+        r2 := @parameter3: android.content.Intent;
+
+        if r2 != null goto label1;
+
+        $r7 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r7.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("work must not be null");
+
+        throw $r7;
+
+     label1:
+        $r6 = <androidx.core.app.JobIntentService: java.lang.Object sLock>;
+
+        r3 = $r6;
+
+        entermonitor $r6;
+
+     label2:
+        r4 = staticinvoke <androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer getWorkEnqueuer(android.content.Context,android.content.ComponentName,boolean,int)>(r0, r1, 1, i0);
+
+        virtualinvoke r4.<androidx.core.app.JobIntentService$WorkEnqueuer: void ensureJobId(int)>(i0);
+
+        virtualinvoke r4.<androidx.core.app.JobIntentService$WorkEnqueuer: void enqueueWork(android.content.Intent)>(r2);
+
+        exitmonitor r3;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r5 = $r8;
+
+        exitmonitor r3;
+
+     label5:
+        throw r5;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    static androidx.core.app.JobIntentService$WorkEnqueuer getWorkEnqueuer(android.content.Context, android.content.ComponentName, boolean, int)
+    {
+        android.content.Context r0;
+        android.content.ComponentName r1;
+        boolean z0;
+        int i0, $i1;
+        java.util.HashMap $r2, $r5;
+        java.lang.Object $r3;
+        androidx.core.app.JobIntentService$CompatWorkEnqueuer $r4;
+        androidx.core.app.JobIntentService$JobWorkEnqueuer $r7;
+        java.lang.IllegalArgumentException $r8;
+        androidx.core.app.JobIntentService$WorkEnqueuer r9;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.content.ComponentName;
+
+        z0 := @parameter2: boolean;
+
+        i0 := @parameter3: int;
+
+        $r2 = <androidx.core.app.JobIntentService: java.util.HashMap sClassWorkEnqueuer>;
+
+        $r3 = virtualinvoke $r2.<java.util.HashMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        r9 = (androidx.core.app.JobIntentService$WorkEnqueuer) $r3;
+
+        if r9 != null goto label4;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 26 goto label2;
+
+        if z0 != 0 goto label1;
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Can\'t be here without a job id");
+
+        throw $r8;
+
+     label1:
+        $r7 = new androidx.core.app.JobIntentService$JobWorkEnqueuer;
+
+        specialinvoke $r7.<androidx.core.app.JobIntentService$JobWorkEnqueuer: void <init>(android.content.Context,android.content.ComponentName,int)>(r0, r1, i0);
+
+        r9 = $r7;
+
+        goto label3;
+
+     label2:
+        $r4 = new androidx.core.app.JobIntentService$CompatWorkEnqueuer;
+
+        specialinvoke $r4.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: void <init>(android.content.Context,android.content.ComponentName)>(r0, r1);
+
+        r9 = $r4;
+
+     label3:
+        $r5 = <androidx.core.app.JobIntentService: java.util.HashMap sClassWorkEnqueuer>;
+
+        virtualinvoke $r5.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r9);
+
+     label4:
+        return r9;
+    }
+
+<androidx.core.app.JobIntentService: void onHandleWork(android.content.Intent)>
+    public void setInterruptIfStopped(boolean)
+    {
+        androidx.core.app.JobIntentService r0;
+        boolean z0;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        z0 := @parameter0: boolean;
+
+        r0.<androidx.core.app.JobIntentService: boolean mInterruptIfStopped> = z0;
+
+        return;
+    }
+
+    public boolean isStopped()
+    {
+        androidx.core.app.JobIntentService r0;
+        boolean $z0;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        $z0 = r0.<androidx.core.app.JobIntentService: boolean mStopped>;
+
+        return $z0;
+    }
+
+    public boolean onStopCurrentWork()
+    {
+        androidx.core.app.JobIntentService r0;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        return 1;
+    }
+
+    boolean doStopCurrentWork()
+    {
+        androidx.core.app.JobIntentService r0;
+        androidx.core.app.JobIntentService$CommandProcessor $r1, $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        $r1 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CommandProcessor mCurProcessor>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CommandProcessor mCurProcessor>;
+
+        $z1 = r0.<androidx.core.app.JobIntentService: boolean mInterruptIfStopped>;
+
+        virtualinvoke $r2.<androidx.core.app.JobIntentService$CommandProcessor: boolean cancel(boolean)>($z1);
+
+     label1:
+        r0.<androidx.core.app.JobIntentService: boolean mStopped> = 1;
+
+        $z0 = virtualinvoke r0.<androidx.core.app.JobIntentService: boolean onStopCurrentWork()>();
+
+        return $z0;
+    }
+
+    void ensureProcessorRunningLocked(boolean)
+    {
+        androidx.core.app.JobIntentService r0;
+        boolean z0;
+        androidx.core.app.JobIntentService$CommandProcessor $r1, $r2, $r6;
+        androidx.core.app.JobIntentService$WorkEnqueuer $r3, $r5;
+        java.util.concurrent.Executor $r7;
+        java.lang.Void[] $r8;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        z0 := @parameter0: boolean;
+
+        $r1 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CommandProcessor mCurProcessor>;
+
+        if $r1 != null goto label2;
+
+        $r2 = new androidx.core.app.JobIntentService$CommandProcessor;
+
+        specialinvoke $r2.<androidx.core.app.JobIntentService$CommandProcessor: void <init>(androidx.core.app.JobIntentService)>(r0);
+
+        r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CommandProcessor mCurProcessor> = $r2;
+
+        $r3 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer mCompatWorkEnqueuer>;
+
+        if $r3 == null goto label1;
+
+        if z0 == 0 goto label1;
+
+        $r5 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer mCompatWorkEnqueuer>;
+
+        virtualinvoke $r5.<androidx.core.app.JobIntentService$WorkEnqueuer: void serviceProcessingStarted()>();
+
+     label1:
+        $r6 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CommandProcessor mCurProcessor>;
+
+        $r7 = <android.os.AsyncTask: java.util.concurrent.Executor THREAD_POOL_EXECUTOR>;
+
+        $r8 = newarray (java.lang.Void)[0];
+
+        virtualinvoke $r6.<androidx.core.app.JobIntentService$CommandProcessor: android.os.AsyncTask executeOnExecutor(java.util.concurrent.Executor,java.lang.Object[])>($r7, $r8);
+
+     label2:
+        return;
+    }
+
+    void processorFinished()
+    {
+        androidx.core.app.JobIntentService r0;
+        java.util.ArrayList r1, $r3, $r4, $r5, $r7;
+        java.lang.Throwable r2, $r8;
+        boolean $z0;
+        androidx.core.app.JobIntentService$WorkEnqueuer $r6;
+        int $i0;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        $r3 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        if $r3 == null goto label7;
+
+        $r4 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        r1 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CommandProcessor mCurProcessor> = null;
+
+        $r5 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        if $r5 == null goto label2;
+
+        $r7 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        $i0 = virtualinvoke $r7.<java.util.ArrayList: int size()>();
+
+        if $i0 <= 0 goto label2;
+
+        virtualinvoke r0.<androidx.core.app.JobIntentService: void ensureProcessorRunningLocked(boolean)>(0);
+
+        goto label3;
+
+     label2:
+        $z0 = r0.<androidx.core.app.JobIntentService: boolean mDestroyed>;
+
+        if $z0 != 0 goto label3;
+
+        $r6 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$WorkEnqueuer mCompatWorkEnqueuer>;
+
+        virtualinvoke $r6.<androidx.core.app.JobIntentService$WorkEnqueuer: void serviceProcessingFinished()>();
+
+     label3:
+        exitmonitor r1;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r8 := @caughtexception;
+
+        r2 = $r8;
+
+        exitmonitor r1;
+
+     label6:
+        throw r2;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    androidx.core.app.JobIntentService$GenericWorkItem dequeueWork()
+    {
+        androidx.core.app.JobIntentService r0;
+        java.util.ArrayList r1, $r4, $r5, $r6;
+        java.lang.Throwable r2, $r11;
+        androidx.core.app.JobIntentService$CompatJobEngine $r3, $r9;
+        int $i0;
+        java.lang.Object $r7;
+        androidx.core.app.JobIntentService$GenericWorkItem $r8, $r10;
+
+        r0 := @this: androidx.core.app.JobIntentService;
+
+        $r3 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CompatJobEngine mJobImpl>;
+
+        if $r3 == null goto label1;
+
+        $r9 = r0.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$CompatJobEngine mJobImpl>;
+
+        $r10 = interfaceinvoke $r9.<androidx.core.app.JobIntentService$CompatJobEngine: androidx.core.app.JobIntentService$GenericWorkItem dequeueWork()>();
+
+        return $r10;
+
+     label1:
+        $r4 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        r1 = $r4;
+
+        entermonitor $r4;
+
+     label2:
+        $r5 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        $i0 = virtualinvoke $r5.<java.util.ArrayList: int size()>();
+
+        if $i0 <= 0 goto label4;
+
+        $r6 = r0.<androidx.core.app.JobIntentService: java.util.ArrayList mCompatQueue>;
+
+        $r7 = virtualinvoke $r6.<java.util.ArrayList: java.lang.Object remove(int)>(0);
+
+        $r8 = (androidx.core.app.JobIntentService$GenericWorkItem) $r7;
+
+        exitmonitor r1;
+
+     label3:
+        return $r8;
+
+     label4:
+        exitmonitor r1;
+
+     label5:
+        return null;
+
+     label6:
+        $r11 := @caughtexception;
+
+        r2 = $r11;
+
+        exitmonitor r1;
+
+     label7:
+        throw r2;
+
+        catch java.lang.Throwable from label2 to label3 with label6;
+        catch java.lang.Throwable from label4 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Object $r0;
+        java.util.HashMap $r1;
+
+        $r0 = new java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        <androidx.core.app.JobIntentService: java.lang.Object sLock> = $r0;
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        <androidx.core.app.JobIntentService: java.util.HashMap sClassWorkEnqueuer> = $r1;
+
+        return;
+    }
+
+androidx.core.app.JobIntentService$CommandProcessor
+<androidx.core.app.JobIntentService$CommandProcessor: androidx.core.app.JobIntentService this$0>
+    void <init>(androidx.core.app.JobIntentService)
+    {
+        androidx.core.app.JobIntentService$CommandProcessor r0;
+        androidx.core.app.JobIntentService r1;
+
+        r0 := @this: androidx.core.app.JobIntentService$CommandProcessor;
+
+        r1 := @parameter0: androidx.core.app.JobIntentService;
+
+        r0.<androidx.core.app.JobIntentService$CommandProcessor: androidx.core.app.JobIntentService this$0> = r1;
+
+        specialinvoke r0.<android.os.AsyncTask: void <init>()>();
+
+        return;
+    }
+
+    protected transient java.lang.Void doInBackground(java.lang.Void[])
+    {
+        androidx.core.app.JobIntentService$CommandProcessor r0;
+        java.lang.Void[] r1;
+        androidx.core.app.JobIntentService$GenericWorkItem r2, $r4;
+        androidx.core.app.JobIntentService $r3, $r5;
+        android.content.Intent $r6;
+
+        r0 := @this: androidx.core.app.JobIntentService$CommandProcessor;
+
+        r1 := @parameter0: java.lang.Void[];
+
+     label1:
+        $r3 = r0.<androidx.core.app.JobIntentService$CommandProcessor: androidx.core.app.JobIntentService this$0>;
+
+        $r4 = virtualinvoke $r3.<androidx.core.app.JobIntentService: androidx.core.app.JobIntentService$GenericWorkItem dequeueWork()>();
+
+        r2 = $r4;
+
+        if $r4 == null goto label2;
+
+        $r5 = r0.<androidx.core.app.JobIntentService$CommandProcessor: androidx.core.app.JobIntentService this$0>;
+
+        $r6 = interfaceinvoke r2.<androidx.core.app.JobIntentService$GenericWorkItem: android.content.Intent getIntent()>();
+
+        virtualinvoke $r5.<androidx.core.app.JobIntentService: void onHandleWork(android.content.Intent)>($r6);
+
+        interfaceinvoke r2.<androidx.core.app.JobIntentService$GenericWorkItem: void complete()>();
+
+        goto label1;
+
+     label2:
+        return null;
+    }
+
+    protected void onCancelled(java.lang.Void)
+    {
+        androidx.core.app.JobIntentService$CommandProcessor r0;
+        java.lang.Void r1;
+        androidx.core.app.JobIntentService $r2;
+
+        r0 := @this: androidx.core.app.JobIntentService$CommandProcessor;
+
+        r1 := @parameter0: java.lang.Void;
+
+        $r2 = r0.<androidx.core.app.JobIntentService$CommandProcessor: androidx.core.app.JobIntentService this$0>;
+
+        virtualinvoke $r2.<androidx.core.app.JobIntentService: void processorFinished()>();
+
+        return;
+    }
+
+    protected void onPostExecute(java.lang.Void)
+    {
+        androidx.core.app.JobIntentService$CommandProcessor r0;
+        java.lang.Void r1;
+        androidx.core.app.JobIntentService $r2;
+
+        r0 := @this: androidx.core.app.JobIntentService$CommandProcessor;
+
+        r1 := @parameter0: java.lang.Void;
+
+        $r2 = r0.<androidx.core.app.JobIntentService$CommandProcessor: androidx.core.app.JobIntentService this$0>;
+
+        virtualinvoke $r2.<androidx.core.app.JobIntentService: void processorFinished()>();
+
+        return;
+    }
+
+    protected volatile void onCancelled(java.lang.Object)
+    {
+        androidx.core.app.JobIntentService$CommandProcessor r0;
+        java.lang.Object r1;
+        java.lang.Void $r2;
+
+        r0 := @this: androidx.core.app.JobIntentService$CommandProcessor;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Void) r1;
+
+        virtualinvoke r0.<androidx.core.app.JobIntentService$CommandProcessor: void onCancelled(java.lang.Void)>($r2);
+
+        return;
+    }
+
+    protected volatile void onPostExecute(java.lang.Object)
+    {
+        androidx.core.app.JobIntentService$CommandProcessor r0;
+        java.lang.Object r1;
+        java.lang.Void $r2;
+
+        r0 := @this: androidx.core.app.JobIntentService$CommandProcessor;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Void) r1;
+
+        virtualinvoke r0.<androidx.core.app.JobIntentService$CommandProcessor: void onPostExecute(java.lang.Void)>($r2);
+
+        return;
+    }
+
+    protected volatile java.lang.Object doInBackground(java.lang.Object[])
+    {
+        androidx.core.app.JobIntentService$CommandProcessor r0;
+        java.lang.Object[] r1;
+        java.lang.Void[] $r2;
+        java.lang.Void $r3;
+
+        r0 := @this: androidx.core.app.JobIntentService$CommandProcessor;
+
+        r1 := @parameter0: java.lang.Object[];
+
+        $r2 = (java.lang.Void[]) r1;
+
+        $r3 = virtualinvoke r0.<androidx.core.app.JobIntentService$CommandProcessor: java.lang.Void doInBackground(java.lang.Void[])>($r2);
+
+        return $r3;
+    }
+
+androidx.core.app.JobIntentService$CompatJobEngine
+<androidx.core.app.JobIntentService$CompatJobEngine: android.os.IBinder compatGetBinder()>
+<androidx.core.app.JobIntentService$CompatJobEngine: androidx.core.app.JobIntentService$GenericWorkItem dequeueWork()>
+androidx.core.app.JobIntentService$CompatWorkEnqueuer
+<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.content.Context mContext>
+<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mLaunchWakeLock>
+<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mRunWakeLock>
+<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mLaunchingService>
+<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mServiceProcessing>
+    void <init>(android.content.Context, android.content.ComponentName)
+    {
+        androidx.core.app.JobIntentService$CompatWorkEnqueuer r0;
+        android.content.Context r1, $r4;
+        android.content.ComponentName r2;
+        android.os.PowerManager r3;
+        java.lang.Object $r5;
+        java.lang.StringBuilder $r6, $r8, $r9, $r13, $r15, $r16;
+        java.lang.String $r7, $r10, $r14, $r17;
+        android.os.PowerManager$WakeLock $r11, $r12, $r18, $r19;
+
+        r0 := @this: androidx.core.app.JobIntentService$CompatWorkEnqueuer;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.content.ComponentName;
+
+        specialinvoke r0.<androidx.core.app.JobIntentService$WorkEnqueuer: void <init>(android.content.ComponentName)>(r2);
+
+        $r4 = virtualinvoke r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.content.Context mContext> = $r4;
+
+        $r5 = virtualinvoke r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("power");
+
+        r3 = (android.os.PowerManager) $r5;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke r2.<android.content.ComponentName: java.lang.String getClassName()>();
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(":launch");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r11 = virtualinvoke r3.<android.os.PowerManager: android.os.PowerManager$WakeLock newWakeLock(int,java.lang.String)>(1, $r10);
+
+        r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mLaunchWakeLock> = $r11;
+
+        $r12 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mLaunchWakeLock>;
+
+        virtualinvoke $r12.<android.os.PowerManager$WakeLock: void setReferenceCounted(boolean)>(0);
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke r2.<android.content.ComponentName: java.lang.String getClassName()>();
+
+        $r15 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r14);
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(":run");
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r18 = virtualinvoke r3.<android.os.PowerManager: android.os.PowerManager$WakeLock newWakeLock(int,java.lang.String)>(1, $r17);
+
+        r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mRunWakeLock> = $r18;
+
+        $r19 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mRunWakeLock>;
+
+        virtualinvoke $r19.<android.os.PowerManager$WakeLock: void setReferenceCounted(boolean)>(0);
+
+        return;
+    }
+
+    void enqueueWork(android.content.Intent)
+    {
+        androidx.core.app.JobIntentService$CompatWorkEnqueuer r0, r3;
+        android.content.Intent r1, r2, $r5;
+        java.lang.Throwable r4, $r12;
+        android.content.ComponentName $r6, $r9;
+        android.content.Context $r8;
+        boolean $z0, $z1;
+        android.os.PowerManager$WakeLock $r11;
+
+        r0 := @this: androidx.core.app.JobIntentService$CompatWorkEnqueuer;
+
+        r1 := @parameter0: android.content.Intent;
+
+        $r5 = new android.content.Intent;
+
+        specialinvoke $r5.<android.content.Intent: void <init>(android.content.Intent)>(r1);
+
+        r2 = $r5;
+
+        $r6 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.content.ComponentName mComponentName>;
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent setComponent(android.content.ComponentName)>($r6);
+
+        $r8 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.content.Context mContext>;
+
+        $r9 = virtualinvoke $r8.<android.content.Context: android.content.ComponentName startService(android.content.Intent)>(r2);
+
+        if $r9 == null goto label6;
+
+        r3 = r0;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mLaunchingService>;
+
+        if $z0 != 0 goto label2;
+
+        r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mLaunchingService> = 1;
+
+        $z1 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mServiceProcessing>;
+
+        if $z1 != 0 goto label2;
+
+        $r11 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mLaunchWakeLock>;
+
+        virtualinvoke $r11.<android.os.PowerManager$WakeLock: void acquire(long)>(60000L);
+
+     label2:
+        exitmonitor r3;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r12 := @caughtexception;
+
+        r4 = $r12;
+
+        exitmonitor r3;
+
+     label5:
+        throw r4;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void serviceStartReceived()
+    {
+        androidx.core.app.JobIntentService$CompatWorkEnqueuer r0, r1;
+
+        r0 := @this: androidx.core.app.JobIntentService$CompatWorkEnqueuer;
+
+        r1 = r0;
+
+        entermonitor r0;
+
+        r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mLaunchingService> = 0;
+
+        exitmonitor r1;
+
+        goto label1;
+
+     label1:
+        return;
+    }
+
+    public void serviceProcessingStarted()
+    {
+        androidx.core.app.JobIntentService$CompatWorkEnqueuer r0, r1;
+        java.lang.Throwable r2, $r6;
+        boolean $z0;
+        android.os.PowerManager$WakeLock $r4, $r5;
+
+        r0 := @this: androidx.core.app.JobIntentService$CompatWorkEnqueuer;
+
+        r1 = r0;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mServiceProcessing>;
+
+        if $z0 != 0 goto label2;
+
+        r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mServiceProcessing> = 1;
+
+        $r4 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mRunWakeLock>;
+
+        virtualinvoke $r4.<android.os.PowerManager$WakeLock: void acquire(long)>(600000L);
+
+        $r5 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mLaunchWakeLock>;
+
+        virtualinvoke $r5.<android.os.PowerManager$WakeLock: void release()>();
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public void serviceProcessingFinished()
+    {
+        androidx.core.app.JobIntentService$CompatWorkEnqueuer r0, r1;
+        java.lang.Throwable r2, $r6;
+        boolean $z0, $z1;
+        android.os.PowerManager$WakeLock $r4, $r5;
+
+        r0 := @this: androidx.core.app.JobIntentService$CompatWorkEnqueuer;
+
+        r1 = r0;
+
+        entermonitor r0;
+
+     label1:
+        $z0 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mServiceProcessing>;
+
+        if $z0 == 0 goto label3;
+
+        $z1 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mLaunchingService>;
+
+        if $z1 == 0 goto label2;
+
+        $r5 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mLaunchWakeLock>;
+
+        virtualinvoke $r5.<android.os.PowerManager$WakeLock: void acquire(long)>(60000L);
+
+     label2:
+        r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: boolean mServiceProcessing> = 0;
+
+        $r4 = r0.<androidx.core.app.JobIntentService$CompatWorkEnqueuer: android.os.PowerManager$WakeLock mRunWakeLock>;
+
+        virtualinvoke $r4.<android.os.PowerManager$WakeLock: void release()>();
+
+     label3:
+        exitmonitor r1;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label6:
+        throw r2;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+androidx.core.app.JobIntentService$CompatWorkItem
+<androidx.core.app.JobIntentService$CompatWorkItem: android.content.Intent mIntent>
+<androidx.core.app.JobIntentService$CompatWorkItem: int mStartId>
+<androidx.core.app.JobIntentService$CompatWorkItem: androidx.core.app.JobIntentService this$0>
+    void <init>(androidx.core.app.JobIntentService, android.content.Intent, int)
+    {
+        androidx.core.app.JobIntentService$CompatWorkItem r0;
+        androidx.core.app.JobIntentService r1;
+        android.content.Intent r2;
+        int i0;
+
+        r0 := @this: androidx.core.app.JobIntentService$CompatWorkItem;
+
+        r1 := @parameter0: androidx.core.app.JobIntentService;
+
+        r2 := @parameter1: android.content.Intent;
+
+        i0 := @parameter2: int;
+
+        r0.<androidx.core.app.JobIntentService$CompatWorkItem: androidx.core.app.JobIntentService this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.core.app.JobIntentService$CompatWorkItem: android.content.Intent mIntent> = r2;
+
+        r0.<androidx.core.app.JobIntentService$CompatWorkItem: int mStartId> = i0;
+
+        return;
+    }
+
+    public android.content.Intent getIntent()
+    {
+        androidx.core.app.JobIntentService$CompatWorkItem r0;
+        android.content.Intent $r1;
+
+        r0 := @this: androidx.core.app.JobIntentService$CompatWorkItem;
+
+        $r1 = r0.<androidx.core.app.JobIntentService$CompatWorkItem: android.content.Intent mIntent>;
+
+        return $r1;
+    }
+
+    public void complete()
+    {
+        androidx.core.app.JobIntentService$CompatWorkItem r0;
+        int $i0;
+        androidx.core.app.JobIntentService $r1;
+
+        r0 := @this: androidx.core.app.JobIntentService$CompatWorkItem;
+
+        $r1 = r0.<androidx.core.app.JobIntentService$CompatWorkItem: androidx.core.app.JobIntentService this$0>;
+
+        $i0 = r0.<androidx.core.app.JobIntentService$CompatWorkItem: int mStartId>;
+
+        virtualinvoke $r1.<androidx.core.app.JobIntentService: void stopSelf(int)>($i0);
+
+        return;
+    }
+
+androidx.core.app.JobIntentService$GenericWorkItem
+<androidx.core.app.JobIntentService$GenericWorkItem: android.content.Intent getIntent()>
+<androidx.core.app.JobIntentService$GenericWorkItem: void complete()>
+androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem
+<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: android.app.job.JobWorkItem mJobWork>
+<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: androidx.core.app.JobIntentService$JobServiceEngineImpl this$0>
+    void <init>(androidx.core.app.JobIntentService$JobServiceEngineImpl, android.app.job.JobWorkItem)
+    {
+        androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem r0;
+        androidx.core.app.JobIntentService$JobServiceEngineImpl r1;
+        android.app.job.JobWorkItem r2;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem;
+
+        r1 := @parameter0: androidx.core.app.JobIntentService$JobServiceEngineImpl;
+
+        r2 := @parameter1: android.app.job.JobWorkItem;
+
+        r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: androidx.core.app.JobIntentService$JobServiceEngineImpl this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: android.app.job.JobWorkItem mJobWork> = r2;
+
+        return;
+    }
+
+    public android.content.Intent getIntent()
+    {
+        androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem r0;
+        android.app.job.JobWorkItem $r1;
+        android.content.Intent $r2;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem;
+
+        $r1 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: android.app.job.JobWorkItem mJobWork>;
+
+        $r2 = virtualinvoke $r1.<android.app.job.JobWorkItem: android.content.Intent getIntent()>();
+
+        return $r2;
+    }
+
+    public void complete()
+    {
+        androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem r0;
+        java.lang.Object r1, $r4;
+        java.lang.Throwable r2, $r10;
+        androidx.core.app.JobIntentService$JobServiceEngineImpl $r3, $r5, $r7;
+        android.app.job.JobParameters $r6, $r9;
+        android.app.job.JobWorkItem $r8;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem;
+
+        $r3 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: androidx.core.app.JobIntentService$JobServiceEngineImpl this$0>;
+
+        $r4 = $r3.<androidx.core.app.JobIntentService$JobServiceEngineImpl: java.lang.Object mLock>;
+
+        r1 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: androidx.core.app.JobIntentService$JobServiceEngineImpl this$0>;
+
+        $r6 = $r5.<androidx.core.app.JobIntentService$JobServiceEngineImpl: android.app.job.JobParameters mParams>;
+
+        if $r6 == null goto label2;
+
+        $r7 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: androidx.core.app.JobIntentService$JobServiceEngineImpl this$0>;
+
+        $r9 = $r7.<androidx.core.app.JobIntentService$JobServiceEngineImpl: android.app.job.JobParameters mParams>;
+
+        $r8 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: android.app.job.JobWorkItem mJobWork>;
+
+        virtualinvoke $r9.<android.app.job.JobParameters: void completeWork(android.app.job.JobWorkItem)>($r8);
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r10 := @caughtexception;
+
+        r2 = $r10;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+androidx.core.app.JobIntentService$JobServiceEngineImpl
+<androidx.core.app.JobIntentService$JobServiceEngineImpl: java.lang.String TAG>
+<androidx.core.app.JobIntentService$JobServiceEngineImpl: boolean DEBUG>
+<androidx.core.app.JobIntentService$JobServiceEngineImpl: androidx.core.app.JobIntentService mService>
+<androidx.core.app.JobIntentService$JobServiceEngineImpl: java.lang.Object mLock>
+<androidx.core.app.JobIntentService$JobServiceEngineImpl: android.app.job.JobParameters mParams>
+    void <init>(androidx.core.app.JobIntentService)
+    {
+        androidx.core.app.JobIntentService$JobServiceEngineImpl r0;
+        androidx.core.app.JobIntentService r1;
+        java.lang.Object $r2;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobServiceEngineImpl;
+
+        r1 := @parameter0: androidx.core.app.JobIntentService;
+
+        specialinvoke r0.<android.app.job.JobServiceEngine: void <init>(android.app.Service)>(r1);
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: java.lang.Object mLock> = $r2;
+
+        r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: androidx.core.app.JobIntentService mService> = r1;
+
+        return;
+    }
+
+    public android.os.IBinder compatGetBinder()
+    {
+        androidx.core.app.JobIntentService$JobServiceEngineImpl r0;
+        android.os.IBinder $r1;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobServiceEngineImpl;
+
+        $r1 = virtualinvoke r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: android.os.IBinder getBinder()>();
+
+        return $r1;
+    }
+
+    public boolean onStartJob(android.app.job.JobParameters)
+    {
+        androidx.core.app.JobIntentService$JobServiceEngineImpl r0;
+        android.app.job.JobParameters r1;
+        androidx.core.app.JobIntentService $r2;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobServiceEngineImpl;
+
+        r1 := @parameter0: android.app.job.JobParameters;
+
+        r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: android.app.job.JobParameters mParams> = r1;
+
+        $r2 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: androidx.core.app.JobIntentService mService>;
+
+        virtualinvoke $r2.<androidx.core.app.JobIntentService: void ensureProcessorRunningLocked(boolean)>(0);
+
+        return 1;
+    }
+
+    public boolean onStopJob(android.app.job.JobParameters)
+    {
+        androidx.core.app.JobIntentService$JobServiceEngineImpl r0;
+        android.app.job.JobParameters r1;
+        boolean z0;
+        java.lang.Object r2, $r4;
+        androidx.core.app.JobIntentService $r3;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobServiceEngineImpl;
+
+        r1 := @parameter0: android.app.job.JobParameters;
+
+        $r3 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: androidx.core.app.JobIntentService mService>;
+
+        z0 = virtualinvoke $r3.<androidx.core.app.JobIntentService: boolean doStopCurrentWork()>();
+
+        $r4 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+        r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: android.app.job.JobParameters mParams> = null;
+
+        exitmonitor r2;
+
+        goto label1;
+
+     label1:
+        return z0;
+    }
+
+    public androidx.core.app.JobIntentService$GenericWorkItem dequeueWork()
+    {
+        androidx.core.app.JobIntentService$JobServiceEngineImpl r0;
+        android.app.job.JobWorkItem r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r11;
+        android.app.job.JobParameters $r5, $r6;
+        android.content.Intent $r7;
+        androidx.core.app.JobIntentService $r8;
+        java.lang.ClassLoader $r9;
+        androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem $r10;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobServiceEngineImpl;
+
+        $r4 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: android.app.job.JobParameters mParams>;
+
+        if $r5 != null goto label3;
+
+        exitmonitor r2;
+
+     label2:
+        return null;
+
+     label3:
+        $r6 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: android.app.job.JobParameters mParams>;
+
+        r1 = virtualinvoke $r6.<android.app.job.JobParameters: android.app.job.JobWorkItem dequeueWork()>();
+
+        exitmonitor r2;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r11 := @caughtexception;
+
+        r3 = $r11;
+
+        exitmonitor r2;
+
+     label6:
+        throw r3;
+
+     label7:
+        if r1 == null goto label8;
+
+        $r7 = virtualinvoke r1.<android.app.job.JobWorkItem: android.content.Intent getIntent()>();
+
+        $r8 = r0.<androidx.core.app.JobIntentService$JobServiceEngineImpl: androidx.core.app.JobIntentService mService>;
+
+        $r9 = virtualinvoke $r8.<androidx.core.app.JobIntentService: java.lang.ClassLoader getClassLoader()>();
+
+        virtualinvoke $r7.<android.content.Intent: void setExtrasClassLoader(java.lang.ClassLoader)>($r9);
+
+        $r10 = new androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem;
+
+        specialinvoke $r10.<androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem: void <init>(androidx.core.app.JobIntentService$JobServiceEngineImpl,android.app.job.JobWorkItem)>(r0, r1);
+
+        return $r10;
+
+     label8:
+        return null;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+androidx.core.app.JobIntentService$JobWorkEnqueuer
+<androidx.core.app.JobIntentService$JobWorkEnqueuer: android.app.job.JobInfo mJobInfo>
+<androidx.core.app.JobIntentService$JobWorkEnqueuer: android.app.job.JobScheduler mJobScheduler>
+    void <init>(android.content.Context, android.content.ComponentName, int)
+    {
+        androidx.core.app.JobIntentService$JobWorkEnqueuer r0;
+        android.content.Context r1, $r8;
+        android.content.ComponentName r2, $r5;
+        int i0;
+        android.app.job.JobInfo$Builder r3, $r4, $r6;
+        android.app.job.JobInfo $r7;
+        java.lang.Object $r9;
+        android.app.job.JobScheduler $r10;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobWorkEnqueuer;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: android.content.ComponentName;
+
+        i0 := @parameter2: int;
+
+        specialinvoke r0.<androidx.core.app.JobIntentService$WorkEnqueuer: void <init>(android.content.ComponentName)>(r2);
+
+        virtualinvoke r0.<androidx.core.app.JobIntentService$JobWorkEnqueuer: void ensureJobId(int)>(i0);
+
+        $r4 = new android.app.job.JobInfo$Builder;
+
+        $r5 = r0.<androidx.core.app.JobIntentService$JobWorkEnqueuer: android.content.ComponentName mComponentName>;
+
+        specialinvoke $r4.<android.app.job.JobInfo$Builder: void <init>(int,android.content.ComponentName)>(i0, $r5);
+
+        r3 = $r4;
+
+        $r6 = virtualinvoke r3.<android.app.job.JobInfo$Builder: android.app.job.JobInfo$Builder setOverrideDeadline(long)>(0L);
+
+        $r7 = virtualinvoke $r6.<android.app.job.JobInfo$Builder: android.app.job.JobInfo build()>();
+
+        r0.<androidx.core.app.JobIntentService$JobWorkEnqueuer: android.app.job.JobInfo mJobInfo> = $r7;
+
+        $r8 = virtualinvoke r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r9 = virtualinvoke $r8.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("jobscheduler");
+
+        $r10 = (android.app.job.JobScheduler) $r9;
+
+        r0.<androidx.core.app.JobIntentService$JobWorkEnqueuer: android.app.job.JobScheduler mJobScheduler> = $r10;
+
+        return;
+    }
+
+    void enqueueWork(android.content.Intent)
+    {
+        androidx.core.app.JobIntentService$JobWorkEnqueuer r0;
+        android.content.Intent r1;
+        android.app.job.JobWorkItem $r2;
+        android.app.job.JobScheduler $r3;
+        android.app.job.JobInfo $r4;
+
+        r0 := @this: androidx.core.app.JobIntentService$JobWorkEnqueuer;
+
+        r1 := @parameter0: android.content.Intent;
+
+        $r3 = r0.<androidx.core.app.JobIntentService$JobWorkEnqueuer: android.app.job.JobScheduler mJobScheduler>;
+
+        $r4 = r0.<androidx.core.app.JobIntentService$JobWorkEnqueuer: android.app.job.JobInfo mJobInfo>;
+
+        $r2 = new android.app.job.JobWorkItem;
+
+        specialinvoke $r2.<android.app.job.JobWorkItem: void <init>(android.content.Intent)>(r1);
+
+        virtualinvoke $r3.<android.app.job.JobScheduler: int enqueue(android.app.job.JobInfo,android.app.job.JobWorkItem)>($r4, $r2);
+
+        return;
+    }
+
+androidx.core.app.JobIntentService$WorkEnqueuer
+<androidx.core.app.JobIntentService$WorkEnqueuer: android.content.ComponentName mComponentName>
+<androidx.core.app.JobIntentService$WorkEnqueuer: boolean mHasJobId>
+<androidx.core.app.JobIntentService$WorkEnqueuer: int mJobId>
+    void <init>(android.content.ComponentName)
+    {
+        androidx.core.app.JobIntentService$WorkEnqueuer r0;
+        android.content.ComponentName r1;
+
+        r0 := @this: androidx.core.app.JobIntentService$WorkEnqueuer;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.core.app.JobIntentService$WorkEnqueuer: android.content.ComponentName mComponentName> = r1;
+
+        return;
+    }
+
+    void ensureJobId(int)
+    {
+        androidx.core.app.JobIntentService$WorkEnqueuer r0;
+        int i0, $i1, $i2;
+        boolean $z0;
+        java.lang.IllegalArgumentException $r1;
+        java.lang.StringBuilder $r2, $r3, $r4, $r5, $r6;
+        java.lang.String $r7;
+
+        r0 := @this: androidx.core.app.JobIntentService$WorkEnqueuer;
+
+        i0 := @parameter0: int;
+
+        $z0 = r0.<androidx.core.app.JobIntentService$WorkEnqueuer: boolean mHasJobId>;
+
+        if $z0 != 0 goto label1;
+
+        r0.<androidx.core.app.JobIntentService$WorkEnqueuer: boolean mHasJobId> = 1;
+
+        r0.<androidx.core.app.JobIntentService$WorkEnqueuer: int mJobId> = i0;
+
+        goto label2;
+
+     label1:
+        $i1 = r0.<androidx.core.app.JobIntentService$WorkEnqueuer: int mJobId>;
+
+        if $i1 == i0 goto label2;
+
+        $r1 = new java.lang.IllegalArgumentException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Given job ID ");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is different than previous ");
+
+        $i2 = r0.<androidx.core.app.JobIntentService$WorkEnqueuer: int mJobId>;
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r7);
+
+        throw $r1;
+
+     label2:
+        return;
+    }
+
+<androidx.core.app.JobIntentService$WorkEnqueuer: void enqueueWork(android.content.Intent)>
+    public void serviceStartReceived()
+    {
+        androidx.core.app.JobIntentService$WorkEnqueuer r0;
+
+        r0 := @this: androidx.core.app.JobIntentService$WorkEnqueuer;
+
+        return;
+    }
+
+    public void serviceProcessingStarted()
+    {
+        androidx.core.app.JobIntentService$WorkEnqueuer r0;
+
+        r0 := @this: androidx.core.app.JobIntentService$WorkEnqueuer;
+
+        return;
+    }
+
+    public void serviceProcessingFinished()
+    {
+        androidx.core.app.JobIntentService$WorkEnqueuer r0;
+
+        r0 := @this: androidx.core.app.JobIntentService$WorkEnqueuer;
+
+        return;
+    }
+

@@ -1,0 +1,520 @@
+androidx.camera.core.imagecapture.TakePictureManager
+<androidx.camera.core.imagecapture.TakePictureManager: java.lang.String TAG>
+<androidx.camera.core.imagecapture.TakePictureManager: java.util.Deque mNewRequests>
+<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImagePipeline mImagePipeline>
+<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImageCaptureControl mImageCaptureControl>
+<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.RequestWithCallback mInFlightRequest>
+<androidx.camera.core.imagecapture.TakePictureManager: boolean mPaused>
+    public void <init>(androidx.camera.core.imagecapture.ImageCaptureControl, androidx.camera.core.imagecapture.ImagePipeline)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+        androidx.camera.core.imagecapture.ImageCaptureControl r1;
+        androidx.camera.core.imagecapture.ImagePipeline r2, $r4;
+        java.util.ArrayDeque $r3;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        r1 := @parameter0: androidx.camera.core.imagecapture.ImageCaptureControl;
+
+        r2 := @parameter1: androidx.camera.core.imagecapture.ImagePipeline;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new java.util.ArrayDeque;
+
+        specialinvoke $r3.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager: java.util.Deque mNewRequests> = $r3;
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager: boolean mPaused> = 0;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImageCaptureControl mImageCaptureControl> = r1;
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImagePipeline mImagePipeline> = r2;
+
+        $r4 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImagePipeline mImagePipeline>;
+
+        virtualinvoke $r4.<androidx.camera.core.imagecapture.ImagePipeline: void setOnImageCloseListener(androidx.camera.core.ForwardingImageProxy$OnImageCloseListener)>(r0);
+
+        return;
+    }
+
+    public void offerRequest(androidx.camera.core.imagecapture.TakePictureRequest)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+        androidx.camera.core.imagecapture.TakePictureRequest r1;
+        java.util.Deque $r2;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        r1 := @parameter0: androidx.camera.core.imagecapture.TakePictureRequest;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        $r2 = r0.<androidx.camera.core.imagecapture.TakePictureManager: java.util.Deque mNewRequests>;
+
+        interfaceinvoke $r2.<java.util.Deque: boolean offer(java.lang.Object)>(r1);
+
+        virtualinvoke r0.<androidx.camera.core.imagecapture.TakePictureManager: void issueNextRequest()>();
+
+        return;
+    }
+
+    public void pause()
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager: boolean mPaused> = 1;
+
+        return;
+    }
+
+    public void resume()
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager: boolean mPaused> = 0;
+
+        virtualinvoke r0.<androidx.camera.core.imagecapture.TakePictureManager: void issueNextRequest()>();
+
+        return;
+    }
+
+    public void abortRequests()
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+        androidx.camera.core.ImageCaptureException r1, $r4;
+        java.util.Iterator r2;
+        androidx.camera.core.imagecapture.TakePictureRequest r3;
+        java.util.Deque $r5, $r6;
+        boolean $z0;
+        androidx.camera.core.imagecapture.RequestWithCallback $r7, $r8;
+        java.lang.Object $r9;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        $r4 = new androidx.camera.core.ImageCaptureException;
+
+        specialinvoke $r4.<androidx.camera.core.ImageCaptureException: void <init>(int,java.lang.String,java.lang.Throwable)>(3, "Camera is closed.", null);
+
+        r1 = $r4;
+
+        $r5 = r0.<androidx.camera.core.imagecapture.TakePictureManager: java.util.Deque mNewRequests>;
+
+        r2 = interfaceinvoke $r5.<java.util.Deque: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r9 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.camera.core.imagecapture.TakePictureRequest) $r9;
+
+        virtualinvoke r3.<androidx.camera.core.imagecapture.TakePictureRequest: void onError(androidx.camera.core.ImageCaptureException)>(r1);
+
+        goto label1;
+
+     label2:
+        $r6 = r0.<androidx.camera.core.imagecapture.TakePictureManager: java.util.Deque mNewRequests>;
+
+        interfaceinvoke $r6.<java.util.Deque: void clear()>();
+
+        $r7 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.RequestWithCallback mInFlightRequest>;
+
+        if $r7 == null goto label3;
+
+        $r8 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.RequestWithCallback mInFlightRequest>;
+
+        virtualinvoke $r8.<androidx.camera.core.imagecapture.RequestWithCallback: void abort(androidx.camera.core.ImageCaptureException)>(r1);
+
+     label3:
+        return;
+    }
+
+    void issueNextRequest()
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+        androidx.camera.core.imagecapture.TakePictureRequest r1;
+        androidx.camera.core.imagecapture.RequestWithCallback r2, $r9;
+        androidx.core.util.Pair r3;
+        androidx.camera.core.imagecapture.CameraRequest r4, $r12;
+        androidx.camera.core.imagecapture.ProcessingRequest r5, $r15;
+        boolean $z0, $z1;
+        androidx.camera.core.imagecapture.ImagePipeline $r6, $r10;
+        int $i1;
+        java.util.Deque $r7;
+        java.lang.Object $r8, $r11, $r13, $r14, $r16;
+        java.lang.Runnable $r17;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TakePictureManager", "Issue the next TakePictureRequest.");
+
+        $z0 = virtualinvoke r0.<androidx.camera.core.imagecapture.TakePictureManager: boolean hasInFlightRequest()>();
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TakePictureManager", "There is already a request in-flight.");
+
+        return;
+
+     label1:
+        $z1 = r0.<androidx.camera.core.imagecapture.TakePictureManager: boolean mPaused>;
+
+        if $z1 == 0 goto label2;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TakePictureManager", "The class is paused.");
+
+        return;
+
+     label2:
+        $r6 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImagePipeline mImagePipeline>;
+
+        $i1 = virtualinvoke $r6.<androidx.camera.core.imagecapture.ImagePipeline: int getCapacity()>();
+
+        if $i1 != 0 goto label3;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TakePictureManager", "Too many acquire images. Close image to be able to process next.");
+
+        return;
+
+     label3:
+        $r7 = r0.<androidx.camera.core.imagecapture.TakePictureManager: java.util.Deque mNewRequests>;
+
+        $r8 = interfaceinvoke $r7.<java.util.Deque: java.lang.Object poll()>();
+
+        r1 = (androidx.camera.core.imagecapture.TakePictureRequest) $r8;
+
+        if r1 != null goto label4;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("TakePictureManager", "No new request.");
+
+        return;
+
+     label4:
+        $r9 = new androidx.camera.core.imagecapture.RequestWithCallback;
+
+        specialinvoke $r9.<androidx.camera.core.imagecapture.RequestWithCallback: void <init>(androidx.camera.core.imagecapture.TakePictureRequest)>(r1);
+
+        r2 = $r9;
+
+        specialinvoke r0.<androidx.camera.core.imagecapture.TakePictureManager: void trackCurrentRequest(androidx.camera.core.imagecapture.RequestWithCallback)>(r2);
+
+        $r10 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImagePipeline mImagePipeline>;
+
+        r3 = virtualinvoke $r10.<androidx.camera.core.imagecapture.ImagePipeline: androidx.core.util.Pair createRequests(androidx.camera.core.imagecapture.TakePictureRequest,androidx.camera.core.imagecapture.TakePictureCallback)>(r1, r2);
+
+        $r11 = r3.<androidx.core.util.Pair: java.lang.Object first>;
+
+        $r12 = (androidx.camera.core.imagecapture.CameraRequest) $r11;
+
+        $r13 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r12);
+
+        r4 = (androidx.camera.core.imagecapture.CameraRequest) $r13;
+
+        $r14 = r3.<androidx.core.util.Pair: java.lang.Object second>;
+
+        $r15 = (androidx.camera.core.imagecapture.ProcessingRequest) $r14;
+
+        $r16 = staticinvoke <java.util.Objects: java.lang.Object requireNonNull(java.lang.Object)>($r15);
+
+        r5 = (androidx.camera.core.imagecapture.ProcessingRequest) $r16;
+
+        $r17 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.core.imagecapture.TakePictureManager,androidx.camera.core.imagecapture.ProcessingRequest)>(r0, r5) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.core.imagecapture.TakePictureManager: void lambda$issueNextRequest$0(androidx.camera.core.imagecapture.ProcessingRequest)>, methodtype: void __METHODTYPE__());
+
+        specialinvoke r0.<androidx.camera.core.imagecapture.TakePictureManager: void submitCameraRequest(androidx.camera.core.imagecapture.CameraRequest,java.lang.Runnable)>(r4, $r17);
+
+        return;
+    }
+
+    private void trackCurrentRequest(androidx.camera.core.imagecapture.RequestWithCallback)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+        androidx.camera.core.imagecapture.RequestWithCallback r1, $r2;
+        boolean $z0, $z1;
+        com.google.common.util.concurrent.ListenableFuture $r3;
+        java.lang.Runnable $r4;
+        java.util.concurrent.Executor $r5;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        r1 := @parameter0: androidx.camera.core.imagecapture.RequestWithCallback;
+
+        $z0 = virtualinvoke r0.<androidx.camera.core.imagecapture.TakePictureManager: boolean hasInFlightRequest()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.core.util.Preconditions: void checkState(boolean)>($z1);
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.RequestWithCallback mInFlightRequest> = r1;
+
+        $r2 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.RequestWithCallback mInFlightRequest>;
+
+        $r3 = virtualinvoke $r2.<androidx.camera.core.imagecapture.RequestWithCallback: com.google.common.util.concurrent.ListenableFuture getCaptureFuture()>();
+
+        $r4 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.core.imagecapture.TakePictureManager)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.core.imagecapture.TakePictureManager: void lambda$trackCurrentRequest$1()>, methodtype: void __METHODTYPE__());
+
+        $r5 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.Executor directExecutor()>();
+
+        interfaceinvoke $r3.<com.google.common.util.concurrent.ListenableFuture: void addListener(java.lang.Runnable,java.util.concurrent.Executor)>($r4, $r5);
+
+        return;
+    }
+
+    private void submitCameraRequest(androidx.camera.core.imagecapture.CameraRequest, java.lang.Runnable)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+        androidx.camera.core.imagecapture.CameraRequest r1;
+        java.lang.Runnable r2;
+        com.google.common.util.concurrent.ListenableFuture r3;
+        androidx.camera.core.imagecapture.ImageCaptureControl $r4, $r5;
+        java.util.List $r6;
+        java.util.concurrent.ScheduledExecutorService $r8;
+        androidx.camera.core.imagecapture.TakePictureManager$1 r9;
+        java.util.concurrent.Executor r10;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        r1 := @parameter0: androidx.camera.core.imagecapture.CameraRequest;
+
+        r2 := @parameter1: java.lang.Runnable;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        $r4 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImageCaptureControl mImageCaptureControl>;
+
+        interfaceinvoke $r4.<androidx.camera.core.imagecapture.ImageCaptureControl: void lockFlashMode()>();
+
+        $r5 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImageCaptureControl mImageCaptureControl>;
+
+        $r6 = virtualinvoke r1.<androidx.camera.core.imagecapture.CameraRequest: java.util.List getCaptureConfigs()>();
+
+        r3 = interfaceinvoke $r5.<androidx.camera.core.imagecapture.ImageCaptureControl: com.google.common.util.concurrent.ListenableFuture submitStillCaptureRequests(java.util.List)>($r6);
+
+        r9 = new androidx.camera.core.imagecapture.TakePictureManager$1;
+
+        specialinvoke r9.<androidx.camera.core.imagecapture.TakePictureManager$1: void <init>(androidx.camera.core.imagecapture.TakePictureManager,java.lang.Runnable,androidx.camera.core.imagecapture.CameraRequest)>(r0, r2, r1);
+
+        $r8 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.ScheduledExecutorService mainThreadExecutor()>();
+
+        r10 = (java.util.concurrent.Executor) $r8;
+
+        staticinvoke <androidx.camera.core.impl.utils.futures.Futures: void addCallback(com.google.common.util.concurrent.ListenableFuture,androidx.camera.core.impl.utils.futures.FutureCallback,java.util.concurrent.Executor)>(r3, r9, r10);
+
+        return;
+    }
+
+    boolean hasInFlightRequest()
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+        androidx.camera.core.imagecapture.RequestWithCallback $r1;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        $r1 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.RequestWithCallback mInFlightRequest>;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public void onImageClose(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+        androidx.camera.core.ImageProxy r1;
+        java.util.concurrent.ScheduledExecutorService $r2;
+        java.lang.Runnable $r3;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        r1 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $r2 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.ScheduledExecutorService mainThreadExecutor()>();
+
+        $r3 = dynamicinvoke "run" <java.lang.Runnable (androidx.camera.core.imagecapture.TakePictureManager)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_VIRTUAL" <androidx.camera.core.imagecapture.TakePictureManager: void issueNextRequest()>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r2.<java.util.concurrent.ScheduledExecutorService: void execute(java.lang.Runnable)>($r3);
+
+        return;
+    }
+
+    private void lambda$trackCurrentRequest$1()
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.RequestWithCallback mInFlightRequest> = null;
+
+        virtualinvoke r0.<androidx.camera.core.imagecapture.TakePictureManager: void issueNextRequest()>();
+
+        return;
+    }
+
+    private void lambda$issueNextRequest$0(androidx.camera.core.imagecapture.ProcessingRequest)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager r0;
+        androidx.camera.core.imagecapture.ProcessingRequest r1;
+        androidx.camera.core.imagecapture.ImagePipeline $r2;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager;
+
+        r1 := @parameter0: androidx.camera.core.imagecapture.ProcessingRequest;
+
+        $r2 = r0.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImagePipeline mImagePipeline>;
+
+        virtualinvoke $r2.<androidx.camera.core.imagecapture.ImagePipeline: void postProcess(androidx.camera.core.imagecapture.ProcessingRequest)>(r1);
+
+        return;
+    }
+
+androidx.camera.core.imagecapture.TakePictureManager$1
+<androidx.camera.core.imagecapture.TakePictureManager$1: java.lang.Runnable val$successRunnable>
+<androidx.camera.core.imagecapture.TakePictureManager$1: androidx.camera.core.imagecapture.CameraRequest val$cameraRequest>
+<androidx.camera.core.imagecapture.TakePictureManager$1: androidx.camera.core.imagecapture.TakePictureManager this$0>
+    void <init>(androidx.camera.core.imagecapture.TakePictureManager, java.lang.Runnable, androidx.camera.core.imagecapture.CameraRequest)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager$1 r0;
+        androidx.camera.core.imagecapture.TakePictureManager r1;
+        java.lang.Runnable r2;
+        androidx.camera.core.imagecapture.CameraRequest r3;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager$1;
+
+        r1 := @parameter0: androidx.camera.core.imagecapture.TakePictureManager;
+
+        r2 := @parameter1: java.lang.Runnable;
+
+        r3 := @parameter2: androidx.camera.core.imagecapture.CameraRequest;
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager$1: androidx.camera.core.imagecapture.TakePictureManager this$0> = r1;
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager$1: java.lang.Runnable val$successRunnable> = r2;
+
+        r0.<androidx.camera.core.imagecapture.TakePictureManager$1: androidx.camera.core.imagecapture.CameraRequest val$cameraRequest> = r3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onSuccess(java.lang.Void)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager$1 r0;
+        java.lang.Void r1;
+        java.lang.Runnable $r2;
+        androidx.camera.core.imagecapture.TakePictureManager $r3;
+        androidx.camera.core.imagecapture.ImageCaptureControl $r4;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager$1;
+
+        r1 := @parameter0: java.lang.Void;
+
+        $r2 = r0.<androidx.camera.core.imagecapture.TakePictureManager$1: java.lang.Runnable val$successRunnable>;
+
+        interfaceinvoke $r2.<java.lang.Runnable: void run()>();
+
+        $r3 = r0.<androidx.camera.core.imagecapture.TakePictureManager$1: androidx.camera.core.imagecapture.TakePictureManager this$0>;
+
+        $r4 = $r3.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImageCaptureControl mImageCaptureControl>;
+
+        interfaceinvoke $r4.<androidx.camera.core.imagecapture.ImageCaptureControl: void unlockFlashMode()>();
+
+        return;
+    }
+
+    public void onFailure(java.lang.Throwable)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager$1 r0;
+        java.lang.Throwable r1;
+        boolean $z0;
+        androidx.camera.core.ImageCaptureException $r2, $r6;
+        androidx.camera.core.imagecapture.CameraRequest $r3, $r7;
+        androidx.camera.core.imagecapture.TakePictureManager $r4;
+        androidx.camera.core.imagecapture.ImageCaptureControl $r5;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager$1;
+
+        r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = r1 instanceof androidx.camera.core.ImageCaptureException;
+
+        if $z0 == 0 goto label1;
+
+        $r7 = r0.<androidx.camera.core.imagecapture.TakePictureManager$1: androidx.camera.core.imagecapture.CameraRequest val$cameraRequest>;
+
+        $r6 = (androidx.camera.core.ImageCaptureException) r1;
+
+        virtualinvoke $r7.<androidx.camera.core.imagecapture.CameraRequest: void onCaptureFailure(androidx.camera.core.ImageCaptureException)>($r6);
+
+        goto label2;
+
+     label1:
+        $r3 = r0.<androidx.camera.core.imagecapture.TakePictureManager$1: androidx.camera.core.imagecapture.CameraRequest val$cameraRequest>;
+
+        $r2 = new androidx.camera.core.ImageCaptureException;
+
+        specialinvoke $r2.<androidx.camera.core.ImageCaptureException: void <init>(int,java.lang.String,java.lang.Throwable)>(2, "Failed to submit capture request", r1);
+
+        virtualinvoke $r3.<androidx.camera.core.imagecapture.CameraRequest: void onCaptureFailure(androidx.camera.core.ImageCaptureException)>($r2);
+
+     label2:
+        $r4 = r0.<androidx.camera.core.imagecapture.TakePictureManager$1: androidx.camera.core.imagecapture.TakePictureManager this$0>;
+
+        $r5 = $r4.<androidx.camera.core.imagecapture.TakePictureManager: androidx.camera.core.imagecapture.ImageCaptureControl mImageCaptureControl>;
+
+        interfaceinvoke $r5.<androidx.camera.core.imagecapture.ImageCaptureControl: void unlockFlashMode()>();
+
+        return;
+    }
+
+    public volatile void onSuccess(java.lang.Object)
+    {
+        androidx.camera.core.imagecapture.TakePictureManager$1 r0;
+        java.lang.Object r1;
+        java.lang.Void $r2;
+
+        r0 := @this: androidx.camera.core.imagecapture.TakePictureManager$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Void) r1;
+
+        virtualinvoke r0.<androidx.camera.core.imagecapture.TakePictureManager$1: void onSuccess(java.lang.Void)>($r2);
+
+        return;
+    }
+

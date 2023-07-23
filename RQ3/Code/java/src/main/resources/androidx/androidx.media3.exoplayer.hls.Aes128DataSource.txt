@@ -1,0 +1,238 @@
+androidx.media3.exoplayer.hls.Aes128DataSource
+<androidx.media3.exoplayer.hls.Aes128DataSource: androidx.media3.datasource.DataSource upstream>
+<androidx.media3.exoplayer.hls.Aes128DataSource: byte[] encryptionKey>
+<androidx.media3.exoplayer.hls.Aes128DataSource: byte[] encryptionIv>
+<androidx.media3.exoplayer.hls.Aes128DataSource: javax.crypto.CipherInputStream cipherInputStream>
+    public void <init>(androidx.media3.datasource.DataSource, byte[], byte[])
+    {
+        androidx.media3.exoplayer.hls.Aes128DataSource r0;
+        androidx.media3.datasource.DataSource r1;
+        byte[] r2, r3;
+
+        r0 := @this: androidx.media3.exoplayer.hls.Aes128DataSource;
+
+        r1 := @parameter0: androidx.media3.datasource.DataSource;
+
+        r2 := @parameter1: byte[];
+
+        r3 := @parameter2: byte[];
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.exoplayer.hls.Aes128DataSource: androidx.media3.datasource.DataSource upstream> = r1;
+
+        r0.<androidx.media3.exoplayer.hls.Aes128DataSource: byte[] encryptionKey> = r2;
+
+        r0.<androidx.media3.exoplayer.hls.Aes128DataSource: byte[] encryptionIv> = r3;
+
+        return;
+    }
+
+    public final void addTransferListener(androidx.media3.datasource.TransferListener)
+    {
+        androidx.media3.exoplayer.hls.Aes128DataSource r0;
+        androidx.media3.datasource.TransferListener r1;
+        androidx.media3.datasource.DataSource $r3;
+
+        r0 := @this: androidx.media3.exoplayer.hls.Aes128DataSource;
+
+        r1 := @parameter0: androidx.media3.datasource.TransferListener;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r3 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: androidx.media3.datasource.DataSource upstream>;
+
+        interfaceinvoke $r3.<androidx.media3.datasource.DataSource: void addTransferListener(androidx.media3.datasource.TransferListener)>(r1);
+
+        return;
+    }
+
+    public final long open(androidx.media3.datasource.DataSpec) throws java.io.IOException
+    {
+        androidx.media3.exoplayer.hls.Aes128DataSource r0;
+        androidx.media3.datasource.DataSpec r1;
+        javax.crypto.Cipher r2;
+        javax.crypto.spec.IvParameterSpec r3, $r6;
+        javax.crypto.spec.SecretKeySpec $r4, r16;
+        byte[] $r5, $r7;
+        androidx.media3.datasource.DataSourceInputStream $r8, r18;
+        androidx.media3.datasource.DataSource $r9;
+        javax.crypto.CipherInputStream $r10;
+        java.lang.Throwable $r11, $r13, r15, r17;
+        java.lang.RuntimeException $r12, $r14;
+
+        r0 := @this: androidx.media3.exoplayer.hls.Aes128DataSource;
+
+        r1 := @parameter0: androidx.media3.datasource.DataSpec;
+
+     label1:
+        r2 = virtualinvoke r0.<androidx.media3.exoplayer.hls.Aes128DataSource: javax.crypto.Cipher getCipherInstance()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r13 := @caughtexception;
+
+        r15 = $r13;
+
+        $r14 = new java.lang.RuntimeException;
+
+        specialinvoke $r14.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r15);
+
+        throw $r14;
+
+     label4:
+        $r4 = new javax.crypto.spec.SecretKeySpec;
+
+        $r5 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: byte[] encryptionKey>;
+
+        specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, "AES");
+
+        r16 = $r4;
+
+        $r6 = new javax.crypto.spec.IvParameterSpec;
+
+        $r7 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: byte[] encryptionIv>;
+
+        specialinvoke $r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r7);
+
+        r3 = $r6;
+
+     label5:
+        virtualinvoke r2.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(2, r16, r3);
+
+     label6:
+        goto label8;
+
+     label7:
+        $r11 := @caughtexception;
+
+        r17 = $r11;
+
+        $r12 = new java.lang.RuntimeException;
+
+        specialinvoke $r12.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>(r17);
+
+        throw $r12;
+
+     label8:
+        $r8 = new androidx.media3.datasource.DataSourceInputStream;
+
+        $r9 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: androidx.media3.datasource.DataSource upstream>;
+
+        specialinvoke $r8.<androidx.media3.datasource.DataSourceInputStream: void <init>(androidx.media3.datasource.DataSource,androidx.media3.datasource.DataSpec)>($r9, r1);
+
+        r18 = $r8;
+
+        $r10 = new javax.crypto.CipherInputStream;
+
+        specialinvoke $r10.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>(r18, r2);
+
+        r0.<androidx.media3.exoplayer.hls.Aes128DataSource: javax.crypto.CipherInputStream cipherInputStream> = $r10;
+
+        virtualinvoke r18.<androidx.media3.datasource.DataSourceInputStream: void open()>();
+
+        return -1L;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch javax.crypto.NoSuchPaddingException from label1 to label2 with label3;
+        catch java.security.InvalidKeyException from label5 to label6 with label7;
+        catch java.security.InvalidAlgorithmParameterException from label5 to label6 with label7;
+    }
+
+    public final int read(byte[], int, int) throws java.io.IOException
+    {
+        androidx.media3.exoplayer.hls.Aes128DataSource r0;
+        byte[] r1;
+        int i0, i1, i2;
+        javax.crypto.CipherInputStream $r2, $r4;
+
+        r0 := @this: androidx.media3.exoplayer.hls.Aes128DataSource;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $r2 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: javax.crypto.CipherInputStream cipherInputStream>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r4 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: javax.crypto.CipherInputStream cipherInputStream>;
+
+        i2 = virtualinvoke $r4.<javax.crypto.CipherInputStream: int read(byte[],int,int)>(r1, i0, i1);
+
+        if i2 >= 0 goto label1;
+
+        return -1;
+
+     label1:
+        return i2;
+    }
+
+    public final android.net.Uri getUri()
+    {
+        androidx.media3.exoplayer.hls.Aes128DataSource r0;
+        androidx.media3.datasource.DataSource $r1;
+        android.net.Uri $r2;
+
+        r0 := @this: androidx.media3.exoplayer.hls.Aes128DataSource;
+
+        $r1 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: androidx.media3.datasource.DataSource upstream>;
+
+        $r2 = interfaceinvoke $r1.<androidx.media3.datasource.DataSource: android.net.Uri getUri()>();
+
+        return $r2;
+    }
+
+    public final java.util.Map getResponseHeaders()
+    {
+        androidx.media3.exoplayer.hls.Aes128DataSource r0;
+        androidx.media3.datasource.DataSource $r1;
+        java.util.Map $r2;
+
+        r0 := @this: androidx.media3.exoplayer.hls.Aes128DataSource;
+
+        $r1 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: androidx.media3.datasource.DataSource upstream>;
+
+        $r2 = interfaceinvoke $r1.<androidx.media3.datasource.DataSource: java.util.Map getResponseHeaders()>();
+
+        return $r2;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        androidx.media3.exoplayer.hls.Aes128DataSource r0;
+        javax.crypto.CipherInputStream $r1;
+        androidx.media3.datasource.DataSource $r2;
+
+        r0 := @this: androidx.media3.exoplayer.hls.Aes128DataSource;
+
+        $r1 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: javax.crypto.CipherInputStream cipherInputStream>;
+
+        if $r1 == null goto label1;
+
+        r0.<androidx.media3.exoplayer.hls.Aes128DataSource: javax.crypto.CipherInputStream cipherInputStream> = null;
+
+        $r2 = r0.<androidx.media3.exoplayer.hls.Aes128DataSource: androidx.media3.datasource.DataSource upstream>;
+
+        interfaceinvoke $r2.<androidx.media3.datasource.DataSource: void close()>();
+
+     label1:
+        return;
+    }
+
+    protected javax.crypto.Cipher getCipherInstance() throws javax.crypto.NoSuchPaddingException, java.security.NoSuchAlgorithmException
+    {
+        androidx.media3.exoplayer.hls.Aes128DataSource r0;
+        javax.crypto.Cipher $r1;
+
+        r0 := @this: androidx.media3.exoplayer.hls.Aes128DataSource;
+
+        $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>("AES/CBC/PKCS7Padding");
+
+        return $r1;
+    }
+

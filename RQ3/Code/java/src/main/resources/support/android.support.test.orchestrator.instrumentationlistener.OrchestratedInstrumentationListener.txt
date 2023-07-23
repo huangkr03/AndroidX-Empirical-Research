@@ -1,0 +1,569 @@
+android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener
+<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: java.lang.String TAG>
+<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: java.lang.String ORCHESTRATOR_PACKAGE>
+<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: java.lang.String ODO_SERVICE_PACKAGE>
+<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener listener>
+<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.callback.OrchestratorCallback odoCallback>
+<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.content.ServiceConnection connection>
+    public void <init>(android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener r1;
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1 $r2;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener;
+
+        specialinvoke r0.<org.junit.runner.notification.RunListener: void <init>()>();
+
+        $r2 = new android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1;
+
+        specialinvoke $r2.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1: void <init>(android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener)>(r0);
+
+        r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.content.ServiceConnection connection> = $r2;
+
+        r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener listener> = r1;
+
+        return;
+    }
+
+    public void connect(android.content.Context)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        android.content.Context r1;
+        android.content.Intent r2, r7;
+        android.content.ServiceConnection $r5;
+        boolean $z0;
+        java.lang.RuntimeException r8;
+        java.lang.Throwable r9;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: android.content.Context;
+
+        r7 = new android.content.Intent;
+
+        specialinvoke r7.<android.content.Intent: void <init>(java.lang.String)>("android.support.test.orchestrator.OrchestratorService");
+
+        r2 = r7;
+
+        virtualinvoke r2.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>("android.support.test.orchestrator");
+
+        $r5 = r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.content.ServiceConnection connection>;
+
+        $z0 = virtualinvoke r1.<android.content.Context: boolean bindService(android.content.Intent,android.content.ServiceConnection,int)>(r2, $r5, 1);
+
+        if $z0 != 0 goto label1;
+
+        r8 = new java.lang.RuntimeException;
+
+        specialinvoke r8.<java.lang.RuntimeException: void <init>(java.lang.String)>("Cannot connect to android.support.test.orchestrator.OrchestratorService");
+
+        r9 = (java.lang.Throwable) r8;
+
+        throw r9;
+
+     label1:
+        return;
+    }
+
+    public void testRunStarted(org.junit.runner.Description)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        org.junit.runner.Description r1;
+        java.lang.Throwable r2, $r5;
+        android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent $r3;
+        android.os.Bundle $r4;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+     label1:
+        $r3 = <android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_RUN_STARTED>;
+
+        $r4 = staticinvoke <android.support.test.orchestrator.junit.BundleJUnitUtils: android.os.Bundle getBundleFromDescription(org.junit.runner.Description)>(r1);
+
+        virtualinvoke r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: void sendTestNotification(android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent,android.os.Bundle)>($r3, $r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("OrchestrationListener", "Unable to send TestRunStarted Status to Orchestrator", r2);
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public void testRunFinished(org.junit.runner.Result)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        org.junit.runner.Result r1;
+        java.lang.Throwable r2, $r5;
+        android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent $r3;
+        android.os.Bundle $r4;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: org.junit.runner.Result;
+
+     label1:
+        $r3 = <android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_RUN_FINISHED>;
+
+        $r4 = staticinvoke <android.support.test.orchestrator.junit.BundleJUnitUtils: android.os.Bundle getBundleFromResult(org.junit.runner.Result)>(r1);
+
+        virtualinvoke r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: void sendTestNotification(android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent,android.os.Bundle)>($r3, $r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("OrchestrationListener", "Unable to send TestRunFinished Status to Orchestrator", r2);
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public void testStarted(org.junit.runner.Description)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        org.junit.runner.Description r1;
+        java.lang.Throwable r2, $r5;
+        android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent $r3;
+        android.os.Bundle $r4;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+     label1:
+        $r3 = <android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_STARTED>;
+
+        $r4 = staticinvoke <android.support.test.orchestrator.junit.BundleJUnitUtils: android.os.Bundle getBundleFromDescription(org.junit.runner.Description)>(r1);
+
+        virtualinvoke r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: void sendTestNotification(android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent,android.os.Bundle)>($r3, $r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("OrchestrationListener", "Unable to send TestStarted Status to Orchestrator", r2);
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public void testFinished(org.junit.runner.Description)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        org.junit.runner.Description r1;
+        java.lang.Throwable r2, $r5;
+        android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent $r3;
+        android.os.Bundle $r4;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+     label1:
+        $r3 = <android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_FINISHED>;
+
+        $r4 = staticinvoke <android.support.test.orchestrator.junit.BundleJUnitUtils: android.os.Bundle getBundleFromDescription(org.junit.runner.Description)>(r1);
+
+        virtualinvoke r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: void sendTestNotification(android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent,android.os.Bundle)>($r3, $r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("OrchestrationListener", "Unable to send TestFinished Status to Orchestrator", r2);
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public void testFailure(org.junit.runner.notification.Failure)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        org.junit.runner.notification.Failure r1;
+        java.lang.Throwable r2, $r5;
+        android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent $r3;
+        android.os.Bundle $r4;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: org.junit.runner.notification.Failure;
+
+     label1:
+        $r3 = <android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_FAILURE>;
+
+        $r4 = staticinvoke <android.support.test.orchestrator.junit.BundleJUnitUtils: android.os.Bundle getBundleFromFailure(org.junit.runner.notification.Failure)>(r1);
+
+        virtualinvoke r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: void sendTestNotification(android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent,android.os.Bundle)>($r3, $r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to send TestFailure status, terminating", r2);
+
+        throw $r6;
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public void testAssumptionFailure(org.junit.runner.notification.Failure)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        org.junit.runner.notification.Failure r1;
+        java.lang.Throwable r2, $r5;
+        android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent $r3;
+        android.os.Bundle $r4;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: org.junit.runner.notification.Failure;
+
+     label1:
+        $r3 = <android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_ASSUMPTION_FAILURE>;
+
+        $r4 = staticinvoke <android.support.test.orchestrator.junit.BundleJUnitUtils: android.os.Bundle getBundleFromFailure(org.junit.runner.notification.Failure)>(r1);
+
+        virtualinvoke r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: void sendTestNotification(android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent,android.os.Bundle)>($r3, $r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to send TestAssumptionFailure status, terminating", r2);
+
+        throw $r6;
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public void testIgnored(org.junit.runner.Description)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        org.junit.runner.Description r1;
+        java.lang.Throwable r2, $r5;
+        android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent $r3;
+        android.os.Bundle $r4;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+     label1:
+        $r3 = <android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent TEST_IGNORED>;
+
+        $r4 = staticinvoke <android.support.test.orchestrator.junit.BundleJUnitUtils: android.os.Bundle getBundleFromDescription(org.junit.runner.Description)>(r1);
+
+        virtualinvoke r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: void sendTestNotification(android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent,android.os.Bundle)>($r3, $r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("OrchestrationListener", "Unable to send TestIgnored Status to Orchestrator", r2);
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public void sendTestNotification(android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent, android.os.Bundle) throws android.os.RemoteException
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent r1;
+        android.os.Bundle r2;
+        android.support.test.orchestrator.callback.OrchestratorCallback $r3, $r5;
+        java.lang.String $r4;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent;
+
+        r2 := @parameter1: android.os.Bundle;
+
+        $r3 = r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.callback.OrchestratorCallback odoCallback>;
+
+        if null != $r3 goto label1;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Unable to send notification, callback is null");
+
+        throw $r6;
+
+     label1:
+        $r4 = virtualinvoke r1.<android.support.test.orchestrator.listeners.OrchestrationListenerManager$TestEvent: java.lang.String toString()>();
+
+        virtualinvoke r2.<android.os.Bundle: void putString(java.lang.String,java.lang.String)>("TestEvent", $r4);
+
+        $r5 = r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.callback.OrchestratorCallback odoCallback>;
+
+        interfaceinvoke $r5.<android.support.test.orchestrator.callback.OrchestratorCallback: void sendTestNotification(android.os.Bundle)>(r2);
+
+        return;
+    }
+
+    public void addTests(org.junit.runner.Description)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        org.junit.runner.Description r1, r14;
+        boolean $z0, $z1, $z2;
+        java.util.ArrayList $r2;
+        java.lang.Object $r3;
+        java.lang.String $r4, $r5, $r10, r11, r12;
+        int $i0, $i1, $i2, $i3;
+        java.lang.StringBuilder $r6, $r7, $r8, $r9;
+        java.util.Iterator r13;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: org.junit.runner.Description;
+
+        $z0 = virtualinvoke r1.<org.junit.runner.Description: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $z1 = virtualinvoke r1.<org.junit.runner.Description: boolean isTest()>();
+
+        if $z1 == 0 goto label2;
+
+        r11 = virtualinvoke r1.<org.junit.runner.Description: java.lang.String getClassName()>();
+
+        r12 = virtualinvoke r1.<org.junit.runner.Description: java.lang.String getMethodName()>();
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>(r11);
+
+        $i0 = virtualinvoke $r4.<java.lang.String: int length()>();
+
+        $i1 = 1 + $i0;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>(r12);
+
+        $i2 = virtualinvoke $r5.<java.lang.String: int length()>();
+
+        $i3 = $i1 + $i2;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(int)>($i3);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r11);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("#");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r12);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: void addTest(java.lang.String)>($r10);
+
+        goto label4;
+
+     label2:
+        $r2 = virtualinvoke r1.<org.junit.runner.Description: java.util.ArrayList getChildren()>();
+
+        r13 = virtualinvoke $r2.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label3:
+        $z2 = interfaceinvoke r13.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label4;
+
+        $r3 = interfaceinvoke r13.<java.util.Iterator: java.lang.Object next()>();
+
+        r14 = (org.junit.runner.Description) $r3;
+
+        virtualinvoke r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: void addTests(org.junit.runner.Description)>(r14);
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public void addTest(java.lang.String)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        java.lang.String r1;
+        java.lang.Throwable r2, $r6;
+        android.support.test.orchestrator.callback.OrchestratorCallback $r3, $r4;
+        java.lang.IllegalStateException $r5;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r3 = r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.callback.OrchestratorCallback odoCallback>;
+
+        if null != $r3 goto label1;
+
+        $r5 = new java.lang.IllegalStateException;
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Unable to send test, callback is null");
+
+        throw $r5;
+
+     label1:
+        $r4 = r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.callback.OrchestratorCallback odoCallback>;
+
+        interfaceinvoke $r4.<android.support.test.orchestrator.callback.OrchestratorCallback: void addTest(java.lang.String)>(r1);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("OrchestrationListener", "Unable to send test", r2);
+
+     label4:
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    static android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener access$000(android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r0;
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener $r1;
+
+        r0 := @parameter0: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        $r1 = r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener listener>;
+
+        return $r1;
+    }
+
+android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1
+<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener this$0>
+    void <init>(android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1 r0;
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener r1;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1;
+
+        r1 := @parameter0: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener;
+
+        r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onServiceConnected(android.content.ComponentName, android.os.IBinder)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1 r0;
+        android.content.ComponentName r1;
+        android.os.IBinder r2;
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener $r3, $r5;
+        android.support.test.orchestrator.callback.OrchestratorCallback $r4;
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener $r6;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        r2 := @parameter1: android.os.IBinder;
+
+        $r3 = r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener this$0>;
+
+        $r4 = staticinvoke <android.support.test.orchestrator.callback.OrchestratorCallback$Stub: android.support.test.orchestrator.callback.OrchestratorCallback asInterface(android.os.IBinder)>(r2);
+
+        $r3.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.callback.OrchestratorCallback odoCallback> = $r4;
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("OrchestrationListener", "OrchestrationListener connected to service");
+
+        $r5 = r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener this$0>;
+
+        $r6 = staticinvoke <android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener access$000(android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener)>($r5);
+
+        interfaceinvoke $r6.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener: void onOrchestratorConnect()>();
+
+        return;
+    }
+
+    public void onServiceDisconnected(android.content.ComponentName)
+    {
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1 r0;
+        android.content.ComponentName r1;
+        android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener $r2;
+
+        r0 := @this: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1;
+
+        r1 := @parameter0: android.content.ComponentName;
+
+        $r2 = r0.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$1: android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener this$0>;
+
+        $r2.<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener: android.support.test.orchestrator.callback.OrchestratorCallback odoCallback> = null;
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("OrchestrationListener", "OrchestrationListener disconnected from service");
+
+        return;
+    }
+
+android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener
+<android.support.test.orchestrator.instrumentationlistener.OrchestratedInstrumentationListener$OnConnectListener: void onOrchestratorConnect()>

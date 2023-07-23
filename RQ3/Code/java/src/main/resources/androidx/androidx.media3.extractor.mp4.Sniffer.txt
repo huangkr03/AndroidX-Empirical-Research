@@ -1,0 +1,417 @@
+androidx.media3.extractor.mp4.Sniffer
+<androidx.media3.extractor.mp4.Sniffer: int BRAND_QUICKTIME>
+<androidx.media3.extractor.mp4.Sniffer: int BRAND_HEIC>
+<androidx.media3.extractor.mp4.Sniffer: int SEARCH_LENGTH>
+<androidx.media3.extractor.mp4.Sniffer: int[] COMPATIBLE_BRANDS>
+    public static boolean sniffFragmented(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $z0 = staticinvoke <androidx.media3.extractor.mp4.Sniffer: boolean sniffInternal(androidx.media3.extractor.ExtractorInput,boolean,boolean)>(r0, 1, 0);
+
+        return $z0;
+    }
+
+    public static boolean sniffUnfragmented(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $z0 = staticinvoke <androidx.media3.extractor.mp4.Sniffer: boolean sniffInternal(androidx.media3.extractor.ExtractorInput,boolean,boolean)>(r0, 0, 0);
+
+        return $z0;
+    }
+
+    public static boolean sniffUnfragmented(androidx.media3.extractor.ExtractorInput, boolean) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        boolean z0, $z1;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        z0 := @parameter1: boolean;
+
+        $z1 = staticinvoke <androidx.media3.extractor.mp4.Sniffer: boolean sniffInternal(androidx.media3.extractor.ExtractorInput,boolean,boolean)>(r0, 0, z0);
+
+        return $z1;
+    }
+
+    private static boolean sniffInternal(androidx.media3.extractor.ExtractorInput, boolean, boolean) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        boolean z0, z1, z2, $z3, z4, z5, $z6;
+        long l0, $l6, $l7, $l8, $l9, $l10, $l12, $l13, $l17, $l20, $l21, $l22, $l24, l28, l29, $l30;
+        androidx.media3.common.util.ParsableByteArray r1, $r2;
+        int i1, i2, $i14, $i15, i25, i26, i32, i33;
+        byte $b3, $b4, $b5, $b11, $b16, $b18, $b19, $b23, b27, $b31;
+        byte[] $r3, $r4, $r5;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        z0 := @parameter1: boolean;
+
+        z1 := @parameter2: boolean;
+
+        l0 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        $b3 = l0 cmp -1L;
+
+        if $b3 == 0 goto label01;
+
+        $b23 = l0 cmp 4096L;
+
+        if $b23 <= 0 goto label02;
+
+     label01:
+        $l24 = 4096L;
+
+        goto label03;
+
+     label02:
+        $l24 = l0;
+
+     label03:
+        i25 = (int) $l24;
+
+        $r2 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void <init>(int)>(64);
+
+        r1 = $r2;
+
+        i26 = 0;
+
+        z4 = 0;
+
+        z5 = 0;
+
+     label04:
+        if i26 >= i25 goto label21;
+
+        b27 = 8;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void reset(int)>(b27);
+
+        $r3 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        z2 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: boolean peekFully(byte[],int,int,boolean)>($r3, 0, b27, 1);
+
+        if z2 != 0 goto label05;
+
+        goto label21;
+
+     label05:
+        l28 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: long readUnsignedInt()>();
+
+        i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        $b4 = l28 cmp 1L;
+
+        if $b4 != 0 goto label06;
+
+        b27 = 16;
+
+        $r5 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r5, 8, 8);
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setLimit(int)>(16);
+
+        l28 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: long readLong()>();
+
+        goto label07;
+
+     label06:
+        $b5 = l28 cmp 0L;
+
+        if $b5 != 0 goto label07;
+
+        l29 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        $b19 = l29 cmp -1L;
+
+        if $b19 == 0 goto label07;
+
+        $l20 = interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: long getPeekPosition()>();
+
+        $l22 = l29 - $l20;
+
+        $l21 = (long) b27;
+
+        l28 = $l22 + $l21;
+
+     label07:
+        $l30 = (long) b27;
+
+        $b31 = l28 cmp $l30;
+
+        if $b31 >= 0 goto label08;
+
+        return 0;
+
+     label08:
+        i26 = i26 + b27;
+
+        if i1 != 1836019574 goto label09;
+
+        $i15 = (int) l28;
+
+        i25 = i25 + $i15;
+
+        $b16 = l0 cmp -1L;
+
+        if $b16 == 0 goto label04;
+
+        $l17 = (long) i25;
+
+        $b18 = $l17 cmp l0;
+
+        if $b18 <= 0 goto label04;
+
+        i25 = (int) l0;
+
+        goto label04;
+
+     label09:
+        if i1 == 1836019558 goto label10;
+
+        if i1 != 1836475768 goto label11;
+
+     label10:
+        z5 = 1;
+
+        goto label21;
+
+     label11:
+        $l6 = (long) i26;
+
+        $l8 = $l6 + l28;
+
+        $l7 = (long) b27;
+
+        $l10 = $l8 - $l7;
+
+        $l9 = (long) i25;
+
+        $b11 = $l10 cmp $l9;
+
+        if $b11 < 0 goto label12;
+
+        goto label21;
+
+     label12:
+        $l12 = (long) b27;
+
+        $l13 = l28 - $l12;
+
+        i32 = (int) $l13;
+
+        i26 = i26 + i32;
+
+        if i1 != 1718909296 goto label19;
+
+        if i32 >= 8 goto label13;
+
+        return 0;
+
+     label13:
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void reset(int)>(i32);
+
+        $r4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, i32);
+
+        i2 = i32 / 4;
+
+        i33 = 0;
+
+     label14:
+        if i33 >= i2 goto label17;
+
+        if i33 != 1 goto label15;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        goto label16;
+
+     label15:
+        $i14 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int readInt()>();
+
+        $z3 = staticinvoke <androidx.media3.extractor.mp4.Sniffer: boolean isCompatibleBrand(int,boolean)>($i14, z1);
+
+        if $z3 == 0 goto label16;
+
+        z4 = 1;
+
+        goto label17;
+
+     label16:
+        i33 = i33 + 1;
+
+        goto label14;
+
+     label17:
+        if z4 != 0 goto label18;
+
+        return 0;
+
+     label18:
+        goto label20;
+
+     label19:
+        if i32 == 0 goto label20;
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void advancePeekPosition(int)>(i32);
+
+     label20:
+        goto label04;
+
+     label21:
+        if z4 == 0 goto label22;
+
+        if z0 != z5 goto label22;
+
+        $z6 = 1;
+
+        goto label23;
+
+     label22:
+        $z6 = 0;
+
+     label23:
+        return $z6;
+    }
+
+    private static boolean isCompatibleBrand(int, boolean)
+    {
+        int i0, i1, i2, $i3, i4;
+        boolean z0;
+        int[] r0;
+
+        i0 := @parameter0: int;
+
+        z0 := @parameter1: boolean;
+
+        $i3 = i0 >>> 8;
+
+        if $i3 != 3368816 goto label1;
+
+        return 1;
+
+     label1:
+        if i0 != 1751476579 goto label2;
+
+        if z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        r0 = <androidx.media3.extractor.mp4.Sniffer: int[] COMPATIBLE_BRANDS>;
+
+        i1 = lengthof r0;
+
+        i4 = 0;
+
+     label3:
+        if i4 >= i1 goto label5;
+
+        i2 = r0[i4];
+
+        if i2 != i0 goto label4;
+
+        return 1;
+
+     label4:
+        i4 = i4 + 1;
+
+        goto label3;
+
+     label5:
+        return 0;
+    }
+
+    private void <init>()
+    {
+        androidx.media3.extractor.mp4.Sniffer r0;
+
+        r0 := @this: androidx.media3.extractor.mp4.Sniffer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        int[] $r0;
+
+        $r0 = newarray (int)[29];
+
+        $r0[0] = 1769172845;
+
+        $r0[1] = 1769172786;
+
+        $r0[2] = 1769172787;
+
+        $r0[3] = 1769172788;
+
+        $r0[4] = 1769172789;
+
+        $r0[5] = 1769172790;
+
+        $r0[6] = 1769172793;
+
+        $r0[7] = 1635148593;
+
+        $r0[8] = 1752589105;
+
+        $r0[9] = 1751479857;
+
+        $r0[10] = 1635135537;
+
+        $r0[11] = 1836069937;
+
+        $r0[12] = 1836069938;
+
+        $r0[13] = 862401121;
+
+        $r0[14] = 862401122;
+
+        $r0[15] = 862417462;
+
+        $r0[16] = 862417718;
+
+        $r0[17] = 862414134;
+
+        $r0[18] = 862414646;
+
+        $r0[19] = 1295275552;
+
+        $r0[20] = 1295270176;
+
+        $r0[21] = 1714714144;
+
+        $r0[22] = 1801741417;
+
+        $r0[23] = 1295275600;
+
+        $r0[24] = 1903435808;
+
+        $r0[25] = 1297305174;
+
+        $r0[26] = 1684175153;
+
+        $r0[27] = 1769172332;
+
+        $r0[28] = 1885955686;
+
+        <androidx.media3.extractor.mp4.Sniffer: int[] COMPATIBLE_BRANDS> = $r0;
+
+        return;
+    }
+

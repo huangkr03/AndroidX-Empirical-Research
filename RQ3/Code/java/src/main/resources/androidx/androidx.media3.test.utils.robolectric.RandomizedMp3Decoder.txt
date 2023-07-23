@@ -1,0 +1,134 @@
+androidx.media3.test.utils.robolectric.RandomizedMp3Decoder
+<androidx.media3.test.utils.robolectric.RandomizedMp3Decoder: java.util.List decoderOutput>
+<androidx.media3.test.utils.robolectric.RandomizedMp3Decoder: int frameSizeInBytes>
+    public void <init>()
+    {
+        androidx.media3.test.utils.robolectric.RandomizedMp3Decoder r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: androidx.media3.test.utils.robolectric.RandomizedMp3Decoder;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        r0.<androidx.media3.test.utils.robolectric.RandomizedMp3Decoder: java.util.List decoderOutput> = $r1;
+
+        return;
+    }
+
+    public void process(java.nio.ByteBuffer, java.nio.ByteBuffer)
+    {
+        androidx.media3.test.utils.robolectric.RandomizedMp3Decoder r0;
+        java.nio.ByteBuffer r1, r2;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7;
+        byte[] r3;
+        java.util.List $r5;
+        boolean $z1;
+
+        r0 := @this: androidx.media3.test.utils.robolectric.RandomizedMp3Decoder;
+
+        r1 := @parameter0: java.nio.ByteBuffer;
+
+        r2 := @parameter1: java.nio.ByteBuffer;
+
+        $i3 = virtualinvoke r1.<java.nio.ByteBuffer: int remaining()>();
+
+        if $i3 != 0 goto label1;
+
+        return;
+
+     label1:
+        $i4 = virtualinvoke r1.<java.nio.ByteBuffer: int remaining()>();
+
+        if $i4 < 4 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkState(boolean,java.lang.Object)>($z1, "Frame size too small, should be at least 4 to hold an MP3 header");
+
+        $i5 = virtualinvoke r1.<java.nio.ByteBuffer: int position()>();
+
+        i0 = staticinvoke <androidx.media3.common.util.Util: int getBigEndianInt(java.nio.ByteBuffer,int)>(r1, $i5);
+
+        i1 = staticinvoke <androidx.media3.extractor.MpegAudioUtil: int parseMpegAudioFrameSampleCount(int)>(i0);
+
+        $i6 = r0.<androidx.media3.test.utils.robolectric.RandomizedMp3Decoder: int frameSizeInBytes>;
+
+        i2 = i1 * $i6;
+
+        r3 = staticinvoke <androidx.media3.test.utils.TestUtil: byte[] buildTestData(int)>(i2);
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte[])>(r3);
+
+        $r5 = r0.<androidx.media3.test.utils.robolectric.RandomizedMp3Decoder: java.util.List decoderOutput>;
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>(r3);
+
+        $i7 = virtualinvoke r1.<java.nio.ByteBuffer: int limit()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer position(int)>($i7);
+
+        return;
+    }
+
+    public void onConfigured(android.media.MediaFormat, android.view.Surface, android.media.MediaCrypto, int)
+    {
+        androidx.media3.test.utils.robolectric.RandomizedMp3Decoder r0;
+        android.media.MediaFormat r1;
+        android.view.Surface r2;
+        android.media.MediaCrypto r3;
+        int i0, i1, i2, $i3;
+        java.lang.String $r4;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.test.utils.robolectric.RandomizedMp3Decoder;
+
+        r1 := @parameter0: android.media.MediaFormat;
+
+        r2 := @parameter1: android.view.Surface;
+
+        r3 := @parameter2: android.media.MediaCrypto;
+
+        i0 := @parameter3: int;
+
+        i1 = virtualinvoke r1.<android.media.MediaFormat: int getInteger(java.lang.String,int)>("pcm-encoding", 2);
+
+        i2 = virtualinvoke r1.<android.media.MediaFormat: int getInteger(java.lang.String)>("channel-count");
+
+        $r4 = virtualinvoke r1.<android.media.MediaFormat: java.lang.String getString(java.lang.String,java.lang.String)>("mime", "audio/mpeg");
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("audio/mpeg");
+
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean)>($z0);
+
+        $i3 = staticinvoke <androidx.media3.common.util.Util: int getPcmFrameSize(int,int)>(i1, i2);
+
+        r0.<androidx.media3.test.utils.robolectric.RandomizedMp3Decoder: int frameSizeInBytes> = $i3;
+
+        return;
+    }
+
+    public com.google.common.collect.ImmutableList getAllOutputBytes()
+    {
+        androidx.media3.test.utils.robolectric.RandomizedMp3Decoder r0;
+        java.util.List $r1;
+        com.google.common.collect.ImmutableList $r2;
+
+        r0 := @this: androidx.media3.test.utils.robolectric.RandomizedMp3Decoder;
+
+        $r1 = r0.<androidx.media3.test.utils.robolectric.RandomizedMp3Decoder: java.util.List decoderOutput>;
+
+        $r2 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList copyOf(java.util.Collection)>($r1);
+
+        return $r2;
+    }
+

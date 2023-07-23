@@ -1,0 +1,879 @@
+androidx.camera.extensions.ExtensionsManager
+<androidx.camera.extensions.ExtensionsManager: java.lang.String TAG>
+<androidx.camera.extensions.ExtensionsManager: java.lang.Object EXTENSIONS_LOCK>
+<androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sInitializeFuture>
+<androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture>
+<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager sExtensionsManager>
+<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability mExtensionsAvailability>
+<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsInfo mExtensionsInfo>
+    public static com.google.common.util.concurrent.ListenableFuture getInstanceAsync(android.content.Context, androidx.camera.core.CameraProvider)
+    {
+        android.content.Context r0;
+        androidx.camera.core.CameraProvider r1;
+        androidx.camera.extensions.internal.VersionName $r2;
+        com.google.common.util.concurrent.ListenableFuture $r3;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.camera.core.CameraProvider;
+
+        $r2 = staticinvoke <androidx.camera.extensions.internal.VersionName: androidx.camera.extensions.internal.VersionName getCurrentVersion()>();
+
+        $r3 = staticinvoke <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture getInstanceAsync(android.content.Context,androidx.camera.core.CameraProvider,androidx.camera.extensions.internal.VersionName)>(r0, r1, $r2);
+
+        return $r3;
+    }
+
+    static com.google.common.util.concurrent.ListenableFuture getInstanceAsync(android.content.Context, androidx.camera.core.CameraProvider, androidx.camera.extensions.internal.VersionName)
+    {
+        android.content.Context r0;
+        androidx.camera.core.CameraProvider r1;
+        androidx.camera.extensions.internal.VersionName r2;
+        java.lang.Object r3, $r5;
+        java.lang.Throwable r4, $r22;
+        com.google.common.util.concurrent.ListenableFuture $r6, $r10, $r11, $r13, $r16, $r19, $r20;
+        androidx.camera.extensions.internal.Version $r7, $r8, $r9;
+        int $i0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Resolver $r12;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r14, $r17;
+        androidx.camera.extensions.ExtensionsManager $r15, $r18;
+        boolean $z0;
+        java.lang.IllegalStateException $r21;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: androidx.camera.core.CameraProvider;
+
+        r2 := @parameter2: androidx.camera.extensions.internal.VersionName;
+
+        $r5 = <androidx.camera.extensions.ExtensionsManager: java.lang.Object EXTENSIONS_LOCK>;
+
+        r3 = $r5;
+
+        entermonitor $r5;
+
+     label01:
+        $r6 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture>;
+
+        if $r6 == null goto label02;
+
+        $r20 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture>;
+
+        $z0 = interfaceinvoke $r20.<com.google.common.util.concurrent.ListenableFuture: boolean isDone()>();
+
+        if $z0 != 0 goto label02;
+
+        $r21 = new java.lang.IllegalStateException;
+
+        specialinvoke $r21.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Not yet done deinitializing extensions");
+
+        throw $r21;
+
+     label02:
+        <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture> = null;
+
+        $r7 = staticinvoke <androidx.camera.extensions.internal.ExtensionVersion: androidx.camera.extensions.internal.Version getRuntimeVersion()>();
+
+        if $r7 != null goto label04;
+
+        $r17 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability NONE>;
+
+        $r18 = staticinvoke <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager getOrCreateExtensionsManager(androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability,androidx.camera.core.CameraProvider)>($r17, r1);
+
+        $r19 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture immediateFuture(java.lang.Object)>($r18);
+
+        exitmonitor r3;
+
+     label03:
+        return $r19;
+
+     label04:
+        $r8 = staticinvoke <androidx.camera.extensions.internal.ExtensionVersion: androidx.camera.extensions.internal.Version getRuntimeVersion()>();
+
+        $r9 = <androidx.camera.extensions.internal.Version: androidx.camera.extensions.internal.Version VERSION_1_1>;
+
+        $i0 = virtualinvoke $r8.<androidx.camera.extensions.internal.Version: int compareTo(androidx.camera.extensions.internal.Version)>($r9);
+
+        if $i0 >= 0 goto label06;
+
+        $r14 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_AVAILABLE>;
+
+        $r15 = staticinvoke <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager getOrCreateExtensionsManager(androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability,androidx.camera.core.CameraProvider)>($r14, r1);
+
+        $r16 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture immediateFuture(java.lang.Object)>($r15);
+
+        exitmonitor r3;
+
+     label05:
+        return $r16;
+
+     label06:
+        $r10 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sInitializeFuture>;
+
+        if $r10 != null goto label07;
+
+        $r12 = dynamicinvoke "attachCompleter" <androidx.concurrent.futures.CallbackToFutureAdapter$Resolver (androidx.camera.extensions.internal.VersionName,android.content.Context,androidx.camera.core.CameraProvider)>(r2, r0, r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.extensions.ExtensionsManager: java.lang.Object lambda$getInstanceAsync$0(androidx.camera.extensions.internal.VersionName,android.content.Context,androidx.camera.core.CameraProvider,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer));
+
+        $r13 = staticinvoke <androidx.concurrent.futures.CallbackToFutureAdapter: com.google.common.util.concurrent.ListenableFuture getFuture(androidx.concurrent.futures.CallbackToFutureAdapter$Resolver)>($r12);
+
+        <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sInitializeFuture> = $r13;
+
+     label07:
+        $r11 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sInitializeFuture>;
+
+        exitmonitor r3;
+
+     label08:
+        return $r11;
+
+     label09:
+        $r22 := @caughtexception;
+
+        r4 = $r22;
+
+        exitmonitor r3;
+
+     label10:
+        throw r4;
+
+        catch java.lang.Throwable from label01 to label03 with label09;
+        catch java.lang.Throwable from label04 to label05 with label09;
+        catch java.lang.Throwable from label06 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label09;
+    }
+
+    public com.google.common.util.concurrent.ListenableFuture shutdown()
+    {
+        androidx.camera.extensions.ExtensionsManager r0, $r11;
+        java.lang.Object r1, $r5;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability r2, $r12;
+        java.lang.Throwable r3, r4, $r20, $r23;
+        androidx.camera.extensions.internal.Version $r6;
+        com.google.common.util.concurrent.ListenableFuture $r7, $r8, $r9, $r13, $r14, $r16, $r17, $r18, $r19, $r21, $r22;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Resolver $r15;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager;
+
+        $r5 = <androidx.camera.extensions.ExtensionsManager: java.lang.Object EXTENSIONS_LOCK>;
+
+        r1 = $r5;
+
+        entermonitor $r5;
+
+     label01:
+        $r6 = staticinvoke <androidx.camera.extensions.internal.ExtensionVersion: androidx.camera.extensions.internal.Version getRuntimeVersion()>();
+
+        if $r6 != null goto label03;
+
+        <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sInitializeFuture> = null;
+
+        <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager sExtensionsManager> = null;
+
+        $r19 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture immediateFuture(java.lang.Object)>(null);
+
+        exitmonitor r1;
+
+     label02:
+        return $r19;
+
+     label03:
+        $r7 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sInitializeFuture>;
+
+        if $r7 != null goto label05;
+
+        $r18 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture immediateFuture(java.lang.Object)>(null);
+
+        exitmonitor r1;
+
+     label04:
+        return $r18;
+
+     label05:
+        $r8 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture>;
+
+        if $r8 == null goto label07;
+
+        $r17 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture>;
+
+        exitmonitor r1;
+
+     label06:
+        return $r17;
+
+     label07:
+        $r9 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sInitializeFuture>;
+
+        interfaceinvoke $r9.<com.google.common.util.concurrent.ListenableFuture: java.lang.Object get()>();
+
+        <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sInitializeFuture> = null;
+
+        $r11 = <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager sExtensionsManager>;
+
+        r2 = $r11.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability mExtensionsAvailability>;
+
+        <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager sExtensionsManager> = null;
+
+     label08:
+        goto label11;
+
+     label09:
+        $r20 := @caughtexception;
+
+        r3 = $r20;
+
+        $r21 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture immediateFailedFuture(java.lang.Throwable)>(r3);
+
+        <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture> = $r21;
+
+        $r22 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture>;
+
+        exitmonitor r1;
+
+     label10:
+        return $r22;
+
+     label11:
+        $r12 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_AVAILABLE>;
+
+        if r2 != $r12 goto label12;
+
+        $r15 = dynamicinvoke "attachCompleter" <androidx.concurrent.futures.CallbackToFutureAdapter$Resolver (androidx.camera.extensions.ExtensionsManager)>(r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer), methodhandle: "REF_INVOKE_SPECIAL" <androidx.camera.extensions.ExtensionsManager: java.lang.Object lambda$shutdown$1(androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>, methodtype: java.lang.Object __METHODTYPE__(androidx.concurrent.futures.CallbackToFutureAdapter$Completer));
+
+        $r16 = staticinvoke <androidx.concurrent.futures.CallbackToFutureAdapter: com.google.common.util.concurrent.ListenableFuture getFuture(androidx.concurrent.futures.CallbackToFutureAdapter$Resolver)>($r15);
+
+        <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture> = $r16;
+
+        goto label13;
+
+     label12:
+        $r13 = staticinvoke <androidx.camera.core.impl.utils.futures.Futures: com.google.common.util.concurrent.ListenableFuture immediateFuture(java.lang.Object)>(null);
+
+        <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture> = $r13;
+
+     label13:
+        $r14 = <androidx.camera.extensions.ExtensionsManager: com.google.common.util.concurrent.ListenableFuture sDeinitializeFuture>;
+
+        exitmonitor r1;
+
+     label14:
+        return $r14;
+
+     label15:
+        $r23 := @caughtexception;
+
+        r4 = $r23;
+
+        exitmonitor r1;
+
+     label16:
+        throw r4;
+
+        catch java.util.concurrent.ExecutionException from label07 to label08 with label09;
+        catch java.lang.InterruptedException from label07 to label08 with label09;
+        catch java.lang.Throwable from label01 to label02 with label15;
+        catch java.lang.Throwable from label03 to label04 with label15;
+        catch java.lang.Throwable from label05 to label06 with label15;
+        catch java.lang.Throwable from label07 to label10 with label15;
+        catch java.lang.Throwable from label11 to label14 with label15;
+        catch java.lang.Throwable from label15 to label16 with label15;
+    }
+
+    static androidx.camera.extensions.ExtensionsManager getOrCreateExtensionsManager(androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability, androidx.camera.core.CameraProvider)
+    {
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability r0;
+        androidx.camera.core.CameraProvider r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r9;
+        androidx.camera.extensions.ExtensionsManager $r5, $r6, $r7, $r8;
+
+        r0 := @parameter0: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability;
+
+        r1 := @parameter1: androidx.camera.core.CameraProvider;
+
+        $r4 = <androidx.camera.extensions.ExtensionsManager: java.lang.Object EXTENSIONS_LOCK>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager sExtensionsManager>;
+
+        if $r5 == null goto label3;
+
+        $r8 = <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager sExtensionsManager>;
+
+        exitmonitor r2;
+
+     label2:
+        return $r8;
+
+     label3:
+        $r6 = new androidx.camera.extensions.ExtensionsManager;
+
+        specialinvoke $r6.<androidx.camera.extensions.ExtensionsManager: void <init>(androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability,androidx.camera.core.CameraProvider)>(r0, r1);
+
+        <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager sExtensionsManager> = $r6;
+
+        $r7 = <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager sExtensionsManager>;
+
+        exitmonitor r2;
+
+     label4:
+        return $r7;
+
+     label5:
+        $r9 := @caughtexception;
+
+        r3 = $r9;
+
+        exitmonitor r2;
+
+     label6:
+        throw r3;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public androidx.camera.core.CameraSelector getExtensionEnabledCameraSelector(androidx.camera.core.CameraSelector, int)
+    {
+        androidx.camera.extensions.ExtensionsManager r0;
+        androidx.camera.core.CameraSelector r1, $r5;
+        int i0;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r2, $r3;
+        androidx.camera.extensions.ExtensionsInfo $r4;
+        java.lang.IllegalArgumentException $r6;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        i0 := @parameter1: int;
+
+        if i0 != 0 goto label1;
+
+        return r1;
+
+     label1:
+        $r3 = r0.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability mExtensionsAvailability>;
+
+        $r2 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_AVAILABLE>;
+
+        if $r3 == $r2 goto label2;
+
+        $r6 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("This device doesn\'t support extensions function! isExtensionAvailable should be checked first before calling getExtensionEnabledCameraSelector.");
+
+        throw $r6;
+
+     label2:
+        $r4 = r0.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsInfo mExtensionsInfo>;
+
+        $r5 = virtualinvoke $r4.<androidx.camera.extensions.ExtensionsInfo: androidx.camera.core.CameraSelector getExtensionCameraSelectorAndInjectCameraConfig(androidx.camera.core.CameraSelector,int)>(r1, i0);
+
+        return $r5;
+    }
+
+    public boolean isExtensionAvailable(androidx.camera.core.CameraSelector, int)
+    {
+        androidx.camera.extensions.ExtensionsManager r0;
+        androidx.camera.core.CameraSelector r1;
+        int i0;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r2, $r3;
+        androidx.camera.extensions.ExtensionsInfo $r4;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        i0 := @parameter1: int;
+
+        if i0 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        $r3 = r0.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability mExtensionsAvailability>;
+
+        $r2 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_AVAILABLE>;
+
+        if $r3 == $r2 goto label2;
+
+        return 0;
+
+     label2:
+        $r4 = r0.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsInfo mExtensionsInfo>;
+
+        $z0 = virtualinvoke $r4.<androidx.camera.extensions.ExtensionsInfo: boolean isExtensionAvailable(androidx.camera.core.CameraSelector,int)>(r1, i0);
+
+        return $z0;
+    }
+
+    public android.util.Range getEstimatedCaptureLatencyRange(androidx.camera.core.CameraSelector, int)
+    {
+        androidx.camera.extensions.ExtensionsManager r0;
+        androidx.camera.core.CameraSelector r1;
+        int i0;
+        java.lang.IllegalArgumentException $r2;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r3, $r4;
+        androidx.camera.extensions.ExtensionsInfo $r5;
+        android.util.Range $r6;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager;
+
+        r1 := @parameter0: androidx.camera.core.CameraSelector;
+
+        i0 := @parameter1: int;
+
+        if i0 == 0 goto label1;
+
+        $r4 = r0.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability mExtensionsAvailability>;
+
+        $r3 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_AVAILABLE>;
+
+        if $r4 == $r3 goto label2;
+
+     label1:
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("No camera can be found to support the specified extensions mode! isExtensionAvailable should be checked first before calling getEstimatedCaptureLatencyRange.");
+
+        throw $r2;
+
+     label2:
+        $r5 = r0.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsInfo mExtensionsInfo>;
+
+        $r6 = virtualinvoke $r5.<androidx.camera.extensions.ExtensionsInfo: android.util.Range getEstimatedCaptureLatencyRange(androidx.camera.core.CameraSelector,int,android.util.Size)>(r1, i0, null);
+
+        return $r6;
+    }
+
+    androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability getExtensionsAvailability()
+    {
+        androidx.camera.extensions.ExtensionsManager r0;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r1;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager;
+
+        $r1 = r0.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability mExtensionsAvailability>;
+
+        return $r1;
+    }
+
+    private void <init>(androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability, androidx.camera.core.CameraProvider)
+    {
+        androidx.camera.extensions.ExtensionsManager r0;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability r1;
+        androidx.camera.core.CameraProvider r2;
+        androidx.camera.extensions.ExtensionsInfo $r3;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager;
+
+        r1 := @parameter0: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability;
+
+        r2 := @parameter1: androidx.camera.core.CameraProvider;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability mExtensionsAvailability> = r1;
+
+        $r3 = new androidx.camera.extensions.ExtensionsInfo;
+
+        specialinvoke $r3.<androidx.camera.extensions.ExtensionsInfo: void <init>(androidx.camera.core.CameraProvider)>(r2);
+
+        r0.<androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsInfo mExtensionsInfo> = $r3;
+
+        return;
+    }
+
+    private java.lang.Object lambda$shutdown$1(androidx.concurrent.futures.CallbackToFutureAdapter$Completer) throws java.lang.Exception
+    {
+        androidx.camera.extensions.ExtensionsManager r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r1;
+        java.lang.Throwable r2, $r5;
+        androidx.camera.extensions.ExtensionsManager$2 $r3;
+        java.util.concurrent.Executor $r4;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager;
+
+        r1 := @parameter0: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+     label1:
+        $r3 = new androidx.camera.extensions.ExtensionsManager$2;
+
+        specialinvoke $r3.<androidx.camera.extensions.ExtensionsManager$2: void <init>(androidx.camera.extensions.ExtensionsManager,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)>(r0, r1);
+
+        $r4 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.Executor directExecutor()>();
+
+        staticinvoke <androidx.camera.extensions.impl.InitializerImpl: void deinit(androidx.camera.extensions.impl.InitializerImpl$OnExtensionsDeinitializedCallback,java.util.concurrent.Executor)>($r3, $r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r2 = $r5;
+
+        virtualinvoke r1.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean setException(java.lang.Throwable)>(r2);
+
+     label4:
+        return null;
+
+        catch java.lang.NoSuchMethodError from label1 to label2 with label3;
+        catch java.lang.NoClassDefFoundError from label1 to label2 with label3;
+    }
+
+    private static java.lang.Object lambda$getInstanceAsync$0(androidx.camera.extensions.internal.VersionName, android.content.Context, androidx.camera.core.CameraProvider, androidx.concurrent.futures.CallbackToFutureAdapter$Completer) throws java.lang.Exception
+    {
+        androidx.camera.extensions.internal.VersionName r0;
+        android.content.Context r1, $r5;
+        androidx.camera.core.CameraProvider r2;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r3;
+        java.lang.String $r4, $r12, $r19;
+        androidx.camera.extensions.ExtensionsManager$1 $r6;
+        java.util.concurrent.Executor $r7;
+        java.lang.Throwable $r8, $r15, r22, r23;
+        java.lang.StringBuilder $r9, $r10, $r11, $r16, $r17, $r18;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r13, $r20;
+        androidx.camera.extensions.ExtensionsManager $r14, $r21;
+
+        r0 := @parameter0: androidx.camera.extensions.internal.VersionName;
+
+        r1 := @parameter1: android.content.Context;
+
+        r2 := @parameter2: androidx.camera.core.CameraProvider;
+
+        r3 := @parameter3: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+     label1:
+        $r4 = virtualinvoke r0.<androidx.camera.extensions.internal.VersionName: java.lang.String toVersionString()>();
+
+        $r5 = staticinvoke <androidx.camera.core.impl.utils.ContextUtil: android.content.Context getApplicationContext(android.content.Context)>(r1);
+
+        $r6 = new androidx.camera.extensions.ExtensionsManager$1;
+
+        specialinvoke $r6.<androidx.camera.extensions.ExtensionsManager$1: void <init>(androidx.concurrent.futures.CallbackToFutureAdapter$Completer,androidx.camera.core.CameraProvider)>(r3, r2);
+
+        $r7 = staticinvoke <androidx.camera.core.impl.utils.executor.CameraXExecutors: java.util.concurrent.Executor directExecutor()>();
+
+        staticinvoke <androidx.camera.extensions.impl.InitializerImpl: void init(java.lang.String,android.content.Context,androidx.camera.extensions.impl.InitializerImpl$OnExtensionsInitializedCallback,java.util.concurrent.Executor)>($r4, $r5, $r6, $r7);
+
+     label2:
+        goto label5;
+
+     label3:
+        $r15 := @caughtexception;
+
+        r22 = $r15;
+
+        $r16 = new java.lang.StringBuilder;
+
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to initialize extensions. Some classes or methods are missed in the vendor library. ");
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r22);
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ExtensionsManager", $r19);
+
+        $r20 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_UNAVAILABLE_MISSING_IMPLEMENTATION>;
+
+        $r21 = staticinvoke <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager getOrCreateExtensionsManager(androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability,androidx.camera.core.CameraProvider)>($r20, r2);
+
+        virtualinvoke r3.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>($r21);
+
+        goto label5;
+
+     label4:
+        $r8 := @caughtexception;
+
+        r23 = $r8;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to initialize extensions. Something wents wrong when initializing the vendor library. ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r23);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ExtensionsManager", $r12);
+
+        $r13 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_UNAVAILABLE_ERROR_LOADING>;
+
+        $r14 = staticinvoke <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager getOrCreateExtensionsManager(androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability,androidx.camera.core.CameraProvider)>($r13, r2);
+
+        virtualinvoke r3.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>($r14);
+
+     label5:
+        return "Initialize extensions";
+
+        catch java.lang.NoSuchMethodError from label1 to label2 with label3;
+        catch java.lang.NoClassDefFoundError from label1 to label2 with label3;
+        catch java.lang.AbstractMethodError from label1 to label2 with label3;
+        catch java.lang.RuntimeException from label1 to label2 with label4;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Object $r0;
+
+        $r0 = new java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        <androidx.camera.extensions.ExtensionsManager: java.lang.Object EXTENSIONS_LOCK> = $r0;
+
+        return;
+    }
+
+androidx.camera.extensions.ExtensionsManager$1
+<androidx.camera.extensions.ExtensionsManager$1: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer>
+<androidx.camera.extensions.ExtensionsManager$1: androidx.camera.core.CameraProvider val$cameraProvider>
+    void <init>(androidx.concurrent.futures.CallbackToFutureAdapter$Completer, androidx.camera.core.CameraProvider)
+    {
+        androidx.camera.extensions.ExtensionsManager$1 r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r1;
+        androidx.camera.core.CameraProvider r2;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager$1;
+
+        r1 := @parameter0: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        r2 := @parameter1: androidx.camera.core.CameraProvider;
+
+        r0.<androidx.camera.extensions.ExtensionsManager$1: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer> = r1;
+
+        r0.<androidx.camera.extensions.ExtensionsManager$1: androidx.camera.core.CameraProvider val$cameraProvider> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onSuccess()
+    {
+        androidx.camera.extensions.ExtensionsManager$1 r0;
+        androidx.camera.core.CameraProvider $r1;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r2;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer $r3;
+        androidx.camera.extensions.ExtensionsManager $r4;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager$1;
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("ExtensionsManager", "Successfully initialized extensions");
+
+        $r3 = r0.<androidx.camera.extensions.ExtensionsManager$1: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer>;
+
+        $r2 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_AVAILABLE>;
+
+        $r1 = r0.<androidx.camera.extensions.ExtensionsManager$1: androidx.camera.core.CameraProvider val$cameraProvider>;
+
+        $r4 = staticinvoke <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager getOrCreateExtensionsManager(androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability,androidx.camera.core.CameraProvider)>($r2, $r1);
+
+        virtualinvoke $r3.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>($r4);
+
+        return;
+    }
+
+    public void onFailure(int)
+    {
+        androidx.camera.extensions.ExtensionsManager$1 r0;
+        int i0;
+        androidx.camera.core.CameraProvider $r1;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r2;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer $r3;
+        androidx.camera.extensions.ExtensionsManager $r4;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager$1;
+
+        i0 := @parameter0: int;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ExtensionsManager", "Failed to initialize extensions");
+
+        $r3 = r0.<androidx.camera.extensions.ExtensionsManager$1: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer>;
+
+        $r2 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_UNAVAILABLE_ERROR_LOADING>;
+
+        $r1 = r0.<androidx.camera.extensions.ExtensionsManager$1: androidx.camera.core.CameraProvider val$cameraProvider>;
+
+        $r4 = staticinvoke <androidx.camera.extensions.ExtensionsManager: androidx.camera.extensions.ExtensionsManager getOrCreateExtensionsManager(androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability,androidx.camera.core.CameraProvider)>($r2, $r1);
+
+        virtualinvoke $r3.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>($r4);
+
+        return;
+    }
+
+androidx.camera.extensions.ExtensionsManager$2
+<androidx.camera.extensions.ExtensionsManager$2: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer>
+<androidx.camera.extensions.ExtensionsManager$2: androidx.camera.extensions.ExtensionsManager this$0>
+    void <init>(androidx.camera.extensions.ExtensionsManager, androidx.concurrent.futures.CallbackToFutureAdapter$Completer)
+    {
+        androidx.camera.extensions.ExtensionsManager$2 r0;
+        androidx.camera.extensions.ExtensionsManager r1;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer r2;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager$2;
+
+        r1 := @parameter0: androidx.camera.extensions.ExtensionsManager;
+
+        r2 := @parameter1: androidx.concurrent.futures.CallbackToFutureAdapter$Completer;
+
+        r0.<androidx.camera.extensions.ExtensionsManager$2: androidx.camera.extensions.ExtensionsManager this$0> = r1;
+
+        r0.<androidx.camera.extensions.ExtensionsManager$2: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onSuccess()
+    {
+        androidx.camera.extensions.ExtensionsManager$2 r0;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer $r1;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager$2;
+
+        $r1 = r0.<androidx.camera.extensions.ExtensionsManager$2: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer>;
+
+        virtualinvoke $r1.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean set(java.lang.Object)>(null);
+
+        return;
+    }
+
+    public void onFailure(int)
+    {
+        androidx.camera.extensions.ExtensionsManager$2 r0;
+        int i0;
+        java.lang.Exception $r1;
+        androidx.concurrent.futures.CallbackToFutureAdapter$Completer $r2;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager$2;
+
+        i0 := @parameter0: int;
+
+        $r2 = r0.<androidx.camera.extensions.ExtensionsManager$2: androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer>;
+
+        $r1 = new java.lang.Exception;
+
+        specialinvoke $r1.<java.lang.Exception: void <init>(java.lang.String)>("Failed to deinitialize extensions.");
+
+        virtualinvoke $r2.<androidx.concurrent.futures.CallbackToFutureAdapter$Completer: boolean setException(java.lang.Throwable)>($r1);
+
+        return;
+    }
+
+androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability
+<androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_AVAILABLE>
+<androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_UNAVAILABLE_ERROR_LOADING>
+<androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_UNAVAILABLE_MISSING_IMPLEMENTATION>
+<androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability NONE>
+<androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability[] $VALUES>
+    public static androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability[] values()
+    {
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability[]) $r1;
+
+        return $r2;
+    }
+
+    public static androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "Landroidx/camera/extensions/ExtensionsManager$ExtensionsAvailability;", r0);
+
+        $r2 = (androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability $r0, $r1, $r2, $r3, $r5, $r6, $r7, $r8;
+        androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability[] $r4;
+
+        $r0 = new androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability;
+
+        specialinvoke $r0.<androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: void <init>(java.lang.String,int)>("LIBRARY_AVAILABLE", 0);
+
+        <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_AVAILABLE> = $r0;
+
+        $r1 = new androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability;
+
+        specialinvoke $r1.<androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: void <init>(java.lang.String,int)>("LIBRARY_UNAVAILABLE_ERROR_LOADING", 1);
+
+        <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_UNAVAILABLE_ERROR_LOADING> = $r1;
+
+        $r2 = new androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability;
+
+        specialinvoke $r2.<androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: void <init>(java.lang.String,int)>("LIBRARY_UNAVAILABLE_MISSING_IMPLEMENTATION", 2);
+
+        <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_UNAVAILABLE_MISSING_IMPLEMENTATION> = $r2;
+
+        $r3 = new androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability;
+
+        specialinvoke $r3.<androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: void <init>(java.lang.String,int)>("NONE", 3);
+
+        <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability NONE> = $r3;
+
+        $r4 = newarray (androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability)[4];
+
+        $r5 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_AVAILABLE>;
+
+        $r4[0] = $r5;
+
+        $r6 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_UNAVAILABLE_ERROR_LOADING>;
+
+        $r4[1] = $r6;
+
+        $r7 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability LIBRARY_UNAVAILABLE_MISSING_IMPLEMENTATION>;
+
+        $r4[2] = $r7;
+
+        $r8 = <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability NONE>;
+
+        $r4[3] = $r8;
+
+        <androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability: androidx.camera.extensions.ExtensionsManager$ExtensionsAvailability[] $VALUES> = $r4;
+
+        return;
+    }
+

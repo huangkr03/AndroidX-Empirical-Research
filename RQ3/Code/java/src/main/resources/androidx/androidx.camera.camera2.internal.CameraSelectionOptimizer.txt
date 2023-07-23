@@ -1,0 +1,237 @@
+androidx.camera.camera2.internal.CameraSelectionOptimizer
+    private void <init>()
+    {
+        androidx.camera.camera2.internal.CameraSelectionOptimizer r0;
+
+        r0 := @this: androidx.camera.camera2.internal.CameraSelectionOptimizer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static java.util.List getSelectedAvailableCameraIds(androidx.camera.camera2.internal.Camera2CameraFactory, androidx.camera.core.CameraSelector) throws androidx.camera.core.InitializationException
+    {
+        androidx.camera.camera2.internal.Camera2CameraFactory r0;
+        androidx.camera.core.CameraSelector r1;
+        java.util.List r2, r26;
+        java.lang.String r3, r18, r20, r24;
+        java.util.ArrayList $r4, $r8, r16, r22;
+        androidx.camera.camera2.internal.compat.CameraManagerCompat $r5, $r7;
+        java.lang.String[] $r6;
+        boolean $z0, $z2, $z4, $z6;
+        java.lang.Object $r9, $r11, $r12;
+        androidx.camera.core.impl.CameraInfoInternal $r10;
+        java.lang.Throwable $r13, $r14, r21, r29;
+        androidx.camera.core.InitializationException $r15;
+        java.util.Iterator r17, r23, r27;
+        java.lang.Integer r19;
+        androidx.camera.camera2.internal.Camera2CameraInfoImpl r25;
+        androidx.camera.core.CameraInfo r28;
+
+        r0 := @parameter0: androidx.camera.camera2.internal.Camera2CameraFactory;
+
+        r1 := @parameter1: androidx.camera.core.CameraSelector;
+
+     label01:
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r16 = $r4;
+
+        $r5 = virtualinvoke r0.<androidx.camera.camera2.internal.Camera2CameraFactory: androidx.camera.camera2.internal.compat.CameraManagerCompat getCameraManager()>();
+
+        $r6 = virtualinvoke $r5.<androidx.camera.camera2.internal.compat.CameraManagerCompat: java.lang.String[] getCameraIdList()>();
+
+        r2 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r6);
+
+        if r1 != null goto label04;
+
+        r17 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label02:
+        $z4 = interfaceinvoke r17.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label03;
+
+        $r12 = interfaceinvoke r17.<java.util.Iterator: java.lang.Object next()>();
+
+        r18 = (java.lang.String) $r12;
+
+        interfaceinvoke r16.<java.util.List: boolean add(java.lang.Object)>(r18);
+
+        goto label02;
+
+     label03:
+        return r16;
+
+     label04:
+        r19 = virtualinvoke r1.<androidx.camera.core.CameraSelector: java.lang.Integer getLensFacing()>();
+
+        $r7 = virtualinvoke r0.<androidx.camera.camera2.internal.Camera2CameraFactory: androidx.camera.camera2.internal.compat.CameraManagerCompat getCameraManager()>();
+
+        r20 = staticinvoke <androidx.camera.camera2.internal.CameraSelectionOptimizer: java.lang.String decideSkippedCameraIdByHeuristic(androidx.camera.camera2.internal.compat.CameraManagerCompat,java.lang.Integer,java.util.List)>($r7, r19, r2);
+
+     label05:
+        goto label07;
+
+     label06:
+        $r13 := @caughtexception;
+
+        r21 = $r13;
+
+        r20 = null;
+
+     label07:
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        r22 = $r8;
+
+        r23 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label08:
+        $z6 = interfaceinvoke r23.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label10;
+
+        $r11 = interfaceinvoke r23.<java.util.Iterator: java.lang.Object next()>();
+
+        r24 = (java.lang.String) $r11;
+
+        $z2 = virtualinvoke r24.<java.lang.String: boolean equals(java.lang.Object)>(r20);
+
+        if $z2 == 0 goto label09;
+
+        goto label08;
+
+     label09:
+        r25 = virtualinvoke r0.<androidx.camera.camera2.internal.Camera2CameraFactory: androidx.camera.camera2.internal.Camera2CameraInfoImpl getCameraInfo(java.lang.String)>(r24);
+
+        interfaceinvoke r22.<java.util.List: boolean add(java.lang.Object)>(r25);
+
+        goto label08;
+
+     label10:
+        r26 = virtualinvoke r1.<androidx.camera.core.CameraSelector: java.util.List filter(java.util.List)>(r22);
+
+        r27 = interfaceinvoke r26.<java.util.List: java.util.Iterator iterator()>();
+
+     label11:
+        $z0 = interfaceinvoke r27.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label12;
+
+        $r9 = interfaceinvoke r27.<java.util.Iterator: java.lang.Object next()>();
+
+        r28 = (androidx.camera.core.CameraInfo) $r9;
+
+        $r10 = (androidx.camera.core.impl.CameraInfoInternal) r28;
+
+        r3 = interfaceinvoke $r10.<androidx.camera.core.impl.CameraInfoInternal: java.lang.String getCameraId()>();
+
+        interfaceinvoke r16.<java.util.List: boolean add(java.lang.Object)>(r3);
+
+        goto label11;
+
+     label12:
+        return r16;
+
+     label13:
+        $r14 := @caughtexception;
+
+        r29 = $r14;
+
+        $r15 = new androidx.camera.core.InitializationException;
+
+        specialinvoke $r15.<androidx.camera.core.InitializationException: void <init>(java.lang.Throwable)>(r29);
+
+        throw $r15;
+
+        catch java.lang.IllegalStateException from label04 to label05 with label06;
+        catch androidx.camera.core.CameraUnavailableException from label01 to label03 with label13;
+        catch androidx.camera.core.CameraUnavailableException from label04 to label12 with label13;
+    }
+
+    private static java.lang.String decideSkippedCameraIdByHeuristic(androidx.camera.camera2.internal.compat.CameraManagerCompat, java.lang.Integer, java.util.List) throws androidx.camera.camera2.internal.compat.CameraAccessExceptionCompat
+    {
+        androidx.camera.camera2.internal.compat.CameraManagerCompat r0;
+        java.lang.Integer r1, $r6, $r10;
+        java.util.List r2;
+        boolean $z0, $z1;
+        int $i0, $i1, $i2, $i3;
+        androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat $r3, $r7;
+        android.hardware.camera2.CameraCharacteristics$Key $r4, $r8;
+        java.lang.Object $r5, $r9;
+        java.lang.String r11;
+
+        r0 := @parameter0: androidx.camera.camera2.internal.compat.CameraManagerCompat;
+
+        r1 := @parameter1: java.lang.Integer;
+
+        r2 := @parameter2: java.util.List;
+
+        r11 = null;
+
+        if r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.List: boolean contains(java.lang.Object)>("0");
+
+        if $z0 == 0 goto label2;
+
+        $z1 = interfaceinvoke r2.<java.util.List: boolean contains(java.lang.Object)>("1");
+
+        if $z1 != 0 goto label3;
+
+     label2:
+        return null;
+
+     label3:
+        $i0 = virtualinvoke r1.<java.lang.Integer: int intValue()>();
+
+        if $i0 != 1 goto label4;
+
+        $r7 = virtualinvoke r0.<androidx.camera.camera2.internal.compat.CameraManagerCompat: androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat getCameraCharacteristicsCompat(java.lang.String)>("0");
+
+        $r8 = <android.hardware.camera2.CameraCharacteristics: android.hardware.camera2.CameraCharacteristics$Key LENS_FACING>;
+
+        $r9 = virtualinvoke $r7.<androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat: java.lang.Object get(android.hardware.camera2.CameraCharacteristics$Key)>($r8);
+
+        $r10 = (java.lang.Integer) $r9;
+
+        $i3 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        if $i3 != 1 goto label5;
+
+        r11 = "1";
+
+        goto label5;
+
+     label4:
+        $i1 = virtualinvoke r1.<java.lang.Integer: int intValue()>();
+
+        if $i1 != 0 goto label5;
+
+        $r3 = virtualinvoke r0.<androidx.camera.camera2.internal.compat.CameraManagerCompat: androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat getCameraCharacteristicsCompat(java.lang.String)>("1");
+
+        $r4 = <android.hardware.camera2.CameraCharacteristics: android.hardware.camera2.CameraCharacteristics$Key LENS_FACING>;
+
+        $r5 = virtualinvoke $r3.<androidx.camera.camera2.internal.compat.CameraCharacteristicsCompat: java.lang.Object get(android.hardware.camera2.CameraCharacteristics$Key)>($r4);
+
+        $r6 = (java.lang.Integer) $r5;
+
+        $i2 = virtualinvoke $r6.<java.lang.Integer: int intValue()>();
+
+        if $i2 != 0 goto label5;
+
+        r11 = "0";
+
+     label5:
+        return r11;
+    }
+

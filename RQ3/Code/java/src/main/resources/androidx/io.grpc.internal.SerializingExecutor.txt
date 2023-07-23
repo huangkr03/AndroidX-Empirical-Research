@@ -1,0 +1,486 @@
+io.grpc.internal.SerializingExecutor
+<io.grpc.internal.SerializingExecutor: io.grpc.internal.SerializingExecutor$AtomicHelper atomicHelper>
+<io.grpc.internal.SerializingExecutor: java.util.logging.Logger log>
+<io.grpc.internal.SerializingExecutor: java.util.concurrent.Executor executor>
+<io.grpc.internal.SerializingExecutor: java.util.Queue runQueue>
+<io.grpc.internal.SerializingExecutor: int runState>
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+        io.grpc.internal.SerializingExecutor$AtomicHelper $r3;
+
+        $r0 = class "Lio/grpc/internal/SerializingExecutor;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.internal.SerializingExecutor: java.util.logging.Logger log> = $r2;
+
+        $r3 = staticinvoke <io.grpc.internal.SerializingExecutor: io.grpc.internal.SerializingExecutor$AtomicHelper getAtomicHelper()>();
+
+        <io.grpc.internal.SerializingExecutor: io.grpc.internal.SerializingExecutor$AtomicHelper atomicHelper> = $r3;
+
+        return;
+    }
+
+    public void <init>(java.util.concurrent.Executor)
+    {
+        io.grpc.internal.SerializingExecutor $r0;
+        java.util.concurrent.Executor $r1;
+        java.util.concurrent.ConcurrentLinkedQueue $r2;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor;
+
+        $r1 := @parameter0: java.util.concurrent.Executor;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.concurrent.ConcurrentLinkedQueue;
+
+        specialinvoke $r2.<java.util.concurrent.ConcurrentLinkedQueue: void <init>()>();
+
+        $r0.<io.grpc.internal.SerializingExecutor: java.util.Queue runQueue> = $r2;
+
+        $r0.<io.grpc.internal.SerializingExecutor: int runState> = 0;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "\'executor\' must not be null.");
+
+        $r0.<io.grpc.internal.SerializingExecutor: java.util.concurrent.Executor executor> = $r1;
+
+        return;
+    }
+
+    static int access$300(io.grpc.internal.SerializingExecutor)
+    {
+        io.grpc.internal.SerializingExecutor $r0;
+        int i0;
+
+        $r0 := @parameter0: io.grpc.internal.SerializingExecutor;
+
+        i0 = $r0.<io.grpc.internal.SerializingExecutor: int runState>;
+
+        return i0;
+    }
+
+    static int access$302(io.grpc.internal.SerializingExecutor, int)
+    {
+        io.grpc.internal.SerializingExecutor $r0;
+        int $i0;
+
+        $r0 := @parameter0: io.grpc.internal.SerializingExecutor;
+
+        $i0 := @parameter1: int;
+
+        $r0.<io.grpc.internal.SerializingExecutor: int runState> = $i0;
+
+        return $i0;
+    }
+
+    private static io.grpc.internal.SerializingExecutor$AtomicHelper getAtomicHelper()
+    {
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r0;
+        io.grpc.internal.SerializingExecutor$AtomicHelper $r1;
+        java.lang.Throwable $r2;
+        java.util.logging.Logger $r3;
+        java.util.logging.Level $r4;
+        io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper r5;
+        io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper r6;
+
+        r5 = new io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper;
+
+        $r1 = r5;
+
+        $r0 = staticinvoke <java.util.concurrent.atomic.AtomicIntegerFieldUpdater: java.util.concurrent.atomic.AtomicIntegerFieldUpdater newUpdater(java.lang.Class,java.lang.String)>(class "Lio/grpc/internal/SerializingExecutor;", "runState");
+
+     label1:
+        specialinvoke r5.<io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper: void <init>(java.util.concurrent.atomic.AtomicIntegerFieldUpdater,io.grpc.internal.SerializingExecutor$1)>($r0, null);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r3 = <io.grpc.internal.SerializingExecutor: java.util.logging.Logger log>;
+
+        $r4 = <java.util.logging.Level: java.util.logging.Level SEVERE>;
+
+        virtualinvoke $r3.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r4, "io.grpc.internal.SerializingExecutor", "getAtomicHelper", "FieldUpdaterAtomicHelper failed", $r2);
+
+        r6 = new io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper;
+
+        $r1 = r6;
+
+        specialinvoke r6.<io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper: void <init>(io.grpc.internal.SerializingExecutor$1)>(null);
+
+     label4:
+        return $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private void schedule(java.lang.Runnable)
+    {
+        io.grpc.internal.SerializingExecutor $r0;
+        boolean $z0;
+        java.lang.Runnable $r1;
+        io.grpc.internal.SerializingExecutor$AtomicHelper $r2;
+        java.util.concurrent.Executor $r3;
+        java.lang.Throwable $r4;
+        java.util.Queue $r5;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = <io.grpc.internal.SerializingExecutor: io.grpc.internal.SerializingExecutor$AtomicHelper atomicHelper>;
+
+        $z0 = virtualinvoke $r2.<io.grpc.internal.SerializingExecutor$AtomicHelper: boolean runStateCompareAndSet(io.grpc.internal.SerializingExecutor,int,int)>($r0, 0, -1);
+
+        if $z0 == 0 goto label6;
+
+        $r3 = $r0.<io.grpc.internal.SerializingExecutor: java.util.concurrent.Executor executor>;
+
+     label1:
+        interfaceinvoke $r3.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r0);
+
+     label2:
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        if $r1 != null goto label4;
+
+        goto label5;
+
+     label4:
+        $r5 = $r0.<io.grpc.internal.SerializingExecutor: java.util.Queue runQueue>;
+
+        interfaceinvoke $r5.<java.util.Queue: boolean remove(java.lang.Object)>($r1);
+
+     label5:
+        $r2 = <io.grpc.internal.SerializingExecutor: io.grpc.internal.SerializingExecutor$AtomicHelper atomicHelper>;
+
+        virtualinvoke $r2.<io.grpc.internal.SerializingExecutor$AtomicHelper: void runStateSet(io.grpc.internal.SerializingExecutor,int)>($r0, 0);
+
+        throw $r4;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void execute(java.lang.Runnable)
+    {
+        io.grpc.internal.SerializingExecutor $r0;
+        java.lang.Runnable $r1, $r4;
+        java.util.Queue $r2;
+        java.lang.Object $r3;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = $r0.<io.grpc.internal.SerializingExecutor: java.util.Queue runQueue>;
+
+        $r3 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "\'r\' must not be null.");
+
+        $r4 = (java.lang.Runnable) $r3;
+
+        interfaceinvoke $r2.<java.util.Queue: boolean add(java.lang.Object)>($r4);
+
+        specialinvoke $r0.<io.grpc.internal.SerializingExecutor: void schedule(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    public void run()
+    {
+        io.grpc.internal.SerializingExecutor $r0;
+        java.lang.Throwable $r1, $r12;
+        java.util.concurrent.Executor $r2, $r3;
+        java.util.Queue $r4;
+        java.lang.Object $r5;
+        java.lang.Runnable $r6;
+        java.util.logging.Logger $r7;
+        java.util.logging.Level $r8;
+        java.lang.StringBuilder $r9;
+        java.lang.String $r10;
+        io.grpc.internal.SerializingExecutor$AtomicHelper $r11;
+        boolean $z0;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor;
+
+        $r2 = $r0.<io.grpc.internal.SerializingExecutor: java.util.concurrent.Executor executor>;
+
+     label01:
+        $r3 = $r0.<io.grpc.internal.SerializingExecutor: java.util.concurrent.Executor executor>;
+
+        if $r2 != $r3 goto label09;
+
+        $r4 = $r0.<io.grpc.internal.SerializingExecutor: java.util.Queue runQueue>;
+
+     label02:
+        $r5 = interfaceinvoke $r4.<java.util.Queue: java.lang.Object poll()>();
+
+     label03:
+        $r6 = (java.lang.Runnable) $r5;
+
+        if $r6 == null goto label09;
+
+     label04:
+        interfaceinvoke $r6.<java.lang.Runnable: void run()>();
+
+     label05:
+        goto label01;
+
+     label06:
+        $r1 := @caughtexception;
+
+        $r7 = <io.grpc.internal.SerializingExecutor: java.util.logging.Logger log>;
+
+        $r8 = <java.util.logging.Level: java.util.logging.Level SEVERE>;
+
+        $r9 = new java.lang.StringBuilder;
+
+     label07:
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Exception while executing runnable ");
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r6);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r7.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r8, "io.grpc.internal.SerializingExecutor", "run", $r10, $r1);
+
+     label08:
+        goto label01;
+
+     label09:
+        $r11 = <io.grpc.internal.SerializingExecutor: io.grpc.internal.SerializingExecutor$AtomicHelper atomicHelper>;
+
+        virtualinvoke $r11.<io.grpc.internal.SerializingExecutor$AtomicHelper: void runStateSet(io.grpc.internal.SerializingExecutor,int)>($r0, 0);
+
+        $r4 = $r0.<io.grpc.internal.SerializingExecutor: java.util.Queue runQueue>;
+
+        $z0 = interfaceinvoke $r4.<java.util.Queue: boolean isEmpty()>();
+
+        if $z0 != 0 goto label12;
+
+        specialinvoke $r0.<io.grpc.internal.SerializingExecutor: void schedule(java.lang.Runnable)>(null);
+
+        return;
+
+     label10:
+        $r12 := @caughtexception;
+
+        $r11 = <io.grpc.internal.SerializingExecutor: io.grpc.internal.SerializingExecutor$AtomicHelper atomicHelper>;
+
+        virtualinvoke $r11.<io.grpc.internal.SerializingExecutor$AtomicHelper: void runStateSet(io.grpc.internal.SerializingExecutor,int)>($r0, 0);
+
+        goto label11;
+
+     label11:
+        throw $r12;
+
+     label12:
+        return;
+
+        catch java.lang.Throwable from label02 to label03 with label10;
+        catch java.lang.RuntimeException from label04 to label05 with label06;
+        catch java.lang.Throwable from label04 to label05 with label10;
+        catch java.lang.Throwable from label07 to label08 with label10;
+    }
+
+io.grpc.internal.SerializingExecutor$1
+io.grpc.internal.SerializingExecutor$AtomicHelper
+    private void <init>()
+    {
+        io.grpc.internal.SerializingExecutor$AtomicHelper $r0;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$AtomicHelper;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    void <init>(io.grpc.internal.SerializingExecutor$1)
+    {
+        io.grpc.internal.SerializingExecutor$AtomicHelper $r0;
+        io.grpc.internal.SerializingExecutor$1 $r1;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$AtomicHelper;
+
+        $r1 := @parameter0: io.grpc.internal.SerializingExecutor$1;
+
+        specialinvoke $r0.<io.grpc.internal.SerializingExecutor$AtomicHelper: void <init>()>();
+
+        return;
+    }
+
+<io.grpc.internal.SerializingExecutor$AtomicHelper: boolean runStateCompareAndSet(io.grpc.internal.SerializingExecutor,int,int)>
+<io.grpc.internal.SerializingExecutor$AtomicHelper: void runStateSet(io.grpc.internal.SerializingExecutor,int)>
+io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper
+<io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper: java.util.concurrent.atomic.AtomicIntegerFieldUpdater runStateUpdater>
+    private void <init>(java.util.concurrent.atomic.AtomicIntegerFieldUpdater)
+    {
+        io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper $r0;
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r1;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper;
+
+        $r1 := @parameter0: java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
+
+        specialinvoke $r0.<io.grpc.internal.SerializingExecutor$AtomicHelper: void <init>(io.grpc.internal.SerializingExecutor$1)>(null);
+
+        $r0.<io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper: java.util.concurrent.atomic.AtomicIntegerFieldUpdater runStateUpdater> = $r1;
+
+        return;
+    }
+
+    void <init>(java.util.concurrent.atomic.AtomicIntegerFieldUpdater, io.grpc.internal.SerializingExecutor$1)
+    {
+        io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper $r0;
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r1;
+        io.grpc.internal.SerializingExecutor$1 $r2;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper;
+
+        $r1 := @parameter0: java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
+
+        $r2 := @parameter1: io.grpc.internal.SerializingExecutor$1;
+
+        specialinvoke $r0.<io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper: void <init>(java.util.concurrent.atomic.AtomicIntegerFieldUpdater)>($r1);
+
+        return;
+    }
+
+    public boolean runStateCompareAndSet(io.grpc.internal.SerializingExecutor, int, int)
+    {
+        io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper $r0;
+        int $i0, $i1;
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r1;
+        boolean $z0;
+        io.grpc.internal.SerializingExecutor $r2;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper;
+
+        $r2 := @parameter0: io.grpc.internal.SerializingExecutor;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 = $r0.<io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper: java.util.concurrent.atomic.AtomicIntegerFieldUpdater runStateUpdater>;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: boolean compareAndSet(java.lang.Object,int,int)>($r2, $i0, $i1);
+
+        return $z0;
+    }
+
+    public void runStateSet(io.grpc.internal.SerializingExecutor, int)
+    {
+        io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper $r0;
+        io.grpc.internal.SerializingExecutor $r1;
+        int $i0;
+        java.util.concurrent.atomic.AtomicIntegerFieldUpdater $r2;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper;
+
+        $r1 := @parameter0: io.grpc.internal.SerializingExecutor;
+
+        $i0 := @parameter1: int;
+
+        $r2 = $r0.<io.grpc.internal.SerializingExecutor$FieldUpdaterAtomicHelper: java.util.concurrent.atomic.AtomicIntegerFieldUpdater runStateUpdater>;
+
+        virtualinvoke $r2.<java.util.concurrent.atomic.AtomicIntegerFieldUpdater: void set(java.lang.Object,int)>($r1, $i0);
+
+        return;
+    }
+
+io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper
+    private void <init>()
+    {
+        io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper $r0;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper;
+
+        specialinvoke $r0.<io.grpc.internal.SerializingExecutor$AtomicHelper: void <init>(io.grpc.internal.SerializingExecutor$1)>(null);
+
+        return;
+    }
+
+    void <init>(io.grpc.internal.SerializingExecutor$1)
+    {
+        io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper $r0;
+        io.grpc.internal.SerializingExecutor$1 $r1;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper;
+
+        $r1 := @parameter0: io.grpc.internal.SerializingExecutor$1;
+
+        specialinvoke $r0.<io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper: void <init>()>();
+
+        return;
+    }
+
+    public boolean runStateCompareAndSet(io.grpc.internal.SerializingExecutor, int, int)
+    {
+        io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper $r0;
+        int $i0, $i1, $i2;
+        io.grpc.internal.SerializingExecutor $r1;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper;
+
+        $r1 := @parameter0: io.grpc.internal.SerializingExecutor;
+
+        $i2 := @parameter1: int;
+
+        $i0 := @parameter2: int;
+
+        entermonitor $r1;
+
+        $i1 = staticinvoke <io.grpc.internal.SerializingExecutor: int access$300(io.grpc.internal.SerializingExecutor)>($r1);
+
+        if $i1 != $i2 goto label1;
+
+        staticinvoke <io.grpc.internal.SerializingExecutor: int access$302(io.grpc.internal.SerializingExecutor,int)>($r1, $i0);
+
+        exitmonitor $r1;
+
+        return 1;
+
+     label1:
+        exitmonitor $r1;
+
+        return 0;
+    }
+
+    public void runStateSet(io.grpc.internal.SerializingExecutor, int)
+    {
+        io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper $r0;
+        io.grpc.internal.SerializingExecutor $r1;
+        int $i0;
+
+        $r0 := @this: io.grpc.internal.SerializingExecutor$SynchronizedAtomicHelper;
+
+        $r1 := @parameter0: io.grpc.internal.SerializingExecutor;
+
+        $i0 := @parameter1: int;
+
+        entermonitor $r1;
+
+        staticinvoke <io.grpc.internal.SerializingExecutor: int access$302(io.grpc.internal.SerializingExecutor,int)>($r1, $i0);
+
+        exitmonitor $r1;
+
+        return;
+    }
+

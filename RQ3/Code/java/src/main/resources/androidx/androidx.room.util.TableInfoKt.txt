@@ -1,0 +1,1205 @@
+androidx.room.util.TableInfoKt
+    public static final androidx.room.util.TableInfo readTableInfo(androidx.sqlite.db.SupportSQLiteDatabase, java.lang.String)
+    {
+        androidx.sqlite.db.SupportSQLiteDatabase r0;
+        java.lang.String r1;
+        java.util.Map r2;
+        java.util.Set r3, r4;
+        androidx.room.util.TableInfo $r5;
+
+        r0 := @parameter0: androidx.sqlite.db.SupportSQLiteDatabase;
+
+        r1 := @parameter1: java.lang.String;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "database");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "tableName");
+
+        r2 = staticinvoke <androidx.room.util.TableInfoKt: java.util.Map readColumns(androidx.sqlite.db.SupportSQLiteDatabase,java.lang.String)>(r0, r1);
+
+        r3 = staticinvoke <androidx.room.util.TableInfoKt: java.util.Set readForeignKeys(androidx.sqlite.db.SupportSQLiteDatabase,java.lang.String)>(r0, r1);
+
+        r4 = staticinvoke <androidx.room.util.TableInfoKt: java.util.Set readIndices(androidx.sqlite.db.SupportSQLiteDatabase,java.lang.String)>(r0, r1);
+
+        $r5 = new androidx.room.util.TableInfo;
+
+        specialinvoke $r5.<androidx.room.util.TableInfo: void <init>(java.lang.String,java.util.Map,java.util.Set,java.util.Set)>(r1, r2, r3, r4);
+
+        return $r5;
+    }
+
+    private static final java.util.Set readForeignKeys(androidx.sqlite.db.SupportSQLiteDatabase, java.lang.String)
+    {
+        androidx.sqlite.db.SupportSQLiteDatabase r0;
+        java.lang.String r1, $r9, $r15, $r16, $r17, $r18, $r19, $r25, $r26, $r27, $r28, $r29;
+        android.database.Cursor $r2, r34;
+        java.util.Set r3, r4, r36, $r54;
+        java.lang.StringBuilder $r5, $r6, $r7, $r8;
+        int $i0, $i1, $i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16;
+        java.util.ArrayList $r10, $r11, $r12, $r20, $r21, $r22;
+        java.util.List $r13, $r23, r35, r38, r39, r53, r56, $r57;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7;
+        androidx.room.util.TableInfo$ForeignKey $r14, $r24;
+        java.lang.Throwable $r30, $r31, $r32, r49, r50, r51, r67;
+        java.io.Closeable r33;
+        java.lang.Iterable $r40, $r45, r58, $r63;
+        java.util.Collection r41, $r59;
+        java.util.Iterator $r42, $r46, r60, r64;
+        java.lang.Object r43, r47, r61, $r65;
+        androidx.room.util.TableInfo$ForeignKeyWithSequence r44, $r48, $r62, $r66;
+
+        r0 := @parameter0: androidx.sqlite.db.SupportSQLiteDatabase;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("PRAGMA foreign_key_list(`");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("`)");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = interfaceinvoke r0.<androidx.sqlite.db.SupportSQLiteDatabase: android.database.Cursor query(java.lang.String)>($r9);
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 <= 15 goto label15;
+
+        r33 = (java.io.Closeable) $r2;
+
+     label01:
+        r34 = (android.database.Cursor) r33;
+
+        i3 = interfaceinvoke r34.<android.database.Cursor: int getColumnIndex(java.lang.String)>("id");
+
+        i4 = interfaceinvoke r34.<android.database.Cursor: int getColumnIndex(java.lang.String)>("seq");
+
+        i5 = interfaceinvoke r34.<android.database.Cursor: int getColumnIndex(java.lang.String)>("table");
+
+        i6 = interfaceinvoke r34.<android.database.Cursor: int getColumnIndex(java.lang.String)>("on_delete");
+
+        i7 = interfaceinvoke r34.<android.database.Cursor: int getColumnIndex(java.lang.String)>("on_update");
+
+        r35 = staticinvoke <androidx.room.util.TableInfoKt: java.util.List readForeignKeyFieldMappings(android.database.Cursor)>(r34);
+
+        interfaceinvoke r34.<android.database.Cursor: boolean moveToPosition(int)>(-1);
+
+        r36 = staticinvoke <kotlin.collections.SetsKt: java.util.Set createSetBuilder()>();
+
+     label02:
+        $z2 = interfaceinvoke r34.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z2 == 0 goto label10;
+
+        i8 = interfaceinvoke r34.<android.database.Cursor: int getInt(int)>(i4);
+
+        if i8 == 0 goto label03;
+
+        goto label02;
+
+     label03:
+        i9 = interfaceinvoke r34.<android.database.Cursor: int getInt(int)>(i3);
+
+        $r20 = new java.util.ArrayList;
+
+        specialinvoke $r20.<java.util.ArrayList: void <init>()>();
+
+        r38 = (java.util.List) $r20;
+
+        $r21 = new java.util.ArrayList;
+
+        specialinvoke $r21.<java.util.ArrayList: void <init>()>();
+
+        r39 = (java.util.List) $r21;
+
+        $r40 = (java.lang.Iterable) r35;
+
+        $r22 = new java.util.ArrayList;
+
+        specialinvoke $r22.<java.util.ArrayList: void <init>()>();
+
+        r41 = (java.util.Collection) $r22;
+
+        $r42 = interfaceinvoke $r40.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label04:
+        $z3 = interfaceinvoke $r42.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label07;
+
+        r43 = interfaceinvoke $r42.<java.util.Iterator: java.lang.Object next()>();
+
+        r44 = (androidx.room.util.TableInfo$ForeignKeyWithSequence) r43;
+
+        $i2 = virtualinvoke r44.<androidx.room.util.TableInfo$ForeignKeyWithSequence: int getId()>();
+
+        if $i2 != i9 goto label05;
+
+        $z4 = 1;
+
+        goto label06;
+
+     label05:
+        $z4 = 0;
+
+     label06:
+        if $z4 == 0 goto label04;
+
+        interfaceinvoke r41.<java.util.Collection: boolean add(java.lang.Object)>(r43);
+
+        goto label04;
+
+     label07:
+        $r23 = (java.util.List) r41;
+
+        $r45 = (java.lang.Iterable) $r23;
+
+        $r46 = interfaceinvoke $r45.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label08:
+        $z1 = interfaceinvoke $r46.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label09;
+
+        r47 = interfaceinvoke $r46.<java.util.Iterator: java.lang.Object next()>();
+
+        $r48 = (androidx.room.util.TableInfo$ForeignKeyWithSequence) r47;
+
+        $r28 = virtualinvoke $r48.<androidx.room.util.TableInfo$ForeignKeyWithSequence: java.lang.String getFrom()>();
+
+        interfaceinvoke r38.<java.util.List: boolean add(java.lang.Object)>($r28);
+
+        $r29 = virtualinvoke $r48.<androidx.room.util.TableInfo$ForeignKeyWithSequence: java.lang.String getTo()>();
+
+        interfaceinvoke r39.<java.util.List: boolean add(java.lang.Object)>($r29);
+
+        goto label08;
+
+     label09:
+        $r24 = new androidx.room.util.TableInfo$ForeignKey;
+
+        $r25 = interfaceinvoke r34.<android.database.Cursor: java.lang.String getString(int)>(i5);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r25, "cursor.getString(tableColumnIndex)");
+
+        $r26 = interfaceinvoke r34.<android.database.Cursor: java.lang.String getString(int)>(i6);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r26, "cursor.getString(onDeleteColumnIndex)");
+
+        $r27 = interfaceinvoke r34.<android.database.Cursor: java.lang.String getString(int)>(i7);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r27, "cursor.getString(onUpdateColumnIndex)");
+
+        specialinvoke $r24.<androidx.room.util.TableInfo$ForeignKey: void <init>(java.lang.String,java.lang.String,java.lang.String,java.util.List,java.util.List)>($r25, $r26, $r27, r38, r39);
+
+        interfaceinvoke r36.<java.util.Set: boolean add(java.lang.Object)>($r24);
+
+        goto label02;
+
+     label10:
+        r4 = staticinvoke <kotlin.collections.SetsKt: java.util.Set build(java.util.Set)>(r36);
+
+     label11:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r33, null);
+
+        return r4;
+
+     label12:
+        $r32 := @caughtexception;
+
+        r49 = $r32;
+
+        r50 = r49;
+
+        throw r49;
+
+     label13:
+        $r30 := @caughtexception;
+
+        r51 = $r30;
+
+     label14:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r33, r50);
+
+        throw r51;
+
+     label15:
+        i10 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("id");
+
+        i11 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("seq");
+
+        i12 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("table");
+
+        i13 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("on_delete");
+
+        i14 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("on_update");
+
+        r53 = staticinvoke <androidx.room.util.TableInfoKt: java.util.List readForeignKeyFieldMappings(android.database.Cursor)>($r2);
+
+        interfaceinvoke $r2.<android.database.Cursor: boolean moveToPosition(int)>(-1);
+
+        $r54 = staticinvoke <kotlin.collections.SetsKt: java.util.Set createSetBuilder()>();
+
+     label16:
+        $z5 = interfaceinvoke $r2.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z5 == 0 goto label24;
+
+        i15 = interfaceinvoke $r2.<android.database.Cursor: int getInt(int)>(i11);
+
+        if i15 == 0 goto label17;
+
+        goto label16;
+
+     label17:
+        i16 = interfaceinvoke $r2.<android.database.Cursor: int getInt(int)>(i10);
+
+        $r10 = new java.util.ArrayList;
+
+        specialinvoke $r10.<java.util.ArrayList: void <init>()>();
+
+        r56 = (java.util.List) $r10;
+
+        $r11 = new java.util.ArrayList;
+
+        specialinvoke $r11.<java.util.ArrayList: void <init>()>();
+
+        $r57 = (java.util.List) $r11;
+
+        r58 = (java.lang.Iterable) r53;
+
+        $r12 = new java.util.ArrayList;
+
+        specialinvoke $r12.<java.util.ArrayList: void <init>()>();
+
+        $r59 = (java.util.Collection) $r12;
+
+        r60 = interfaceinvoke r58.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label18:
+        $z6 = interfaceinvoke r60.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label21;
+
+        r61 = interfaceinvoke r60.<java.util.Iterator: java.lang.Object next()>();
+
+        $r62 = (androidx.room.util.TableInfo$ForeignKeyWithSequence) r61;
+
+        $i1 = virtualinvoke $r62.<androidx.room.util.TableInfo$ForeignKeyWithSequence: int getId()>();
+
+        if $i1 != i16 goto label19;
+
+        $z7 = 1;
+
+        goto label20;
+
+     label19:
+        $z7 = 0;
+
+     label20:
+        if $z7 == 0 goto label18;
+
+        interfaceinvoke $r59.<java.util.Collection: boolean add(java.lang.Object)>(r61);
+
+        goto label18;
+
+     label21:
+        $r13 = (java.util.List) $r59;
+
+        $r63 = (java.lang.Iterable) $r13;
+
+        r64 = interfaceinvoke $r63.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label22:
+        $z0 = interfaceinvoke r64.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label23;
+
+        $r65 = interfaceinvoke r64.<java.util.Iterator: java.lang.Object next()>();
+
+        $r66 = (androidx.room.util.TableInfo$ForeignKeyWithSequence) $r65;
+
+        $r18 = virtualinvoke $r66.<androidx.room.util.TableInfo$ForeignKeyWithSequence: java.lang.String getFrom()>();
+
+        interfaceinvoke r56.<java.util.List: boolean add(java.lang.Object)>($r18);
+
+        $r19 = virtualinvoke $r66.<androidx.room.util.TableInfo$ForeignKeyWithSequence: java.lang.String getTo()>();
+
+        interfaceinvoke $r57.<java.util.List: boolean add(java.lang.Object)>($r19);
+
+        goto label22;
+
+     label23:
+        $r14 = new androidx.room.util.TableInfo$ForeignKey;
+
+        $r15 = interfaceinvoke $r2.<android.database.Cursor: java.lang.String getString(int)>(i12);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r15, "cursor.getString(tableColumnIndex)");
+
+        $r16 = interfaceinvoke $r2.<android.database.Cursor: java.lang.String getString(int)>(i13);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r16, "cursor.getString(onDeleteColumnIndex)");
+
+        $r17 = interfaceinvoke $r2.<android.database.Cursor: java.lang.String getString(int)>(i14);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r17, "cursor.getString(onUpdateColumnIndex)");
+
+        specialinvoke $r14.<androidx.room.util.TableInfo$ForeignKey: void <init>(java.lang.String,java.lang.String,java.lang.String,java.util.List,java.util.List)>($r15, $r16, $r17, r56, $r57);
+
+        interfaceinvoke $r54.<java.util.Set: boolean add(java.lang.Object)>($r14);
+
+        goto label16;
+
+     label24:
+        r3 = staticinvoke <kotlin.collections.SetsKt: java.util.Set build(java.util.Set)>($r54);
+
+     label25:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        return r3;
+
+     label26:
+        $r31 := @caughtexception;
+
+        r67 = $r31;
+
+     label27:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        throw r67;
+
+        catch java.lang.Throwable from label01 to label11 with label12;
+        catch java.lang.Throwable from label12 to label13 with label13;
+        catch java.lang.Throwable from label13 to label14 with label13;
+        catch java.lang.Throwable from label15 to label25 with label26;
+        catch java.lang.Throwable from label26 to label27 with label26;
+    }
+
+    private static final java.util.List readForeignKeyFieldMappings(android.database.Cursor)
+    {
+        android.database.Cursor r0;
+        int i0, i1, i2, i3, $i4, $i5;
+        java.util.List r1, $r3, $r5;
+        boolean $z1;
+        java.lang.Iterable $r4;
+        androidx.room.util.TableInfo$ForeignKeyWithSequence $r6;
+        java.lang.String $r7, $r8;
+
+        r0 := @parameter0: android.database.Cursor;
+
+        i0 = interfaceinvoke r0.<android.database.Cursor: int getColumnIndex(java.lang.String)>("id");
+
+        i1 = interfaceinvoke r0.<android.database.Cursor: int getColumnIndex(java.lang.String)>("seq");
+
+        i2 = interfaceinvoke r0.<android.database.Cursor: int getColumnIndex(java.lang.String)>("from");
+
+        i3 = interfaceinvoke r0.<android.database.Cursor: int getColumnIndex(java.lang.String)>("to");
+
+        r1 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List createListBuilder()>();
+
+     label1:
+        $z1 = interfaceinvoke r0.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z1 == 0 goto label2;
+
+        $r6 = new androidx.room.util.TableInfo$ForeignKeyWithSequence;
+
+        $i4 = interfaceinvoke r0.<android.database.Cursor: int getInt(int)>(i0);
+
+        $i5 = interfaceinvoke r0.<android.database.Cursor: int getInt(int)>(i1);
+
+        $r7 = interfaceinvoke r0.<android.database.Cursor: java.lang.String getString(int)>(i2);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r7, "cursor.getString(fromColumnIndex)");
+
+        $r8 = interfaceinvoke r0.<android.database.Cursor: java.lang.String getString(int)>(i3);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r8, "cursor.getString(toColumnIndex)");
+
+        specialinvoke $r6.<androidx.room.util.TableInfo$ForeignKeyWithSequence: void <init>(int,int,java.lang.String,java.lang.String)>($i4, $i5, $r7, $r8);
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        goto label1;
+
+     label2:
+        $r3 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List build(java.util.List)>(r1);
+
+        $r4 = (java.lang.Iterable) $r3;
+
+        $r5 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List sorted(java.lang.Iterable)>($r4);
+
+        return $r5;
+    }
+
+    private static final java.util.Map readColumns(androidx.sqlite.db.SupportSQLiteDatabase, java.lang.String)
+    {
+        androidx.sqlite.db.SupportSQLiteDatabase r0;
+        java.lang.String r1, r3, $r12, r22, r23, r24, r31, r32;
+        android.database.Cursor $r2, r19;
+        java.util.Map r4, r5, r6, r7, r20, $r29;
+        java.lang.StringBuilder $r8, $r9, $r10, $r11;
+        int $i0, $i1, $i2, $i3, $i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16;
+        boolean $z0, $z1, $z2, z3, $z4, z5;
+        androidx.room.util.TableInfo$Column $r13, $r14;
+        java.lang.Throwable $r15, $r16, $r17, r25, r26, r27, r33;
+        java.io.Closeable r18;
+
+        r0 := @parameter0: androidx.sqlite.db.SupportSQLiteDatabase;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("PRAGMA table_info(`");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("`)");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = interfaceinvoke r0.<androidx.sqlite.db.SupportSQLiteDatabase: android.database.Cursor query(java.lang.String)>($r12);
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 <= 15 goto label12;
+
+        r18 = (java.io.Closeable) $r2;
+
+     label01:
+        r19 = (android.database.Cursor) r18;
+
+        $i3 = interfaceinvoke r19.<android.database.Cursor: int getColumnCount()>();
+
+        if $i3 > 0 goto label03;
+
+        r7 = staticinvoke <kotlin.collections.MapsKt: java.util.Map emptyMap()>();
+
+     label02:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r18, null);
+
+        return r7;
+
+     label03:
+        i5 = interfaceinvoke r19.<android.database.Cursor: int getColumnIndex(java.lang.String)>("name");
+
+        i6 = interfaceinvoke r19.<android.database.Cursor: int getColumnIndex(java.lang.String)>("type");
+
+        i7 = interfaceinvoke r19.<android.database.Cursor: int getColumnIndex(java.lang.String)>("notnull");
+
+        i8 = interfaceinvoke r19.<android.database.Cursor: int getColumnIndex(java.lang.String)>("pk");
+
+        i9 = interfaceinvoke r19.<android.database.Cursor: int getColumnIndex(java.lang.String)>("dflt_value");
+
+        r20 = staticinvoke <kotlin.collections.MapsKt: java.util.Map createMapBuilder()>();
+
+     label04:
+        $z1 = interfaceinvoke r19.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z1 == 0 goto label07;
+
+        r22 = interfaceinvoke r19.<android.database.Cursor: java.lang.String getString(int)>(i5);
+
+        r23 = interfaceinvoke r19.<android.database.Cursor: java.lang.String getString(int)>(i6);
+
+        $i4 = interfaceinvoke r19.<android.database.Cursor: int getInt(int)>(i7);
+
+        if $i4 == 0 goto label05;
+
+        $z2 = 1;
+
+        goto label06;
+
+     label05:
+        $z2 = 0;
+
+     label06:
+        z3 = $z2;
+
+        i10 = interfaceinvoke r19.<android.database.Cursor: int getInt(int)>(i8);
+
+        r24 = interfaceinvoke r19.<android.database.Cursor: java.lang.String getString(int)>(i9);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r22, "name");
+
+        $r14 = new androidx.room.util.TableInfo$Column;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r23, "type");
+
+        specialinvoke $r14.<androidx.room.util.TableInfo$Column: void <init>(java.lang.String,java.lang.String,boolean,int,java.lang.String,int)>(r22, r23, z3, i10, r24, 2);
+
+        interfaceinvoke r20.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r22, $r14);
+
+        goto label04;
+
+     label07:
+        r6 = staticinvoke <kotlin.collections.MapsKt: java.util.Map build(java.util.Map)>(r20);
+
+     label08:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r18, null);
+
+        return r6;
+
+     label09:
+        $r15 := @caughtexception;
+
+        r25 = $r15;
+
+        r26 = r25;
+
+        throw r25;
+
+     label10:
+        $r16 := @caughtexception;
+
+        r27 = $r16;
+
+     label11:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r18, r26);
+
+        throw r27;
+
+     label12:
+        $i1 = interfaceinvoke $r2.<android.database.Cursor: int getColumnCount()>();
+
+        if $i1 > 0 goto label14;
+
+        r5 = staticinvoke <kotlin.collections.MapsKt: java.util.Map emptyMap()>();
+
+     label13:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        return r5;
+
+     label14:
+        i11 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("name");
+
+        i12 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("type");
+
+        i13 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("notnull");
+
+        i14 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("pk");
+
+        i15 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("dflt_value");
+
+        $r29 = staticinvoke <kotlin.collections.MapsKt: java.util.Map createMapBuilder()>();
+
+     label15:
+        $z0 = interfaceinvoke $r2.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z0 == 0 goto label18;
+
+        r31 = interfaceinvoke $r2.<android.database.Cursor: java.lang.String getString(int)>(i11);
+
+        r32 = interfaceinvoke $r2.<android.database.Cursor: java.lang.String getString(int)>(i12);
+
+        $i2 = interfaceinvoke $r2.<android.database.Cursor: int getInt(int)>(i13);
+
+        if $i2 == 0 goto label16;
+
+        $z4 = 1;
+
+        goto label17;
+
+     label16:
+        $z4 = 0;
+
+     label17:
+        z5 = $z4;
+
+        i16 = interfaceinvoke $r2.<android.database.Cursor: int getInt(int)>(i14);
+
+        r3 = interfaceinvoke $r2.<android.database.Cursor: java.lang.String getString(int)>(i15);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r31, "name");
+
+        $r13 = new androidx.room.util.TableInfo$Column;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r32, "type");
+
+        specialinvoke $r13.<androidx.room.util.TableInfo$Column: void <init>(java.lang.String,java.lang.String,boolean,int,java.lang.String,int)>(r31, r32, z5, i16, r3, 2);
+
+        interfaceinvoke $r29.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r31, $r13);
+
+        goto label15;
+
+     label18:
+        r4 = staticinvoke <kotlin.collections.MapsKt: java.util.Map build(java.util.Map)>($r29);
+
+     label19:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        return r4;
+
+     label20:
+        $r17 := @caughtexception;
+
+        r33 = $r17;
+
+     label21:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        throw r33;
+
+        catch java.lang.Throwable from label01 to label02 with label09;
+        catch java.lang.Throwable from label03 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label10;
+        catch java.lang.Throwable from label10 to label11 with label10;
+        catch java.lang.Throwable from label12 to label13 with label20;
+        catch java.lang.Throwable from label14 to label19 with label20;
+        catch java.lang.Throwable from label20 to label21 with label20;
+    }
+
+    private static final java.util.Set readIndices(androidx.sqlite.db.SupportSQLiteDatabase, java.lang.String)
+    {
+        androidx.sqlite.db.SupportSQLiteDatabase r0;
+        java.lang.String r1, $r10, r20, r21, r29, r30;
+        android.database.Cursor $r2, r17;
+        androidx.room.util.TableInfo$Index r3, $r11, $r12, r22;
+        java.util.Set r4, r5, r18, $r27;
+        java.lang.StringBuilder $r6, $r7, $r8, $r9;
+        int $i0, $i1, $i2, i3, i4, i5, i6, i7, i8;
+        boolean $z0, $z1, $z2, $z3, z4, $z5, $z6, z7;
+        java.lang.Throwable $r13, $r14, $r15, r23, r24, r25, r31;
+        java.io.Closeable r16;
+
+        r0 := @parameter0: androidx.sqlite.db.SupportSQLiteDatabase;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("PRAGMA index_list(`");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("`)");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = interfaceinvoke r0.<androidx.sqlite.db.SupportSQLiteDatabase: android.database.Cursor query(java.lang.String)>($r10);
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 <= 15 goto label15;
+
+        r16 = (java.io.Closeable) $r2;
+
+     label01:
+        r17 = (android.database.Cursor) r16;
+
+        i3 = interfaceinvoke r17.<android.database.Cursor: int getColumnIndex(java.lang.String)>("name");
+
+        i4 = interfaceinvoke r17.<android.database.Cursor: int getColumnIndex(java.lang.String)>("origin");
+
+        i5 = interfaceinvoke r17.<android.database.Cursor: int getColumnIndex(java.lang.String)>("unique");
+
+        if i3 == -1 goto label02;
+
+        if i4 == -1 goto label02;
+
+        if i5 != -1 goto label03;
+
+     label02:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r16, null);
+
+        return null;
+
+     label03:
+        r18 = staticinvoke <kotlin.collections.SetsKt: java.util.Set createSetBuilder()>();
+
+     label04:
+        $z2 = interfaceinvoke r17.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z2 == 0 goto label10;
+
+        r20 = interfaceinvoke r17.<android.database.Cursor: java.lang.String getString(int)>(i4);
+
+        $z1 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>("c", r20);
+
+        if $z1 != 0 goto label05;
+
+        goto label04;
+
+     label05:
+        r21 = interfaceinvoke r17.<android.database.Cursor: java.lang.String getString(int)>(i3);
+
+        $i2 = interfaceinvoke r17.<android.database.Cursor: int getInt(int)>(i5);
+
+        if $i2 != 1 goto label06;
+
+        $z3 = 1;
+
+        goto label07;
+
+     label06:
+        $z3 = 0;
+
+     label07:
+        z4 = $z3;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r21, "name");
+
+        $r12 = staticinvoke <androidx.room.util.TableInfoKt: androidx.room.util.TableInfo$Index readIndex(androidx.sqlite.db.SupportSQLiteDatabase,java.lang.String,boolean)>(r0, r21, z4);
+
+        if $r12 != null goto label09;
+
+     label08:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r16, null);
+
+        return null;
+
+     label09:
+        r22 = $r12;
+
+        interfaceinvoke r18.<java.util.Set: boolean add(java.lang.Object)>(r22);
+
+        goto label04;
+
+     label10:
+        r5 = staticinvoke <kotlin.collections.SetsKt: java.util.Set build(java.util.Set)>(r18);
+
+     label11:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r16, null);
+
+        return r5;
+
+     label12:
+        $r14 := @caughtexception;
+
+        r23 = $r14;
+
+        r24 = r23;
+
+        throw r23;
+
+     label13:
+        $r13 := @caughtexception;
+
+        r25 = $r13;
+
+     label14:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r16, r24);
+
+        throw r25;
+
+     label15:
+        i6 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("name");
+
+        i7 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("origin");
+
+        i8 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("unique");
+
+        if i6 == -1 goto label16;
+
+        if i7 == -1 goto label16;
+
+        if i8 != -1 goto label17;
+
+     label16:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        return null;
+
+     label17:
+        $r27 = staticinvoke <kotlin.collections.SetsKt: java.util.Set createSetBuilder()>();
+
+     label18:
+        $z5 = interfaceinvoke $r2.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z5 == 0 goto label24;
+
+        r29 = interfaceinvoke $r2.<android.database.Cursor: java.lang.String getString(int)>(i7);
+
+        $z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>("c", r29);
+
+        if $z0 != 0 goto label19;
+
+        goto label18;
+
+     label19:
+        r30 = interfaceinvoke $r2.<android.database.Cursor: java.lang.String getString(int)>(i6);
+
+        $i1 = interfaceinvoke $r2.<android.database.Cursor: int getInt(int)>(i8);
+
+        if $i1 != 1 goto label20;
+
+        $z6 = 1;
+
+        goto label21;
+
+     label20:
+        $z6 = 0;
+
+     label21:
+        z7 = $z6;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r30, "name");
+
+        $r11 = staticinvoke <androidx.room.util.TableInfoKt: androidx.room.util.TableInfo$Index readIndex(androidx.sqlite.db.SupportSQLiteDatabase,java.lang.String,boolean)>(r0, r30, z7);
+
+        if $r11 != null goto label23;
+
+     label22:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        return null;
+
+     label23:
+        r3 = $r11;
+
+        interfaceinvoke $r27.<java.util.Set: boolean add(java.lang.Object)>(r3);
+
+        goto label18;
+
+     label24:
+        r4 = staticinvoke <kotlin.collections.SetsKt: java.util.Set build(java.util.Set)>($r27);
+
+     label25:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        return r4;
+
+     label26:
+        $r15 := @caughtexception;
+
+        r31 = $r15;
+
+     label27:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        throw r31;
+
+        catch java.lang.Throwable from label01 to label02 with label12;
+        catch java.lang.Throwable from label03 to label08 with label12;
+        catch java.lang.Throwable from label09 to label11 with label12;
+        catch java.lang.Throwable from label12 to label13 with label13;
+        catch java.lang.Throwable from label13 to label14 with label13;
+        catch java.lang.Throwable from label15 to label16 with label26;
+        catch java.lang.Throwable from label17 to label22 with label26;
+        catch java.lang.Throwable from label23 to label25 with label26;
+        catch java.lang.Throwable from label26 to label27 with label26;
+    }
+
+    private static final androidx.room.util.TableInfo$Index readIndex(androidx.sqlite.db.SupportSQLiteDatabase, java.lang.String, boolean)
+    {
+        androidx.sqlite.db.SupportSQLiteDatabase r0;
+        java.lang.String r1, $r7, r33, $r34, r35, r48, $r49, r50;
+        boolean z0, $z1, $z2;
+        android.database.Cursor $r2, r30;
+        java.lang.StringBuilder $r3, $r4, $r5, $r6;
+        int $i0, $i1, $i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14;
+        java.util.TreeMap $r8, $r9, $r17, $r18, r31, r32, r46, r47;
+        java.util.Collection $r10, $r12, $r19, $r21;
+        java.lang.Iterable $r11, $r13, $r20, $r22;
+        androidx.room.util.TableInfo$Index $r14, $r23, r40, $r41, r55;
+        java.util.Map $r15, $r16, $r24, $r25;
+        java.lang.Throwable $r26, $r27, $r28, r42, r43, r44, r56;
+        java.io.Closeable r29;
+        java.lang.Integer r36, r37, r51, r52;
+        java.util.List r38, r39, r53, r54;
+
+        r0 := @parameter0: androidx.sqlite.db.SupportSQLiteDatabase;
+
+        r1 := @parameter1: java.lang.String;
+
+        z0 := @parameter2: boolean;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("PRAGMA index_xinfo(`");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("`)");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = interfaceinvoke r0.<androidx.sqlite.db.SupportSQLiteDatabase: android.database.Cursor query(java.lang.String)>($r7);
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 <= 15 goto label14;
+
+        r29 = (java.io.Closeable) $r2;
+
+     label01:
+        r30 = (android.database.Cursor) r29;
+
+        i3 = interfaceinvoke r30.<android.database.Cursor: int getColumnIndex(java.lang.String)>("seqno");
+
+        i4 = interfaceinvoke r30.<android.database.Cursor: int getColumnIndex(java.lang.String)>("cid");
+
+        i5 = interfaceinvoke r30.<android.database.Cursor: int getColumnIndex(java.lang.String)>("name");
+
+        i6 = interfaceinvoke r30.<android.database.Cursor: int getColumnIndex(java.lang.String)>("desc");
+
+        if i3 == -1 goto label02;
+
+        if i4 == -1 goto label02;
+
+        if i5 == -1 goto label02;
+
+        if i6 != -1 goto label03;
+
+     label02:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r29, null);
+
+        return null;
+
+     label03:
+        $r17 = new java.util.TreeMap;
+
+        specialinvoke $r17.<java.util.TreeMap: void <init>()>();
+
+        r31 = $r17;
+
+        $r18 = new java.util.TreeMap;
+
+        specialinvoke $r18.<java.util.TreeMap: void <init>()>();
+
+        r32 = $r18;
+
+     label04:
+        $z1 = interfaceinvoke r30.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z1 == 0 goto label08;
+
+        i7 = interfaceinvoke r30.<android.database.Cursor: int getInt(int)>(i4);
+
+        if i7 >= 0 goto label05;
+
+        goto label04;
+
+     label05:
+        i8 = interfaceinvoke r30.<android.database.Cursor: int getInt(int)>(i3);
+
+        r33 = interfaceinvoke r30.<android.database.Cursor: java.lang.String getString(int)>(i5);
+
+        $i2 = interfaceinvoke r30.<android.database.Cursor: int getInt(int)>(i6);
+
+        if $i2 <= 0 goto label06;
+
+        $r34 = "DESC";
+
+        goto label07;
+
+     label06:
+        $r34 = "ASC";
+
+     label07:
+        r35 = $r34;
+
+        r36 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i8);
+
+        $r24 = (java.util.Map) r31;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r33, "columnName");
+
+        interfaceinvoke $r24.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r36, r33);
+
+        r37 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i8);
+
+        $r25 = (java.util.Map) r32;
+
+        interfaceinvoke $r25.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r37, r35);
+
+        goto label04;
+
+     label08:
+        $r19 = virtualinvoke r31.<java.util.TreeMap: java.util.Collection values()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r19, "columnsMap.values");
+
+        $r20 = (java.lang.Iterable) $r19;
+
+        r38 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List toList(java.lang.Iterable)>($r20);
+
+        $r21 = virtualinvoke r32.<java.util.TreeMap: java.util.Collection values()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r21, "ordersMap.values");
+
+        $r22 = (java.lang.Iterable) $r21;
+
+        r39 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List toList(java.lang.Iterable)>($r22);
+
+        $r23 = new androidx.room.util.TableInfo$Index;
+
+        specialinvoke $r23.<androidx.room.util.TableInfo$Index: void <init>(java.lang.String,boolean,java.util.List,java.util.List)>(r1, z0, r38, r39);
+
+        r40 = $r23;
+
+     label09:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r29, null);
+
+        $r41 = r40;
+
+        goto label13;
+
+     label10:
+        $r26 := @caughtexception;
+
+        r42 = $r26;
+
+        r43 = r42;
+
+        throw r42;
+
+     label11:
+        $r28 := @caughtexception;
+
+        r44 = $r28;
+
+     label12:
+        staticinvoke <kotlin.io.CloseableKt: void closeFinally(java.io.Closeable,java.lang.Throwable)>(r29, r43);
+
+        throw r44;
+
+     label13:
+        goto label25;
+
+     label14:
+        i9 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("seqno");
+
+        i10 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("cid");
+
+        i11 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("name");
+
+        i12 = interfaceinvoke $r2.<android.database.Cursor: int getColumnIndex(java.lang.String)>("desc");
+
+        if i9 == -1 goto label15;
+
+        if i10 == -1 goto label15;
+
+        if i11 == -1 goto label15;
+
+        if i12 != -1 goto label16;
+
+     label15:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        return null;
+
+     label16:
+        $r8 = new java.util.TreeMap;
+
+        specialinvoke $r8.<java.util.TreeMap: void <init>()>();
+
+        r46 = $r8;
+
+        $r9 = new java.util.TreeMap;
+
+        specialinvoke $r9.<java.util.TreeMap: void <init>()>();
+
+        r47 = $r9;
+
+     label17:
+        $z2 = interfaceinvoke $r2.<android.database.Cursor: boolean moveToNext()>();
+
+        if $z2 == 0 goto label21;
+
+        i13 = interfaceinvoke $r2.<android.database.Cursor: int getInt(int)>(i10);
+
+        if i13 >= 0 goto label18;
+
+        goto label17;
+
+     label18:
+        i14 = interfaceinvoke $r2.<android.database.Cursor: int getInt(int)>(i9);
+
+        r48 = interfaceinvoke $r2.<android.database.Cursor: java.lang.String getString(int)>(i11);
+
+        $i1 = interfaceinvoke $r2.<android.database.Cursor: int getInt(int)>(i12);
+
+        if $i1 <= 0 goto label19;
+
+        $r49 = "DESC";
+
+        goto label20;
+
+     label19:
+        $r49 = "ASC";
+
+     label20:
+        r50 = $r49;
+
+        r51 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i14);
+
+        $r15 = (java.util.Map) r46;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r48, "columnName");
+
+        interfaceinvoke $r15.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r51, r48);
+
+        r52 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i14);
+
+        $r16 = (java.util.Map) r47;
+
+        interfaceinvoke $r16.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r52, r50);
+
+        goto label17;
+
+     label21:
+        $r10 = virtualinvoke r46.<java.util.TreeMap: java.util.Collection values()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r10, "columnsMap.values");
+
+        $r11 = (java.lang.Iterable) $r10;
+
+        r53 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List toList(java.lang.Iterable)>($r11);
+
+        $r12 = virtualinvoke r47.<java.util.TreeMap: java.util.Collection values()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r12, "ordersMap.values");
+
+        $r13 = (java.lang.Iterable) $r12;
+
+        r54 = staticinvoke <kotlin.collections.CollectionsKt: java.util.List toList(java.lang.Iterable)>($r13);
+
+        $r14 = new androidx.room.util.TableInfo$Index;
+
+        specialinvoke $r14.<androidx.room.util.TableInfo$Index: void <init>(java.lang.String,boolean,java.util.List,java.util.List)>(r1, z0, r53, r54);
+
+        r55 = $r14;
+
+     label22:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        $r41 = r55;
+
+        goto label25;
+
+     label23:
+        $r27 := @caughtexception;
+
+        r56 = $r27;
+
+     label24:
+        interfaceinvoke $r2.<android.database.Cursor: void close()>();
+
+        throw r56;
+
+     label25:
+        return $r41;
+
+        catch java.lang.Throwable from label01 to label02 with label10;
+        catch java.lang.Throwable from label03 to label09 with label10;
+        catch java.lang.Throwable from label10 to label11 with label11;
+        catch java.lang.Throwable from label11 to label12 with label11;
+        catch java.lang.Throwable from label14 to label15 with label23;
+        catch java.lang.Throwable from label16 to label22 with label23;
+        catch java.lang.Throwable from label23 to label24 with label23;
+    }
+

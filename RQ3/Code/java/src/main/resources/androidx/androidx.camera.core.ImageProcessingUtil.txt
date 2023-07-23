@@ -1,0 +1,858 @@
+androidx.camera.core.ImageProcessingUtil
+<androidx.camera.core.ImageProcessingUtil: java.lang.String TAG>
+<androidx.camera.core.ImageProcessingUtil: int sImageCount>
+    private void <init>()
+    {
+        androidx.camera.core.ImageProcessingUtil r0;
+
+        r0 := @this: androidx.camera.core.ImageProcessingUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static androidx.camera.core.ImageProxy convertJpegBytesToImage(androidx.camera.core.impl.ImageReaderProxy, byte[])
+    {
+        androidx.camera.core.impl.ImageReaderProxy r0;
+        byte[] r1;
+        android.view.Surface r2;
+        androidx.camera.core.ImageProxy r3;
+        int $i0, $i1;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.camera.core.impl.ImageReaderProxy;
+
+        r1 := @parameter1: byte[];
+
+        $i0 = interfaceinvoke r0.<androidx.camera.core.impl.ImageReaderProxy: int getImageFormat()>();
+
+        if $i0 != 256 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <androidx.core.util.Preconditions: void checkArgument(boolean)>($z0);
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        r2 = interfaceinvoke r0.<androidx.camera.core.impl.ImageReaderProxy: android.view.Surface getSurface()>();
+
+        staticinvoke <androidx.core.util.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $i1 = staticinvoke <androidx.camera.core.ImageProcessingUtil: int nativeWriteJpegToSurface(byte[],android.view.Surface)>(r1, r2);
+
+        if $i1 == 0 goto label3;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "Failed to enqueue JPEG image.");
+
+        return null;
+
+     label3:
+        r3 = interfaceinvoke r0.<androidx.camera.core.impl.ImageReaderProxy: androidx.camera.core.ImageProxy acquireLatestImage()>();
+
+        if r3 != null goto label4;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "Failed to get acquire JPEG image.");
+
+     label4:
+        return r3;
+    }
+
+    public static androidx.camera.core.ImageProxy convertYUVToRGB(androidx.camera.core.ImageProxy, androidx.camera.core.impl.ImageReaderProxy, java.nio.ByteBuffer, int, boolean)
+    {
+        androidx.camera.core.ImageProxy r0, r4;
+        androidx.camera.core.impl.ImageReaderProxy r1;
+        java.nio.ByteBuffer r2;
+        int i0, $i4, $i5, $i6;
+        boolean z0, $z1, $z2, $z3;
+        long l1, $l2, $l3;
+        androidx.camera.core.ImageProcessingUtil$Result r3, $r7;
+        androidx.camera.core.SingleCloseImageProxy r5, $r8;
+        android.view.Surface $r6;
+        androidx.camera.core.ForwardingImageProxy$OnImageCloseListener $r9;
+        java.lang.Object[] $r10;
+        java.util.Locale $r11;
+        java.lang.Long $r12;
+        java.lang.Integer $r13;
+        java.lang.String $r14;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        r1 := @parameter1: androidx.camera.core.impl.ImageReaderProxy;
+
+        r2 := @parameter2: java.nio.ByteBuffer;
+
+        i0 := @parameter3: int;
+
+        z0 := @parameter4: boolean;
+
+        $z1 = staticinvoke <androidx.camera.core.ImageProcessingUtil: boolean isSupportedYUVFormat(androidx.camera.core.ImageProxy)>(r0);
+
+        if $z1 != 0 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "Unsupported format for YUV to RGB");
+
+        return null;
+
+     label1:
+        l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $z2 = staticinvoke <androidx.camera.core.ImageProcessingUtil: boolean isSupportedRotationDegrees(int)>(i0);
+
+        if $z2 != 0 goto label2;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "Unsupported rotation degrees for rotate RGB");
+
+        return null;
+
+     label2:
+        $r6 = interfaceinvoke r1.<androidx.camera.core.impl.ImageReaderProxy: android.view.Surface getSurface()>();
+
+        r3 = staticinvoke <androidx.camera.core.ImageProcessingUtil: androidx.camera.core.ImageProcessingUtil$Result convertYUVToRGBInternal(androidx.camera.core.ImageProxy,android.view.Surface,java.nio.ByteBuffer,int,boolean)>(r0, $r6, r2, i0, z0);
+
+        $r7 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>;
+
+        if r3 != $r7 goto label3;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "YUV to RGB conversion failure");
+
+        return null;
+
+     label3:
+        $z3 = staticinvoke <android.util.Log: boolean isLoggable(java.lang.String,int)>("MH", 3);
+
+        if $z3 == 0 goto label4;
+
+        $r11 = <java.util.Locale: java.util.Locale US>;
+
+        $r10 = newarray (java.lang.Object)[2];
+
+        $l2 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l3 = $l2 - l1;
+
+        $r12 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        $r10[0] = $r12;
+
+        $i4 = <androidx.camera.core.ImageProcessingUtil: int sImageCount>;
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i4);
+
+        $r10[1] = $r13;
+
+        $r14 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r11, "Image processing performance profiling, duration: [%d], image count: %d", $r10);
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("ImageProcessingUtil", $r14);
+
+        $i5 = <androidx.camera.core.ImageProcessingUtil: int sImageCount>;
+
+        $i6 = $i5 + 1;
+
+        <androidx.camera.core.ImageProcessingUtil: int sImageCount> = $i6;
+
+     label4:
+        r4 = interfaceinvoke r1.<androidx.camera.core.impl.ImageReaderProxy: androidx.camera.core.ImageProxy acquireLatestImage()>();
+
+        if r4 != null goto label5;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "YUV to RGB acquireLatestImage failure");
+
+        return null;
+
+     label5:
+        $r8 = new androidx.camera.core.SingleCloseImageProxy;
+
+        specialinvoke $r8.<androidx.camera.core.SingleCloseImageProxy: void <init>(androidx.camera.core.ImageProxy)>(r4);
+
+        r5 = $r8;
+
+        $r9 = dynamicinvoke "onImageClose" <androidx.camera.core.ForwardingImageProxy$OnImageCloseListener (androidx.camera.core.ImageProxy,androidx.camera.core.ImageProxy)>(r4, r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(androidx.camera.core.ImageProxy), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.core.ImageProcessingUtil: void lambda$convertYUVToRGB$0(androidx.camera.core.ImageProxy,androidx.camera.core.ImageProxy,androidx.camera.core.ImageProxy)>, methodtype: void __METHODTYPE__(androidx.camera.core.ImageProxy));
+
+        virtualinvoke r5.<androidx.camera.core.SingleCloseImageProxy: void addOnImageCloseListener(androidx.camera.core.ForwardingImageProxy$OnImageCloseListener)>($r9);
+
+        return r5;
+    }
+
+    public static boolean applyPixelShiftForYUV(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageProxy r0;
+        androidx.camera.core.ImageProcessingUtil$Result r1, $r2;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $z0 = staticinvoke <androidx.camera.core.ImageProcessingUtil: boolean isSupportedYUVFormat(androidx.camera.core.ImageProxy)>(r0);
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "Unsupported format for YUV to RGB");
+
+        return 0;
+
+     label1:
+        r1 = staticinvoke <androidx.camera.core.ImageProcessingUtil: androidx.camera.core.ImageProcessingUtil$Result applyPixelShiftInternal(androidx.camera.core.ImageProxy)>(r0);
+
+        $r2 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>;
+
+        if r1 != $r2 goto label2;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "One pixel shift for YUV failure");
+
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    public static androidx.camera.core.ImageProxy rotateYUV(androidx.camera.core.ImageProxy, androidx.camera.core.impl.ImageReaderProxy, android.media.ImageWriter, java.nio.ByteBuffer, java.nio.ByteBuffer, java.nio.ByteBuffer, int)
+    {
+        androidx.camera.core.ImageProxy r0, r6;
+        androidx.camera.core.impl.ImageReaderProxy r1;
+        android.media.ImageWriter r2;
+        java.nio.ByteBuffer r3, r4, r5;
+        int i0, $i1;
+        androidx.camera.core.SingleCloseImageProxy r7, $r8;
+        boolean $z0, $z1;
+        androidx.camera.core.ForwardingImageProxy$OnImageCloseListener $r9;
+        androidx.camera.core.ImageProcessingUtil$Result r10, $r11;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        r1 := @parameter1: androidx.camera.core.impl.ImageReaderProxy;
+
+        r2 := @parameter2: android.media.ImageWriter;
+
+        r3 := @parameter3: java.nio.ByteBuffer;
+
+        r4 := @parameter4: java.nio.ByteBuffer;
+
+        r5 := @parameter5: java.nio.ByteBuffer;
+
+        i0 := @parameter6: int;
+
+        $z0 = staticinvoke <androidx.camera.core.ImageProcessingUtil: boolean isSupportedYUVFormat(androidx.camera.core.ImageProxy)>(r0);
+
+        if $z0 != 0 goto label1;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "Unsupported format for rotate YUV");
+
+        return null;
+
+     label1:
+        $z1 = staticinvoke <androidx.camera.core.ImageProcessingUtil: boolean isSupportedRotationDegrees(int)>(i0);
+
+        if $z1 != 0 goto label2;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "Unsupported rotation degrees for rotate YUV");
+
+        return null;
+
+     label2:
+        r10 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>;
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 23 goto label3;
+
+        if i0 <= 0 goto label3;
+
+        r10 = staticinvoke <androidx.camera.core.ImageProcessingUtil: androidx.camera.core.ImageProcessingUtil$Result rotateYUVInternal(androidx.camera.core.ImageProxy,android.media.ImageWriter,java.nio.ByteBuffer,java.nio.ByteBuffer,java.nio.ByteBuffer,int)>(r0, r2, r3, r4, r5, i0);
+
+     label3:
+        $r11 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>;
+
+        if r10 != $r11 goto label4;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "rotate YUV failure");
+
+        return null;
+
+     label4:
+        r6 = interfaceinvoke r1.<androidx.camera.core.impl.ImageReaderProxy: androidx.camera.core.ImageProxy acquireLatestImage()>();
+
+        if r6 != null goto label5;
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("ImageProcessingUtil", "YUV rotation acquireLatestImage failure");
+
+        return null;
+
+     label5:
+        $r8 = new androidx.camera.core.SingleCloseImageProxy;
+
+        specialinvoke $r8.<androidx.camera.core.SingleCloseImageProxy: void <init>(androidx.camera.core.ImageProxy)>(r6);
+
+        r7 = $r8;
+
+        $r9 = dynamicinvoke "onImageClose" <androidx.camera.core.ForwardingImageProxy$OnImageCloseListener (androidx.camera.core.ImageProxy,androidx.camera.core.ImageProxy)>(r6, r0) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(androidx.camera.core.ImageProxy), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.core.ImageProcessingUtil: void lambda$rotateYUV$1(androidx.camera.core.ImageProxy,androidx.camera.core.ImageProxy,androidx.camera.core.ImageProxy)>, methodtype: void __METHODTYPE__(androidx.camera.core.ImageProxy));
+
+        virtualinvoke r7.<androidx.camera.core.SingleCloseImageProxy: void addOnImageCloseListener(androidx.camera.core.ForwardingImageProxy$OnImageCloseListener)>($r9);
+
+        return r7;
+    }
+
+    private static boolean isSupportedYUVFormat(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageProxy r0;
+        int $i0, $i1;
+        androidx.camera.core.ImageProxy$PlaneProxy[] $r1;
+        boolean $z0;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        $i0 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getFormat()>();
+
+        if $i0 != 35 goto label1;
+
+        $r1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $i1 = lengthof $r1;
+
+        if $i1 != 3 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private static boolean isSupportedRotationDegrees(int)
+    {
+        int i0;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        if i0 == 0 goto label1;
+
+        if i0 == 90 goto label1;
+
+        if i0 == 180 goto label1;
+
+        if i0 != 270 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    private static androidx.camera.core.ImageProcessingUtil$Result convertYUVToRGBInternal(androidx.camera.core.ImageProxy, android.view.Surface, java.nio.ByteBuffer, int, boolean)
+    {
+        androidx.camera.core.ImageProxy r0;
+        android.view.Surface r1;
+        java.nio.ByteBuffer r2, $r15, $r18, $r21;
+        int i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, $i12, $i13, $i14;
+        boolean z0;
+        androidx.camera.core.ImageProxy$PlaneProxy[] $r3, $r5, $r7, $r9, $r11, $r13, $r16, $r19;
+        androidx.camera.core.ImageProxy$PlaneProxy $r4, $r6, $r8, $r10, $r12, $r14, $r17, $r20;
+        androidx.camera.core.ImageProcessingUtil$Result $r22, $r23;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        r1 := @parameter1: android.view.Surface;
+
+        r2 := @parameter2: java.nio.ByteBuffer;
+
+        i0 := @parameter3: int;
+
+        z0 := @parameter4: boolean;
+
+        i1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        i2 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $r3 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r4 = $r3[0];
+
+        i3 = interfaceinvoke $r4.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $r5 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r6 = $r5[1];
+
+        i4 = interfaceinvoke $r6.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $r7 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r8 = $r7[2];
+
+        i5 = interfaceinvoke $r8.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $r9 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r10 = $r9[0];
+
+        i6 = interfaceinvoke $r10.<androidx.camera.core.ImageProxy$PlaneProxy: int getPixelStride()>();
+
+        $r11 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r12 = $r11[1];
+
+        i7 = interfaceinvoke $r12.<androidx.camera.core.ImageProxy$PlaneProxy: int getPixelStride()>();
+
+        if z0 == 0 goto label1;
+
+        $i12 = i6;
+
+        goto label2;
+
+     label1:
+        $i12 = 0;
+
+     label2:
+        i8 = $i12;
+
+        if z0 == 0 goto label3;
+
+        $i13 = i7;
+
+        goto label4;
+
+     label3:
+        $i13 = 0;
+
+     label4:
+        i9 = $i13;
+
+        if z0 == 0 goto label5;
+
+        $i14 = i7;
+
+        goto label6;
+
+     label5:
+        $i14 = 0;
+
+     label6:
+        i10 = $i14;
+
+        $r13 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r14 = $r13[0];
+
+        $r15 = interfaceinvoke $r14.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        $r16 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r17 = $r16[1];
+
+        $r18 = interfaceinvoke $r17.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        $r19 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r20 = $r19[2];
+
+        $r21 = interfaceinvoke $r20.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        i11 = staticinvoke <androidx.camera.core.ImageProcessingUtil: int nativeConvertAndroid420ToABGR(java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,int,int,android.view.Surface,java.nio.ByteBuffer,int,int,int,int,int,int)>($r15, i3, $r18, i4, $r21, i5, i6, i7, r1, r2, i1, i2, i8, i9, i10, i0);
+
+        if i11 == 0 goto label7;
+
+        $r23 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>;
+
+        return $r23;
+
+     label7:
+        $r22 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result SUCCESS>;
+
+        return $r22;
+    }
+
+    private static androidx.camera.core.ImageProcessingUtil$Result applyPixelShiftInternal(androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageProxy r0;
+        int i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10;
+        androidx.camera.core.ImageProxy$PlaneProxy[] $r1, $r3, $r5, $r7, $r9, $r11, $r14, $r17;
+        androidx.camera.core.ImageProxy$PlaneProxy $r2, $r4, $r6, $r8, $r10, $r12, $r15, $r18;
+        java.nio.ByteBuffer $r13, $r16, $r19;
+        androidx.camera.core.ImageProcessingUtil$Result $r20, $r21;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        i0 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        i1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $r1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r2 = $r1[0];
+
+        i2 = interfaceinvoke $r2.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $r3 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r4 = $r3[1];
+
+        i3 = interfaceinvoke $r4.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $r5 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r6 = $r5[2];
+
+        i4 = interfaceinvoke $r6.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $r7 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r8 = $r7[0];
+
+        i5 = interfaceinvoke $r8.<androidx.camera.core.ImageProxy$PlaneProxy: int getPixelStride()>();
+
+        $r9 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r10 = $r9[1];
+
+        i6 = interfaceinvoke $r10.<androidx.camera.core.ImageProxy$PlaneProxy: int getPixelStride()>();
+
+        i7 = i5;
+
+        i8 = i6;
+
+        i9 = i6;
+
+        $r11 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r12 = $r11[0];
+
+        $r13 = interfaceinvoke $r12.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        $r14 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r15 = $r14[1];
+
+        $r16 = interfaceinvoke $r15.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        $r17 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r18 = $r17[2];
+
+        $r19 = interfaceinvoke $r18.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        i10 = staticinvoke <androidx.camera.core.ImageProcessingUtil: int nativeShiftPixel(java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,int,int,int,int,int,int,int)>($r13, i2, $r16, i3, $r19, i4, i5, i6, i0, i1, i7, i8, i9);
+
+        if i10 == 0 goto label1;
+
+        $r21 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>;
+
+        return $r21;
+
+     label1:
+        $r20 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result SUCCESS>;
+
+        return $r20;
+    }
+
+    private static androidx.camera.core.ImageProcessingUtil$Result rotateYUVInternal(androidx.camera.core.ImageProxy, android.media.ImageWriter, java.nio.ByteBuffer, java.nio.ByteBuffer, java.nio.ByteBuffer, int)
+    {
+        androidx.camera.core.ImageProxy r0;
+        android.media.ImageWriter r1;
+        java.nio.ByteBuffer r2, r3, r4, $r16, $r19, $r22, $r25, $r32, $r39;
+        int i0, i1, i2, i3, i4, i5, i6, i7, $i8, $i9, $i10, $i11, $i12, $i13;
+        android.media.Image r5;
+        androidx.camera.core.ImageProxy$PlaneProxy[] $r6, $r8, $r10, $r12, $r14, $r17, $r20;
+        androidx.camera.core.ImageProxy$PlaneProxy $r7, $r9, $r11, $r13, $r15, $r18, $r21;
+        android.media.Image$Plane[] $r23, $r26, $r28, $r30, $r33, $r35, $r37, $r40, $r42;
+        android.media.Image$Plane $r24, $r27, $r29, $r31, $r34, $r36, $r38, $r41, $r43;
+        androidx.camera.core.ImageProcessingUtil$Result $r44, $r45, $r46;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        r1 := @parameter1: android.media.ImageWriter;
+
+        r2 := @parameter2: java.nio.ByteBuffer;
+
+        r3 := @parameter3: java.nio.ByteBuffer;
+
+        r4 := @parameter4: java.nio.ByteBuffer;
+
+        i0 := @parameter5: int;
+
+        i1 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getWidth()>();
+
+        i2 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: int getHeight()>();
+
+        $r6 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r7 = $r6[0];
+
+        i3 = interfaceinvoke $r7.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $r8 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r9 = $r8[1];
+
+        i4 = interfaceinvoke $r9.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $r10 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r11 = $r10[2];
+
+        i5 = interfaceinvoke $r11.<androidx.camera.core.ImageProxy$PlaneProxy: int getRowStride()>();
+
+        $r12 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r13 = $r12[1];
+
+        i6 = interfaceinvoke $r13.<androidx.camera.core.ImageProxy$PlaneProxy: int getPixelStride()>();
+
+        r5 = staticinvoke <androidx.camera.core.internal.compat.ImageWriterCompat: android.media.Image dequeueInputImage(android.media.ImageWriter)>(r1);
+
+        if r5 != null goto label1;
+
+        $r46 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>;
+
+        return $r46;
+
+     label1:
+        $r14 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r15 = $r14[0];
+
+        $r16 = interfaceinvoke $r15.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        $r17 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r18 = $r17[1];
+
+        $r19 = interfaceinvoke $r18.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        $r20 = interfaceinvoke r0.<androidx.camera.core.ImageProxy: androidx.camera.core.ImageProxy$PlaneProxy[] getPlanes()>();
+
+        $r21 = $r20[2];
+
+        $r22 = interfaceinvoke $r21.<androidx.camera.core.ImageProxy$PlaneProxy: java.nio.ByteBuffer getBuffer()>();
+
+        $r23 = virtualinvoke r5.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r24 = $r23[0];
+
+        $r25 = virtualinvoke $r24.<android.media.Image$Plane: java.nio.ByteBuffer getBuffer()>();
+
+        $r26 = virtualinvoke r5.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r27 = $r26[0];
+
+        $i8 = virtualinvoke $r27.<android.media.Image$Plane: int getRowStride()>();
+
+        $r28 = virtualinvoke r5.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r29 = $r28[0];
+
+        $i9 = virtualinvoke $r29.<android.media.Image$Plane: int getPixelStride()>();
+
+        $r30 = virtualinvoke r5.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r31 = $r30[1];
+
+        $r32 = virtualinvoke $r31.<android.media.Image$Plane: java.nio.ByteBuffer getBuffer()>();
+
+        $r33 = virtualinvoke r5.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r34 = $r33[1];
+
+        $i10 = virtualinvoke $r34.<android.media.Image$Plane: int getRowStride()>();
+
+        $r35 = virtualinvoke r5.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r36 = $r35[1];
+
+        $i11 = virtualinvoke $r36.<android.media.Image$Plane: int getPixelStride()>();
+
+        $r37 = virtualinvoke r5.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r38 = $r37[2];
+
+        $r39 = virtualinvoke $r38.<android.media.Image$Plane: java.nio.ByteBuffer getBuffer()>();
+
+        $r40 = virtualinvoke r5.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r41 = $r40[2];
+
+        $i12 = virtualinvoke $r41.<android.media.Image$Plane: int getRowStride()>();
+
+        $r42 = virtualinvoke r5.<android.media.Image: android.media.Image$Plane[] getPlanes()>();
+
+        $r43 = $r42[2];
+
+        $i13 = virtualinvoke $r43.<android.media.Image$Plane: int getPixelStride()>();
+
+        i7 = staticinvoke <androidx.camera.core.ImageProcessingUtil: int nativeRotateYUV(java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,int,java.nio.ByteBuffer,int,int,java.nio.ByteBuffer,int,int,java.nio.ByteBuffer,int,int,java.nio.ByteBuffer,java.nio.ByteBuffer,java.nio.ByteBuffer,int,int,int)>($r16, i3, $r19, i4, $r22, i5, i6, $r25, $i8, $i9, $r32, $i10, $i11, $r39, $i12, $i13, r2, r3, r4, i1, i2, i0);
+
+        if i7 == 0 goto label2;
+
+        $r45 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>;
+
+        return $r45;
+
+     label2:
+        staticinvoke <androidx.camera.core.internal.compat.ImageWriterCompat: void queueInputImage(android.media.ImageWriter,android.media.Image)>(r1, r5);
+
+        $r44 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result SUCCESS>;
+
+        return $r44;
+    }
+
+<androidx.camera.core.ImageProcessingUtil: int nativeWriteJpegToSurface(byte[],android.view.Surface)>
+<androidx.camera.core.ImageProcessingUtil: int nativeConvertAndroid420ToABGR(java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,int,int,android.view.Surface,java.nio.ByteBuffer,int,int,int,int,int,int)>
+<androidx.camera.core.ImageProcessingUtil: int nativeShiftPixel(java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,int,int,int,int,int,int,int)>
+<androidx.camera.core.ImageProcessingUtil: int nativeRotateYUV(java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,java.nio.ByteBuffer,int,int,java.nio.ByteBuffer,int,int,java.nio.ByteBuffer,int,int,java.nio.ByteBuffer,int,int,java.nio.ByteBuffer,java.nio.ByteBuffer,java.nio.ByteBuffer,int,int,int)>
+    private static void lambda$rotateYUV$1(androidx.camera.core.ImageProxy, androidx.camera.core.ImageProxy, androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageProxy r0, r1, r2;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        r1 := @parameter1: androidx.camera.core.ImageProxy;
+
+        r2 := @parameter2: androidx.camera.core.ImageProxy;
+
+        if r0 == null goto label1;
+
+        if r1 == null goto label1;
+
+        interfaceinvoke r1.<androidx.camera.core.ImageProxy: void close()>();
+
+     label1:
+        return;
+    }
+
+    private static void lambda$convertYUVToRGB$0(androidx.camera.core.ImageProxy, androidx.camera.core.ImageProxy, androidx.camera.core.ImageProxy)
+    {
+        androidx.camera.core.ImageProxy r0, r1, r2;
+
+        r0 := @parameter0: androidx.camera.core.ImageProxy;
+
+        r1 := @parameter1: androidx.camera.core.ImageProxy;
+
+        r2 := @parameter2: androidx.camera.core.ImageProxy;
+
+        if r0 == null goto label1;
+
+        if r1 == null goto label1;
+
+        interfaceinvoke r1.<androidx.camera.core.ImageProxy: void close()>();
+
+     label1:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        <androidx.camera.core.ImageProcessingUtil: int sImageCount> = 0;
+
+        staticinvoke <java.lang.System: void loadLibrary(java.lang.String)>("image_processing_util_jni");
+
+        return;
+    }
+
+androidx.camera.core.ImageProcessingUtil$Result
+<androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result UNKNOWN>
+<androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result SUCCESS>
+<androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>
+<androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result[] $VALUES>
+    public static androidx.camera.core.ImageProcessingUtil$Result[] values()
+    {
+        androidx.camera.core.ImageProcessingUtil$Result[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (androidx.camera.core.ImageProcessingUtil$Result[]) $r1;
+
+        return $r2;
+    }
+
+    public static androidx.camera.core.ImageProcessingUtil$Result valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        androidx.camera.core.ImageProcessingUtil$Result $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "Landroidx/camera/core/ImageProcessingUtil$Result;", r0);
+
+        $r2 = (androidx.camera.core.ImageProcessingUtil$Result) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        androidx.camera.core.ImageProcessingUtil$Result r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: androidx.camera.core.ImageProcessingUtil$Result;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        androidx.camera.core.ImageProcessingUtil$Result $r0, $r1, $r2, $r4, $r5, $r6;
+        androidx.camera.core.ImageProcessingUtil$Result[] $r3;
+
+        $r0 = new androidx.camera.core.ImageProcessingUtil$Result;
+
+        specialinvoke $r0.<androidx.camera.core.ImageProcessingUtil$Result: void <init>(java.lang.String,int)>("UNKNOWN", 0);
+
+        <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result UNKNOWN> = $r0;
+
+        $r1 = new androidx.camera.core.ImageProcessingUtil$Result;
+
+        specialinvoke $r1.<androidx.camera.core.ImageProcessingUtil$Result: void <init>(java.lang.String,int)>("SUCCESS", 1);
+
+        <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result SUCCESS> = $r1;
+
+        $r2 = new androidx.camera.core.ImageProcessingUtil$Result;
+
+        specialinvoke $r2.<androidx.camera.core.ImageProcessingUtil$Result: void <init>(java.lang.String,int)>("ERROR_CONVERSION", 2);
+
+        <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION> = $r2;
+
+        $r3 = newarray (androidx.camera.core.ImageProcessingUtil$Result)[3];
+
+        $r4 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result UNKNOWN>;
+
+        $r3[0] = $r4;
+
+        $r5 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result SUCCESS>;
+
+        $r3[1] = $r5;
+
+        $r6 = <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result ERROR_CONVERSION>;
+
+        $r3[2] = $r6;
+
+        <androidx.camera.core.ImageProcessingUtil$Result: androidx.camera.core.ImageProcessingUtil$Result[] $VALUES> = $r3;
+
+        return;
+    }
+

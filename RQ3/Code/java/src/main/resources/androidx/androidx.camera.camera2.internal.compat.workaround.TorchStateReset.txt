@@ -1,0 +1,161 @@
+androidx.camera.camera2.internal.compat.workaround.TorchStateReset
+<androidx.camera.camera2.internal.compat.workaround.TorchStateReset: boolean mIsImageCaptureTorchIsClosedQuirkEnabled>
+    public void <init>()
+    {
+        androidx.camera.camera2.internal.compat.workaround.TorchStateReset r0;
+        androidx.camera.core.impl.Quirk $r1;
+        boolean $z0;
+
+        r0 := @this: androidx.camera.camera2.internal.compat.workaround.TorchStateReset;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = staticinvoke <androidx.camera.camera2.internal.compat.quirk.DeviceQuirks: androidx.camera.core.impl.Quirk get(java.lang.Class)>(class "Landroidx/camera/camera2/internal/compat/quirk/TorchIsClosedAfterImageCapturingQuirk;");
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        r0.<androidx.camera.camera2.internal.compat.workaround.TorchStateReset: boolean mIsImageCaptureTorchIsClosedQuirkEnabled> = $z0;
+
+        return;
+    }
+
+    public boolean isTorchResetRequired(java.util.List, boolean)
+    {
+        androidx.camera.camera2.internal.compat.workaround.TorchStateReset r0;
+        java.util.List r1;
+        boolean z0, $z1, $z2;
+        java.util.Iterator r2;
+        android.hardware.camera2.CaptureRequest r3;
+        java.lang.Integer r4;
+        java.lang.Object $r5, $r7;
+        android.hardware.camera2.CaptureRequest$Key $r6;
+        int $i0;
+
+        r0 := @this: androidx.camera.camera2.internal.compat.workaround.TorchStateReset;
+
+        r1 := @parameter0: java.util.List;
+
+        z0 := @parameter1: boolean;
+
+        $z1 = r0.<androidx.camera.camera2.internal.compat.workaround.TorchStateReset: boolean mIsImageCaptureTorchIsClosedQuirkEnabled>;
+
+        if $z1 == 0 goto label3;
+
+        if z0 == 0 goto label3;
+
+        r2 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z2 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label3;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (android.hardware.camera2.CaptureRequest) $r5;
+
+        $r6 = <android.hardware.camera2.CaptureRequest: android.hardware.camera2.CaptureRequest$Key FLASH_MODE>;
+
+        $r7 = virtualinvoke r3.<android.hardware.camera2.CaptureRequest: java.lang.Object get(android.hardware.camera2.CaptureRequest$Key)>($r6);
+
+        r4 = (java.lang.Integer) $r7;
+
+        if r4 == null goto label2;
+
+        $i0 = virtualinvoke r4.<java.lang.Integer: int intValue()>();
+
+        if $i0 != 2 goto label2;
+
+        return 1;
+
+     label2:
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+    public androidx.camera.core.impl.CaptureConfig createTorchResetRequest(androidx.camera.core.impl.CaptureConfig)
+    {
+        androidx.camera.camera2.internal.compat.workaround.TorchStateReset r0;
+        androidx.camera.core.impl.CaptureConfig r1, $r12;
+        androidx.camera.core.impl.CaptureConfig$Builder r2, r16;
+        androidx.camera.core.impl.DeferrableSurface r3;
+        int $i0;
+        java.util.List $r5;
+        boolean $z0;
+        androidx.camera.core.impl.Config $r6, r18;
+        android.hardware.camera2.CaptureRequest$Key $r8;
+        java.lang.Integer $r9;
+        androidx.camera.camera2.impl.Camera2ImplConfig $r11;
+        java.lang.Object $r13;
+        java.util.Iterator r14;
+        androidx.camera.camera2.impl.Camera2ImplConfig$Builder r15, r17;
+
+        r0 := @this: androidx.camera.camera2.internal.compat.workaround.TorchStateReset;
+
+        r1 := @parameter0: androidx.camera.core.impl.CaptureConfig;
+
+        r16 = new androidx.camera.core.impl.CaptureConfig$Builder;
+
+        specialinvoke r16.<androidx.camera.core.impl.CaptureConfig$Builder: void <init>()>();
+
+        r2 = r16;
+
+        $i0 = virtualinvoke r1.<androidx.camera.core.impl.CaptureConfig: int getTemplateType()>();
+
+        virtualinvoke r2.<androidx.camera.core.impl.CaptureConfig$Builder: void setTemplateType(int)>($i0);
+
+        $r5 = virtualinvoke r1.<androidx.camera.core.impl.CaptureConfig: java.util.List getSurfaces()>();
+
+        r14 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r14.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r13 = interfaceinvoke r14.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.camera.core.impl.DeferrableSurface) $r13;
+
+        virtualinvoke r2.<androidx.camera.core.impl.CaptureConfig$Builder: void addSurface(androidx.camera.core.impl.DeferrableSurface)>(r3);
+
+        goto label1;
+
+     label2:
+        $r6 = virtualinvoke r1.<androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config getImplementationOptions()>();
+
+        virtualinvoke r2.<androidx.camera.core.impl.CaptureConfig$Builder: void addImplementationOptions(androidx.camera.core.impl.Config)>($r6);
+
+        r17 = new androidx.camera.camera2.impl.Camera2ImplConfig$Builder;
+
+        specialinvoke r17.<androidx.camera.camera2.impl.Camera2ImplConfig$Builder: void <init>()>();
+
+        r15 = r17;
+
+        $r8 = <android.hardware.camera2.CaptureRequest: android.hardware.camera2.CaptureRequest$Key FLASH_MODE>;
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+        virtualinvoke r15.<androidx.camera.camera2.impl.Camera2ImplConfig$Builder: androidx.camera.camera2.impl.Camera2ImplConfig$Builder setCaptureRequestOption(android.hardware.camera2.CaptureRequest$Key,java.lang.Object)>($r8, $r9);
+
+        $r11 = virtualinvoke r15.<androidx.camera.camera2.impl.Camera2ImplConfig$Builder: androidx.camera.camera2.impl.Camera2ImplConfig build()>();
+
+        r18 = (androidx.camera.core.impl.Config) $r11;
+
+        virtualinvoke r2.<androidx.camera.core.impl.CaptureConfig$Builder: void addImplementationOptions(androidx.camera.core.impl.Config)>(r18);
+
+        $r12 = virtualinvoke r2.<androidx.camera.core.impl.CaptureConfig$Builder: androidx.camera.core.impl.CaptureConfig build()>();
+
+        return $r12;
+    }
+

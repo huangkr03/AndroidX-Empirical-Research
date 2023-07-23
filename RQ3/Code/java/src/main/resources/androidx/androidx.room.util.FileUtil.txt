@@ -1,0 +1,83 @@
+androidx.room.util.FileUtil
+    public static final void copy(java.nio.channels.ReadableByteChannel, java.nio.channels.FileChannel) throws java.io.IOException
+    {
+        java.nio.channels.ReadableByteChannel r0;
+        java.nio.channels.FileChannel r1;
+        java.io.OutputStream r2;
+        byte[] r3;
+        int i0, i1, $i2, i4;
+        java.nio.channels.WritableByteChannel $r4;
+        java.lang.Throwable $r5, r7;
+        java.io.InputStream r6;
+        boolean z1;
+
+        r0 := @parameter0: java.nio.channels.ReadableByteChannel;
+
+        r1 := @parameter1: java.nio.channels.FileChannel;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "input");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "output");
+
+     label1:
+        $i2 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i2 <= 23 goto label2;
+
+        virtualinvoke r1.<java.nio.channels.FileChannel: long transferFrom(java.nio.channels.ReadableByteChannel,long,long)>(r0, 0L, 9223372036854775807L);
+
+        goto label4;
+
+     label2:
+        r6 = staticinvoke <java.nio.channels.Channels: java.io.InputStream newInputStream(java.nio.channels.ReadableByteChannel)>(r0);
+
+        $r4 = (java.nio.channels.WritableByteChannel) r1;
+
+        r2 = staticinvoke <java.nio.channels.Channels: java.io.OutputStream newOutputStream(java.nio.channels.WritableByteChannel)>($r4);
+
+        z1 = 0;
+
+        r3 = newarray (byte)[4096];
+
+     label3:
+        i0 = virtualinvoke r6.<java.io.InputStream: int read(byte[])>(r3);
+
+        i1 = i0;
+
+        i4 = i1;
+
+        if i0 <= 0 goto label4;
+
+        virtualinvoke r2.<java.io.OutputStream: void write(byte[],int,int)>(r3, 0, i4);
+
+        goto label3;
+
+     label4:
+        virtualinvoke r1.<java.nio.channels.FileChannel: void force(boolean)>(0);
+
+     label5:
+        interfaceinvoke r0.<java.nio.channels.ReadableByteChannel: void close()>();
+
+        virtualinvoke r1.<java.nio.channels.FileChannel: void close()>();
+
+        goto label8;
+
+     label6:
+        $r5 := @caughtexception;
+
+        r7 = $r5;
+
+     label7:
+        interfaceinvoke r0.<java.nio.channels.ReadableByteChannel: void close()>();
+
+        virtualinvoke r1.<java.nio.channels.FileChannel: void close()>();
+
+        throw r7;
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label1 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+

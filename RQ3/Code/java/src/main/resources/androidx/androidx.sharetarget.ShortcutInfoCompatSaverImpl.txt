@@ -1,0 +1,1834 @@
+androidx.sharetarget.ShortcutInfoCompatSaverImpl
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.lang.String TAG>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.lang.String DIRECTORY_TARGETS>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.lang.String DIRECTORY_BITMAPS>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.lang.String FILENAME_XML>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: int EXECUTOR_KEEP_ALIVE_TIME_SECS>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.lang.Object GET_INSTANCE_LOCK>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: androidx.sharetarget.ShortcutInfoCompatSaverImpl sInstance>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: android.content.Context mContext>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mScheduledBitmapTasks>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mDiskIoService>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.io.File mTargetsXmlFile>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.io.File mBitmapsDir>
+    public static androidx.sharetarget.ShortcutInfoCompatSaverImpl getInstance(android.content.Context)
+    {
+        android.content.Context r0;
+        java.lang.Object r1, $r5;
+        java.lang.Throwable r2, $r10;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r3, $r4, $r6, $r7;
+        java.util.concurrent.ExecutorService $r8, $r9;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r3 = <androidx.sharetarget.ShortcutInfoCompatSaverImpl: androidx.sharetarget.ShortcutInfoCompatSaverImpl sInstance>;
+
+        if $r3 != null goto label6;
+
+        $r5 = <androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.lang.Object GET_INSTANCE_LOCK>;
+
+        r1 = $r5;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = <androidx.sharetarget.ShortcutInfoCompatSaverImpl: androidx.sharetarget.ShortcutInfoCompatSaverImpl sInstance>;
+
+        if $r6 != null goto label2;
+
+        $r7 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        $r8 = staticinvoke <androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService createExecutorService()>();
+
+        $r9 = staticinvoke <androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService createExecutorService()>();
+
+        specialinvoke $r7.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: void <init>(android.content.Context,java.util.concurrent.ExecutorService,java.util.concurrent.ExecutorService)>(r0, $r8, $r9);
+
+        <androidx.sharetarget.ShortcutInfoCompatSaverImpl: androidx.sharetarget.ShortcutInfoCompatSaverImpl sInstance> = $r7;
+
+     label2:
+        exitmonitor r1;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r10 := @caughtexception;
+
+        r2 = $r10;
+
+        exitmonitor r1;
+
+     label5:
+        throw r2;
+
+     label6:
+        $r4 = <androidx.sharetarget.ShortcutInfoCompatSaverImpl: androidx.sharetarget.ShortcutInfoCompatSaverImpl sInstance>;
+
+        return $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    static java.util.concurrent.ExecutorService createExecutorService()
+    {
+        java.util.concurrent.ThreadPoolExecutor $r0;
+        java.util.concurrent.LinkedBlockingQueue $r1;
+        java.util.concurrent.TimeUnit $r2;
+
+        $r0 = new java.util.concurrent.ThreadPoolExecutor;
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $r1 = new java.util.concurrent.LinkedBlockingQueue;
+
+        specialinvoke $r1.<java.util.concurrent.LinkedBlockingQueue: void <init>()>();
+
+        specialinvoke $r0.<java.util.concurrent.ThreadPoolExecutor: void <init>(int,int,long,java.util.concurrent.TimeUnit,java.util.concurrent.BlockingQueue)>(0, 1, 20L, $r2, $r1);
+
+        return $r0;
+    }
+
+    void <init>(android.content.Context, java.util.concurrent.ExecutorService, java.util.concurrent.ExecutorService)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        android.content.Context r1, $r7;
+        java.util.concurrent.ExecutorService r2, r3, $r13;
+        java.io.File r4, $r8, $r9, $r10, $r11;
+        androidx.collection.ArrayMap $r5, $r6;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$1 $r12;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: java.util.concurrent.ExecutorService;
+
+        r3 := @parameter2: java.util.concurrent.ExecutorService;
+
+        specialinvoke r0.<androidx.core.content.pm.ShortcutInfoCompatSaver: void <init>()>();
+
+        $r5 = new androidx.collection.ArrayMap;
+
+        specialinvoke $r5.<androidx.collection.ArrayMap: void <init>()>();
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap> = $r5;
+
+        $r6 = new androidx.collection.ArrayMap;
+
+        specialinvoke $r6.<androidx.collection.ArrayMap: void <init>()>();
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mScheduledBitmapTasks> = $r6;
+
+        $r7 = virtualinvoke r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: android.content.Context mContext> = $r7;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService> = r2;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mDiskIoService> = r3;
+
+        $r8 = new java.io.File;
+
+        $r9 = virtualinvoke r1.<android.content.Context: java.io.File getFilesDir()>();
+
+        specialinvoke $r8.<java.io.File: void <init>(java.io.File,java.lang.String)>($r9, "ShortcutInfoCompatSaver_share_targets");
+
+        r4 = $r8;
+
+        $r10 = new java.io.File;
+
+        specialinvoke $r10.<java.io.File: void <init>(java.io.File,java.lang.String)>(r4, "ShortcutInfoCompatSaver_share_targets_bitmaps");
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.io.File mBitmapsDir> = $r10;
+
+        $r11 = new java.io.File;
+
+        specialinvoke $r11.<java.io.File: void <init>(java.io.File,java.lang.String)>(r4, "targets.xml");
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.io.File mTargetsXmlFile> = $r11;
+
+        $r13 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService>;
+
+        $r12 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$1;
+
+        specialinvoke $r12.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,java.io.File)>(r0, r4);
+
+        interfaceinvoke $r13.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable)>($r12);
+
+        return;
+    }
+
+    public com.google.common.util.concurrent.ListenableFuture removeShortcuts(java.util.List)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        java.util.List r1;
+        java.util.ArrayList r2, $r4;
+        androidx.concurrent.futures.ResolvableFuture r3;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$2 $r5;
+        java.util.concurrent.ExecutorService $r6;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: java.util.List;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(java.util.Collection)>(r1);
+
+        r2 = $r4;
+
+        r3 = staticinvoke <androidx.concurrent.futures.ResolvableFuture: androidx.concurrent.futures.ResolvableFuture create()>();
+
+        $r6 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService>;
+
+        $r5 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$2;
+
+        specialinvoke $r5.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,java.util.List,androidx.concurrent.futures.ResolvableFuture)>(r0, r2, r3);
+
+        interfaceinvoke $r6.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable)>($r5);
+
+        return r3;
+    }
+
+    public com.google.common.util.concurrent.ListenableFuture removeAllShortcuts()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        androidx.concurrent.futures.ResolvableFuture r1;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$3 $r2;
+        java.util.concurrent.ExecutorService $r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 = staticinvoke <androidx.concurrent.futures.ResolvableFuture: androidx.concurrent.futures.ResolvableFuture create()>();
+
+        $r3 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService>;
+
+        $r2 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$3;
+
+        specialinvoke $r2.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,androidx.concurrent.futures.ResolvableFuture)>(r0, r1);
+
+        interfaceinvoke $r3.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable)>($r2);
+
+        return r1;
+    }
+
+    public java.util.List getShortcuts() throws java.lang.Exception
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$4 $r1;
+        java.util.concurrent.ExecutorService $r2;
+        java.util.concurrent.Future $r3;
+        java.lang.Object $r4;
+        java.util.List $r5;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        $r2 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService>;
+
+        $r1 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$4;
+
+        specialinvoke $r1.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$4: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl)>(r0);
+
+        $r3 = interfaceinvoke $r2.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r1);
+
+        $r4 = interfaceinvoke $r3.<java.util.concurrent.Future: java.lang.Object get()>();
+
+        $r5 = (java.util.List) $r4;
+
+        return $r5;
+    }
+
+    public androidx.core.graphics.drawable.IconCompat getShortcutIcon(java.lang.String) throws java.lang.Exception
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        java.lang.String r1, $r8, $r9, $r16;
+        androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer r2;
+        java.lang.Throwable r3, $r19;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$5 $r4;
+        java.util.concurrent.ExecutorService $r5, $r11;
+        java.util.concurrent.Future $r6, $r12;
+        java.lang.Object $r7, $r13;
+        boolean $z0, $z1;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$6 $r10;
+        android.content.Context $r14, $r17;
+        android.content.res.Resources $r15;
+        androidx.core.graphics.drawable.IconCompat $r18, $r21;
+        int i0;
+        android.graphics.Bitmap r20;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r5 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService>;
+
+        $r4 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$5;
+
+        specialinvoke $r4.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$5: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,java.lang.String)>(r0, r1);
+
+        $r6 = interfaceinvoke $r5.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r4);
+
+        $r7 = interfaceinvoke $r6.<java.util.concurrent.Future: java.lang.Object get()>();
+
+        r2 = (androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer) $r7;
+
+        if r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r8 = r2.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: java.lang.String mResourceName>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r8);
+
+        if $z0 != 0 goto label6;
+
+        i0 = 0;
+
+     label2:
+        $r14 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: android.content.Context mContext>;
+
+        $r15 = virtualinvoke $r14.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r16 = r2.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: java.lang.String mResourceName>;
+
+        i0 = virtualinvoke $r15.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>($r16, null, null);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r19 := @caughtexception;
+
+        r3 = $r19;
+
+     label5:
+        if i0 == 0 goto label6;
+
+        $r17 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: android.content.Context mContext>;
+
+        $r18 = staticinvoke <androidx.core.graphics.drawable.IconCompat: androidx.core.graphics.drawable.IconCompat createWithResource(android.content.Context,int)>($r17, i0);
+
+        return $r18;
+
+     label6:
+        $r9 = r2.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: java.lang.String mBitmapPath>;
+
+        $z1 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r9);
+
+        if $z1 != 0 goto label9;
+
+        $r11 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mDiskIoService>;
+
+        $r10 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$6;
+
+        specialinvoke $r10.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$6: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer)>(r0, r2);
+
+        $r12 = interfaceinvoke $r11.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r10);
+
+        $r13 = interfaceinvoke $r12.<java.util.concurrent.Future: java.lang.Object get()>();
+
+        r20 = (android.graphics.Bitmap) $r13;
+
+        if r20 == null goto label7;
+
+        $r21 = staticinvoke <androidx.core.graphics.drawable.IconCompat: androidx.core.graphics.drawable.IconCompat createWithBitmap(android.graphics.Bitmap)>(r20);
+
+        goto label8;
+
+     label7:
+        $r21 = null;
+
+     label8:
+        return $r21;
+
+     label9:
+        return null;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+    }
+
+    void deleteDanglingBitmaps(java.util.List)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        java.util.List r1;
+        java.util.ArrayList r2, $r4;
+        java.io.File r3, $r5;
+        boolean $z0, $z1, $z3;
+        java.lang.String $r6, $r8, $r9;
+        java.lang.Object $r7;
+        java.util.Iterator r10;
+        androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer r11;
+        java.io.File[] r12;
+        int i0, i1;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: java.util.List;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r2 = $r4;
+
+        r10 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r10.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = interfaceinvoke r10.<java.util.Iterator: java.lang.Object next()>();
+
+        r11 = (androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer) $r7;
+
+        $r8 = r11.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: java.lang.String mBitmapPath>;
+
+        $z3 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r8);
+
+        if $z3 != 0 goto label2;
+
+        $r9 = r11.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: java.lang.String mBitmapPath>;
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r9);
+
+     label2:
+        goto label1;
+
+     label3:
+        $r5 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.io.File mBitmapsDir>;
+
+        r12 = virtualinvoke $r5.<java.io.File: java.io.File[] listFiles()>();
+
+        i0 = lengthof r12;
+
+        i1 = 0;
+
+     label4:
+        if i1 >= i0 goto label6;
+
+        r3 = r12[i1];
+
+        $r6 = virtualinvoke r3.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $z1 = interfaceinvoke r2.<java.util.List: boolean contains(java.lang.Object)>($r6);
+
+        if $z1 != 0 goto label5;
+
+        virtualinvoke r3.<java.io.File: boolean delete()>();
+
+     label5:
+        i1 = i1 + 1;
+
+        goto label4;
+
+     label6:
+        return;
+    }
+
+    public com.google.common.util.concurrent.ListenableFuture addShortcuts(java.util.List)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        java.util.List r1;
+        java.util.ArrayList r2, $r4;
+        androidx.core.content.pm.ShortcutInfoCompat r3, $r10;
+        int $i0;
+        boolean $z0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$7 $r5;
+        java.util.concurrent.ExecutorService $r6;
+        java.lang.Object $r8;
+        androidx.core.content.pm.ShortcutInfoCompat$Builder $r9;
+        java.util.Iterator r11;
+        androidx.concurrent.futures.ResolvableFuture r12;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: java.util.List;
+
+        $r4 = new java.util.ArrayList;
+
+        $i0 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(int)>($i0);
+
+        r2 = $r4;
+
+        r11 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r11.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r11.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.core.content.pm.ShortcutInfoCompat) $r8;
+
+        $r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder;
+
+        specialinvoke $r9.<androidx.core.content.pm.ShortcutInfoCompat$Builder: void <init>(androidx.core.content.pm.ShortcutInfoCompat)>(r3);
+
+        $r10 = virtualinvoke $r9.<androidx.core.content.pm.ShortcutInfoCompat$Builder: androidx.core.content.pm.ShortcutInfoCompat build()>();
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r10);
+
+        goto label1;
+
+     label2:
+        r12 = staticinvoke <androidx.concurrent.futures.ResolvableFuture: androidx.concurrent.futures.ResolvableFuture create()>();
+
+        $r6 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService>;
+
+        $r5 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$7;
+
+        specialinvoke $r5.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,java.util.List,androidx.concurrent.futures.ResolvableFuture)>(r0, r2, r12);
+
+        interfaceinvoke $r6.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable)>($r5);
+
+        return r12;
+    }
+
+    com.google.common.util.concurrent.ListenableFuture scheduleBitmapSaving(android.graphics.Bitmap, java.lang.String)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        android.graphics.Bitmap r1;
+        java.lang.String r2;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$8 $r3;
+        com.google.common.util.concurrent.ListenableFuture $r4;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: android.graphics.Bitmap;
+
+        r2 := @parameter1: java.lang.String;
+
+        $r3 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$8;
+
+        specialinvoke $r3.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,android.graphics.Bitmap,java.lang.String)>(r0, r1, r2);
+
+        $r4 = specialinvoke r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: com.google.common.util.concurrent.ListenableFuture submitDiskOperation(java.lang.Runnable)>($r3);
+
+        return $r4;
+    }
+
+    private com.google.common.util.concurrent.ListenableFuture submitDiskOperation(java.lang.Runnable)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        java.lang.Runnable r1;
+        androidx.concurrent.futures.ResolvableFuture r2;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$9 $r3;
+        java.util.concurrent.ExecutorService $r4;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        r2 = staticinvoke <androidx.concurrent.futures.ResolvableFuture: androidx.concurrent.futures.ResolvableFuture create()>();
+
+        $r4 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mDiskIoService>;
+
+        $r3 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$9;
+
+        specialinvoke $r3.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,androidx.concurrent.futures.ResolvableFuture,java.lang.Runnable)>(r0, r2, r1);
+
+        interfaceinvoke $r4.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable)>($r3);
+
+        return r2;
+    }
+
+    void scheduleSyncCurrentState(androidx.concurrent.futures.ResolvableFuture)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        androidx.concurrent.futures.ResolvableFuture r1;
+        java.util.ArrayList r2, $r4;
+        com.google.common.util.concurrent.ListenableFuture r3;
+        java.util.Map $r5;
+        java.util.Collection $r6;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$10 $r7;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$11 $r8;
+        java.util.concurrent.ExecutorService $r9;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: androidx.concurrent.futures.ResolvableFuture;
+
+        $r4 = new java.util.ArrayList;
+
+        $r5 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.util.Collection values()>();
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(java.util.Collection)>($r6);
+
+        r2 = $r4;
+
+        $r7 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$10;
+
+        specialinvoke $r7.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$10: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,java.util.List)>(r0, r2);
+
+        r3 = specialinvoke r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: com.google.common.util.concurrent.ListenableFuture submitDiskOperation(java.lang.Runnable)>($r7);
+
+        $r8 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$11;
+
+        specialinvoke $r8.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl,com.google.common.util.concurrent.ListenableFuture,androidx.concurrent.futures.ResolvableFuture)>(r0, r3, r1);
+
+        $r9 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService>;
+
+        interfaceinvoke r3.<com.google.common.util.concurrent.ListenableFuture: void addListener(java.lang.Runnable,java.util.concurrent.Executor)>($r8, $r9);
+
+        return;
+    }
+
+    androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer containerFrom(androidx.core.content.pm.ShortcutInfoCompat)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        androidx.core.content.pm.ShortcutInfoCompat r1, r3;
+        androidx.core.graphics.drawable.IconCompat r2;
+        int $i0, $i1;
+        android.content.Context $r4;
+        android.content.res.Resources $r5;
+        java.io.File $r6, $r7;
+        java.util.UUID $r8;
+        java.lang.String $r9, r10, r11;
+        androidx.core.content.pm.ShortcutInfoCompat$Builder $r12, $r13;
+        androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer $r14;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: androidx.core.content.pm.ShortcutInfoCompat;
+
+        r10 = null;
+
+        r11 = null;
+
+        r2 = virtualinvoke r1.<androidx.core.content.pm.ShortcutInfoCompat: androidx.core.graphics.drawable.IconCompat getIcon()>();
+
+        if r2 == null goto label3;
+
+        $i0 = virtualinvoke r2.<androidx.core.graphics.drawable.IconCompat: int getType()>();
+
+        tableswitch($i0)
+        {
+            case -1: goto label3;
+            case 0: goto label3;
+            case 1: goto label2;
+            case 2: goto label1;
+            case 3: goto label3;
+            case 4: goto label3;
+            case 5: goto label2;
+            case 6: goto label3;
+            default: goto label3;
+        };
+
+     label1:
+        $r4 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: android.content.Context mContext>;
+
+        $r5 = virtualinvoke $r4.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $i1 = virtualinvoke r2.<androidx.core.graphics.drawable.IconCompat: int getResId()>();
+
+        r10 = virtualinvoke $r5.<android.content.res.Resources: java.lang.String getResourceName(int)>($i1);
+
+        goto label3;
+
+     label2:
+        $r6 = new java.io.File;
+
+        $r7 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.io.File mBitmapsDir>;
+
+        $r8 = staticinvoke <java.util.UUID: java.util.UUID randomUUID()>();
+
+        $r9 = virtualinvoke $r8.<java.util.UUID: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.io.File: void <init>(java.io.File,java.lang.String)>($r7, $r9);
+
+        r11 = virtualinvoke $r6.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        goto label3;
+
+     label3:
+        $r12 = new androidx.core.content.pm.ShortcutInfoCompat$Builder;
+
+        specialinvoke $r12.<androidx.core.content.pm.ShortcutInfoCompat$Builder: void <init>(androidx.core.content.pm.ShortcutInfoCompat)>(r1);
+
+        $r13 = virtualinvoke $r12.<androidx.core.content.pm.ShortcutInfoCompat$Builder: androidx.core.content.pm.ShortcutInfoCompat$Builder setIcon(androidx.core.graphics.drawable.IconCompat)>(null);
+
+        r3 = virtualinvoke $r13.<androidx.core.content.pm.ShortcutInfoCompat$Builder: androidx.core.content.pm.ShortcutInfoCompat build()>();
+
+        $r14 = new androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer;
+
+        specialinvoke $r14.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: void <init>(androidx.core.content.pm.ShortcutInfoCompat,java.lang.String,java.lang.String)>(r3, r10, r11);
+
+        return $r14;
+    }
+
+    void saveBitmap(android.graphics.Bitmap, java.lang.String)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        android.graphics.Bitmap r1;
+        java.lang.String r2, $r12, $r22;
+        java.lang.Throwable r3, r4, $r15, $r16, $r17, r24;
+        boolean $z0, $z1;
+        java.io.FileOutputStream $r5, r23;
+        java.io.File $r6;
+        android.graphics.Bitmap$CompressFormat $r7;
+        java.lang.RuntimeException $r8, $r18;
+        java.lang.StringBuilder $r9, $r10, $r11, $r19, $r20, $r21;
+        java.lang.IllegalArgumentException $r13, $r14;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: android.graphics.Bitmap;
+
+        r2 := @parameter1: java.lang.String;
+
+        if r1 != null goto label01;
+
+        $r14 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r14.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("bitmap is null");
+
+        throw $r14;
+
+     label01:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>(r2);
+
+        if $z0 == 0 goto label02;
+
+        $r13 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r13.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("path is empty");
+
+        throw $r13;
+
+     label02:
+        $r5 = new java.io.FileOutputStream;
+
+        $r6 = new java.io.File;
+
+        specialinvoke $r6.<java.io.File: void <init>(java.lang.String)>(r2);
+
+        specialinvoke $r5.<java.io.FileOutputStream: void <init>(java.io.File)>($r6);
+
+        r23 = $r5;
+
+     label03:
+        $r7 = <android.graphics.Bitmap$CompressFormat: android.graphics.Bitmap$CompressFormat PNG>;
+
+        $z1 = virtualinvoke r1.<android.graphics.Bitmap: boolean compress(android.graphics.Bitmap$CompressFormat,int,java.io.OutputStream)>($r7, 100, r23);
+
+        if $z1 != 0 goto label04;
+
+        staticinvoke <android.util.Log: int wtf(java.lang.String,java.lang.String)>("ShortcutInfoCompatSaver", "Unable to compress bitmap");
+
+        $r8 = new java.lang.RuntimeException;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to compress bitmap for saving ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.lang.RuntimeException: void <init>(java.lang.String)>($r12);
+
+        throw $r8;
+
+     label04:
+        virtualinvoke r23.<java.io.FileOutputStream: void close()>();
+
+        goto label10;
+
+     label05:
+        $r15 := @caughtexception;
+
+        r3 = $r15;
+
+     label06:
+        virtualinvoke r23.<java.io.FileOutputStream: void close()>();
+
+     label07:
+        goto label09;
+
+     label08:
+        $r16 := @caughtexception;
+
+        r4 = $r16;
+
+        virtualinvoke r3.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>(r4);
+
+     label09:
+        throw r3;
+
+     label10:
+        goto label12;
+
+     label11:
+        $r17 := @caughtexception;
+
+        r24 = $r17;
+
+        staticinvoke <android.util.Log: int wtf(java.lang.String,java.lang.String,java.lang.Throwable)>("ShortcutInfoCompatSaver", "Unable to write bitmap to file", r24);
+
+        $r18 = new java.lang.RuntimeException;
+
+        $r19 = new java.lang.StringBuilder;
+
+        specialinvoke $r19.<java.lang.StringBuilder: void <init>()>();
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to write bitmap to file ");
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r18.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>($r22, r24);
+
+        throw $r18;
+
+     label12:
+        return;
+
+        catch java.lang.Throwable from label03 to label04 with label05;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.io.IOException from label02 to label10 with label11;
+        catch java.lang.RuntimeException from label02 to label10 with label11;
+        catch java.lang.OutOfMemoryError from label02 to label10 with label11;
+    }
+
+    static boolean ensureDir(java.io.File)
+    {
+        java.io.File r0;
+        boolean $z0, $z1, $z2, $z3, $z4;
+
+        r0 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke r0.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label1;
+
+        $z2 = virtualinvoke r0.<java.io.File: boolean isDirectory()>();
+
+        if $z2 != 0 goto label1;
+
+        $z3 = virtualinvoke r0.<java.io.File: boolean delete()>();
+
+        if $z3 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $z4 = virtualinvoke r0.<java.io.File: boolean exists()>();
+
+        if $z4 != 0 goto label2;
+
+        $z1 = virtualinvoke r0.<java.io.File: boolean mkdirs()>();
+
+        return $z1;
+
+     label2:
+        return 1;
+    }
+
+    public volatile java.lang.Object removeAllShortcuts()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        com.google.common.util.concurrent.ListenableFuture $r1;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        $r1 = virtualinvoke r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: com.google.common.util.concurrent.ListenableFuture removeAllShortcuts()>();
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object removeShortcuts(java.util.List)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        java.util.List r1;
+        com.google.common.util.concurrent.ListenableFuture $r2;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: java.util.List;
+
+        $r2 = virtualinvoke r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: com.google.common.util.concurrent.ListenableFuture removeShortcuts(java.util.List)>(r1);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object addShortcuts(java.util.List)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r0;
+        java.util.List r1;
+        com.google.common.util.concurrent.ListenableFuture $r2;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r1 := @parameter0: java.util.List;
+
+        $r2 = virtualinvoke r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: com.google.common.util.concurrent.ListenableFuture addShortcuts(java.util.List)>(r1);
+
+        return $r2;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Object $r0;
+
+        $r0 = new java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        <androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.lang.Object GET_INSTANCE_LOCK> = $r0;
+
+        return;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$1
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: java.io.File val$workingDirectory>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, java.io.File)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$1 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        java.io.File r2;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$1;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: java.io.File;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: java.io.File val$workingDirectory> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$1 r0;
+        java.lang.Throwable r1, $r17;
+        java.io.File $r2, $r4, $r9;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r3, $r5, $r6, $r7, $r13, $r15;
+        android.content.Context $r8;
+        java.util.Map $r10, $r11, $r14;
+        java.util.ArrayList $r12;
+        java.util.Collection $r16;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$1;
+
+     label1:
+        $r2 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: java.io.File val$workingDirectory>;
+
+        staticinvoke <androidx.sharetarget.ShortcutInfoCompatSaverImpl: boolean ensureDir(java.io.File)>($r2);
+
+        $r3 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r4 = $r3.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.io.File mBitmapsDir>;
+
+        staticinvoke <androidx.sharetarget.ShortcutInfoCompatSaverImpl: boolean ensureDir(java.io.File)>($r4);
+
+        $r5 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r10 = $r5.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap>;
+
+        $r6 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r9 = $r6.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.io.File mTargetsXmlFile>;
+
+        $r7 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r8 = $r7.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: android.content.Context mContext>;
+
+        $r11 = staticinvoke <androidx.sharetarget.ShortcutsInfoSerialization: java.util.Map loadFromXml(java.io.File,android.content.Context)>($r9, $r8);
+
+        interfaceinvoke $r10.<java.util.Map: void putAll(java.util.Map)>($r11);
+
+        $r15 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r12 = new java.util.ArrayList;
+
+        $r13 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r14 = $r13.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap>;
+
+        $r16 = interfaceinvoke $r14.<java.util.Map: java.util.Collection values()>();
+
+        specialinvoke $r12.<java.util.ArrayList: void <init>(java.util.Collection)>($r16);
+
+        virtualinvoke $r15.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: void deleteDanglingBitmaps(java.util.List)>($r12);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r17 := @caughtexception;
+
+        r1 = $r17;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ShortcutInfoCompatSaver", "ShortcutInfoCompatSaver started with an exceptions ", r1);
+
+     label4:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$10
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$10: java.util.List val$containers>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$10: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, java.util.List)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$10 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        java.util.List r2;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$10;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: java.util.List;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$10: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$10: java.util.List val$containers> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$10 r0;
+        java.util.List $r1, $r5;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r2, $r3;
+        java.io.File $r4;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$10;
+
+        $r2 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$10: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r1 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$10: java.util.List val$containers>;
+
+        virtualinvoke $r2.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: void deleteDanglingBitmaps(java.util.List)>($r1);
+
+        $r5 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$10: java.util.List val$containers>;
+
+        $r3 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$10: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r4 = $r3.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.io.File mTargetsXmlFile>;
+
+        staticinvoke <androidx.sharetarget.ShortcutsInfoSerialization: void saveAsXml(java.util.List,java.io.File)>($r5, $r4);
+
+        return;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$11
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: com.google.common.util.concurrent.ListenableFuture val$future>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: androidx.concurrent.futures.ResolvableFuture val$output>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, com.google.common.util.concurrent.ListenableFuture, androidx.concurrent.futures.ResolvableFuture)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$11 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        com.google.common.util.concurrent.ListenableFuture r2;
+        androidx.concurrent.futures.ResolvableFuture r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$11;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: com.google.common.util.concurrent.ListenableFuture;
+
+        r3 := @parameter2: androidx.concurrent.futures.ResolvableFuture;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: com.google.common.util.concurrent.ListenableFuture val$future> = r2;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: androidx.concurrent.futures.ResolvableFuture val$output> = r3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$11 r0;
+        java.lang.Throwable r1, $r5;
+        com.google.common.util.concurrent.ListenableFuture $r2;
+        androidx.concurrent.futures.ResolvableFuture $r4, $r6;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$11;
+
+     label1:
+        $r2 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: com.google.common.util.concurrent.ListenableFuture val$future>;
+
+        interfaceinvoke $r2.<com.google.common.util.concurrent.ListenableFuture: java.lang.Object get()>();
+
+        $r4 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: androidx.concurrent.futures.ResolvableFuture val$output>;
+
+        virtualinvoke $r4.<androidx.concurrent.futures.ResolvableFuture: boolean set(java.lang.Object)>(null);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r1 = $r5;
+
+        $r6 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$11: androidx.concurrent.futures.ResolvableFuture val$output>;
+
+        virtualinvoke $r6.<androidx.concurrent.futures.ResolvableFuture: boolean setException(java.lang.Throwable)>(r1);
+
+     label4:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$2
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: java.util.List val$idList>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: androidx.concurrent.futures.ResolvableFuture val$result>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, java.util.List, androidx.concurrent.futures.ResolvableFuture)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$2 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        java.util.List r2;
+        androidx.concurrent.futures.ResolvableFuture r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$2;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: java.util.List;
+
+        r3 := @parameter2: androidx.concurrent.futures.ResolvableFuture;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: java.util.List val$idList> = r2;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: androidx.concurrent.futures.ResolvableFuture val$result> = r3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$2 r0;
+        java.util.Iterator r1;
+        java.lang.String r2;
+        com.google.common.util.concurrent.ListenableFuture r3;
+        java.util.List $r4;
+        boolean $z0;
+        androidx.concurrent.futures.ResolvableFuture $r5;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r6, $r8, $r11;
+        java.lang.Object $r7, $r13;
+        java.util.Map $r9, $r12;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$2;
+
+        $r4 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: java.util.List val$idList>;
+
+        r1 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (java.lang.String) $r7;
+
+        $r8 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r9 = $r8.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap>;
+
+        interfaceinvoke $r9.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r2);
+
+        $r11 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r12 = $r11.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mScheduledBitmapTasks>;
+
+        $r13 = interfaceinvoke $r12.<java.util.Map: java.lang.Object remove(java.lang.Object)>(r2);
+
+        r3 = (com.google.common.util.concurrent.ListenableFuture) $r13;
+
+        if r3 == null goto label2;
+
+        interfaceinvoke r3.<com.google.common.util.concurrent.ListenableFuture: boolean cancel(boolean)>(0);
+
+     label2:
+        goto label1;
+
+     label3:
+        $r6 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r5 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$2: androidx.concurrent.futures.ResolvableFuture val$result>;
+
+        virtualinvoke $r6.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: void scheduleSyncCurrentState(androidx.concurrent.futures.ResolvableFuture)>($r5);
+
+        return;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$3
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: androidx.concurrent.futures.ResolvableFuture val$result>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, androidx.concurrent.futures.ResolvableFuture)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$3 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        androidx.concurrent.futures.ResolvableFuture r2;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$3;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: androidx.concurrent.futures.ResolvableFuture;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: androidx.concurrent.futures.ResolvableFuture val$result> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$3 r0;
+        java.util.Iterator r1;
+        com.google.common.util.concurrent.ListenableFuture r2;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r3, $r5, $r8, $r11;
+        java.util.Map $r4, $r6, $r9;
+        java.util.Collection $r7;
+        boolean $z0;
+        androidx.concurrent.futures.ResolvableFuture $r10;
+        java.lang.Object $r12;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$3;
+
+        $r3 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r4 = $r3.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap>;
+
+        interfaceinvoke $r4.<java.util.Map: void clear()>();
+
+        $r5 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r6 = $r5.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mScheduledBitmapTasks>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.util.Collection values()>();
+
+        r1 = interfaceinvoke $r7.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r12 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (com.google.common.util.concurrent.ListenableFuture) $r12;
+
+        interfaceinvoke r2.<com.google.common.util.concurrent.ListenableFuture: boolean cancel(boolean)>(0);
+
+        goto label1;
+
+     label2:
+        $r8 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r9 = $r8.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mScheduledBitmapTasks>;
+
+        interfaceinvoke $r9.<java.util.Map: void clear()>();
+
+        $r11 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r10 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$3: androidx.concurrent.futures.ResolvableFuture val$result>;
+
+        virtualinvoke $r11.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: void scheduleSyncCurrentState(androidx.concurrent.futures.ResolvableFuture)>($r10);
+
+        return;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$4
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$4: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$4 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$4;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$4: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.util.ArrayList call()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$4 r0;
+        java.util.ArrayList r1, $r4;
+        java.util.Iterator r2;
+        androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer r3;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r5;
+        java.util.Map $r6;
+        java.util.Collection $r7;
+        boolean $z0;
+        java.lang.Object $r8;
+        androidx.core.content.pm.ShortcutInfoCompat$Builder $r9;
+        androidx.core.content.pm.ShortcutInfoCompat $r10, $r11;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$4;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r1 = $r4;
+
+        $r5 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$4: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r6 = $r5.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.util.Collection values()>();
+
+        r2 = interfaceinvoke $r7.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer) $r8;
+
+        $r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder;
+
+        $r10 = r3.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: androidx.core.content.pm.ShortcutInfoCompat mShortcutInfo>;
+
+        specialinvoke $r9.<androidx.core.content.pm.ShortcutInfoCompat$Builder: void <init>(androidx.core.content.pm.ShortcutInfoCompat)>($r10);
+
+        $r11 = virtualinvoke $r9.<androidx.core.content.pm.ShortcutInfoCompat$Builder: androidx.core.content.pm.ShortcutInfoCompat build()>();
+
+        virtualinvoke r1.<java.util.ArrayList: boolean add(java.lang.Object)>($r11);
+
+        goto label1;
+
+     label2:
+        return r1;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$4 r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$4;
+
+        $r1 = virtualinvoke r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$4: java.util.ArrayList call()>();
+
+        return $r1;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$5
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$5: java.lang.String val$shortcutId>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$5: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, java.lang.String)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$5 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        java.lang.String r2;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$5;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: java.lang.String;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$5: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$5: java.lang.String val$shortcutId> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer call()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$5 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r1;
+        java.lang.String $r2;
+        java.util.Map $r3;
+        java.lang.Object $r4;
+        androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer $r5;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$5;
+
+        $r1 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$5: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r3 = $r1.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap>;
+
+        $r2 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$5: java.lang.String val$shortcutId>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.lang.Object get(java.lang.Object)>($r2);
+
+        $r5 = (androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer) $r4;
+
+        return $r5;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$5 r0;
+        androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer $r1;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$5;
+
+        $r1 = virtualinvoke r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$5: androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer call()>();
+
+        return $r1;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$6
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$6: androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer val$container>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$6: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$6 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer r2;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$6;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$6: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$6: androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer val$container> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public android.graphics.Bitmap call()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$6 r0;
+        androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer $r1;
+        java.lang.String $r2;
+        android.graphics.Bitmap $r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$6;
+
+        $r1 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$6: androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer val$container>;
+
+        $r2 = $r1.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: java.lang.String mBitmapPath>;
+
+        $r3 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeFile(java.lang.String)>($r2);
+
+        return $r3;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$6 r0;
+        android.graphics.Bitmap $r1;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$6;
+
+        $r1 = virtualinvoke r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$6: android.graphics.Bitmap call()>();
+
+        return $r1;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: java.lang.String val$id>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: com.google.common.util.concurrent.ListenableFuture val$future>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl$7 this$1>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl$7, java.lang.String, com.google.common.util.concurrent.ListenableFuture)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$7 r1;
+        java.lang.String r2;
+        com.google.common.util.concurrent.ListenableFuture r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl$7;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: com.google.common.util.concurrent.ListenableFuture;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl$7 this$1> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: java.lang.String val$id> = r2;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: com.google.common.util.concurrent.ListenableFuture val$future> = r3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1 r0;
+        java.lang.Throwable r1, $r10;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$7 $r2, $r11;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r3;
+        java.lang.String $r4;
+        java.util.Map $r5;
+        com.google.common.util.concurrent.ListenableFuture $r7, $r8;
+        boolean $z0;
+        androidx.concurrent.futures.ResolvableFuture $r12;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1;
+
+        $r2 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl$7 this$1>;
+
+        $r3 = $r2.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r5 = $r3.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mScheduledBitmapTasks>;
+
+        $r4 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: java.lang.String val$id>;
+
+        interfaceinvoke $r5.<java.util.Map: java.lang.Object remove(java.lang.Object)>($r4);
+
+        $r7 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: com.google.common.util.concurrent.ListenableFuture val$future>;
+
+        $z0 = interfaceinvoke $r7.<com.google.common.util.concurrent.ListenableFuture: boolean isCancelled()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r8 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: com.google.common.util.concurrent.ListenableFuture val$future>;
+
+        interfaceinvoke $r8.<com.google.common.util.concurrent.ListenableFuture: java.lang.Object get()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r10 := @caughtexception;
+
+        r1 = $r10;
+
+        $r11 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: androidx.sharetarget.ShortcutInfoCompatSaverImpl$7 this$1>;
+
+        $r12 = $r11.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.concurrent.futures.ResolvableFuture val$result>;
+
+        virtualinvoke $r12.<androidx.concurrent.futures.ResolvableFuture: boolean setException(java.lang.Throwable)>(r1);
+
+     label4:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$7
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: java.util.List val$copy>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.concurrent.futures.ResolvableFuture val$result>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, java.util.List, androidx.concurrent.futures.ResolvableFuture)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$7 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        java.util.List r2;
+        androidx.concurrent.futures.ResolvableFuture r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$7;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: java.util.List;
+
+        r3 := @parameter2: androidx.concurrent.futures.ResolvableFuture;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: java.util.List val$copy> = r2;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.concurrent.futures.ResolvableFuture val$result> = r3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$7 r0;
+        java.util.Iterator r1;
+        androidx.core.content.pm.ShortcutInfoCompat r2;
+        java.util.Set r3;
+        androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer r4;
+        androidx.core.graphics.drawable.IconCompat r5;
+        android.graphics.Bitmap r6, $r27;
+        java.lang.String r7, $r15, $r19;
+        com.google.common.util.concurrent.ListenableFuture r8, r9;
+        java.util.List $r10;
+        androidx.concurrent.futures.ResolvableFuture $r11;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r12, $r14, $r16, $r20, $r21, $r25;
+        java.lang.Object $r13, $r23;
+        boolean $z0, $z2;
+        java.util.Map $r17, $r22;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1 $r24;
+        java.util.concurrent.ExecutorService $r26;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$7;
+
+        $r10 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: java.util.List val$copy>;
+
+        r1 = interfaceinvoke $r10.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z2 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label7;
+
+        $r13 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (androidx.core.content.pm.ShortcutInfoCompat) $r13;
+
+        r3 = virtualinvoke r2.<androidx.core.content.pm.ShortcutInfoCompat: java.util.Set getCategories()>();
+
+        if r3 == null goto label1;
+
+        $z0 = interfaceinvoke r3.<java.util.Set: boolean isEmpty()>();
+
+        if $z0 == 0 goto label2;
+
+        goto label1;
+
+     label2:
+        $r14 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        r4 = virtualinvoke $r14.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer containerFrom(androidx.core.content.pm.ShortcutInfoCompat)>(r2);
+
+        r5 = virtualinvoke r2.<androidx.core.content.pm.ShortcutInfoCompat: androidx.core.graphics.drawable.IconCompat getIcon()>();
+
+        $r15 = r4.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: java.lang.String mBitmapPath>;
+
+        if $r15 == null goto label3;
+
+        $r27 = virtualinvoke r5.<androidx.core.graphics.drawable.IconCompat: android.graphics.Bitmap getBitmap()>();
+
+        goto label4;
+
+     label3:
+        $r27 = null;
+
+     label4:
+        r6 = $r27;
+
+        r7 = virtualinvoke r2.<androidx.core.content.pm.ShortcutInfoCompat: java.lang.String getId()>();
+
+        $r16 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r17 = $r16.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mShortcutsMap>;
+
+        interfaceinvoke $r17.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r7, r4);
+
+        if r6 == null goto label6;
+
+        $r20 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r19 = r4.<androidx.sharetarget.ShortcutsInfoSerialization$ShortcutContainer: java.lang.String mBitmapPath>;
+
+        r8 = virtualinvoke $r20.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: com.google.common.util.concurrent.ListenableFuture scheduleBitmapSaving(android.graphics.Bitmap,java.lang.String)>(r6, $r19);
+
+        $r21 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r22 = $r21.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.Map mScheduledBitmapTasks>;
+
+        $r23 = interfaceinvoke $r22.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r7, r8);
+
+        r9 = (com.google.common.util.concurrent.ListenableFuture) $r23;
+
+        if r9 == null goto label5;
+
+        interfaceinvoke r9.<com.google.common.util.concurrent.ListenableFuture: boolean cancel(boolean)>(0);
+
+     label5:
+        $r24 = new androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1;
+
+        specialinvoke $r24.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7$1: void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl$7,java.lang.String,com.google.common.util.concurrent.ListenableFuture)>(r0, r7, r8);
+
+        $r25 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r26 = $r25.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: java.util.concurrent.ExecutorService mCacheUpdateService>;
+
+        interfaceinvoke r8.<com.google.common.util.concurrent.ListenableFuture: void addListener(java.lang.Runnable,java.util.concurrent.Executor)>($r24, $r26);
+
+     label6:
+        goto label1;
+
+     label7:
+        $r12 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r11 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$7: androidx.concurrent.futures.ResolvableFuture val$result>;
+
+        virtualinvoke $r12.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: void scheduleSyncCurrentState(androidx.concurrent.futures.ResolvableFuture)>($r11);
+
+        return;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$8
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: android.graphics.Bitmap val$bitmap>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: java.lang.String val$path>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, android.graphics.Bitmap, java.lang.String)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$8 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        android.graphics.Bitmap r2;
+        java.lang.String r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$8;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: android.graphics.Bitmap;
+
+        r3 := @parameter2: java.lang.String;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: android.graphics.Bitmap val$bitmap> = r2;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: java.lang.String val$path> = r3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$8 r0;
+        java.lang.String $r1;
+        android.graphics.Bitmap $r2;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl $r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$8;
+
+        $r3 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>;
+
+        $r2 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: android.graphics.Bitmap val$bitmap>;
+
+        $r1 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$8: java.lang.String val$path>;
+
+        virtualinvoke $r3.<androidx.sharetarget.ShortcutInfoCompatSaverImpl: void saveBitmap(android.graphics.Bitmap,java.lang.String)>($r2, $r1);
+
+        return;
+    }
+
+androidx.sharetarget.ShortcutInfoCompatSaverImpl$9
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: androidx.concurrent.futures.ResolvableFuture val$result>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: java.lang.Runnable val$runnable>
+<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0>
+    void <init>(androidx.sharetarget.ShortcutInfoCompatSaverImpl, androidx.concurrent.futures.ResolvableFuture, java.lang.Runnable)
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$9 r0;
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl r1;
+        androidx.concurrent.futures.ResolvableFuture r2;
+        java.lang.Runnable r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$9;
+
+        r1 := @parameter0: androidx.sharetarget.ShortcutInfoCompatSaverImpl;
+
+        r2 := @parameter1: androidx.concurrent.futures.ResolvableFuture;
+
+        r3 := @parameter2: java.lang.Runnable;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: androidx.sharetarget.ShortcutInfoCompatSaverImpl this$0> = r1;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: androidx.concurrent.futures.ResolvableFuture val$result> = r2;
+
+        r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: java.lang.Runnable val$runnable> = r3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        androidx.sharetarget.ShortcutInfoCompatSaverImpl$9 r0;
+        java.lang.Throwable r1, $r5;
+        androidx.concurrent.futures.ResolvableFuture $r2, $r4, $r6;
+        boolean $z0;
+        java.lang.Runnable $r3;
+
+        r0 := @this: androidx.sharetarget.ShortcutInfoCompatSaverImpl$9;
+
+        $r2 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: androidx.concurrent.futures.ResolvableFuture val$result>;
+
+        $z0 = virtualinvoke $r2.<androidx.concurrent.futures.ResolvableFuture: boolean isCancelled()>();
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r3 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: java.lang.Runnable val$runnable>;
+
+        interfaceinvoke $r3.<java.lang.Runnable: void run()>();
+
+        $r4 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: androidx.concurrent.futures.ResolvableFuture val$result>;
+
+        virtualinvoke $r4.<androidx.concurrent.futures.ResolvableFuture: boolean set(java.lang.Object)>(null);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r1 = $r5;
+
+        $r6 = r0.<androidx.sharetarget.ShortcutInfoCompatSaverImpl$9: androidx.concurrent.futures.ResolvableFuture val$result>;
+
+        virtualinvoke $r6.<androidx.concurrent.futures.ResolvableFuture: boolean setException(java.lang.Throwable)>(r1);
+
+     label4:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+

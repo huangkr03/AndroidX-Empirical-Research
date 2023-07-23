@@ -1,0 +1,176 @@
+android.support.test.internal.util.AndroidRunnerBuilderUtil
+    public void <init>()
+    {
+        android.support.test.internal.util.AndroidRunnerBuilderUtil r0;
+
+        r0 := @this: android.support.test.internal.util.AndroidRunnerBuilderUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static boolean isJUnit3Test(java.lang.Class)
+    {
+        java.lang.Class r0, $r1;
+        boolean $z0;
+
+        r0 := @parameter0: java.lang.Class;
+
+        $r1 = class "Ljunit/framework/TestCase;";
+
+        $z0 = virtualinvoke $r1.<java.lang.Class: boolean isAssignableFrom(java.lang.Class)>(r0);
+
+        return $z0;
+    }
+
+    public static boolean isJUnit3TestSuite(java.lang.Class)
+    {
+        java.lang.Class r0, $r1;
+        boolean $z0;
+
+        r0 := @parameter0: java.lang.Class;
+
+        $r1 = class "Ljunit/framework/TestSuite;";
+
+        $z0 = virtualinvoke $r1.<java.lang.Class: boolean isAssignableFrom(java.lang.Class)>(r0);
+
+        return $z0;
+    }
+
+    public static boolean hasSuiteMethod(java.lang.Class)
+    {
+        java.lang.Class r0;
+        java.lang.Throwable r1, $r4;
+        java.lang.Class[] $r2;
+
+        r0 := @parameter0: java.lang.Class;
+
+     label1:
+        $r2 = newarray (java.lang.Class)[0];
+
+        virtualinvoke r0.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>("suite", $r2);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+        return 0;
+
+     label4:
+        return 1;
+
+        catch java.lang.NoSuchMethodException from label1 to label2 with label3;
+    }
+
+    public static boolean hasJUnit3TestMethod(java.lang.Class)
+    {
+        java.lang.Class r0;
+        java.lang.reflect.Method[] r1;
+        int i0, i1;
+        java.lang.reflect.Method r2;
+        boolean $z0;
+
+        r0 := @parameter0: java.lang.Class;
+
+        r1 = virtualinvoke r0.<java.lang.Class: java.lang.reflect.Method[] getMethods()>();
+
+        i0 = lengthof r1;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label3;
+
+        r2 = r1[i1];
+
+        $z0 = staticinvoke <android.support.test.internal.util.AndroidRunnerBuilderUtil: boolean isPublicTestMethod(java.lang.reflect.Method)>(r2);
+
+        if $z0 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+    private static boolean isPublicTestMethod(java.lang.reflect.Method)
+    {
+        java.lang.reflect.Method r0;
+        boolean $z0, $z1, $z2;
+        int $i0;
+
+        r0 := @parameter0: java.lang.reflect.Method;
+
+        $z0 = staticinvoke <android.support.test.internal.util.AndroidRunnerBuilderUtil: boolean isTestMethod(java.lang.reflect.Method)>(r0);
+
+        if $z0 == 0 goto label1;
+
+        $i0 = virtualinvoke r0.<java.lang.reflect.Method: int getModifiers()>();
+
+        $z1 = staticinvoke <java.lang.reflect.Modifier: boolean isPublic(int)>($i0);
+
+        if $z1 == 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+
+    private static boolean isTestMethod(java.lang.reflect.Method)
+    {
+        java.lang.reflect.Method r0;
+        java.lang.Class[] $r1;
+        int $i0;
+        java.lang.String $r2;
+        boolean $z0, $z1, $z2;
+        java.lang.Class $r3, $r4;
+
+        r0 := @parameter0: java.lang.reflect.Method;
+
+        $r1 = virtualinvoke r0.<java.lang.reflect.Method: java.lang.Class[] getParameterTypes()>();
+
+        $i0 = lengthof $r1;
+
+        if $i0 != 0 goto label1;
+
+        $r2 = virtualinvoke r0.<java.lang.reflect.Method: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>("test");
+
+        if $z0 == 0 goto label1;
+
+        $r3 = virtualinvoke r0.<java.lang.reflect.Method: java.lang.Class getReturnType()>();
+
+        $r4 = <java.lang.Void: java.lang.Class TYPE>;
+
+        $z1 = virtualinvoke $r3.<java.lang.Object: boolean equals(java.lang.Object)>($r4);
+
+        if $z1 == 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+

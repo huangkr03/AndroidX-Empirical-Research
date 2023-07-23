@@ -1,0 +1,286 @@
+androidx.media3.extractor.metadata.icy.IcyDecoder
+<androidx.media3.extractor.metadata.icy.IcyDecoder: java.util.regex.Pattern METADATA_ELEMENT>
+<androidx.media3.extractor.metadata.icy.IcyDecoder: java.lang.String STREAM_KEY_NAME>
+<androidx.media3.extractor.metadata.icy.IcyDecoder: java.lang.String STREAM_KEY_URL>
+<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder utf8Decoder>
+<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder iso88591Decoder>
+    public void <init>()
+    {
+        androidx.media3.extractor.metadata.icy.IcyDecoder r0;
+        java.nio.charset.Charset $r1, $r3;
+        java.nio.charset.CharsetDecoder $r2, $r4;
+
+        r0 := @this: androidx.media3.extractor.metadata.icy.IcyDecoder;
+
+        specialinvoke r0.<androidx.media3.extractor.metadata.SimpleMetadataDecoder: void <init>()>();
+
+        $r1 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        $r2 = virtualinvoke $r1.<java.nio.charset.Charset: java.nio.charset.CharsetDecoder newDecoder()>();
+
+        r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder utf8Decoder> = $r2;
+
+        $r3 = <com.google.common.base.Charsets: java.nio.charset.Charset ISO_8859_1>;
+
+        $r4 = virtualinvoke $r3.<java.nio.charset.Charset: java.nio.charset.CharsetDecoder newDecoder()>();
+
+        r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder iso88591Decoder> = $r4;
+
+        return;
+    }
+
+    protected androidx.media3.common.Metadata decode(androidx.media3.extractor.metadata.MetadataInputBuffer, java.nio.ByteBuffer)
+    {
+        androidx.media3.extractor.metadata.icy.IcyDecoder r0;
+        androidx.media3.extractor.metadata.MetadataInputBuffer r1;
+        java.nio.ByteBuffer r2;
+        java.lang.String r3, r6, r7, r8, r17, r18;
+        byte[] r4;
+        java.util.regex.Matcher r5;
+        int $i0, $i1, i2;
+        java.util.regex.Pattern $r10;
+        boolean $z0, $z1, $z2;
+        java.lang.Object[] $r12, $r15;
+        byte b3;
+        androidx.media3.extractor.metadata.icy.IcyInfo r19, r21;
+        androidx.media3.common.Metadata r20, r22;
+        androidx.media3.common.Metadata$Entry[] r23, r24;
+
+        r0 := @this: androidx.media3.extractor.metadata.icy.IcyDecoder;
+
+        r1 := @parameter0: androidx.media3.extractor.metadata.MetadataInputBuffer;
+
+        r2 := @parameter1: java.nio.ByteBuffer;
+
+        r3 = specialinvoke r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.lang.String decodeToString(java.nio.ByteBuffer)>(r2);
+
+        $i0 = virtualinvoke r2.<java.nio.ByteBuffer: int limit()>();
+
+        r4 = newarray (byte)[$i0];
+
+        virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[])>(r4);
+
+        if r3 != null goto label1;
+
+        r20 = new androidx.media3.common.Metadata;
+
+        $r15 = newarray (androidx.media3.common.Metadata$Entry)[1];
+
+        r19 = new androidx.media3.extractor.metadata.icy.IcyInfo;
+
+        specialinvoke r19.<androidx.media3.extractor.metadata.icy.IcyInfo: void <init>(byte[],java.lang.String,java.lang.String)>(r4, null, null);
+
+        $r15[0] = r19;
+
+        r23 = (androidx.media3.common.Metadata$Entry[]) $r15;
+
+        specialinvoke r20.<androidx.media3.common.Metadata: void <init>(androidx.media3.common.Metadata$Entry[])>(r23);
+
+        return r20;
+
+     label1:
+        r17 = null;
+
+        r18 = null;
+
+        i2 = 0;
+
+        $r10 = <androidx.media3.extractor.metadata.icy.IcyDecoder: java.util.regex.Pattern METADATA_ELEMENT>;
+
+        r5 = virtualinvoke $r10.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r3);
+
+     label2:
+        $z0 = virtualinvoke r5.<java.util.regex.Matcher: boolean find(int)>(i2);
+
+        if $z0 == 0 goto label9;
+
+        r6 = virtualinvoke r5.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        r7 = virtualinvoke r5.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        if r6 == null goto label8;
+
+        r8 = staticinvoke <com.google.common.base.Ascii: java.lang.String toLowerCase(java.lang.String)>(r6);
+
+        b3 = -1;
+
+        $i1 = virtualinvoke r8.<java.lang.String: int hashCode()>();
+
+        lookupswitch($i1)
+        {
+            case -315603473: goto label4;
+            case 1646559960: goto label3;
+            default: goto label5;
+        };
+
+     label3:
+        $z1 = virtualinvoke r8.<java.lang.String: boolean equals(java.lang.Object)>("streamtitle");
+
+        if $z1 == 0 goto label5;
+
+        b3 = 0;
+
+        goto label5;
+
+     label4:
+        $z2 = virtualinvoke r8.<java.lang.String: boolean equals(java.lang.Object)>("streamurl");
+
+        if $z2 == 0 goto label5;
+
+        b3 = 1;
+
+     label5:
+        lookupswitch(b3)
+        {
+            case 0: goto label6;
+            case 1: goto label7;
+            default: goto label8;
+        };
+
+     label6:
+        r17 = r7;
+
+        goto label8;
+
+     label7:
+        r18 = r7;
+
+        goto label8;
+
+     label8:
+        i2 = virtualinvoke r5.<java.util.regex.Matcher: int end()>();
+
+        goto label2;
+
+     label9:
+        r22 = new androidx.media3.common.Metadata;
+
+        $r12 = newarray (androidx.media3.common.Metadata$Entry)[1];
+
+        r21 = new androidx.media3.extractor.metadata.icy.IcyInfo;
+
+        specialinvoke r21.<androidx.media3.extractor.metadata.icy.IcyInfo: void <init>(byte[],java.lang.String,java.lang.String)>(r4, r17, r18);
+
+        $r12[0] = r21;
+
+        r24 = (androidx.media3.common.Metadata$Entry[]) $r12;
+
+        specialinvoke r22.<androidx.media3.common.Metadata: void <init>(androidx.media3.common.Metadata$Entry[])>(r24);
+
+        return r22;
+    }
+
+    private java.lang.String decodeToString(java.nio.ByteBuffer)
+    {
+        androidx.media3.extractor.metadata.icy.IcyDecoder r0;
+        java.nio.ByteBuffer r1;
+        java.lang.Throwable r2, $r6, $r11, $r13, $r15, r18;
+        java.nio.charset.CharsetDecoder $r3, $r5, $r7, $r8, $r10, $r12, $r14, $r16;
+        java.nio.CharBuffer $r4, $r9;
+        java.lang.String r17, r19;
+
+        r0 := @this: androidx.media3.extractor.metadata.icy.IcyDecoder;
+
+        r1 := @parameter0: java.nio.ByteBuffer;
+
+     label01:
+        $r3 = r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder utf8Decoder>;
+
+        $r4 = virtualinvoke $r3.<java.nio.charset.CharsetDecoder: java.nio.CharBuffer decode(java.nio.ByteBuffer)>(r1);
+
+        r17 = virtualinvoke $r4.<java.nio.CharBuffer: java.lang.String toString()>();
+
+     label02:
+        $r5 = r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder utf8Decoder>;
+
+        virtualinvoke $r5.<java.nio.charset.CharsetDecoder: java.nio.charset.CharsetDecoder reset()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        return r17;
+
+     label03:
+        $r6 := @caughtexception;
+
+        $r7 = r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder utf8Decoder>;
+
+        virtualinvoke $r7.<java.nio.charset.CharsetDecoder: java.nio.charset.CharsetDecoder reset()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        goto label05;
+
+     label04:
+        $r13 := @caughtexception;
+
+        r18 = $r13;
+
+        $r14 = r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder utf8Decoder>;
+
+        virtualinvoke $r14.<java.nio.charset.CharsetDecoder: java.nio.charset.CharsetDecoder reset()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        throw r18;
+
+     label05:
+        $r8 = r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder iso88591Decoder>;
+
+        $r9 = virtualinvoke $r8.<java.nio.charset.CharsetDecoder: java.nio.CharBuffer decode(java.nio.ByteBuffer)>(r1);
+
+        r19 = virtualinvoke $r9.<java.nio.CharBuffer: java.lang.String toString()>();
+
+     label06:
+        $r10 = r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder iso88591Decoder>;
+
+        virtualinvoke $r10.<java.nio.charset.CharsetDecoder: java.nio.charset.CharsetDecoder reset()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        return r19;
+
+     label07:
+        $r11 := @caughtexception;
+
+     label08:
+        $r12 = r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder iso88591Decoder>;
+
+        virtualinvoke $r12.<java.nio.charset.CharsetDecoder: java.nio.charset.CharsetDecoder reset()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        return null;
+
+     label09:
+        $r15 := @caughtexception;
+
+        r2 = $r15;
+
+     label10:
+        $r16 = r0.<androidx.media3.extractor.metadata.icy.IcyDecoder: java.nio.charset.CharsetDecoder iso88591Decoder>;
+
+        virtualinvoke $r16.<java.nio.charset.CharsetDecoder: java.nio.charset.CharsetDecoder reset()>();
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.Buffer rewind()>();
+
+        throw r2;
+
+        catch java.nio.charset.CharacterCodingException from label01 to label02 with label03;
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.nio.charset.CharacterCodingException from label05 to label06 with label07;
+        catch java.lang.Throwable from label05 to label06 with label09;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label09 to label10 with label09;
+    }
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String,int)>("(.+?)=\'(.*?)\';", 32);
+
+        <androidx.media3.extractor.metadata.icy.IcyDecoder: java.util.regex.Pattern METADATA_ELEMENT> = $r0;
+
+        return;
+    }
+

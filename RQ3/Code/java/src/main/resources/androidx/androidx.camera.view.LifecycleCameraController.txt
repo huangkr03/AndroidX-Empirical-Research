@@ -1,0 +1,130 @@
+androidx.camera.view.LifecycleCameraController
+<androidx.camera.view.LifecycleCameraController: java.lang.String TAG>
+<androidx.camera.view.LifecycleCameraController: androidx.lifecycle.LifecycleOwner mLifecycleOwner>
+    public void <init>(android.content.Context)
+    {
+        androidx.camera.view.LifecycleCameraController r0;
+        android.content.Context r1;
+
+        r0 := @this: androidx.camera.view.LifecycleCameraController;
+
+        r1 := @parameter0: android.content.Context;
+
+        specialinvoke r0.<androidx.camera.view.CameraController: void <init>(android.content.Context)>(r1);
+
+        return;
+    }
+
+    public void bindToLifecycle(androidx.lifecycle.LifecycleOwner)
+    {
+        androidx.camera.view.LifecycleCameraController r0;
+        androidx.lifecycle.LifecycleOwner r1;
+
+        r0 := @this: androidx.camera.view.LifecycleCameraController;
+
+        r1 := @parameter0: androidx.lifecycle.LifecycleOwner;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        r0.<androidx.camera.view.LifecycleCameraController: androidx.lifecycle.LifecycleOwner mLifecycleOwner> = r1;
+
+        virtualinvoke r0.<androidx.camera.view.LifecycleCameraController: void startCameraAndTrackStates()>();
+
+        return;
+    }
+
+    public void unbind()
+    {
+        androidx.camera.view.LifecycleCameraController r0;
+        androidx.camera.lifecycle.ProcessCameraProvider $r1, $r2;
+
+        r0 := @this: androidx.camera.view.LifecycleCameraController;
+
+        staticinvoke <androidx.camera.core.impl.utils.Threads: void checkMainThread()>();
+
+        r0.<androidx.camera.view.LifecycleCameraController: androidx.lifecycle.LifecycleOwner mLifecycleOwner> = null;
+
+        r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.core.Camera mCamera> = null;
+
+        $r1 = r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.lifecycle.ProcessCameraProvider mCameraProvider>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.lifecycle.ProcessCameraProvider mCameraProvider>;
+
+        virtualinvoke $r2.<androidx.camera.lifecycle.ProcessCameraProvider: void unbindAll()>();
+
+     label1:
+        return;
+    }
+
+    androidx.camera.core.Camera startCamera()
+    {
+        androidx.camera.view.LifecycleCameraController r0;
+        androidx.camera.core.UseCaseGroup r1;
+        androidx.lifecycle.LifecycleOwner $r2, $r5;
+        androidx.camera.lifecycle.ProcessCameraProvider $r3, $r6;
+        androidx.camera.core.CameraSelector $r4;
+        androidx.camera.core.Camera $r7;
+
+        r0 := @this: androidx.camera.view.LifecycleCameraController;
+
+        $r2 = r0.<androidx.camera.view.LifecycleCameraController: androidx.lifecycle.LifecycleOwner mLifecycleOwner>;
+
+        if $r2 != null goto label1;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("CamLifecycleController", "Lifecycle is not set.");
+
+        return null;
+
+     label1:
+        $r3 = r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.lifecycle.ProcessCameraProvider mCameraProvider>;
+
+        if $r3 != null goto label2;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>("CamLifecycleController", "CameraProvider is not ready.");
+
+        return null;
+
+     label2:
+        r1 = virtualinvoke r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.core.UseCaseGroup createUseCaseGroup()>();
+
+        if r1 != null goto label3;
+
+        return null;
+
+     label3:
+        $r6 = r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.lifecycle.ProcessCameraProvider mCameraProvider>;
+
+        $r5 = r0.<androidx.camera.view.LifecycleCameraController: androidx.lifecycle.LifecycleOwner mLifecycleOwner>;
+
+        $r4 = r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.core.CameraSelector mCameraSelector>;
+
+        $r7 = virtualinvoke $r6.<androidx.camera.lifecycle.ProcessCameraProvider: androidx.camera.core.Camera bindToLifecycle(androidx.lifecycle.LifecycleOwner,androidx.camera.core.CameraSelector,androidx.camera.core.UseCaseGroup)>($r5, $r4, r1);
+
+        return $r7;
+    }
+
+    void shutDownForTests()
+    {
+        androidx.camera.view.LifecycleCameraController r0;
+        androidx.camera.lifecycle.ProcessCameraProvider $r1, $r2, $r3;
+
+        r0 := @this: androidx.camera.view.LifecycleCameraController;
+
+        $r1 = r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.lifecycle.ProcessCameraProvider mCameraProvider>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.lifecycle.ProcessCameraProvider mCameraProvider>;
+
+        virtualinvoke $r2.<androidx.camera.lifecycle.ProcessCameraProvider: void unbindAll()>();
+
+        $r3 = r0.<androidx.camera.view.LifecycleCameraController: androidx.camera.lifecycle.ProcessCameraProvider mCameraProvider>;
+
+        virtualinvoke $r3.<androidx.camera.lifecycle.ProcessCameraProvider: com.google.common.util.concurrent.ListenableFuture shutdown()>();
+
+     label1:
+        return;
+    }
+

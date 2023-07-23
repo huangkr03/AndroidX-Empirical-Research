@@ -1,0 +1,447 @@
+androidx.media3.extractor.ts.PsBinarySearchSeeker
+<androidx.media3.extractor.ts.PsBinarySearchSeeker: long SEEK_TOLERANCE_US>
+<androidx.media3.extractor.ts.PsBinarySearchSeeker: int MINIMUM_SEARCH_RANGE_BYTES>
+<androidx.media3.extractor.ts.PsBinarySearchSeeker: int TIMESTAMP_SEARCH_BYTES>
+    public void <init>(androidx.media3.common.util.TimestampAdjuster, long, long)
+    {
+        androidx.media3.extractor.ts.PsBinarySearchSeeker r0;
+        androidx.media3.common.util.TimestampAdjuster r1;
+        long l0, l1, $l2;
+        androidx.media3.extractor.BinarySearchSeeker$DefaultSeekTimestampConverter $r2;
+        androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker $r3;
+
+        r0 := @this: androidx.media3.extractor.ts.PsBinarySearchSeeker;
+
+        r1 := @parameter0: androidx.media3.common.util.TimestampAdjuster;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        $r2 = new androidx.media3.extractor.BinarySearchSeeker$DefaultSeekTimestampConverter;
+
+        specialinvoke $r2.<androidx.media3.extractor.BinarySearchSeeker$DefaultSeekTimestampConverter: void <init>()>();
+
+        $r3 = new androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker;
+
+        specialinvoke $r3.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: void <init>(androidx.media3.common.util.TimestampAdjuster,androidx.media3.extractor.ts.PsBinarySearchSeeker$1)>(r1, null);
+
+        $l2 = l0 + 1L;
+
+        specialinvoke r0.<androidx.media3.extractor.BinarySearchSeeker: void <init>(androidx.media3.extractor.BinarySearchSeeker$SeekTimestampConverter,androidx.media3.extractor.BinarySearchSeeker$TimestampSeeker,long,long,long,long,long,long,int)>($r2, $r3, l0, 0L, $l2, 0L, l1, 188L, 1000);
+
+        return;
+    }
+
+    private static int peekIntAtPosition(byte[], int)
+    {
+        byte[] r0;
+        int i0, $i3, $i6, $i7, $i8, $i11, $i12, $i13, $i16, $i17;
+        byte $b1, $b4, $b9, $b14;
+        short $s2, $s5, $s10, $s15;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        $b1 = r0[i0];
+
+        $s2 = $b1 & 255;
+
+        $i7 = $s2 << 24;
+
+        $i3 = i0 + 1;
+
+        $b4 = r0[$i3];
+
+        $s5 = $b4 & 255;
+
+        $i6 = $s5 << 16;
+
+        $i12 = $i7 | $i6;
+
+        $i8 = i0 + 2;
+
+        $b9 = r0[$i8];
+
+        $s10 = $b9 & 255;
+
+        $i11 = $s10 << 8;
+
+        $i16 = $i12 | $i11;
+
+        $i13 = i0 + 3;
+
+        $b14 = r0[$i13];
+
+        $s15 = $b14 & 255;
+
+        $i17 = $i16 | $s15;
+
+        return $i17;
+    }
+
+    static int access$100(byte[], int)
+    {
+        byte[] r0;
+        int i0, $i1;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        $i1 = staticinvoke <androidx.media3.extractor.ts.PsBinarySearchSeeker: int peekIntAtPosition(byte[],int)>(r0, i0);
+
+        return $i1;
+    }
+
+androidx.media3.extractor.ts.PsBinarySearchSeeker$1
+androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker
+<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.common.util.TimestampAdjuster scrTimestampAdjuster>
+<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.common.util.ParsableByteArray packetBuffer>
+    private void <init>(androidx.media3.common.util.TimestampAdjuster)
+    {
+        androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker r0;
+        androidx.media3.common.util.TimestampAdjuster r1;
+        androidx.media3.common.util.ParsableByteArray $r2;
+
+        r0 := @this: androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker;
+
+        r1 := @parameter0: androidx.media3.common.util.TimestampAdjuster;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.common.util.TimestampAdjuster scrTimestampAdjuster> = r1;
+
+        $r2 = new androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.common.util.ParsableByteArray packetBuffer> = $r2;
+
+        return;
+    }
+
+    public androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult searchForTimestamp(androidx.media3.extractor.ExtractorInput, long) throws java.io.IOException
+    {
+        androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        long l0, l1, $l3, $l4, $l5;
+        int i2;
+        androidx.media3.common.util.ParsableByteArray $r2, $r3, $r5;
+        byte[] $r4;
+        androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult $r6;
+
+        r0 := @this: androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        l0 := @parameter1: long;
+
+        l1 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l3 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getLength()>();
+
+        $l4 = $l3 - l1;
+
+        $l5 = staticinvoke <java.lang.Math: long min(long,long)>(20000L, $l4);
+
+        i2 = (int) $l5;
+
+        $r2 = r0.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.common.util.ParsableByteArray packetBuffer>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void reset(int)>(i2);
+
+        $r3 = r0.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.common.util.ParsableByteArray packetBuffer>;
+
+        $r4 = virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r4, 0, i2);
+
+        $r5 = r0.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.common.util.ParsableByteArray packetBuffer>;
+
+        $r6 = specialinvoke r0.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult searchForScrValueInBuffer(androidx.media3.common.util.ParsableByteArray,long,long)>($r5, l0, l1);
+
+        return $r6;
+    }
+
+    public void onSeekFinished()
+    {
+        androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker r0;
+        byte[] $r1;
+        androidx.media3.common.util.ParsableByteArray $r2;
+
+        r0 := @this: androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker;
+
+        $r2 = r0.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.common.util.ParsableByteArray packetBuffer>;
+
+        $r1 = <androidx.media3.common.util.Util: byte[] EMPTY_BYTE_ARRAY>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void reset(byte[])>($r1);
+
+        return;
+    }
+
+    private androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult searchForScrValueInBuffer(androidx.media3.common.util.ParsableByteArray, long, long)
+    {
+        androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        long l0, l1, l2, l3, l4, $l6, $l10, $l13, $l15, $l16, l19, l22;
+        byte $b5, $b8, $b9, $b11, $b14;
+        androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult $r2, $r3, $r6, $r7, $r8;
+        byte[] $r4;
+        int $i7, $i12, i17, i18, $i20, i21;
+        androidx.media3.common.util.TimestampAdjuster $r5;
+
+        r0 := @this: androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        i17 = -1;
+
+        i18 = -1;
+
+        l19 = -9223372036854775807L;
+
+     label1:
+        $i20 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i20 < 4 goto label7;
+
+        $r4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $i7 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        i21 = staticinvoke <androidx.media3.extractor.ts.PsBinarySearchSeeker: int access$100(byte[],int)>($r4, $i7);
+
+        if i21 == 442 goto label2;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(1);
+
+        goto label1;
+
+     label2:
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        l2 = staticinvoke <androidx.media3.extractor.ts.PsDurationReader: long readScrValueFromPack(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        $b8 = l2 cmp -9223372036854775807L;
+
+        if $b8 == 0 goto label6;
+
+        $r5 = r0.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: androidx.media3.common.util.TimestampAdjuster scrTimestampAdjuster>;
+
+        l3 = virtualinvoke $r5.<androidx.media3.common.util.TimestampAdjuster: long adjustTsTimestamp(long)>(l2);
+
+        $b9 = l3 cmp l0;
+
+        if $b9 <= 0 goto label4;
+
+        $b14 = l19 cmp -9223372036854775807L;
+
+        if $b14 != 0 goto label3;
+
+        $r8 = staticinvoke <androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult: androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult overestimatedResult(long,long)>(l3, l1);
+
+        return $r8;
+
+     label3:
+        $l15 = (long) i17;
+
+        $l16 = l1 + $l15;
+
+        $r7 = staticinvoke <androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult: androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult targetFoundResult(long)>($l16);
+
+        return $r7;
+
+     label4:
+        $l10 = l3 + 100000L;
+
+        $b11 = $l10 cmp l0;
+
+        if $b11 <= 0 goto label5;
+
+        $i12 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        $l13 = (long) $i12;
+
+        l4 = l1 + $l13;
+
+        $r6 = staticinvoke <androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult: androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult targetFoundResult(long)>(l4);
+
+        return $r6;
+
+     label5:
+        l19 = l3;
+
+        i17 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+     label6:
+        staticinvoke <androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: void skipToEndOfCurrentPack(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        i18 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        goto label1;
+
+     label7:
+        $b5 = l19 cmp -9223372036854775807L;
+
+        if $b5 == 0 goto label8;
+
+        $l6 = (long) i18;
+
+        l22 = l1 + $l6;
+
+        $r3 = staticinvoke <androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult: androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult underestimatedResult(long,long)>(l19, l22);
+
+        return $r3;
+
+     label8:
+        $r2 = <androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult: androidx.media3.extractor.BinarySearchSeeker$TimestampSearchResult NO_TIMESTAMP_IN_RANGE_RESULT>;
+
+        return $r2;
+    }
+
+    private static void skipToEndOfCurrentPack(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.common.util.ParsableByteArray r0;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, i15, i16, $i17, i18, i19;
+        byte[] $r1, $r2;
+
+        r0 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i0 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+        $i2 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i2 >= 10 goto label1;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i0);
+
+        return;
+
+     label1:
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(9);
+
+        $i3 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedByte()>();
+
+        i1 = $i3 & 7;
+
+        $i4 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i4 >= i1 goto label2;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i0);
+
+        return;
+
+     label2:
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(i1);
+
+        $i5 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i5 >= 4 goto label3;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i0);
+
+        return;
+
+     label3:
+        $r1 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $i6 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        i15 = staticinvoke <androidx.media3.extractor.ts.PsBinarySearchSeeker: int access$100(byte[],int)>($r1, $i6);
+
+        if i15 != 443 goto label5;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        i16 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        $i14 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i14 >= i16 goto label4;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i0);
+
+        return;
+
+     label4:
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(i16);
+
+     label5:
+        $i17 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i17 < 4 goto label9;
+
+        $r2 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $i7 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        i18 = staticinvoke <androidx.media3.extractor.ts.PsBinarySearchSeeker: int access$100(byte[],int)>($r2, $i7);
+
+        if i18 == 442 goto label9;
+
+        if i18 != 441 goto label6;
+
+        goto label9;
+
+     label6:
+        $i8 = i18 >>> 8;
+
+        if $i8 == 1 goto label7;
+
+        goto label9;
+
+     label7:
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void skipBytes(int)>(4);
+
+        $i9 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i9 >= 2 goto label8;
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i0);
+
+        return;
+
+     label8:
+        i19 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int readUnsignedShort()>();
+
+        $i10 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+        $i11 = virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        $i12 = $i11 + i19;
+
+        $i13 = staticinvoke <java.lang.Math: int min(int,int)>($i10, $i12);
+
+        virtualinvoke r0.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>($i13);
+
+        goto label5;
+
+     label9:
+        return;
+    }
+
+    void <init>(androidx.media3.common.util.TimestampAdjuster, androidx.media3.extractor.ts.PsBinarySearchSeeker$1)
+    {
+        androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker r0;
+        androidx.media3.common.util.TimestampAdjuster r1;
+        androidx.media3.extractor.ts.PsBinarySearchSeeker$1 r2;
+
+        r0 := @this: androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker;
+
+        r1 := @parameter0: androidx.media3.common.util.TimestampAdjuster;
+
+        r2 := @parameter1: androidx.media3.extractor.ts.PsBinarySearchSeeker$1;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.PsBinarySearchSeeker$PsScrSeeker: void <init>(androidx.media3.common.util.TimestampAdjuster)>(r1);
+
+        return;
+    }
+

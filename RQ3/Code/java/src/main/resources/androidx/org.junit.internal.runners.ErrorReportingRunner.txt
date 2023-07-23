@@ -1,0 +1,215 @@
+org.junit.internal.runners.ErrorReportingRunner
+<org.junit.internal.runners.ErrorReportingRunner: java.util.List causes>
+<org.junit.internal.runners.ErrorReportingRunner: java.lang.Class testClass>
+    public void <init>(java.lang.Class, java.lang.Throwable)
+    {
+        org.junit.internal.runners.ErrorReportingRunner $r0;
+        java.lang.Class $r1;
+        java.lang.Throwable $r2;
+        java.util.List $r3;
+        java.lang.NullPointerException $r4;
+
+        $r0 := @this: org.junit.internal.runners.ErrorReportingRunner;
+
+        $r1 := @parameter0: java.lang.Class;
+
+        $r2 := @parameter1: java.lang.Throwable;
+
+        specialinvoke $r0.<org.junit.runner.Runner: void <init>()>();
+
+        if $r1 != null goto label1;
+
+        $r4 = new java.lang.NullPointerException;
+
+        specialinvoke $r4.<java.lang.NullPointerException: void <init>(java.lang.String)>("Test class cannot be null");
+
+        throw $r4;
+
+     label1:
+        $r0.<org.junit.internal.runners.ErrorReportingRunner: java.lang.Class testClass> = $r1;
+
+        $r3 = specialinvoke $r0.<org.junit.internal.runners.ErrorReportingRunner: java.util.List getCauses(java.lang.Throwable)>($r2);
+
+        $r0.<org.junit.internal.runners.ErrorReportingRunner: java.util.List causes> = $r3;
+
+        return;
+    }
+
+    private org.junit.runner.Description describeCause(java.lang.Throwable)
+    {
+        org.junit.internal.runners.ErrorReportingRunner $r0;
+        java.lang.Throwable $r1;
+        org.junit.runner.Description $r2;
+        java.lang.Class $r3;
+
+        $r0 := @this: org.junit.internal.runners.ErrorReportingRunner;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r3 = $r0.<org.junit.internal.runners.ErrorReportingRunner: java.lang.Class testClass>;
+
+        $r2 = staticinvoke <org.junit.runner.Description: org.junit.runner.Description createTestDescription(java.lang.Class,java.lang.String)>($r3, "initializationError");
+
+        return $r2;
+    }
+
+    private java.util.List getCauses(java.lang.Throwable)
+    {
+        org.junit.internal.runners.ErrorReportingRunner $r0;
+        java.lang.Throwable $r1;
+        boolean $z0;
+        java.util.List $r2;
+        org.junit.runners.model.InitializationError $r3;
+        org.junit.internal.runners.InitializationError $r4;
+        java.lang.Throwable[] $r5;
+
+        $r0 := @this: org.junit.internal.runners.ErrorReportingRunner;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $z0 = $r1 instanceof java.lang.reflect.InvocationTargetException;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = virtualinvoke $r1.<java.lang.Throwable: java.lang.Throwable getCause()>();
+
+        $r2 = specialinvoke $r0.<org.junit.internal.runners.ErrorReportingRunner: java.util.List getCauses(java.lang.Throwable)>($r1);
+
+        return $r2;
+
+     label1:
+        $z0 = $r1 instanceof org.junit.runners.model.InitializationError;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = (org.junit.runners.model.InitializationError) $r1;
+
+        $r2 = virtualinvoke $r3.<org.junit.runners.model.InitializationError: java.util.List getCauses()>();
+
+        return $r2;
+
+     label2:
+        $z0 = $r1 instanceof org.junit.internal.runners.InitializationError;
+
+        if $z0 == 0 goto label3;
+
+        $r4 = (org.junit.internal.runners.InitializationError) $r1;
+
+        $r2 = virtualinvoke $r4.<org.junit.internal.runners.InitializationError: java.util.List getCauses()>();
+
+        return $r2;
+
+     label3:
+        $r5 = newarray (java.lang.Throwable)[1];
+
+        $r5[0] = $r1;
+
+        $r2 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r5);
+
+        return $r2;
+    }
+
+    private void runCause(java.lang.Throwable, org.junit.runner.notification.RunNotifier)
+    {
+        org.junit.internal.runners.ErrorReportingRunner $r0;
+        java.lang.Throwable $r1;
+        org.junit.runner.notification.RunNotifier $r2;
+        org.junit.runner.notification.Failure $r3;
+        org.junit.runner.Description $r4;
+
+        $r0 := @this: org.junit.internal.runners.ErrorReportingRunner;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 := @parameter1: org.junit.runner.notification.RunNotifier;
+
+        $r4 = specialinvoke $r0.<org.junit.internal.runners.ErrorReportingRunner: org.junit.runner.Description describeCause(java.lang.Throwable)>($r1);
+
+        virtualinvoke $r2.<org.junit.runner.notification.RunNotifier: void fireTestStarted(org.junit.runner.Description)>($r4);
+
+        $r3 = new org.junit.runner.notification.Failure;
+
+        specialinvoke $r3.<org.junit.runner.notification.Failure: void <init>(org.junit.runner.Description,java.lang.Throwable)>($r4, $r1);
+
+        virtualinvoke $r2.<org.junit.runner.notification.RunNotifier: void fireTestFailure(org.junit.runner.notification.Failure)>($r3);
+
+        virtualinvoke $r2.<org.junit.runner.notification.RunNotifier: void fireTestFinished(org.junit.runner.Description)>($r4);
+
+        return;
+    }
+
+    public org.junit.runner.Description getDescription()
+    {
+        org.junit.internal.runners.ErrorReportingRunner $r0;
+        java.lang.Class $r1;
+        org.junit.runner.Description $r2, $r7;
+        java.util.List $r3;
+        java.util.Iterator $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        java.lang.Throwable $r6;
+
+        $r0 := @this: org.junit.internal.runners.ErrorReportingRunner;
+
+        $r1 = $r0.<org.junit.internal.runners.ErrorReportingRunner: java.lang.Class testClass>;
+
+        $r2 = staticinvoke <org.junit.runner.Description: org.junit.runner.Description createSuiteDescription(java.lang.Class)>($r1);
+
+        $r3 = $r0.<org.junit.internal.runners.ErrorReportingRunner: java.util.List causes>;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (java.lang.Throwable) $r5;
+
+        $r7 = specialinvoke $r0.<org.junit.internal.runners.ErrorReportingRunner: org.junit.runner.Description describeCause(java.lang.Throwable)>($r6);
+
+        virtualinvoke $r2.<org.junit.runner.Description: void addChild(org.junit.runner.Description)>($r7);
+
+        goto label1;
+
+     label2:
+        return $r2;
+    }
+
+    public void run(org.junit.runner.notification.RunNotifier)
+    {
+        org.junit.internal.runners.ErrorReportingRunner $r0;
+        org.junit.runner.notification.RunNotifier $r1;
+        java.util.List $r2;
+        java.util.Iterator $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        java.lang.Throwable $r5;
+
+        $r0 := @this: org.junit.internal.runners.ErrorReportingRunner;
+
+        $r1 := @parameter0: org.junit.runner.notification.RunNotifier;
+
+        $r2 = $r0.<org.junit.internal.runners.ErrorReportingRunner: java.util.List causes>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.lang.Throwable) $r4;
+
+        specialinvoke $r0.<org.junit.internal.runners.ErrorReportingRunner: void runCause(java.lang.Throwable,org.junit.runner.notification.RunNotifier)>($r5, $r1);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+

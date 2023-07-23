@@ -1,0 +1,220 @@
+com.google.common.flogger.util.CallerFinder
+<com.google.common.flogger.util.CallerFinder: com.google.common.flogger.util.StackGetter STACK_GETTER>
+<com.google.common.flogger.util.CallerFinder: java.lang.String[] STACK_GETTER_IMPLEMENTATIONS>
+    static void <clinit>()
+    {
+        com.google.common.flogger.util.StackGetter $r0;
+        java.lang.String[] $r1;
+
+        $r1 = newarray (java.lang.String)[2];
+
+        $r1[0] = "com.google.common.flogger.util.StackWalkerStackGetter";
+
+        $r1[1] = "com.google.common.flogger.util.JavaLangAccessStackGetter";
+
+        <com.google.common.flogger.util.CallerFinder: java.lang.String[] STACK_GETTER_IMPLEMENTATIONS> = $r1;
+
+        $r0 = staticinvoke <com.google.common.flogger.util.CallerFinder: com.google.common.flogger.util.StackGetter getBestStackGetter()>();
+
+        <com.google.common.flogger.util.CallerFinder: com.google.common.flogger.util.StackGetter STACK_GETTER> = $r0;
+
+        return;
+    }
+
+    public static java.lang.StackTraceElement findCallerOf(java.lang.Class, int)
+    {
+        java.lang.Class $r0;
+        int $i0;
+        com.google.common.flogger.util.StackGetter $r1;
+        java.lang.StackTraceElement $r2;
+        java.lang.IllegalArgumentException $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+
+        $r0 := @parameter0: java.lang.Class;
+
+        $i0 := @parameter1: int;
+
+        staticinvoke <com.google.common.flogger.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.String)>($r0, "target");
+
+        if $i0 < 0 goto label1;
+
+        $r1 = <com.google.common.flogger.util.CallerFinder: com.google.common.flogger.util.StackGetter STACK_GETTER>;
+
+        $i0 = $i0 + 1;
+
+        $r2 = interfaceinvoke $r1.<com.google.common.flogger.util.StackGetter: java.lang.StackTraceElement callerOf(java.lang.Class,int)>($r0, $i0);
+
+        return $r2;
+
+     label1:
+        $r3 = new java.lang.IllegalArgumentException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("skip count cannot be negative: ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r5);
+
+        throw $r3;
+    }
+
+    private static com.google.common.flogger.util.StackGetter getBestStackGetter()
+    {
+        int $i0, $i1;
+        com.google.common.flogger.util.StackGetter $r0;
+        java.lang.String[] $r1;
+        java.lang.String $r2;
+        com.google.common.flogger.util.ThrowableStackGetter $r3;
+
+        $r1 = <com.google.common.flogger.util.CallerFinder: java.lang.String[] STACK_GETTER_IMPLEMENTATIONS>;
+
+        $i0 = lengthof $r1;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $r2 = $r1[$i1];
+
+        $r0 = staticinvoke <com.google.common.flogger.util.CallerFinder: com.google.common.flogger.util.StackGetter maybeCreateStackGetter(java.lang.String)>($r2);
+
+        if $r0 == null goto label2;
+
+        return $r0;
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $r3 = new com.google.common.flogger.util.ThrowableStackGetter;
+
+        specialinvoke $r3.<com.google.common.flogger.util.ThrowableStackGetter: void <init>()>();
+
+        return $r3;
+    }
+
+    public static java.lang.StackTraceElement[] getStackForCallerOf(java.lang.Class, int, int)
+    {
+        java.lang.Class $r0;
+        int $i0, $i1;
+        java.lang.IllegalArgumentException $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+        com.google.common.flogger.util.StackGetter $r4;
+        java.lang.StackTraceElement[] $r5;
+
+        $r0 := @parameter0: java.lang.Class;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        staticinvoke <com.google.common.flogger.util.Checks: java.lang.Object checkNotNull(java.lang.Object,java.lang.String)>($r0, "target");
+
+        if $i0 > 0 goto label2;
+
+        if $i0 != -1 goto label1;
+
+        goto label2;
+
+     label1:
+        $r1 = new java.lang.IllegalArgumentException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("invalid maximum depth: ");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r3);
+
+        throw $r1;
+
+     label2:
+        if $i1 < 0 goto label3;
+
+        $r4 = <com.google.common.flogger.util.CallerFinder: com.google.common.flogger.util.StackGetter STACK_GETTER>;
+
+        $i1 = $i1 + 1;
+
+        $r5 = interfaceinvoke $r4.<com.google.common.flogger.util.StackGetter: java.lang.StackTraceElement[] getStackForCaller(java.lang.Class,int,int)>($r0, $i0, $i1);
+
+        return $r5;
+
+     label3:
+        $r1 = new java.lang.IllegalArgumentException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("skip count cannot be negative: ");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r3);
+
+        throw $r1;
+    }
+
+    private static com.google.common.flogger.util.StackGetter maybeCreateStackGetter(java.lang.String)
+    {
+        java.lang.Class[] $r0;
+        java.lang.String $r1;
+        java.lang.Class $r2;
+        java.lang.reflect.Constructor $r3;
+        java.lang.Object[] $r4;
+        java.lang.Object $r5;
+        com.google.common.flogger.util.StackGetter $r6;
+        java.lang.Throwable $r7;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>($r1);
+
+     label1:
+        $r2 = virtualinvoke $r2.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(class "Lcom/google/common/flogger/util/StackGetter;");
+
+     label2:
+        $r0 = newarray (java.lang.Class)[0];
+
+     label3:
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Constructor getDeclaredConstructor(java.lang.Class[])>($r0);
+
+     label4:
+        $r4 = newarray (java.lang.Object)[0];
+
+     label5:
+        $r5 = virtualinvoke $r3.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r4);
+
+     label6:
+        $r6 = (com.google.common.flogger.util.StackGetter) $r5;
+
+        return $r6;
+
+     label7:
+        $r7 := @caughtexception;
+
+        return null;
+
+        catch java.lang.Throwable from label1 to label2 with label7;
+        catch java.lang.Throwable from label3 to label4 with label7;
+        catch java.lang.Throwable from label5 to label6 with label7;
+    }
+

@@ -1,0 +1,200 @@
+android.support.v4.content.pm.ShortcutManagerCompat
+<android.support.v4.content.pm.ShortcutManagerCompat: java.lang.String ACTION_INSTALL_SHORTCUT>
+<android.support.v4.content.pm.ShortcutManagerCompat: java.lang.String INSTALL_SHORTCUT_PERMISSION>
+    private void <init>()
+    {
+        android.support.v4.content.pm.ShortcutManagerCompat r0;
+
+        r0 := @this: android.support.v4.content.pm.ShortcutManagerCompat;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static boolean isRequestPinShortcutSupported(android.content.Context)
+    {
+        android.content.Context r0;
+        java.util.Iterator r1;
+        android.content.pm.ResolveInfo r2;
+        java.lang.String r3, $r9;
+        int $i0, $i1;
+        android.content.pm.PackageManager $r4;
+        android.content.Intent $r5;
+        java.util.List $r6;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Object $r7, $r10;
+        android.content.pm.ActivityInfo $r8;
+        android.content.pm.ShortcutManager $r11;
+
+        r0 := @parameter0: android.content.Context;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 26 goto label1;
+
+        $r10 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.Class)>(class "Landroid/content/pm/ShortcutManager;");
+
+        $r11 = (android.content.pm.ShortcutManager) $r10;
+
+        $z3 = virtualinvoke $r11.<android.content.pm.ShortcutManager: boolean isRequestPinShortcutSupported()>();
+
+        return $z3;
+
+     label1:
+        $i1 = staticinvoke <android.support.v4.content.ContextCompat: int checkSelfPermission(android.content.Context,java.lang.String)>(r0, "com.android.launcher.permission.INSTALL_SHORTCUT");
+
+        if $i1 == 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r4 = virtualinvoke r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r5 = new android.content.Intent;
+
+        specialinvoke $r5.<android.content.Intent: void <init>(java.lang.String)>("com.android.launcher.action.INSTALL_SHORTCUT");
+
+        $r6 = virtualinvoke $r4.<android.content.pm.PackageManager: java.util.List queryBroadcastReceivers(android.content.Intent,int)>($r5, 0);
+
+        r1 = interfaceinvoke $r6.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r7 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (android.content.pm.ResolveInfo) $r7;
+
+        $r8 = r2.<android.content.pm.ResolveInfo: android.content.pm.ActivityInfo activityInfo>;
+
+        r3 = $r8.<android.content.pm.ActivityInfo: java.lang.String permission>;
+
+        $z1 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>(r3);
+
+        if $z1 != 0 goto label4;
+
+        $r9 = "com.android.launcher.permission.INSTALL_SHORTCUT";
+
+        $z2 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(r3);
+
+        if $z2 == 0 goto label5;
+
+     label4:
+        return 1;
+
+     label5:
+        goto label3;
+
+     label6:
+        return 0;
+    }
+
+    public static boolean requestPinShortcut(android.content.Context, android.support.v4.content.pm.ShortcutInfoCompat, android.content.IntentSender)
+    {
+        android.content.Context r0;
+        android.support.v4.content.pm.ShortcutInfoCompat r1;
+        android.content.IntentSender r2;
+        android.content.Intent r3, $r4;
+        int $i0;
+        boolean $z0, $z1;
+        android.support.v4.content.pm.ShortcutManagerCompat$1 $r5;
+        java.lang.Object $r6;
+        android.content.pm.ShortcutManager $r7;
+        android.content.pm.ShortcutInfo $r8;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.support.v4.content.pm.ShortcutInfoCompat;
+
+        r2 := @parameter2: android.content.IntentSender;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 26 goto label1;
+
+        $r6 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.Class)>(class "Landroid/content/pm/ShortcutManager;");
+
+        $r7 = (android.content.pm.ShortcutManager) $r6;
+
+        $r8 = virtualinvoke r1.<android.support.v4.content.pm.ShortcutInfoCompat: android.content.pm.ShortcutInfo toShortcutInfo()>();
+
+        $z1 = virtualinvoke $r7.<android.content.pm.ShortcutManager: boolean requestPinShortcut(android.content.pm.ShortcutInfo,android.content.IntentSender)>($r8, r2);
+
+        return $z1;
+
+     label1:
+        $z0 = staticinvoke <android.support.v4.content.pm.ShortcutManagerCompat: boolean isRequestPinShortcutSupported(android.content.Context)>(r0);
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r4 = new android.content.Intent;
+
+        specialinvoke $r4.<android.content.Intent: void <init>(java.lang.String)>("com.android.launcher.action.INSTALL_SHORTCUT");
+
+        r3 = virtualinvoke r1.<android.support.v4.content.pm.ShortcutInfoCompat: android.content.Intent addToIntent(android.content.Intent)>($r4);
+
+        if r2 != null goto label3;
+
+        virtualinvoke r0.<android.content.Context: void sendBroadcast(android.content.Intent)>(r3);
+
+        return 1;
+
+     label3:
+        $r5 = new android.support.v4.content.pm.ShortcutManagerCompat$1;
+
+        specialinvoke $r5.<android.support.v4.content.pm.ShortcutManagerCompat$1: void <init>(android.content.IntentSender)>(r2);
+
+        virtualinvoke r0.<android.content.Context: void sendOrderedBroadcast(android.content.Intent,java.lang.String,android.content.BroadcastReceiver,android.os.Handler,int,java.lang.String,android.os.Bundle)>(r3, null, $r5, null, -1, null, null);
+
+        return 1;
+    }
+
+    public static android.content.Intent createShortcutResultIntent(android.content.Context, android.support.v4.content.pm.ShortcutInfoCompat)
+    {
+        android.content.Context r0;
+        android.support.v4.content.pm.ShortcutInfoCompat r1;
+        int $i0;
+        android.content.Intent $r2, $r3, r7;
+        java.lang.Object $r4;
+        android.content.pm.ShortcutManager $r5;
+        android.content.pm.ShortcutInfo $r6;
+
+        r0 := @parameter0: android.content.Context;
+
+        r1 := @parameter1: android.support.v4.content.pm.ShortcutInfoCompat;
+
+        r7 = null;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 26 goto label1;
+
+        $r4 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.Class)>(class "Landroid/content/pm/ShortcutManager;");
+
+        $r5 = (android.content.pm.ShortcutManager) $r4;
+
+        $r6 = virtualinvoke r1.<android.support.v4.content.pm.ShortcutInfoCompat: android.content.pm.ShortcutInfo toShortcutInfo()>();
+
+        r7 = virtualinvoke $r5.<android.content.pm.ShortcutManager: android.content.Intent createShortcutResultIntent(android.content.pm.ShortcutInfo)>($r6);
+
+     label1:
+        if r7 != null goto label2;
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>()>();
+
+        r7 = $r3;
+
+     label2:
+        $r2 = virtualinvoke r1.<android.support.v4.content.pm.ShortcutInfoCompat: android.content.Intent addToIntent(android.content.Intent)>(r7);
+
+        return $r2;
+    }
+

@@ -1,0 +1,1280 @@
+androidx.media3.extractor.ts.AdtsReader
+<androidx.media3.extractor.ts.AdtsReader: java.lang.String TAG>
+<androidx.media3.extractor.ts.AdtsReader: int STATE_FINDING_SAMPLE>
+<androidx.media3.extractor.ts.AdtsReader: int STATE_CHECKING_ADTS_HEADER>
+<androidx.media3.extractor.ts.AdtsReader: int STATE_READING_ID3_HEADER>
+<androidx.media3.extractor.ts.AdtsReader: int STATE_READING_ADTS_HEADER>
+<androidx.media3.extractor.ts.AdtsReader: int STATE_READING_SAMPLE>
+<androidx.media3.extractor.ts.AdtsReader: int HEADER_SIZE>
+<androidx.media3.extractor.ts.AdtsReader: int CRC_SIZE>
+<androidx.media3.extractor.ts.AdtsReader: int MATCH_STATE_VALUE_SHIFT>
+<androidx.media3.extractor.ts.AdtsReader: int MATCH_STATE_START>
+<androidx.media3.extractor.ts.AdtsReader: int MATCH_STATE_FF>
+<androidx.media3.extractor.ts.AdtsReader: int MATCH_STATE_I>
+<androidx.media3.extractor.ts.AdtsReader: int MATCH_STATE_ID>
+<androidx.media3.extractor.ts.AdtsReader: int ID3_HEADER_SIZE>
+<androidx.media3.extractor.ts.AdtsReader: int ID3_SIZE_OFFSET>
+<androidx.media3.extractor.ts.AdtsReader: byte[] ID3_IDENTIFIER>
+<androidx.media3.extractor.ts.AdtsReader: int VERSION_UNSET>
+<androidx.media3.extractor.ts.AdtsReader: boolean exposeId3>
+<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>
+<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableByteArray id3HeaderBuffer>
+<androidx.media3.extractor.ts.AdtsReader: java.lang.String language>
+<androidx.media3.extractor.ts.AdtsReader: java.lang.String formatId>
+<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput output>
+<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput id3Output>
+<androidx.media3.extractor.ts.AdtsReader: int state>
+<androidx.media3.extractor.ts.AdtsReader: int bytesRead>
+<androidx.media3.extractor.ts.AdtsReader: int matchState>
+<androidx.media3.extractor.ts.AdtsReader: boolean hasCrc>
+<androidx.media3.extractor.ts.AdtsReader: boolean foundFirstFrame>
+<androidx.media3.extractor.ts.AdtsReader: int firstFrameVersion>
+<androidx.media3.extractor.ts.AdtsReader: int firstFrameSampleRateIndex>
+<androidx.media3.extractor.ts.AdtsReader: int currentFrameVersion>
+<androidx.media3.extractor.ts.AdtsReader: boolean hasOutputFormat>
+<androidx.media3.extractor.ts.AdtsReader: long sampleDurationUs>
+<androidx.media3.extractor.ts.AdtsReader: int sampleSize>
+<androidx.media3.extractor.ts.AdtsReader: long timeUs>
+<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput currentOutput>
+<androidx.media3.extractor.ts.AdtsReader: long currentSampleDuration>
+    public void <init>(boolean)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        boolean z0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        z0 := @parameter0: boolean;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void <init>(boolean,java.lang.String)>(z0, null);
+
+        return;
+    }
+
+    public void <init>(boolean, java.lang.String)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        boolean z0;
+        java.lang.String r1;
+        androidx.media3.common.util.ParsableBitArray $r2;
+        byte[] $r3, $r5, $r6;
+        androidx.media3.common.util.ParsableByteArray $r4;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        z0 := @parameter0: boolean;
+
+        r1 := @parameter1: java.lang.String;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new androidx.media3.common.util.ParsableBitArray;
+
+        $r3 = newarray (byte)[7];
+
+        specialinvoke $r2.<androidx.media3.common.util.ParsableBitArray: void <init>(byte[])>($r3);
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch> = $r2;
+
+        $r4 = new androidx.media3.common.util.ParsableByteArray;
+
+        $r5 = <androidx.media3.extractor.ts.AdtsReader: byte[] ID3_IDENTIFIER>;
+
+        $r6 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r5, 10);
+
+        specialinvoke $r4.<androidx.media3.common.util.ParsableByteArray: void <init>(byte[])>($r6);
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableByteArray id3HeaderBuffer> = $r4;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void setFindingSampleState()>();
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameVersion> = -1;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameSampleRateIndex> = -1;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: long sampleDurationUs> = -9223372036854775807L;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: long timeUs> = -9223372036854775807L;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: boolean exposeId3> = z0;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: java.lang.String language> = r1;
+
+        return;
+    }
+
+    public static boolean isAdtsSyncWord(int)
+    {
+        int i0, $i1;
+        boolean $z0;
+
+        i0 := @parameter0: int;
+
+        $i1 = i0 & 65526;
+
+        if $i1 != 65520 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public void seek()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: long timeUs> = -9223372036854775807L;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void resetSync()>();
+
+        return;
+    }
+
+    public void createTracks(androidx.media3.extractor.ExtractorOutput, androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.extractor.ExtractorOutput r1;
+        androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator r2;
+        java.lang.String $r3, $r10;
+        int $i0, $i1;
+        androidx.media3.extractor.TrackOutput $r4, $r5, $r7, $r9;
+        boolean $z0;
+        androidx.media3.extractor.DummyTrackOutput $r6;
+        androidx.media3.common.Format$Builder $r8, $r11, $r12;
+        androidx.media3.common.Format $r13;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorOutput;
+
+        r2 := @parameter1: androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator;
+
+        virtualinvoke r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: void generateNewId()>();
+
+        $r3 = virtualinvoke r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: java.lang.String getFormatId()>();
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: java.lang.String formatId> = $r3;
+
+        $i0 = virtualinvoke r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: int getTrackId()>();
+
+        $r4 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: androidx.media3.extractor.TrackOutput track(int,int)>($i0, 1);
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput output> = $r4;
+
+        $r5 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput output>;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput currentOutput> = $r5;
+
+        $z0 = r0.<androidx.media3.extractor.ts.AdtsReader: boolean exposeId3>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: void generateNewId()>();
+
+        $i1 = virtualinvoke r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: int getTrackId()>();
+
+        $r7 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorOutput: androidx.media3.extractor.TrackOutput track(int,int)>($i1, 5);
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput id3Output> = $r7;
+
+        $r9 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput id3Output>;
+
+        $r8 = new androidx.media3.common.Format$Builder;
+
+        specialinvoke $r8.<androidx.media3.common.Format$Builder: void <init>()>();
+
+        $r10 = virtualinvoke r2.<androidx.media3.extractor.ts.TsPayloadReader$TrackIdGenerator: java.lang.String getFormatId()>();
+
+        $r11 = virtualinvoke $r8.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setId(java.lang.String)>($r10);
+
+        $r12 = virtualinvoke $r11.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleMimeType(java.lang.String)>("application/id3");
+
+        $r13 = virtualinvoke $r12.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        interfaceinvoke $r9.<androidx.media3.extractor.TrackOutput: void format(androidx.media3.common.Format)>($r13);
+
+        goto label2;
+
+     label1:
+        $r6 = new androidx.media3.extractor.DummyTrackOutput;
+
+        specialinvoke $r6.<androidx.media3.extractor.DummyTrackOutput: void <init>()>();
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput id3Output> = $r6;
+
+     label2:
+        return;
+    }
+
+    public void packetStarted(long, int)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        long l0;
+        int i1;
+        byte $b2;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        $b2 = l0 cmp -9223372036854775807L;
+
+        if $b2 == 0 goto label1;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: long timeUs> = l0;
+
+     label1:
+        return;
+    }
+
+    public void consume(androidx.media3.common.util.ParsableByteArray) throws androidx.media3.common.ParserException
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.common.util.ParsableByteArray r1, $r4;
+        byte b0, $b3;
+        int $i1, $i2;
+        boolean $z0, $z1, $z2;
+        androidx.media3.common.util.ParsableBitArray $r2;
+        byte[] $r3, $r5;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void assertTracksCreated()>();
+
+     label01:
+        $i2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i2 <= 0 goto label10;
+
+        $i1 = r0.<androidx.media3.extractor.ts.AdtsReader: int state>;
+
+        tableswitch($i1)
+        {
+            case 0: goto label02;
+            case 1: goto label04;
+            case 2: goto label03;
+            case 3: goto label05;
+            case 4: goto label08;
+            default: goto label09;
+        };
+
+     label02:
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void findNextSample(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        goto label01;
+
+     label03:
+        $r4 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableByteArray id3HeaderBuffer>;
+
+        $r5 = virtualinvoke $r4.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $z2 = specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: boolean continueRead(androidx.media3.common.util.ParsableByteArray,byte[],int)>(r1, $r5, 10);
+
+        if $z2 == 0 goto label01;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void parseId3Header()>();
+
+        goto label01;
+
+     label04:
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void checkAdtsHeader(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        goto label01;
+
+     label05:
+        $z0 = r0.<androidx.media3.extractor.ts.AdtsReader: boolean hasCrc>;
+
+        if $z0 == 0 goto label06;
+
+        $b3 = 7;
+
+        goto label07;
+
+     label06:
+        $b3 = 5;
+
+     label07:
+        b0 = $b3;
+
+        $r2 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        $r3 = $r2.<androidx.media3.common.util.ParsableBitArray: byte[] data>;
+
+        $z1 = specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: boolean continueRead(androidx.media3.common.util.ParsableByteArray,byte[],int)>(r1, $r3, b0);
+
+        if $z1 == 0 goto label01;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void parseAdtsHeader()>();
+
+        goto label01;
+
+     label08:
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void readSample(androidx.media3.common.util.ParsableByteArray)>(r1);
+
+        goto label01;
+
+     label09:
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r6;
+
+     label10:
+        return;
+    }
+
+    public void packetFinished()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        return;
+    }
+
+    public long getSampleDurationUs()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        long $l0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        $l0 = r0.<androidx.media3.extractor.ts.AdtsReader: long sampleDurationUs>;
+
+        return $l0;
+    }
+
+    private void resetSync()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: boolean foundFirstFrame> = 0;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void setFindingSampleState()>();
+
+        return;
+    }
+
+    private boolean continueRead(androidx.media3.common.util.ParsableByteArray, byte[], int)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        byte[] r2;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r2 := @parameter1: byte[];
+
+        i0 := @parameter2: int;
+
+        $i2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        $i3 = r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead>;
+
+        $i4 = i0 - $i3;
+
+        i1 = staticinvoke <java.lang.Math: int min(int,int)>($i2, $i4);
+
+        $i5 = r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead>;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void readBytes(byte[],int,int)>(r2, $i5, i1);
+
+        $i6 = r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead>;
+
+        $i7 = $i6 + i1;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead> = $i7;
+
+        $i8 = r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead>;
+
+        if $i8 != i0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private void setFindingSampleState()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int state> = 0;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead> = 0;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int matchState> = 256;
+
+        return;
+    }
+
+    private void setReadingId3HeaderState()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        byte[] $r1;
+        int $i0;
+        androidx.media3.common.util.ParsableByteArray $r2;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int state> = 2;
+
+        $r1 = <androidx.media3.extractor.ts.AdtsReader: byte[] ID3_IDENTIFIER>;
+
+        $i0 = lengthof $r1;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead> = $i0;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int sampleSize> = 0;
+
+        $r2 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableByteArray id3HeaderBuffer>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(0);
+
+        return;
+    }
+
+    private void setReadingSampleState(androidx.media3.extractor.TrackOutput, long, int, int)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.extractor.TrackOutput r1;
+        long l0;
+        int i1, i2;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r1 := @parameter0: androidx.media3.extractor.TrackOutput;
+
+        l0 := @parameter1: long;
+
+        i1 := @parameter2: int;
+
+        i2 := @parameter3: int;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int state> = 4;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead> = i1;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput currentOutput> = r1;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: long currentSampleDuration> = l0;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int sampleSize> = i2;
+
+        return;
+    }
+
+    private void setReadingAdtsHeaderState()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int state> = 3;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead> = 0;
+
+        return;
+    }
+
+    private void setCheckingAdtsHeaderState()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int state> = 1;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead> = 0;
+
+        return;
+    }
+
+    private void findNextSample(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        byte[] r2;
+        int i0, $i2, $i4, $i5, $i10, i11, $i12, $i13;
+        short s1, $s7, $s8, $s9;
+        byte $b3, $b6;
+        boolean $z0, $z1, $z2, $z3, $z4;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        i11 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        i0 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+     label01:
+        if i11 >= i0 goto label14;
+
+        $i2 = i11;
+
+        i11 = i11 + 1;
+
+        $b3 = r2[$i2];
+
+        s1 = $b3 & 255;
+
+        $i4 = r0.<androidx.media3.extractor.ts.AdtsReader: int matchState>;
+
+        if $i4 != 512 goto label07;
+
+        $b6 = (byte) s1;
+
+        $z0 = specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: boolean isAdtsSyncBytes(byte,byte)>(-1, $b6);
+
+        if $z0 == 0 goto label07;
+
+        $z1 = r0.<androidx.media3.extractor.ts.AdtsReader: boolean foundFirstFrame>;
+
+        if $z1 != 0 goto label02;
+
+        $i10 = i11 - 2;
+
+        $z3 = specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: boolean checkSyncPositionValid(androidx.media3.common.util.ParsableByteArray,int)>(r1, $i10);
+
+        if $z3 == 0 goto label07;
+
+     label02:
+        $s7 = s1 & 8;
+
+        $s8 = $s7 >> 3;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int currentFrameVersion> = $s8;
+
+        $s9 = s1 & 1;
+
+        if $s9 != 0 goto label03;
+
+        $z4 = 1;
+
+        goto label04;
+
+     label03:
+        $z4 = 0;
+
+     label04:
+        r0.<androidx.media3.extractor.ts.AdtsReader: boolean hasCrc> = $z4;
+
+        $z2 = r0.<androidx.media3.extractor.ts.AdtsReader: boolean foundFirstFrame>;
+
+        if $z2 != 0 goto label05;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void setCheckingAdtsHeaderState()>();
+
+        goto label06;
+
+     label05:
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void setReadingAdtsHeaderState()>();
+
+     label06:
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i11);
+
+        return;
+
+     label07:
+        $i12 = r0.<androidx.media3.extractor.ts.AdtsReader: int matchState>;
+
+        $i13 = $i12 | s1;
+
+        lookupswitch($i13)
+        {
+            case 329: goto label09;
+            case 511: goto label08;
+            case 836: goto label10;
+            case 1075: goto label11;
+            default: goto label12;
+        };
+
+     label08:
+        r0.<androidx.media3.extractor.ts.AdtsReader: int matchState> = 512;
+
+        goto label13;
+
+     label09:
+        r0.<androidx.media3.extractor.ts.AdtsReader: int matchState> = 768;
+
+        goto label13;
+
+     label10:
+        r0.<androidx.media3.extractor.ts.AdtsReader: int matchState> = 1024;
+
+        goto label13;
+
+     label11:
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void setReadingId3HeaderState()>();
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i11);
+
+        return;
+
+     label12:
+        $i5 = r0.<androidx.media3.extractor.ts.AdtsReader: int matchState>;
+
+        if $i5 == 256 goto label13;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int matchState> = 256;
+
+        i11 = i11 + -1;
+
+     label13:
+        goto label01;
+
+     label14:
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(i11);
+
+        return;
+    }
+
+    private void checkAdtsHeader(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        int i0, $i1, $i2, $i4, $i5, $i6;
+        androidx.media3.common.util.ParsableBitArray $r2, $r5, $r6;
+        byte[] $r3, $r4;
+        byte $b3;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        $i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i1 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        $r3 = $r2.<androidx.media3.common.util.ParsableBitArray: byte[] data>;
+
+        $r4 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        $i2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int getPosition()>();
+
+        $b3 = $r4[$i2];
+
+        $r3[0] = $b3;
+
+        $r5 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        virtualinvoke $r5.<androidx.media3.common.util.ParsableBitArray: void setPosition(int)>(2);
+
+        $r6 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        i0 = virtualinvoke $r6.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(4);
+
+        $i4 = r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameSampleRateIndex>;
+
+        if $i4 == -1 goto label2;
+
+        $i6 = r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameSampleRateIndex>;
+
+        if i0 == $i6 goto label2;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void resetSync()>();
+
+        return;
+
+     label2:
+        $z0 = r0.<androidx.media3.extractor.ts.AdtsReader: boolean foundFirstFrame>;
+
+        if $z0 != 0 goto label3;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: boolean foundFirstFrame> = 1;
+
+        $i5 = r0.<androidx.media3.extractor.ts.AdtsReader: int currentFrameVersion>;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameVersion> = $i5;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameSampleRateIndex> = i0;
+
+     label3:
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void setReadingAdtsHeaderState()>();
+
+        return;
+    }
+
+    private boolean checkSyncPositionValid(androidx.media3.common.util.ParsableByteArray, int)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        int i0, i1, i2, i3, $i4, $i5, $i6, $i9, $i10, $i12, $i13, $i15, $i16, $i18, $i22, $i23, $i24, i25, i26;
+        byte[] r2, $r4, $r8, $r12;
+        androidx.media3.common.util.ParsableBitArray $r3, $r5, $r6, $r7, $r9, $r10, $r11, $r13, $r14;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        byte $b7, $b8, $b11, $b14, $b17, $b19, $b20, $b21;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        i0 := @parameter1: int;
+
+        $i4 = i0 + 1;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>($i4);
+
+        $r3 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        $r4 = $r3.<androidx.media3.common.util.ParsableBitArray: byte[] data>;
+
+        $z0 = specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: boolean tryRead(androidx.media3.common.util.ParsableByteArray,byte[],int)>(r1, $r4, 1);
+
+        if $z0 != 0 goto label01;
+
+        return 0;
+
+     label01:
+        $r5 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        virtualinvoke $r5.<androidx.media3.common.util.ParsableBitArray: void setPosition(int)>(4);
+
+        $r6 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        i1 = virtualinvoke $r6.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(1);
+
+        $i5 = r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameVersion>;
+
+        if $i5 == -1 goto label02;
+
+        $i24 = r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameVersion>;
+
+        if i1 == $i24 goto label02;
+
+        return 0;
+
+     label02:
+        $i6 = r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameSampleRateIndex>;
+
+        if $i6 == -1 goto label05;
+
+        $r11 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        $r12 = $r11.<androidx.media3.common.util.ParsableBitArray: byte[] data>;
+
+        $z3 = specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: boolean tryRead(androidx.media3.common.util.ParsableByteArray,byte[],int)>(r1, $r12, 1);
+
+        if $z3 != 0 goto label03;
+
+        return 1;
+
+     label03:
+        $r13 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        virtualinvoke $r13.<androidx.media3.common.util.ParsableBitArray: void setPosition(int)>(2);
+
+        $r14 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        i25 = virtualinvoke $r14.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(4);
+
+        $i22 = r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameSampleRateIndex>;
+
+        if i25 == $i22 goto label04;
+
+        return 0;
+
+     label04:
+        $i23 = i0 + 2;
+
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>($i23);
+
+     label05:
+        $r7 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        $r8 = $r7.<androidx.media3.common.util.ParsableBitArray: byte[] data>;
+
+        $z1 = specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: boolean tryRead(androidx.media3.common.util.ParsableByteArray,byte[],int)>(r1, $r8, 4);
+
+        if $z1 != 0 goto label06;
+
+        return 1;
+
+     label06:
+        $r9 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        virtualinvoke $r9.<androidx.media3.common.util.ParsableBitArray: void setPosition(int)>(14);
+
+        $r10 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        i26 = virtualinvoke $r10.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(13);
+
+        if i26 >= 7 goto label07;
+
+        return 0;
+
+     label07:
+        r2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: byte[] getData()>();
+
+        i2 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int limit()>();
+
+        i3 = i0 + i26;
+
+        if i3 < i2 goto label08;
+
+        return 1;
+
+     label08:
+        $b7 = r2[i3];
+
+        if $b7 != -1 goto label12;
+
+        $i15 = i3 + 1;
+
+        if $i15 != i2 goto label09;
+
+        return 1;
+
+     label09:
+        $i16 = i3 + 1;
+
+        $b17 = r2[$i16];
+
+        $z2 = specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: boolean isAdtsSyncBytes(byte,byte)>(-1, $b17);
+
+        if $z2 == 0 goto label10;
+
+        $i18 = i3 + 1;
+
+        $b19 = r2[$i18];
+
+        $b20 = $b19 & 8;
+
+        $b21 = $b20 >> 3;
+
+        if $b21 != i1 goto label10;
+
+        $z4 = 1;
+
+        goto label11;
+
+     label10:
+        $z4 = 0;
+
+     label11:
+        return $z4;
+
+     label12:
+        $b8 = r2[i3];
+
+        if $b8 == 73 goto label13;
+
+        return 0;
+
+     label13:
+        $i9 = i3 + 1;
+
+        if $i9 != i2 goto label14;
+
+        return 1;
+
+     label14:
+        $i10 = i3 + 1;
+
+        $b11 = r2[$i10];
+
+        if $b11 == 68 goto label15;
+
+        return 0;
+
+     label15:
+        $i12 = i3 + 2;
+
+        if $i12 != i2 goto label16;
+
+        return 1;
+
+     label16:
+        $i13 = i3 + 2;
+
+        $b14 = r2[$i13];
+
+        if $b14 != 51 goto label17;
+
+        $z5 = 1;
+
+        goto label18;
+
+     label17:
+        $z5 = 0;
+
+     label18:
+        return $z5;
+    }
+
+    private boolean isAdtsSyncBytes(byte, byte)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        byte b0, b1;
+        int i2, $i5;
+        short $s3, $s4;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        b0 := @parameter0: byte;
+
+        b1 := @parameter1: byte;
+
+        $s3 = b0 & 255;
+
+        $i5 = $s3 << 8;
+
+        $s4 = b1 & 255;
+
+        i2 = $i5 | $s4;
+
+        $z0 = staticinvoke <androidx.media3.extractor.ts.AdtsReader: boolean isAdtsSyncWord(int)>(i2);
+
+        return $z0;
+    }
+
+    private boolean tryRead(androidx.media3.common.util.ParsableByteArray, byte[], int)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        byte[] r2;
+        int i0, $i1;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        r2 := @parameter1: byte[];
+
+        i0 := @parameter2: int;
+
+        $i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        if $i1 >= i0 goto label1;
+
+        return 0;
+
+     label1:
+        virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: void readBytes(byte[],int,int)>(r2, 0, i0);
+
+        return 1;
+    }
+
+    private void parseId3Header()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.common.util.ParsableByteArray $r1, $r3, $r4;
+        androidx.media3.extractor.TrackOutput $r2, $r5;
+        int $i0, $i1;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        $r2 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput id3Output>;
+
+        $r1 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableByteArray id3HeaderBuffer>;
+
+        interfaceinvoke $r2.<androidx.media3.extractor.TrackOutput: void sampleData(androidx.media3.common.util.ParsableByteArray,int)>($r1, 10);
+
+        $r3 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableByteArray id3HeaderBuffer>;
+
+        virtualinvoke $r3.<androidx.media3.common.util.ParsableByteArray: void setPosition(int)>(6);
+
+        $r5 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput id3Output>;
+
+        $r4 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableByteArray id3HeaderBuffer>;
+
+        $i0 = virtualinvoke $r4.<androidx.media3.common.util.ParsableByteArray: int readSynchSafeInt()>();
+
+        $i1 = $i0 + 10;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void setReadingSampleState(androidx.media3.extractor.TrackOutput,long,int,int)>($r5, 0L, 10, $i1);
+
+        return;
+    }
+
+    private void parseAdtsHeader() throws androidx.media3.common.ParserException
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        int i0, $i1, $i2, $i4, $i5, $i6, $i7, $i8, i11, i12;
+        byte[] r1;
+        androidx.media3.extractor.AacUtil$Config r2;
+        androidx.media3.common.Format r3;
+        androidx.media3.common.util.ParsableBitArray $r4, $r5, $r6, $r7, $r9, $r10, $r11;
+        boolean $z0, $z1;
+        long $l3, $l9, $l10;
+        androidx.media3.extractor.TrackOutput $r8, $r24;
+        androidx.media3.common.Format$Builder $r12, $r14, $r15, $r17, $r18, $r19, $r21, $r23;
+        java.lang.String $r13, $r16, $r22, $r29;
+        java.util.List $r20;
+        java.lang.StringBuilder $r25, $r26, $r27, $r28;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        $r4 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        virtualinvoke $r4.<androidx.media3.common.util.ParsableBitArray: void setPosition(int)>(0);
+
+        $z0 = r0.<androidx.media3.extractor.ts.AdtsReader: boolean hasOutputFormat>;
+
+        if $z0 != 0 goto label2;
+
+        $r9 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        $i4 = virtualinvoke $r9.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(2);
+
+        i11 = $i4 + 1;
+
+        if i11 == 2 goto label1;
+
+        $r25 = new java.lang.StringBuilder;
+
+        specialinvoke $r25.<java.lang.StringBuilder: void <init>()>();
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Detected audio object type: ");
+
+        $r27 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i11);
+
+        $r28 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", but assuming AAC LC.");
+
+        $r29 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String)>("AdtsReader", $r29);
+
+        i11 = 2;
+
+     label1:
+        $r10 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        virtualinvoke $r10.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(5);
+
+        $r11 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        i0 = virtualinvoke $r11.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(3);
+
+        $i5 = r0.<androidx.media3.extractor.ts.AdtsReader: int firstFrameSampleRateIndex>;
+
+        r1 = staticinvoke <androidx.media3.extractor.AacUtil: byte[] buildAudioSpecificConfig(int,int,int)>(i11, $i5, i0);
+
+        r2 = staticinvoke <androidx.media3.extractor.AacUtil: androidx.media3.extractor.AacUtil$Config parseAudioSpecificConfig(byte[])>(r1);
+
+        $r12 = new androidx.media3.common.Format$Builder;
+
+        specialinvoke $r12.<androidx.media3.common.Format$Builder: void <init>()>();
+
+        $r13 = r0.<androidx.media3.extractor.ts.AdtsReader: java.lang.String formatId>;
+
+        $r14 = virtualinvoke $r12.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setId(java.lang.String)>($r13);
+
+        $r15 = virtualinvoke $r14.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleMimeType(java.lang.String)>("audio/mp4a-latm");
+
+        $r16 = r2.<androidx.media3.extractor.AacUtil$Config: java.lang.String codecs>;
+
+        $r17 = virtualinvoke $r15.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setCodecs(java.lang.String)>($r16);
+
+        $i6 = r2.<androidx.media3.extractor.AacUtil$Config: int channelCount>;
+
+        $r18 = virtualinvoke $r17.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setChannelCount(int)>($i6);
+
+        $i7 = r2.<androidx.media3.extractor.AacUtil$Config: int sampleRateHz>;
+
+        $r19 = virtualinvoke $r18.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setSampleRate(int)>($i7);
+
+        $r20 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>(r1);
+
+        $r21 = virtualinvoke $r19.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setInitializationData(java.util.List)>($r20);
+
+        $r22 = r0.<androidx.media3.extractor.ts.AdtsReader: java.lang.String language>;
+
+        $r23 = virtualinvoke $r21.<androidx.media3.common.Format$Builder: androidx.media3.common.Format$Builder setLanguage(java.lang.String)>($r22);
+
+        r3 = virtualinvoke $r23.<androidx.media3.common.Format$Builder: androidx.media3.common.Format build()>();
+
+        $i8 = r3.<androidx.media3.common.Format: int sampleRate>;
+
+        $l9 = (long) $i8;
+
+        $l10 = 1024000000L / $l9;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: long sampleDurationUs> = $l10;
+
+        $r24 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput output>;
+
+        interfaceinvoke $r24.<androidx.media3.extractor.TrackOutput: void format(androidx.media3.common.Format)>(r3);
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: boolean hasOutputFormat> = 1;
+
+        goto label3;
+
+     label2:
+        $r5 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        virtualinvoke $r5.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(10);
+
+     label3:
+        $r6 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        virtualinvoke $r6.<androidx.media3.common.util.ParsableBitArray: void skipBits(int)>(4);
+
+        $r7 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.common.util.ParsableBitArray adtsScratch>;
+
+        $i1 = virtualinvoke $r7.<androidx.media3.common.util.ParsableBitArray: int readBits(int)>(13);
+
+        $i2 = $i1 - 2;
+
+        i12 = $i2 - 5;
+
+        $z1 = r0.<androidx.media3.extractor.ts.AdtsReader: boolean hasCrc>;
+
+        if $z1 == 0 goto label4;
+
+        i12 = i12 + -2;
+
+     label4:
+        $r8 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput output>;
+
+        $l3 = r0.<androidx.media3.extractor.ts.AdtsReader: long sampleDurationUs>;
+
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void setReadingSampleState(androidx.media3.extractor.TrackOutput,long,int,int)>($r8, $l3, 0, i12);
+
+        return;
+    }
+
+    private void readSample(androidx.media3.common.util.ParsableByteArray)
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.common.util.ParsableByteArray r1;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i11;
+        androidx.media3.extractor.TrackOutput $r2, $r3;
+        long $l9, $l12, $l13, $l14, $l15;
+        byte $b10;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        r1 := @parameter0: androidx.media3.common.util.ParsableByteArray;
+
+        $i1 = virtualinvoke r1.<androidx.media3.common.util.ParsableByteArray: int bytesLeft()>();
+
+        $i3 = r0.<androidx.media3.extractor.ts.AdtsReader: int sampleSize>;
+
+        $i2 = r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead>;
+
+        $i4 = $i3 - $i2;
+
+        i0 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i4);
+
+        $r2 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput currentOutput>;
+
+        interfaceinvoke $r2.<androidx.media3.extractor.TrackOutput: void sampleData(androidx.media3.common.util.ParsableByteArray,int)>(r1, i0);
+
+        $i5 = r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead>;
+
+        $i6 = $i5 + i0;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead> = $i6;
+
+        $i8 = r0.<androidx.media3.extractor.ts.AdtsReader: int bytesRead>;
+
+        $i7 = r0.<androidx.media3.extractor.ts.AdtsReader: int sampleSize>;
+
+        if $i8 != $i7 goto label2;
+
+        $l9 = r0.<androidx.media3.extractor.ts.AdtsReader: long timeUs>;
+
+        $b10 = $l9 cmp -9223372036854775807L;
+
+        if $b10 == 0 goto label1;
+
+        $r3 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput currentOutput>;
+
+        $l12 = r0.<androidx.media3.extractor.ts.AdtsReader: long timeUs>;
+
+        $i11 = r0.<androidx.media3.extractor.ts.AdtsReader: int sampleSize>;
+
+        interfaceinvoke $r3.<androidx.media3.extractor.TrackOutput: void sampleMetadata(long,int,int,int,androidx.media3.extractor.TrackOutput$CryptoData)>($l12, 1, $i11, 0, null);
+
+        $l14 = r0.<androidx.media3.extractor.ts.AdtsReader: long timeUs>;
+
+        $l13 = r0.<androidx.media3.extractor.ts.AdtsReader: long currentSampleDuration>;
+
+        $l15 = $l14 + $l13;
+
+        r0.<androidx.media3.extractor.ts.AdtsReader: long timeUs> = $l15;
+
+     label1:
+        specialinvoke r0.<androidx.media3.extractor.ts.AdtsReader: void setFindingSampleState()>();
+
+     label2:
+        return;
+    }
+
+    private void assertTracksCreated()
+    {
+        androidx.media3.extractor.ts.AdtsReader r0;
+        androidx.media3.extractor.TrackOutput $r1, $r3, $r5;
+
+        r0 := @this: androidx.media3.extractor.ts.AdtsReader;
+
+        $r1 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput output>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r3 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput currentOutput>;
+
+        staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r3);
+
+        $r5 = r0.<androidx.media3.extractor.ts.AdtsReader: androidx.media3.extractor.TrackOutput id3Output>;
+
+        staticinvoke <androidx.media3.common.util.Util: java.lang.Object castNonNull(java.lang.Object)>($r5);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        byte[] $r0;
+
+        $r0 = newarray (byte)[3];
+
+        $r0[0] = 73;
+
+        $r0[1] = 68;
+
+        $r0[2] = 51;
+
+        <androidx.media3.extractor.ts.AdtsReader: byte[] ID3_IDENTIFIER> = $r0;
+
+        return;
+    }
+

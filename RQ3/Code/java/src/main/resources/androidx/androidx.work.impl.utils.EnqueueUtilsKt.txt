@@ -1,0 +1,198 @@
+androidx.work.impl.utils.EnqueueUtilsKt
+    public static final androidx.work.impl.model.WorkSpec tryDelegateConstrainedWorkSpec(androidx.work.impl.model.WorkSpec)
+    {
+        androidx.work.impl.model.WorkSpec r0, $r13;
+        androidx.work.Constraints r1;
+        java.lang.String r2, r4, $r6;
+        boolean z0, $z1, $z2;
+        androidx.work.Data r3, $r8, $r11;
+        java.lang.Class $r5, $r12;
+        androidx.work.Data$Builder $r7, $r9, $r10;
+
+        r0 := @parameter0: androidx.work.impl.model.WorkSpec;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "workSpec");
+
+        r1 = r0.<androidx.work.impl.model.WorkSpec: androidx.work.Constraints constraints>;
+
+        r2 = r0.<androidx.work.impl.model.WorkSpec: java.lang.String workerClassName>;
+
+        $r5 = class "Landroidx/work/impl/workers/ConstraintTrackingWorker;";
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.String getName()>();
+
+        z0 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>(r2, $r6);
+
+        if z0 != 0 goto label2;
+
+        $z1 = virtualinvoke r1.<androidx.work.Constraints: boolean requiresBatteryNotLow()>();
+
+        if $z1 != 0 goto label1;
+
+        $z2 = virtualinvoke r1.<androidx.work.Constraints: boolean requiresStorageNotLow()>();
+
+        if $z2 == 0 goto label2;
+
+     label1:
+        $r7 = new androidx.work.Data$Builder;
+
+        specialinvoke $r7.<androidx.work.Data$Builder: void <init>()>();
+
+        $r8 = r0.<androidx.work.impl.model.WorkSpec: androidx.work.Data input>;
+
+        $r9 = virtualinvoke $r7.<androidx.work.Data$Builder: androidx.work.Data$Builder putAll(androidx.work.Data)>($r8);
+
+        $r10 = virtualinvoke $r9.<androidx.work.Data$Builder: androidx.work.Data$Builder putString(java.lang.String,java.lang.String)>("androidx.work.impl.workers.ConstraintTrackingWorker.ARGUMENT_CLASS_NAME", r2);
+
+        $r11 = virtualinvoke $r10.<androidx.work.Data$Builder: androidx.work.Data build()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r11, "Builder().putAll(workSpe\u2026ame)\n            .build()");
+
+        r3 = $r11;
+
+        $r12 = class "Landroidx/work/impl/workers/ConstraintTrackingWorker;";
+
+        r4 = virtualinvoke $r12.<java.lang.Class: java.lang.String getName()>();
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r4, "name");
+
+        $r13 = staticinvoke <androidx.work.impl.model.WorkSpec: androidx.work.impl.model.WorkSpec copy$default(androidx.work.impl.model.WorkSpec,java.lang.String,androidx.work.WorkInfo$State,java.lang.String,java.lang.String,androidx.work.Data,androidx.work.Data,long,long,long,androidx.work.Constraints,int,androidx.work.BackoffPolicy,long,long,long,long,boolean,androidx.work.OutOfQuotaPolicy,int,int,int,java.lang.Object)>(r0, null, null, r4, null, r3, null, 0L, 0L, 0L, null, 0, null, 0L, 0L, 0L, 0L, 0, null, 0, 0, 1048555, null);
+
+        return $r13;
+
+     label2:
+        return r0;
+    }
+
+    public static final androidx.work.impl.model.WorkSpec wrapInConstraintTrackingWorkerIfNeeded(java.util.List, androidx.work.impl.model.WorkSpec)
+    {
+        java.util.List r0;
+        androidx.work.impl.model.WorkSpec r1, $r2;
+        int i0, $i1;
+        boolean $z0, $z1;
+
+        r0 := @parameter0: java.util.List;
+
+        r1 := @parameter1: androidx.work.impl.model.WorkSpec;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r0, "schedulers");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "workSpec");
+
+        i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if 23 > i0 goto label2;
+
+        if i0 >= 26 goto label1;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label1:
+        $z1 = 0;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        if $z1 == 0 goto label4;
+
+        $r2 = staticinvoke <androidx.work.impl.utils.EnqueueUtilsKt: androidx.work.impl.model.WorkSpec tryDelegateConstrainedWorkSpec(androidx.work.impl.model.WorkSpec)>(r1);
+
+        goto label6;
+
+     label4:
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 > 22 goto label5;
+
+        $z0 = staticinvoke <androidx.work.impl.utils.EnqueueUtilsKt: boolean usesScheduler(java.util.List,java.lang.String)>(r0, "androidx.work.impl.background.gcm.GcmScheduler");
+
+        if $z0 == 0 goto label5;
+
+        $r2 = staticinvoke <androidx.work.impl.utils.EnqueueUtilsKt: androidx.work.impl.model.WorkSpec tryDelegateConstrainedWorkSpec(androidx.work.impl.model.WorkSpec)>(r1);
+
+        goto label6;
+
+     label5:
+        $r2 = r1;
+
+     label6:
+        return $r2;
+    }
+
+    private static final boolean usesScheduler(java.util.List, java.lang.String)
+    {
+        java.util.List r0;
+        java.lang.String r1;
+        java.lang.Class r2, $r6;
+        java.util.Iterator r3;
+        java.lang.Object r4;
+        androidx.work.impl.Scheduler r5;
+        boolean $z2, $z3, $z4, $z5, $z6;
+        java.util.Collection $r7;
+        java.lang.Throwable $r8;
+        java.lang.Iterable $r9;
+
+        r0 := @parameter0: java.util.List;
+
+        r1 := @parameter1: java.lang.String;
+
+     label1:
+        r2 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r1);
+
+        $r9 = (java.lang.Iterable) r0;
+
+        $z2 = $r9 instanceof java.util.Collection;
+
+        if $z2 == 0 goto label2;
+
+        $r7 = (java.util.Collection) $r9;
+
+        $z4 = interfaceinvoke $r7.<java.util.Collection: boolean isEmpty()>();
+
+        if $z4 == 0 goto label2;
+
+        $z5 = 0;
+
+        goto label5;
+
+     label2:
+        r3 = interfaceinvoke $r9.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z6 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z6 == 0 goto label4;
+
+        r4 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (androidx.work.impl.Scheduler) r4;
+
+        $r6 = virtualinvoke r5.<java.lang.Object: java.lang.Class getClass()>();
+
+        $z3 = virtualinvoke r2.<java.lang.Class: boolean isAssignableFrom(java.lang.Class)>($r6);
+
+        if $z3 == 0 goto label3;
+
+        $z5 = 1;
+
+        goto label5;
+
+     label4:
+        $z5 = 0;
+
+     label5:
+        return $z5;
+
+     label6:
+        $r8 := @caughtexception;
+
+        return 0;
+
+        catch java.lang.ClassNotFoundException from label1 to label6 with label6;
+    }
+

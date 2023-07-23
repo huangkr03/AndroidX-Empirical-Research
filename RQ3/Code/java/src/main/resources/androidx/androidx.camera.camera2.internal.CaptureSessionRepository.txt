@@ -1,0 +1,795 @@
+androidx.camera.camera2.internal.CaptureSessionRepository
+<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.concurrent.Executor mExecutor>
+<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>
+<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCaptureSessions>
+<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mClosingCaptureSession>
+<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCreatingCaptureSessions>
+<androidx.camera.camera2.internal.CaptureSessionRepository: android.hardware.camera2.CameraDevice$StateCallback mCameraStateCallback>
+    void <init>(java.util.concurrent.Executor)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        java.util.concurrent.Executor r1;
+        java.lang.Object $r2;
+        java.util.LinkedHashSet $r3, $r4, $r5;
+        androidx.camera.camera2.internal.CaptureSessionRepository$1 $r6;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        r1 := @parameter0: java.util.concurrent.Executor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.lang.Object;
+
+        specialinvoke $r2.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock> = $r2;
+
+        $r3 = new java.util.LinkedHashSet;
+
+        specialinvoke $r3.<java.util.LinkedHashSet: void <init>()>();
+
+        r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCaptureSessions> = $r3;
+
+        $r4 = new java.util.LinkedHashSet;
+
+        specialinvoke $r4.<java.util.LinkedHashSet: void <init>()>();
+
+        r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mClosingCaptureSession> = $r4;
+
+        $r5 = new java.util.LinkedHashSet;
+
+        specialinvoke $r5.<java.util.LinkedHashSet: void <init>()>();
+
+        r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCreatingCaptureSessions> = $r5;
+
+        $r6 = new androidx.camera.camera2.internal.CaptureSessionRepository$1;
+
+        specialinvoke $r6.<androidx.camera.camera2.internal.CaptureSessionRepository$1: void <init>(androidx.camera.camera2.internal.CaptureSessionRepository)>(r0);
+
+        r0.<androidx.camera.camera2.internal.CaptureSessionRepository: android.hardware.camera2.CameraDevice$StateCallback mCameraStateCallback> = $r6;
+
+        r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.concurrent.Executor mExecutor> = r1;
+
+        return;
+    }
+
+    android.hardware.camera2.CameraDevice$StateCallback getCameraStateCallback()
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        android.hardware.camera2.CameraDevice$StateCallback $r1;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        $r1 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: android.hardware.camera2.CameraDevice$StateCallback mCameraStateCallback>;
+
+        return $r1;
+    }
+
+    static void forceOnClosed(java.util.Set)
+    {
+        java.util.Set r0;
+        java.util.Iterator r1;
+        androidx.camera.camera2.internal.SynchronizedCaptureSession r2;
+        boolean $z0;
+        java.lang.Object $r3;
+        androidx.camera.camera2.internal.SynchronizedCaptureSession$StateCallback $r4;
+
+        r0 := @parameter0: java.util.Set;
+
+        r1 = interfaceinvoke r0.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (androidx.camera.camera2.internal.SynchronizedCaptureSession) $r3;
+
+        $r4 = interfaceinvoke r2.<androidx.camera.camera2.internal.SynchronizedCaptureSession: androidx.camera.camera2.internal.SynchronizedCaptureSession$StateCallback getStateCallback()>();
+
+        virtualinvoke $r4.<androidx.camera.camera2.internal.SynchronizedCaptureSession$StateCallback: void onClosed(androidx.camera.camera2.internal.SynchronizedCaptureSession)>(r2);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void forceFinishCloseStaleSessions(androidx.camera.camera2.internal.SynchronizedCaptureSession)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        androidx.camera.camera2.internal.SynchronizedCaptureSession r1, r4;
+        java.util.List r2;
+        java.util.Iterator r3;
+        boolean $z0;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        r1 := @parameter0: androidx.camera.camera2.internal.SynchronizedCaptureSession;
+
+        r2 = virtualinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.List getSessionsInOrder()>();
+
+        r3 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (androidx.camera.camera2.internal.SynchronizedCaptureSession) $r5;
+
+        if r4 != r1 goto label2;
+
+        goto label3;
+
+     label2:
+        interfaceinvoke r4.<androidx.camera.camera2.internal.SynchronizedCaptureSession: void finishClose()>();
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    java.util.List getCaptureSessions()
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r6;
+        java.util.ArrayList $r4;
+        java.util.Set $r5;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        $r3 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = new java.util.ArrayList;
+
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCaptureSessions>;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(java.util.Collection)>($r5);
+
+        exitmonitor r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    java.util.List getClosingCaptureSession()
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r6;
+        java.util.ArrayList $r4;
+        java.util.Set $r5;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        $r3 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = new java.util.ArrayList;
+
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mClosingCaptureSession>;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(java.util.Collection)>($r5);
+
+        exitmonitor r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    java.util.List getCreatingCaptureSessions()
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        java.lang.Object r1, $r3;
+        java.lang.Throwable r2, $r6;
+        java.util.ArrayList $r4;
+        java.util.Set $r5;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        $r3 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r1 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = new java.util.ArrayList;
+
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCreatingCaptureSessions>;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(java.util.Collection)>($r5);
+
+        exitmonitor r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r2 = $r6;
+
+        exitmonitor r1;
+
+     label4:
+        throw r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    java.util.List getSessionsInOrder()
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        java.lang.Object r1, $r4;
+        java.util.ArrayList r2, $r5;
+        java.lang.Throwable r3, $r8;
+        java.util.List $r6, $r7;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        $r4 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r1 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r2 = $r5;
+
+        $r6 = virtualinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.List getCaptureSessions()>();
+
+        interfaceinvoke r2.<java.util.List: boolean addAll(java.util.Collection)>($r6);
+
+        $r7 = virtualinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.List getCreatingCaptureSessions()>();
+
+        interfaceinvoke r2.<java.util.List: boolean addAll(java.util.Collection)>($r7);
+
+        exitmonitor r1;
+
+     label2:
+        return r2;
+
+     label3:
+        $r8 := @caughtexception;
+
+        r3 = $r8;
+
+        exitmonitor r1;
+
+     label4:
+        throw r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    void onCreateCaptureSession(androidx.camera.camera2.internal.SynchronizedCaptureSession)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        androidx.camera.camera2.internal.SynchronizedCaptureSession r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r6;
+        java.util.Set $r5;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        r1 := @parameter0: androidx.camera.camera2.internal.SynchronizedCaptureSession;
+
+        $r4 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCreatingCaptureSessions>;
+
+        interfaceinvoke $r5.<java.util.Set: boolean add(java.lang.Object)>(r1);
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r3 = $r6;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    void onCaptureSessionConfigureFail(androidx.camera.camera2.internal.SynchronizedCaptureSession)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        androidx.camera.camera2.internal.SynchronizedCaptureSession r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r6;
+        java.util.Set $r5;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        r1 := @parameter0: androidx.camera.camera2.internal.SynchronizedCaptureSession;
+
+        specialinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository: void forceFinishCloseStaleSessions(androidx.camera.camera2.internal.SynchronizedCaptureSession)>(r1);
+
+        $r4 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCreatingCaptureSessions>;
+
+        interfaceinvoke $r5.<java.util.Set: boolean remove(java.lang.Object)>(r1);
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r3 = $r6;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    void onCaptureSessionCreated(androidx.camera.camera2.internal.SynchronizedCaptureSession)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        androidx.camera.camera2.internal.SynchronizedCaptureSession r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r7;
+        java.util.Set $r5, $r6;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        r1 := @parameter0: androidx.camera.camera2.internal.SynchronizedCaptureSession;
+
+        $r4 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCaptureSessions>;
+
+        interfaceinvoke $r5.<java.util.Set: boolean add(java.lang.Object)>(r1);
+
+        $r6 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCreatingCaptureSessions>;
+
+        interfaceinvoke $r6.<java.util.Set: boolean remove(java.lang.Object)>(r1);
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        specialinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository: void forceFinishCloseStaleSessions(androidx.camera.camera2.internal.SynchronizedCaptureSession)>(r1);
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    void onCaptureSessionClosed(androidx.camera.camera2.internal.SynchronizedCaptureSession)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        androidx.camera.camera2.internal.SynchronizedCaptureSession r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r7;
+        java.util.Set $r5, $r6;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        r1 := @parameter0: androidx.camera.camera2.internal.SynchronizedCaptureSession;
+
+        $r4 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCaptureSessions>;
+
+        interfaceinvoke $r5.<java.util.Set: boolean remove(java.lang.Object)>(r1);
+
+        $r6 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mClosingCaptureSession>;
+
+        interfaceinvoke $r6.<java.util.Set: boolean remove(java.lang.Object)>(r1);
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r7 := @caughtexception;
+
+        r3 = $r7;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    void onCaptureSessionClosing(androidx.camera.camera2.internal.SynchronizedCaptureSession)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository r0;
+        androidx.camera.camera2.internal.SynchronizedCaptureSession r1;
+        java.lang.Object r2, $r4;
+        java.lang.Throwable r3, $r6;
+        java.util.Set $r5;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        r1 := @parameter0: androidx.camera.camera2.internal.SynchronizedCaptureSession;
+
+        $r4 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r2 = $r4;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mClosingCaptureSession>;
+
+        interfaceinvoke $r5.<java.util.Set: boolean add(java.lang.Object)>(r1);
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        r3 = $r6;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+androidx.camera.camera2.internal.CaptureSessionRepository$1
+<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>
+    void <init>(androidx.camera.camera2.internal.CaptureSessionRepository)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository$1 r0;
+        androidx.camera.camera2.internal.CaptureSessionRepository r1;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository$1;
+
+        r1 := @parameter0: androidx.camera.camera2.internal.CaptureSessionRepository;
+
+        r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0> = r1;
+
+        specialinvoke r0.<android.hardware.camera2.CameraDevice$StateCallback: void <init>()>();
+
+        return;
+    }
+
+    public void onOpened(android.hardware.camera2.CameraDevice)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository$1 r0;
+        android.hardware.camera2.CameraDevice r1;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository$1;
+
+        r1 := @parameter0: android.hardware.camera2.CameraDevice;
+
+        return;
+    }
+
+    public void onError(android.hardware.camera2.CameraDevice, int)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository$1 r0;
+        android.hardware.camera2.CameraDevice r1;
+        int i0;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository$1;
+
+        r1 := @parameter0: android.hardware.camera2.CameraDevice;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: void forceOnClosedCaptureSessions()>();
+
+        specialinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: void cameraClosed()>();
+
+        return;
+    }
+
+    public void onClosed(android.hardware.camera2.CameraDevice)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository$1 r0;
+        android.hardware.camera2.CameraDevice r1;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository$1;
+
+        r1 := @parameter0: android.hardware.camera2.CameraDevice;
+
+        specialinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: void cameraClosed()>();
+
+        return;
+    }
+
+    public void onDisconnected(android.hardware.camera2.CameraDevice)
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository$1 r0;
+        android.hardware.camera2.CameraDevice r1;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository$1;
+
+        r1 := @parameter0: android.hardware.camera2.CameraDevice;
+
+        specialinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: void forceOnClosedCaptureSessions()>();
+
+        specialinvoke r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: void cameraClosed()>();
+
+        return;
+    }
+
+    private void forceOnClosedCaptureSessions()
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository$1 r0;
+        java.util.LinkedHashSet r1, $r4;
+        java.lang.Object r2, $r6;
+        java.lang.Throwable r3, $r14;
+        androidx.camera.camera2.internal.CaptureSessionRepository $r5, $r7, $r9, $r11;
+        java.util.Set $r8, $r10;
+        java.util.concurrent.Executor $r12;
+        java.lang.Runnable $r13;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository$1;
+
+        $r4 = new java.util.LinkedHashSet;
+
+        specialinvoke $r4.<java.util.LinkedHashSet: void <init>()>();
+
+        r1 = $r4;
+
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>;
+
+        $r6 = $r5.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r2 = $r6;
+
+        entermonitor $r6;
+
+     label1:
+        $r7 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>;
+
+        $r8 = $r7.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCreatingCaptureSessions>;
+
+        virtualinvoke r1.<java.util.LinkedHashSet: boolean addAll(java.util.Collection)>($r8);
+
+        $r9 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>;
+
+        $r10 = $r9.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCaptureSessions>;
+
+        virtualinvoke r1.<java.util.LinkedHashSet: boolean addAll(java.util.Collection)>($r10);
+
+        exitmonitor r2;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r14 := @caughtexception;
+
+        r3 = $r14;
+
+        exitmonitor r2;
+
+     label4:
+        throw r3;
+
+     label5:
+        $r11 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>;
+
+        $r12 = $r11.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.concurrent.Executor mExecutor>;
+
+        $r13 = dynamicinvoke "run" <java.lang.Runnable (java.util.LinkedHashSet)>(r1) <java.lang.invoke.LambdaMetafactory: java.lang.invoke.CallSite metafactory(java.lang.invoke.MethodHandles$Lookup,java.lang.String,java.lang.invoke.MethodType,java.lang.invoke.MethodType,java.lang.invoke.MethodHandle,java.lang.invoke.MethodType)>(methodtype: void __METHODTYPE__(), methodhandle: "REF_INVOKE_STATIC" <androidx.camera.camera2.internal.CaptureSessionRepository$1: void lambda$forceOnClosedCaptureSessions$0(java.util.LinkedHashSet)>, methodtype: void __METHODTYPE__());
+
+        interfaceinvoke $r12.<java.util.concurrent.Executor: void execute(java.lang.Runnable)>($r13);
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private void cameraClosed()
+    {
+        androidx.camera.camera2.internal.CaptureSessionRepository$1 r0;
+        java.util.List r1;
+        androidx.camera.camera2.internal.CaptureSessionRepository $r2, $r4, $r5, $r7, $r9;
+        java.lang.Object $r3, $r11, r13;
+        java.util.Set $r6, $r8, $r10;
+        boolean $z0;
+        java.lang.Throwable $r12, r14;
+        java.util.Iterator r15;
+        androidx.camera.camera2.internal.SynchronizedCaptureSession r16;
+
+        r0 := @this: androidx.camera.camera2.internal.CaptureSessionRepository$1;
+
+        $r2 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>;
+
+        $r3 = $r2.<androidx.camera.camera2.internal.CaptureSessionRepository: java.lang.Object mLock>;
+
+        r13 = $r3;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>;
+
+        r1 = virtualinvoke $r4.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.List getSessionsInOrder()>();
+
+        $r5 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>;
+
+        $r6 = $r5.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCreatingCaptureSessions>;
+
+        interfaceinvoke $r6.<java.util.Set: void clear()>();
+
+        $r7 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>;
+
+        $r8 = $r7.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mCaptureSessions>;
+
+        interfaceinvoke $r8.<java.util.Set: void clear()>();
+
+        $r9 = r0.<androidx.camera.camera2.internal.CaptureSessionRepository$1: androidx.camera.camera2.internal.CaptureSessionRepository this$0>;
+
+        $r10 = $r9.<androidx.camera.camera2.internal.CaptureSessionRepository: java.util.Set mClosingCaptureSession>;
+
+        interfaceinvoke $r10.<java.util.Set: void clear()>();
+
+        exitmonitor r13;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r12 := @caughtexception;
+
+        r14 = $r12;
+
+        exitmonitor r13;
+
+     label4:
+        throw r14;
+
+     label5:
+        r15 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label6:
+        $z0 = interfaceinvoke r15.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label7;
+
+        $r11 = interfaceinvoke r15.<java.util.Iterator: java.lang.Object next()>();
+
+        r16 = (androidx.camera.camera2.internal.SynchronizedCaptureSession) $r11;
+
+        interfaceinvoke r16.<androidx.camera.camera2.internal.SynchronizedCaptureSession: void finishClose()>();
+
+        goto label6;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private static void lambda$forceOnClosedCaptureSessions$0(java.util.LinkedHashSet)
+    {
+        java.util.LinkedHashSet r0;
+
+        r0 := @parameter0: java.util.LinkedHashSet;
+
+        staticinvoke <androidx.camera.camera2.internal.CaptureSessionRepository: void forceOnClosed(java.util.Set)>(r0);
+
+        return;
+    }
+

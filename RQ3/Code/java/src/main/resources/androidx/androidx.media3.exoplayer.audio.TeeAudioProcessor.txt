@@ -1,0 +1,559 @@
+androidx.media3.exoplayer.audio.TeeAudioProcessor
+<androidx.media3.exoplayer.audio.TeeAudioProcessor: androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink audioBufferSink>
+    public void <init>(androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink)
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor r0;
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink r1, $r3;
+        java.lang.Object $r2;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor;
+
+        r1 := @parameter0: androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.BaseAudioProcessor: void <init>()>();
+
+        $r2 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r3 = (androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink) $r2;
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink audioBufferSink> = $r3;
+
+        return;
+    }
+
+    public androidx.media3.common.audio.AudioProcessor$AudioFormat onConfigure(androidx.media3.common.audio.AudioProcessor$AudioFormat)
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor r0;
+        androidx.media3.common.audio.AudioProcessor$AudioFormat r1;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor;
+
+        r1 := @parameter0: androidx.media3.common.audio.AudioProcessor$AudioFormat;
+
+        return r1;
+    }
+
+    public void queueInput(java.nio.ByteBuffer)
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor r0;
+        java.nio.ByteBuffer r1, $r3, $r4, $r5;
+        int i0;
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink $r2;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor;
+
+        r1 := @parameter0: java.nio.ByteBuffer;
+
+        i0 = virtualinvoke r1.<java.nio.ByteBuffer: int remaining()>();
+
+        if i0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink audioBufferSink>;
+
+        $r3 = virtualinvoke r1.<java.nio.ByteBuffer: java.nio.ByteBuffer asReadOnlyBuffer()>();
+
+        interfaceinvoke $r2.<androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink: void handleBuffer(java.nio.ByteBuffer)>($r3);
+
+        $r4 = virtualinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: java.nio.ByteBuffer replaceOutputBuffer(int)>(i0);
+
+        $r5 = virtualinvoke $r4.<java.nio.ByteBuffer: java.nio.ByteBuffer put(java.nio.ByteBuffer)>(r1);
+
+        virtualinvoke $r5.<java.nio.ByteBuffer: java.nio.Buffer flip()>();
+
+        return;
+    }
+
+    protected void onFlush()
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor r0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: void flushSinkIfActive()>();
+
+        return;
+    }
+
+    protected void onQueueEndOfStream()
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor r0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: void flushSinkIfActive()>();
+
+        return;
+    }
+
+    protected void onReset()
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor r0;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: void flushSinkIfActive()>();
+
+        return;
+    }
+
+    private void flushSinkIfActive()
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor r0;
+        boolean $z0;
+        androidx.media3.common.audio.AudioProcessor$AudioFormat $r1, $r2, $r3;
+        int $i0, $i1, $i2;
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink $r4;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor;
+
+        $z0 = virtualinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: boolean isActive()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink audioBufferSink>;
+
+        $r1 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i2 = $r1.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int sampleRate>;
+
+        $r2 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i1 = $r2.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int channelCount>;
+
+        $r3 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor: androidx.media3.common.audio.AudioProcessor$AudioFormat inputAudioFormat>;
+
+        $i0 = $r3.<androidx.media3.common.audio.AudioProcessor$AudioFormat: int encoding>;
+
+        interfaceinvoke $r4.<androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink: void flush(int,int,int)>($i2, $i1, $i0);
+
+     label1:
+        return;
+    }
+
+androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink: void flush(int,int,int)>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$AudioBufferSink: void handleBuffer(java.nio.ByteBuffer)>
+androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.lang.String TAG>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int FILE_SIZE_MINUS_8_OFFSET>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int FILE_SIZE_MINUS_44_OFFSET>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int HEADER_LENGTH>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.lang.String outputFileNamePrefix>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: byte[] scratchBuffer>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int sampleRateHz>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int channelCount>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int encoding>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.io.RandomAccessFile randomAccessFile>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int counter>
+<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int bytesWritten>
+    public void <init>(java.lang.String)
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink r0;
+        java.lang.String r1;
+        byte[] $r2, $r3;
+        java.nio.ByteBuffer $r4, $r6;
+        java.nio.ByteOrder $r5;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink;
+
+        r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.lang.String outputFileNamePrefix> = r1;
+
+        $r2 = newarray (byte)[1024];
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: byte[] scratchBuffer> = $r2;
+
+        $r3 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: byte[] scratchBuffer>;
+
+        $r4 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>($r3);
+
+        $r5 = <java.nio.ByteOrder: java.nio.ByteOrder LITTLE_ENDIAN>;
+
+        $r6 = virtualinvoke $r4.<java.nio.ByteBuffer: java.nio.ByteBuffer order(java.nio.ByteOrder)>($r5);
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer> = $r6;
+
+        return;
+    }
+
+    public void flush(int, int, int)
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink r0;
+        int i0, i1, i2;
+        java.lang.Throwable r1, $r2;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+     label1:
+        specialinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: void reset()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r1 = $r2;
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("WaveFileAudioBufferSink", "Error resetting", r1);
+
+     label4:
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int sampleRateHz> = i0;
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int channelCount> = i1;
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int encoding> = i2;
+
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public void handleBuffer(java.nio.ByteBuffer)
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink r0;
+        java.nio.ByteBuffer r1;
+        java.lang.Throwable r2, $r3;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink;
+
+        r1 := @parameter0: java.nio.ByteBuffer;
+
+     label1:
+        specialinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: void maybePrepareFile()>();
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: void writeBuffer(java.nio.ByteBuffer)>(r1);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+        r2 = $r3;
+
+        staticinvoke <androidx.media3.common.util.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("WaveFileAudioBufferSink", "Error writing data", r2);
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    private void maybePrepareFile() throws java.io.IOException
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink r0;
+        java.io.RandomAccessFile r1, $r2, $r3;
+        java.lang.String $r4;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink;
+
+        $r2 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.io.RandomAccessFile randomAccessFile>;
+
+        if $r2 == null goto label1;
+
+        return;
+
+     label1:
+        $r3 = new java.io.RandomAccessFile;
+
+        $r4 = specialinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.lang.String getNextOutputFileName()>();
+
+        specialinvoke $r3.<java.io.RandomAccessFile: void <init>(java.lang.String,java.lang.String)>($r4, "rw");
+
+        r1 = $r3;
+
+        specialinvoke r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: void writeFileHeader(java.io.RandomAccessFile)>(r1);
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.io.RandomAccessFile randomAccessFile> = r1;
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int bytesWritten> = 44;
+
+        return;
+    }
+
+    private void writeFileHeader(java.io.RandomAccessFile) throws java.io.IOException
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink r0;
+        java.io.RandomAccessFile r1;
+        int i0, $i1, $i2, $i4, $i6, $i7, $i8, $i9, $i10, $i12, $i13, $i14, $i16;
+        java.nio.ByteBuffer $r2, $r4, $r6, $r8, $r10, $r12, $r14, $r16, $r18;
+        short $s3, $s5, $s11, $s15;
+        byte[] $r19;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink;
+
+        r1 := @parameter0: java.io.RandomAccessFile;
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void writeInt(int)>(1380533830);
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void writeInt(int)>(-1);
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void writeInt(int)>(1463899717);
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void writeInt(int)>(1718449184);
+
+        $r2 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        virtualinvoke $r2.<java.nio.ByteBuffer: java.nio.Buffer clear()>();
+
+        $r4 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        virtualinvoke $r4.<java.nio.ByteBuffer: java.nio.ByteBuffer putInt(int)>(16);
+
+        $r6 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        $i1 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int encoding>;
+
+        $i2 = staticinvoke <androidx.media3.extractor.WavUtil: int getTypeForPcmEncoding(int)>($i1);
+
+        $s3 = (short) $i2;
+
+        virtualinvoke $r6.<java.nio.ByteBuffer: java.nio.ByteBuffer putShort(short)>($s3);
+
+        $r8 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        $i4 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int channelCount>;
+
+        $s5 = (short) $i4;
+
+        virtualinvoke $r8.<java.nio.ByteBuffer: java.nio.ByteBuffer putShort(short)>($s5);
+
+        $r10 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        $i6 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int sampleRateHz>;
+
+        virtualinvoke $r10.<java.nio.ByteBuffer: java.nio.ByteBuffer putInt(int)>($i6);
+
+        $i8 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int encoding>;
+
+        $i7 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int channelCount>;
+
+        i0 = staticinvoke <androidx.media3.common.util.Util: int getPcmFrameSize(int,int)>($i8, $i7);
+
+        $r12 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        $i9 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int sampleRateHz>;
+
+        $i10 = i0 * $i9;
+
+        virtualinvoke $r12.<java.nio.ByteBuffer: java.nio.ByteBuffer putInt(int)>($i10);
+
+        $r14 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        $s11 = (short) i0;
+
+        virtualinvoke $r14.<java.nio.ByteBuffer: java.nio.ByteBuffer putShort(short)>($s11);
+
+        $r16 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        $i13 = 8 * i0;
+
+        $i12 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int channelCount>;
+
+        $i14 = $i13 / $i12;
+
+        $s15 = (short) $i14;
+
+        virtualinvoke $r16.<java.nio.ByteBuffer: java.nio.ByteBuffer putShort(short)>($s15);
+
+        $r19 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: byte[] scratchBuffer>;
+
+        $r18 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        $i16 = virtualinvoke $r18.<java.nio.ByteBuffer: int position()>();
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void write(byte[],int,int)>($r19, 0, $i16);
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void writeInt(int)>(1684108385);
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void writeInt(int)>(-1);
+
+        return;
+    }
+
+    private void writeBuffer(java.nio.ByteBuffer) throws java.io.IOException
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink r0;
+        java.nio.ByteBuffer r1;
+        java.io.RandomAccessFile r2, $r3;
+        int i0, $i1, $i2, $i3, $i4;
+        java.lang.Object $r4;
+        boolean $z0;
+        byte[] $r5, $r6, $r8;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink;
+
+        r1 := @parameter0: java.nio.ByteBuffer;
+
+        $r3 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.io.RandomAccessFile randomAccessFile>;
+
+        $r4 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>($r3);
+
+        r2 = (java.io.RandomAccessFile) $r4;
+
+     label1:
+        $z0 = virtualinvoke r1.<java.nio.ByteBuffer: boolean hasRemaining()>();
+
+        if $z0 == 0 goto label2;
+
+        $i1 = virtualinvoke r1.<java.nio.ByteBuffer: int remaining()>();
+
+        $r5 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: byte[] scratchBuffer>;
+
+        $i2 = lengthof $r5;
+
+        i0 = staticinvoke <java.lang.Math: int min(int,int)>($i1, $i2);
+
+        $r6 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: byte[] scratchBuffer>;
+
+        virtualinvoke r1.<java.nio.ByteBuffer: java.nio.ByteBuffer get(byte[],int,int)>($r6, 0, i0);
+
+        $r8 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: byte[] scratchBuffer>;
+
+        virtualinvoke r2.<java.io.RandomAccessFile: void write(byte[],int,int)>($r8, 0, i0);
+
+        $i3 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int bytesWritten>;
+
+        $i4 = $i3 + i0;
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int bytesWritten> = $i4;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void reset() throws java.io.IOException
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink r0;
+        java.io.RandomAccessFile r1;
+        java.lang.Throwable r2, r3, $r14, $r15;
+        java.nio.ByteBuffer $r4, $r6, $r9, $r11;
+        int $i0, $i1, $i2, $i3;
+        byte[] $r8, $r13;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink;
+
+        r1 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.io.RandomAccessFile randomAccessFile>;
+
+        if r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r4 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        virtualinvoke $r4.<java.nio.ByteBuffer: java.nio.Buffer clear()>();
+
+        $r6 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        $i0 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int bytesWritten>;
+
+        $i1 = $i0 - 8;
+
+        virtualinvoke $r6.<java.nio.ByteBuffer: java.nio.ByteBuffer putInt(int)>($i1);
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void seek(long)>(4L);
+
+        $r8 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: byte[] scratchBuffer>;
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void write(byte[],int,int)>($r8, 0, 4);
+
+        $r9 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        virtualinvoke $r9.<java.nio.ByteBuffer: java.nio.Buffer clear()>();
+
+        $r11 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.nio.ByteBuffer scratchByteBuffer>;
+
+        $i2 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int bytesWritten>;
+
+        $i3 = $i2 - 44;
+
+        virtualinvoke $r11.<java.nio.ByteBuffer: java.nio.ByteBuffer putInt(int)>($i3);
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void seek(long)>(40L);
+
+        $r13 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: byte[] scratchBuffer>;
+
+        virtualinvoke r1.<java.io.RandomAccessFile: void write(byte[],int,int)>($r13, 0, 4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r15 := @caughtexception;
+
+        r2 = $r15;
+
+        staticinvoke <androidx.media3.common.util.Log: void w(java.lang.String,java.lang.String,java.lang.Throwable)>("WaveFileAudioBufferSink", "Error updating file size", r2);
+
+     label4:
+        virtualinvoke r1.<java.io.RandomAccessFile: void close()>();
+
+     label5:
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.io.RandomAccessFile randomAccessFile> = null;
+
+        goto label7;
+
+     label6:
+        $r14 := @caughtexception;
+
+        r3 = $r14;
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.io.RandomAccessFile randomAccessFile> = null;
+
+        throw r3;
+
+     label7:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+        catch java.lang.Throwable from label4 to label5 with label6;
+    }
+
+    private java.lang.String getNextOutputFileName()
+    {
+        androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink r0;
+        java.lang.Object[] $r1;
+        java.lang.String $r2, $r4;
+        int $i0, $i1;
+        java.lang.Integer $r3;
+
+        r0 := @this: androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink;
+
+        $r1 = newarray (java.lang.Object)[2];
+
+        $r2 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: java.lang.String outputFileNamePrefix>;
+
+        $r1[0] = $r2;
+
+        $i0 = r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int counter>;
+
+        $i1 = $i0 + 1;
+
+        r0.<androidx.media3.exoplayer.audio.TeeAudioProcessor$WavFileAudioBufferSink: int counter> = $i1;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r1[1] = $r3;
+
+        $r4 = staticinvoke <androidx.media3.common.util.Util: java.lang.String formatInvariant(java.lang.String,java.lang.Object[])>("%s-%04d.wav", $r1);
+
+        return $r4;
+    }
+

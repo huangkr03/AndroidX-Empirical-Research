@@ -1,0 +1,1099 @@
+io.grpc.internal.KeepAliveManager
+<io.grpc.internal.KeepAliveManager: long MIN_KEEPALIVE_TIMEOUT_NANOS>
+<io.grpc.internal.KeepAliveManager: long MIN_KEEPALIVE_TIME_NANOS>
+<io.grpc.internal.KeepAliveManager: boolean keepAliveDuringTransportIdle>
+<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$KeepAlivePinger keepAlivePinger>
+<io.grpc.internal.KeepAliveManager: long keepAliveTimeInNanos>
+<io.grpc.internal.KeepAliveManager: long keepAliveTimeoutInNanos>
+<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture pingFuture>
+<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledExecutorService scheduler>
+<io.grpc.internal.KeepAliveManager: java.lang.Runnable sendPing>
+<io.grpc.internal.KeepAliveManager: java.lang.Runnable shutdown>
+<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture shutdownFuture>
+<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>
+<io.grpc.internal.KeepAliveManager: com.google.common.base.Stopwatch stopwatch>
+    static void <clinit>()
+    {
+        java.util.concurrent.TimeUnit $r0;
+        long $l0;
+
+        $r0 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $l0 = virtualinvoke $r0.<java.util.concurrent.TimeUnit: long toNanos(long)>(10L);
+
+        <io.grpc.internal.KeepAliveManager: long MIN_KEEPALIVE_TIME_NANOS> = $l0;
+
+        $r0 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $l0 = virtualinvoke $r0.<java.util.concurrent.TimeUnit: long toNanos(long)>(10L);
+
+        <io.grpc.internal.KeepAliveManager: long MIN_KEEPALIVE_TIMEOUT_NANOS> = $l0;
+
+        return;
+    }
+
+    public void <init>(io.grpc.internal.KeepAliveManager$KeepAlivePinger, java.util.concurrent.ScheduledExecutorService, long, long, boolean)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        io.grpc.internal.KeepAliveManager$KeepAlivePinger $r1;
+        java.util.concurrent.ScheduledExecutorService $r2;
+        long $l0, $l1;
+        boolean $z0;
+        com.google.common.base.Stopwatch $r3;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager;
+
+        $r1 := @parameter0: io.grpc.internal.KeepAliveManager$KeepAlivePinger;
+
+        $r2 := @parameter1: java.util.concurrent.ScheduledExecutorService;
+
+        $l0 := @parameter2: long;
+
+        $l1 := @parameter3: long;
+
+        $z0 := @parameter4: boolean;
+
+        $r3 = staticinvoke <com.google.common.base.Stopwatch: com.google.common.base.Stopwatch createUnstarted()>();
+
+        specialinvoke $r0.<io.grpc.internal.KeepAliveManager: void <init>(io.grpc.internal.KeepAliveManager$KeepAlivePinger,java.util.concurrent.ScheduledExecutorService,com.google.common.base.Stopwatch,long,long,boolean)>($r1, $r2, $r3, $l0, $l1, $z0);
+
+        return;
+    }
+
+    void <init>(io.grpc.internal.KeepAliveManager$KeepAlivePinger, java.util.concurrent.ScheduledExecutorService, com.google.common.base.Stopwatch, long, long, boolean)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        java.util.concurrent.ScheduledExecutorService $r1;
+        com.google.common.base.Stopwatch $r2, $r9;
+        long $l0, $l1;
+        boolean $z0;
+        io.grpc.internal.KeepAliveManager$KeepAlivePinger $r3;
+        io.grpc.internal.KeepAliveManager$State $r4;
+        io.grpc.internal.LogExceptionRunnable $r5;
+        io.grpc.internal.KeepAliveManager$1 $r6;
+        io.grpc.internal.KeepAliveManager$2 $r7;
+        java.lang.Object $r8;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager;
+
+        $r3 := @parameter0: io.grpc.internal.KeepAliveManager$KeepAlivePinger;
+
+        $r1 := @parameter1: java.util.concurrent.ScheduledExecutorService;
+
+        $r2 := @parameter2: com.google.common.base.Stopwatch;
+
+        $l0 := @parameter3: long;
+
+        $l1 := @parameter4: long;
+
+        $z0 := @parameter5: boolean;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r4 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE>;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r4;
+
+        $r5 = new io.grpc.internal.LogExceptionRunnable;
+
+        $r6 = new io.grpc.internal.KeepAliveManager$1;
+
+        specialinvoke $r6.<io.grpc.internal.KeepAliveManager$1: void <init>(io.grpc.internal.KeepAliveManager)>($r0);
+
+        specialinvoke $r5.<io.grpc.internal.LogExceptionRunnable: void <init>(java.lang.Runnable)>($r6);
+
+        $r0.<io.grpc.internal.KeepAliveManager: java.lang.Runnable shutdown> = $r5;
+
+        $r5 = new io.grpc.internal.LogExceptionRunnable;
+
+        $r7 = new io.grpc.internal.KeepAliveManager$2;
+
+        specialinvoke $r7.<io.grpc.internal.KeepAliveManager$2: void <init>(io.grpc.internal.KeepAliveManager)>($r0);
+
+        specialinvoke $r5.<io.grpc.internal.LogExceptionRunnable: void <init>(java.lang.Runnable)>($r7);
+
+        $r0.<io.grpc.internal.KeepAliveManager: java.lang.Runnable sendPing> = $r5;
+
+        $r8 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r3, "keepAlivePinger");
+
+        $r3 = (io.grpc.internal.KeepAliveManager$KeepAlivePinger) $r8;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$KeepAlivePinger keepAlivePinger> = $r3;
+
+        $r8 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "scheduler");
+
+        $r1 = (java.util.concurrent.ScheduledExecutorService) $r8;
+
+        $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledExecutorService scheduler> = $r1;
+
+        $r8 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "stopwatch");
+
+        $r9 = (com.google.common.base.Stopwatch) $r8;
+
+        $r0.<io.grpc.internal.KeepAliveManager: com.google.common.base.Stopwatch stopwatch> = $r9;
+
+        $r0.<io.grpc.internal.KeepAliveManager: long keepAliveTimeInNanos> = $l0;
+
+        $r0.<io.grpc.internal.KeepAliveManager: long keepAliveTimeoutInNanos> = $l1;
+
+        $r0.<io.grpc.internal.KeepAliveManager: boolean keepAliveDuringTransportIdle> = $z0;
+
+        $r2 = virtualinvoke $r2.<com.google.common.base.Stopwatch: com.google.common.base.Stopwatch reset()>();
+
+        virtualinvoke $r2.<com.google.common.base.Stopwatch: com.google.common.base.Stopwatch start()>();
+
+        return;
+    }
+
+    static io.grpc.internal.KeepAliveManager$State access$000(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        io.grpc.internal.KeepAliveManager$State r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        r1 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        return r1;
+    }
+
+    static io.grpc.internal.KeepAliveManager$State access$002(io.grpc.internal.KeepAliveManager, io.grpc.internal.KeepAliveManager$State)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        io.grpc.internal.KeepAliveManager$State $r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        $r1 := @parameter1: io.grpc.internal.KeepAliveManager$State;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r1;
+
+        return $r1;
+    }
+
+    static io.grpc.internal.KeepAliveManager$KeepAlivePinger access$100(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        io.grpc.internal.KeepAliveManager$KeepAlivePinger r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        r1 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$KeepAlivePinger keepAlivePinger>;
+
+        return r1;
+    }
+
+    static java.util.concurrent.ScheduledFuture access$202(io.grpc.internal.KeepAliveManager, java.util.concurrent.ScheduledFuture)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        java.util.concurrent.ScheduledFuture $r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        $r1 := @parameter1: java.util.concurrent.ScheduledFuture;
+
+        $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture pingFuture> = $r1;
+
+        return $r1;
+    }
+
+    static java.util.concurrent.ScheduledFuture access$302(io.grpc.internal.KeepAliveManager, java.util.concurrent.ScheduledFuture)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        java.util.concurrent.ScheduledFuture $r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        $r1 := @parameter1: java.util.concurrent.ScheduledFuture;
+
+        $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture shutdownFuture> = $r1;
+
+        return $r1;
+    }
+
+    static java.lang.Runnable access$400(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        java.lang.Runnable r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        r1 = $r0.<io.grpc.internal.KeepAliveManager: java.lang.Runnable shutdown>;
+
+        return r1;
+    }
+
+    static long access$500(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        long l0;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        l0 = $r0.<io.grpc.internal.KeepAliveManager: long keepAliveTimeoutInNanos>;
+
+        return l0;
+    }
+
+    static java.util.concurrent.ScheduledExecutorService access$600(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        java.util.concurrent.ScheduledExecutorService r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        r1 = $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledExecutorService scheduler>;
+
+        return r1;
+    }
+
+    static java.lang.Runnable access$700(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        java.lang.Runnable r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        r1 = $r0.<io.grpc.internal.KeepAliveManager: java.lang.Runnable sendPing>;
+
+        return r1;
+    }
+
+    static long access$800(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        long l0;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        l0 = $r0.<io.grpc.internal.KeepAliveManager: long keepAliveTimeInNanos>;
+
+        return l0;
+    }
+
+    static com.google.common.base.Stopwatch access$900(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        com.google.common.base.Stopwatch r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        r1 = $r0.<io.grpc.internal.KeepAliveManager: com.google.common.base.Stopwatch stopwatch>;
+
+        return r1;
+    }
+
+    public void onDataReceived()
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        java.util.concurrent.TimeUnit $r1;
+        com.google.common.base.Stopwatch $r2;
+        io.grpc.internal.KeepAliveManager$State $r3, $r4;
+        java.util.concurrent.ScheduledFuture $r5;
+        boolean $z0;
+        java.util.concurrent.ScheduledExecutorService $r6;
+        java.lang.Runnable $r7;
+        long $l0;
+        java.lang.Throwable $r8;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager;
+
+        entermonitor $r0;
+
+     label01:
+        $r2 = $r0.<io.grpc.internal.KeepAliveManager: com.google.common.base.Stopwatch stopwatch>;
+
+        $r2 = virtualinvoke $r2.<com.google.common.base.Stopwatch: com.google.common.base.Stopwatch reset()>();
+
+        virtualinvoke $r2.<com.google.common.base.Stopwatch: com.google.common.base.Stopwatch start()>();
+
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r4 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SCHEDULED>;
+
+        if $r3 != $r4 goto label03;
+
+        $r3 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_DELAYED>;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r3;
+
+     label02:
+        exitmonitor $r0;
+
+        return;
+
+     label03:
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r4 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SENT>;
+
+        if $r3 == $r4 goto label04;
+
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r4 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE_AND_PING_SENT>;
+
+        if $r3 != $r4 goto label02;
+
+     label04:
+        $r5 = $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture shutdownFuture>;
+
+        $z0 = 0;
+
+        if $r5 == null goto label05;
+
+        interfaceinvoke $r5.<java.util.concurrent.ScheduledFuture: boolean cancel(boolean)>(0);
+
+     label05:
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r4 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE_AND_PING_SENT>;
+
+        if $r3 != $r4 goto label07;
+
+        $r3 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE>;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r3;
+
+     label06:
+        exitmonitor $r0;
+
+        return;
+
+     label07:
+        $r3 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SCHEDULED>;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r3;
+
+        $r5 = $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture pingFuture>;
+
+        if $r5 != null goto label08;
+
+        $z0 = 1;
+
+        goto label08;
+
+     label08:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z0, "There should be no outstanding pingFuture");
+
+        $r6 = $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledExecutorService scheduler>;
+
+        $r7 = $r0.<io.grpc.internal.KeepAliveManager: java.lang.Runnable sendPing>;
+
+        $l0 = $r0.<io.grpc.internal.KeepAliveManager: long keepAliveTimeInNanos>;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r5 = interfaceinvoke $r6.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r7, $l0, $r1);
+
+        $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture pingFuture> = $r5;
+
+     label09:
+        goto label02;
+
+     label10:
+        $r8 := @caughtexception;
+
+        exitmonitor $r0;
+
+        goto label11;
+
+     label11:
+        throw $r8;
+
+        catch java.lang.Throwable from label01 to label02 with label10;
+        catch java.lang.Throwable from label03 to label06 with label10;
+        catch java.lang.Throwable from label07 to label09 with label10;
+    }
+
+    public void onTransportActive()
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        java.util.concurrent.TimeUnit $r1;
+        io.grpc.internal.KeepAliveManager$State $r2, $r3;
+        java.util.concurrent.ScheduledFuture $r4;
+        java.util.concurrent.ScheduledExecutorService $r5;
+        java.lang.Runnable $r6;
+        long $l0, $l1;
+        com.google.common.base.Stopwatch $r7;
+        java.lang.Throwable $r8;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager;
+
+        entermonitor $r0;
+
+     label1:
+        $r2 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r3 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE>;
+
+        if $r2 != $r3 goto label3;
+
+        $r2 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SCHEDULED>;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r2;
+
+        $r4 = $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture pingFuture>;
+
+        if $r4 != null goto label2;
+
+        $r5 = $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledExecutorService scheduler>;
+
+        $r6 = $r0.<io.grpc.internal.KeepAliveManager: java.lang.Runnable sendPing>;
+
+        $l0 = $r0.<io.grpc.internal.KeepAliveManager: long keepAliveTimeInNanos>;
+
+        $r7 = $r0.<io.grpc.internal.KeepAliveManager: com.google.common.base.Stopwatch stopwatch>;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l1 = virtualinvoke $r7.<com.google.common.base.Stopwatch: long elapsed(java.util.concurrent.TimeUnit)>($r1);
+
+        $l0 = $l0 - $l1;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r4 = interfaceinvoke $r5.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r6, $l0, $r1);
+
+        $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture pingFuture> = $r4;
+
+     label2:
+        exitmonitor $r0;
+
+        return;
+
+     label3:
+        $r2 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r3 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE_AND_PING_SENT>;
+
+        if $r2 != $r3 goto label2;
+
+        $r2 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SENT>;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r2;
+
+     label4:
+        goto label2;
+
+     label5:
+        $r8 := @caughtexception;
+
+        exitmonitor $r0;
+
+        goto label6;
+
+     label6:
+        throw $r8;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    public void onTransportIdle()
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        boolean $z0;
+        io.grpc.internal.KeepAliveManager$State $r1, $r2;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager;
+
+        entermonitor $r0;
+
+        $z0 = $r0.<io.grpc.internal.KeepAliveManager: boolean keepAliveDuringTransportIdle>;
+
+        if $z0 == 0 goto label1;
+
+        exitmonitor $r0;
+
+        return;
+
+     label1:
+        $r1 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r2 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SCHEDULED>;
+
+        if $r1 == $r2 goto label2;
+
+        $r1 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r2 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_DELAYED>;
+
+        if $r1 != $r2 goto label3;
+
+     label2:
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE>;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r1;
+
+     label3:
+        $r1 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r2 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SENT>;
+
+        if $r1 != $r2 goto label4;
+
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE_AND_PING_SENT>;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r1;
+
+     label4:
+        exitmonitor $r0;
+
+        return;
+    }
+
+    public void onTransportStarted()
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        boolean $z0;
+        java.lang.Throwable $r1;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager;
+
+        entermonitor $r0;
+
+     label1:
+        $z0 = $r0.<io.grpc.internal.KeepAliveManager: boolean keepAliveDuringTransportIdle>;
+
+        if $z0 == 0 goto label2;
+
+        virtualinvoke $r0.<io.grpc.internal.KeepAliveManager: void onTransportActive()>();
+
+     label2:
+        exitmonitor $r0;
+
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r1;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public void onTransportTermination()
+    {
+        io.grpc.internal.KeepAliveManager $r0;
+        io.grpc.internal.KeepAliveManager$State $r1, $r2;
+        java.util.concurrent.ScheduledFuture $r3;
+        java.lang.Throwable $r4;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state>;
+
+        $r2 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State DISCONNECTED>;
+
+        if $r1 == $r2 goto label3;
+
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State DISCONNECTED>;
+
+        $r0.<io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State state> = $r1;
+
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture shutdownFuture>;
+
+        if $r3 == null goto label2;
+
+        interfaceinvoke $r3.<java.util.concurrent.ScheduledFuture: boolean cancel(boolean)>(0);
+
+     label2:
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture pingFuture>;
+
+        if $r3 == null goto label3;
+
+        interfaceinvoke $r3.<java.util.concurrent.ScheduledFuture: boolean cancel(boolean)>(0);
+
+        $r0.<io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture pingFuture> = null;
+
+     label3:
+        exitmonitor $r0;
+
+        return;
+
+     label4:
+        $r4 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+
+io.grpc.internal.KeepAliveManager$1
+<io.grpc.internal.KeepAliveManager$1: io.grpc.internal.KeepAliveManager this$0>
+    void <init>(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager$1 $r0;
+        io.grpc.internal.KeepAliveManager $r1;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$1;
+
+        $r1 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        $r0.<io.grpc.internal.KeepAliveManager$1: io.grpc.internal.KeepAliveManager this$0> = $r1;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        io.grpc.internal.KeepAliveManager$1 $r0;
+        io.grpc.internal.KeepAliveManager $r1, $r2;
+        io.grpc.internal.KeepAliveManager$State $r3, $r4;
+        boolean $z0;
+        io.grpc.internal.KeepAliveManager$KeepAlivePinger $r5;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$1;
+
+        $r1 = $r0.<io.grpc.internal.KeepAliveManager$1: io.grpc.internal.KeepAliveManager this$0>;
+
+        entermonitor $r1;
+
+        $r2 = $r0.<io.grpc.internal.KeepAliveManager$1: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r3 = staticinvoke <io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State access$000(io.grpc.internal.KeepAliveManager)>($r2);
+
+        $r4 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State DISCONNECTED>;
+
+        if $r3 == $r4 goto label1;
+
+        $r2 = $r0.<io.grpc.internal.KeepAliveManager$1: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r3 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State DISCONNECTED>;
+
+        staticinvoke <io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State access$002(io.grpc.internal.KeepAliveManager,io.grpc.internal.KeepAliveManager$State)>($r2, $r3);
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        exitmonitor $r1;
+
+        if $z0 == 0 goto label3;
+
+        $r1 = $r0.<io.grpc.internal.KeepAliveManager$1: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r5 = staticinvoke <io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$KeepAlivePinger access$100(io.grpc.internal.KeepAliveManager)>($r1);
+
+        interfaceinvoke $r5.<io.grpc.internal.KeepAliveManager$KeepAlivePinger: void onPingTimeout()>();
+
+     label3:
+        return;
+    }
+
+io.grpc.internal.KeepAliveManager$2
+<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>
+    void <init>(io.grpc.internal.KeepAliveManager)
+    {
+        io.grpc.internal.KeepAliveManager$2 $r0;
+        io.grpc.internal.KeepAliveManager $r1;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$2;
+
+        $r1 := @parameter0: io.grpc.internal.KeepAliveManager;
+
+        $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0> = $r1;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        io.grpc.internal.KeepAliveManager$2 $r0;
+        java.util.concurrent.TimeUnit $r1;
+        io.grpc.internal.KeepAliveManager $r2, $r3, $r7;
+        io.grpc.internal.KeepAliveManager$State $r4, $r5;
+        java.util.concurrent.ScheduledExecutorService $r6;
+        java.lang.Runnable $r8;
+        long $l0, $l1;
+        java.util.concurrent.ScheduledFuture $r9;
+        boolean $z0;
+        com.google.common.base.Stopwatch $r10;
+        io.grpc.internal.KeepAliveManager$KeepAlivePinger $r11;
+        java.lang.Throwable $r12;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$2;
+
+        $r2 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        entermonitor $r2;
+
+     label1:
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        staticinvoke <io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture access$202(io.grpc.internal.KeepAliveManager,java.util.concurrent.ScheduledFuture)>($r3, null);
+
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State access$000(io.grpc.internal.KeepAliveManager)>($r3);
+
+        $r5 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SCHEDULED>;
+
+        if $r4 != $r5 goto label2;
+
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r4 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SENT>;
+
+        staticinvoke <io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State access$002(io.grpc.internal.KeepAliveManager,io.grpc.internal.KeepAliveManager$State)>($r3, $r4);
+
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledExecutorService access$600(io.grpc.internal.KeepAliveManager)>($r3);
+
+        $r7 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r8 = staticinvoke <io.grpc.internal.KeepAliveManager: java.lang.Runnable access$400(io.grpc.internal.KeepAliveManager)>($r7);
+
+        $r7 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $l0 = staticinvoke <io.grpc.internal.KeepAliveManager: long access$500(io.grpc.internal.KeepAliveManager)>($r7);
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r9 = interfaceinvoke $r6.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r8, $l0, $r1);
+
+        staticinvoke <io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture access$302(io.grpc.internal.KeepAliveManager,java.util.concurrent.ScheduledFuture)>($r3, $r9);
+
+        $z0 = 1;
+
+        goto label4;
+
+     label2:
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r4 = staticinvoke <io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State access$000(io.grpc.internal.KeepAliveManager)>($r3);
+
+        $r5 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_DELAYED>;
+
+        if $r4 != $r5 goto label3;
+
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r6 = staticinvoke <io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledExecutorService access$600(io.grpc.internal.KeepAliveManager)>($r3);
+
+        $r7 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r8 = staticinvoke <io.grpc.internal.KeepAliveManager: java.lang.Runnable access$700(io.grpc.internal.KeepAliveManager)>($r7);
+
+        $r7 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $l0 = staticinvoke <io.grpc.internal.KeepAliveManager: long access$800(io.grpc.internal.KeepAliveManager)>($r7);
+
+        $r7 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r10 = staticinvoke <io.grpc.internal.KeepAliveManager: com.google.common.base.Stopwatch access$900(io.grpc.internal.KeepAliveManager)>($r7);
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $l1 = virtualinvoke $r10.<com.google.common.base.Stopwatch: long elapsed(java.util.concurrent.TimeUnit)>($r1);
+
+        $l0 = $l0 - $l1;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit NANOSECONDS>;
+
+        $r9 = interfaceinvoke $r6.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r8, $l0, $r1);
+
+        staticinvoke <io.grpc.internal.KeepAliveManager: java.util.concurrent.ScheduledFuture access$202(io.grpc.internal.KeepAliveManager,java.util.concurrent.ScheduledFuture)>($r3, $r9);
+
+        $r3 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r4 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SCHEDULED>;
+
+        staticinvoke <io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$State access$002(io.grpc.internal.KeepAliveManager,io.grpc.internal.KeepAliveManager$State)>($r3, $r4);
+
+     label3:
+        $z0 = 0;
+
+     label4:
+        exitmonitor $r2;
+
+        if $z0 == 0 goto label6;
+
+        $r2 = $r0.<io.grpc.internal.KeepAliveManager$2: io.grpc.internal.KeepAliveManager this$0>;
+
+        $r11 = staticinvoke <io.grpc.internal.KeepAliveManager: io.grpc.internal.KeepAliveManager$KeepAlivePinger access$100(io.grpc.internal.KeepAliveManager)>($r2);
+
+        interfaceinvoke $r11.<io.grpc.internal.KeepAliveManager$KeepAlivePinger: void ping()>();
+
+        return;
+
+     label5:
+        $r12 := @caughtexception;
+
+        exitmonitor $r2;
+
+        throw $r12;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+    }
+
+io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1
+<io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger this$0>
+    void <init>(io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger)
+    {
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1 $r0;
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger $r1;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1;
+
+        $r1 := @parameter0: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger;
+
+        $r0.<io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger this$0> = $r1;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void onFailure(java.lang.Throwable)
+    {
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1 $r0;
+        java.lang.Throwable $r1;
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger $r2;
+        io.grpc.internal.ConnectionClientTransport $r3;
+        io.grpc.Status $r4;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r2 = $r0.<io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger this$0>;
+
+        $r3 = staticinvoke <io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger: io.grpc.internal.ConnectionClientTransport access$1000(io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger)>($r2);
+
+        $r4 = <io.grpc.Status: io.grpc.Status UNAVAILABLE>;
+
+        $r4 = virtualinvoke $r4.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Keepalive failed. The connection is likely gone");
+
+        interfaceinvoke $r3.<io.grpc.internal.ConnectionClientTransport: void shutdownNow(io.grpc.Status)>($r4);
+
+        return;
+    }
+
+    public void onSuccess(long)
+    {
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1 $r0;
+        long $l0;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1;
+
+        $l0 := @parameter0: long;
+
+        return;
+    }
+
+io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger
+<io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger: io.grpc.internal.ConnectionClientTransport transport>
+    public void <init>(io.grpc.internal.ConnectionClientTransport)
+    {
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger $r0;
+        io.grpc.internal.ConnectionClientTransport $r1;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger;
+
+        $r1 := @parameter0: io.grpc.internal.ConnectionClientTransport;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger: io.grpc.internal.ConnectionClientTransport transport> = $r1;
+
+        return;
+    }
+
+    static io.grpc.internal.ConnectionClientTransport access$1000(io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger)
+    {
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger $r0;
+        io.grpc.internal.ConnectionClientTransport r1;
+
+        $r0 := @parameter0: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger;
+
+        r1 = $r0.<io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger: io.grpc.internal.ConnectionClientTransport transport>;
+
+        return r1;
+    }
+
+    public void onPingTimeout()
+    {
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger $r0;
+        io.grpc.internal.ConnectionClientTransport $r1;
+        io.grpc.Status $r2;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger;
+
+        $r1 = $r0.<io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger: io.grpc.internal.ConnectionClientTransport transport>;
+
+        $r2 = <io.grpc.Status: io.grpc.Status UNAVAILABLE>;
+
+        $r2 = virtualinvoke $r2.<io.grpc.Status: io.grpc.Status withDescription(java.lang.String)>("Keepalive failed. The connection is likely gone");
+
+        interfaceinvoke $r1.<io.grpc.internal.ConnectionClientTransport: void shutdownNow(io.grpc.Status)>($r2);
+
+        return;
+    }
+
+    public void ping()
+    {
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger $r0;
+        io.grpc.internal.ConnectionClientTransport $r1;
+        io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1 $r2;
+        java.util.concurrent.Executor $r3;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger;
+
+        $r1 = $r0.<io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger: io.grpc.internal.ConnectionClientTransport transport>;
+
+        $r2 = new io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1;
+
+        specialinvoke $r2.<io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger$1: void <init>(io.grpc.internal.KeepAliveManager$ClientKeepAlivePinger)>($r0);
+
+        $r3 = staticinvoke <com.google.common.util.concurrent.MoreExecutors: java.util.concurrent.Executor directExecutor()>();
+
+        interfaceinvoke $r1.<io.grpc.internal.ConnectionClientTransport: void ping(io.grpc.internal.ClientTransport$PingCallback,java.util.concurrent.Executor)>($r2, $r3);
+
+        return;
+    }
+
+io.grpc.internal.KeepAliveManager$KeepAlivePinger
+<io.grpc.internal.KeepAliveManager$KeepAlivePinger: void onPingTimeout()>
+<io.grpc.internal.KeepAliveManager$KeepAlivePinger: void ping()>
+io.grpc.internal.KeepAliveManager$State
+<io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State[] $VALUES>
+<io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State DISCONNECTED>
+<io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE>
+<io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE_AND_PING_SENT>
+<io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_DELAYED>
+<io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SCHEDULED>
+<io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SENT>
+    private static io.grpc.internal.KeepAliveManager$State[] $values()
+    {
+        io.grpc.internal.KeepAliveManager$State[] $r0;
+        io.grpc.internal.KeepAliveManager$State $r1;
+
+        $r0 = newarray (io.grpc.internal.KeepAliveManager$State)[6];
+
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE>;
+
+        $r0[0] = $r1;
+
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SCHEDULED>;
+
+        $r0[1] = $r1;
+
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_DELAYED>;
+
+        $r0[2] = $r1;
+
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SENT>;
+
+        $r0[3] = $r1;
+
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE_AND_PING_SENT>;
+
+        $r0[4] = $r1;
+
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State DISCONNECTED>;
+
+        $r0[5] = $r1;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        io.grpc.internal.KeepAliveManager$State[] $r0;
+        io.grpc.internal.KeepAliveManager$State $r1;
+
+        $r1 = new io.grpc.internal.KeepAliveManager$State;
+
+        specialinvoke $r1.<io.grpc.internal.KeepAliveManager$State: void <init>(java.lang.String,int)>("IDLE", 0);
+
+        <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE> = $r1;
+
+        $r1 = new io.grpc.internal.KeepAliveManager$State;
+
+        specialinvoke $r1.<io.grpc.internal.KeepAliveManager$State: void <init>(java.lang.String,int)>("PING_SCHEDULED", 1);
+
+        <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SCHEDULED> = $r1;
+
+        $r1 = new io.grpc.internal.KeepAliveManager$State;
+
+        specialinvoke $r1.<io.grpc.internal.KeepAliveManager$State: void <init>(java.lang.String,int)>("PING_DELAYED", 2);
+
+        <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_DELAYED> = $r1;
+
+        $r1 = new io.grpc.internal.KeepAliveManager$State;
+
+        specialinvoke $r1.<io.grpc.internal.KeepAliveManager$State: void <init>(java.lang.String,int)>("PING_SENT", 3);
+
+        <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State PING_SENT> = $r1;
+
+        $r1 = new io.grpc.internal.KeepAliveManager$State;
+
+        specialinvoke $r1.<io.grpc.internal.KeepAliveManager$State: void <init>(java.lang.String,int)>("IDLE_AND_PING_SENT", 4);
+
+        <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State IDLE_AND_PING_SENT> = $r1;
+
+        $r1 = new io.grpc.internal.KeepAliveManager$State;
+
+        specialinvoke $r1.<io.grpc.internal.KeepAliveManager$State: void <init>(java.lang.String,int)>("DISCONNECTED", 5);
+
+        <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State DISCONNECTED> = $r1;
+
+        $r0 = staticinvoke <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State[] $values()>();
+
+        <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State[] $VALUES> = $r0;
+
+        return;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        io.grpc.internal.KeepAliveManager$State $r0;
+        java.lang.String $r1;
+        int $i0;
+
+        $r0 := @this: io.grpc.internal.KeepAliveManager$State;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        specialinvoke $r0.<java.lang.Enum: void <init>(java.lang.String,int)>($r1, $i0);
+
+        return;
+    }
+
+    public static io.grpc.internal.KeepAliveManager$State[] values()
+    {
+        java.lang.Object $r0;
+        io.grpc.internal.KeepAliveManager$State[] $r1;
+
+        $r1 = <io.grpc.internal.KeepAliveManager$State: io.grpc.internal.KeepAliveManager$State[] $VALUES>;
+
+        $r0 = virtualinvoke $r1.<java.lang.Object: java.lang.Object clone()>();
+
+        $r1 = (io.grpc.internal.KeepAliveManager$State[]) $r0;
+
+        return $r1;
+    }
+

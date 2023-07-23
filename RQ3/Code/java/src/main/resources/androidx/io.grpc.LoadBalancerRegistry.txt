@@ -1,0 +1,455 @@
+io.grpc.LoadBalancerRegistry
+<io.grpc.LoadBalancerRegistry: java.lang.Iterable HARDCODED_CLASSES>
+<io.grpc.LoadBalancerRegistry: io.grpc.LoadBalancerRegistry instance>
+<io.grpc.LoadBalancerRegistry: java.util.logging.Logger logger>
+<io.grpc.LoadBalancerRegistry: java.util.LinkedHashSet allProviders>
+<io.grpc.LoadBalancerRegistry: java.util.LinkedHashMap effectiveProviders>
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        java.lang.String $r1;
+        java.util.logging.Logger $r2;
+        java.util.List $r3;
+        java.lang.Iterable r4;
+
+        $r0 = class "Lio/grpc/LoadBalancerRegistry;";
+
+        $r1 = virtualinvoke $r0.<java.lang.Class: java.lang.String getName()>();
+
+        $r2 = staticinvoke <java.util.logging.Logger: java.util.logging.Logger getLogger(java.lang.String)>($r1);
+
+        <io.grpc.LoadBalancerRegistry: java.util.logging.Logger logger> = $r2;
+
+        $r3 = staticinvoke <io.grpc.LoadBalancerRegistry: java.util.List getHardCodedClasses()>();
+
+        r4 = (java.lang.Iterable) $r3;
+
+        <io.grpc.LoadBalancerRegistry: java.lang.Iterable HARDCODED_CLASSES> = r4;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        io.grpc.LoadBalancerRegistry $r0;
+        java.util.LinkedHashSet $r1;
+        java.util.LinkedHashMap $r2;
+
+        $r0 := @this: io.grpc.LoadBalancerRegistry;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.LinkedHashSet;
+
+        specialinvoke $r1.<java.util.LinkedHashSet: void <init>()>();
+
+        $r0.<io.grpc.LoadBalancerRegistry: java.util.LinkedHashSet allProviders> = $r1;
+
+        $r2 = new java.util.LinkedHashMap;
+
+        specialinvoke $r2.<java.util.LinkedHashMap: void <init>()>();
+
+        $r0.<io.grpc.LoadBalancerRegistry: java.util.LinkedHashMap effectiveProviders> = $r2;
+
+        return;
+    }
+
+    private void addProvider(io.grpc.LoadBalancerProvider)
+    {
+        io.grpc.LoadBalancerRegistry $r0;
+        boolean $z0;
+        io.grpc.LoadBalancerProvider $r1;
+        java.util.LinkedHashSet $r2;
+        java.lang.Throwable $r3;
+
+        $r0 := @this: io.grpc.LoadBalancerRegistry;
+
+        $r1 := @parameter0: io.grpc.LoadBalancerProvider;
+
+        entermonitor $r0;
+
+     label1:
+        $z0 = virtualinvoke $r1.<io.grpc.LoadBalancerProvider: boolean isAvailable()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "isAvailable() returned false");
+
+        $r2 = $r0.<io.grpc.LoadBalancerRegistry: java.util.LinkedHashSet allProviders>;
+
+        virtualinvoke $r2.<java.util.LinkedHashSet: boolean add(java.lang.Object)>($r1);
+
+     label2:
+        exitmonitor $r0;
+
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public static io.grpc.LoadBalancerRegistry getDefaultRegistry()
+    {
+        io.grpc.LoadBalancerRegistry $r0;
+        java.lang.Iterable $r1;
+        java.lang.Class $r2;
+        java.lang.ClassLoader $r3;
+        io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor $r4;
+        java.util.List $r5;
+        java.util.Iterator $r6;
+        boolean $z0;
+        java.lang.Object $r7;
+        io.grpc.LoadBalancerProvider $r8;
+        java.util.logging.Logger $r9;
+        java.util.logging.Level $r10;
+        java.lang.StringBuilder $r11;
+        java.lang.String $r12;
+        java.lang.Throwable $r13;
+
+        entermonitor class "Lio/grpc/LoadBalancerRegistry;";
+
+     label1:
+        $r0 = <io.grpc.LoadBalancerRegistry: io.grpc.LoadBalancerRegistry instance>;
+
+        if $r0 != null goto label4;
+
+        $r1 = <io.grpc.LoadBalancerRegistry: java.lang.Iterable HARDCODED_CLASSES>;
+
+        $r2 = class "Lio/grpc/LoadBalancerProvider;";
+
+        $r3 = virtualinvoke $r2.<java.lang.Class: java.lang.ClassLoader getClassLoader()>();
+
+        $r4 = new io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor;
+
+        specialinvoke $r4.<io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor: void <init>()>();
+
+        $r5 = staticinvoke <io.grpc.ServiceProviders: java.util.List loadAll(java.lang.Class,java.lang.Iterable,java.lang.ClassLoader,io.grpc.ServiceProviders$PriorityAccessor)>(class "Lio/grpc/LoadBalancerProvider;", $r1, $r3, $r4);
+
+        $r0 = new io.grpc.LoadBalancerRegistry;
+
+        specialinvoke $r0.<io.grpc.LoadBalancerRegistry: void <init>()>();
+
+        <io.grpc.LoadBalancerRegistry: io.grpc.LoadBalancerRegistry instance> = $r0;
+
+        $r6 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (io.grpc.LoadBalancerProvider) $r7;
+
+        $r9 = <io.grpc.LoadBalancerRegistry: java.util.logging.Logger logger>;
+
+        $r10 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Service loader found ");
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r8);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r9.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String)>($r10, "io.grpc.LoadBalancerRegistry", "getDefaultRegistry", $r12);
+
+        $z0 = virtualinvoke $r8.<io.grpc.LoadBalancerProvider: boolean isAvailable()>();
+
+        if $z0 == 0 goto label2;
+
+        $r0 = <io.grpc.LoadBalancerRegistry: io.grpc.LoadBalancerRegistry instance>;
+
+        specialinvoke $r0.<io.grpc.LoadBalancerRegistry: void addProvider(io.grpc.LoadBalancerProvider)>($r8);
+
+        goto label2;
+
+     label3:
+        $r0 = <io.grpc.LoadBalancerRegistry: io.grpc.LoadBalancerRegistry instance>;
+
+        specialinvoke $r0.<io.grpc.LoadBalancerRegistry: void refreshProviderMap()>();
+
+     label4:
+        $r0 = <io.grpc.LoadBalancerRegistry: io.grpc.LoadBalancerRegistry instance>;
+
+     label5:
+        exitmonitor class "Lio/grpc/LoadBalancerRegistry;";
+
+        return $r0;
+
+     label6:
+        $r13 := @caughtexception;
+
+        exitmonitor class "Lio/grpc/LoadBalancerRegistry;";
+
+        goto label7;
+
+     label7:
+        throw $r13;
+
+        catch java.lang.Throwable from label1 to label5 with label6;
+    }
+
+    static java.util.List getHardCodedClasses()
+    {
+        java.util.ArrayList $r0, r7;
+        java.lang.Class $r1;
+        java.lang.Throwable $r2, $r5;
+        java.util.logging.Logger $r3;
+        java.util.logging.Level $r4;
+        java.util.List $r6;
+
+        r7 = new java.util.ArrayList;
+
+        $r0 = r7;
+
+        specialinvoke r7.<java.util.ArrayList: void <init>()>();
+
+        $r1 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("io.grpc.internal.PickFirstLoadBalancerProvider");
+
+     label1:
+        virtualinvoke $r0.<java.util.ArrayList: boolean add(java.lang.Object)>($r1);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r3 = <io.grpc.LoadBalancerRegistry: java.util.logging.Logger logger>;
+
+        $r4 = <java.util.logging.Level: java.util.logging.Level WARNING>;
+
+        virtualinvoke $r3.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r4, "io.grpc.LoadBalancerRegistry", "getHardCodedClasses", "Unable to find pick-first LoadBalancer", $r2);
+
+     label4:
+        $r1 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>("io.grpc.util.SecretRoundRobinLoadBalancerProvider$Provider");
+
+     label5:
+        virtualinvoke $r0.<java.util.ArrayList: boolean add(java.lang.Object)>($r1);
+
+     label6:
+        goto label8;
+
+     label7:
+        $r5 := @caughtexception;
+
+        $r3 = <io.grpc.LoadBalancerRegistry: java.util.logging.Logger logger>;
+
+        $r4 = <java.util.logging.Level: java.util.logging.Level FINE>;
+
+        virtualinvoke $r3.<java.util.logging.Logger: void logp(java.util.logging.Level,java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)>($r4, "io.grpc.LoadBalancerRegistry", "getHardCodedClasses", "Unable to find round-robin LoadBalancer", $r5);
+
+     label8:
+        $r6 = (java.util.List) $r0;
+
+        $r6 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r6);
+
+        return $r6;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label3;
+        catch java.lang.ClassNotFoundException from label5 to label6 with label7;
+    }
+
+    private void refreshProviderMap()
+    {
+        io.grpc.LoadBalancerRegistry $r0;
+        java.util.LinkedHashMap $r1;
+        java.util.LinkedHashSet $r2;
+        java.util.Iterator $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        io.grpc.LoadBalancerProvider $r5, $r7;
+        java.lang.String $r6;
+        int $i0, $i1;
+        java.lang.Throwable $r8;
+
+        $r0 := @this: io.grpc.LoadBalancerRegistry;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = $r0.<io.grpc.LoadBalancerRegistry: java.util.LinkedHashMap effectiveProviders>;
+
+        virtualinvoke $r1.<java.util.LinkedHashMap: void clear()>();
+
+        $r2 = $r0.<io.grpc.LoadBalancerRegistry: java.util.LinkedHashSet allProviders>;
+
+        $r3 = virtualinvoke $r2.<java.util.LinkedHashSet: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (io.grpc.LoadBalancerProvider) $r4;
+
+        $r6 = virtualinvoke $r5.<io.grpc.LoadBalancerProvider: java.lang.String getPolicyName()>();
+
+        $r1 = $r0.<io.grpc.LoadBalancerRegistry: java.util.LinkedHashMap effectiveProviders>;
+
+        $r4 = virtualinvoke $r1.<java.util.LinkedHashMap: java.lang.Object get(java.lang.Object)>($r6);
+
+        $r7 = (io.grpc.LoadBalancerProvider) $r4;
+
+        if $r7 == null goto label3;
+
+        $i0 = virtualinvoke $r7.<io.grpc.LoadBalancerProvider: int getPriority()>();
+
+        $i1 = virtualinvoke $r5.<io.grpc.LoadBalancerProvider: int getPriority()>();
+
+        if $i0 >= $i1 goto label2;
+
+     label3:
+        $r1 = $r0.<io.grpc.LoadBalancerRegistry: java.util.LinkedHashMap effectiveProviders>;
+
+        virtualinvoke $r1.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r6, $r5);
+
+     label4:
+        goto label2;
+
+     label5:
+        exitmonitor $r0;
+
+        return;
+
+     label6:
+        $r8 := @caughtexception;
+
+        exitmonitor $r0;
+
+        goto label7;
+
+     label7:
+        throw $r8;
+
+        catch java.lang.Throwable from label1 to label4 with label6;
+    }
+
+    public io.grpc.LoadBalancerProvider getProvider(java.lang.String)
+    {
+        io.grpc.LoadBalancerRegistry $r0;
+        java.util.LinkedHashMap $r1;
+        java.lang.String $r2;
+        java.lang.Object $r3;
+        io.grpc.LoadBalancerProvider $r4;
+        java.lang.Throwable $r5;
+
+        $r0 := @this: io.grpc.LoadBalancerRegistry;
+
+        $r2 := @parameter0: java.lang.String;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = $r0.<io.grpc.LoadBalancerRegistry: java.util.LinkedHashMap effectiveProviders>;
+
+        $r3 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r2, "policy");
+
+        $r3 = virtualinvoke $r1.<java.util.LinkedHashMap: java.lang.Object get(java.lang.Object)>($r3);
+
+        $r4 = (io.grpc.LoadBalancerProvider) $r3;
+
+     label2:
+        exitmonitor $r0;
+
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor
+    void <init>()
+    {
+        io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor $r0;
+
+        $r0 := @this: io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public int getPriority(io.grpc.LoadBalancerProvider)
+    {
+        io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor $r0;
+        int $i0;
+        io.grpc.LoadBalancerProvider $r1;
+
+        $r0 := @this: io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor;
+
+        $r1 := @parameter0: io.grpc.LoadBalancerProvider;
+
+        $i0 = virtualinvoke $r1.<io.grpc.LoadBalancerProvider: int getPriority()>();
+
+        return $i0;
+    }
+
+    public volatile int getPriority(java.lang.Object)
+    {
+        io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor $r0;
+        int $i0;
+        java.lang.Object $r1;
+        io.grpc.LoadBalancerProvider $r2;
+
+        $r0 := @this: io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = (io.grpc.LoadBalancerProvider) $r1;
+
+        $i0 = virtualinvoke $r0.<io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor: int getPriority(io.grpc.LoadBalancerProvider)>($r2);
+
+        return $i0;
+    }
+
+    public boolean isAvailable(io.grpc.LoadBalancerProvider)
+    {
+        io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor $r0;
+        boolean $z0;
+        io.grpc.LoadBalancerProvider $r1;
+
+        $r0 := @this: io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor;
+
+        $r1 := @parameter0: io.grpc.LoadBalancerProvider;
+
+        $z0 = virtualinvoke $r1.<io.grpc.LoadBalancerProvider: boolean isAvailable()>();
+
+        return $z0;
+    }
+
+    public volatile boolean isAvailable(java.lang.Object)
+    {
+        io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor $r0;
+        boolean $z0;
+        java.lang.Object $r1;
+        io.grpc.LoadBalancerProvider $r2;
+
+        $r0 := @this: io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = (io.grpc.LoadBalancerProvider) $r1;
+
+        $z0 = virtualinvoke $r0.<io.grpc.LoadBalancerRegistry$LoadBalancerPriorityAccessor: boolean isAvailable(io.grpc.LoadBalancerProvider)>($r2);
+
+        return $z0;
+    }
+

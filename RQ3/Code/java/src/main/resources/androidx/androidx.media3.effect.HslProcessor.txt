@@ -1,0 +1,178 @@
+androidx.media3.effect.HslProcessor
+<androidx.media3.effect.HslProcessor: java.lang.String VERTEX_SHADER_PATH>
+<androidx.media3.effect.HslProcessor: java.lang.String FRAGMENT_SHADER_PATH>
+<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>
+    public void <init>(android.content.Context, androidx.media3.effect.HslAdjustment, boolean) throws androidx.media3.common.FrameProcessingException
+    {
+        androidx.media3.effect.HslProcessor r0;
+        android.content.Context r1;
+        androidx.media3.effect.HslAdjustment r2;
+        boolean z0, $z1;
+        androidx.media3.common.util.GlProgram $r3, $r4, $r6, $r7, $r8, $r9, $r10;
+        float[] $r5, r14;
+        float $f0, $f1, $f2, $f3, $f4, $f5;
+        java.lang.Throwable $r11, r13;
+        androidx.media3.common.FrameProcessingException $r12;
+
+        r0 := @this: androidx.media3.effect.HslProcessor;
+
+        r1 := @parameter0: android.content.Context;
+
+        r2 := @parameter1: androidx.media3.effect.HslAdjustment;
+
+        z0 := @parameter2: boolean;
+
+        specialinvoke r0.<androidx.media3.effect.SingleFrameGlTextureProcessor: void <init>(boolean)>(z0);
+
+        if z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <androidx.media3.common.util.Assertions: void checkArgument(boolean,java.lang.Object)>($z1, "HDR is not yet supported.");
+
+     label3:
+        $r3 = new androidx.media3.common.util.GlProgram;
+
+        specialinvoke $r3.<androidx.media3.common.util.GlProgram: void <init>(android.content.Context,java.lang.String,java.lang.String)>(r1, "shaders/vertex_shader_transformation_es2.glsl", "shaders/fragment_shader_hsl_es2.glsl");
+
+        r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram> = $r3;
+
+     label4:
+        goto label6;
+
+     label5:
+        $r11 := @caughtexception;
+
+        r13 = $r11;
+
+        $r12 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r12.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.Throwable)>(r13);
+
+        throw $r12;
+
+     label6:
+        $r4 = r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $r5 = staticinvoke <androidx.media3.common.util.GlUtil: float[] getNormalizedCoordinateBounds()>();
+
+        virtualinvoke $r4.<androidx.media3.common.util.GlProgram: void setBufferAttribute(java.lang.String,float[],int)>("aFramePosition", $r5, 4);
+
+        r14 = staticinvoke <androidx.media3.common.util.GlUtil: float[] create4x4IdentityMatrix()>();
+
+        $r6 = r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r6.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uTransformationMatrix", r14);
+
+        $r7 = r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r7.<androidx.media3.common.util.GlProgram: void setFloatsUniform(java.lang.String,float[])>("uTexTransformationMatrix", r14);
+
+        $r8 = r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $f0 = r2.<androidx.media3.effect.HslAdjustment: float hueAdjustmentDegrees>;
+
+        $f1 = $f0 / 360.0F;
+
+        virtualinvoke $r8.<androidx.media3.common.util.GlProgram: void setFloatUniform(java.lang.String,float)>("uHueAdjustmentDegrees", $f1);
+
+        $r9 = r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $f2 = r2.<androidx.media3.effect.HslAdjustment: float saturationAdjustment>;
+
+        $f3 = $f2 / 100.0F;
+
+        virtualinvoke $r9.<androidx.media3.common.util.GlProgram: void setFloatUniform(java.lang.String,float)>("uSaturationAdjustment", $f3);
+
+        $r10 = r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        $f4 = r2.<androidx.media3.effect.HslAdjustment: float lightnessAdjustment>;
+
+        $f5 = $f4 / 100.0F;
+
+        virtualinvoke $r10.<androidx.media3.common.util.GlProgram: void setFloatUniform(java.lang.String,float)>("uLightnessAdjustment", $f5);
+
+        return;
+
+        catch java.io.IOException from label3 to label4 with label5;
+        catch androidx.media3.common.util.GlUtil$GlException from label3 to label4 with label5;
+    }
+
+    public android.util.Pair configure(int, int)
+    {
+        androidx.media3.effect.HslProcessor r0;
+        int i0, i1;
+        java.lang.Integer $r1, $r2;
+        android.util.Pair $r3;
+
+        r0 := @this: androidx.media3.effect.HslProcessor;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r3 = staticinvoke <android.util.Pair: android.util.Pair create(java.lang.Object,java.lang.Object)>($r1, $r2);
+
+        return $r3;
+    }
+
+    public void drawFrame(int, long) throws androidx.media3.common.FrameProcessingException
+    {
+        androidx.media3.effect.HslProcessor r0;
+        int i0;
+        long l1;
+        java.lang.Throwable r1, $r5;
+        androidx.media3.common.util.GlProgram $r2, $r3, $r4;
+        androidx.media3.common.FrameProcessingException $r6;
+
+        r0 := @this: androidx.media3.effect.HslProcessor;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+     label1:
+        $r2 = r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r2.<androidx.media3.common.util.GlProgram: void use()>();
+
+        $r3 = r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r3.<androidx.media3.common.util.GlProgram: void setSamplerTexIdUniform(java.lang.String,int,int)>("uTexSampler", i0, 0);
+
+        $r4 = r0.<androidx.media3.effect.HslProcessor: androidx.media3.common.util.GlProgram glProgram>;
+
+        virtualinvoke $r4.<androidx.media3.common.util.GlProgram: void bindAttributesAndUniforms()>();
+
+        staticinvoke <android.opengl.GLES20: void glDrawArrays(int,int,int)>(5, 0, 4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r1 = $r5;
+
+        $r6 = new androidx.media3.common.FrameProcessingException;
+
+        specialinvoke $r6.<androidx.media3.common.FrameProcessingException: void <init>(java.lang.Throwable,long)>(r1, l1);
+
+        throw $r6;
+
+     label4:
+        return;
+
+        catch androidx.media3.common.util.GlUtil$GlException from label1 to label2 with label3;
+    }
+

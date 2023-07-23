@@ -1,0 +1,73 @@
+org.junit.internal.requests.MemoizingRequest
+<org.junit.internal.requests.MemoizingRequest: org.junit.runner.Runner runner>
+<org.junit.internal.requests.MemoizingRequest: java.util.concurrent.locks.Lock runnerLock>
+    void <init>()
+    {
+        org.junit.internal.requests.MemoizingRequest $r0;
+        java.util.concurrent.locks.ReentrantLock $r1;
+
+        $r0 := @this: org.junit.internal.requests.MemoizingRequest;
+
+        specialinvoke $r0.<org.junit.runner.Request: void <init>()>();
+
+        $r1 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r1.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        $r0.<org.junit.internal.requests.MemoizingRequest: java.util.concurrent.locks.Lock runnerLock> = $r1;
+
+        return;
+    }
+
+<org.junit.internal.requests.MemoizingRequest: org.junit.runner.Runner createRunner()>
+    public final org.junit.runner.Runner getRunner()
+    {
+        org.junit.internal.requests.MemoizingRequest $r0;
+        java.util.concurrent.locks.Lock $r1;
+        org.junit.runner.Runner $r2;
+        java.lang.Throwable $r3;
+
+        $r0 := @this: org.junit.internal.requests.MemoizingRequest;
+
+        $r2 = $r0.<org.junit.internal.requests.MemoizingRequest: org.junit.runner.Runner runner>;
+
+        if $r2 != null goto label5;
+
+        $r1 = $r0.<org.junit.internal.requests.MemoizingRequest: java.util.concurrent.locks.Lock runnerLock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r2 = $r0.<org.junit.internal.requests.MemoizingRequest: org.junit.runner.Runner runner>;
+
+        if $r2 != null goto label3;
+
+     label1:
+        $r2 = virtualinvoke $r0.<org.junit.internal.requests.MemoizingRequest: org.junit.runner.Runner createRunner()>();
+
+     label2:
+        $r0.<org.junit.internal.requests.MemoizingRequest: org.junit.runner.Runner runner> = $r2;
+
+     label3:
+        $r1 = $r0.<org.junit.internal.requests.MemoizingRequest: java.util.concurrent.locks.Lock runnerLock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label5;
+
+     label4:
+        $r3 := @caughtexception;
+
+        $r1 = $r0.<org.junit.internal.requests.MemoizingRequest: java.util.concurrent.locks.Lock runnerLock>;
+
+        interfaceinvoke $r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r3;
+
+     label5:
+        $r2 = $r0.<org.junit.internal.requests.MemoizingRequest: org.junit.runner.Runner runner>;
+
+        return $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label4;
+    }
+

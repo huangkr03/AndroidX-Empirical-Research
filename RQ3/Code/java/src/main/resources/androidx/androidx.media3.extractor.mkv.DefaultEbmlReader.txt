@@ -1,0 +1,656 @@
+androidx.media3.extractor.mkv.DefaultEbmlReader
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int ELEMENT_STATE_READ_ID>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int ELEMENT_STATE_READ_CONTENT_SIZE>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int ELEMENT_STATE_READ_CONTENT>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int MAX_ID_BYTES>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int MAX_LENGTH_BYTES>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int MAX_INTEGER_ELEMENT_SIZE_BYTES>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int VALID_FLOAT32_ELEMENT_SIZE_BYTES>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int VALID_FLOAT64_ELEMENT_SIZE_BYTES>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: byte[] scratch>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: java.util.ArrayDeque masterElementsStack>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.VarintReader varintReader>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementId>
+<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>
+    public void <init>()
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader r0;
+        byte[] $r1;
+        java.util.ArrayDeque $r2;
+        androidx.media3.extractor.mkv.VarintReader $r3;
+
+        r0 := @this: androidx.media3.extractor.mkv.DefaultEbmlReader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = newarray (byte)[8];
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: byte[] scratch> = $r1;
+
+        $r2 = new java.util.ArrayDeque;
+
+        specialinvoke $r2.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: java.util.ArrayDeque masterElementsStack> = $r2;
+
+        $r3 = new androidx.media3.extractor.mkv.VarintReader;
+
+        specialinvoke $r3.<androidx.media3.extractor.mkv.VarintReader: void <init>()>();
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.VarintReader varintReader> = $r3;
+
+        return;
+    }
+
+    public void init(androidx.media3.extractor.mkv.EbmlProcessor)
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader r0;
+        androidx.media3.extractor.mkv.EbmlProcessor r1;
+
+        r0 := @this: androidx.media3.extractor.mkv.DefaultEbmlReader;
+
+        r1 := @parameter0: androidx.media3.extractor.mkv.EbmlProcessor;
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor> = r1;
+
+        return;
+    }
+
+    public void reset()
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader r0;
+        java.util.ArrayDeque $r1;
+        androidx.media3.extractor.mkv.VarintReader $r2;
+
+        r0 := @this: androidx.media3.extractor.mkv.DefaultEbmlReader;
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState> = 0;
+
+        $r1 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: java.util.ArrayDeque masterElementsStack>;
+
+        virtualinvoke $r1.<java.util.ArrayDeque: void clear()>();
+
+        $r2 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.VarintReader varintReader>;
+
+        virtualinvoke $r2.<androidx.media3.extractor.mkv.VarintReader: void reset()>();
+
+        return;
+    }
+
+    public boolean read(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement r2, $r41, r42;
+        long l0, l1, $l5, $l7, $l10, $l12, $l13, $l16, $l18, $l21, $l22, $l24, $l27, $l28, $l29, $l31, $l33, $l35, $l39, $l40, l43;
+        androidx.media3.extractor.mkv.EbmlProcessor $r3, $r7, $r8, $r14, $r15, $r22, $r30, $r39;
+        java.util.ArrayDeque $r5, $r29, $r38;
+        java.lang.Object $r6, $r40;
+        int $i2, $i3, $i4, $i8, $i9, $i14, $i15, $i19, $i20, $i25, $i26, $i30, $i32, $i34, $i38, $i42, i44;
+        byte $b6, $b11, $b17, $b23, $b36, $b37, $b41;
+        double $d0;
+        java.lang.StringBuilder $r10, $r11, $r18, $r19, $r24, $r25, $r32, $r33, r43, r44, r45, r46;
+        java.lang.String $r12, $r16, $r20, $r26, $r34;
+        androidx.media3.common.ParserException $r13, $r21, $r27, $r35;
+        androidx.media3.extractor.mkv.VarintReader $r36, $r37;
+        java.lang.Throwable r47, r48, r49, r50;
+
+        r0 := @this: androidx.media3.extractor.mkv.DefaultEbmlReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        $r3 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkStateNotNull(java.lang.Object)>($r3);
+
+     label01:
+        $r5 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: java.util.ArrayDeque masterElementsStack>;
+
+        $r6 = virtualinvoke $r5.<java.util.ArrayDeque: java.lang.Object peek()>();
+
+        r2 = (androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement) $r6;
+
+        if r2 == null goto label02;
+
+        $l39 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l40 = staticinvoke <androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: long access$000(androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement)>(r2);
+
+        $b41 = $l39 cmp $l40;
+
+        if $b41 < 0 goto label02;
+
+        $r39 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>;
+
+        $r38 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: java.util.ArrayDeque masterElementsStack>;
+
+        $r40 = virtualinvoke $r38.<java.util.ArrayDeque: java.lang.Object pop()>();
+
+        $r41 = (androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement) $r40;
+
+        $i42 = staticinvoke <androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: int access$100(androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement)>($r41);
+
+        interfaceinvoke $r39.<androidx.media3.extractor.mkv.EbmlProcessor: void endMasterElement(int)>($i42);
+
+        return 1;
+
+     label02:
+        $i2 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState>;
+
+        if $i2 != 0 goto label05;
+
+        $r37 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.VarintReader varintReader>;
+
+        l43 = virtualinvoke $r37.<androidx.media3.extractor.mkv.VarintReader: long readUnsignedVarint(androidx.media3.extractor.ExtractorInput,boolean,boolean,int)>(r1, 1, 0, 4);
+
+        $b36 = l43 cmp -2L;
+
+        if $b36 != 0 goto label03;
+
+        l43 = specialinvoke r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long maybeResyncToNextLevel1Element(androidx.media3.extractor.ExtractorInput)>(r1);
+
+     label03:
+        $b37 = l43 cmp -1L;
+
+        if $b37 != 0 goto label04;
+
+        return 0;
+
+     label04:
+        $i38 = (int) l43;
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementId> = $i38;
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState> = 1;
+
+     label05:
+        $i3 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState>;
+
+        if $i3 != 1 goto label06;
+
+        $r36 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.VarintReader varintReader>;
+
+        $l35 = virtualinvoke $r36.<androidx.media3.extractor.mkv.VarintReader: long readUnsignedVarint(androidx.media3.extractor.ExtractorInput,boolean,boolean,int)>(r1, 0, 1, 8);
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize> = $l35;
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState> = 2;
+
+     label06:
+        $r7 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>;
+
+        $i4 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementId>;
+
+        i44 = interfaceinvoke $r7.<androidx.media3.extractor.mkv.EbmlProcessor: int getElementType(int)>($i4);
+
+        tableswitch(i44)
+        {
+            case 0: goto label15;
+            case 1: goto label07;
+            case 2: goto label08;
+            case 3: goto label12;
+            case 4: goto label14;
+            case 5: goto label10;
+            default: goto label16;
+        };
+
+     label07:
+        l0 = interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: long getPosition()>();
+
+        $l29 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        l1 = l0 + $l29;
+
+        $r29 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: java.util.ArrayDeque masterElementsStack>;
+
+        r42 = new androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement;
+
+        $i30 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementId>;
+
+        specialinvoke r42.<androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: void <init>(int,long,androidx.media3.extractor.mkv.DefaultEbmlReader$1)>($i30, l1, null);
+
+        virtualinvoke $r29.<java.util.ArrayDeque: void push(java.lang.Object)>(r42);
+
+        $r30 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>;
+
+        $i32 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementId>;
+
+        $l31 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        interfaceinvoke $r30.<androidx.media3.extractor.mkv.EbmlProcessor: void startMasterElement(int,long,long)>($i32, l0, $l31);
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState> = 0;
+
+        return 1;
+
+     label08:
+        $l22 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $b23 = $l22 cmp 8L;
+
+        if $b23 <= 0 goto label09;
+
+        r43 = new java.lang.StringBuilder;
+
+        specialinvoke r43.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke r43.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid integer size: ");
+
+        $l28 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l28);
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r27 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>($r26, null);
+
+        r47 = (java.lang.Throwable) $r27;
+
+        throw r47;
+
+     label09:
+        $r22 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>;
+
+        $i26 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementId>;
+
+        $l24 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $i25 = (int) $l24;
+
+        $l27 = specialinvoke r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long readInteger(androidx.media3.extractor.ExtractorInput,int)>(r1, $i25);
+
+        interfaceinvoke $r22.<androidx.media3.extractor.mkv.EbmlProcessor: void integerElement(int,long)>($i26, $l27);
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState> = 0;
+
+        return 1;
+
+     label10:
+        $l5 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $b6 = $l5 cmp 4L;
+
+        if $b6 == 0 goto label11;
+
+        $l10 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $b11 = $l10 cmp 8L;
+
+        if $b11 == 0 goto label11;
+
+        r44 = new java.lang.StringBuilder;
+
+        specialinvoke r44.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke r44.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid float size: ");
+
+        $l12 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l12);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r13 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>($r12, null);
+
+        r48 = (java.lang.Throwable) $r13;
+
+        throw r48;
+
+     label11:
+        $r8 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>;
+
+        $i9 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementId>;
+
+        $l7 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $i8 = (int) $l7;
+
+        $d0 = specialinvoke r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: double readFloat(androidx.media3.extractor.ExtractorInput,int)>(r1, $i8);
+
+        interfaceinvoke $r8.<androidx.media3.extractor.mkv.EbmlProcessor: void floatElement(int,double)>($i9, $d0);
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState> = 0;
+
+        return 1;
+
+     label12:
+        $l16 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $b17 = $l16 cmp 2147483647L;
+
+        if $b17 <= 0 goto label13;
+
+        r45 = new java.lang.StringBuilder;
+
+        specialinvoke r45.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke r45.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("String element size: ");
+
+        $l21 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l21);
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r21 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>($r20, null);
+
+        r49 = (java.lang.Throwable) $r21;
+
+        throw r49;
+
+     label13:
+        $r15 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>;
+
+        $i20 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementId>;
+
+        $l18 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $i19 = (int) $l18;
+
+        $r16 = staticinvoke <androidx.media3.extractor.mkv.DefaultEbmlReader: java.lang.String readString(androidx.media3.extractor.ExtractorInput,int)>(r1, $i19);
+
+        interfaceinvoke $r15.<androidx.media3.extractor.mkv.EbmlProcessor: void stringElement(int,java.lang.String)>($i20, $r16);
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState> = 0;
+
+        return 1;
+
+     label14:
+        $r14 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>;
+
+        $i15 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementId>;
+
+        $l13 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $i14 = (int) $l13;
+
+        interfaceinvoke $r14.<androidx.media3.extractor.mkv.EbmlProcessor: void binaryElement(int,int,androidx.media3.extractor.ExtractorInput)>($i15, $i14, r1);
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState> = 0;
+
+        return 1;
+
+     label15:
+        $l33 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long elementContentSize>;
+
+        $i34 = (int) $l33;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>($i34);
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: int elementState> = 0;
+
+        goto label17;
+
+     label16:
+        r46 = new java.lang.StringBuilder;
+
+        specialinvoke r46.<java.lang.StringBuilder: void <init>()>();
+
+        $r32 = virtualinvoke r46.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid element type ");
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i44);
+
+        $r34 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r35 = staticinvoke <androidx.media3.common.ParserException: androidx.media3.common.ParserException createForMalformedContainer(java.lang.String,java.lang.Throwable)>($r34, null);
+
+        r50 = (java.lang.Throwable) $r35;
+
+        throw r50;
+
+     label17:
+        goto label01;
+    }
+
+    private long maybeResyncToNextLevel1Element(androidx.media3.extractor.ExtractorInput) throws java.io.IOException
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        int i0, i1;
+        byte[] $r2, $r3, $r4;
+        byte $b2;
+        long $l3, $l4;
+        androidx.media3.extractor.mkv.EbmlProcessor $r5;
+        boolean $z0;
+
+        r0 := @this: androidx.media3.extractor.mkv.DefaultEbmlReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void resetPeekPosition()>();
+
+     label1:
+        $r2 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: byte[] scratch>;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void peekFully(byte[],int,int)>($r2, 0, 4);
+
+        $r3 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: byte[] scratch>;
+
+        $b2 = $r3[0];
+
+        i0 = staticinvoke <androidx.media3.extractor.mkv.VarintReader: int parseUnsignedVarintLength(int)>($b2);
+
+        if i0 == -1 goto label2;
+
+        if i0 > 4 goto label2;
+
+        $r4 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: byte[] scratch>;
+
+        $l3 = staticinvoke <androidx.media3.extractor.mkv.VarintReader: long assembleVarint(byte[],int,boolean)>($r4, i0, 0);
+
+        i1 = (int) $l3;
+
+        $r5 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: androidx.media3.extractor.mkv.EbmlProcessor processor>;
+
+        $z0 = interfaceinvoke $r5.<androidx.media3.extractor.mkv.EbmlProcessor: boolean isLevel1Element(int)>(i1);
+
+        if $z0 == 0 goto label2;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>(i0);
+
+        $l4 = (long) i1;
+
+        return $l4;
+
+     label2:
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void skipFully(int)>(1);
+
+        goto label1;
+    }
+
+    private long readInteger(androidx.media3.extractor.ExtractorInput, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        int i0, i6;
+        byte[] $r2, $r3;
+        byte $b1;
+        short $s2;
+        long $l3, $l4, l5;
+
+        r0 := @this: androidx.media3.extractor.mkv.DefaultEbmlReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        i0 := @parameter1: int;
+
+        $r2 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: byte[] scratch>;
+
+        interfaceinvoke r1.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>($r2, 0, i0);
+
+        l5 = 0L;
+
+        i6 = 0;
+
+     label1:
+        if i6 >= i0 goto label2;
+
+        $l4 = l5 << 8;
+
+        $r3 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: byte[] scratch>;
+
+        $b1 = $r3[i6];
+
+        $s2 = $b1 & 255;
+
+        $l3 = (long) $s2;
+
+        l5 = $l4 | $l3;
+
+        i6 = i6 + 1;
+
+        goto label1;
+
+     label2:
+        return l5;
+    }
+
+    private double readFloat(androidx.media3.extractor.ExtractorInput, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader r0;
+        androidx.media3.extractor.ExtractorInput r1;
+        int i0, $i2;
+        long l1;
+        float $f0;
+        double d0;
+
+        r0 := @this: androidx.media3.extractor.mkv.DefaultEbmlReader;
+
+        r1 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        i0 := @parameter1: int;
+
+        l1 = specialinvoke r0.<androidx.media3.extractor.mkv.DefaultEbmlReader: long readInteger(androidx.media3.extractor.ExtractorInput,int)>(r1, i0);
+
+        if i0 != 4 goto label1;
+
+        $i2 = (int) l1;
+
+        $f0 = staticinvoke <java.lang.Float: float intBitsToFloat(int)>($i2);
+
+        d0 = (double) $f0;
+
+        goto label2;
+
+     label1:
+        d0 = staticinvoke <java.lang.Double: double longBitsToDouble(long)>(l1);
+
+     label2:
+        return d0;
+    }
+
+    private static java.lang.String readString(androidx.media3.extractor.ExtractorInput, int) throws java.io.IOException
+    {
+        androidx.media3.extractor.ExtractorInput r0;
+        int i0, $i1, i3;
+        byte[] r1;
+        java.lang.String $r2;
+        byte $b2;
+
+        r0 := @parameter0: androidx.media3.extractor.ExtractorInput;
+
+        i0 := @parameter1: int;
+
+        if i0 != 0 goto label1;
+
+        return "";
+
+     label1:
+        r1 = newarray (byte)[i0];
+
+        interfaceinvoke r0.<androidx.media3.extractor.ExtractorInput: void readFully(byte[],int,int)>(r1, 0, i0);
+
+        i3 = i0;
+
+     label2:
+        if i3 <= 0 goto label3;
+
+        $i1 = i3 - 1;
+
+        $b2 = r1[$i1];
+
+        if $b2 != 0 goto label3;
+
+        i3 = i3 + -1;
+
+        goto label2;
+
+     label3:
+        $r2 = new java.lang.String;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],int,int)>(r1, 0, i3);
+
+        return $r2;
+    }
+
+androidx.media3.extractor.mkv.DefaultEbmlReader$1
+androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement
+<androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: int elementId>
+<androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: long elementEndPosition>
+    private void <init>(int, long)
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement r0;
+        int i0;
+        long l1;
+
+        r0 := @this: androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: int elementId> = i0;
+
+        r0.<androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: long elementEndPosition> = l1;
+
+        return;
+    }
+
+    static long access$000(androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement)
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement r0;
+        long $l0;
+
+        r0 := @parameter0: androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement;
+
+        $l0 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: long elementEndPosition>;
+
+        return $l0;
+    }
+
+    static int access$100(androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement)
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement r0;
+        int $i0;
+
+        r0 := @parameter0: androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement;
+
+        $i0 = r0.<androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: int elementId>;
+
+        return $i0;
+    }
+
+    void <init>(int, long, androidx.media3.extractor.mkv.DefaultEbmlReader$1)
+    {
+        androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement r0;
+        int i0;
+        long l1;
+        androidx.media3.extractor.mkv.DefaultEbmlReader$1 r1;
+
+        r0 := @this: androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        r1 := @parameter2: androidx.media3.extractor.mkv.DefaultEbmlReader$1;
+
+        specialinvoke r0.<androidx.media3.extractor.mkv.DefaultEbmlReader$MasterElement: void <init>(int,long)>(i0, l1);
+
+        return;
+    }
+

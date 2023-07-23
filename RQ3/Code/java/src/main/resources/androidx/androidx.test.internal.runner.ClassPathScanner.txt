@@ -1,0 +1,771 @@
+androidx.test.internal.runner.ClassPathScanner
+<androidx.test.internal.runner.ClassPathScanner: java.lang.String[] DEFAULT_EXCLUDED_PACKAGES>
+<androidx.test.internal.runner.ClassPathScanner: java.util.Set classPath>
+    static void <clinit>()
+    {
+        java.lang.String[] $r0;
+
+        $r0 = newarray (java.lang.String)[8];
+
+        $r0[0] = "junit";
+
+        $r0[1] = "org.junit";
+
+        $r0[2] = "org.hamcrest";
+
+        $r0[3] = "org.mockito";
+
+        $r0[4] = "androidx.test.internal.runner.junit3";
+
+        $r0[5] = "androidx.test.runner.suites";
+
+        $r0[6] = "org.jacoco";
+
+        $r0[7] = "net.bytebuddy";
+
+        <androidx.test.internal.runner.ClassPathScanner: java.lang.String[] DEFAULT_EXCLUDED_PACKAGES> = $r0;
+
+        return;
+    }
+
+    public void <init>(java.util.Collection)
+    {
+        androidx.test.internal.runner.ClassPathScanner $r0;
+        java.util.Collection $r1;
+        java.util.HashSet $r2, r3;
+        java.util.Set r4;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner;
+
+        $r1 := @parameter0: java.util.Collection;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        r3 = new java.util.HashSet;
+
+        $r2 = r3;
+
+        specialinvoke r3.<java.util.HashSet: void <init>()>();
+
+        r4 = (java.util.Set) $r2;
+
+        $r0.<androidx.test.internal.runner.ClassPathScanner: java.util.Set classPath> = r4;
+
+        r4 = (java.util.Set) $r2;
+
+        interfaceinvoke r4.<java.util.Set: boolean addAll(java.util.Collection)>($r1);
+
+        return;
+    }
+
+    private void addEntriesFromPath(java.util.Set, java.lang.String, androidx.test.internal.runner.ClassPathScanner$ClassNameFilter) throws java.io.IOException
+    {
+        androidx.test.internal.runner.ClassPathScanner $r0;
+        androidx.test.internal.runner.ClassPathScanner$ClassNameFilter $r1;
+        java.util.Set $r2;
+        java.lang.String $r3, $r7;
+        dalvik.system.DexFile $r4;
+        java.lang.Throwable $r5, $r6;
+        boolean $z0;
+        int $i0;
+        java.lang.StringBuilder $r8;
+        java.util.Enumeration $r9;
+        java.lang.Object $r10;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner;
+
+        $r2 := @parameter0: java.util.Set;
+
+        $r3 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: androidx.test.internal.runner.ClassPathScanner$ClassNameFilter;
+
+        $r4 = new dalvik.system.DexFile;
+
+     label01:
+        specialinvoke $r4.<dalvik.system.DexFile: void <init>(java.lang.String)>($r3);
+
+     label02:
+        goto label13;
+
+     label03:
+        $r5 := @caughtexception;
+
+        goto label25;
+
+     label04:
+        $r6 := @caughtexception;
+
+     label05:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean endsWith(java.lang.String)>(".zip");
+
+     label06:
+        if $z0 == 0 goto label24;
+
+     label07:
+        $i0 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+     label08:
+        $i0 = $i0 + -3;
+
+     label09:
+        $r7 = virtualinvoke $r3.<java.lang.String: java.lang.String substring(int,int)>(0, $i0);
+
+     label10:
+        $r8 = new java.lang.StringBuilder;
+
+     label11:
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("dex");
+
+        $r7 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label12:
+        $r4 = staticinvoke <dalvik.system.DexFile: dalvik.system.DexFile loadDex(java.lang.String,java.lang.String,int)>($r3, $r7, 0);
+
+     label13:
+        $r9 = virtualinvoke $r4.<dalvik.system.DexFile: java.util.Enumeration entries()>();
+
+     label14:
+        $z0 = interfaceinvoke $r9.<java.util.Enumeration: boolean hasMoreElements()>();
+
+     label15:
+        if $z0 == 0 goto label22;
+
+     label16:
+        $r10 = interfaceinvoke $r9.<java.util.Enumeration: java.lang.Object nextElement()>();
+
+     label17:
+        $r3 = (java.lang.String) $r10;
+
+     label18:
+        $z0 = interfaceinvoke $r1.<androidx.test.internal.runner.ClassPathScanner$ClassNameFilter: boolean accept(java.lang.String)>($r3);
+
+     label19:
+        if $z0 == 0 goto label14;
+
+     label20:
+        interfaceinvoke $r2.<java.util.Set: boolean add(java.lang.Object)>($r3);
+
+     label21:
+        goto label14;
+
+     label22:
+        if $r4 == null goto label29;
+
+        virtualinvoke $r4.<dalvik.system.DexFile: void close()>();
+
+        return;
+
+     label23:
+        $r5 := @caughtexception;
+
+        goto label26;
+
+     label24:
+        throw $r6;
+
+     label25:
+        $r4 = null;
+
+     label26:
+        if $r4 == null goto label27;
+
+        virtualinvoke $r4.<dalvik.system.DexFile: void close()>();
+
+     label27:
+        goto label28;
+
+     label28:
+        throw $r5;
+
+     label29:
+        return;
+
+        catch java.io.IOException from label01 to label02 with label04;
+        catch java.lang.Throwable from label01 to label02 with label03;
+        catch java.lang.Throwable from label05 to label06 with label03;
+        catch java.lang.Throwable from label07 to label08 with label03;
+        catch java.lang.Throwable from label09 to label10 with label03;
+        catch java.lang.Throwable from label11 to label12 with label03;
+        catch java.lang.Throwable from label13 to label15 with label23;
+        catch java.lang.Throwable from label16 to label17 with label23;
+        catch java.lang.Throwable from label18 to label19 with label23;
+        catch java.lang.Throwable from label20 to label21 with label23;
+        catch java.lang.Throwable from label24 to label25 with label03;
+    }
+
+    public static java.util.Collection getDefaultClasspaths(android.app.Instrumentation)
+    {
+        int $i0, $i1;
+        android.app.Instrumentation $r0;
+        java.util.ArrayList $r1, r13;
+        android.content.Context $r2;
+        java.lang.String $r3;
+        java.util.regex.Pattern $r4;
+        android.content.pm.ApplicationInfo $r5;
+        java.io.File $r6, r14;
+        java.util.ArrayDeque $r7, r15;
+        boolean $z0;
+        java.lang.Object $r8;
+        java.io.File[] $r9;
+        java.util.regex.Matcher $r10;
+        java.lang.Throwable $r11;
+        java.util.List $r12;
+        java.util.Collection r16;
+
+        $r0 := @parameter0: android.app.Instrumentation;
+
+        r13 = new java.util.ArrayList;
+
+        $r1 = r13;
+
+        specialinvoke r13.<java.util.ArrayList: void <init>()>();
+
+        $r2 = virtualinvoke $r0.<android.app.Instrumentation: android.content.Context getContext()>();
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageCodePath()>();
+
+        r16 = (java.util.Collection) $r1;
+
+        interfaceinvoke r16.<java.util.Collection: boolean add(java.lang.Object)>($r3);
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 > 20 goto label8;
+
+        $r4 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>(".*\\.classes\\d+\\.zip");
+
+     label1:
+        $r2 = virtualinvoke $r0.<android.app.Instrumentation: android.content.Context getTargetContext()>();
+
+        $r5 = virtualinvoke $r2.<android.content.Context: android.content.pm.ApplicationInfo getApplicationInfo()>();
+
+     label2:
+        r14 = new java.io.File;
+
+        $r3 = $r5.<android.content.pm.ApplicationInfo: java.lang.String dataDir>;
+
+        specialinvoke r14.<java.io.File: void <init>(java.lang.String)>($r3);
+
+        r15 = new java.util.ArrayDeque;
+
+        $r7 = r15;
+
+        specialinvoke r15.<java.util.ArrayDeque: void <init>()>();
+
+        virtualinvoke $r7.<java.util.ArrayDeque: boolean add(java.lang.Object)>(r14);
+
+     label3:
+        $z0 = virtualinvoke $r7.<java.util.ArrayDeque: boolean isEmpty()>();
+
+        if $z0 != 0 goto label9;
+
+        $r8 = virtualinvoke $r7.<java.util.ArrayDeque: java.lang.Object pop()>();
+
+        $r6 = (java.io.File) $r8;
+
+        $r9 = virtualinvoke $r6.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = lengthof $r9;
+
+        $i1 = 0;
+
+     label4:
+        if $i1 >= $i0 goto label3;
+
+        $r6 = $r9[$i1];
+
+        $z0 = virtualinvoke $r6.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label5;
+
+        virtualinvoke $r7.<java.util.ArrayDeque: boolean add(java.lang.Object)>($r6);
+
+        goto label6;
+
+     label5:
+        $z0 = virtualinvoke $r6.<java.io.File: boolean isFile()>();
+
+        if $z0 == 0 goto label6;
+
+        $r3 = virtualinvoke $r6.<java.io.File: java.lang.String getName()>();
+
+        $r10 = virtualinvoke $r4.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r3);
+
+        $z0 = virtualinvoke $r10.<java.util.regex.Matcher: boolean matches()>();
+
+        if $z0 == 0 goto label6;
+
+        $r3 = virtualinvoke $r6.<java.io.File: java.lang.String getPath()>();
+
+        r16 = (java.util.Collection) $r1;
+
+        interfaceinvoke r16.<java.util.Collection: boolean add(java.lang.Object)>($r3);
+
+     label6:
+        $i1 = $i1 + 1;
+
+        goto label4;
+
+     label7:
+        $r11 := @caughtexception;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("ClassPathScanner", "Failed to retrieve ApplicationInfo, no additional .dex files add for app under test", $r11);
+
+        $r12 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        r16 = (java.util.Collection) $r12;
+
+        return r16;
+
+     label8:
+        r16 = (java.util.Collection) $r1;
+
+        return r16;
+
+     label9:
+        r16 = (java.util.Collection) $r1;
+
+        return r16;
+
+        catch java.lang.RuntimeException from label1 to label2 with label7;
+    }
+
+    public java.util.Set getClassPathEntries() throws java.io.IOException
+    {
+        androidx.test.internal.runner.ClassPathScanner $r0;
+        int $i0, $i1;
+        java.lang.String $r1;
+        androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter $r2;
+        java.util.Set $r3;
+        androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter $r4;
+        java.lang.String[] $r5;
+        androidx.test.internal.runner.ClassPathScanner$ExternalClassNameFilter $r6;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner;
+
+        $r4 = new androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter;
+
+        specialinvoke $r4.<androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter: void <init>()>();
+
+        $r5 = <androidx.test.internal.runner.ClassPathScanner: java.lang.String[] DEFAULT_EXCLUDED_PACKAGES>;
+
+        $i0 = lengthof $r5;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r1 = $r5[$i1];
+
+        $r2 = new androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter;
+
+        specialinvoke $r2.<androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter: void <init>(java.lang.String)>($r1);
+
+        virtualinvoke $r4.<androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter: void add(androidx.test.internal.runner.ClassPathScanner$ClassNameFilter)>($r2);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r6 = new androidx.test.internal.runner.ClassPathScanner$ExternalClassNameFilter;
+
+        specialinvoke $r6.<androidx.test.internal.runner.ClassPathScanner$ExternalClassNameFilter: void <init>()>();
+
+        virtualinvoke $r4.<androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter: void add(androidx.test.internal.runner.ClassPathScanner$ClassNameFilter)>($r6);
+
+        $r3 = virtualinvoke $r0.<androidx.test.internal.runner.ClassPathScanner: java.util.Set getClassPathEntries(androidx.test.internal.runner.ClassPathScanner$ClassNameFilter)>($r4);
+
+        return $r3;
+    }
+
+    public java.util.Set getClassPathEntries(androidx.test.internal.runner.ClassPathScanner$ClassNameFilter) throws java.io.IOException
+    {
+        androidx.test.internal.runner.ClassPathScanner $r0;
+        androidx.test.internal.runner.ClassPathScanner$ClassNameFilter $r1;
+        java.util.LinkedHashSet $r2, r7;
+        java.util.Set $r3;
+        java.util.Iterator $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        java.lang.String $r6;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner;
+
+        $r1 := @parameter0: androidx.test.internal.runner.ClassPathScanner$ClassNameFilter;
+
+        r7 = new java.util.LinkedHashSet;
+
+        $r2 = r7;
+
+        specialinvoke r7.<java.util.LinkedHashSet: void <init>()>();
+
+        $r3 = $r0.<androidx.test.internal.runner.ClassPathScanner: java.util.Set classPath>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (java.lang.String) $r5;
+
+        $r3 = (java.util.Set) $r2;
+
+        specialinvoke $r0.<androidx.test.internal.runner.ClassPathScanner: void addEntriesFromPath(java.util.Set,java.lang.String,androidx.test.internal.runner.ClassPathScanner$ClassNameFilter)>($r3, $r6, $r1);
+
+        goto label1;
+
+     label2:
+        $r3 = (java.util.Set) $r2;
+
+        return $r3;
+    }
+
+androidx.test.internal.runner.ClassPathScanner$AcceptAllFilter
+    public void <init>()
+    {
+        androidx.test.internal.runner.ClassPathScanner$AcceptAllFilter r0;
+
+        r0 := @this: androidx.test.internal.runner.ClassPathScanner$AcceptAllFilter;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public boolean accept(java.lang.String)
+    {
+        androidx.test.internal.runner.ClassPathScanner$AcceptAllFilter r0;
+        java.lang.String r1;
+
+        r0 := @this: androidx.test.internal.runner.ClassPathScanner$AcceptAllFilter;
+
+        r1 := @parameter0: java.lang.String;
+
+        return 1;
+    }
+
+androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter
+<androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter: java.util.List filters>
+    public void <init>()
+    {
+        androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter $r0;
+        java.util.ArrayList r1;
+        java.util.List r2;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        r1 = new java.util.ArrayList;
+
+        specialinvoke r1.<java.util.ArrayList: void <init>()>();
+
+        r2 = (java.util.List) r1;
+
+        $r0.<androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter: java.util.List filters> = r2;
+
+        return;
+    }
+
+    public boolean accept(java.lang.String)
+    {
+        androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter $r0;
+        java.lang.String $r1;
+        java.util.List $r2;
+        java.util.Iterator $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        androidx.test.internal.runner.ClassPathScanner$ClassNameFilter $r5;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter: java.util.List filters>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (androidx.test.internal.runner.ClassPathScanner$ClassNameFilter) $r4;
+
+        $z0 = interfaceinvoke $r5.<androidx.test.internal.runner.ClassPathScanner$ClassNameFilter: boolean accept(java.lang.String)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    public void add(androidx.test.internal.runner.ClassPathScanner$ClassNameFilter)
+    {
+        androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter $r0;
+        androidx.test.internal.runner.ClassPathScanner$ClassNameFilter $r1;
+        java.util.List $r2;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter;
+
+        $r1 := @parameter0: androidx.test.internal.runner.ClassPathScanner$ClassNameFilter;
+
+        $r2 = $r0.<androidx.test.internal.runner.ClassPathScanner$ChainedClassNameFilter: java.util.List filters>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r1);
+
+        return;
+    }
+
+androidx.test.internal.runner.ClassPathScanner$ClassNameFilter
+<androidx.test.internal.runner.ClassPathScanner$ClassNameFilter: boolean accept(java.lang.String)>
+androidx.test.internal.runner.ClassPathScanner$ExcludeClassNamesFilter
+<androidx.test.internal.runner.ClassPathScanner$ExcludeClassNamesFilter: java.util.Set excludedClassNames>
+    public void <init>(java.util.Set)
+    {
+        androidx.test.internal.runner.ClassPathScanner$ExcludeClassNamesFilter r0;
+        java.util.Set r1;
+
+        r0 := @this: androidx.test.internal.runner.ClassPathScanner$ExcludeClassNamesFilter;
+
+        r1 := @parameter0: java.util.Set;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.test.internal.runner.ClassPathScanner$ExcludeClassNamesFilter: java.util.Set excludedClassNames> = r1;
+
+        return;
+    }
+
+    public boolean accept(java.lang.String)
+    {
+        androidx.test.internal.runner.ClassPathScanner$ExcludeClassNamesFilter r0;
+        java.lang.String r1;
+        java.util.Set $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: androidx.test.internal.runner.ClassPathScanner$ExcludeClassNamesFilter;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<androidx.test.internal.runner.ClassPathScanner$ExcludeClassNamesFilter: java.util.Set excludedClassNames>;
+
+        $z0 = interfaceinvoke $r2.<java.util.Set: boolean contains(java.lang.Object)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter
+<androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter: java.lang.String pkgName>
+    public void <init>(java.lang.String)
+    {
+        androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter $r0;
+        java.lang.String $r1;
+        boolean $z0;
+        java.lang.Object[] $r2;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean endsWith(java.lang.String)>(".");
+
+        if $z0 != 0 goto label1;
+
+        $r2 = newarray (java.lang.Object)[1];
+
+        $r2[0] = $r1;
+
+        $r1 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%s.", $r2);
+
+        $r0.<androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter: java.lang.String pkgName> = $r1;
+
+        return;
+
+     label1:
+        $r0.<androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter: java.lang.String pkgName> = $r1;
+
+        return;
+    }
+
+    public boolean accept(java.lang.String)
+    {
+        androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter $r0;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 = $r0.<androidx.test.internal.runner.ClassPathScanner$ExcludePackageNameFilter: java.lang.String pkgName>;
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>($r1);
+
+        $z0 = $z0 ^ 1;
+
+        return $z0;
+    }
+
+androidx.test.internal.runner.ClassPathScanner$ExternalClassNameFilter
+    public void <init>()
+    {
+        androidx.test.internal.runner.ClassPathScanner$ExternalClassNameFilter $r0;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner$ExternalClassNameFilter;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public boolean accept(java.lang.String)
+    {
+        androidx.test.internal.runner.ClassPathScanner$ExternalClassNameFilter $r0;
+        boolean $z0;
+        java.lang.String $r1;
+
+        $r0 := @this: androidx.test.internal.runner.ClassPathScanner$ExternalClassNameFilter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean contains(java.lang.CharSequence)>("$");
+
+        $z0 = $z0 ^ 1;
+
+        return $z0;
+    }
+
+androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter
+<androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter: java.util.Collection pkgNames>
+    public void <init>(java.util.Collection)
+    {
+        androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter r0;
+        java.util.Collection r1, $r6, $r8;
+        java.util.Iterator r2;
+        java.lang.String r3, $r9;
+        java.util.ArrayList $r4;
+        int $i0;
+        boolean $z0, $z1;
+        java.lang.Object $r5;
+        java.lang.Object[] $r7;
+
+        r0 := @this: androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter;
+
+        r1 := @parameter0: java.util.Collection;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new java.util.ArrayList;
+
+        $i0 = interfaceinvoke r1.<java.util.Collection: int size()>();
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>(int)>($i0);
+
+        r0.<androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter: java.util.Collection pkgNames> = $r4;
+
+        r2 = interfaceinvoke r1.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r5;
+
+        $z1 = virtualinvoke r3.<java.lang.String: boolean endsWith(java.lang.String)>(".");
+
+        if $z1 != 0 goto label2;
+
+        $r8 = r0.<androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter: java.util.Collection pkgNames>;
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r7[0] = r3;
+
+        $r9 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%s.", $r7);
+
+        interfaceinvoke $r8.<java.util.Collection: boolean add(java.lang.Object)>($r9);
+
+        goto label3;
+
+     label2:
+        $r6 = r0.<androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter: java.util.Collection pkgNames>;
+
+        interfaceinvoke $r6.<java.util.Collection: boolean add(java.lang.Object)>(r3);
+
+     label3:
+        goto label1;
+
+     label4:
+        return;
+    }
+
+    public boolean accept(java.lang.String)
+    {
+        androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter r0;
+        java.lang.String r1, r3;
+        java.util.Iterator r2;
+        java.util.Collection $r4;
+        boolean $z0, $z1;
+        java.lang.Object $r5;
+
+        r0 := @this: androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r4 = r0.<androidx.test.internal.runner.ClassPathScanner$InclusivePackageNamesFilter: java.util.Collection pkgNames>;
+
+        r2 = interfaceinvoke $r4.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r5;
+
+        $z1 = virtualinvoke r1.<java.lang.String: boolean startsWith(java.lang.String)>(r3);
+
+        if $z1 == 0 goto label2;
+
+        return 1;
+
+     label2:
+        goto label1;
+
+     label3:
+        return 0;
+    }
+

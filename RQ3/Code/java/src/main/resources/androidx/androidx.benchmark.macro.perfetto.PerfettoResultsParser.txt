@@ -1,0 +1,227 @@
+androidx.benchmark.macro.perfetto.PerfettoResultsParser
+<androidx.benchmark.macro.perfetto.PerfettoResultsParser: androidx.benchmark.macro.perfetto.PerfettoResultsParser INSTANCE>
+    private void <init>()
+    {
+        androidx.benchmark.macro.perfetto.PerfettoResultsParser r0;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.PerfettoResultsParser;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public final androidx.benchmark.macro.IterationResult parseStartupResult(java.lang.String, java.lang.String)
+    {
+        androidx.benchmark.macro.perfetto.PerfettoResultsParser r0, $r11;
+        java.lang.String r1, r2, $r10;
+        org.json.JSONObject r3, r4, r6, $r7, $r8;
+        org.json.JSONArray r5, $r9;
+        int i0, i1, i2;
+        boolean $z2;
+        androidx.benchmark.macro.IterationResult $r12, $r13;
+        java.util.Map $r14, $r15;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.PerfettoResultsParser;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "jsonMetricResults");
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r2, "packageName");
+
+        $r7 = new org.json.JSONObject;
+
+        specialinvoke $r7.<org.json.JSONObject: void <init>(java.lang.String)>(r1);
+
+        r3 = $r7;
+
+        $r8 = virtualinvoke r3.<org.json.JSONObject: org.json.JSONObject optJSONObject(java.lang.String)>("android_startup");
+
+        if $r8 != null goto label1;
+
+        goto label4;
+
+     label1:
+        r4 = $r8;
+
+        $r9 = virtualinvoke r4.<org.json.JSONObject: org.json.JSONArray optJSONArray(java.lang.String)>("startup");
+
+        if $r9 != null goto label2;
+
+        goto label4;
+
+     label2:
+        r5 = $r9;
+
+        i2 = 0;
+
+        i0 = virtualinvoke r5.<org.json.JSONArray: int length()>();
+
+     label3:
+        if i2 >= i0 goto label4;
+
+        i1 = i2;
+
+        i2 = i2 + 1;
+
+        r6 = virtualinvoke r5.<org.json.JSONArray: org.json.JSONObject getJSONObject(int)>(i1);
+
+        $r10 = virtualinvoke r6.<org.json.JSONObject: java.lang.String optString(java.lang.String)>("package_name");
+
+        $z2 = staticinvoke <kotlin.jvm.internal.Intrinsics: boolean areEqual(java.lang.Object,java.lang.Object)>($r10, r2);
+
+        if $z2 == 0 goto label3;
+
+        $r11 = <androidx.benchmark.macro.perfetto.PerfettoResultsParser: androidx.benchmark.macro.perfetto.PerfettoResultsParser INSTANCE>;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>(r6, "startupResult");
+
+        $r12 = specialinvoke $r11.<androidx.benchmark.macro.perfetto.PerfettoResultsParser: androidx.benchmark.macro.IterationResult parseStartupMetricsWithUiState(org.json.JSONObject)>(r6);
+
+        return $r12;
+
+     label4:
+        $r13 = new androidx.benchmark.macro.IterationResult;
+
+        $r14 = staticinvoke <kotlin.collections.MapsKt: java.util.Map emptyMap()>();
+
+        $r15 = staticinvoke <kotlin.collections.MapsKt: java.util.Map emptyMap()>();
+
+        specialinvoke $r13.<androidx.benchmark.macro.IterationResult: void <init>(java.util.Map,java.util.Map,kotlin.ranges.LongRange)>($r14, $r15, null);
+
+        return $r13;
+    }
+
+    private final androidx.benchmark.macro.IterationResult parseStartupMetricsWithUiState(org.json.JSONObject)
+    {
+        androidx.benchmark.macro.perfetto.PerfettoResultsParser r0;
+        org.json.JSONObject $r1, $r5, $r6, r17;
+        double d0, $d1;
+        java.lang.Double r2, $r7, $r13;
+        java.util.Map r3, r15, $r23;
+        java.lang.Long r4, $r18, r19, $r20;
+        kotlin.Pair $r8;
+        long $l0, $l1, $l2, $l3;
+        kotlin.ranges.LongRange $r9, $r24;
+        kotlin.Pair[] r14;
+        java.lang.String r16;
+        androidx.benchmark.macro.IterationResult $r21;
+
+        r0 := @this: androidx.benchmark.macro.perfetto.PerfettoResultsParser;
+
+        $r1 := @parameter0: org.json.JSONObject;
+
+        $r5 = virtualinvoke $r1.<org.json.JSONObject: org.json.JSONObject getJSONObject(java.lang.String)>("to_first_frame");
+
+        d0 = virtualinvoke $r5.<org.json.JSONObject: double getDouble(java.lang.String)>("dur_ms");
+
+        $r6 = virtualinvoke $r1.<org.json.JSONObject: org.json.JSONObject optJSONObject(java.lang.String)>("report_fully_drawn");
+
+        if $r6 != null goto label1;
+
+        $r13 = null;
+
+        goto label2;
+
+     label1:
+        $d1 = virtualinvoke $r6.<org.json.JSONObject: double getDouble(java.lang.String)>("dur_ms");
+
+        $r13 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d1);
+
+     label2:
+        r2 = $r13;
+
+        r14 = newarray (kotlin.Pair)[1];
+
+        $r7 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d0);
+
+        $r8 = staticinvoke <kotlin.TuplesKt: kotlin.Pair 'to'(java.lang.Object,java.lang.Object)>("startupMs", $r7);
+
+        r14[0] = $r8;
+
+        r3 = staticinvoke <kotlin.collections.MapsKt: java.util.Map mutableMapOf(kotlin.Pair[])>(r14);
+
+        if r2 == null goto label3;
+
+        r15 = r3;
+
+        r16 = "fullyDrawnMs";
+
+        interfaceinvoke r15.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r16, r2);
+
+     label3:
+        r17 = virtualinvoke $r1.<org.json.JSONObject: org.json.JSONObject optJSONObject(java.lang.String)>("event_timestamps");
+
+        if r17 != null goto label4;
+
+        $r18 = null;
+
+        goto label5;
+
+     label4:
+        $l0 = virtualinvoke r17.<org.json.JSONObject: long optLong(java.lang.String)>("intent_received");
+
+        $r18 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+     label5:
+        r19 = $r18;
+
+        if r17 != null goto label6;
+
+        $r20 = null;
+
+        goto label7;
+
+     label6:
+        $l1 = virtualinvoke r17.<org.json.JSONObject: long optLong(java.lang.String)>("first_frame");
+
+        $r20 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+     label7:
+        r4 = $r20;
+
+        $r21 = new androidx.benchmark.macro.IterationResult;
+
+        $r23 = staticinvoke <kotlin.collections.MapsKt: java.util.Map emptyMap()>();
+
+        if r19 == null goto label8;
+
+        if r4 == null goto label8;
+
+        $r9 = new kotlin.ranges.LongRange;
+
+        $r24 = $r9;
+
+        $l2 = virtualinvoke r19.<java.lang.Long: long longValue()>();
+
+        $l3 = virtualinvoke r4.<java.lang.Long: long longValue()>();
+
+        specialinvoke $r9.<kotlin.ranges.LongRange: void <init>(long,long)>($l2, $l3);
+
+        goto label9;
+
+     label8:
+        $r24 = (kotlin.ranges.LongRange) null;
+
+     label9:
+        specialinvoke $r21.<androidx.benchmark.macro.IterationResult: void <init>(java.util.Map,java.util.Map,kotlin.ranges.LongRange)>(r3, $r23, $r24);
+
+        return $r21;
+    }
+
+    static void <clinit>()
+    {
+        androidx.benchmark.macro.perfetto.PerfettoResultsParser $r0;
+
+        $r0 = new androidx.benchmark.macro.perfetto.PerfettoResultsParser;
+
+        specialinvoke $r0.<androidx.benchmark.macro.perfetto.PerfettoResultsParser: void <init>()>();
+
+        <androidx.benchmark.macro.perfetto.PerfettoResultsParser: androidx.benchmark.macro.perfetto.PerfettoResultsParser INSTANCE> = $r0;
+
+        return;
+    }
+

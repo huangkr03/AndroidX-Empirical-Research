@@ -1,0 +1,357 @@
+androidx.camera.camera2.internal.Camera2CaptureRequestBuilder
+<androidx.camera.camera2.internal.Camera2CaptureRequestBuilder: java.lang.String TAG>
+    private void <init>()
+    {
+        androidx.camera.camera2.internal.Camera2CaptureRequestBuilder r0;
+
+        r0 := @this: androidx.camera.camera2.internal.Camera2CaptureRequestBuilder;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.util.List getConfiguredSurfaces(java.util.List, java.util.Map)
+    {
+        java.util.List r0;
+        java.util.Map r1;
+        java.util.ArrayList r2, $r6;
+        java.util.Iterator r3;
+        androidx.camera.core.impl.DeferrableSurface r4;
+        android.view.Surface r5;
+        boolean $z0;
+        java.lang.Object $r7, $r8;
+        java.lang.IllegalArgumentException $r9;
+
+        r0 := @parameter0: java.util.List;
+
+        r1 := @parameter1: java.util.Map;
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        r2 = $r6;
+
+        r3 = interfaceinvoke r0.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (androidx.camera.core.impl.DeferrableSurface) $r7;
+
+        $r8 = interfaceinvoke r1.<java.util.Map: java.lang.Object get(java.lang.Object)>(r4);
+
+        r5 = (android.view.Surface) $r8;
+
+        if r5 != null goto label2;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("DeferrableSurface not in configuredSurfaceMap");
+
+        throw $r9;
+
+     label2:
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>(r5);
+
+        goto label1;
+
+     label3:
+        return r2;
+    }
+
+    private static void applyImplementationOptionToCaptureBuilder(android.hardware.camera2.CaptureRequest$Builder, androidx.camera.core.impl.Config)
+    {
+        android.hardware.camera2.CaptureRequest$Builder r0;
+        androidx.camera.core.impl.Config r1;
+        androidx.camera.camera2.interop.CaptureRequestOptions r2;
+        java.util.Iterator r3;
+        androidx.camera.core.impl.Config$Option r4;
+        android.hardware.camera2.CaptureRequest$Key r5;
+        java.lang.Throwable r6, $r12;
+        androidx.camera.camera2.interop.CaptureRequestOptions$Builder $r7;
+        java.util.Set $r8;
+        boolean $z0;
+        java.lang.Object $r9, $r10, $r11;
+        java.lang.StringBuilder $r13, $r14, $r15;
+        java.lang.String $r16;
+
+        r0 := @parameter0: android.hardware.camera2.CaptureRequest$Builder;
+
+        r1 := @parameter1: androidx.camera.core.impl.Config;
+
+        $r7 = staticinvoke <androidx.camera.camera2.interop.CaptureRequestOptions$Builder: androidx.camera.camera2.interop.CaptureRequestOptions$Builder 'from'(androidx.camera.core.impl.Config)>(r1);
+
+        r2 = virtualinvoke $r7.<androidx.camera.camera2.interop.CaptureRequestOptions$Builder: androidx.camera.camera2.interop.CaptureRequestOptions build()>();
+
+        $r8 = virtualinvoke r2.<androidx.camera.camera2.interop.CaptureRequestOptions: java.util.Set listOptions()>();
+
+        r3 = interfaceinvoke $r8.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r9 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (androidx.camera.core.impl.Config$Option) $r9;
+
+        $r10 = virtualinvoke r4.<androidx.camera.core.impl.Config$Option: java.lang.Object getToken()>();
+
+        r5 = (android.hardware.camera2.CaptureRequest$Key) $r10;
+
+     label2:
+        $r11 = virtualinvoke r2.<androidx.camera.camera2.interop.CaptureRequestOptions: java.lang.Object retrieveOption(androidx.camera.core.impl.Config$Option)>(r4);
+
+        virtualinvoke r0.<android.hardware.camera2.CaptureRequest$Builder: void set(android.hardware.camera2.CaptureRequest$Key,java.lang.Object)>(r5, $r11);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r12 := @caughtexception;
+
+        r6 = $r12;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("CaptureRequest.Key is not supported: ");
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r5);
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <androidx.camera.core.Logger: void e(java.lang.String,java.lang.String)>("Camera2CaptureRequestBuilder", $r16);
+
+     label5:
+        goto label1;
+
+     label6:
+        return;
+
+        catch java.lang.IllegalArgumentException from label2 to label3 with label4;
+    }
+
+    public static android.hardware.camera2.CaptureRequest build(androidx.camera.core.impl.CaptureConfig, android.hardware.camera2.CameraDevice, java.util.Map) throws android.hardware.camera2.CameraAccessException
+    {
+        androidx.camera.core.impl.CaptureConfig r0;
+        android.hardware.camera2.CameraDevice r1;
+        java.util.Map r2;
+        java.util.List r3, $r7;
+        androidx.camera.core.impl.CameraCaptureResult r4;
+        java.util.Iterator r5;
+        android.view.Surface r6;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        int $i0, $i2, $i3;
+        androidx.camera.core.impl.Config $r8, $r14, $r20, $r28, $r29;
+        androidx.camera.core.impl.Config$Option $r9, $r15, $r21, $r30;
+        androidx.camera.core.impl.TagBundle $r10;
+        android.hardware.camera2.CaptureRequest $r11;
+        java.lang.Object $r12, $r16, $r22;
+        android.hardware.camera2.CaptureRequest$Key $r13, $r19;
+        java.lang.Integer $r17, $r23;
+        byte $b1;
+        java.lang.Byte $r18;
+        android.hardware.camera2.CaptureResult $r24, $r25;
+        android.hardware.camera2.TotalCaptureResult $r26;
+        android.hardware.camera2.CaptureRequest$Builder r27;
+
+        r0 := @parameter0: androidx.camera.core.impl.CaptureConfig;
+
+        r1 := @parameter1: android.hardware.camera2.CameraDevice;
+
+        r2 := @parameter2: java.util.Map;
+
+        if r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r7 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: java.util.List getSurfaces()>();
+
+        r3 = staticinvoke <androidx.camera.camera2.internal.Camera2CaptureRequestBuilder: java.util.List getConfiguredSurfaces(java.util.List,java.util.Map)>($r7, r2);
+
+        $z0 = interfaceinvoke r3.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label2;
+
+        return null;
+
+     label2:
+        r4 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.CameraCaptureResult getCameraCaptureResult()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 23 goto label3;
+
+        $i2 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: int getTemplateType()>();
+
+        if $i2 != 5 goto label3;
+
+        if r4 == null goto label3;
+
+        $r24 = interfaceinvoke r4.<androidx.camera.core.impl.CameraCaptureResult: android.hardware.camera2.CaptureResult getCaptureResult()>();
+
+        $z2 = $r24 instanceof android.hardware.camera2.TotalCaptureResult;
+
+        if $z2 == 0 goto label3;
+
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("Camera2CaptureRequestBuilder", "createReprocessCaptureRequest");
+
+        $r25 = interfaceinvoke r4.<androidx.camera.core.impl.CameraCaptureResult: android.hardware.camera2.CaptureResult getCaptureResult()>();
+
+        $r26 = (android.hardware.camera2.TotalCaptureResult) $r25;
+
+        r27 = staticinvoke <androidx.camera.camera2.internal.Camera2CaptureRequestBuilder$Api23Impl: android.hardware.camera2.CaptureRequest$Builder createReprocessCaptureRequest(android.hardware.camera2.CameraDevice,android.hardware.camera2.TotalCaptureResult)>(r1, $r26);
+
+        goto label4;
+
+     label3:
+        staticinvoke <androidx.camera.core.Logger: void d(java.lang.String,java.lang.String)>("Camera2CaptureRequestBuilder", "createCaptureRequest");
+
+        $i3 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: int getTemplateType()>();
+
+        r27 = virtualinvoke r1.<android.hardware.camera2.CameraDevice: android.hardware.camera2.CaptureRequest$Builder createCaptureRequest(int)>($i3);
+
+     label4:
+        $r28 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config getImplementationOptions()>();
+
+        staticinvoke <androidx.camera.camera2.internal.Camera2CaptureRequestBuilder: void applyImplementationOptionToCaptureBuilder(android.hardware.camera2.CaptureRequest$Builder,androidx.camera.core.impl.Config)>(r27, $r28);
+
+        $r29 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config getImplementationOptions()>();
+
+        $r30 = <androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config$Option OPTION_ROTATION>;
+
+        $z3 = interfaceinvoke $r29.<androidx.camera.core.impl.Config: boolean containsOption(androidx.camera.core.impl.Config$Option)>($r30);
+
+        if $z3 == 0 goto label5;
+
+        $r19 = <android.hardware.camera2.CaptureRequest: android.hardware.camera2.CaptureRequest$Key JPEG_ORIENTATION>;
+
+        $r20 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config getImplementationOptions()>();
+
+        $r21 = <androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config$Option OPTION_ROTATION>;
+
+        $r22 = interfaceinvoke $r20.<androidx.camera.core.impl.Config: java.lang.Object retrieveOption(androidx.camera.core.impl.Config$Option)>($r21);
+
+        $r23 = (java.lang.Integer) $r22;
+
+        virtualinvoke r27.<android.hardware.camera2.CaptureRequest$Builder: void set(android.hardware.camera2.CaptureRequest$Key,java.lang.Object)>($r19, $r23);
+
+     label5:
+        $r8 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config getImplementationOptions()>();
+
+        $r9 = <androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config$Option OPTION_JPEG_QUALITY>;
+
+        $z1 = interfaceinvoke $r8.<androidx.camera.core.impl.Config: boolean containsOption(androidx.camera.core.impl.Config$Option)>($r9);
+
+        if $z1 == 0 goto label6;
+
+        $r13 = <android.hardware.camera2.CaptureRequest: android.hardware.camera2.CaptureRequest$Key JPEG_QUALITY>;
+
+        $r14 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config getImplementationOptions()>();
+
+        $r15 = <androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config$Option OPTION_JPEG_QUALITY>;
+
+        $r16 = interfaceinvoke $r14.<androidx.camera.core.impl.Config: java.lang.Object retrieveOption(androidx.camera.core.impl.Config$Option)>($r15);
+
+        $r17 = (java.lang.Integer) $r16;
+
+        $b1 = virtualinvoke $r17.<java.lang.Integer: byte byteValue()>();
+
+        $r18 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b1);
+
+        virtualinvoke r27.<android.hardware.camera2.CaptureRequest$Builder: void set(android.hardware.camera2.CaptureRequest$Key,java.lang.Object)>($r13, $r18);
+
+     label6:
+        r5 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label7:
+        $z4 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label8;
+
+        $r12 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (android.view.Surface) $r12;
+
+        virtualinvoke r27.<android.hardware.camera2.CaptureRequest$Builder: void addTarget(android.view.Surface)>(r6);
+
+        goto label7;
+
+     label8:
+        $r10 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.TagBundle getTagBundle()>();
+
+        virtualinvoke r27.<android.hardware.camera2.CaptureRequest$Builder: void setTag(java.lang.Object)>($r10);
+
+        $r11 = virtualinvoke r27.<android.hardware.camera2.CaptureRequest$Builder: android.hardware.camera2.CaptureRequest build()>();
+
+        return $r11;
+    }
+
+    public static android.hardware.camera2.CaptureRequest buildWithoutTarget(androidx.camera.core.impl.CaptureConfig, android.hardware.camera2.CameraDevice) throws android.hardware.camera2.CameraAccessException
+    {
+        androidx.camera.core.impl.CaptureConfig r0;
+        android.hardware.camera2.CameraDevice r1;
+        android.hardware.camera2.CaptureRequest$Builder r2;
+        int $i0;
+        androidx.camera.core.impl.Config $r3;
+        android.hardware.camera2.CaptureRequest $r4;
+
+        r0 := @parameter0: androidx.camera.core.impl.CaptureConfig;
+
+        r1 := @parameter1: android.hardware.camera2.CameraDevice;
+
+        if r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $i0 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: int getTemplateType()>();
+
+        r2 = virtualinvoke r1.<android.hardware.camera2.CameraDevice: android.hardware.camera2.CaptureRequest$Builder createCaptureRequest(int)>($i0);
+
+        $r3 = virtualinvoke r0.<androidx.camera.core.impl.CaptureConfig: androidx.camera.core.impl.Config getImplementationOptions()>();
+
+        staticinvoke <androidx.camera.camera2.internal.Camera2CaptureRequestBuilder: void applyImplementationOptionToCaptureBuilder(android.hardware.camera2.CaptureRequest$Builder,androidx.camera.core.impl.Config)>(r2, $r3);
+
+        $r4 = virtualinvoke r2.<android.hardware.camera2.CaptureRequest$Builder: android.hardware.camera2.CaptureRequest build()>();
+
+        return $r4;
+    }
+
+androidx.camera.camera2.internal.Camera2CaptureRequestBuilder$Api23Impl
+    private void <init>()
+    {
+        androidx.camera.camera2.internal.Camera2CaptureRequestBuilder$Api23Impl r0;
+
+        r0 := @this: androidx.camera.camera2.internal.Camera2CaptureRequestBuilder$Api23Impl;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static android.hardware.camera2.CaptureRequest$Builder createReprocessCaptureRequest(android.hardware.camera2.CameraDevice, android.hardware.camera2.TotalCaptureResult) throws android.hardware.camera2.CameraAccessException
+    {
+        android.hardware.camera2.CameraDevice r0;
+        android.hardware.camera2.TotalCaptureResult r1;
+        android.hardware.camera2.CaptureRequest$Builder $r2;
+
+        r0 := @parameter0: android.hardware.camera2.CameraDevice;
+
+        r1 := @parameter1: android.hardware.camera2.TotalCaptureResult;
+
+        $r2 = virtualinvoke r0.<android.hardware.camera2.CameraDevice: android.hardware.camera2.CaptureRequest$Builder createReprocessCaptureRequest(android.hardware.camera2.TotalCaptureResult)>(r1);
+
+        return $r2;
+    }
+

@@ -1,0 +1,393 @@
+androidx.graphics.lowlatency.FrameBufferPool
+<androidx.graphics.lowlatency.FrameBufferPool: androidx.graphics.lowlatency.FrameBufferPool$Companion Companion>
+<androidx.graphics.lowlatency.FrameBufferPool: int width>
+<androidx.graphics.lowlatency.FrameBufferPool: int height>
+<androidx.graphics.lowlatency.FrameBufferPool: int format>
+<androidx.graphics.lowlatency.FrameBufferPool: long usage>
+<androidx.graphics.lowlatency.FrameBufferPool: int maxPoolSize>
+<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>
+<androidx.graphics.lowlatency.FrameBufferPool: int mNumAllocated>
+<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.ReentrantLock mLock>
+<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.Condition mCondition>
+<androidx.graphics.lowlatency.FrameBufferPool: java.lang.String TAG>
+    public void <init>(int, int, int, long, int)
+    {
+        androidx.graphics.lowlatency.FrameBufferPool r0;
+        int i0, i1, i2, i4, $i5;
+        long l3;
+        java.util.ArrayList $r1;
+        java.util.concurrent.locks.ReentrantLock $r2, $r3;
+        java.util.concurrent.locks.Condition $r4;
+        java.lang.IllegalArgumentException $r5;
+
+        r0 := @this: androidx.graphics.lowlatency.FrameBufferPool;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        l3 := @parameter3: long;
+
+        i4 := @parameter4: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: int width> = i0;
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: int height> = i1;
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: int format> = i2;
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: long usage> = l3;
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: int maxPoolSize> = i4;
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool> = $r1;
+
+        $r2 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r2.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.ReentrantLock mLock> = $r2;
+
+        $r3 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.ReentrantLock mLock>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.locks.ReentrantLock: java.util.concurrent.locks.Condition newCondition()>();
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.Condition mCondition> = $r4;
+
+        $i5 = r0.<androidx.graphics.lowlatency.FrameBufferPool: int maxPoolSize>;
+
+        if $i5 > 0 goto label1;
+
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Pool size must be at least 1");
+
+        throw $r5;
+
+     label1:
+        return;
+    }
+
+    public final androidx.graphics.lowlatency.FrameBuffer obtain(androidx.graphics.opengl.egl.EGLSpec)
+    {
+        androidx.graphics.lowlatency.FrameBufferPool r0;
+        androidx.graphics.opengl.egl.EGLSpec r1;
+        java.util.concurrent.locks.Lock r2;
+        androidx.graphics.lowlatency.FrameBuffer r3, r21, $r22;
+        java.util.concurrent.locks.ReentrantLock $r4;
+        java.util.ArrayList $r5, $r6, $r9, $r10, $r12, $r13;
+        boolean $z0, $z1, $z3;
+        java.util.Collection $r7;
+        int $i0, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, i13;
+        long $l1;
+        android.hardware.HardwareBuffer $r8;
+        java.lang.Object $r11;
+        java.lang.StringBuilder $r15, $r16, $r17;
+        java.lang.String $r18;
+        java.util.concurrent.locks.Condition $r19;
+        java.lang.Throwable $r20;
+
+        r0 := @this: androidx.graphics.lowlatency.FrameBufferPool;
+
+        r1 := @parameter0: androidx.graphics.opengl.egl.EGLSpec;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "eglSpec");
+
+        $r4 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.ReentrantLock mLock>;
+
+        r2 = (java.util.concurrent.locks.Lock) $r4;
+
+        interfaceinvoke r2.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label1:
+        $r5 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>;
+
+        $z0 = virtualinvoke $r5.<java.util.ArrayList: boolean isEmpty()>();
+
+        if $z0 == 0 goto label2;
+
+        $i10 = r0.<androidx.graphics.lowlatency.FrameBufferPool: int mNumAllocated>;
+
+        $i9 = r0.<androidx.graphics.lowlatency.FrameBufferPool: int maxPoolSize>;
+
+        if $i10 < $i9 goto label2;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Waiting for FrameBuffer to become available, current allocation count: ");
+
+        $i11 = r0.<androidx.graphics.lowlatency.FrameBufferPool: int mNumAllocated>;
+
+        $r17 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i11);
+
+        $r18 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("FrameBufferPool", $r18);
+
+        $r19 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.Condition mCondition>;
+
+        interfaceinvoke $r19.<java.util.concurrent.locks.Condition: void await()>();
+
+        goto label1;
+
+     label2:
+        $r6 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>;
+
+        $r7 = (java.util.Collection) $r6;
+
+        $z1 = interfaceinvoke $r7.<java.util.Collection: boolean isEmpty()>();
+
+        if $z1 != 0 goto label3;
+
+        $z3 = 1;
+
+        goto label4;
+
+     label3:
+        $z3 = 0;
+
+     label4:
+        if $z3 == 0 goto label5;
+
+        $r10 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>;
+
+        $r9 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>;
+
+        $i5 = virtualinvoke $r9.<java.util.ArrayList: int size()>();
+
+        $i6 = $i5 - 1;
+
+        $r11 = virtualinvoke $r10.<java.util.ArrayList: java.lang.Object get(int)>($i6);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r11, "mPool[mPool.size - 1]");
+
+        r21 = (androidx.graphics.lowlatency.FrameBuffer) $r11;
+
+        $r13 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>;
+
+        $r12 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>;
+
+        $i7 = virtualinvoke $r12.<java.util.ArrayList: int size()>();
+
+        $i8 = $i7 - 1;
+
+        virtualinvoke $r13.<java.util.ArrayList: java.lang.Object remove(int)>($i8);
+
+        $r22 = r21;
+
+        goto label6;
+
+     label5:
+        i13 = r0.<androidx.graphics.lowlatency.FrameBufferPool: int mNumAllocated>;
+
+        $i0 = i13 + 1;
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: int mNumAllocated> = $i0;
+
+        $r22 = new androidx.graphics.lowlatency.FrameBuffer;
+
+        $i4 = r0.<androidx.graphics.lowlatency.FrameBufferPool: int width>;
+
+        $i3 = r0.<androidx.graphics.lowlatency.FrameBufferPool: int height>;
+
+        $i2 = r0.<androidx.graphics.lowlatency.FrameBufferPool: int format>;
+
+        $l1 = r0.<androidx.graphics.lowlatency.FrameBufferPool: long usage>;
+
+        $r8 = staticinvoke <android.hardware.HardwareBuffer: android.hardware.HardwareBuffer create(int,int,int,int,long)>($i4, $i3, $i2, 1, $l1);
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullExpressionValue(java.lang.Object,java.lang.String)>($r8, "create(\n                \u2026age\n                    )");
+
+        specialinvoke $r22.<androidx.graphics.lowlatency.FrameBuffer: void <init>(androidx.graphics.opengl.egl.EGLSpec,android.hardware.HardwareBuffer)>(r1, $r8);
+
+     label6:
+        r3 = $r22;
+
+     label7:
+        interfaceinvoke r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return r3;
+
+     label8:
+        $r20 := @caughtexception;
+
+     label9:
+        interfaceinvoke r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r20;
+
+        catch java.lang.Throwable from label1 to label7 with label8;
+        catch java.lang.Throwable from label8 to label9 with label8;
+    }
+
+    public final void release(androidx.graphics.lowlatency.FrameBuffer)
+    {
+        androidx.graphics.lowlatency.FrameBufferPool r0;
+        androidx.graphics.lowlatency.FrameBuffer r1;
+        java.util.concurrent.locks.Lock r2;
+        java.util.concurrent.locks.ReentrantLock $r3;
+        java.util.ArrayList $r4;
+        java.util.concurrent.locks.Condition $r5;
+        java.lang.Throwable $r6;
+        kotlin.Unit $r7;
+
+        r0 := @this: androidx.graphics.lowlatency.FrameBufferPool;
+
+        r1 := @parameter0: androidx.graphics.lowlatency.FrameBuffer;
+
+        staticinvoke <kotlin.jvm.internal.Intrinsics: void checkNotNullParameter(java.lang.Object,java.lang.String)>(r1, "frameBuffer");
+
+        $r3 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.ReentrantLock mLock>;
+
+        r2 = (java.util.concurrent.locks.Lock) $r3;
+
+        interfaceinvoke r2.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label1:
+        $r4 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>;
+
+        virtualinvoke $r4.<java.util.ArrayList: boolean add(java.lang.Object)>(r1);
+
+        $r5 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.Condition mCondition>;
+
+        interfaceinvoke $r5.<java.util.concurrent.locks.Condition: void signal()>();
+
+        $r7 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label2:
+        interfaceinvoke r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label5;
+
+     label3:
+        $r6 := @caughtexception;
+
+     label4:
+        interfaceinvoke r2.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r6;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public final void close()
+    {
+        androidx.graphics.lowlatency.FrameBufferPool r0;
+        java.util.concurrent.locks.Lock r1;
+        java.util.Iterator r2;
+        androidx.graphics.lowlatency.FrameBuffer r3;
+        java.util.concurrent.locks.ReentrantLock $r4;
+        java.util.ArrayList $r5, $r6;
+        boolean $z0;
+        java.lang.Object $r7;
+        java.lang.Throwable $r8;
+        kotlin.Unit $r9;
+
+        r0 := @this: androidx.graphics.lowlatency.FrameBufferPool;
+
+        $r4 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.concurrent.locks.ReentrantLock mLock>;
+
+        r1 = (java.util.concurrent.locks.Lock) $r4;
+
+        interfaceinvoke r1.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label1:
+        $r5 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>;
+
+        r2 = virtualinvoke $r5.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (androidx.graphics.lowlatency.FrameBuffer) $r7;
+
+        virtualinvoke r3.<androidx.graphics.lowlatency.FrameBuffer: void close()>();
+
+        goto label2;
+
+     label3:
+        $r6 = r0.<androidx.graphics.lowlatency.FrameBufferPool: java.util.ArrayList mPool>;
+
+        virtualinvoke $r6.<java.util.ArrayList: void clear()>();
+
+        r0.<androidx.graphics.lowlatency.FrameBufferPool: int mNumAllocated> = 0;
+
+        $r9 = <kotlin.Unit: kotlin.Unit INSTANCE>;
+
+     label4:
+        interfaceinvoke r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label7;
+
+     label5:
+        $r8 := @caughtexception;
+
+     label6:
+        interfaceinvoke r1.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r8;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    static void <clinit>()
+    {
+        androidx.graphics.lowlatency.FrameBufferPool$Companion $r0;
+
+        $r0 = new androidx.graphics.lowlatency.FrameBufferPool$Companion;
+
+        specialinvoke $r0.<androidx.graphics.lowlatency.FrameBufferPool$Companion: void <init>(kotlin.jvm.internal.DefaultConstructorMarker)>(null);
+
+        <androidx.graphics.lowlatency.FrameBufferPool: androidx.graphics.lowlatency.FrameBufferPool$Companion Companion> = $r0;
+
+        return;
+    }
+
+androidx.graphics.lowlatency.FrameBufferPool$Companion
+    private void <init>()
+    {
+        androidx.graphics.lowlatency.FrameBufferPool$Companion r0;
+
+        r0 := @this: androidx.graphics.lowlatency.FrameBufferPool$Companion;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(kotlin.jvm.internal.DefaultConstructorMarker)
+    {
+        androidx.graphics.lowlatency.FrameBufferPool$Companion r0;
+        kotlin.jvm.internal.DefaultConstructorMarker $r1;
+
+        r0 := @this: androidx.graphics.lowlatency.FrameBufferPool$Companion;
+
+        $r1 := @parameter0: kotlin.jvm.internal.DefaultConstructorMarker;
+
+        specialinvoke r0.<androidx.graphics.lowlatency.FrameBufferPool$Companion: void <init>()>();
+
+        return;
+    }
+

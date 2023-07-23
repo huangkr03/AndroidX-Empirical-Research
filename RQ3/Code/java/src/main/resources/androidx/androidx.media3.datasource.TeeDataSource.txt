@@ -1,0 +1,247 @@
+androidx.media3.datasource.TeeDataSource
+<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSource upstream>
+<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSink dataSink>
+<androidx.media3.datasource.TeeDataSource: boolean dataSinkNeedsClosing>
+<androidx.media3.datasource.TeeDataSource: long bytesRemaining>
+    public void <init>(androidx.media3.datasource.DataSource, androidx.media3.datasource.DataSink)
+    {
+        androidx.media3.datasource.TeeDataSource r0;
+        androidx.media3.datasource.DataSource r1, $r4;
+        androidx.media3.datasource.DataSink r2, $r6;
+        java.lang.Object $r3, $r5;
+
+        r0 := @this: androidx.media3.datasource.TeeDataSource;
+
+        r1 := @parameter0: androidx.media3.datasource.DataSource;
+
+        r2 := @parameter1: androidx.media3.datasource.DataSink;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r4 = (androidx.media3.datasource.DataSource) $r3;
+
+        r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSource upstream> = $r4;
+
+        $r5 = staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $r6 = (androidx.media3.datasource.DataSink) $r5;
+
+        r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSink dataSink> = $r6;
+
+        return;
+    }
+
+    public void addTransferListener(androidx.media3.datasource.TransferListener)
+    {
+        androidx.media3.datasource.TeeDataSource r0;
+        androidx.media3.datasource.TransferListener r1;
+        androidx.media3.datasource.DataSource $r3;
+
+        r0 := @this: androidx.media3.datasource.TeeDataSource;
+
+        r1 := @parameter0: androidx.media3.datasource.TransferListener;
+
+        staticinvoke <androidx.media3.common.util.Assertions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r3 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSource upstream>;
+
+        interfaceinvoke $r3.<androidx.media3.datasource.DataSource: void addTransferListener(androidx.media3.datasource.TransferListener)>(r1);
+
+        return;
+    }
+
+    public long open(androidx.media3.datasource.DataSpec) throws java.io.IOException
+    {
+        androidx.media3.datasource.TeeDataSource r0;
+        androidx.media3.datasource.DataSource $r1;
+        long $l0, $l1, $l3, $l5, $l7, $l8;
+        byte $b2, $b4, $b6;
+        androidx.media3.datasource.DataSpec r2;
+        androidx.media3.datasource.DataSink $r3;
+
+        r0 := @this: androidx.media3.datasource.TeeDataSource;
+
+        r2 := @parameter0: androidx.media3.datasource.DataSpec;
+
+        $r1 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSource upstream>;
+
+        $l0 = interfaceinvoke $r1.<androidx.media3.datasource.DataSource: long open(androidx.media3.datasource.DataSpec)>(r2);
+
+        r0.<androidx.media3.datasource.TeeDataSource: long bytesRemaining> = $l0;
+
+        $l1 = r0.<androidx.media3.datasource.TeeDataSource: long bytesRemaining>;
+
+        $b2 = $l1 cmp 0L;
+
+        if $b2 != 0 goto label1;
+
+        return 0L;
+
+     label1:
+        $l3 = r2.<androidx.media3.datasource.DataSpec: long length>;
+
+        $b4 = $l3 cmp -1L;
+
+        if $b4 != 0 goto label2;
+
+        $l5 = r0.<androidx.media3.datasource.TeeDataSource: long bytesRemaining>;
+
+        $b6 = $l5 cmp -1L;
+
+        if $b6 == 0 goto label2;
+
+        $l7 = r0.<androidx.media3.datasource.TeeDataSource: long bytesRemaining>;
+
+        r2 = virtualinvoke r2.<androidx.media3.datasource.DataSpec: androidx.media3.datasource.DataSpec subrange(long,long)>(0L, $l7);
+
+     label2:
+        r0.<androidx.media3.datasource.TeeDataSource: boolean dataSinkNeedsClosing> = 1;
+
+        $r3 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSink dataSink>;
+
+        interfaceinvoke $r3.<androidx.media3.datasource.DataSink: void open(androidx.media3.datasource.DataSpec)>(r2);
+
+        $l8 = r0.<androidx.media3.datasource.TeeDataSource: long bytesRemaining>;
+
+        return $l8;
+    }
+
+    public int read(byte[], int, int) throws java.io.IOException
+    {
+        androidx.media3.datasource.TeeDataSource r0;
+        byte[] r1;
+        int i0, i1, i2;
+        long $l3, $l5, $l7, $l8, $l9;
+        byte $b4, $b6;
+        androidx.media3.datasource.DataSource $r2;
+        androidx.media3.datasource.DataSink $r3;
+
+        r0 := @this: androidx.media3.datasource.TeeDataSource;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $l3 = r0.<androidx.media3.datasource.TeeDataSource: long bytesRemaining>;
+
+        $b4 = $l3 cmp 0L;
+
+        if $b4 != 0 goto label1;
+
+        return -1;
+
+     label1:
+        $r2 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSource upstream>;
+
+        i2 = interfaceinvoke $r2.<androidx.media3.datasource.DataSource: int read(byte[],int,int)>(r1, i0, i1);
+
+        if i2 <= 0 goto label2;
+
+        $r3 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSink dataSink>;
+
+        interfaceinvoke $r3.<androidx.media3.datasource.DataSink: void write(byte[],int,int)>(r1, i0, i2);
+
+        $l5 = r0.<androidx.media3.datasource.TeeDataSource: long bytesRemaining>;
+
+        $b6 = $l5 cmp -1L;
+
+        if $b6 == 0 goto label2;
+
+        $l8 = r0.<androidx.media3.datasource.TeeDataSource: long bytesRemaining>;
+
+        $l7 = (long) i2;
+
+        $l9 = $l8 - $l7;
+
+        r0.<androidx.media3.datasource.TeeDataSource: long bytesRemaining> = $l9;
+
+     label2:
+        return i2;
+    }
+
+    public android.net.Uri getUri()
+    {
+        androidx.media3.datasource.TeeDataSource r0;
+        androidx.media3.datasource.DataSource $r1;
+        android.net.Uri $r2;
+
+        r0 := @this: androidx.media3.datasource.TeeDataSource;
+
+        $r1 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSource upstream>;
+
+        $r2 = interfaceinvoke $r1.<androidx.media3.datasource.DataSource: android.net.Uri getUri()>();
+
+        return $r2;
+    }
+
+    public java.util.Map getResponseHeaders()
+    {
+        androidx.media3.datasource.TeeDataSource r0;
+        androidx.media3.datasource.DataSource $r1;
+        java.util.Map $r2;
+
+        r0 := @this: androidx.media3.datasource.TeeDataSource;
+
+        $r1 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSource upstream>;
+
+        $r2 = interfaceinvoke $r1.<androidx.media3.datasource.DataSource: java.util.Map getResponseHeaders()>();
+
+        return $r2;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        androidx.media3.datasource.TeeDataSource r0;
+        java.lang.Throwable r1, $r4;
+        androidx.media3.datasource.DataSource $r2;
+        boolean $z0, $z1;
+        androidx.media3.datasource.DataSink $r3, $r5;
+
+        r0 := @this: androidx.media3.datasource.TeeDataSource;
+
+     label1:
+        $r2 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSource upstream>;
+
+        interfaceinvoke $r2.<androidx.media3.datasource.DataSource: void close()>();
+
+     label2:
+        $z0 = r0.<androidx.media3.datasource.TeeDataSource: boolean dataSinkNeedsClosing>;
+
+        if $z0 == 0 goto label5;
+
+        r0.<androidx.media3.datasource.TeeDataSource: boolean dataSinkNeedsClosing> = 0;
+
+        $r3 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSink dataSink>;
+
+        interfaceinvoke $r3.<androidx.media3.datasource.DataSink: void close()>();
+
+        goto label5;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r1 = $r4;
+
+        $z1 = r0.<androidx.media3.datasource.TeeDataSource: boolean dataSinkNeedsClosing>;
+
+        if $z1 == 0 goto label4;
+
+        r0.<androidx.media3.datasource.TeeDataSource: boolean dataSinkNeedsClosing> = 0;
+
+        $r5 = r0.<androidx.media3.datasource.TeeDataSource: androidx.media3.datasource.DataSink dataSink>;
+
+        interfaceinvoke $r5.<androidx.media3.datasource.DataSink: void close()>();
+
+     label4:
+        throw r1;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+

@@ -1,0 +1,110 @@
+androidx.core.app.LocaleManagerCompat
+    private void <init>()
+    {
+        androidx.core.app.LocaleManagerCompat r0;
+
+        r0 := @this: androidx.core.app.LocaleManagerCompat;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static androidx.core.os.LocaleListCompat getSystemLocales(android.content.Context)
+    {
+        android.content.Context r0, $r2;
+        java.lang.Object r1;
+        boolean $z0;
+        android.content.res.Resources $r3;
+        android.content.res.Configuration $r4;
+        android.os.LocaleList $r5;
+        androidx.core.os.LocaleListCompat r6;
+
+        r0 := @parameter0: android.content.Context;
+
+        r6 = staticinvoke <androidx.core.os.LocaleListCompat: androidx.core.os.LocaleListCompat getEmptyLocaleList()>();
+
+        $z0 = staticinvoke <androidx.core.os.BuildCompat: boolean isAtLeastT()>();
+
+        if $z0 == 0 goto label2;
+
+        r1 = staticinvoke <androidx.core.app.LocaleManagerCompat: java.lang.Object getLocaleManagerForApplication(android.content.Context)>(r0);
+
+        if r1 == null goto label1;
+
+        $r5 = staticinvoke <androidx.core.app.LocaleManagerCompat$Api33Impl: android.os.LocaleList localeManagerGetSystemLocales(java.lang.Object)>(r1);
+
+        r6 = staticinvoke <androidx.core.os.LocaleListCompat: androidx.core.os.LocaleListCompat wrap(android.os.LocaleList)>($r5);
+
+     label1:
+        goto label3;
+
+     label2:
+        $r2 = virtualinvoke r0.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r4 = virtualinvoke $r3.<android.content.res.Resources: android.content.res.Configuration getConfiguration()>();
+
+        r6 = staticinvoke <androidx.core.app.LocaleManagerCompat: androidx.core.os.LocaleListCompat getConfigurationLocales(android.content.res.Configuration)>($r4);
+
+     label3:
+        return r6;
+    }
+
+    private static java.lang.Object getLocaleManagerForApplication(android.content.Context)
+    {
+        android.content.Context r0;
+        java.lang.Object $r1;
+
+        r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("locale");
+
+        return $r1;
+    }
+
+    static androidx.core.os.LocaleListCompat getConfigurationLocales(android.content.res.Configuration)
+    {
+        android.content.res.Configuration r0;
+        int $i0, $i1;
+        java.util.Locale[] $r1;
+        java.util.Locale $r2, $r4;
+        androidx.core.os.LocaleListCompat $r3, $r6, $r7;
+        java.lang.String $r5;
+
+        r0 := @parameter0: android.content.res.Configuration;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 24 goto label1;
+
+        $r7 = staticinvoke <androidx.core.app.LocaleManagerCompat$Api24Impl: androidx.core.os.LocaleListCompat getLocales(android.content.res.Configuration)>(r0);
+
+        return $r7;
+
+     label1:
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 21 goto label2;
+
+        $r4 = r0.<android.content.res.Configuration: java.util.Locale locale>;
+
+        $r5 = staticinvoke <androidx.core.app.LocaleManagerCompat$Api21Impl: java.lang.String toLanguageTag(java.util.Locale)>($r4);
+
+        $r6 = staticinvoke <androidx.core.os.LocaleListCompat: androidx.core.os.LocaleListCompat forLanguageTags(java.lang.String)>($r5);
+
+        return $r6;
+
+     label2:
+        $r1 = newarray (java.util.Locale)[1];
+
+        $r2 = r0.<android.content.res.Configuration: java.util.Locale locale>;
+
+        $r1[0] = $r2;
+
+        $r3 = staticinvoke <androidx.core.os.LocaleListCompat: androidx.core.os.LocaleListCompat create(java.util.Locale[])>($r1);
+
+        return $r3;
+    }
+

@@ -1,0 +1,672 @@
+androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil
+    private void <init>()
+    {
+        androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil r0;
+
+        r0 := @this: androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static transient androidx.media3.common.AdPlaybackState addAdGroupToAdPlaybackState(androidx.media3.common.AdPlaybackState, long, long, long[])
+    {
+        long l0, l1, l2, $l4, $l5, $l8, $l10;
+        long[] r0;
+        int $i3, $i7, i12, $i13, i14, $i15;
+        androidx.media3.common.AdPlaybackState $r1, r4, $r5, $r6, $r7, $r8, r9;
+        byte $b6, $b9, $b11;
+        androidx.media3.common.AdPlaybackState$AdGroup $r2, $r3;
+
+        r4 := @parameter0: androidx.media3.common.AdPlaybackState;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        r0 := @parameter3: long[];
+
+        l2 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: long getMediaPeriodPositionUsForContent(long,int,androidx.media3.common.AdPlaybackState)>(l0, -1, r4);
+
+        i12 = r4.<androidx.media3.common.AdPlaybackState: int removedAdGroupCount>;
+
+     label1:
+        $i3 = r4.<androidx.media3.common.AdPlaybackState: int adGroupCount>;
+
+        if i12 >= $i3 goto label2;
+
+        $r2 = virtualinvoke r4.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i12);
+
+        $l8 = $r2.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $b9 = $l8 cmp -9223372036854775808L;
+
+        if $b9 == 0 goto label2;
+
+        $r3 = virtualinvoke r4.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i12);
+
+        $l10 = $r3.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $b11 = $l10 cmp l2;
+
+        if $b11 > 0 goto label2;
+
+        i12 = i12 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = virtualinvoke r4.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState withNewAdGroup(int,long)>(i12, l2);
+
+        $r6 = virtualinvoke $r5.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState withIsServerSideInserted(int,boolean)>(i12, 1);
+
+        $i13 = lengthof r0;
+
+        $r7 = virtualinvoke $r6.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState withAdCount(int,int)>(i12, $i13);
+
+        $r8 = virtualinvoke $r7.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState withAdDurationsUs(int,long[])>(i12, r0);
+
+        r9 = virtualinvoke $r8.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState withContentResumeOffsetUs(int,long)>(i12, l1);
+
+        i14 = 0;
+
+     label3:
+        $i15 = lengthof r0;
+
+        if i14 >= $i15 goto label4;
+
+        $l5 = r0[i14];
+
+        $b6 = $l5 cmp 0L;
+
+        if $b6 != 0 goto label4;
+
+        $i7 = i14;
+
+        i14 = i14 + 1;
+
+        r9 = virtualinvoke r9.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState withSkippedAd(int,int)>(i12, $i7);
+
+        goto label3;
+
+     label4:
+        $l4 = staticinvoke <androidx.media3.common.util.Util: long sum(long[])>(r0);
+
+        $r1 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: androidx.media3.common.AdPlaybackState correctFollowingAdGroupTimes(androidx.media3.common.AdPlaybackState,int,long,long)>(r9, i12, $l4, l1);
+
+        return $r1;
+    }
+
+    public static long getStreamPositionUs(androidx.media3.common.Player, androidx.media3.common.AdPlaybackState)
+    {
+        androidx.media3.common.Player r0;
+        androidx.media3.common.AdPlaybackState r1;
+        androidx.media3.common.Timeline r2;
+        androidx.media3.common.Timeline$Period r3, $r4;
+        int i0, $i2, i9;
+        long l1, $l3, $l4, $l5, $l6, $l7, $l8, l10;
+        boolean $z0, $z1, $z2;
+        java.lang.Object $r5, $r6;
+
+        r0 := @parameter0: androidx.media3.common.Player;
+
+        r1 := @parameter1: androidx.media3.common.AdPlaybackState;
+
+        r2 = interfaceinvoke r0.<androidx.media3.common.Player: androidx.media3.common.Timeline getCurrentTimeline()>();
+
+        $z0 = virtualinvoke r2.<androidx.media3.common.Timeline: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        return -9223372036854775807L;
+
+     label1:
+        $i2 = interfaceinvoke r0.<androidx.media3.common.Player: int getCurrentPeriodIndex()>();
+
+        $r4 = new androidx.media3.common.Timeline$Period;
+
+        specialinvoke $r4.<androidx.media3.common.Timeline$Period: void <init>()>();
+
+        r3 = virtualinvoke r2.<androidx.media3.common.Timeline: androidx.media3.common.Timeline$Period getPeriod(int,androidx.media3.common.Timeline$Period)>($i2, $r4);
+
+        $r5 = virtualinvoke r3.<androidx.media3.common.Timeline$Period: java.lang.Object getAdsId()>();
+
+        $r6 = r1.<androidx.media3.common.AdPlaybackState: java.lang.Object adsId>;
+
+        $z1 = staticinvoke <androidx.media3.common.util.Util: boolean areEqual(java.lang.Object,java.lang.Object)>($r5, $r6);
+
+        if $z1 != 0 goto label2;
+
+        return -9223372036854775807L;
+
+     label2:
+        $z2 = interfaceinvoke r0.<androidx.media3.common.Player: boolean isPlayingAd()>();
+
+        if $z2 == 0 goto label3;
+
+        i9 = interfaceinvoke r0.<androidx.media3.common.Player: int getCurrentAdGroupIndex()>();
+
+        i0 = interfaceinvoke r0.<androidx.media3.common.Player: int getCurrentAdIndexInAdGroup()>();
+
+        $l7 = interfaceinvoke r0.<androidx.media3.common.Player: long getCurrentPosition()>();
+
+        l1 = staticinvoke <androidx.media3.common.util.Util: long msToUs(long)>($l7);
+
+        $l8 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: long getStreamPositionUsForAd(long,int,int,androidx.media3.common.AdPlaybackState)>(l1, i9, i0, r1);
+
+        return $l8;
+
+     label3:
+        $l3 = interfaceinvoke r0.<androidx.media3.common.Player: long getCurrentPosition()>();
+
+        $l4 = staticinvoke <androidx.media3.common.util.Util: long msToUs(long)>($l3);
+
+        $l5 = virtualinvoke r3.<androidx.media3.common.Timeline$Period: long getPositionInWindowUs()>();
+
+        l10 = $l4 - $l5;
+
+        $l6 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: long getStreamPositionUsForContent(long,int,androidx.media3.common.AdPlaybackState)>(l10, -1, r1);
+
+        return $l6;
+    }
+
+    public static long getStreamPositionUs(long, androidx.media3.common.MediaPeriodId, androidx.media3.common.AdPlaybackState)
+    {
+        long l0, $l4;
+        androidx.media3.common.MediaPeriodId r0;
+        androidx.media3.common.AdPlaybackState r1;
+        boolean $z0;
+        int $i1, $i2, $i3;
+
+        l0 := @parameter0: long;
+
+        r0 := @parameter1: androidx.media3.common.MediaPeriodId;
+
+        r1 := @parameter2: androidx.media3.common.AdPlaybackState;
+
+        $z0 = virtualinvoke r0.<androidx.media3.common.MediaPeriodId: boolean isAd()>();
+
+        if $z0 == 0 goto label1;
+
+        $i3 = r0.<androidx.media3.common.MediaPeriodId: int adGroupIndex>;
+
+        $i2 = r0.<androidx.media3.common.MediaPeriodId: int adIndexInAdGroup>;
+
+        $l4 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: long getStreamPositionUsForAd(long,int,int,androidx.media3.common.AdPlaybackState)>(l0, $i3, $i2, r1);
+
+        goto label2;
+
+     label1:
+        $i1 = r0.<androidx.media3.common.MediaPeriodId: int nextAdGroupIndex>;
+
+        $l4 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: long getStreamPositionUsForContent(long,int,androidx.media3.common.AdPlaybackState)>(l0, $i1, r1);
+
+     label2:
+        return $l4;
+    }
+
+    public static long getMediaPeriodPositionUs(long, androidx.media3.common.MediaPeriodId, androidx.media3.common.AdPlaybackState)
+    {
+        long l0, $l4;
+        androidx.media3.common.MediaPeriodId r0;
+        androidx.media3.common.AdPlaybackState r1;
+        boolean $z0;
+        int $i1, $i2, $i3;
+
+        l0 := @parameter0: long;
+
+        r0 := @parameter1: androidx.media3.common.MediaPeriodId;
+
+        r1 := @parameter2: androidx.media3.common.AdPlaybackState;
+
+        $z0 = virtualinvoke r0.<androidx.media3.common.MediaPeriodId: boolean isAd()>();
+
+        if $z0 == 0 goto label1;
+
+        $i3 = r0.<androidx.media3.common.MediaPeriodId: int adGroupIndex>;
+
+        $i2 = r0.<androidx.media3.common.MediaPeriodId: int adIndexInAdGroup>;
+
+        $l4 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: long getMediaPeriodPositionUsForAd(long,int,int,androidx.media3.common.AdPlaybackState)>(l0, $i3, $i2, r1);
+
+        goto label2;
+
+     label1:
+        $i1 = r0.<androidx.media3.common.MediaPeriodId: int nextAdGroupIndex>;
+
+        $l4 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: long getMediaPeriodPositionUsForContent(long,int,androidx.media3.common.AdPlaybackState)>(l0, $i1, r1);
+
+     label2:
+        return $l4;
+    }
+
+    public static long getStreamPositionUsForAd(long, int, int, androidx.media3.common.AdPlaybackState)
+    {
+        int i0, i1, $i3, $i5, i10, i11, i12;
+        androidx.media3.common.AdPlaybackState r0;
+        androidx.media3.common.AdPlaybackState$AdGroup r1, r2;
+        long $l2, $l4, $l6, $l7, l8, l9;
+        long[] $r3, $r4;
+
+        l8 := @parameter0: long;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r0 := @parameter3: androidx.media3.common.AdPlaybackState;
+
+        r1 = virtualinvoke r0.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i0);
+
+        $l2 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        l9 = l8 + $l2;
+
+        i10 = r0.<androidx.media3.common.AdPlaybackState: int removedAdGroupCount>;
+
+     label1:
+        if i10 >= i0 goto label4;
+
+        r2 = virtualinvoke r0.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i10);
+
+        i11 = 0;
+
+     label2:
+        $i5 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: int getAdCountInGroup(androidx.media3.common.AdPlaybackState,int)>(r0, i10);
+
+        if i11 >= $i5 goto label3;
+
+        $r4 = r2.<androidx.media3.common.AdPlaybackState$AdGroup: long[] durationsUs>;
+
+        $l7 = $r4[i11];
+
+        l9 = l9 + $l7;
+
+        i11 = i11 + 1;
+
+        goto label2;
+
+     label3:
+        $l6 = r2.<androidx.media3.common.AdPlaybackState$AdGroup: long contentResumeOffsetUs>;
+
+        l9 = l9 - $l6;
+
+        i10 = i10 + 1;
+
+        goto label1;
+
+     label4:
+        $i3 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: int getAdCountInGroup(androidx.media3.common.AdPlaybackState,int)>(r0, i0);
+
+        if i1 >= $i3 goto label6;
+
+        i12 = 0;
+
+     label5:
+        if i12 >= i1 goto label6;
+
+        $r3 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long[] durationsUs>;
+
+        $l4 = $r3[i12];
+
+        l9 = l9 + $l4;
+
+        i12 = i12 + 1;
+
+        goto label5;
+
+     label6:
+        return l9;
+    }
+
+    public static long getMediaPeriodPositionUsForAd(long, int, int, androidx.media3.common.AdPlaybackState)
+    {
+        int i0, i1, $i3, $i5, i10, i11, i12;
+        androidx.media3.common.AdPlaybackState r0;
+        androidx.media3.common.AdPlaybackState$AdGroup r1, r2;
+        long $l2, $l4, $l6, $l7, l8, l9;
+        long[] $r3, $r4;
+
+        l8 := @parameter0: long;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r0 := @parameter3: androidx.media3.common.AdPlaybackState;
+
+        r1 = virtualinvoke r0.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i0);
+
+        $l2 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        l9 = l8 - $l2;
+
+        i10 = r0.<androidx.media3.common.AdPlaybackState: int removedAdGroupCount>;
+
+     label1:
+        if i10 >= i0 goto label4;
+
+        r2 = virtualinvoke r0.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i10);
+
+        i11 = 0;
+
+     label2:
+        $i5 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: int getAdCountInGroup(androidx.media3.common.AdPlaybackState,int)>(r0, i10);
+
+        if i11 >= $i5 goto label3;
+
+        $r4 = r2.<androidx.media3.common.AdPlaybackState$AdGroup: long[] durationsUs>;
+
+        $l7 = $r4[i11];
+
+        l9 = l9 - $l7;
+
+        i11 = i11 + 1;
+
+        goto label2;
+
+     label3:
+        $l6 = r2.<androidx.media3.common.AdPlaybackState$AdGroup: long contentResumeOffsetUs>;
+
+        l9 = l9 + $l6;
+
+        i10 = i10 + 1;
+
+        goto label1;
+
+     label4:
+        $i3 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: int getAdCountInGroup(androidx.media3.common.AdPlaybackState,int)>(r0, i0);
+
+        if i1 >= $i3 goto label6;
+
+        i12 = 0;
+
+     label5:
+        if i12 >= i1 goto label6;
+
+        $r3 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long[] durationsUs>;
+
+        $l4 = $r3[i12];
+
+        l9 = l9 - $l4;
+
+        i12 = i12 + 1;
+
+        goto label5;
+
+     label6:
+        return l9;
+    }
+
+    public static long getStreamPositionUsForContent(long, int, androidx.media3.common.AdPlaybackState)
+    {
+        long l0, l1, $l2, $l4, $l6, $l8, $l9, $l10, $l12, $l13, $l14, l16, l19, $l20;
+        androidx.media3.common.AdPlaybackState r0;
+        androidx.media3.common.AdPlaybackState$AdGroup r1;
+        byte $b3, $b5, $b11;
+        int $i7, i15, i17, i18;
+        long[] $r2;
+
+        l0 := @parameter0: long;
+
+        i15 := @parameter1: int;
+
+        r0 := @parameter2: androidx.media3.common.AdPlaybackState;
+
+        l16 = 0L;
+
+        if i15 != -1 goto label1;
+
+        i15 = r0.<androidx.media3.common.AdPlaybackState: int adGroupCount>;
+
+     label1:
+        i17 = r0.<androidx.media3.common.AdPlaybackState: int removedAdGroupCount>;
+
+     label2:
+        if i17 >= i15 goto label7;
+
+        r1 = virtualinvoke r0.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i17);
+
+        $l2 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $b3 = $l2 cmp -9223372036854775808L;
+
+        if $b3 == 0 goto label7;
+
+        $l4 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $b5 = $l4 cmp l0;
+
+        if $b5 <= 0 goto label3;
+
+        goto label7;
+
+     label3:
+        $l6 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        l1 = $l6 + l16;
+
+        i18 = 0;
+
+     label4:
+        $i7 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: int getAdCountInGroup(androidx.media3.common.AdPlaybackState,int)>(r0, i17);
+
+        if i18 >= $i7 goto label5;
+
+        $r2 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long[] durationsUs>;
+
+        $l14 = $r2[i18];
+
+        l16 = l16 + $l14;
+
+        i18 = i18 + 1;
+
+        goto label4;
+
+     label5:
+        $l8 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long contentResumeOffsetUs>;
+
+        l16 = l16 - $l8;
+
+        $l10 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $l9 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long contentResumeOffsetUs>;
+
+        l19 = $l10 + $l9;
+
+        $b11 = l19 cmp l0;
+
+        if $b11 <= 0 goto label6;
+
+        $l12 = l0 + l16;
+
+        $l13 = staticinvoke <java.lang.Math: long max(long,long)>(l1, $l12);
+
+        return $l13;
+
+     label6:
+        i17 = i17 + 1;
+
+        goto label2;
+
+     label7:
+        $l20 = l0 + l16;
+
+        return $l20;
+    }
+
+    public static long getMediaPeriodPositionUsForContent(long, int, androidx.media3.common.AdPlaybackState)
+    {
+        long l0, $l1, $l3, $l4, $l7, $l8, $l9, $l10, $l12, $l13, $l14, $l15, l17, l20, $l21;
+        androidx.media3.common.AdPlaybackState r0;
+        androidx.media3.common.AdPlaybackState$AdGroup r1;
+        byte $b2, $b5, $b11;
+        int $i6, i16, i18, i19;
+        long[] $r2;
+
+        l0 := @parameter0: long;
+
+        i16 := @parameter1: int;
+
+        r0 := @parameter2: androidx.media3.common.AdPlaybackState;
+
+        l17 = 0L;
+
+        if i16 != -1 goto label1;
+
+        i16 = r0.<androidx.media3.common.AdPlaybackState: int adGroupCount>;
+
+     label1:
+        i18 = r0.<androidx.media3.common.AdPlaybackState: int removedAdGroupCount>;
+
+     label2:
+        if i18 >= i16 goto label7;
+
+        r1 = virtualinvoke r0.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i18);
+
+        $l1 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $b2 = $l1 cmp -9223372036854775808L;
+
+        if $b2 == 0 goto label7;
+
+        $l4 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $l3 = l0 - l17;
+
+        $b5 = $l4 cmp $l3;
+
+        if $b5 <= 0 goto label3;
+
+        goto label7;
+
+     label3:
+        i19 = 0;
+
+     label4:
+        $i6 = staticinvoke <androidx.media3.exoplayer.source.ads.ServerSideAdInsertionUtil: int getAdCountInGroup(androidx.media3.common.AdPlaybackState,int)>(r0, i18);
+
+        if i19 >= $i6 goto label5;
+
+        $r2 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long[] durationsUs>;
+
+        $l15 = $r2[i19];
+
+        l17 = l17 + $l15;
+
+        i19 = i19 + 1;
+
+        goto label4;
+
+     label5:
+        $l7 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long contentResumeOffsetUs>;
+
+        l17 = l17 - $l7;
+
+        $l9 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $l8 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long contentResumeOffsetUs>;
+
+        l20 = $l9 + $l8;
+
+        $l10 = l0 - l17;
+
+        $b11 = l20 cmp $l10;
+
+        if $b11 <= 0 goto label6;
+
+        $l13 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $l12 = l0 - l17;
+
+        $l14 = staticinvoke <java.lang.Math: long max(long,long)>($l13, $l12);
+
+        return $l14;
+
+     label6:
+        i18 = i18 + 1;
+
+        goto label2;
+
+     label7:
+        $l21 = l0 - l17;
+
+        return $l21;
+    }
+
+    public static int getAdCountInGroup(androidx.media3.common.AdPlaybackState, int)
+    {
+        androidx.media3.common.AdPlaybackState r0;
+        int i0, $i1, $i2;
+        androidx.media3.common.AdPlaybackState$AdGroup r1;
+
+        r0 := @parameter0: androidx.media3.common.AdPlaybackState;
+
+        i0 := @parameter1: int;
+
+        r1 = virtualinvoke r0.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i0);
+
+        $i1 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: int count>;
+
+        if $i1 != -1 goto label1;
+
+        $i2 = 0;
+
+        goto label2;
+
+     label1:
+        $i2 = r1.<androidx.media3.common.AdPlaybackState$AdGroup: int count>;
+
+     label2:
+        return $i2;
+    }
+
+    private static androidx.media3.common.AdPlaybackState correctFollowingAdGroupTimes(androidx.media3.common.AdPlaybackState, int, long, long)
+    {
+        int i0, $i6, i9;
+        long l1, l2, l3, l4, $l5, $l8;
+        androidx.media3.common.AdPlaybackState$AdGroup $r0;
+        byte $b7;
+        androidx.media3.common.AdPlaybackState r1;
+
+        r1 := @parameter0: androidx.media3.common.AdPlaybackState;
+
+        i0 := @parameter1: int;
+
+        l1 := @parameter2: long;
+
+        l2 := @parameter3: long;
+
+        $l5 = neg l1;
+
+        l3 = $l5 + l2;
+
+        i9 = i0 + 1;
+
+     label1:
+        $i6 = r1.<androidx.media3.common.AdPlaybackState: int adGroupCount>;
+
+        if i9 >= $i6 goto label3;
+
+        $r0 = virtualinvoke r1.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState$AdGroup getAdGroup(int)>(i9);
+
+        l4 = $r0.<androidx.media3.common.AdPlaybackState$AdGroup: long timeUs>;
+
+        $b7 = l4 cmp -9223372036854775808L;
+
+        if $b7 == 0 goto label2;
+
+        $l8 = l4 + l3;
+
+        r1 = virtualinvoke r1.<androidx.media3.common.AdPlaybackState: androidx.media3.common.AdPlaybackState withAdGroupTimeUs(int,long)>(i9, $l8);
+
+     label2:
+        i9 = i9 + 1;
+
+        goto label1;
+
+     label3:
+        return r1;
+    }
+
