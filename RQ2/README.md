@@ -1,9 +1,9 @@
-# RQ1
+# RQ2
 
-## About Posts-Collector
+## About Analyzer
 
-Posts collector is used to collect posts from Stack OverFlow, to run the code, you should install Maven and install necessary dependencies.
+Analyzer is used to extract APK utilized APIs, to run the code, you should install Maven and install necessary dependencies. And the program entry is in `MainExtractor.java`, you should package the whole program into an executable jar file and use command `java -jar executable.jar <android.jar-directory> <apk-path> <output-directory>` to run. 
 
 ## About Data
 
-In data directory, `androidx_.json` is the original posts we collected from Stack OverFlow, and `categories.csv` is our final categories result about 171 selected high-quality posts.
+Because the limit space of github upload, we cannot upload all our apk dataset, so instead we just upload all apk id, see `F-Droid_apk.txt` and `Gpaly_apk.txt`. And the file `data\Most_Frequently_Used_APIs.txt` is our result about most frequently-utilized AndroidX classes by taxon, with average number of utilized classes per apk.
